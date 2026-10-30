@@ -1,0 +1,28 @@
+node_modules
+.next
+.vercel
+.turbo
+coverage
+dist
+*.log
+.DS_Store
+
+# rahasia: tidak boleh pernah masuk git
+.env
+.env.*
+!.env.example
+*.pem
+gemini.env
+
+# keadaan lokal loop (bukan sumber)
+loop/LOOP_ON
+loop/LOOP_PAUSE
+loop/DONE_OK
+loop/.queue_empty
+loop/.gate_merah
+loop/.gate_*.log
+loop/gate_last.json
+loop/.wake_guard.log
+loop/.context_guard.log
+loop/.context_gauge.json
+loop/.compaction_flag.json

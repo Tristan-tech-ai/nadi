@@ -1,0 +1,9 @@
+# Dibaca penuh dengan Read setelah sesi mulai atau setelah kompaksi (context_guard.py memaksanya). Jalur relatif terhadap folder nadi.
+loop/README.md
+loop/wake_header.txt
+loop/STATE.md
+loop/DECISIONS.md
+loop/UNTUK-TRISTAN.md
+docs/design/DIRECTION.md
+docs/design/ANTI-SLOP.md
+docs/design/VOICE.md
