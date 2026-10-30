@@ -13,8 +13,9 @@
    "accept": "LEARN.md memuat versi + URL sumber + tanggal untuk tiap paket; catatan perubahan besar Next.js (proxy, cache components, typegen) dari docs resmi",
    "how": "npm view <pkg> version; baca node_modules/next/dist/docs setelah install; WebFetch changelog resmi",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "running",
+   "created": "2026-10-30T20:05:52",
+   "started": "2026-10-30T20:16:16"
   },
   {
    "id": "R-02",
@@ -897,6 +898,20 @@
    "blocked_by": "F5-03,F4-07,F3-07,F2-06",
    "status": "ready",
    "created": "2026-10-30T20:05:52"
+  },
+  {
+   "id": "Q-06",
+   "fase": "Q",
+   "kind": "maint",
+   "priority": 4,
+   "size": "s",
+   "wajib": true,
+   "title": "Naikkan Next.js ke rilis keamanan 3 Nov 2026",
+   "accept": "versi next di apps/web sama dengan patch yang diumumkan di nextjs.org/blog setelah 3 Nov; gerbang lulus; deploy READY",
+   "how": "baca advisori resmi, pnpm up next eslint-config-next, jalankan gate",
+   "blocked_by": "tunggu rilis keamanan Next.js 3 Nov 2026",
+   "status": "blocked",
+   "created": "2026-10-30T20:17:29"
   }
  ]
 }
