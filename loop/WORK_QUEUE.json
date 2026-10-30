@@ -189,8 +189,8 @@
    "title": "Lempar Saja v1: unggah (kompres di HP), bucket Storage ber-RLS, antrean pgmq, Edge Function pemroses AI, usulan + geser terima",
    "accept": "10 berkas korpus contoh (F0-10) -> usulan benar >= 8; terima usulan membuat baris orang/kerja/dokumen; berkas sama tidak diproses dua kali; token tercatat per berkas",
    "how": "Edge Function memakai secret ANTHROPIC_API_KEY; model kecil dulu, naik bila keyakinan rendah",
-   "blocked_by": "F0-05,F0-10",
-   "status": "ready",
+   "blocked_by": "F0-06B,F0-06C",
+   "status": "blocked",
    "created": "2026-10-30T20:05:52"
   },
   {
@@ -1018,6 +1018,49 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-10-31T02:18:04"
+  },
+  {
+   "id": "F0-06A",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 7,
+   "size": "s",
+   "wajib": false,
+   "title": "Lempar Saja: fondasi data (bucket berkas ber-RLS, lempar_berkas anti-duplikat, konfigurasi model, pemakaian_ai)",
+   "accept": "migrasi identik; tes SQL lulus; e2e unggah sungguhan: jalur liar ditolak, sha sama tidak didaftarkan dua kali, usaha lain tidak bisa baca/tulis",
+   "how": "storage.objects RLS + RPC security definer",
+   "blocked_by": "",
+   "status": "running",
+   "created": "2026-10-31T02:34:24",
+   "started": "2026-10-31T02:34:24"
+  },
+  {
+   "id": "F0-06B",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 7,
+   "size": "m",
+   "wajib": false,
+   "title": "Lempar Saja: Edge Function baca-berkas (model ringan lalu berat, keluaran terstruktur, usulan per jenis, token tercatat)",
+   "accept": "10 berkas korpus (satu per jenis) -> jenis dan bidang kunci benar >= 8 dari 10 (skrip eval di repo, hasil di docs/quality); pemakaian_ai dan berkas.token_ai terisi; berkas yang sudah selesai tidak diproses ulang",
+   "how": "SDK @anthropic-ai/sdk 1.3.0 di Deno, output_config.format json_schema, ID model dari tabel konfigurasi",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T02:34:24"
+  },
+  {
+   "id": "F0-06C",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 7,
+   "size": "m",
+   "wajib": false,
+   "title": "Lempar Saja: layar unggah (kompres foto di HP, sha256 di browser) dan terima usulan membuat baris orang/kejadian",
+   "accept": "e2e: lempar nota dan KTP dari korpus -> usulan muncul di Feed -> Setujui membuat baris orang/kejadian; galat dan keadaan memuat rapi; axe bersih 390/1440",
+   "how": "browser-image-compression atau canvas bawaan; server action",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T02:34:24"
   }
  ]
 }
