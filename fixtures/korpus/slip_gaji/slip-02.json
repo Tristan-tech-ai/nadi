@@ -1,0 +1,24 @@
+{
+ "jenis": "slip_gaji",
+ "berkas": "slip-02.pdf",
+ "bidang": {
+  "nama": "Dimas Arsana",
+  "periode": "2026-10",
+  "gaji_pokok": 4900000,
+  "tunjangan": {
+   "transport": 400000,
+   "makan": 400000
+  },
+  "lembur": 0,
+  "potongan": {
+   "bpjs_kesehatan": 49000,
+   "jht": 98000,
+   "jp": 49000,
+   "pph21": 36800,
+   "kasbon": 0
+  },
+  "bruto": 5700000,
+  "neto": 5467200
+ },
+ "catatan": "potongan nilai contoh"
+}

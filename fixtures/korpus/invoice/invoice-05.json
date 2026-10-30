@@ -1,0 +1,33 @@
+{
+ "jenis": "invoice",
+ "berkas": "invoice-05.pdf",
+ "bidang": {
+  "penjual": "PT Kopi Kintamani Lestari",
+  "nomor": "INV/2026/X/0035",
+  "tanggal": "2026-10-07",
+  "jatuh_tempo": "2026-10-21",
+  "pembeli": "Warung Bu Made",
+  "baris": [
+   {
+    "nama": "Jasa cuci linen per kg",
+    "qty": 20,
+    "harga": 137000,
+    "jumlah": 2740000
+   },
+   {
+    "nama": "Biji kopi arabika 1 kg",
+    "qty": 8,
+    "harga": 196000,
+    "jumlah": 1568000
+   },
+   {
+    "nama": "Gula aren 1 kg",
+    "qty": 16,
+    "harga": 122000,
+    "jumlah": 1952000
+   }
+  ],
+  "total": 6260000
+ },
+ "catatan": "bukan faktur pajak"
+}

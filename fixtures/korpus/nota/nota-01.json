@@ -1,0 +1,31 @@
+{
+ "jenis": "nota",
+ "berkas": "nota-01.png",
+ "bidang": {
+  "pemasok": "UD Sumber Rejeki",
+  "nomor": "NT-4671",
+  "tanggal": "2026-10-13",
+  "baris": [
+   {
+    "nama": "Teh celup 25",
+    "qty": 9,
+    "harga": 9500,
+    "jumlah": 85500
+   },
+   {
+    "nama": "Tepung terigu 1 kg",
+    "qty": 6,
+    "harga": 13500,
+    "jumlah": 81000
+   },
+   {
+    "nama": "Bawang merah 1 kg",
+    "qty": 5,
+    "harga": 42000,
+    "jumlah": 210000
+   }
+  ],
+  "total": 376500
+ },
+ "catatan": "tata letak a"
+}

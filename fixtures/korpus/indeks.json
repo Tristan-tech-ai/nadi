@@ -1,0 +1,216 @@
+{
+ "dibuat": "deterministik, seed 20261031",
+ "jumlah": 42,
+ "berkas": [
+  {
+   "jenis": "nota",
+   "berkas": "nota/nota-01.png",
+   "jawaban": "nota/nota-01.json"
+  },
+  {
+   "jenis": "nota",
+   "berkas": "nota/nota-02.png",
+   "jawaban": "nota/nota-02.json"
+  },
+  {
+   "jenis": "nota",
+   "berkas": "nota/nota-03.png",
+   "jawaban": "nota/nota-03.json"
+  },
+  {
+   "jenis": "nota",
+   "berkas": "nota/nota-04.png",
+   "jawaban": "nota/nota-04.json"
+  },
+  {
+   "jenis": "nota",
+   "berkas": "nota/nota-05.png",
+   "jawaban": "nota/nota-05.json"
+  },
+  {
+   "jenis": "nota",
+   "berkas": "nota/nota-06.png",
+   "jawaban": "nota/nota-06.json"
+  },
+  {
+   "jenis": "nota",
+   "berkas": "nota/nota-07.png",
+   "jawaban": "nota/nota-07.json"
+  },
+  {
+   "jenis": "nota",
+   "berkas": "nota/nota-08.png",
+   "jawaban": "nota/nota-08.json"
+  },
+  {
+   "jenis": "invoice",
+   "berkas": "invoice/invoice-01.pdf",
+   "jawaban": "invoice/invoice-01.json"
+  },
+  {
+   "jenis": "invoice",
+   "berkas": "invoice/invoice-02.pdf",
+   "jawaban": "invoice/invoice-02.json"
+  },
+  {
+   "jenis": "invoice",
+   "berkas": "invoice/invoice-03.pdf",
+   "jawaban": "invoice/invoice-03.json"
+  },
+  {
+   "jenis": "invoice",
+   "berkas": "invoice/invoice-04.pdf",
+   "jawaban": "invoice/invoice-04.json"
+  },
+  {
+   "jenis": "invoice",
+   "berkas": "invoice/invoice-05.pdf",
+   "jawaban": "invoice/invoice-05.json"
+  },
+  {
+   "jenis": "invoice",
+   "berkas": "invoice/invoice-06.pdf",
+   "jawaban": "invoice/invoice-06.json"
+  },
+  {
+   "jenis": "slip_gaji",
+   "berkas": "slip_gaji/slip-01.pdf",
+   "jawaban": "slip_gaji/slip-01.json"
+  },
+  {
+   "jenis": "slip_gaji",
+   "berkas": "slip_gaji/slip-02.pdf",
+   "jawaban": "slip_gaji/slip-02.json"
+  },
+  {
+   "jenis": "slip_gaji",
+   "berkas": "slip_gaji/slip-03.pdf",
+   "jawaban": "slip_gaji/slip-03.json"
+  },
+  {
+   "jenis": "slip_gaji",
+   "berkas": "slip_gaji/slip-04.pdf",
+   "jawaban": "slip_gaji/slip-04.json"
+  },
+  {
+   "jenis": "slip_gaji",
+   "berkas": "slip_gaji/slip-05.pdf",
+   "jawaban": "slip_gaji/slip-05.json"
+  },
+  {
+   "jenis": "slip_gaji",
+   "berkas": "slip_gaji/slip-06.pdf",
+   "jawaban": "slip_gaji/slip-06.json"
+  },
+  {
+   "jenis": "ktp",
+   "berkas": "ktp/ktp-01.png",
+   "jawaban": "ktp/ktp-01.json"
+  },
+  {
+   "jenis": "ktp",
+   "berkas": "ktp/ktp-02.png",
+   "jawaban": "ktp/ktp-02.json"
+  },
+  {
+   "jenis": "ktp",
+   "berkas": "ktp/ktp-03.png",
+   "jawaban": "ktp/ktp-03.json"
+  },
+  {
+   "jenis": "ktp",
+   "berkas": "ktp/ktp-04.png",
+   "jawaban": "ktp/ktp-04.json"
+  },
+  {
+   "jenis": "cv",
+   "berkas": "cv/cv-01.pdf",
+   "jawaban": "cv/cv-01.json"
+  },
+  {
+   "jenis": "cv",
+   "berkas": "cv/cv-02.pdf",
+   "jawaban": "cv/cv-02.json"
+  },
+  {
+   "jenis": "cv",
+   "berkas": "cv/cv-03.pdf",
+   "jawaban": "cv/cv-03.json"
+  },
+  {
+   "jenis": "cv",
+   "berkas": "cv/cv-04.pdf",
+   "jawaban": "cv/cv-04.json"
+  },
+  {
+   "jenis": "surat",
+   "berkas": "surat/surat-01.pdf",
+   "jawaban": "surat/surat-01.json"
+  },
+  {
+   "jenis": "surat",
+   "berkas": "surat/surat-02.pdf",
+   "jawaban": "surat/surat-02.json"
+  },
+  {
+   "jenis": "surat",
+   "berkas": "surat/surat-03.pdf",
+   "jawaban": "surat/surat-03.json"
+  },
+  {
+   "jenis": "surat",
+   "berkas": "surat/surat-04.pdf",
+   "jawaban": "surat/surat-04.json"
+  },
+  {
+   "jenis": "surat_sakit",
+   "berkas": "surat_sakit/sakit-01.png",
+   "jawaban": "surat_sakit/sakit-01.json"
+  },
+  {
+   "jenis": "surat_sakit",
+   "berkas": "surat_sakit/sakit-02.png",
+   "jawaban": "surat_sakit/sakit-02.json"
+  },
+  {
+   "jenis": "excel_karyawan",
+   "berkas": "excel_karyawan/karyawan-30.xlsx",
+   "jawaban": "excel_karyawan/karyawan-30.json"
+  },
+  {
+   "jenis": "excel_karyawan",
+   "berkas": "excel_karyawan/karyawan-8-kolom-acak.xlsx",
+   "jawaban": "excel_karyawan/karyawan-8-kolom-acak.json"
+  },
+  {
+   "jenis": "absen",
+   "berkas": "absen/absen-01.xlsx",
+   "jawaban": "absen/absen-01.json"
+  },
+  {
+   "jenis": "absen",
+   "berkas": "absen/absen-02.xlsx",
+   "jawaban": "absen/absen-02.json"
+  },
+  {
+   "jenis": "absen",
+   "berkas": "absen/absen-03.xlsx",
+   "jawaban": "absen/absen-03.json"
+  },
+  {
+   "jenis": "mutasi",
+   "berkas": "mutasi/mutasi-01.csv",
+   "jawaban": "mutasi/mutasi-01.json"
+  },
+  {
+   "jenis": "mutasi",
+   "berkas": "mutasi/mutasi-02.csv",
+   "jawaban": "mutasi/mutasi-02.json"
+  },
+  {
+   "jenis": "mutasi",
+   "berkas": "mutasi/mutasi-03.csv",
+   "jawaban": "mutasi/mutasi-03.json"
+  }
+ ]
+}

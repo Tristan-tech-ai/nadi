@@ -1,0 +1,37 @@
+{
+ "jenis": "nota",
+ "berkas": "nota-02.png",
+ "bidang": {
+  "pemasok": "CV Tani Makmur",
+  "nomor": "INV-TM-2641",
+  "tanggal": "2026-10-08",
+  "baris": [
+   {
+    "nama": "Bawang merah 1 kg",
+    "qty": 4,
+    "harga": 42000,
+    "jumlah": 168000
+   },
+   {
+    "nama": "Beras premium 5 kg",
+    "qty": 12,
+    "harga": 78000,
+    "jumlah": 936000
+   },
+   {
+    "nama": "Susu kental manis",
+    "qty": 8,
+    "harga": 12500,
+    "jumlah": 100000
+   },
+   {
+    "nama": "Gula pasir 1 kg",
+    "qty": 5,
+    "harga": 17500,
+    "jumlah": 87500
+   }
+  ],
+  "total": 1291500
+ },
+ "catatan": "tata letak b"
+}

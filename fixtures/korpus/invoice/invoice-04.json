@@ -1,0 +1,33 @@
+{
+ "jenis": "invoice",
+ "berkas": "invoice-04.pdf",
+ "bidang": {
+  "penjual": "CV Laundry Bersih Jaya",
+  "nomor": "INV/2026/X/0028",
+  "tanggal": "2026-10-21",
+  "jatuh_tempo": "2026-11-04",
+  "pembeli": "Villa Asri Ubud",
+  "baris": [
+   {
+    "nama": "Biji kopi arabika 1 kg",
+    "qty": 17,
+    "harga": 134000,
+    "jumlah": 2278000
+   },
+   {
+    "nama": "Gula aren 1 kg",
+    "qty": 20,
+    "harga": 182000,
+    "jumlah": 3640000
+   },
+   {
+    "nama": "Jasa cuci linen per kg",
+    "qty": 6,
+    "harga": 84000,
+    "jumlah": 504000
+   }
+  ],
+  "total": 6422000
+ },
+ "catatan": "bukan faktur pajak"
+}

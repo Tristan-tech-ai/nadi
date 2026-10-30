@@ -1,0 +1,49 @@
+{
+ "jenis": "nota",
+ "berkas": "nota-05.png",
+ "bidang": {
+  "pemasok": "UD Sumber Rejeki",
+  "nomor": "NT-5841",
+  "tanggal": "2026-10-24",
+  "baris": [
+   {
+    "nama": "Cabai rawit 500 g",
+    "qty": 10,
+    "harga": 31000,
+    "jumlah": 310000
+   },
+   {
+    "nama": "Bawang merah 1 kg",
+    "qty": 10,
+    "harga": 42000,
+    "jumlah": 420000
+   },
+   {
+    "nama": "Tepung terigu 1 kg",
+    "qty": 11,
+    "harga": 13500,
+    "jumlah": 148500
+   },
+   {
+    "nama": "Telur ayam 1 kg",
+    "qty": 7,
+    "harga": 29000,
+    "jumlah": 203000
+   },
+   {
+    "nama": "Susu kental manis",
+    "qty": 4,
+    "harga": 12500,
+    "jumlah": 50000
+   },
+   {
+    "nama": "Gula pasir 1 kg",
+    "qty": 9,
+    "harga": 17500,
+    "jumlah": 157500
+   }
+  ],
+  "total": 1289000
+ },
+ "catatan": "tata letak a"
+}

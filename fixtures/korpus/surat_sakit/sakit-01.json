@@ -1,0 +1,10 @@
+{
+ "jenis": "surat_sakit",
+ "berkas": "sakit-01.png",
+ "bidang": {
+  "nama": "Fitri Astuti",
+  "mulai": "2026-10-25",
+  "lama_hari": 3
+ },
+ "catatan": ""
+}

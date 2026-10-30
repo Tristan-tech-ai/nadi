@@ -1,0 +1,129 @@
+{
+ "jenis": "mutasi",
+ "berkas": "mutasi-01.csv",
+ "bidang": {
+  "baris": [
+   {
+    "tanggal": "2026-10-07",
+    "keterangan": "PEMBAYARAN LISTRIK PLN",
+    "cabang": "0000",
+    "jumlah": 2503000,
+    "arah": "DB",
+    "saldo": 15806500
+   },
+   {
+    "tanggal": "2026-10-09",
+    "keterangan": "TRSF E-BANKING CR KAFE SENJA INV/2026/X/0017",
+    "cabang": "0000",
+    "jumlah": 1240000,
+    "arah": "CR",
+    "saldo": 18214000
+   },
+   {
+    "tanggal": "2026-10-09",
+    "keterangan": "TRSF E-BANKING DB UD SUMBER REJEKI",
+    "cabang": "0000",
+    "jumlah": 559500,
+    "arah": "DB",
+    "saldo": 17654500
+   },
+   {
+    "tanggal": "2026-10-09",
+    "keterangan": "BIAYA ADM",
+    "cabang": "0000",
+    "jumlah": 861000,
+    "arah": "DB",
+    "saldo": 17682000
+   },
+   {
+    "tanggal": "2026-10-10",
+    "keterangan": "TRSF E-BANKING DB GAJI OKTOBER",
+    "cabang": "0000",
+    "jumlah": 2845000,
+    "arah": "DB",
+    "saldo": 9377000
+   },
+   {
+    "tanggal": "2026-10-13",
+    "keterangan": "QRIS SETTLEMENT",
+    "cabang": "0000",
+    "jumlah": 1233000,
+    "arah": "CR",
+    "saldo": 18915000
+   },
+   {
+    "tanggal": "2026-10-13",
+    "keterangan": "QRIS SETTLEMENT",
+    "cabang": "0000",
+    "jumlah": 698000,
+    "arah": "CR",
+    "saldo": 10075000
+   },
+   {
+    "tanggal": "2026-10-15",
+    "keterangan": "SETORAN TUNAI",
+    "cabang": "0000",
+    "jumlah": 1097000,
+    "arah": "CR",
+    "saldo": 17434000
+   },
+   {
+    "tanggal": "2026-10-15",
+    "keterangan": "SETORAN TUNAI",
+    "cabang": "0000",
+    "jumlah": 928000,
+    "arah": "CR",
+    "saldo": 18362000
+   },
+   {
+    "tanggal": "2026-10-17",
+    "keterangan": "BIAYA ADM",
+    "cabang": "0000",
+    "jumlah": 3342000,
+    "arah": "DB",
+    "saldo": 12222000
+   },
+   {
+    "tanggal": "2026-10-19",
+    "keterangan": "BIAYA ADM",
+    "cabang": "0000",
+    "jumlah": 242500,
+    "arah": "DB",
+    "saldo": 15564000
+   },
+   {
+    "tanggal": "2026-10-19",
+    "keterangan": "QRIS SETTLEMENT",
+    "cabang": "0000",
+    "jumlah": 256500,
+    "arah": "CR",
+    "saldo": 10331500
+   },
+   {
+    "tanggal": "2026-10-21",
+    "keterangan": "BIAYA ADM",
+    "cabang": "0000",
+    "jumlah": 52500,
+    "arah": "DB",
+    "saldo": 18309500
+   },
+   {
+    "tanggal": "2026-10-25",
+    "keterangan": "TRSF E-BANKING CR WARUNG INV/2026/X/0012",
+    "cabang": "0000",
+    "jumlah": 888500,
+    "arah": "CR",
+    "saldo": 18543000
+   },
+   {
+    "tanggal": "2026-10-25",
+    "keterangan": "BIAYA ADM",
+    "cabang": "0000",
+    "jumlah": 2578000,
+    "arah": "DB",
+    "saldo": 16337000
+   }
+  ]
+ },
+ "catatan": "kolom meniru ekspor umum, bukan spesifikasi resmi bank; saldo pada baris tidak berurutan setelah diurutkan tanggal"
+}

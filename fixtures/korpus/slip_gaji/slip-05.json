@@ -1,0 +1,24 @@
+{
+ "jenis": "slip_gaji",
+ "berkas": "slip-05.pdf",
+ "bidang": {
+  "nama": "Lestari Utami",
+  "periode": "2026-10",
+  "gaji_pokok": 6300000,
+  "tunjangan": {
+   "transport": 550000,
+   "makan": 600000
+  },
+  "lembur": 0,
+  "potongan": {
+   "bpjs_kesehatan": 63000,
+   "jht": 126000,
+   "jp": 63000,
+   "pph21": 47300,
+   "kasbon": 0
+  },
+  "bruto": 7450000,
+  "neto": 7150700
+ },
+ "catatan": "potongan nilai contoh"
+}

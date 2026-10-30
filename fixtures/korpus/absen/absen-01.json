@@ -1,0 +1,359 @@
+{
+ "jenis": "absen",
+ "berkas": "absen-01.xlsx",
+ "bidang": {
+  "baris": [
+   {
+    "nama": "Siti Wijaya",
+    "tanggal": "2026-10-01",
+    "masuk": "07.15",
+    "pulang": "18.25",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Wijaya",
+    "tanggal": "2026-10-02",
+    "masuk": "08.16",
+    "pulang": "16.43",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Wijaya",
+    "tanggal": "2026-10-03",
+    "masuk": "07.19",
+    "pulang": "17.21",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Wijaya",
+    "tanggal": "2026-10-04",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Izin"
+   },
+   {
+    "nama": "Siti Wijaya",
+    "tanggal": "2026-10-05",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Izin"
+   },
+   {
+    "nama": "Siti Wijaya",
+    "tanggal": "2026-10-06",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Sakit"
+   },
+   {
+    "nama": "Siti Wijaya",
+    "tanggal": "2026-10-07",
+    "masuk": "08.18",
+    "pulang": "18.00",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Wijaya",
+    "tanggal": "2026-10-08",
+    "masuk": "07.59",
+    "pulang": "18.36",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Wijaya",
+    "tanggal": "2026-10-09",
+    "masuk": "07.47",
+    "pulang": "17.52",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Wijaya",
+    "tanggal": "2026-10-10",
+    "masuk": "07.38",
+    "pulang": "16.21",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rudi Rahmawati",
+    "tanggal": "2026-10-01",
+    "masuk": "07.24",
+    "pulang": "18.51",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rudi Rahmawati",
+    "tanggal": "2026-10-02",
+    "masuk": "07.00",
+    "pulang": "16.51",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rudi Rahmawati",
+    "tanggal": "2026-10-03",
+    "masuk": "08.27",
+    "pulang": "17.14",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rudi Rahmawati",
+    "tanggal": "2026-10-04",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Izin"
+   },
+   {
+    "nama": "Rudi Rahmawati",
+    "tanggal": "2026-10-05",
+    "masuk": "08.37",
+    "pulang": "16.02",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rudi Rahmawati",
+    "tanggal": "2026-10-06",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Sakit"
+   },
+   {
+    "nama": "Rudi Rahmawati",
+    "tanggal": "2026-10-07",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Sakit"
+   },
+   {
+    "nama": "Rudi Rahmawati",
+    "tanggal": "2026-10-08",
+    "masuk": "07.42",
+    "pulang": "16.31",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rudi Rahmawati",
+    "tanggal": "2026-10-09",
+    "masuk": "07.03",
+    "pulang": "16.24",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rudi Rahmawati",
+    "tanggal": "2026-10-10",
+    "masuk": "08.23",
+    "pulang": "16.50",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Saputra",
+    "tanggal": "2026-10-01",
+    "masuk": "07.22",
+    "pulang": "17.31",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Saputra",
+    "tanggal": "2026-10-02",
+    "masuk": "08.23",
+    "pulang": "17.55",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Saputra",
+    "tanggal": "2026-10-03",
+    "masuk": "07.01",
+    "pulang": "16.51",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Saputra",
+    "tanggal": "2026-10-04",
+    "masuk": "08.09",
+    "pulang": "17.12",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Saputra",
+    "tanggal": "2026-10-05",
+    "masuk": "07.38",
+    "pulang": "16.00",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Saputra",
+    "tanggal": "2026-10-06",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Sakit"
+   },
+   {
+    "nama": "Komang Saputra",
+    "tanggal": "2026-10-07",
+    "masuk": "07.11",
+    "pulang": "18.21",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Saputra",
+    "tanggal": "2026-10-08",
+    "masuk": "08.13",
+    "pulang": "18.27",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Saputra",
+    "tanggal": "2026-10-09",
+    "masuk": "07.36",
+    "pulang": "16.44",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Saputra",
+    "tanggal": "2026-10-10",
+    "masuk": "08.38",
+    "pulang": "16.01",
+    "keterangan": ""
+   },
+   {
+    "nama": "Hendra Pratama",
+    "tanggal": "2026-10-01",
+    "masuk": "08.41",
+    "pulang": "18.19",
+    "keterangan": ""
+   },
+   {
+    "nama": "Hendra Pratama",
+    "tanggal": "2026-10-02",
+    "masuk": "07.27",
+    "pulang": "16.35",
+    "keterangan": ""
+   },
+   {
+    "nama": "Hendra Pratama",
+    "tanggal": "2026-10-03",
+    "masuk": "08.05",
+    "pulang": "18.50",
+    "keterangan": ""
+   },
+   {
+    "nama": "Hendra Pratama",
+    "tanggal": "2026-10-04",
+    "masuk": "08.07",
+    "pulang": "16.14",
+    "keterangan": ""
+   },
+   {
+    "nama": "Hendra Pratama",
+    "tanggal": "2026-10-05",
+    "masuk": "07.58",
+    "pulang": "16.52",
+    "keterangan": ""
+   },
+   {
+    "nama": "Hendra Pratama",
+    "tanggal": "2026-10-06",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Izin"
+   },
+   {
+    "nama": "Hendra Pratama",
+    "tanggal": "2026-10-07",
+    "masuk": "07.38",
+    "pulang": "17.31",
+    "keterangan": ""
+   },
+   {
+    "nama": "Hendra Pratama",
+    "tanggal": "2026-10-08",
+    "masuk": "08.10",
+    "pulang": "17.07",
+    "keterangan": ""
+   },
+   {
+    "nama": "Hendra Pratama",
+    "tanggal": "2026-10-09",
+    "masuk": "08.49",
+    "pulang": "17.19",
+    "keterangan": ""
+   },
+   {
+    "nama": "Hendra Pratama",
+    "tanggal": "2026-10-10",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Izin"
+   },
+   {
+    "nama": "Wayan Kurniawan",
+    "tanggal": "2026-10-01",
+    "masuk": "07.44",
+    "pulang": "16.12",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Kurniawan",
+    "tanggal": "2026-10-02",
+    "masuk": "08.59",
+    "pulang": "17.49",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Kurniawan",
+    "tanggal": "2026-10-03",
+    "masuk": "07.40",
+    "pulang": "16.54",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Kurniawan",
+    "tanggal": "2026-10-04",
+    "masuk": "07.11",
+    "pulang": "17.31",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Kurniawan",
+    "tanggal": "2026-10-05",
+    "masuk": "07.55",
+    "pulang": "16.46",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Kurniawan",
+    "tanggal": "2026-10-06",
+    "masuk": "07.20",
+    "pulang": "17.07",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Kurniawan",
+    "tanggal": "2026-10-07",
+    "masuk": "07.16",
+    "pulang": "16.55",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Kurniawan",
+    "tanggal": "2026-10-08",
+    "masuk": "07.17",
+    "pulang": "18.29",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Kurniawan",
+    "tanggal": "2026-10-09",
+    "masuk": "07.22",
+    "pulang": "18.52",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Kurniawan",
+    "tanggal": "2026-10-10",
+    "masuk": "08.05",
+    "pulang": "18.52",
+    "keterangan": ""
+   }
+  ]
+ },
+ "catatan": "jam memakai titik (format EYD)"
+}

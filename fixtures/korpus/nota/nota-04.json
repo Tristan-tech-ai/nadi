@@ -1,0 +1,31 @@
+{
+ "jenis": "nota",
+ "berkas": "nota-04.png",
+ "bidang": {
+  "pemasok": "CV Tani Makmur",
+  "nomor": "INV-TM-5056",
+  "tanggal": "2026-10-23",
+  "baris": [
+   {
+    "nama": "Beras premium 5 kg",
+    "qty": 8,
+    "harga": 78000,
+    "jumlah": 624000
+   },
+   {
+    "nama": "Gula pasir 1 kg",
+    "qty": 3,
+    "harga": 17500,
+    "jumlah": 52500
+   },
+   {
+    "nama": "Cabai rawit 500 g",
+    "qty": 5,
+    "harga": 31000,
+    "jumlah": 155000
+   }
+  ],
+  "total": 831500
+ },
+ "catatan": "tata letak b"
+}

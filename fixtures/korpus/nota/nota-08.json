@@ -1,0 +1,49 @@
+{
+ "jenis": "nota",
+ "berkas": "nota-08.png",
+ "bidang": {
+  "pemasok": "CV Tani Makmur",
+  "nomor": "INV-TM-5048",
+  "tanggal": "2026-10-20",
+  "baris": [
+   {
+    "nama": "Air mineral 1 dus",
+    "qty": 8,
+    "harga": 46000,
+    "jumlah": 368000
+   },
+   {
+    "nama": "Minyak goreng 2 L",
+    "qty": 8,
+    "harga": 36500,
+    "jumlah": 292000
+   },
+   {
+    "nama": "Minyak goreng 2 L",
+    "qty": 12,
+    "harga": 36500,
+    "jumlah": 438000
+   },
+   {
+    "nama": "Tepung terigu 1 kg",
+    "qty": 1,
+    "harga": 13500,
+    "jumlah": 13500
+   },
+   {
+    "nama": "Telur ayam 1 kg",
+    "qty": 5,
+    "harga": 29000,
+    "jumlah": 145000
+   },
+   {
+    "nama": "Telur ayam 1 kg",
+    "qty": 10,
+    "harga": 29000,
+    "jumlah": 290000
+   }
+  ],
+  "total": 1546500
+ },
+ "catatan": "tata letak b"
+}

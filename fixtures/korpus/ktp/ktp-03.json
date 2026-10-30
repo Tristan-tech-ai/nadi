@@ -1,0 +1,11 @@
+{
+ "jenis": "ktp",
+ "berkas": "ktp-03.png",
+ "bidang": {
+  "nik": "9923172401921132",
+  "nama": "LESTARI SUDARMA",
+  "tanggal_lahir": "1992-01-24",
+  "jenis_kelamin": "L"
+ },
+ "catatan": "sintetis: kode provinsi 99 tidak ada, bertanda CONTOH"
+}

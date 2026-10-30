@@ -1,0 +1,11 @@
+{
+ "jenis": "ktp",
+ "berkas": "ktp-01.png",
+ "bidang": {
+  "nik": "9921012605831840",
+  "nama": "AGUS ASTUTI",
+  "tanggal_lahir": "1983-05-26",
+  "jenis_kelamin": "L"
+ },
+ "catatan": "sintetis: kode provinsi 99 tidak ada, bertanda CONTOH"
+}

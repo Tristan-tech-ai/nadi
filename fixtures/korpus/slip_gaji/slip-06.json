@@ -1,0 +1,24 @@
+{
+ "jenis": "slip_gaji",
+ "berkas": "slip-06.pdf",
+ "bidang": {
+  "nama": "Lestari Wirawan",
+  "periode": "2026-10",
+  "gaji_pokok": 4400000,
+  "tunjangan": {
+   "transport": 250000,
+   "makan": 600000
+  },
+  "lembur": 255000,
+  "potongan": {
+   "bpjs_kesehatan": 44000,
+   "jht": 88000,
+   "jp": 44000,
+   "pph21": 33000,
+   "kasbon": 0
+  },
+  "bruto": 5505000,
+  "neto": 5296000
+ },
+ "catatan": "potongan nilai contoh"
+}

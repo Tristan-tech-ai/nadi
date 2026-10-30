@@ -1,0 +1,11 @@
+{
+ "jenis": "ktp",
+ "berkas": "ktp-02.png",
+ "bidang": {
+  "nik": "9916146706956250",
+  "nama": "ANDI SANTOSO",
+  "tanggal_lahir": "1995-06-27",
+  "jenis_kelamin": "P"
+ },
+ "catatan": "sintetis: kode provinsi 99 tidak ada, bertanda CONTOH"
+}

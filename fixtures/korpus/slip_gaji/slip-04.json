@@ -1,0 +1,24 @@
+{
+ "jenis": "slip_gaji",
+ "berkas": "slip-04.pdf",
+ "bidang": {
+  "nama": "Novi Utami",
+  "periode": "2026-10",
+  "gaji_pokok": 5050000,
+  "tunjangan": {
+   "transport": 550000,
+   "makan": 400000
+  },
+  "lembur": 0,
+  "potongan": {
+   "bpjs_kesehatan": 50500,
+   "jht": 101000,
+   "jp": 50500,
+   "pph21": 37900,
+   "kasbon": 250000
+  },
+  "bruto": 6000000,
+  "neto": 5510100
+ },
+ "catatan": "potongan nilai contoh"
+}

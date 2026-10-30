@@ -1,0 +1,30 @@
+{
+ "jenis": "cv",
+ "berkas": "cv-01.pdf",
+ "bidang": {
+  "nama": "Wulan Astuti",
+  "posisi": "Kasir",
+  "pengalaman": [
+   {
+    "tempat": "Toko Bangunan Jaya",
+    "peran": "Kasir",
+    "tahun": "2020-2026"
+   },
+   {
+    "tempat": "Minimarket Sinar",
+    "peran": "Gudang",
+    "tahun": "2022-2023"
+   },
+   {
+    "tempat": "Minimarket Sinar",
+    "peran": "Kasir",
+    "tahun": "2021-2024"
+   }
+  ],
+  "keahlian": [
+   "Mengoperasikan kasir",
+   "Pembukuan sederhana"
+  ]
+ },
+ "catatan": ""
+}

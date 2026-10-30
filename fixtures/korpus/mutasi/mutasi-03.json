@@ -1,0 +1,129 @@
+{
+ "jenis": "mutasi",
+ "berkas": "mutasi-03.csv",
+ "bidang": {
+  "baris": [
+   {
+    "tanggal": "2026-10-04",
+    "keterangan": "SETORAN TUNAI",
+    "cabang": "0000",
+    "jumlah": 2846000,
+    "arah": "CR",
+    "saldo": 20239500
+   },
+   {
+    "tanggal": "2026-10-08",
+    "keterangan": "QRIS SETTLEMENT",
+    "cabang": "0000",
+    "jumlah": 3413500,
+    "arah": "CR",
+    "saldo": 17393500
+   },
+   {
+    "tanggal": "2026-10-11",
+    "keterangan": "TRSF E-BANKING CR KAFE SENJA INV/2026/X/0013",
+    "cabang": "0000",
+    "jumlah": 2408500,
+    "arah": "CR",
+    "saldo": 24259500
+   },
+   {
+    "tanggal": "2026-10-13",
+    "keterangan": "TRSF E-BANKING CR KAFE SENJA INV/2026/X/0026",
+    "cabang": "0000",
+    "jumlah": 2107500,
+    "arah": "CR",
+    "saldo": 22290500
+   },
+   {
+    "tanggal": "2026-10-13",
+    "keterangan": "PEMBAYARAN LISTRIK PLN",
+    "cabang": "0000",
+    "jumlah": 1702500,
+    "arah": "DB",
+    "saldo": 16389000
+   },
+   {
+    "tanggal": "2026-10-14",
+    "keterangan": "SETORAN TUNAI",
+    "cabang": "0000",
+    "jumlah": 1849000,
+    "arah": "CR",
+    "saldo": 24139500
+   },
+   {
+    "tanggal": "2026-10-15",
+    "keterangan": "TRSF E-BANKING DB GAJI OKTOBER",
+    "cabang": "0000",
+    "jumlah": 1466000,
+    "arah": "DB",
+    "saldo": 13980000
+   },
+   {
+    "tanggal": "2026-10-17",
+    "keterangan": "TRSF E-BANKING DB GAJI OKTOBER",
+    "cabang": "0000",
+    "jumlah": 2401000,
+    "arah": "DB",
+    "saldo": 13988000
+   },
+   {
+    "tanggal": "2026-10-18",
+    "keterangan": "TRSF E-BANKING CR VILLA ASRI INV/2026/X/0027",
+    "cabang": "0000",
+    "jumlah": 943000,
+    "arah": "CR",
+    "saldo": 25082500
+   },
+   {
+    "tanggal": "2026-10-22",
+    "keterangan": "TRSF E-BANKING DB GAJI OKTOBER",
+    "cabang": "0000",
+    "jumlah": 1392000,
+    "arah": "DB",
+    "saldo": 22867500
+   },
+   {
+    "tanggal": "2026-10-22",
+    "keterangan": "TRSF E-BANKING DB UD SUMBER REJEKI",
+    "cabang": "0000",
+    "jumlah": 2828000,
+    "arah": "DB",
+    "saldo": 18091500
+   },
+   {
+    "tanggal": "2026-10-23",
+    "keterangan": "TRSF E-BANKING DB GAJI OKTOBER",
+    "cabang": "0000",
+    "jumlah": 1368500,
+    "arah": "DB",
+    "saldo": 23714000
+   },
+   {
+    "tanggal": "2026-10-24",
+    "keterangan": "SETORAN TUNAI",
+    "cabang": "0000",
+    "jumlah": 1458000,
+    "arah": "CR",
+    "saldo": 15446000
+   },
+   {
+    "tanggal": "2026-10-25",
+    "keterangan": "TRSF E-BANKING DB UD SUMBER REJEKI",
+    "cabang": "0000",
+    "jumlah": 1863000,
+    "arah": "DB",
+    "saldo": 21851000
+   },
+   {
+    "tanggal": "2026-10-26",
+    "keterangan": "PEMBAYARAN LISTRIK PLN",
+    "cabang": "0000",
+    "jumlah": 1948000,
+    "arah": "DB",
+    "saldo": 20919500
+   }
+  ]
+ },
+ "catatan": "kolom meniru ekspor umum, bukan spesifikasi resmi bank; saldo pada baris tidak berurutan setelah diurutkan tanggal"
+}

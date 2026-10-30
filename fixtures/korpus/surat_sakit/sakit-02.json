@@ -1,0 +1,10 @@
+{
+ "jenis": "surat_sakit",
+ "berkas": "sakit-02.png",
+ "bidang": {
+  "nama": "Andi Permana",
+  "mulai": "2026-10-26",
+  "lama_hari": 3
+ },
+ "catatan": ""
+}

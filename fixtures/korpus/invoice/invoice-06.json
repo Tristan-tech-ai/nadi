@@ -1,0 +1,39 @@
+{
+ "jenis": "invoice",
+ "berkas": "invoice-06.pdf",
+ "bidang": {
+  "penjual": "CV Laundry Bersih Jaya",
+  "nomor": "INV/2026/X/0042",
+  "tanggal": "2026-10-09",
+  "jatuh_tempo": "2026-10-23",
+  "pembeli": "Warung Bu Made",
+  "baris": [
+   {
+    "nama": "Antar jemput cucian",
+    "qty": 12,
+    "harga": 26000,
+    "jumlah": 312000
+   },
+   {
+    "nama": "Biji kopi arabika 1 kg",
+    "qty": 5,
+    "harga": 62000,
+    "jumlah": 310000
+   },
+   {
+    "nama": "Jasa cuci linen per kg",
+    "qty": 2,
+    "harga": 118000,
+    "jumlah": 236000
+   },
+   {
+    "nama": "Jasa cuci linen per kg",
+    "qty": 20,
+    "harga": 237000,
+    "jumlah": 4740000
+   }
+  ],
+  "total": 5598000
+ },
+ "catatan": "bukan faktur pajak"
+}

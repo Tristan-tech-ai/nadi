@@ -1,0 +1,33 @@
+{
+ "jenis": "invoice",
+ "berkas": "invoice-01.pdf",
+ "bidang": {
+  "penjual": "PT Kopi Kintamani Lestari",
+  "nomor": "INV/2026/X/0007",
+  "tanggal": "2026-10-11",
+  "jatuh_tempo": "2026-10-25",
+  "pembeli": "Kafe Senja Sanur",
+  "baris": [
+   {
+    "nama": "Antar jemput cucian",
+    "qty": 18,
+    "harga": 34000,
+    "jumlah": 612000
+   },
+   {
+    "nama": "Setrika seprai",
+    "qty": 7,
+    "harga": 241000,
+    "jumlah": 1687000
+   },
+   {
+    "nama": "Kopi robusta 1 kg",
+    "qty": 5,
+    "harga": 127000,
+    "jumlah": 635000
+   }
+  ],
+  "total": 2934000
+ },
+ "catatan": "bukan faktur pajak"
+}

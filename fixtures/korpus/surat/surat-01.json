@@ -1,0 +1,11 @@
+{
+ "jenis": "surat",
+ "berkas": "surat-01.pdf",
+ "bidang": {
+  "nomor": "099/SK/HRD/X/2026",
+  "jenis": "Surat Keputusan Mutasi",
+  "tanggal": "2026-10-09",
+  "pihak": "Ketut Wijaya"
+ },
+ "catatan": "pola nomor urut/kode/unit/bulan romawi/tahun"
+}

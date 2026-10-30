@@ -1,0 +1,11 @@
+{
+ "jenis": "surat",
+ "berkas": "surat-04.pdf",
+ "bidang": {
+  "nomor": "109/SPH/MKT/X/2026",
+  "jenis": "Surat Penawaran Harga",
+  "tanggal": "2026-10-20",
+  "pihak": "Komang Saputra"
+ },
+ "catatan": "pola nomor urut/kode/unit/bulan romawi/tahun"
+}

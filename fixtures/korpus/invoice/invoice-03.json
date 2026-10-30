@@ -1,0 +1,33 @@
+{
+ "jenis": "invoice",
+ "berkas": "invoice-03.pdf",
+ "bidang": {
+  "penjual": "PT Kopi Kintamani Lestari",
+  "nomor": "INV/2026/X/0021",
+  "tanggal": "2026-10-18",
+  "jatuh_tempo": "2026-11-01",
+  "pembeli": "Villa Asri Ubud",
+  "baris": [
+   {
+    "nama": "Setrika seprai",
+    "qty": 20,
+    "harga": 131000,
+    "jumlah": 2620000
+   },
+   {
+    "nama": "Antar jemput cucian",
+    "qty": 1,
+    "harga": 220000,
+    "jumlah": 220000
+   },
+   {
+    "nama": "Gula aren 1 kg",
+    "qty": 5,
+    "harga": 22000,
+    "jumlah": 110000
+   }
+  ],
+  "total": 2950000
+ },
+ "catatan": "bukan faktur pajak"
+}

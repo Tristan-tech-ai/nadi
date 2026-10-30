@@ -1,0 +1,43 @@
+{
+ "jenis": "nota",
+ "berkas": "nota-07.png",
+ "bidang": {
+  "pemasok": "UD Sumber Rejeki",
+  "nomor": "NT-5109",
+  "tanggal": "2026-10-18",
+  "baris": [
+   {
+    "nama": "Air mineral 1 dus",
+    "qty": 1,
+    "harga": 46000,
+    "jumlah": 46000
+   },
+   {
+    "nama": "Bawang merah 1 kg",
+    "qty": 6,
+    "harga": 42000,
+    "jumlah": 252000
+   },
+   {
+    "nama": "Tepung terigu 1 kg",
+    "qty": 4,
+    "harga": 13500,
+    "jumlah": 54000
+   },
+   {
+    "nama": "Beras premium 5 kg",
+    "qty": 8,
+    "harga": 78000,
+    "jumlah": 624000
+   },
+   {
+    "nama": "Bawang merah 1 kg",
+    "qty": 5,
+    "harga": 42000,
+    "jumlah": 210000
+   }
+  ],
+  "total": 1186000
+ },
+ "catatan": "tata letak a"
+}

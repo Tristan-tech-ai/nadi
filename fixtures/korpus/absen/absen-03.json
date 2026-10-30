@@ -1,0 +1,359 @@
+{
+ "jenis": "absen",
+ "berkas": "absen-03.xlsx",
+ "bidang": {
+  "baris": [
+   {
+    "nama": "Wayan Utami",
+    "tanggal": "2026-10-01",
+    "masuk": "08.10",
+    "pulang": "18.41",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Utami",
+    "tanggal": "2026-10-02",
+    "masuk": "08.46",
+    "pulang": "16.58",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Utami",
+    "tanggal": "2026-10-03",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Sakit"
+   },
+   {
+    "nama": "Wayan Utami",
+    "tanggal": "2026-10-04",
+    "masuk": "08.32",
+    "pulang": "16.54",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Utami",
+    "tanggal": "2026-10-05",
+    "masuk": "07.08",
+    "pulang": "17.11",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Utami",
+    "tanggal": "2026-10-06",
+    "masuk": "07.51",
+    "pulang": "16.56",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Utami",
+    "tanggal": "2026-10-07",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Izin"
+   },
+   {
+    "nama": "Wayan Utami",
+    "tanggal": "2026-10-08",
+    "masuk": "07.18",
+    "pulang": "17.24",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Utami",
+    "tanggal": "2026-10-09",
+    "masuk": "08.38",
+    "pulang": "17.36",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Utami",
+    "tanggal": "2026-10-10",
+    "masuk": "08.24",
+    "pulang": "16.54",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rina Lestari",
+    "tanggal": "2026-10-01",
+    "masuk": "08.34",
+    "pulang": "18.54",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rina Lestari",
+    "tanggal": "2026-10-02",
+    "masuk": "07.35",
+    "pulang": "16.10",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rina Lestari",
+    "tanggal": "2026-10-03",
+    "masuk": "07.25",
+    "pulang": "16.14",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rina Lestari",
+    "tanggal": "2026-10-04",
+    "masuk": "08.32",
+    "pulang": "16.56",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rina Lestari",
+    "tanggal": "2026-10-05",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Izin"
+   },
+   {
+    "nama": "Rina Lestari",
+    "tanggal": "2026-10-06",
+    "masuk": "08.38",
+    "pulang": "16.24",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rina Lestari",
+    "tanggal": "2026-10-07",
+    "masuk": "08.38",
+    "pulang": "17.57",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rina Lestari",
+    "tanggal": "2026-10-08",
+    "masuk": "07.43",
+    "pulang": "18.10",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rina Lestari",
+    "tanggal": "2026-10-09",
+    "masuk": "08.24",
+    "pulang": "18.18",
+    "keterangan": ""
+   },
+   {
+    "nama": "Rina Lestari",
+    "tanggal": "2026-10-10",
+    "masuk": "08.34",
+    "pulang": "16.29",
+    "keterangan": ""
+   },
+   {
+    "nama": "Lestari Permana",
+    "tanggal": "2026-10-01",
+    "masuk": "07.27",
+    "pulang": "18.59",
+    "keterangan": ""
+   },
+   {
+    "nama": "Lestari Permana",
+    "tanggal": "2026-10-02",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Izin"
+   },
+   {
+    "nama": "Lestari Permana",
+    "tanggal": "2026-10-03",
+    "masuk": "08.29",
+    "pulang": "16.31",
+    "keterangan": ""
+   },
+   {
+    "nama": "Lestari Permana",
+    "tanggal": "2026-10-04",
+    "masuk": "08.32",
+    "pulang": "18.11",
+    "keterangan": ""
+   },
+   {
+    "nama": "Lestari Permana",
+    "tanggal": "2026-10-05",
+    "masuk": "08.03",
+    "pulang": "16.09",
+    "keterangan": ""
+   },
+   {
+    "nama": "Lestari Permana",
+    "tanggal": "2026-10-06",
+    "masuk": "08.15",
+    "pulang": "17.04",
+    "keterangan": ""
+   },
+   {
+    "nama": "Lestari Permana",
+    "tanggal": "2026-10-07",
+    "masuk": "08.55",
+    "pulang": "17.20",
+    "keterangan": ""
+   },
+   {
+    "nama": "Lestari Permana",
+    "tanggal": "2026-10-08",
+    "masuk": "08.42",
+    "pulang": "18.06",
+    "keterangan": ""
+   },
+   {
+    "nama": "Lestari Permana",
+    "tanggal": "2026-10-09",
+    "masuk": "08.13",
+    "pulang": "16.14",
+    "keterangan": ""
+   },
+   {
+    "nama": "Lestari Permana",
+    "tanggal": "2026-10-10",
+    "masuk": "07.52",
+    "pulang": "16.28",
+    "keterangan": ""
+   },
+   {
+    "nama": "Andi Utami",
+    "tanggal": "2026-10-01",
+    "masuk": "07.31",
+    "pulang": "18.08",
+    "keterangan": ""
+   },
+   {
+    "nama": "Andi Utami",
+    "tanggal": "2026-10-02",
+    "masuk": "07.04",
+    "pulang": "16.52",
+    "keterangan": ""
+   },
+   {
+    "nama": "Andi Utami",
+    "tanggal": "2026-10-03",
+    "masuk": "07.28",
+    "pulang": "17.56",
+    "keterangan": ""
+   },
+   {
+    "nama": "Andi Utami",
+    "tanggal": "2026-10-04",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Izin"
+   },
+   {
+    "nama": "Andi Utami",
+    "tanggal": "2026-10-05",
+    "masuk": "08.17",
+    "pulang": "18.41",
+    "keterangan": ""
+   },
+   {
+    "nama": "Andi Utami",
+    "tanggal": "2026-10-06",
+    "masuk": "08.04",
+    "pulang": "16.46",
+    "keterangan": ""
+   },
+   {
+    "nama": "Andi Utami",
+    "tanggal": "2026-10-07",
+    "masuk": "08.44",
+    "pulang": "18.47",
+    "keterangan": ""
+   },
+   {
+    "nama": "Andi Utami",
+    "tanggal": "2026-10-08",
+    "masuk": "08.38",
+    "pulang": "16.39",
+    "keterangan": ""
+   },
+   {
+    "nama": "Andi Utami",
+    "tanggal": "2026-10-09",
+    "masuk": "08.02",
+    "pulang": "16.35",
+    "keterangan": ""
+   },
+   {
+    "nama": "Andi Utami",
+    "tanggal": "2026-10-10",
+    "masuk": "07.40",
+    "pulang": "16.58",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Gunawan",
+    "tanggal": "2026-10-01",
+    "masuk": "08.41",
+    "pulang": "17.01",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Gunawan",
+    "tanggal": "2026-10-02",
+    "masuk": "08.43",
+    "pulang": "18.01",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Gunawan",
+    "tanggal": "2026-10-03",
+    "masuk": "08.17",
+    "pulang": "17.15",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Gunawan",
+    "tanggal": "2026-10-04",
+    "masuk": "07.46",
+    "pulang": "18.08",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Gunawan",
+    "tanggal": "2026-10-05",
+    "masuk": "08.11",
+    "pulang": "16.29",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Gunawan",
+    "tanggal": "2026-10-06",
+    "masuk": "08.52",
+    "pulang": "18.13",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Gunawan",
+    "tanggal": "2026-10-07",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Izin"
+   },
+   {
+    "nama": "Siti Gunawan",
+    "tanggal": "2026-10-08",
+    "masuk": "08.48",
+    "pulang": "16.24",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Gunawan",
+    "tanggal": "2026-10-09",
+    "masuk": "07.32",
+    "pulang": "17.15",
+    "keterangan": ""
+   },
+   {
+    "nama": "Siti Gunawan",
+    "tanggal": "2026-10-10",
+    "masuk": "",
+    "pulang": "",
+    "keterangan": "Izin"
+   }
+  ]
+ },
+ "catatan": "jam memakai titik (format EYD)"
+}

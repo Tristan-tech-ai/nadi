@@ -1,0 +1,33 @@
+{
+ "jenis": "invoice",
+ "berkas": "invoice-02.pdf",
+ "bidang": {
+  "penjual": "CV Laundry Bersih Jaya",
+  "nomor": "INV/2026/X/0014",
+  "tanggal": "2026-10-20",
+  "jatuh_tempo": "2026-11-03",
+  "pembeli": "Villa Asri Ubud",
+  "baris": [
+   {
+    "nama": "Setrika seprai",
+    "qty": 2,
+    "harga": 117000,
+    "jumlah": 234000
+   },
+   {
+    "nama": "Biji kopi arabika 1 kg",
+    "qty": 18,
+    "harga": 58000,
+    "jumlah": 1044000
+   },
+   {
+    "nama": "Kopi robusta 1 kg",
+    "qty": 19,
+    "harga": 120000,
+    "jumlah": 2280000
+   }
+  ],
+  "total": 3558000
+ },
+ "catatan": "bukan faktur pajak"
+}

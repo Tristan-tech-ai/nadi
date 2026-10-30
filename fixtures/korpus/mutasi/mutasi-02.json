@@ -1,0 +1,129 @@
+{
+ "jenis": "mutasi",
+ "berkas": "mutasi-02.csv",
+ "bidang": {
+  "baris": [
+   {
+    "tanggal": "2026-10-02",
+    "keterangan": "QRIS SETTLEMENT",
+    "cabang": "0000",
+    "jumlah": 68000,
+    "arah": "CR",
+    "saldo": 7382000
+   },
+   {
+    "tanggal": "2026-10-02",
+    "keterangan": "TRSF E-BANKING CR VILLA ASRI INV/2026/X/0023",
+    "cabang": "0000",
+    "jumlah": 2245500,
+    "arah": "CR",
+    "saldo": 3599000
+   },
+   {
+    "tanggal": "2026-10-03",
+    "keterangan": "TRSF E-BANKING DB GAJI OKTOBER",
+    "cabang": "0000",
+    "jumlah": 120500,
+    "arah": "DB",
+    "saldo": 7314000
+   },
+   {
+    "tanggal": "2026-10-03",
+    "keterangan": "TRSF E-BANKING DB UD SUMBER REJEKI",
+    "cabang": "0000",
+    "jumlah": 714000,
+    "arah": "DB",
+    "saldo": 2045500
+   },
+   {
+    "tanggal": "2026-10-06",
+    "keterangan": "TRSF E-BANKING CR KAFE SENJA INV/2026/X/0009",
+    "cabang": "0000",
+    "jumlah": 3287500,
+    "arah": "CR",
+    "saldo": 7976500
+   },
+   {
+    "tanggal": "2026-10-07",
+    "keterangan": "QRIS SETTLEMENT",
+    "cabang": "0000",
+    "jumlah": 3222000,
+    "arah": "CR",
+    "saldo": 1353500
+   },
+   {
+    "tanggal": "2026-10-08",
+    "keterangan": "TRSF E-BANKING DB UD SUMBER REJEKI",
+    "cabang": "0000",
+    "jumlah": 3432000,
+    "arah": "DB",
+    "saldo": 2759500
+   },
+   {
+    "tanggal": "2026-10-09",
+    "keterangan": "TRSF E-BANKING DB UD SUMBER REJEKI",
+    "cabang": "0000",
+    "jumlah": 2709500,
+    "arah": "DB",
+    "saldo": 1518000
+   },
+   {
+    "tanggal": "2026-10-09",
+    "keterangan": "TRSF E-BANKING CR KAFE SENJA INV/2026/X/0019",
+    "cabang": "0000",
+    "jumlah": 2643500,
+    "arah": "CR",
+    "saldo": 4689000
+   },
+   {
+    "tanggal": "2026-10-13",
+    "keterangan": "QRIS SETTLEMENT",
+    "cabang": "0000",
+    "jumlah": 1305500,
+    "arah": "CR",
+    "saldo": 8948500
+   },
+   {
+    "tanggal": "2026-10-15",
+    "keterangan": "QRIS SETTLEMENT",
+    "cabang": "0000",
+    "jumlah": 2592500,
+    "arah": "CR",
+    "saldo": 6191500
+   },
+   {
+    "tanggal": "2026-10-17",
+    "keterangan": "BIAYA ADM",
+    "cabang": "0000",
+    "jumlah": 1672500,
+    "arah": "DB",
+    "saldo": 7434500
+   },
+   {
+    "tanggal": "2026-10-20",
+    "keterangan": "TRSF E-BANKING DB UD SUMBER REJEKI",
+    "cabang": "0000",
+    "jumlah": 3386500,
+    "arah": "DB",
+    "saldo": -1868500
+   },
+   {
+    "tanggal": "2026-10-22",
+    "keterangan": "SETORAN TUNAI",
+    "cabang": "0000",
+    "jumlah": 158500,
+    "arah": "CR",
+    "saldo": 9107000
+   },
+   {
+    "tanggal": "2026-10-27",
+    "keterangan": "BIAYA ADM",
+    "cabang": "0000",
+    "jumlah": 3154500,
+    "arah": "DB",
+    "saldo": 4227500
+   }
+  ]
+ },
+ "catatan": "kolom meniru ekspor umum, bukan spesifikasi resmi bank; saldo pada baris tidak berurutan setelah diurutkan tanggal"
+}

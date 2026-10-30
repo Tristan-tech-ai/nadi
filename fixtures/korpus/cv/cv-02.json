@@ -1,0 +1,21 @@
+{
+ "jenis": "cv",
+ "berkas": "cv-02.pdf",
+ "bidang": {
+  "nama": "Rina Arsana",
+  "posisi": "Barista",
+  "pengalaman": [
+   {
+    "tempat": "Minimarket Sinar",
+    "peran": "Kasir",
+    "tahun": "2018-2025"
+   }
+  ],
+  "keahlian": [
+   "Bahasa Inggris dasar",
+   "Latte art",
+   "Microsoft Excel"
+  ]
+ },
+ "catatan": ""
+}

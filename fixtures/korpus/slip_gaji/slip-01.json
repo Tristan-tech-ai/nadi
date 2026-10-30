@@ -1,0 +1,24 @@
+{
+ "jenis": "slip_gaji",
+ "berkas": "slip-01.pdf",
+ "bidang": {
+  "nama": "Ketut Rahmawati",
+  "periode": "2026-10",
+  "gaji_pokok": 6400000,
+  "tunjangan": {
+   "transport": 400000,
+   "makan": 700000
+  },
+  "lembur": 0,
+  "potongan": {
+   "bpjs_kesehatan": 64000,
+   "jht": 128000,
+   "jp": 64000,
+   "pph21": 48000,
+   "kasbon": 0
+  },
+  "bruto": 7500000,
+  "neto": 7196000
+ },
+ "catatan": "potongan nilai contoh"
+}

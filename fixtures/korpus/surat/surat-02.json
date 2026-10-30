@@ -1,0 +1,11 @@
+{
+ "jenis": "surat",
+ "berkas": "surat-02.pdf",
+ "bidang": {
+  "nomor": "070/ST/OPS/X/2026",
+  "jenis": "Surat Tugas",
+  "tanggal": "2026-10-16",
+  "pihak": "Rina Permana"
+ },
+ "catatan": "pola nomor urut/kode/unit/bulan romawi/tahun"
+}

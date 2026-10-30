@@ -1,0 +1,21 @@
+{
+ "jenis": "cv",
+ "berkas": "cv-03.pdf",
+ "bidang": {
+  "nama": "Putu Wirawan",
+  "posisi": "Admin keuangan",
+  "pengalaman": [
+   {
+    "tempat": "Kafe Senja Sanur",
+    "peran": "Barista",
+    "tahun": "2018-2024"
+   }
+  ],
+  "keahlian": [
+   "Bahasa Inggris dasar",
+   "Melayani pelanggan",
+   "Stok opname"
+  ]
+ },
+ "catatan": ""
+}

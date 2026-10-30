@@ -1,0 +1,11 @@
+{
+ "jenis": "ktp",
+ "berkas": "ktp-04.png",
+ "bidang": {
+  "nik": "9920186101963718",
+  "nama": "DIMAS UTAMI",
+  "tanggal_lahir": "1996-01-21",
+  "jenis_kelamin": "P"
+ },
+ "catatan": "sintetis: kode provinsi 99 tidak ada, bertanda CONTOH"
+}

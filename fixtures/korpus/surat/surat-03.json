@@ -1,0 +1,11 @@
+{
+ "jenis": "surat",
+ "berkas": "surat-03.pdf",
+ "bidang": {
+  "nomor": "092/SP/HRD/X/2026",
+  "jenis": "Surat Peringatan Pertama",
+  "tanggal": "2026-10-09",
+  "pihak": "Dimas Santoso"
+ },
+ "catatan": "pola nomor urut/kode/unit/bulan romawi/tahun"
+}

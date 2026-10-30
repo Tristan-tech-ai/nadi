@@ -1,0 +1,55 @@
+{
+ "jenis": "nota",
+ "berkas": "nota-03.png",
+ "bidang": {
+  "pemasok": "UD Sumber Rejeki",
+  "nomor": "NT-3051",
+  "tanggal": "2026-10-08",
+  "baris": [
+   {
+    "nama": "Kecap manis 600 ml",
+    "qty": 1,
+    "harga": 23500,
+    "jumlah": 23500
+   },
+   {
+    "nama": "Minyak goreng 2 L",
+    "qty": 10,
+    "harga": 36500,
+    "jumlah": 365000
+   },
+   {
+    "nama": "Teh celup 25",
+    "qty": 7,
+    "harga": 9500,
+    "jumlah": 66500
+   },
+   {
+    "nama": "Minyak goreng 2 L",
+    "qty": 3,
+    "harga": 36500,
+    "jumlah": 109500
+   },
+   {
+    "nama": "Tepung terigu 1 kg",
+    "qty": 8,
+    "harga": 13500,
+    "jumlah": 108000
+   },
+   {
+    "nama": "Air mineral 1 dus",
+    "qty": 6,
+    "harga": 46000,
+    "jumlah": 276000
+   },
+   {
+    "nama": "Minyak goreng 2 L",
+    "qty": 8,
+    "harga": 36500,
+    "jumlah": 292000
+   }
+  ],
+  "total": 1240500
+ },
+ "catatan": "tata letak a"
+}

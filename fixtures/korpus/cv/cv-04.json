@@ -1,0 +1,26 @@
+{
+ "jenis": "cv",
+ "berkas": "cv-04.pdf",
+ "bidang": {
+  "nama": "Dimas Astuti",
+  "posisi": "Staf gudang",
+  "pengalaman": [
+   {
+    "tempat": "Kafe Senja Sanur",
+    "peran": "Admin",
+    "tahun": "2018-2023"
+   },
+   {
+    "tempat": "Minimarket Sinar",
+    "peran": "Gudang",
+    "tahun": "2018-2023"
+   }
+  ],
+  "keahlian": [
+   "Melayani pelanggan",
+   "Stok opname",
+   "Latte art"
+  ]
+ },
+ "catatan": ""
+}
