@@ -75,8 +75,11 @@
    "accept": "apps/web memakai token di :root dan dark; halaman /dev/komponen menampilkan semua komponen; ASSETS.md mencatat lisensi tiap aset; kontras AA lulus axe",
    "how": "dari DIRECTION.md; unduh font Google Fonts/Fontsource; ikon dengan lisensi MIT/ISC",
    "blocked_by": "D-01,F0-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "started": "2026-10-31T00:24:13",
+   "done": "2026-10-31T00:30:43",
+   "result": "commit 5401c48: token di :root + gelap (tokens.test 46 asersi kontras AA dan sinkron globals.css), next/font Plus Jakarta Sans/Bricolage/IBM Plex Mono, ikon Phosphor MIT, logo SVG, Tombol/Rupiah/Cap/KartuUsulan, /dev/komponen; e2e 8/8 axe 0 serius terang+gelap 390+1440, tangkapan ditinjau; lisensi di docs/ASSETS.md"
   },
   {
    "id": "D-03",

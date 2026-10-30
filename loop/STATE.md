@@ -3,9 +3,10 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 00:50, setelah tick 4.
-- Fase: F0. Progres wajib: 5/64 (R-01, F0-01, F0-03, F0-02, D-01).
-- Berikutnya: F0-10 (korpus contoh sintetis), F0-08 (paket industri + aturan bertanggal), lalu D-02 (sistem desain: token dari DIRECTION.md, font Plus Jakarta Sans/Bricolage/IBM Plex Mono, ikon, logo).
+- Tanggal: 31 Okt 2026 01:20, setelah tick 5.
+- Fase: F0. Progres wajib: 6/64 (R-01, F0-01, F0-03, F0-02, D-01, D-02).
+- Berikutnya: F0-10 (korpus contoh sintetis 40 berkas), F0-08 (paket industri + aturan bertanggal), F0-04 (auth) setelah itu.
+- Sistem desain: src/lib/tokens.ts (sumber warna, diuji kontras dan sinkron dengan globals.css), src/lib/format.ts (formatRupiah/Tanggal/Jam/Persen), komponen di src/components/ui (Tombol, Rupiah, Cap, KartuUsulan, LogoNadi), ikon dari @phosphor-icons/react/dist/ssr (nama berakhiran Icon), lembar /dev/komponen (noindex).
 - Desain: arah 'kertas kerja yang hidup' (docs/design/DIRECTION.md), palet kertas/tinta/kunyit/cap/daun/laut tanpa ungu, sapaan 'kamu', format Rp1.250.000. Gerbang `slop` memeriksa aturan [M] di ANTI-SLOP.md.
 - Produksi: https://nadi-well-13fd.vercel.app (proyek Vercel prj_FEXfQJCj2AulucGiuO6WniLz4KJ4, sin1, Node 24, install `npx --yes pnpm@10.29.2 install`). Deploy lewat create_deployment dengan berkas (atau redeploy deploymentId) karena GitHub App belum terpasang (F0-02B terblokir, UNTUK-TRISTAN). Deploy hanya di titik penting.
 - Database: migrasi fondasi, graf_usaha, mode_hemat ter-apply; sidik md5 identik repo (cek: scripts/cek-migrasi.py dengan json dari supabase_migrations). Tes: supabase/tests/isolasi_tenant.test.sql (38 asersi). pg_cron: nadi-ringkas-harian 17:30 UTC, nadi-partman 18:00 UTC.
