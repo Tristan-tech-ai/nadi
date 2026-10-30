@@ -243,8 +243,11 @@
    "accept": "minimal 40 berkas di fixtures/korpus dengan jawaban benar (JSON) untuk uji akurasi; tidak ada data orang sungguhan",
    "how": "buat sendiri (HTML->PDF/PNG, xlsx) meniru format umum Indonesia yang ditemukan di internet; catat sumber format",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "started": "2026-10-31T01:01:11",
+   "done": "2026-10-31T01:04:49",
+   "result": "commit 4791ad7: fixtures/korpus 42 berkas (nota 8 dua tata letak, invoice 6, slip 6, KTP 4 NIK provinsi 99 + CONTOH, CV 4, surat 4, surat sakit 2, absen xlsx 3, karyawan xlsx 2, mutasi CSV 3) dengan jawaban JSON; korpus.test 9 tes (total unit 83/83); skrip deterministik kecuali cap waktu PDF/XLSX"
   },
   {
    "id": "F0-11",
