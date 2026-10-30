@@ -3,9 +3,9 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 ~04:10, setelah tick 10 (F0-08 selesai). KONTEKS KRITIS: kompaksi segera; baca loop/MUST_READ.txt dulu.
-- Fase: F0. Progres wajib: 11/67.
-- Berikutnya: F0-08B (aturan bertanggal dari sumber resmi), F0-05B (Web Push), F0-06 (Lempar Saja v1). Migrasi paket_industri belum dicek sidiknya dengan scripts/cek-migrasi.py (lakukan di awal tick berikut).
+- Tanggal: 31 Okt 2026 ~04:30, setelah tick 11 (F0-08B selesai). KONTEKS KRITIS: kompaksi segera; baca loop/MUST_READ.txt dulu.
+- Fase: F0. Progres wajib: 12/67. Enam migrasi identik repo (fondasi, graf_usaha, mode_hemat, akun_staf, paket_industri, aturan_resmi).
+- Berikutnya: F0-05B (Web Push), F0-06 (Lempar Saja v1), F0-11 (landing). Aturan yang belum terverifikasi: UMP/UMK Bali (buka teks SK), BPJS Kesehatan, tabel PPh 21 TER (wajib sebelum F1-05).
 - Paket industri: tabel paket_industri (fnb, toko); RPC pasang_paket(kode) dipanggil di buatPerusahaan setelah refreshSession.
 - Aplikasi: layout /app punya kepala + nav bawah (src/components/app/nav-bawah.tsx, isi per peran) di balik Suspense; service worker didaftarkan di layout akar (src/components/app/daftar-sw.tsx, public/sw.js); /app = Feed Keputusan (usulan menunggu); /app/lempar halaman sementara jujur ('pembaca berkas sedang disiapkan'). Ikon dibuat ulang: node scripts/buat-ikon.mjs.
 - Staf: perusahaan.kode (6 huruf), orang.id_staf (S001..), RPC buat_akun_staf(p_orang,p_pin) membuat akun email sintetis {kode}-{id}@staf.nadi.local; /masuk/staf; /app/orang (pengelola). e2e auth menambah satu 'Staf Uji <waktu>' per jalan di usaha uji A (data uji tumbuh pelan; bersihkan nanti lewat arsip, bukan delete).

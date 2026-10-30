@@ -15,3 +15,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 03:15 | F0-04B | staf masuk dengan kode usaha + ID + PIN; tes SQL 13/13; e2e staf lulus | 49a52bd |
 | 31 Okt 2026 03:50 | F0-05 | nav per peran, Feed, manifest + share target, SW luring, ikon; e2e 24/24 + installability CDP | 0b09263 |
 | 31 Okt 2026 04:10 | F0-08 | paket industri fnb+toko, pasang_paket; tes SQL 7/7; aturan resmi dipisah F0-08B | 893ddf0 |
+| 31 Okt 2026 04:30 | F0-08B | aturan bertanggal: 4 resmi BPJS TK, 4 bertanda belum terverifikasi | d6a9d4d |

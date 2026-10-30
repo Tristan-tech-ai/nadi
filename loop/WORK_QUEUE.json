@@ -996,8 +996,11 @@
    "accept": "setiap baris aturan_bertanggal punya URL sumber resmi yang dibuka langsung dan tanggal akses; yang belum cocok teks resmi terverifikasi=false; tes SQL: tidak ada aturan tanpa sumber",
    "how": "WebFetch situs resmi (bpjsketenagakerjaan.go.id, pajak.go.id, jdih), migrasi insert aturan_bertanggal",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T01:47:37"
+   "status": "done",
+   "created": "2026-10-31T01:47:37",
+   "started": "2026-10-31T01:59:13",
+   "done": "2026-10-31T02:00:34",
+   "result": "commit d6a9d4d: migrasi aturan_resmi (sidik identik), 8 aturan semua bersumber, 4 terverifikasi dari situs resmi BPJS TK, 4 bertanda belum (UMP/UMK Bali dari berita, BPJS Kesehatan, tabel TER belum dimuat)"
   }
  ]
 }
