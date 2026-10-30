@@ -101,11 +101,11 @@ async function cobaAturan(db: SupabaseClient, perusahaan_id: string, teks: strin
  * tipe bidang diperbaiki tanpa token, lalu model diberi satu kesempatan memperbaiki dengan rincian bidang yang salah.
  * Hanya aturan yang lulus yang disimpan.
  */
-async function tulisAturan(db: SupabaseClient, model: string, perusahaan_id: string, berkas_id: string, teks: string, hasil: Hasil) {
+async function tulisAturan(db: SupabaseClient, model: string, perusahaan_id: string, berkas_id: string, teks: string, hasil: Hasil, ocr: boolean) {
   const rapi = (b: Record<string, unknown>) => rapikan(BIDANG[hasil.jenis], b) as Record<string, unknown>;
   const percakapan: Anthropic.MessageParam[] = [{
     role: "user",
-    content: `Jenis berkas: ${hasil.jenis}\n\nTeks berkas (per baris):\n<teks>\n${teks.slice(0, 30000)}\n</teks>\n\nHasil bacaan yang benar (JSON, nama bidang wajib sama):\n${JSON.stringify(hasil.bidang)}`,
+    content: `Jenis berkas: ${hasil.jenis}\n\nTeks berkas${ocr ? " (hasil OCR foto di HP; hasil bacaan di bawah diambil dari fotonya)" : ""} (per baris):\n<teks>\n${teks.slice(0, 30000)}\n</teks>\n\nHasil bacaan yang benar (JSON, nama bidang wajib sama):\n${JSON.stringify(hasil.bidang)}`,
   }];
   try {
     for (let coba = 1; coba <= 2; coba++) {
@@ -120,10 +120,10 @@ async function tulisAturan(db: SupabaseClient, model: string, perusahaan_id: str
       const t = r.content.find((b) => b.type === "text");
       if (r.stop_reason !== "end_turn" || t?.type !== "text") return console.log("tulis_aturan berhenti", r.stop_reason);
       let aturan = aturanDari(hasil.jenis, JSON.parse(t.text) as AturanMentah);
-      let uji = ujiAturan(aturan, teks, hasil.bidang, rapi);
+      let uji = ujiAturan(aturan, teks, hasil.bidang, rapi, ocr);
       if (!uji.lulus) {
-        aturan = perbaikiTipe(aturan, teks, hasil.bidang, rapi);
-        uji = ujiAturan(aturan, teks, hasil.bidang, rapi);
+        aturan = perbaikiTipe(aturan, teks, hasil.bidang, rapi, ocr);
+        uji = ujiAturan(aturan, teks, hasil.bidang, rapi, ocr);
       }
       if (uji.lulus) {
         const { error } = await db.from("ekstraktor").insert({
@@ -205,13 +205,17 @@ Deno.serve(async (req) => {
         return await gagal(`Nadi belum bisa membaca berkas ini (${akhir.berhenti}). Coba foto ulang lebih jelas.`);
       }
       // Berkas berteks dan jenisnya dikenal: tulis aturan sekali agar berkas kembarannya nanti tanpa token.
-      if (teks && hasil.jenis !== "lainnya") EdgeRuntime.waitUntil(tulisAturan(admin, tangga.berat, berkas.perusahaan_id, berkas_id, teks, hasil));
+      if (teks && hasil.jenis !== "lainnya") EdgeRuntime.waitUntil(tulisAturan(admin, tangga.berat, berkas.perusahaan_id, berkas_id, teks, hasil, Boolean(ocrCukup)));
     }
 
     const u = usulanDari(hasil);
     const { data: usulan } = await admin.from("usulan").insert({
       perusahaan_id: berkas.perusahaan_id, sumber: "lempar", aksi: u.aksi, judul: u.judul,
-      penjelasan: sumber === "aturan" ? u.penjelasan.replace(/Dibaca dari berkas, yakin \d+%\./, "Dibaca dengan aturan tersimpan untuk tata letak ini, tanpa AI.") : u.penjelasan,
+      penjelasan: sumber === "aturan"
+        ? u.penjelasan.replace(/Dibaca dari berkas, yakin \d+%\./, ocrCukup
+          ? "Dibaca dari foto dengan aturan tersimpan, tanpa AI. Angka sudah dicocokkan; periksa ejaan nama dan nomor."
+          : "Dibaca dengan aturan tersimpan untuk tata letak ini, tanpa AI.")
+        : u.penjelasan,
       payload: { jenis: hasil.jenis, bidang: hasil.bidang, ringkasan: hasil.ringkasan }, keyakinan: hasil.keyakinan,
       dampak_rp: u.dampak_rp, berkas_id,
     }).select("id").single();

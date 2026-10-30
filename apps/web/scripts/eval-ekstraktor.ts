@@ -6,7 +6,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { createClient } from "@supabase/supabase-js";
 import { createWorker } from "tesseract.js";
-import { akurasi } from "../../../supabase/functions/baca-berkas/ekstraktor.ts";
+import { akurasi, samaNilai } from "../../../supabase/functions/baca-berkas/ekstraktor.ts";
 import { nilai, type Hasil } from "../../../supabase/functions/baca-berkas/inti.ts";
 
 const AKAR = join(import.meta.dirname, "..", "..", "..");
@@ -69,13 +69,18 @@ for (const [jenis, pertama, kembar, mime, garam] of PASANGAN) {
   }
   const b = await lempar(kembar, mime, garam);
   const jawaban = JSON.parse(readFileSync(join(KORPUS, kembar.replace(/\.\w+$/, ".json")), "utf8")).bidang;
+  const foto = mime.startsWith("image/");
   const n = b.hasil ? nilai(jenis, jawaban, b.hasil) : { benar: false, salah: ["tidak terbaca"] };
+  // Foto lewat OCR: nomor boleh beda satu huruf (mis. "NT" terbaca "NI"), dicatat terpisah; angka dan tanggal tetap persis.
+  const ocrHuruf = foto && b.hasil && n.salah.includes("nomor") && samaNilai(jawaban.nomor, (b.hasil.bidang as Record<string, unknown>).nomor, true)
+    ? `nomor OCR ${JSON.stringify((b.hasil.bidang as Record<string, unknown>).nomor)}` : "";
+  if (ocrHuruf) { n.salah = n.salah.filter((x) => x !== "nomor"); n.benar = n.salah.length === 0; }
   const acc = b.hasil ? akurasi(jawaban, b.hasil.bidang) : { cocok: 0, total: 1 };
   cocokBidang += acc.cocok;
   totalBidang += acc.total;
   const ok = b.hasil?.sumber === "aturan" && b.token === 0 && n.benar;
   if (ok) lulus++;
-  baris.push(`| ${jenis} | ${pertama} | ${a.hasil?.sumber ?? "-"}, ${a.token} token | ${ada ? "ya" : "tidak"} | ${kembar} | ${b.hasil?.sumber ?? "-"}, ${b.token} token, ${b.detik.toFixed(1)} dtk | ${acc.cocok}/${acc.total} | ${ok ? "lulus" : "gagal: " + n.salah.join(", ")} |`);
+  baris.push(`| ${jenis} | ${pertama} | ${a.hasil?.sumber ?? "-"}, ${a.token} token | ${ada ? "ya" : "tidak"} | ${kembar} | ${b.hasil?.sumber ?? "-"}, ${b.token} token, ${b.detik.toFixed(1)} dtk | ${acc.cocok}/${acc.total} | ${ok ? "lulus" + (ocrHuruf ? ` (${ocrHuruf})` : "") : "gagal: " + n.salah.join(", ")} |`);
   console.log(baris.at(-1));
 }
 
@@ -91,7 +96,7 @@ Berkas pertama tiap tata letak dibaca model; model berat lalu menulis aturan yan
 |---|---|---|---|---|---|---|---|
 ${baris.join("\n")}
 
-Catatan: foto nota belum bisa 0 token (butuh OCR di perangkat, R-03). Berkas CSV/XLSX tidak diberi byte unik, jadi jalan ulang memakai hasil yang sudah tersimpan.
+Catatan: foto nota dibaca OCR di perangkat (tesseract.js 7.0.0 'ind', sama seperti di HP) lalu teksnya dikirim bersama foto. Aturan dari foto diuji longgar untuk teks (paling banyak 1 huruf beda per 6) tetapi persis untuk angka dan tanggal, dan selalu lewat pemeriksaan silang (jumlah baris = total, qty x harga = jumlah). Akurasi bidang dihitung persis, jadi salah baca huruf OCR ("kg" menjadi "ko") terhitung salah di kolom Bidang benar. Berkas CSV/XLSX tidak diberi byte unik, jadi jalan ulang memakai hasil yang sudah tersimpan.
 `);
 console.log(`\nLULUS ${lulus}/${PASANGAN.length}, bidang ${persen}%`);
 process.exit(lulus === PASANGAN.length && cocokBidang / totalBidang >= 0.95 ? 0 : 1);

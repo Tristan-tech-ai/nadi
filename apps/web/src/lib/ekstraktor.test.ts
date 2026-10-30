@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { unzipSync } from "fflate";
 import { extractText, getDocumentProxy } from "unpdf";
 import { describe, expect, it } from "vitest";
-import { SKEMA_ATURAN, akurasi, aturanDari, cocok, jalankan, konsisten, perbaikiTipe, sidik, ubah, ujiAturan, type Aturan, type AturanMentah } from "../../../../supabase/functions/baca-berkas/ekstraktor";
+import { SKEMA_ATURAN, akurasi, aturanDari, cocok, jalankan, konsisten, perbaikiTipe, samaNilai, sidik, ubah, ujiAturan, type Aturan, type AturanMentah } from "../../../../supabase/functions/baca-berkas/ekstraktor";
 import { BIDANG, nilai, rapikan, xlsxKeTeks, type Hasil, type Jenis } from "../../../../supabase/functions/baca-berkas/inti";
 
 const KORPUS = join(__dirname, "..", "..", "..", "..", "fixtures", "korpus");
@@ -180,5 +180,46 @@ describe("aturan tulisan model diuji sebelum disimpan", () => {
   });
   it("akurasi menghitung nilai daun", () => {
     expect(akurasi({ a: 1, b: [{ c: "x" }, { c: "y" }] }, { a: 1, b: [{ c: "X" }, { c: "z" }] })).toEqual({ cocok: 2, total: 3 });
+  });
+});
+
+describe("foto nota lewat teks OCR (tesseract.js 'ind', fixtures/ocr)", () => {
+  const ocr = (f: string) => readFileSync(join(KORPUS, "..", "ocr", f), "utf8");
+  const rapi = (b: Record<string, unknown>) => rapikan(BIDANG.nota, b) as Record<string, unknown>;
+  // Satu barang tersebar di dua baris OCR: "Teh celup 25" lalu "9x 9.500 85.500" (baris kosong di antaranya).
+  const NOTA_OCR: Aturan = aturanDari("nota", {
+    bentuk: "teks", jangkar: ["No:", "Tgl:", "TOTAL", "Terima kasih"],
+    bidang: [
+      { nama: "pemasok", pola: "^(.+)$", tipe: "teks", opsional: false },
+      { nama: "nomor", pola: "^No:\\s*(\\S+)", tipe: "teks", opsional: false },
+      { nama: "tanggal", pola: "^Tgl:\\s*(\\S+)", tipe: "tanggal", opsional: false },
+      { nama: "total", pola: "^TOTAL\\s+([\\d.]+)", tipe: "rupiah", opsional: false },
+    ],
+    tabel_pola: "^(?<nama>.+?)\\s+(?<qty>\\d+)\\s*x\\s*(?<harga>[\\d.]+)\\s+(?<jumlah>[\\d.]+)$",
+    tabel_setelah: "Tgl:", tabel_sebelum: "TOTAL", tabel_gabung: 2,
+    tabel_kolom: [{ nama: "nama", tipe: "teks" }, { nama: "qty", tipe: "angka" }, { nama: "harga", tipe: "rupiah" }, { nama: "jumlah", tipe: "rupiah" }],
+    kolom: [],
+  });
+  it("baris tabel dua baris digabung; angka nota kembaran terbaca dan konsisten", () => {
+    const h = jalankan(NOTA_OCR, ocr("nota-05.txt"));
+    expect(h.lengkap).toBe(true);
+    expect(konsisten("nota", h.bidang)).toEqual([]);
+    const benar = jawaban("nota", "nota-05.png");
+    expect(h.bidang.total).toBe(benar.total);
+    expect(h.bidang.tanggal).toBe(benar.tanggal);
+    expect((h.bidang.baris as unknown[]).length).toBe(benar.baris.length);
+  });
+  it("uji aturan dari OCR: salah baca huruf kecil diterima (longgar), tanpa longgar ditolak", () => {
+    const benar = jawaban("nota", "nota-01.png");
+    expect(ujiAturan(NOTA_OCR, ocr("nota-01.txt"), benar, rapi, true)).toEqual({ lulus: true, alasan: "" });
+    expect(ujiAturan(NOTA_OCR, ocr("nota-01.txt"), benar, rapi).alasan).toMatch(/nomor: harap "NT-4671", dapat "NI-4671"/);
+  });
+  it("longgar hanya untuk teks: angka, tanggal, dan teks yang beda jauh tetap salah", () => {
+    expect(samaNilai("NT-4671", "NI-4671", true)).toBe(true);
+    expect(samaNilai("Bawang merah 1 kg", "Bawang merah 1 ko", true)).toBe(true);
+    expect(samaNilai("2026-10-13", "2026-10-18", true)).toBe(false);
+    expect(samaNilai(376500, 376000, true)).toBe(false);
+    expect(samaNilai("NT-4671", "NT-9999", true)).toBe(false);
+    expect(samaNilai("UD Sumber Rejeki", "Toko Makmur", true)).toBe(false);
   });
 });
