@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { unzipSync } from "fflate";
 import { extractText, getDocumentProxy } from "unpdf";
 import { describe, expect, it } from "vitest";
-import { cocok, jalankan, konsisten, sidik, ubah, type Aturan } from "../../../../supabase/functions/baca-berkas/ekstraktor";
+import { SKEMA_ATURAN, akurasi, aturanDari, cocok, jalankan, konsisten, perbaikiTipe, sidik, ubah, ujiAturan, type Aturan, type AturanMentah } from "../../../../supabase/functions/baca-berkas/ekstraktor";
 import { BIDANG, nilai, rapikan, xlsxKeTeks, type Hasil, type Jenis } from "../../../../supabase/functions/baca-berkas/inti";
 
 const KORPUS = join(__dirname, "..", "..", "..", "..", "fixtures", "korpus");
@@ -62,17 +62,6 @@ const ABSEN: Aturan = {
     pulang: { judul: "Pulang", tipe: "jam" }, keterangan: { judul: "Keterangan", tipe: "teks" },
   },
 };
-
-/** Akurasi tingkat bidang: setiap nilai daun di jawaban dibandingkan dengan hasil. */
-function akurasi(benar: unknown, hasil: unknown): { cocok: number; total: number } {
-  if (Array.isArray(benar)) {
-    return benar.reduce((s, x, i) => { const r = akurasi(x, (hasil as unknown[] | undefined)?.[i]); return { cocok: s.cocok + r.cocok, total: s.total + r.total }; }, { cocok: 0, total: 0 });
-  }
-  if (benar && typeof benar === "object") {
-    return Object.entries(benar).reduce((s, [k, x]) => { const r = akurasi(x, (hasil as Record<string, unknown> | undefined)?.[k]); return { cocok: s.cocok + r.cocok, total: s.total + r.total }; }, { cocok: 0, total: 0 });
-  }
-  return { cocok: String(benar).toLowerCase() === String(hasil ?? "").toLowerCase() ? 1 : 0, total: 1 };
-}
 
 describe("ubah", () => {
   it("rupiah EYD, desimal CSV, tanggal Indonesia, periode, jam", () => {
@@ -136,5 +125,60 @@ describe("pengaman", () => {
   });
   it("sidik stabil terhadap urutan dan huruf besar jangkar", async () => {
     expect(await sidik({ ...MUTASI, jangkar: ["saldo", "TANGGAL", "Keterangan", "Jumlah", "DB/CR"] })).toBe(await sidik(MUTASI));
+  });
+});
+
+describe("aturan tulisan model diuji sebelum disimpan", () => {
+  const rapi = (b: Record<string, unknown>) => rapikan(BIDANG.invoice, b) as Record<string, unknown>;
+  const inv = INVOICE as Extract<Aturan, { bentuk: "teks" }>;
+  const mentah: AturanMentah = {
+    bentuk: "teks",
+    jangkar: inv.jangkar,
+    bidang: Object.entries(inv.bidang).map(([nama, v]) => ({ nama, pola: v.pola, tipe: v.tipe, opsional: false })),
+    tabel_pola: inv.tabel!.pola,
+    tabel_setelah: "Uraian Qty",
+    tabel_sebelum: "Total tagihan",
+    tabel_kolom: [{ nama: "nama", tipe: "teks" }, { nama: "qty", tipe: "angka" }, { nama: "harga", tipe: "rupiah" }, { nama: "jumlah", tipe: "rupiah" }],
+    kolom: [],
+  };
+  it("bentuk mentah (keluaran terstruktur) menjadi aturan yang lulus uji di berkas asal dan berkas kembarannya", async () => {
+    const aturan = aturanDari("invoice", mentah);
+    const t1 = await teksPdf(join(KORPUS, "invoice", "invoice-01.pdf"));
+    expect(ujiAturan(aturan, t1, jawaban("invoice", "invoice-01.pdf"), rapi)).toEqual({ lulus: true, alasan: "" });
+    const t5 = await teksPdf(join(KORPUS, "invoice", "invoice-05.pdf"));
+    expect(ujiAturan(aturan, t5, jawaban("invoice", "invoice-05.pdf"), rapi).lulus).toBe(true);
+  });
+  it("regex yang menangkap angka keliru, jangkar hafalan, dan regex rusak ditolak", async () => {
+    const t1 = await teksPdf(join(KORPUS, "invoice", "invoice-01.pdf"));
+    const salahPola = aturanDari("invoice", { ...mentah, bidang: mentah.bidang.map((b) => (b.nama === "total" ? { ...b, pola: "(Rp[\\d.]+)" } : b)) });
+    expect(ujiAturan(salahPola, t1, jawaban("invoice", "invoice-01.pdf"), rapi).lulus).toBe(false);
+    const hafalan = aturanDari("invoice", { ...mentah, jangkar: ["PT Kopi Kintamani Lestari", "INVOICE"] });
+    expect(cocok(hafalan, await teksPdf(join(KORPUS, "invoice", "invoice-02.pdf")))).toBe(false);
+    const rusak = aturanDari("invoice", { ...mentah, bidang: [{ nama: "nomor", pola: "(", tipe: "teks", opsional: false }] });
+    expect(ujiAturan(rusak, t1, jawaban("invoice", "invoice-01.pdf"), rapi).alasan).toMatch(/regex rusak/);
+  });
+  it("skema aturan kecil dan tertutup", () => {
+    expect(JSON.stringify(SKEMA_ATURAN)).not.toMatch(/anyOf|minimum|maxLength/);
+    expect((SKEMA_ATURAN as { additionalProperties: boolean }).additionalProperties).toBe(false);
+  });
+  it("tipe yang keliru (tanggal ditulis teks, jumlah ditulis angka) diperbaiki tanpa model", () => {
+    const teks = readFileSync(join(KORPUS, "mutasi", "mutasi-01.csv"), "utf8");
+    const benar = jawaban("mutasi", "mutasi-01.csv");
+    const rapiM = (b: Record<string, unknown>) => rapikan(BIDANG.mutasi, b) as Record<string, unknown>;
+    const keliru = JSON.parse(JSON.stringify(MUTASI)) as Extract<Aturan, { bentuk: "kolom" }>;
+    keliru.kolom.tanggal.tipe = "teks";
+    keliru.kolom.saldo.tipe = "teks";
+    const uji = ujiAturan(keliru, teks, benar, rapiM);
+    expect(uji.lulus).toBe(false);
+    expect(uji.alasan).toMatch(/baris\[0\]\.tanggal: harap "2026-10-07", dapat "07\/10\/2026"/);
+    const diperbaiki = perbaikiTipe(keliru, teks, benar, rapiM);
+    expect(ujiAturan(diperbaiki, teks, benar, rapiM)).toEqual({ lulus: true, alasan: "" });
+    expect((diperbaiki as typeof keliru).kolom.tanggal.tipe).toBe("tanggal");
+  });
+  it("angka desimal CSV dibaca sebagai angka utuh", () => {
+    expect(ubah("2503000.00", "angka")).toBe(2503000);
+  });
+  it("akurasi menghitung nilai daun", () => {
+    expect(akurasi({ a: 1, b: [{ c: "x" }, { c: "y" }] }, { a: 1, b: [{ c: "X" }, { c: "z" }] })).toEqual({ cocok: 2, total: 3 });
   });
 });

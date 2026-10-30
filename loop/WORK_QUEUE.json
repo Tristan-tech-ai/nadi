@@ -1135,8 +1135,9 @@
    "accept": "e2e/eval: berkas pertama invoice/slip/mutasi memakai model dan menyimpan aturan teruji; berkas kedua tata letak sama selesai dengan token_ai = 0 dan hasil benar; gagal konsisten jatuh balik ke model",
    "how": "Edge Function baca-berkas v4 (unpdf di Deno), tabel ekstraktor + RLS, keluaran terstruktur untuk aturan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T04:14:06"
+   "status": "running",
+   "created": "2026-10-31T04:14:06",
+   "started": "2026-10-31T04:26:18"
   },
   {
    "id": "F0-07C",
