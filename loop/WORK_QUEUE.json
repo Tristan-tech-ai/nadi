@@ -30,9 +30,11 @@
    "accept": "docs/research/jev.md berisi sumber primer bertanggal; satu panggilan nyata atau bukti tidak tersedia + fallback model kecil terdokumentasi",
    "how": "WebSearch/WebFetch docs resmi; uji via AI Gateway dari Vercel (OIDC) bila tersedia",
    "blocked_by": "F0-02",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-30T20:05:52",
-   "started": "2026-10-31T03:55:09"
+   "started": "2026-10-31T03:55:09",
+   "done": "2026-10-31T03:57:52",
+   "result": "commit f31ec68; docs/research/jev.md (9 sumber primer bertanggal 31 Okt 2026): akses API TypeSafe /v1/systemone dan Vercel AI Gateway /v1/evaluate (typesafe-ai/jev, /usr/bin/bash,042/jt input, output gratis, konteks 32-64 rb, batas laju per organisasi tidak dipublikasikan, early access, tanpa SLA), format choice/score/boolean; bukti tidak tersedia: 403 TypeSafe dan 401 AI Gateway tanpa kredensial (20:56 UTC); fallback model ringan berbentuk sama terdokumentasi; spike nyata dipindah ke R-02B setelah F0-13 deploy"
   },
   {
    "id": "R-03",
