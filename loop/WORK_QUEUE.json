@@ -156,9 +156,11 @@
    "accept": "e2e Playwright: daftar -> buat perusahaan -> klaim pid ada di JWT -> data perusahaan B tidak terlihat; staf masuk tanpa email",
    "how": "Supabase Auth; atasi batas email konfirmasi (cek pengaturan, catat di UNTUK-TRISTAN.md bila butuh klik dasbor)",
    "blocked_by": "F0-01,F0-03,D-02",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-30T20:05:52",
-   "started": "2026-10-31T00:42:13"
+   "started": "2026-10-31T00:42:13",
+   "done": "2026-10-31T00:49:50",
+   "result": "commit 65eb04a: /masuk, /daftar, /auth/konfirmasi, /app (Suspense), /app/mulai (RPC buat_perusahaan + refreshSession), /app/perusahaan (pindah); e2e auth 5/5 (sandi salah, validasi daftar, klaim pid+prn di JWT, B tidak melihat usaha A, pindah usaha mengganti pid), axe /masuk /daftar 0 serius; tes unit auth-pesan 11; masuk staf kode+ID dipisah ke F0-04B"
   },
   {
    "id": "F0-05",

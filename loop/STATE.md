@@ -3,9 +3,10 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 01:20, setelah tick 5.
-- Fase: F0. Progres wajib: 6/64 (R-01, F0-01, F0-03, F0-02, D-01, D-02).
-- Berikutnya: F0-10 (korpus contoh sintetis 40 berkas), F0-08 (paket industri + aturan bertanggal), F0-04 (auth) setelah itu.
+- Tanggal: 31 Okt 2026 02:10, setelah tick 6.
+- Fase: F0. Progres wajib: 7/65 (+F0-04).
+- Berikutnya: F0-10 (korpus contoh), F0-04B (masuk staf kode+ID), F0-05 (kerangka aplikasi, PWA, Feed), F0-08 (paket industri).
+- Auth: src/app/auth-actions.ts (masuk/daftar/keluar), src/lib/sesi.ts (bacaSesi/wajibSesi/wajibPerusahaan, hanya di balik Suspense), src/app/app/actions.ts (buatPerusahaan, pindahPerusahaan + refreshSession). createClient memanggil connection(). Akun uji e2e e2e-a/e2e-b@uji.nadi.local, sandi di apps/web/.env.e2e.local (diabaikan git; salinan di scratchpad e2e_sandi.txt). Produksi belum memuat auth (deploy berkas berikutnya bersama landing/F0-05).
 - Sistem desain: src/lib/tokens.ts (sumber warna, diuji kontras dan sinkron dengan globals.css), src/lib/format.ts (formatRupiah/Tanggal/Jam/Persen), komponen di src/components/ui (Tombol, Rupiah, Cap, KartuUsulan, LogoNadi), ikon dari @phosphor-icons/react/dist/ssr (nama berakhiran Icon), lembar /dev/komponen (noindex).
 - Desain: arah 'kertas kerja yang hidup' (docs/design/DIRECTION.md), palet kertas/tinta/kunyit/cap/daun/laut tanpa ungu, sapaan 'kamu', format Rp1.250.000. Gerbang `slop` memeriksa aturan [M] di ANTI-SLOP.md.
 - Produksi: https://nadi-well-13fd.vercel.app (proyek Vercel prj_FEXfQJCj2AulucGiuO6WniLz4KJ4, sin1, Node 24, install `npx --yes pnpm@10.29.2 install`). Deploy lewat create_deployment dengan berkas (atau redeploy deploymentId) karena GitHub App belum terpasang (F0-02B terblokir, UNTUK-TRISTAN). Deploy hanya di titik penting.
