@@ -4,4 +4,4 @@ Loop tidak pernah menunggu isi berkas ini; ia lanjut ke tugas lain. Isinya hanya
 
 | Tanggal | Butuh | Kenapa | Cara (langkah persis) | Status |
 |---|---|---|---|---|
-| 30 Okt 2026 | (opsional) Pasang Vercel GitHub App di akun Tristan-tech-ai untuk repo `nadi` | Deploy otomatis tiap push | https://github.com/apps/vercel/installations/new, pilih Tristan-tech-ai, Only select repositories, pilih nadi, Install | belum diketahui |
+| 31 Okt 2026 | Pasang Vercel GitHub App di akun Tristan-tech-ai untuk repo `nadi` | Tanpa ini Vercel tidak melihat repo (galat repo_not_found 31 Okt), jadi deploy dikirim manual dari berkas dan tidak otomatis per push (tugas F0-02B menunggu ini) | Masuk GitHub sebagai Tristan-tech-ai, buka https://github.com/apps/vercel/installations/new, pilih akun Tristan-tech-ai, Only select repositories, pilih nadi, Install | menunggu |

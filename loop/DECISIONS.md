@@ -4,6 +4,8 @@ Setiap keputusan produk, desain, atau teknis yang diambil loop, dengan alasan da
 
 | Tanggal | Keputusan | Alasan | Sumber |
 |---|---|---|---|
+| 31 Okt 2026 | Deploy produksi sementara lewat unggahan berkas (create_deployment) sampai Vercel GitHub App terpasang; deploy hanya di titik penting karena tiap deploy mengirim isi berkas | Repo tidak terlihat oleh Vercel (repo_not_found); menunggu satu klik Tristan (UNTUK-TRISTAN, F0-02B) | Vercel MCP |
+| 31 Okt 2026 | Proyek Vercel nadi: region fungsi sin1, Node 24.x, Fluid, proteksi SSO hanya preview | Dekat dengan Supabase Singapura; produksi harus bisa dibuka publik | update_project |
 | 30 Okt 2026 | Mode hemat: kejadian mentah 90 hari, audit 180 hari (pg_partman), ringkasan_harian per perusahaan/jenis/orang dihitung pg_cron 17:30 UTC | DB Free 500 MB; KPI dan insight cukup dari ringkasan; retensi membuang partisi utuh, bukan DELETE baris | supabase.com/pricing; pg_partman 5.3.1 |
 | 30 Okt 2026 | WARN advisor 'security definer dapat dipanggil authenticated' untuk buat_perusahaan dan pindah_perusahaan diterima | Keduanya harus menulis app_metadata di auth.users dan memeriksa keanggotaan/auth.uid() di dalam | get_advisors 30 Okt 2026 |
 | 30 Okt 2026 | Penjaga anti-macet: hook Elicitation menjawab konfirmasi MCP Supabase saat loop aktif; SQL penghapus data ditolak di depan; pengawas detak 25 menit dengan notifikasi Windows | Loop diam 3 jam (20:34-23:26) menunggu dialog konfirmasi karena migrasi memuat drop policy; Tristan mengizinkan modifikasi diri | dokumentasi resmi hook agen (event Elicitation), 30 Okt 2026 |

@@ -116,8 +116,9 @@
    "accept": "URL produksi menjawab 200; get_deployment READY; env NEXT_PUBLIC_SUPABASE_* terpasang; push berikutnya memicu deploy otomatis",
    "how": "Vercel MCP create_project/create_git_project (teamId team_DIFMD08eDgAex5GasIRHz7Fj); bila GitHub App belum terpasang, catat di UNTUK-TRISTAN.md dan deploy lewat jalur lain",
    "blocked_by": "F0-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "running",
+   "created": "2026-10-30T20:05:52",
+   "started": "2026-10-30T23:49:07"
   },
   {
    "id": "F0-03",
@@ -919,6 +920,20 @@
    "blocked_by": "tunggu rilis keamanan Next.js 3 Nov 2026",
    "status": "blocked",
    "created": "2026-10-30T20:17:29"
+  },
+  {
+   "id": "F0-02B",
+   "fase": "F0",
+   "kind": "deploy",
+   "priority": 30,
+   "size": "s",
+   "wajib": true,
+   "title": "Deploy otomatis setiap push (Vercel tersambung ke repo GitHub)",
+   "accept": "push ke main memicu deploy produksi READY tanpa langkah manual; get_project menunjukkan link repo Tristan-tech-ai/nadi",
+   "how": "setelah Vercel GitHub App terpasang: create_git_project atau sambungkan proyek nadi yang sudah ada",
+   "blocked_by": "menunggu Tristan memasang Vercel GitHub App (UNTUK-TRISTAN.md)",
+   "status": "blocked",
+   "created": "2026-10-30T23:50:52"
   }
  ]
 }
