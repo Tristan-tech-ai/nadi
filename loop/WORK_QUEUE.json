@@ -1135,9 +1135,11 @@
    "accept": "e2e/eval: berkas pertama invoice/slip/mutasi memakai model dan menyimpan aturan teruji; berkas kedua tata letak sama selesai dengan token_ai = 0 dan hasil benar; gagal konsisten jatuh balik ke model",
    "how": "Edge Function baca-berkas v4 (unpdf di Deno), tabel ekstraktor + RLS, keluaran terstruktur untuk aturan",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-31T04:14:06",
-   "started": "2026-10-31T04:26:18"
+   "started": "2026-10-31T04:26:18",
+   "done": "2026-10-31T04:43:20",
+   "result": "commit b8da06f; baca-berkas v5 (ekstraktor.ts + inti.ts + index.ts); docs/quality/eval-ekstraktor.md: 4/4 tata letak (invoice PDF, slip PDF, mutasi CSV, absen XLSX) berkas kembaran dibaca aturan tersimpan dengan token_ai 0, 1 dtk, 371/371 bidang benar; aturan buruk ditolak (log v4), perbaikan tipe + umpan balik (invoice lulus percobaan 2); vitest ekstraktor 15/15"
   },
   {
    "id": "F0-07C",
