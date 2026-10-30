@@ -1018,9 +1018,11 @@
    "accept": "trigger usulan insert (status menunggu) -> pgmq/pg_net memanggil Edge Function push aksi 'usulan' dengan kunci rahasia dari Vault (header apikey), dikirim ke langganan anggota berperan untuk_peran di perusahaan itu; digabung per 5 menit agar tidak membanjiri; tes SQL + e2e: menyisipkan usulan memunculkan pemberitahuan di Chrome",
    "how": "docs Supabase pg_net + Vault (apikey header untuk kunci sb_secret), Edge Function push v2",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-31T02:18:04",
-   "started": "2026-10-31T03:30:10"
+   "started": "2026-10-31T03:30:10",
+   "done": "2026-10-31T03:43:42",
+   "result": "commit a1bb53a; migrasi push_usulan identik (11/11); Edge Function push v2 verify_jwt=false + token x-nadi-token dari Vault; tes SQL push_usulan 11/11 (gabung per usaha, tahan 5 menit, staf tidak ditarget, fungsi tertutup untuk pengguna); cron sungguhan: net._http_response 200 terkirim 1; e2e push.spec 2/2 (usulan baru -> pemberitahuan di Chrome dalam 32,6 dtk tanpa tombol). Klaim salah sementara: regex peka huruf besar dan tes paralel 2 perangkat"
   },
   {
    "id": "F0-06A",
