@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { HasilForm } from "@/lib/auth-pesan";
 import { createClient } from "@/lib/supabase/server";
@@ -17,6 +18,30 @@ export async function buatPerusahaan(_: HasilForm, form: FormData): Promise<Hasi
   if (error) return { galat: error.code === "54000" ? "Akun ini sudah mencapai batas 20 usaha." : "Nadi gagal membuat usaha. Coba lagi sebentar.", isian: { nama, industri } };
   await supabase.auth.refreshSession();
   redirect("/app");
+}
+
+export async function tambahOrang(_: HasilForm, form: FormData): Promise<HasilForm> {
+  const nama = String(form.get("nama") ?? "").trim();
+  if (nama.length < 2) return { galat: "Nama minimal 2 huruf." };
+  const supabase = await createClient();
+  const { data: sesi } = await supabase.auth.getClaims();
+  const pid = (sesi?.claims?.app_metadata as { pid?: string } | undefined)?.pid;
+  const { error } = await supabase.from("orang").insert({ perusahaan_id: pid, nama });
+  if (error) return { galat: "Nadi gagal menambah orang. Hanya pemilik atau admin yang bisa." };
+  revalidatePath("/app/orang");
+  return {};
+}
+
+export async function buatAkunStaf(_: HasilForm, form: FormData): Promise<HasilForm> {
+  const orang = String(form.get("orang") ?? "");
+  const pin = String(form.get("pin") ?? "");
+  if (!/^\d{6}$/.test(pin)) return { galat: "PIN harus 6 angka." };
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("buat_akun_staf", { p_orang: orang, p_pin: pin });
+  if (error) return { galat: error.code === "42501" ? "Hanya pemilik atau admin yang bisa membuat akun staf." : "Nadi gagal membuat akun. Coba lagi sebentar." };
+  const r = data as { kode: string; id_staf: string };
+  revalidatePath("/app/orang");
+  return { info: `Akun siap. Staf masuk di /masuk/staf dengan kode ${r.kode}, ID ${r.id_staf}, dan PIN yang barusan kamu isi.` };
 }
 
 export async function pindahPerusahaan(form: FormData) {

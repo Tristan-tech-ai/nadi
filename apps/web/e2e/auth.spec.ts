@@ -96,3 +96,29 @@ test("pemilik A pindah antar dua usaha, klaim ikut berganti", async ({ page, con
   const sesudah = klaimDariCookie(await context.cookies()).app_metadata.pid;
   expect(sesudah).not.toBe(sebelum);
 });
+
+test("pemilik membuat akun staf; staf masuk tanpa email dan ditolak di halaman pengelola", async ({ page, browser }) => {
+  await masukSebagai(page, E.E2E_EMAIL_A);
+  await pastikanUsaha(page, "Warung Uji A");
+  await page.goto("/app/orang");
+  const kode = (await page.getByTestId("kode-usaha").textContent())!.trim();
+  const nama = `Staf Uji ${Date.now()}`;
+  await page.getByLabel("Nama orang").fill(nama);
+  await page.getByRole("button", { name: "Tambah" }).click();
+  const baris = page.getByRole("listitem").filter({ hasText: nama });
+  await expect(baris).toBeVisible();
+  await baris.getByPlaceholder("PIN 6 angka").fill("246810");
+  await baris.getByRole("button", { name: "Buat akun staf" }).click();
+  await expect(baris.getByTestId("info-akun")).toContainText(`kode ${kode}`);
+  const id = (await baris.getByTestId("info-akun").textContent())!.match(/ID (S\d{3})/)![1];
+
+  const staf = await (await browser.newContext()).newPage();
+  await staf.goto("/masuk/staf");
+  await staf.getByLabel("Kode usaha").fill(kode);
+  await staf.getByLabel("ID kamu").fill(id);
+  await staf.getByLabel("PIN").fill("246810");
+  await staf.getByRole("button", { name: "Masuk" }).click();
+  await expect(staf.getByTestId("peran")).toContainText("staf");
+  await staf.goto("/app/orang");
+  await expect(staf.getByTestId("ditolak")).toBeVisible();
+});

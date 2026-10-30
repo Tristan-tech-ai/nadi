@@ -16,6 +16,21 @@ export async function masuk(_: HasilForm, form: FormData): Promise<HasilForm> {
   redirect(jalurAman(teks(form, "next")));
 }
 
+/** Staf masuk tanpa email: kode usaha + ID staf + PIN 6 angka, dipetakan ke email sintetis buatan buat_akun_staf. */
+export async function masukStaf(_: HasilForm, form: FormData): Promise<HasilForm> {
+  const kode = teks(form, "kode").toUpperCase();
+  const id = teks(form, "id").toUpperCase();
+  const pin = String(form.get("pin") ?? "");
+  const isian = { kode, id };
+  if (!/^[A-Z0-9]{6}$/.test(kode)) return { galat: "Kode usaha berisi 6 huruf atau angka. Tanyakan ke pemilik.", isian };
+  if (!/^S\d{3}$/.test(id)) return { galat: "ID staf seperti S001. Tanyakan ke pemilik.", isian };
+  if (!/^\d{6}$/.test(pin)) return { galat: "PIN berisi 6 angka.", isian };
+  const supabase = await createClient();
+  const { error } = await supabase.auth.signInWithPassword({ email: `${kode}-${id}@staf.nadi.local`.toLowerCase(), password: pin });
+  if (error) return { galat: error.code === "invalid_credentials" ? "Kode, ID, atau PIN tidak cocok. Periksa lagi, atau minta pemilik mengatur ulang PIN." : pesanGalatAuth(error.code), isian };
+  redirect("/app");
+}
+
 export async function daftar(_: HasilForm, form: FormData): Promise<HasilForm> {
   const email = teks(form, "email").toLowerCase();
   const sandi = String(form.get("sandi") ?? "");
