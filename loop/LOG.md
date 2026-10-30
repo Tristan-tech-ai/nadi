@@ -19,3 +19,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 02:20 | F0-05B | Web Push: VAPID di Vault via Edge Function push, langganan ber-RLS, e2e Chrome terima push FCM, SQL 15/15; tambah F0-05C | 401c0cc |
 | 31 Okt 2026 03:00 | F0-06A | fondasi Lempar Saja: bucket ber-RLS, lempar_berkas anti-duplikat, konfigurasi model, pemakaian_ai; SQL 14/14, e2e unggah lulus; F0-06 dipecah A/B/C | 8312beb |
 | 31 Okt 2026 03:05 | F0-06B | baca-berkas: eval korpus 10/10, 20 rb token, cache instruksi terbukti, tidak diproses ulang; anyOf ditolak API lalu diganti | 33e0f1a |
+| 31 Okt 2026 03:25 | F0-06C, F0-06 | layar Lempar + share target + Setujui/Tolak (putuskan_usulan, SQL 13/13), e2e lempar 2/2, desktop 20/20, axe bersih; Lempar Saja v1 selesai | ed800ba |

@@ -189,9 +189,11 @@
    "title": "Lempar Saja v1: unggah (kompres di HP), bucket Storage ber-RLS, antrean pgmq, Edge Function pemroses AI, usulan + geser terima",
    "accept": "10 berkas korpus contoh (F0-10) -> usulan benar >= 8; terima usulan membuat baris orang/kerja/dokumen; berkas sama tidak diproses dua kali; token tercatat per berkas",
    "how": "Edge Function memakai secret ANTHROPIC_API_KEY; model kecil dulu, naik bila keyakinan rendah",
-   "blocked_by": "F0-06B,F0-06C",
-   "status": "blocked",
-   "created": "2026-10-30T20:05:52"
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T03:18:59",
+   "result": "Gabungan F0-06A (8312beb), F0-06B (33e0f1a), F0-06C (ed800ba): korpus 10 berkas -> 10/10 usulan benar (docs/quality/eval-lempar.md); Setujui membuat baris orang (KTP, Excel) dan kejadian (nota, absen, mutasi) lewat putuskan_usulan; berkas sama tidak diproses dua kali (sha256 per usaha + klaim atomik); token tercatat per berkas (berkas.token_ai) dan per panggilan (pemakaian_ai). Penyimpangan: antrean pgmq diganti panggilan langsung (DECISIONS); kerja/dokumen belum punya tabel sendiri, dokumen dicatat sebagai kejadian berbukti berkas"
   },
   {
    "id": "F0-07",
@@ -1064,9 +1066,11 @@
    "accept": "e2e: lempar nota dan KTP dari korpus -> usulan muncul di Feed -> Setujui membuat baris orang/kejadian; galat dan keadaan memuat rapi; axe bersih 390/1440",
    "how": "browser-image-compression atau canvas bawaan; server action",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-31T02:34:24",
-   "started": "2026-10-31T03:08:04"
+   "started": "2026-10-31T03:08:04",
+   "done": "2026-10-31T03:18:50",
+   "result": "commit ed800ba; layar /app/lempar (Foto/Pilih berkas, seret-lepas, kompres JPEG 2000px, sha256, unggah RLS, baca via server action), share target daftar+unggah lalu ?berkas=; RPC putuskan_usulan (tes SQL 13/13: orang dari KTP dengan NIK hash, impor Excel lewati duplikat, kejadian nota/absen, staf dan usaha lain ditolak, NIK mentah dihapus); e2e lempar 2/2 + desktop 20/20; axe bersih Lempar+Feed 390/1440 terang+gelap; migrasi 10/10 identik. Lighthouse halaman ber-login belum diukur"
   }
  ]
 }
