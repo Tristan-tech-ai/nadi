@@ -16,7 +16,7 @@ step() {  # step NAMA perintah...
   [ "${RES[-1]}" = "ok" ] || tail -25 "loop/.gate_$name.log"
 }
 
-step rahasia ./scripts/check-secrets.sh
+step rahasia bash scripts/check-secrets.sh
 # TANPA JEJAK: nama asisten pengembang tidak boleh ada di berkas terlacak maupun riwayat (pola ditulis terpecah agar skrip ini lolos sendiri)
 jejak() { local P='c[l]aude|noreply@a[n]thropic|co-a[u]thored-by'; ! git grep -qiIE "$P" -- . && ! git log --format='%an%n%ae%n%cn%n%ce%n%B' | grep -qiE "$P"; }
 step jejak jejak
