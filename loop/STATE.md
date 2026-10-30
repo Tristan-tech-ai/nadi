@@ -3,9 +3,10 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 ~02:20 (jam lokal), setelah tick 12 (F0-05B Web Push selesai). Catatan jam tick 11 di sini sebelumnya (~04:30) salah.
-- Fase: F0. Progres wajib: 13/67. Delapan migrasi identik repo (fondasi, graf_usaha, mode_hemat, akun_staf, paket_industri, aturan_resmi, web_push, web_push_unik).
-- Berikutnya: F0-06 (Lempar Saja v1), F0-11 (landing), F0-09 (MCP). Aturan belum terverifikasi: UMP/UMK Bali (teks SK), BPJS Kesehatan, tabel PPh 21 TER (wajib sebelum F1-05).
+- Tanggal: 31 Okt 2026 ~03:00 (jam lokal), setelah tick 13 (F0-06A fondasi Lempar Saja).
+- Fase: F0. Progres wajib: 13/67. Sembilan migrasi identik repo (... web_push_unik, lempar_saja).
+- Berikutnya: F0-06B (Edge Function baca-berkas + eval korpus >= 8/10), lalu F0-06C (layar unggah + terima usulan). F0-06 terblokir oleh F0-06B,F0-06C (terbuka otomatis). Lainnya: F0-11 (landing), F0-09 (MCP). Aturan belum terverifikasi: UMP/UMK Bali, BPJS Kesehatan, TER (wajib sebelum F1-05).
+- Lempar Saja (data): bucket `berkas` pribadi 10 MB (jpg/png/webp/pdf/csv/xlsx); RPC lempar_berkas(sha256, nama, mime, ukuran) -> {ada, id, status, jalur}; jalur {usaha}/lempar/{sha256}.{ext}; berkas.status 'unggah' sampai diproses; Storage INSERT hanya ke jalur terdaftar berstatus 'unggah' milik pengunggah; SELECT pengelola atau pemilik objek. public.konfigurasi (model_ai: ringan/berat/ambang_naik, diisi SQL, tanpa ID model di repo); public.pemakaian_ai (token per panggilan, baca pengelola; ditulis Edge Function). Rencana F0-06B: SDK @anthropic-ai/sdk 1.3.0 di Deno, output_config.format json_schema, xlsx/csv diubah ke teks dulu (bukan dikirim sebagai gambar). e2e lempar-api menambah satu berkas uji per jalan di usaha A (sintetis).
 - Web Push: tabel langganan_push (unik perusahaan+pengguna+endpoint, RLS milik sendiri); kunci VAPID dibuat Edge Function `push` (supabase/functions/push, jsr:@negrel/webpush 0.5.0) dan disimpan di Vault (app.vapid + RPC kunci_push_publik / vapid_ambil khusus service_role); aksi 'siapkan' dan 'uji'. UI di /app/perusahaan (src/components/app/pemberitahuan.tsx, src/app/app/push-actions.ts); sw.js v2 menangani push + notificationclick. e2e push butuh Google Chrome + launchPersistentContext (profil penyamaran menolak push). Env publik lokal di apps/web/.env.local (diabaikan git).
 - Jebakan Windows: skrip node dengan path /c/... menulis ke C:\c\... (pakai path C:/...). Folder kosong sisa ada di C:\c\Users\Tristan\AppData\Local\Temp (penghapusan diblok penjaga, dibiarkan; C:\c juga berisi data lain milik Tristan).
 - Paket industri: tabel paket_industri (fnb, toko); RPC pasang_paket(kode) dipanggil di buatPerusahaan setelah refreshSession.

@@ -17,3 +17,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 04:10 | F0-08 | paket industri fnb+toko, pasang_paket; tes SQL 7/7; aturan resmi dipisah F0-08B | 893ddf0 |
 | 31 Okt 2026 04:30 | F0-08B | aturan bertanggal: 4 resmi BPJS TK, 4 bertanda belum terverifikasi | d6a9d4d |
 | 31 Okt 2026 02:20 | F0-05B | Web Push: VAPID di Vault via Edge Function push, langganan ber-RLS, e2e Chrome terima push FCM, SQL 15/15; tambah F0-05C | 401c0cc |
+| 31 Okt 2026 03:00 | F0-06A | fondasi Lempar Saja: bucket ber-RLS, lempar_berkas anti-duplikat, konfigurasi model, pemakaian_ai; SQL 14/14, e2e unggah lulus; F0-06 dipecah A/B/C | 8312beb |

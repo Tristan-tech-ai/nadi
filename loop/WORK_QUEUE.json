@@ -1030,9 +1030,11 @@
    "accept": "migrasi identik; tes SQL lulus; e2e unggah sungguhan: jalur liar ditolak, sha sama tidak didaftarkan dua kali, usaha lain tidak bisa baca/tulis",
    "how": "storage.objects RLS + RPC security definer",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-31T02:34:24",
-   "started": "2026-10-31T02:34:24"
+   "started": "2026-10-31T02:34:24",
+   "done": "2026-10-31T02:34:56",
+   "result": "commit 8312beb; migrasi lempar_saja identik (cek-migrasi 9/9); tes SQL lempar_saja 14/14; e2e lempar-api.spec lulus (unggah sungguhan ke Storage, jalur liar ditolak, anti-duplikat, usaha B tidak bisa baca/tulis/lihat); advisor: WARN lempar_berkas security definer diterima (cek anggota di dalam); konfigurasi model_ai diisi lewat SQL"
   },
   {
    "id": "F0-06B",
