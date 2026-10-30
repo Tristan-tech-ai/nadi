@@ -18,7 +18,7 @@ const TANGGAL = "YYYY-MM-DD, kosong bila tidak ada";
 const RP = "rupiah utuh tanpa pemisah, 0 bila tidak ada";
 const barisBarang = objek({ nama: teks(), qty: angka(), harga: angka(RP), jumlah: angka(RP) });
 
-const BIDANG: Record<Jenis, Skema> = {
+export const BIDANG: Record<Jenis, Skema> = {
   nota: objek({ pemasok: teks("nama toko/pemasok yang menerbitkan nota"), nomor: teks(), tanggal: teks(TANGGAL), baris: daftar(barisBarang), total: angka(RP) }),
   invoice: objek({ penjual: teks(), nomor: teks(), tanggal: teks(TANGGAL), jatuh_tempo: teks(TANGGAL), pembeli: teks(), baris: daftar(barisBarang), total: angka(RP) }),
   slip_gaji: objek({

@@ -208,8 +208,8 @@
    "title": "Ekstraktor terkompilasi: sidik tata letak, LLM menulis aturan sekali, pelari deterministik, jatuh balik ke LLM saat keyakinan rendah",
    "accept": "berkas kedua dengan tata letak sama diproses dengan 0 token; akurasi bidang >= 95% pada korpus; metrik token hemat tampil di dasbor admin",
    "how": "OCR teks (pdf teks langsung; gambar via model vision sekali), jangkar + regex per bidang",
-   "blocked_by": "F0-06",
-   "status": "ready",
+   "blocked_by": "F0-07B,F0-07C",
+   "status": "blocked",
    "created": "2026-10-30T20:05:52"
   },
   {
@@ -1088,9 +1088,10 @@
    "title": "Deploy produksi terbaru (auth, Lempar Saja, push) lewat unggah berkas Vercel",
    "accept": "get_deployment READY di https://nadi-well-13fd.vercel.app; dari luar: /masuk 200, /app mengalihkan ke /masuk tanpa sesi, manifest share_target ada, e2e asap + auth jalan dengan E2E_BASE_URL produksi; env NEXT_PUBLIC_SUPABASE_* terpasang",
    "how": "create_deployment dengan berkas repo (tanpa node_modules/.next), atau redeploy bila GitHub App sudah terpasang",
-   "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T03:57:21"
+   "blocked_by": "F0-02B",
+   "status": "blocked",
+   "created": "2026-10-31T03:57:21",
+   "started": "2026-10-31T04:09:04"
   },
   {
    "id": "R-02B",
@@ -1105,6 +1106,49 @@
    "blocked_by": "F0-13",
    "status": "blocked",
    "created": "2026-10-31T03:57:22"
+  },
+  {
+   "id": "F0-07A",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 8,
+   "size": "m",
+   "wajib": false,
+   "title": "Ekstraktor: teks PDF tanpa model (unpdf), aturan jangkar+regex+kolom, pelari deterministik, pemeriksaan silang",
+   "accept": "vitest: satu aturan per tata letak membaca semua invoice/slip PDF, mutasi CSV, absen XLSX korpus dengan bidang kunci benar dan akurasi bidang >= 95%; angka tak konsisten dan baris tak terbaca ditolak",
+   "how": "supabase/functions/baca-berkas/ekstraktor.ts, unpdf 1.9.1",
+   "blocked_by": "",
+   "status": "running",
+   "created": "2026-10-31T04:14:06",
+   "started": "2026-10-31T04:14:06"
+  },
+  {
+   "id": "F0-07B",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 8,
+   "size": "m",
+   "wajib": false,
+   "title": "Ekstraktor: model menulis aturan sekali, disimpan per usaha, baca-berkas memakai aturan dengan 0 token bila cocok dan konsisten",
+   "accept": "e2e/eval: berkas pertama invoice/slip/mutasi memakai model dan menyimpan aturan teruji; berkas kedua tata letak sama selesai dengan token_ai = 0 dan hasil benar; gagal konsisten jatuh balik ke model",
+   "how": "Edge Function baca-berkas v4 (unpdf di Deno), tabel ekstraktor + RLS, keluaran terstruktur untuk aturan",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T04:14:06"
+  },
+  {
+   "id": "F0-07C",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 8,
+   "size": "s",
+   "wajib": false,
+   "title": "Ekstraktor: metrik token hemat di dasbor admin dan eval korpus",
+   "accept": "halaman /app/perusahaan (pengelola) menampilkan token dipakai vs dihemat 30 hari dari pemakaian_ai; docs/quality/eval-ekstraktor.md: >= 95% bidang benar, berkas kedua 0 token",
+   "how": "ringkasan SQL dari pemakaian_ai + kolom berkas.lewat_aturan",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T04:14:06"
   }
  ]
 }
