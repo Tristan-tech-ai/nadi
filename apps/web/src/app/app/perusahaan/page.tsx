@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { pindahPerusahaan } from "@/app/app/actions";
+import { Pemberitahuan } from "@/components/app/pemberitahuan";
 import { createClient } from "@/lib/supabase/server";
 import { wajibSesi } from "@/lib/sesi";
 
@@ -44,6 +45,13 @@ async function Daftar() {
   );
 }
 
+async function BagianPemberitahuan() {
+  await wajibSesi();
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("kunci_push_publik");
+  return <Pemberitahuan kunciPublik={(data as string | null) ?? null} />;
+}
+
 export default function Perusahaan() {
   return (
     <main className="mx-auto w-full max-w-xl px-5 py-10">
@@ -53,6 +61,9 @@ export default function Perusahaan() {
         <Daftar />
       </Suspense>
       <Link href="/app/mulai" className="mt-6 inline-block text-sm font-semibold underline underline-offset-4">Tambah usaha lain</Link>
+      <Suspense fallback={<div className="mt-10 h-28 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+        <BagianPemberitahuan />
+      </Suspense>
     </main>
   );
 }

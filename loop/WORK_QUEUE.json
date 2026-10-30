@@ -982,8 +982,9 @@
    "accept": "kunci VAPID dibuat sendiri dan disimpan sebagai env sensitive Vercel + secret Supabase; tabel langganan_push ber-RLS; tombol Nyalakan pemberitahuan; e2e Chromium menerima push uji",
    "how": "docs bawaan Next progressive-web-apps.md (bagian push), web-push di server, service worker menangani push",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T01:34:26"
+   "status": "running",
+   "created": "2026-10-31T01:34:26",
+   "started": "2026-10-31T02:03:08"
   },
   {
    "id": "F0-08B",
