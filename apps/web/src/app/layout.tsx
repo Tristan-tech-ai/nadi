@@ -7,9 +7,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  // slop-ok: themeColor butuh nilai literal; sama dengan token --kertas terang dan gelap.
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0b0b0c" },
+    { media: "(prefers-color-scheme: light)", color: "#F6F2EA" }, // slop-ok: token kertas
+    { media: "(prefers-color-scheme: dark)", color: "#141311" }, // slop-ok: token kertas gelap
   ],
 };
 
