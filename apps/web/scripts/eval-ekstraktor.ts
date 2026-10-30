@@ -5,6 +5,7 @@ import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { createClient } from "@supabase/supabase-js";
+import { createWorker } from "tesseract.js";
 import { akurasi } from "../../../supabase/functions/baca-berkas/ekstraktor.ts";
 import { nilai, type Hasil } from "../../../supabase/functions/baca-berkas/inti.ts";
 
@@ -21,6 +22,7 @@ const PASANGAN = [
   ["slip_gaji", "slip_gaji/slip-02.pdf", "slip_gaji/slip-04.pdf", "application/pdf", true],
   ["mutasi", "mutasi/mutasi-02.csv", "mutasi/mutasi-03.csv", "text/csv", true],
   ["absen", "absen/absen-02.xlsx", "absen/absen-03.xlsx", XLSX, false],
+  ["nota", "nota/nota-01.png", "nota/nota-05.png", "image/png", true],
 ] as const;
 
 const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
@@ -31,12 +33,20 @@ const tunggu = (ms: number) => new Promise((r) => setTimeout(r, ms));
 async function lempar(jalur: string, mime: string, garam: boolean) {
   let isi = readFileSync(join(KORPUS, jalur));
   // PDF: byte unik setelah %%EOF; CSV: baris koma kosong (dibuang pembaca) dengan panjang unik. Keduanya mengubah sha256.
+  if (garam && mime === "image/png") isi = Buffer.concat([isi, Buffer.from(`${Date.now()}`)]); // byte setelah IEND diabaikan pembaca PNG
   if (garam && mime === "application/pdf") isi = Buffer.concat([isi, Buffer.from(`\n%${Date.now()}`)]);
   if (garam && mime === "text/csv") isi = Buffer.concat([isi, Buffer.from("\n" + ",".repeat(5 + (Date.now() % 997)))]);
   const sha = createHash("sha256").update(isi).digest("hex");
   const { data: d, error } = await sb.rpc("lempar_berkas", { p_sha256: sha, p_nama: jalur.split("/")[1], p_mime: mime, p_ukuran: isi.length });
   if (error) throw error;
   if (d.status === "unggah") await sb.storage.from("berkas").upload(d.jalur, isi, { contentType: mime });
+  // Foto: OCR di sisi klien (sama seperti Pelempar di browser), disimpan sebelum berkas dibaca.
+  if (mime.startsWith("image/") && d.status === "unggah") {
+    const ocr = await createWorker("ind");
+    const { data } = await ocr.recognize(isi);
+    await ocr.terminate();
+    await sb.rpc("simpan_ocr", { p_berkas: d.id, p_teks: data.text, p_keyakinan: data.confidence });
+  }
   const mulai = Date.now();
   await sb.functions.invoke("baca-berkas", { body: { berkas_id: d.id } });
   const { data: row } = await sb.from("berkas").select("hasil, token_ai").eq("id", d.id).single();
