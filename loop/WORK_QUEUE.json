@@ -1064,8 +1064,9 @@
    "accept": "e2e: lempar nota dan KTP dari korpus -> usulan muncul di Feed -> Setujui membuat baris orang/kejadian; galat dan keadaan memuat rapi; axe bersih 390/1440",
    "how": "browser-image-compression atau canvas bawaan; server action",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T02:34:24"
+   "status": "running",
+   "created": "2026-10-31T02:34:24",
+   "started": "2026-10-31T03:08:04"
   }
  ]
 }

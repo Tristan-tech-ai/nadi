@@ -49,8 +49,10 @@ async function Isi() {
 
 export default function Orang() {
   return (
-    <Suspense fallback={<div className="mx-auto mt-10 h-40 w-full max-w-2xl animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
-      <Isi />
-    </Suspense>
+    <main className="flex flex-1 flex-col">
+      <Suspense fallback={<div className="mx-auto mt-10 h-40 w-full max-w-2xl animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+        <Isi />
+      </Suspense>
+    </main>
   );
 }

@@ -53,3 +53,26 @@ export async function pindahPerusahaan(form: FormData) {
   if (!error) await supabase.auth.refreshSession();
   redirect(error ? "/app/perusahaan?galat=1" : "/app");
 }
+
+export type HasilPutusan = { galat?: string; pesan?: string; status?: "diterima" | "ditolak" };
+
+const PESAN_AKSI: Record<string, (n: number, lewat: number) => string> = {
+  "orang.buat": () => "Tersimpan. Satu orang ditambahkan.",
+  "orang.impor": (n, lewat) => `Tersimpan. ${n} orang ditambahkan${lewat ? `, ${lewat} dilewati karena sudah ada` : ""}.`,
+  "rekrut.pelamar": () => "Tersimpan sebagai pelamar.",
+  "absen.impor": (n) => `Tersimpan. ${n} baris absen masuk.`,
+  "uang.mutasi": (n) => `Tersimpan. ${n} transaksi rekening siap dicocokkan.`,
+};
+
+/** Setujui atau tolak satu usulan Feed lewat RPC putuskan_usulan (pemeriksaan peran ada di database). */
+export async function putuskan(_: HasilPutusan, form: FormData): Promise<HasilPutusan> {
+  const id = String(form.get("usulan") ?? "");
+  const setuju = form.get("keputusan") === "setuju";
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("putuskan_usulan", { p_usulan: id, p_setuju: setuju });
+  if (error) return { galat: error.code === "42501" ? "Hanya pemilik atau admin yang bisa memutuskan." : "Nadi gagal menyimpan keputusan. Coba lagi sebentar." };
+  // Tanpa revalidatePath: kartu tetap tampil dengan cap hasilnya sampai Feed dimuat ulang, supaya keputusan terlihat.
+  if (!setuju) return { status: "ditolak", pesan: "Ditolak. Tidak ada yang dicatat." };
+  const buat = PESAN_AKSI[data.aksi as string];
+  return { status: "diterima", pesan: buat ? buat(data.dibuat, data.dilewati) : "Tersimpan dan dicatat." };
+}
