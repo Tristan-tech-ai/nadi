@@ -100,8 +100,10 @@
    "accept": "pnpm install, lint, typecheck, test, build lulus; loop/gate.sh menulis loop/gate_last.json ok=true untuk HEAD; CI GitHub Actions hijau di push pertama",
    "how": "pakai versi dari R-01; salin pola supabase/server.ts, proxy.ts dari repo lama",
    "blocked_by": "R-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-30T20:23:10",
+   "result": "commit ef0613d: gate.sh LULUS (lint, tipe, unit 2/2, build), e2e lokal 4/4 (axe 0 serius, hp+desktop), CI GitHub success ef0613d"
   },
   {
    "id": "F0-02",

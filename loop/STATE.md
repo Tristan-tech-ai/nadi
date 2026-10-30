@@ -3,9 +3,10 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 30 Okt 2026, sebelum tick pertama.
-- Fase: F0 (fondasi). Progres wajib: 0/62.
-- Berikutnya: R-01 (ground truth versi tumpukan), lalu F0-03 (migrasi graf_usaha) dan F0-01 (kerangka monorepo).
+- Tanggal: 30 Okt 2026, setelah tick 1.
+- Fase: F0 (fondasi). Progres wajib: 2/63 (R-01, F0-01).
+- Berikutnya: F0-03 (migrasi graf_usaha: berkas sudah ada di supabase/migrations/20261030100100_graf_usaha.sql, belum ter-apply; tambah mode hemat + tes SQL), lalu D-01 (riset desain) dan F0-02 (proyek Vercel).
+- Catatan teknis baru: Next 16.4.3 dengan Cache Components aktif; membaca cookies() di luar <Suspense> = galat build (docs bawaan 02-guides/authentication-with-cache-components.md). Tailwind lewat @tailwindcss/turbopack. TS ^5 dan ESLint ^9 sesuai template resmi.
 
 ## Fakta penting yang sudah terverifikasi
 - Supabase `nadi` (izyesrryiljitpusaqvf, Singapura, paket Free, compute Nano). Migrasi `fondasi` ter-apply. Migrasi `graf_usaha` BELUM ter-apply (pemanggilan terputus 30 Okt; transaksi tidak masuk sama sekali, dicek: hanya tabel perusahaan dan anggota).
