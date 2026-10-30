@@ -1,7 +1,9 @@
 // Edge Function `push`: mengirim Web Push ke perangkat pengguna yang memanggil.
 // Kunci VAPID dibuat di sini saat pertama dipakai dan disimpan di Vault; tidak pernah keluar dari server.
 // Aksi: { aksi: "siapkan" } memastikan kunci ada dan mengembalikan kunci publik;
-//       { aksi: "uji" } mengirim pemberitahuan uji ke semua langganan milik pemanggil.
+//       { aksi: "uji" } mengirim pemberitahuan uji ke semua langganan milik pemanggil;
+//       { aksi: "usulan", perusahaan_id, jumlah, judul } dari database (pg_cron + pg_net, header x-nadi-token dari Vault)
+//       mengabari pemilik/admin usaha itu bahwa ada usulan menunggu. Fungsi ini di-deploy tanpa verify_jwt dan memeriksa sendiri.
 import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2.118.0";
 import * as webpush from "jsr:@negrel/webpush@0.5.0";
 
@@ -54,8 +56,47 @@ function json(isi: unknown, status = 200) {
   return new Response(JSON.stringify(isi), { status, headers: { "Content-Type": "application/json" } });
 }
 
+type Langganan = { id: string; endpoint: string; p256dh: string; auth: string };
+
+/** Kirim satu pesan ke daftar langganan; langganan mati (404/410) dihapus lewat `hapus`. */
+async function kirim(server: webpush.ApplicationServer, daftar: Langganan[], pesan: string, hapus: (id: string) => Promise<unknown>) {
+  let terkirim = 0;
+  const gagal: number[] = [];
+  for (const l of daftar) {
+    try {
+      await server.subscribe({ endpoint: l.endpoint, keys: { p256dh: l.p256dh, auth: l.auth } }).pushTextMessage(pesan, { ttl: 3600 });
+      terkirim++;
+    } catch (e) {
+      const status = e instanceof webpush.PushMessageError ? e.response.status : 0;
+      gagal.push(status);
+      if (status === 404 || status === 410) await hapus(l.id);
+    }
+  }
+  return { terkirim, gagal };
+}
+
 Deno.serve(async (req) => {
   if (req.method !== "POST") return json({ galat: "Pakai POST" }, 405);
+  const isi = await req.json().catch(() => ({}));
+
+  // Panggilan dari database: token acak di Vault, dicocokkan lewat RPC khusus peran layanan.
+  const token = req.headers.get("x-nadi-token");
+  if (token) {
+    const db = admin();
+    const { data: cocok } = await db.rpc("push_token_cocok", { p_token: token });
+    if (!cocok) return json({ galat: "Token tidak sah" }, 401);
+    if (isi.aksi !== "usulan" || typeof isi.perusahaan_id !== "string") return json({ galat: "Aksi tidak dikenal" }, 400);
+    const kunci = await siapkan(db);
+    const { data: target } = await db.rpc("target_push", { p_perusahaan: isi.perusahaan_id, p_peran: ["pemilik", "admin"] });
+    const jumlah = Number(isi.jumlah) || 1;
+    const pesan = JSON.stringify({
+      judul: jumlah > 1 ? `${jumlah} usulan menunggu keputusanmu` : "Usulan baru menunggu keputusanmu",
+      isi: String(isi.judul ?? "Buka Feed untuk menyetujui atau menolak."),
+      tautan: "/app",
+    });
+    return json(await kirim(kunci.server, (target ?? []) as Langganan[], pesan, (id) => db.from("langganan_push").delete().eq("id", id)));
+  }
+
   const otorisasi = req.headers.get("Authorization");
   if (!otorisasi) return json({ galat: "Masuk dulu" }, 401);
 
@@ -67,12 +108,11 @@ Deno.serve(async (req) => {
   const { data: siapa, error: eSiapa } = await pengguna.auth.getUser();
   if (eSiapa || !siapa.user) return json({ galat: "Sesi tidak sah" }, 401);
 
-  const { aksi } = await req.json().catch(() => ({ aksi: null }));
   const kunci = await siapkan(admin());
 
-  if (aksi === "siapkan") return json({ publik: kunci.publik });
+  if (isi.aksi === "siapkan") return json({ publik: kunci.publik });
 
-  if (aksi === "uji") {
+  if (isi.aksi === "uji") {
     const { data: langganan, error } = await pengguna.from("langganan_push").select("id, endpoint, p256dh, auth");
     if (error) return json({ galat: error.message }, 400);
     const pesan = JSON.stringify({
@@ -80,21 +120,7 @@ Deno.serve(async (req) => {
       isi: "Mulai sekarang usulan yang perlu keputusanmu muncul di sini.",
       tautan: "/app",
     });
-    let terkirim = 0;
-    const gagal: number[] = [];
-    for (const l of langganan ?? []) {
-      try {
-        await kunci.server.subscribe({ endpoint: l.endpoint, keys: { p256dh: l.p256dh, auth: l.auth } })
-          .pushTextMessage(pesan, { ttl: 600 });
-        terkirim++;
-      } catch (e) {
-        const status = e instanceof webpush.PushMessageError ? e.response.status : 0;
-        gagal.push(status);
-        // 404/410: langganan sudah mati di layanan push, hapus agar tidak dicoba lagi.
-        if (status === 404 || status === 410) await pengguna.from("langganan_push").delete().eq("id", l.id);
-      }
-    }
-    return json({ terkirim, gagal });
+    return json(await kirim(kunci.server, langganan ?? [], pesan, (id) => pengguna.from("langganan_push").delete().eq("id", id)));
   }
 
   return json({ galat: "Aksi tidak dikenal" }, 400);

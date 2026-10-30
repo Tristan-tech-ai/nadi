@@ -1018,8 +1018,9 @@
    "accept": "trigger usulan insert (status menunggu) -> pgmq/pg_net memanggil Edge Function push aksi 'usulan' dengan kunci rahasia dari Vault (header apikey), dikirim ke langganan anggota berperan untuk_peran di perusahaan itu; digabung per 5 menit agar tidak membanjiri; tes SQL + e2e: menyisipkan usulan memunculkan pemberitahuan di Chrome",
    "how": "docs Supabase pg_net + Vault (apikey header untuk kunci sb_secret), Edge Function push v2",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T02:18:04"
+   "status": "running",
+   "created": "2026-10-31T02:18:04",
+   "started": "2026-10-31T03:30:10"
   },
   {
    "id": "F0-06A",
