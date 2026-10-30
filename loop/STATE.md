@@ -3,9 +3,10 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 ~03:50, setelah tick 9 (F0-05 selesai). KONTEKS KRITIS: kompaksi segera; baca loop/MUST_READ.txt dulu setelahnya.
-- Fase: F0. Progres wajib: 10/66.
-- Berikutnya: F0-08 (paket industri F&B+toko + aturan bertanggal bersumber), F0-05B (Web Push VAPID), F0-06 (Lempar Saja v1: unggah ke Storage, antrean, Edge Function AI, usulan; route share target /app/lempar/terima sudah menerima POST).
+- Tanggal: 31 Okt 2026 ~04:10, setelah tick 10 (F0-08 selesai). KONTEKS KRITIS: kompaksi segera; baca loop/MUST_READ.txt dulu.
+- Fase: F0. Progres wajib: 11/67.
+- Berikutnya: F0-08B (aturan bertanggal dari sumber resmi), F0-05B (Web Push), F0-06 (Lempar Saja v1). Migrasi paket_industri belum dicek sidiknya dengan scripts/cek-migrasi.py (lakukan di awal tick berikut).
+- Paket industri: tabel paket_industri (fnb, toko); RPC pasang_paket(kode) dipanggil di buatPerusahaan setelah refreshSession.
 - Aplikasi: layout /app punya kepala + nav bawah (src/components/app/nav-bawah.tsx, isi per peran) di balik Suspense; service worker didaftarkan di layout akar (src/components/app/daftar-sw.tsx, public/sw.js); /app = Feed Keputusan (usulan menunggu); /app/lempar halaman sementara jujur ('pembaca berkas sedang disiapkan'). Ikon dibuat ulang: node scripts/buat-ikon.mjs.
 - Staf: perusahaan.kode (6 huruf), orang.id_staf (S001..), RPC buat_akun_staf(p_orang,p_pin) membuat akun email sintetis {kode}-{id}@staf.nadi.local; /masuk/staf; /app/orang (pengelola). e2e auth menambah satu 'Staf Uji <waktu>' per jalan di usaha uji A (data uji tumbuh pelan; bersihkan nanti lewat arsip, bukan delete).
 - Korpus: fixtures/korpus (42 berkas, 10 jenis, jawaban JSON per berkas, indeks.json), dibuat ulang `node scripts/korpus/buat.mjs` dari apps/web (seed 20261031; JSON/PNG/CSV identik tiap kali; PDF dan XLSX beda hanya di cap waktu metadata (Chromium, entri zip exceljs), isi sel diuji sama). Tes: apps/web/src/lib/korpus.test.ts.

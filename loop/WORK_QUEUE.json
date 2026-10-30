@@ -218,8 +218,10 @@
    "accept": "paket terpasang ke perusahaan baru dalam 1 klik; setiap aturan punya URL sumber + tanggal; yang belum diverifikasi bertanda terverifikasi=false",
    "how": "riset regulasi resmi (BPJS, UMP Bali 2026, PPh 21 TER) dari situs pemerintah",
    "blocked_by": "F0-03",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T01:47:37",
+   "result": "commit 893ddf0: migrasi paket_industri (fnb 5 topi, toko 4 topi, tempat, resep Mata), pasang_paket idempoten khusus pemilik/admin dipanggil setelah buat perusahaan; tes SQL 7/7; aturan bertanggal resmi dipisah ke F0-08B"
   },
   {
    "id": "F0-09",
@@ -982,6 +984,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-10-31T01:34:26"
+  },
+  {
+   "id": "F0-08B",
+   "fase": "F0",
+   "kind": "research",
+   "priority": 6,
+   "size": "m",
+   "wajib": true,
+   "title": "Aturan bertanggal dari sumber resmi: BPJS (JHT, JP, JKK, JKM, Kesehatan), UMP/UMK Bali 2026, PPh 21 TER",
+   "accept": "setiap baris aturan_bertanggal punya URL sumber resmi yang dibuka langsung dan tanggal akses; yang belum cocok teks resmi terverifikasi=false; tes SQL: tidak ada aturan tanpa sumber",
+   "how": "WebFetch situs resmi (bpjsketenagakerjaan.go.id, pajak.go.id, jdih), migrasi insert aturan_bertanggal",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T01:47:37"
   }
  ]
 }
