@@ -17,6 +17,8 @@ export async function buatPerusahaan(_: HasilForm, form: FormData): Promise<Hasi
   const { error } = await supabase.rpc("buat_perusahaan", { p_nama: nama, p_industri: industri });
   if (error) return { galat: error.code === "54000" ? "Akun ini sudah mencapai batas 20 usaha." : "Nadi gagal membuat usaha. Coba lagi sebentar.", isian: { nama, industri } };
   await supabase.auth.refreshSession();
+  // Topi bawaan jenis usaha (paket industri); butuh klaim pid baru, jadi setelah refreshSession.
+  await supabase.rpc("pasang_paket", { p_kode: industri });
   redirect("/app");
 }
 
