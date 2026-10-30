@@ -26,3 +26,10 @@ loop/.wake_guard.log
 loop/.context_guard.log
 loop/.context_gauge.json
 loop/.compaction_flag.json
+
+# keadaan lokal pengawas macet
+loop/.detak
+loop/.watchdog.pid
+loop/.watchdog.log
+loop/.elisitasi.log
+loop/MACET.md

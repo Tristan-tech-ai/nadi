@@ -4,6 +4,9 @@ Setiap keputusan produk, desain, atau teknis yang diambil loop, dengan alasan da
 
 | Tanggal | Keputusan | Alasan | Sumber |
 |---|---|---|---|
+| 30 Okt 2026 | Mode hemat: kejadian mentah 90 hari, audit 180 hari (pg_partman), ringkasan_harian per perusahaan/jenis/orang dihitung pg_cron 17:30 UTC | DB Free 500 MB; KPI dan insight cukup dari ringkasan; retensi membuang partisi utuh, bukan DELETE baris | supabase.com/pricing; pg_partman 5.3.1 |
+| 30 Okt 2026 | WARN advisor 'security definer dapat dipanggil authenticated' untuk buat_perusahaan dan pindah_perusahaan diterima | Keduanya harus menulis app_metadata di auth.users dan memeriksa keanggotaan/auth.uid() di dalam | get_advisors 30 Okt 2026 |
+| 30 Okt 2026 | Penjaga anti-macet: hook Elicitation menjawab konfirmasi MCP Supabase saat loop aktif; SQL penghapus data ditolak di depan; pengawas detak 25 menit dengan notifikasi Windows | Loop diam 3 jam (20:34-23:26) menunggu dialog konfirmasi karena migrasi memuat drop policy; Tristan mengizinkan modifikasi diri | dokumentasi resmi hook agen (event Elicitation), 30 Okt 2026 |
 | 30 Okt 2026 | Kunci API model AI disimpan sebagai secret Edge Function Supabase; semua panggilan AI lewat Edge Function | Kunci tidak pernah terlihat oleh agen; satu tempat | percakapan dengan Tristan |
 | 30 Okt 2026 | Tanpa WhatsApp Business API. Penggantinya: PWA dengan Web Push, Web Share Target (bagikan dari WA ke Nadi), tautan wa.me untuk pesan keluar, Telegram opsional | Tristan tidak bisa mendapatkan API WA; gateway tidak resmi melanggar ketentuan WA dan berisiko nomor diblokir | percakapan; riset harga Meta Okt 2026 |
 | 30 Okt 2026 | Stack: SQL di Postgres untuk logika data, TypeScript (Next.js di Vercel) untuk web, Rust ke WASM untuk jalur CPU berat, Rust untuk agen edge Mata, Python untuk ML | Beban utama adalah I/O dan database, bukan CPU aplikasi | percakapan |

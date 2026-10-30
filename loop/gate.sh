@@ -22,6 +22,7 @@ jejak() { local P='c[l]aude|noreply@a[n]thropic|co-a[u]thored-by'; ! git grep -q
 step jejak jejak
 step antrean python -I loop/next_task.py selftest
 step penjaga python -I loop/hooks/wake_guard.py selftest
+step macet python -I loop/hooks/macet_guard.py selftest
 if [ -f package.json ] && [ -d apps/web ]; then
   step lint pnpm -s lint
   step tipe pnpm -s typecheck

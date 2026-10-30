@@ -1,10 +1,4 @@
--- Fondasi Nadi: ekstensi, fungsi bantu, tenant (perusahaan) dan keanggotaan.
--- Pola skala:
---  * ID UUIDv7 (berurutan waktu) agar indeks btree tetap rapat saat data tumbuh.
---  * Perusahaan aktif dan peran ada di klaim JWT (app_metadata), jadi RLS cukup membandingkan
---    kolom dengan konstanta (initPlan), tanpa join ke tabel keanggotaan di setiap baris.
---  * Setiap indeks tenant diawali perusahaan_id.
-
+-- see repo file supabase/migrations/20261030100000_fondasi.sql
 create extension if not exists pg_trgm with schema extensions;
 create extension if not exists btree_gin with schema extensions;
 create extension if not exists vector with schema extensions;
@@ -18,12 +12,9 @@ create extension if not exists pg_partman with schema partman;
 create schema if not exists app;
 grant usage on schema app to authenticated, anon;
 
--- Tolak secara bawaan: tabel baru di public (termasuk partisi yang dibuat pg_partman tiap bulan)
--- tidak otomatis terbuka ke API. Setiap tabel diberi hak secara eksplisit.
 alter default privileges for role postgres in schema public revoke all on tables from anon, authenticated;
 alter default privileges for role postgres in schema public revoke all on functions from anon, authenticated, public;
 
--- UUIDv7: 48 bit milidetik + acak. Urut waktu, tetap unik global.
 create or replace function app.uuid7() returns uuid
 language sql volatile set search_path = '' as $$
   select encode(
@@ -35,7 +26,6 @@ language sql volatile set search_path = '' as $$
     'hex')::uuid;
 $$;
 
--- Klaim dari JWT. Dipanggil sebagai (select app.pid()) di kebijakan agar dihitung sekali per query.
 create or replace function app.pid() returns uuid
 language sql stable set search_path = '' as $$
   select nullif(auth.jwt() -> 'app_metadata' ->> 'pid', '')::uuid;
@@ -46,7 +36,6 @@ language sql stable set search_path = '' as $$
   select coalesce(auth.jwt() -> 'app_metadata' ->> 'prn', '');
 $$;
 
--- Pengelola = pemilik atau admin perusahaan aktif.
 create or replace function app.pengelola() returns boolean
 language sql stable set search_path = '' as $$
   select coalesce(auth.jwt() -> 'app_metadata' ->> 'prn', '') in ('pemilik', 'admin');
@@ -59,12 +48,11 @@ begin
   return new;
 end $$;
 
--- ===== Tenant =====
 create table public.perusahaan (
   id uuid primary key default app.uuid7(),
   nama text not null check (length(nama) between 2 and 120),
-  bentuk_usaha text,             -- perorangan, pt_perorangan, cv, pt, yayasan, koperasi, ... (data, bukan enum)
-  industri text,                 -- kode paket industri, mis. fnb, toko
+  bentuk_usaha text,
+  industri text,
   zona_waktu text not null default 'Asia/Jakarta',
   pengaturan jsonb not null default '{}'::jsonb,
   dibuat_oleh uuid references auth.users(id) on delete set null,
@@ -78,7 +66,7 @@ create table public.anggota (
   perusahaan_id uuid not null references public.perusahaan(id) on delete cascade,
   user_id uuid not null references auth.users(id) on delete cascade,
   peran text not null default 'staf' check (peran in ('pemilik', 'admin', 'akuntan', 'staf')),
-  orang_id uuid,                 -- diisi setelah tabel orang ada (FK ditambah di migrasi berikut)
+  orang_id uuid,
   aktif boolean not null default true,
   dibuat_at timestamptz not null default now(),
   primary key (perusahaan_id, user_id)
@@ -90,8 +78,6 @@ alter table public.anggota enable row level security;
 alter table public.perusahaan force row level security;
 alter table public.anggota force row level security;
 
--- Pengguna melihat perusahaan tempat ia menjadi anggota (daftar pilihan perusahaan); ini satu-satunya kebijakan
--- yang memakai join keanggotaan, dan tabelnya kecil per pengguna.
 create policy perusahaan_baca on public.perusahaan for select to authenticated
   using (id in (select a.perusahaan_id from public.anggota a where a.user_id = (select auth.uid()) and a.aktif));
 create policy perusahaan_ubah on public.perusahaan for update to authenticated
@@ -104,7 +90,6 @@ create policy anggota_kelola on public.anggota for update to authenticated
   using (perusahaan_id = (select app.pid()) and (select app.pengelola()))
   with check (perusahaan_id = (select app.pid()) and peran <> 'pemilik');
 
--- Menulis perusahaan aktif + peran ke app_metadata. Klien lalu memanggil refreshSession() agar JWT baru membawa klaimnya.
 create or replace function app.tulis_klaim(p_user uuid, p_pid uuid, p_prn text) returns void
 language sql security definer set search_path = '' as $$
   update auth.users
@@ -146,8 +131,6 @@ end $$;
 revoke all on function public.buat_perusahaan(text, text, text) from public, anon;
 grant execute on function public.buat_perusahaan(text, text, text) to authenticated;
 
--- Saat keanggotaan dicabut atau perannya berubah, klaim pengguna ikut diperbarui
--- (JWT lama tetap berlaku sampai kedaluwarsa, maks. 1 jam; aksi sensitif memeriksa ulang lewat app.anggota_aktif()).
 create or replace function app.sinkron_klaim_anggota() returns trigger
 language plpgsql security definer set search_path = '' as $$
 begin
@@ -163,7 +146,6 @@ end $$;
 create trigger anggota_sinkron_klaim after update of peran, aktif on public.anggota
   for each row execute function app.sinkron_klaim_anggota();
 
--- Untuk aksi sensitif (uang, gaji, izin akses): periksa keanggotaan nyata, bukan hanya klaim.
 create or replace function app.anggota_aktif(p_peran text[] default null) returns boolean
 language sql stable security definer set search_path = '' as $$
   select exists (

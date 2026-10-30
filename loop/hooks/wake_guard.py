@@ -47,7 +47,7 @@ WRITE_BASH = re.compile(r"(>>|\bcat\s*>|\bsed\s+-i|\bcp\s|\bmv\s|\btee\s|Out-Fil
 SUB_MCP = re.compile(r"(apply_migration|deploy_edge_function|create_project_env|create_project)$")
 MONITOR = ("hanya pemantauan", "tick tenang", "putaran tenang", "monitoring only", "quiet tick", "tidak ada yang dikerjakan")
 ANCHORS = ("KONTRAK TICK", "next_task.py", "PERINTAH TETAP", "HANYA AUTENTIKASI", "Ide adalah kerja", "GROUND TRUTH",
-           "GERBANG", "PENJAGA", "TANPA JEJAK", "ANTI-SLOP", "SETIAP GILIRAN BERAKHIR DENGAN ScheduleWakeup", "600", "LAPORAN")
+           "GERBANG", "PENJAGA", "TANPA JEJAK", "ANTI-MACET", "ANTI-SLOP", "SETIAP GILIRAN BERAKHIR DENGAN ScheduleWakeup", "600", "LAPORAN")
 
 
 def log(msg):
