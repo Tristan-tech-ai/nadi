@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, IBM_Plex_Mono, Plus_Jakarta_Sans } from "next/font/google";
+import { DaftarSw } from "@/components/app/daftar-sw";
 import "./globals.css";
 
 // Plus Jakarta Sans (Tokotype, OFL): huruf antarmuka. Bricolage Grotesque (OFL): judul besar. IBM Plex Mono (OFL): nomor dokumen.
@@ -23,7 +24,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="id" className={`${jakarta.variable} ${bricolage.variable} ${plexMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        {children}
+        <DaftarSw />
+      </body>
     </html>
   );
 }

@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { keluar } from "@/app/auth-actions";
+import { NavBawah } from "@/components/app/nav-bawah";
 import { TandaNadi } from "@/components/ui/logo";
 import { createClient } from "@/lib/supabase/server";
 import { bacaSesi } from "@/lib/sesi";
@@ -23,6 +24,11 @@ async function NamaPerusahaan() {
   );
 }
 
+async function Navigasi() {
+  const sesi = await bacaSesi();
+  return sesi?.peran ? <NavBawah peran={sesi.peran} /> : null;
+}
+
 export default function LayoutApp({ children }: LayoutProps<"/app">) {
   return (
     <div className="flex min-h-full flex-1 flex-col">
@@ -35,6 +41,9 @@ export default function LayoutApp({ children }: LayoutProps<"/app">) {
         </Suspense>
       </header>
       <div className="flex flex-1 flex-col">{children}</div>
+      <Suspense fallback={<div className="h-14 border-t border-garis" aria-hidden />}>
+        <Navigasi />
+      </Suspense>
     </div>
   );
 }

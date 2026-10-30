@@ -122,3 +122,15 @@ test("pemilik membuat akun staf; staf masuk tanpa email dan ditolak di halaman p
   await staf.goto("/app/orang");
   await expect(staf.getByTestId("ditolak")).toBeVisible();
 });
+
+test("pemilik melihat Feed (keadaan kosong), navigasi bawah, dan share target menerima berkas", async ({ page }) => {
+  await masukSebagai(page, E.E2E_EMAIL_B);
+  await pastikanUsaha(page, "Toko Uji B", "Toko, grosir, minimarket");
+  await expect(page.getByTestId("feed-kosong")).toBeVisible();
+  const nav = page.getByRole("navigation", { name: "Navigasi utama" });
+  await expect(nav.getByRole("link", { name: "Orang" })).toBeVisible();
+  await expect(nav.getByRole("link", { name: "Feed" })).toHaveAttribute("aria-current", "page");
+  const res = await page.request.post("/app/lempar/terima", { multipart: { berkas: { name: "nota.png", mimeType: "image/png", buffer: Buffer.from("89504e47", "hex") } }, maxRedirects: 0 });
+  expect(res.status()).toBe(303);
+  expect(res.headers()["location"]).toContain("/app/lempar?dibagikan=1");
+});

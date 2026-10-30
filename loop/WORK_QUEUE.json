@@ -173,8 +173,9 @@
    "accept": "Lighthouse PWA installable; push uji sampai di Chromium; berbagi gambar dari menu Share Android/Chromium masuk ke Lempar",
    "how": "kunci VAPID dibuat sendiri dan disimpan sebagai env sensitive Vercel/secret Supabase",
    "blocked_by": "F0-04",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "running",
+   "created": "2026-10-30T20:05:52",
+   "started": "2026-10-31T01:31:07"
   },
   {
    "id": "F0-06",
@@ -965,6 +966,20 @@
    "started": "2026-10-31T01:16:15",
    "done": "2026-10-31T01:19:25",
    "result": "commit 49a52bd: migrasi akun_staf (md5 identik), tes SQL akun_staf 13/13, /masuk/staf + /app/orang (khusus pemilik/admin), e2e staf: pemilik buat akun PIN, staf masuk tanpa email, ditolak di halaman pengelola (auth e2e 6/6); advisor 0 ERROR"
+  },
+  {
+   "id": "F0-05B",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 7,
+   "size": "m",
+   "wajib": true,
+   "title": "Web Push: kunci VAPID, langganan per perangkat, kirim notifikasi uji",
+   "accept": "kunci VAPID dibuat sendiri dan disimpan sebagai env sensitive Vercel + secret Supabase; tabel langganan_push ber-RLS; tombol Nyalakan pemberitahuan; e2e Chromium menerima push uji",
+   "how": "docs bawaan Next progressive-web-apps.md (bagian push), web-push di server, service worker menangani push",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T01:34:26"
   }
  ]
 }
