@@ -1174,9 +1174,11 @@
    "accept": "foto nota korpus kedua dengan tata letak sama: token_ai 0 dan bidang kunci benar; OCR keyakinan < 85 atau pemeriksaan silang gagal jatuh balik ke model; unduhan OCR hanya saat melempar foto; e2e",
    "how": "Pelempar mengirim teks OCR + keyakinan lewat RPC/kolom berkas; baca-berkas memakai teks itu untuk cobaAturan dan tulisAturan",
    "blocked_by": "F0-07D2",
-   "status": "blocked",
+   "status": "done",
    "created": "2026-10-31T05:13:00",
-   "started": "2026-10-31T05:25:11"
+   "started": "2026-10-31T05:25:11",
+   "done": "2026-10-31T06:17:58",
+   "result": "foto nota 0 token lewat OCR perangkat + aturan tersimpan: docs/quality/eval-ekstraktor.md 5/5, bidang 99.2%"
   },
   {
    "id": "F0-07D1",
@@ -1206,8 +1208,10 @@
    "accept": "foto nota kedua tata letak sama (nota-05 setelah nota-01) token_ai 0 dan bidang kunci benar; OCR < 85 atau tidak konsisten jatuh balik ke model",
    "how": "deploy dengan isi berkas persis dari repo",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T05:25:11"
+   "status": "done",
+   "created": "2026-10-31T05:25:11",
+   "done": "2026-10-31T06:17:58",
+   "result": "baca-berkas v7 (deploy MCP, sha 150db9ce); commit 025be91, 2a969eb, 9928a80; eval-ekstraktor 5/5: nota-05.png aturan 0 token (total/tanggal/6 baris benar, nomor OCR NI-5841), aturan nota tabel_gabung 2 ditulis model dari OCR nota-01; vitest ekstraktor 19/19; aturan invoice berhafalan dinonaktifkan"
   }
  ]
 }

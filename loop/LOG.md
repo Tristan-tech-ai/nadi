@@ -28,3 +28,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 05:20 | R-03 | riset ML di browser terukur: OCR 0,2 dtk per foto, RF-DETR WebGPU 80 ms, Whisper 1,2 dtk/5 dtk; tambah F0-07D | 73163f9 |
 | 31 Okt 2026 05:35 | F0-07D1 | OCR foto di perangkat + simpan_ocr (SQL 6/6, e2e 2/2, OCR tersimpan keyakinan 87) | lihat git log |
 | 31 Okt 2026 05:45 | F0-07D2 (kode) | baca-berkas memakai teks OCR foto untuk aturan; deploy + bukti di tick berikut | lihat git log |
+| 31 Okt 2026 06:25 | F0-07D2, F0-07D | baca-berkas v7: foto nota 0 token lewat OCR (tabel_gabung, uji longgar teks), hafalan nilai dibuang; eval ekstraktor 5/5, bidang 99,2% | 3ec9308 |
