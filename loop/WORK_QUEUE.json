@@ -244,8 +244,9 @@
    "accept": "Klien MCP (asisten AI pelanggan) bisa menyambung ke /api/mcp, menjalankan siapa_saya dan buat usulan; tes otomatis untuk alur OAuth",
    "how": "baca spesifikasi resmi dulu; adaptasi kode repo lama",
    "blocked_by": "F0-05",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "running",
+   "created": "2026-10-30T20:05:52",
+   "started": "2026-10-31T06:37:48"
   },
   {
    "id": "F0-10",

@@ -41,10 +41,9 @@ Kompatibilitas: klien lama (`initialize`, tanpa header baru) masih banyak. Spesi
 | `siapa_saya` | baca | usaha, peran, cakupan token, jumlah usulan menunggu |
 | `daftar_orang` | baca (pengelola) | orang aktif + topi, tanpa NIK/gaji |
 | `daftar_usulan` | baca | usulan menunggu/terbaru (judul, aksi, dampak_rp, sumber) |
-| `ringkasan_ai` | baca (pengelola) | pemakaian dan penghematan AI 30 hari |
 | `buat_usulan` | usul | aksi dari daftar putih (`orang.buat`, `uang.keluar`, `izin.sakit`, `tugas.buat`, `catatan`), judul, penjelasan, payload, dampak_rp; masuk Feed dengan sumber `mcp` dan nama klien, harus disetujui pemilik/admin di Nadi |
 
-Resources dan prompts menyusul (F0-09B). MCP Apps (kartu persetujuan di chat) menyusul setelah Feed stabil.
+Ringkasan pemakaian AI, resources, dan prompts menyusul (F0-09B). MCP Apps (kartu persetujuan di chat) menyusul setelah Feed stabil.
 
 ### Halaman izin `/oauth/izinkan`
 - Validasi parameter: `response_type=code`, `code_challenge_method=S256`, `code_challenge` 43-128 base64url, `resource` (wajib, harus `<origin>/api/mcp`), `state`, `scope` ⊆ didukung.
