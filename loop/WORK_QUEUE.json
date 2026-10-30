@@ -1189,9 +1189,11 @@
    "accept": "tes SQL: hanya pengunggah berkas berstatus unggah yang bisa menyimpan OCR, usaha lain ditolak; unit: OCR dimuat dinamis hanya untuk image/*; e2e lempar tetap lulus",
    "how": "migrasi + src/lib/ocr.ts",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-31T05:25:11",
-   "started": "2026-10-31T05:25:11"
+   "started": "2026-10-31T05:25:11",
+   "done": "2026-10-31T05:27:07",
+   "result": "commit berikut; migrasi ocr_foto (berkas.teks_ocr, ocr_keyakinan, RPC simpan_ocr); tes SQL ocr_foto 6/6; unit ocr 2/2; e2e lempar 2/2 dan OCR tersimpan dari browser (nota-01 keyakinan 87, ktp-01 83)"
   },
   {
    "id": "F0-07D2",

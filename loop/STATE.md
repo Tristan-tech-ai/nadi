@@ -3,9 +3,10 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 ~05:20 (jam lokal), setelah tick 21 (R-03 riset ML di browser).
-- Fase: F0. Progres wajib: 17/67. Tiga belas migrasi identik repo. baca-berkas v5 terdeploy (isi dari commit b8da06f).
-- Berikutnya (READY): F0-07D (OCR foto tesseract.js di Pelempar agar foto nota 0 token), F0-09 (server MCP v2), F0-11 (landing), F0-12 (perusahaan demo), F1-01. F0-13 deploy produksi dan R-02B menunggu F0-02B (Vercel GitHub App; UNTUK-TRISTAN PENTING). Aturan belum terverifikasi: UMP/UMK Bali, BPJS Kesehatan, TER (wajib sebelum F1-05).
+- Tanggal: 31 Okt 2026 ~05:35 (jam lokal), setelah tick 22 (F0-07D1 OCR foto di perangkat).
+- Fase: F0. Progres wajib: 17/67. Empat belas migrasi (terbaru ocr_foto; cek sidik di awal tick berikut). baca-berkas v5 terdeploy (isi dari commit b8da06f) BELUM memakai teks_ocr.
+- Berikutnya: F0-07D2 (baca-berkas v6: bila berkas.mime image/* dan ocr_keyakinan >= 85, teks = teks_ocr untuk cobaAturan; tulisAturan juga dari teks_ocr; tetap kirim foto ke model bila tidak cocok; deploy isi index.ts+inti.ts+ekstraktor.ts PERSIS; bukti: nota-01 lalu nota-05 bergaram, nota-05 token 0). Lalu F0-09, F0-11, F0-12, F1-01. F0-13/R-02B menunggu GitHub App.
+- OCR: src/lib/ocr.ts (bacaTeksFoto dinamis, AMBANG_OCR 85), Pelempar memanggil RPC simpan_ocr setelah unggah dan sebelum bacaBerkasAksi.
 - ML di browser: docs/research/ml-browser.md (tesseract.js 7.0.0 'ind' 166-280 ms per foto, RF-DETR nano WebGPU ±80 ms, whisper-tiny). Halaman uji sementara ada di scratchpad (ml/ocr.html, ml/tjs.html), bukan di repo.
 - Ringkasan AI: RPC public.ringkasan_ai(p_hari) security invoker (null untuk non-pengelola), kartu src/components/app/hemat-ai.tsx di /app/perusahaan; formatAngka di src/lib/format.ts.
 - Deploy Edge Function: tempel isi berkas PERSIS dari repo (index.ts + inti.ts + ekstraktor.ts untuk baca-berkas; index.ts untuk push). Pernah salah tempel sekali; selalu bandingkan dengan repo.
