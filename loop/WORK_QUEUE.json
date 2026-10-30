@@ -1047,9 +1047,11 @@
    "accept": "10 berkas korpus (satu per jenis) -> jenis dan bidang kunci benar >= 8 dari 10 (skrip eval di repo, hasil di docs/quality); pemakaian_ai dan berkas.token_ai terisi; berkas yang sudah selesai tidak diproses ulang",
    "how": "SDK @anthropic-ai/sdk 1.3.0 di Deno, output_config.format json_schema, ID model dari tabel konfigurasi",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-31T02:34:24",
-   "started": "2026-10-31T02:46:03"
+   "started": "2026-10-31T02:46:03",
+   "done": "2026-10-31T02:57:13",
+   "result": "commit 33e0f1a; Edge Function baca-berkas v3; eval korpus 10/10 benar (docs/quality/eval-lempar.md), 20.021 token, semua model ringan, cache instruksi 17.784 token terbaca; jalan ulang 10/10 tidak diproses ulang tanpa token; pemakaian_ai 10 baris + berkas.token_ai terisi; unit baca-berkas 11/11. Klaim salah: deploy pertama inti.ts berisi teks pengganti, dan skema anyOf ditolak API (grammar terlalu besar), keduanya diperbaiki"
   },
   {
    "id": "F0-06C",
