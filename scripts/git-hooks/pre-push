@@ -1,0 +1,12 @@
+#!/bin/sh
+# TANPA JEJAK: tolak push bila nama asisten pengembang ada di berkas terlacak, metadata/pesan commit, atau isi riwayat.
+P='c[l]aude|noreply@a[n]thropic|co-a[u]thored-by'
+N='c[l]aude|noreply@a[n]thropic'
+if git grep -qiIE "$P" -- . || git log --format='%an%n%ae%n%cn%n%ce%n%B' | grep -qiE "$P" || git log -p --no-color | grep -qiE "^[+-].*($N)"; then
+  echo "push ditolak: ada jejak asisten pengembang (aturan TANPA JEJAK). Jalankan bash loop/gate.sh." >&2
+  exit 1
+fi
+# GERBANG: HEAD harus sudah lulus bash loop/gate.sh (insiden 30 Okt: `gate.sh | tail && git push` lolos walau gerbang merah).
+HEAD=$(git rev-parse HEAD)
+python -I -c "import json,sys; g=json.load(open('loop/gate_last.json')); sys.exit(0 if g.get('ok') and g.get('head')=='$HEAD' and g.get('kode_belum_commit')==0 else 1)" 2>/dev/null || {
+  echo "push ditolak: HEAD ${HEAD%${HEAD#????????}} belum lulus bash loop/gate.sh" >&2; exit 1; }

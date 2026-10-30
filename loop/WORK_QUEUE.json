@@ -130,8 +130,11 @@
    "accept": "migrasi tercatat di supabase_migrations dan isi sama dengan berkas repo (diff kosong); tes SQL >= 25 asersi lulus termasuk lintas-tenant nol bocor; get_advisors security tanpa ERROR baru",
    "how": "berkas supabase/migrations/20261030100100_graf_usaha.sql sudah ditulis (migrasi sebelumnya terputus, tidak ter-apply); tes dijalankan via execute_sql dalam transaksi yang dibatalkan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "started": "2026-10-30T20:34:15",
+   "done": "2026-10-30T23:37:55",
+   "result": "commit bd8271f: migrasi fondasi+graf_usaha+mode_hemat ter-apply dan sidik md5 identik dengan repo (scripts/cek-migrasi.py); tes isolasi 38/38 lulus + 1 uji merah sengaja; advisor security 0 ERROR (2 WARN disengaja, DECISIONS)"
   },
   {
    "id": "F0-04",

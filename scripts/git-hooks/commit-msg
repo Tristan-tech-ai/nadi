@@ -1,0 +1,6 @@
+#!/bin/sh
+# TANPA JEJAK: tolak pesan commit yang memuat atribusi asisten pengembang.
+if grep -qiE 'c[l]aude|noreply@a[n]thropic|co-a[u]thored-by' "$1"; then
+  echo "commit ditolak: pesan memuat atribusi asisten pengembang (aturan TANPA JEJAK)" >&2
+  exit 1
+fi

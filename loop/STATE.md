@@ -3,10 +3,12 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 30 Okt 2026, setelah tick 1.
-- Fase: F0 (fondasi). Progres wajib: 2/63 (R-01, F0-01).
-- Berikutnya: F0-03 (migrasi graf_usaha: berkas sudah ada di supabase/migrations/20261030100100_graf_usaha.sql, belum ter-apply; tambah mode hemat + tes SQL), lalu D-01 (riset desain) dan F0-02 (proyek Vercel).
-- Catatan teknis baru: Next 16.4.3 dengan Cache Components aktif; membaca cookies() di luar <Suspense> = galat build (docs bawaan 02-guides/authentication-with-cache-components.md). Tailwind lewat @tailwindcss/turbopack. TS ^5 dan ESLint ^9 sesuai template resmi.
+- Tanggal: 30 Okt 2026 23:50, setelah tick 2.
+- Fase: F0. Progres wajib: 3/63 (R-01, F0-01, F0-03).
+- Berikutnya: F0-02 (proyek Vercel 'nadi' + env + deploy), lalu D-01 (riset desain) dan F0-10 (korpus contoh).
+- Database: migrasi fondasi, graf_usaha, mode_hemat ter-apply; sidik md5 identik repo (cek: scripts/cek-migrasi.py dengan json dari supabase_migrations). Tes: supabase/tests/isolasi_tenant.test.sql (38 asersi). pg_cron: nadi-ringkas-harian 17:30 UTC, nadi-partman 18:00 UTC.
+- Anti-macet: hook macet_guard (pre/post/elisitasi/start) di loop/hooks, pengawas loop/watchdog.py (pid di loop/.watchdog.pid), hook git pre-push (jejak + gerbang hijau) dan commit-msg dipasang dari scripts/git-hooks oleh gate.sh.
+- Insiden tick 2: loop diam 20:34-23:26 menunggu dialog konfirmasi MCP (drop policy). Diperbaiki dengan hook Elicitation. Commit dengan jejak sempat ter-push karena `gate.sh | tail && git push`; ditulis ulang (force-with-lease, satu commit milik loop) dan dicegah pre-push.
 
 ## Fakta penting yang sudah terverifikasi
 - Supabase `nadi` (izyesrryiljitpusaqvf, Singapura, paket Free, compute Nano). Migrasi `fondasi` ter-apply. Migrasi `graf_usaha` BELUM ter-apply (pemanggilan terputus 30 Okt; transaksi tidak masuk sama sekali, dicek: hanya tabel perusahaan dan anggota).
