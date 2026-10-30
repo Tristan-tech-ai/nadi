@@ -3,9 +3,9 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 ~05:35 (jam lokal), setelah tick 22 (F0-07D1 OCR foto di perangkat).
-- Fase: F0. Progres wajib: 17/67. Empat belas migrasi (terbaru ocr_foto; cek sidik di awal tick berikut). baca-berkas v5 terdeploy (isi dari commit b8da06f) BELUM memakai teks_ocr.
-- Berikutnya: F0-07D2 (baca-berkas v6: bila berkas.mime image/* dan ocr_keyakinan >= 85, teks = teks_ocr untuk cobaAturan; tulisAturan juga dari teks_ocr; tetap kirim foto ke model bila tidak cocok; deploy isi index.ts+inti.ts+ekstraktor.ts PERSIS; bukti: nota-01 lalu nota-05 bergaram, nota-05 token 0). Lalu F0-09, F0-11, F0-12, F1-01. F0-13/R-02B menunggu GitHub App.
+- Tanggal: 31 Okt 2026 ~05:45 (jam lokal), tick 23: kode F0-07D2 sudah di-commit tapi BELUM DIDEPLOY (konteks penuh).
+- Fase: F0. Progres wajib: 17/67. Empat belas migrasi (terbaru ocr_foto; cek sidik di awal tick berikut).
+- LANGKAH BERIKUTNYA PERSIS: (1) baca supabase/functions/baca-berkas/{index.ts,inti.ts,ekstraktor.ts} dari repo; (2) deploy_edge_function baca-berkas (verify_jwt true) dengan isi ketiganya PERSIS; (3) tambah ke apps/web/scripts/eval-ekstraktor.ts pasangan ["nota", "nota/nota-01.png", "nota/nota-05.png", "image/png", true] dengan garam PNG (byte di ujung) dan OCR di Node: import { createWorker } from "tesseract.js" (sudah dependensi), recognize buffer, lalu sb.rpc("simpan_ocr", {p_berkas, p_teks, p_keyakinan}) setelah unggah dan sebelum invoke baca-berkas; (4) jalankan node scripts/eval-ekstraktor.ts dari apps/web: nota-05 harus sumber aturan, 0 token, bidang kunci benar; bila aturan nota ditolak (OCR "NI-4671" vs model "NT-4671"), catat dan pertimbangkan nomor sebagai bidang opsional atau keyakinan; (5) done F0-07D2 lalu F0-07D. Setelahnya F0-09, F0-11, F0-12, F1-01. F0-13/R-02B menunggu GitHub App.
 - OCR: src/lib/ocr.ts (bacaTeksFoto dinamis, AMBANG_OCR 85), Pelempar memanggil RPC simpan_ocr setelah unggah dan sebelum bacaBerkasAksi.
 - ML di browser: docs/research/ml-browser.md (tesseract.js 7.0.0 'ind' 166-280 ms per foto, RF-DETR nano WebGPU ±80 ms, whisper-tiny). Halaman uji sementara ada di scratchpad (ml/ocr.html, ml/tjs.html), bukan di repo.
 - Ringkasan AI: RPC public.ringkasan_ai(p_hari) security invoker (null untuk non-pengelola), kartu src/components/app/hemat-ai.tsx di /app/perusahaan; formatAngka di src/lib/format.ts.
