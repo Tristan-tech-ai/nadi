@@ -47,8 +47,9 @@
    "accept": "docs/research/ml-browser.md: model, lisensi, ukuran unduhan, fps/latensi terukur di Chromium lokal",
    "how": "Hugging Face MCP untuk mencari model; uji cepat di halaman sandbox lokal",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "running",
+   "created": "2026-10-30T20:05:52",
+   "started": "2026-10-31T05:11:05"
   },
   {
    "id": "D-01",
@@ -1159,6 +1160,20 @@
    "started": "2026-10-31T04:55:04",
    "done": "2026-10-31T04:59:21",
    "result": "commit fb9d2a1; RPC ringkasan_ai (security invoker, null untuk non-pengelola) + migrasi perbaikan (variabel bentrok kolom, tertangkap tes SQL merah lalu hijau 6/6); kartu 'AI dalam 30 hari terakhir' di /app/perusahaan: dibaca AI vs tanpa AI, token terpakai, perkiraan token dihemat, keadaan kosong; e2e lempar+auth 9/9; axe bersih 390/1440 terang+gelap; migrasi 13/13 identik; eval ekstraktor 4/4 dan 371/371 bidang (docs/quality/eval-ekstraktor.md)"
+  },
+  {
+   "id": "F0-07D",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 8,
+   "size": "m",
+   "wajib": false,
+   "title": "OCR foto di perangkat (tesseract.js ind) agar foto nota dengan tata letak dikenal dibaca tanpa token",
+   "accept": "foto nota korpus kedua dengan tata letak sama: token_ai 0 dan bidang kunci benar; OCR keyakinan < 85 atau pemeriksaan silang gagal jatuh balik ke model; unduhan OCR hanya saat melempar foto; e2e",
+   "how": "Pelempar mengirim teks OCR + keyakinan lewat RPC/kolom berkas; baca-berkas memakai teks itu untuk cobaAturan dan tulisAturan",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T05:13:00"
   }
  ]
 }
