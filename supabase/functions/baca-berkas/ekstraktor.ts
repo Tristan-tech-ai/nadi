@@ -241,12 +241,21 @@ Teks hasil OCR foto: huruf bisa salah baca (mis. "NT" terbaca "NI", "kg" terbaca
 Bentuk "kolom" (CSV/Excel): jangkar = judul kolom persis; kolom = pemetaan nama bidang baris ke judul kolom dan tipenya. Kosongkan bidang dan tabel.
 Nama bidang harus sama dengan kunci di hasil bacaan yang diberikan. Aturan akan langsung diuji pada berkas ini dan ditolak bila hasilnya berbeda.`;
 
+/**
+ * Label tetap tanpa nilai: potong di angka/rupiah pertama ("Total tagihan Rp3.558.000" menjadi "Total tagihan").
+ * Model kadang menghafal nilai berkas asal di jangkar atau batas tabel; aturan seperti itu lulus uji di berkas asal
+ * tetapi tidak pernah cocok dengan berkas kembarannya.
+ */
+export const labelSaja = (s: string) => s.split(/\s*(?:Rp\.?\s*)?\d/i)[0].trim();
+
 export function aturanDari(jenis: string, m: AturanMentah): Aturan {
   if (m.bentuk === "kolom") {
     return { bentuk: "kolom", jenis, jangkar: m.jangkar, kolom: Object.fromEntries(m.kolom.map((k) => [k.nama, { judul: k.judul, tipe: k.tipe }])) };
   }
+  const jangkar = [...new Set(m.jangkar.map(labelSaja).filter((j) => j.length >= 3))];
+  m = { ...m, tabel_setelah: labelSaja(m.tabel_setelah), tabel_sebelum: labelSaja(m.tabel_sebelum) };
   const aturan: AturanTeks = {
-    bentuk: "teks", jenis, jangkar: m.jangkar,
+    bentuk: "teks", jenis, jangkar,
     bidang: Object.fromEntries(m.bidang.map((b) => [b.nama, { pola: b.pola, tipe: b.tipe, ...(b.opsional ? { opsional: true } : {}) }])),
   };
   if (m.tabel_pola) {

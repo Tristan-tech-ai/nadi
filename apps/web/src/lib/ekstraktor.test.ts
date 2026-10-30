@@ -157,6 +157,13 @@ describe("aturan tulisan model diuji sebelum disimpan", () => {
     const rusak = aturanDari("invoice", { ...mentah, bidang: [{ nama: "nomor", pola: "(", tipe: "teks", opsional: false }] });
     expect(ujiAturan(rusak, t1, jawaban("invoice", "invoice-01.pdf"), rapi).alasan).toMatch(/regex rusak/);
   });
+  it("nilai hafalan di batas tabel dan jangkar dibuang (eval 31 Okt: aturan invoice tidak cocok dengan kembarannya)", async () => {
+    const hafal = aturanDari("invoice", { ...mentah, tabel_sebelum: "Total tagihan Rp3.558.000", jangkar: [...mentah.jangkar, "No. 2026", "Rp1.250.000"] });
+    expect((hafal as Extract<Aturan, { bentuk: "teks" }>).tabel!.sebelum).toBe("Total tagihan");
+    expect(hafal.jangkar).toEqual([...inv.jangkar, "No."]);
+    const t5 = await teksPdf(join(KORPUS, "invoice", "invoice-05.pdf"));
+    expect(ujiAturan(hafal, t5, jawaban("invoice", "invoice-05.pdf"), rapi).lulus).toBe(true);
+  });
   it("skema aturan kecil dan tertutup", () => {
     expect(JSON.stringify(SKEMA_ATURAN)).not.toMatch(/anyOf|minimum|maxLength/);
     expect((SKEMA_ATURAN as { additionalProperties: boolean }).additionalProperties).toBe(false);

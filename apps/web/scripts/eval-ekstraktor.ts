@@ -58,13 +58,13 @@ let lulus = 0;
 let cocokBidang = 0;
 let totalBidang = 0;
 for (const [jenis, pertama, kembar, mime, garam] of PASANGAN) {
-  const { count: sebelum } = await sb.from("ekstraktor").select("id", { count: "exact", head: true }).eq("jenis_berkas", jenis);
+  const { count: sebelum } = await sb.from("ekstraktor").select("id", { count: "exact", head: true }).eq("jenis_berkas", jenis).eq("aktif", true);
   const a = await lempar(pertama, mime, garam);
   // Aturan ditulis di latar belakang setelah respons; tunggu sampai tersimpan (atau 90 dtk).
   let ada = (sebelum ?? 0) > 0;
   for (let i = 0; i < 30 && !ada; i++) {
     await tunggu(3000);
-    const { count } = await sb.from("ekstraktor").select("id", { count: "exact", head: true }).eq("jenis_berkas", jenis);
+    const { count } = await sb.from("ekstraktor").select("id", { count: "exact", head: true }).eq("jenis_berkas", jenis).eq("aktif", true);
     ada = (count ?? 0) > 0;
   }
   const b = await lempar(kembar, mime, garam);
