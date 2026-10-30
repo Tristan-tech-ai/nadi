@@ -40,6 +40,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# contoh env boleh dilacak
-!.env.example
-public/mediapipe/wasm/
+# berkas agen yang ditulis ulang otomatis oleh next dev (tidak dilacak)
+AGENTS.md
+/test-results/
+/playwright-report/

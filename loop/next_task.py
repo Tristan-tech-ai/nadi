@@ -40,8 +40,9 @@ def load(path=Q):
 
 
 def save(d, path=Q):
-    with open(path, "w", encoding="utf-8") as f:
+    with open(path, "w", encoding="utf-8", newline="\n") as f:
         json.dump(d, f, indent=1, ensure_ascii=False)
+        f.write("\n")
 
 
 def blocked(t, d):
