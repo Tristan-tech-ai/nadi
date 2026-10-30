@@ -13,9 +13,11 @@
    "accept": "LEARN.md memuat versi + URL sumber + tanggal untuk tiap paket; catatan perubahan besar Next.js (proxy, cache components, typegen) dari docs resmi",
    "how": "npm view <pkg> version; baca node_modules/next/dist/docs setelah install; WebFetch changelog resmi",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-30T20:05:52",
-   "started": "2026-10-30T20:16:16"
+   "started": "2026-10-30T20:16:16",
+   "done": "2026-10-30T20:17:32",
+   "result": "commit c6fb424: loop/LEARN.md 5 baris versi+sumber; template resmi create-next-app 16.4.3 diperiksa"
   },
   {
    "id": "R-02",
