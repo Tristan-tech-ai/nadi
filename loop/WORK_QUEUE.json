@@ -47,9 +47,11 @@
    "accept": "docs/research/ml-browser.md: model, lisensi, ukuran unduhan, fps/latensi terukur di Chromium lokal",
    "how": "Hugging Face MCP untuk mencari model; uji cepat di halaman sandbox lokal",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-30T20:05:52",
-   "started": "2026-10-31T05:11:05"
+   "started": "2026-10-31T05:11:05",
+   "done": "2026-10-31T05:13:30",
+   "result": "commit 73163f9; docs/research/ml-browser.md: tesseract.js 7.0.0 ind (Apache-2.0, 2,5 MB, 166-280 ms per foto korpus, angka benar), RF-DETR nano ONNX (Apache-2.0, 109 MB fp32, WebGPU 78-108 ms / WASM ±1 dtk), whisper-tiny (39 MB, WASM 1,2 dtk per 5 dtk audio); semua diukur di Chrome 156 lokal; akurasi Whisper Indonesia belum diukur (tanpa rekaman korpus); tugas lanjutan F0-07D"
   },
   {
    "id": "D-01",

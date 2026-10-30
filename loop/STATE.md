@@ -3,9 +3,10 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 ~05:05 (jam lokal), setelah tick 20 (F0-07C + F0-07 ekstraktor terkompilasi selesai).
-- Fase: F0. Progres wajib: 16/67. Tiga belas migrasi identik repo (... push_usulan, ringkasan_ai, ringkasan_ai_perbaiki). baca-berkas v5 terdeploy (isi dari commit b8da06f).
-- Berikutnya (READY): R-03 (ML di browser: OCR/deteksi objek/Whisper), F0-09 (server MCP v2), F0-11 (landing), F0-12 (perusahaan demo), F1-01 (orang dan topi). F0-13 deploy produksi dan R-02B menunggu F0-02B (Vercel GitHub App; UNTUK-TRISTAN PENTING). Aturan belum terverifikasi: UMP/UMK Bali, BPJS Kesehatan, TER (wajib sebelum F1-05).
+- Tanggal: 31 Okt 2026 ~05:20 (jam lokal), setelah tick 21 (R-03 riset ML di browser).
+- Fase: F0. Progres wajib: 17/67. Tiga belas migrasi identik repo. baca-berkas v5 terdeploy (isi dari commit b8da06f).
+- Berikutnya (READY): F0-07D (OCR foto tesseract.js di Pelempar agar foto nota 0 token), F0-09 (server MCP v2), F0-11 (landing), F0-12 (perusahaan demo), F1-01. F0-13 deploy produksi dan R-02B menunggu F0-02B (Vercel GitHub App; UNTUK-TRISTAN PENTING). Aturan belum terverifikasi: UMP/UMK Bali, BPJS Kesehatan, TER (wajib sebelum F1-05).
+- ML di browser: docs/research/ml-browser.md (tesseract.js 7.0.0 'ind' 166-280 ms per foto, RF-DETR nano WebGPU ±80 ms, whisper-tiny). Halaman uji sementara ada di scratchpad (ml/ocr.html, ml/tjs.html), bukan di repo.
 - Ringkasan AI: RPC public.ringkasan_ai(p_hari) security invoker (null untuk non-pengelola), kartu src/components/app/hemat-ai.tsx di /app/perusahaan; formatAngka di src/lib/format.ts.
 - Deploy Edge Function: tempel isi berkas PERSIS dari repo (index.ts + inti.ts + ekstraktor.ts untuk baca-berkas; index.ts untuk push). Pernah salah tempel sekali; selalu bandingkan dengan repo.
 - Ekstraktor: supabase/functions/baca-berkas/ekstraktor.ts. Aturan bentuk 'teks' {jangkar, bidang: {nama(bertitik): {pola, tipe, opsional}}, tabel: {pola grup bernama, setelah, sebelum, tipe}} atau 'kolom' {jangkar judul, kolom: {bidang: {judul, tipe}}}; tipe teks/angka/rupiah/tanggal/periode/jam; konsisten() memeriksa jumlah baris = total, qty x harga, bruto - potongan = neto. Teks PDF lewat unpdf 1.9.1. Tabel public.ekstraktor (sidik_tata_letak, jenis_berkas, aturan jsonb, dipakai, aktif) diisi baca-berkas lewat tulisAturan (latar, model berat, uji + perbaikiTipe + 1 umpan balik); cobaAturan dijalankan sebelum model; berkas.hasil.sumber = 'aturan'|'model'. Eval: node scripts/eval-ekstraktor.ts (apps/web). Foto nota belum bisa 0 token (butuh OCR browser, R-03). inti.ts kini mengekspor BIDANG (versi terdeploy belum; tidak mengubah perilaku).

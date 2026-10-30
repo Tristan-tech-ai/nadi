@@ -25,3 +25,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 04:20 | F0-07A, F0-13 | ekstraktor terkompilasi: pelari aturan + teks PDF tanpa model, vitest 9/9 (18 berkas korpus); F0-13 deploy diblokir sampai GitHub App | 40c5f6f |
 | 31 Okt 2026 04:45 | F0-07B | model menulis aturan teruji, berkas kembaran 0 token: eval 4/4, 371/371 bidang; v4 2/4 lalu v5 perbaikan tipe + umpan balik | b8da06f |
 | 31 Okt 2026 05:05 | F0-07C, F0-07 | ringkasan_ai + kartu AI 30 hari (SQL merah lalu 6/6, e2e 9/9, axe bersih); ekstraktor terkompilasi selesai | fb9d2a1 |
+| 31 Okt 2026 05:20 | R-03 | riset ML di browser terukur: OCR 0,2 dtk per foto, RF-DETR WebGPU 80 ms, Whisper 1,2 dtk/5 dtk; tambah F0-07D | 73163f9 |
