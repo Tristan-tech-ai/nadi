@@ -960,8 +960,11 @@
    "accept": "pemilik membuat akun staf dari daftar orang; staf masuk di /masuk/staf dengan kode+ID+PIN; e2e: staf masuk, hanya melihat data perusahaannya, tidak bisa membuka halaman pengelola; tes SQL fungsi pembuat akun",
    "how": "fungsi SECURITY DEFINER membuat auth.users+auth.identities dengan email sintetis {id}@staf.nadi.local; pelajari pola akun murid repo lama (supabase/pending/20261005010000_student_accounts.sql) tapi verifikasi ulang",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T00:49:20"
+   "status": "done",
+   "created": "2026-10-31T00:49:20",
+   "started": "2026-10-31T01:16:15",
+   "done": "2026-10-31T01:19:25",
+   "result": "commit 49a52bd: migrasi akun_staf (md5 identik), tes SQL akun_staf 13/13, /masuk/staf + /app/orang (khusus pemilik/admin), e2e staf: pemilik buat akun PIN, staf masuk tanpa email, ditolak di halaman pengelola (auth e2e 6/6); advisor 0 ERROR"
   }
  ]
 }

@@ -12,3 +12,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 01:20 | D-02 | sistem desain: token teruji kontras, font, ikon, logo, komponen, /dev/komponen; e2e 8/8 | 5401c48 |
 | 31 Okt 2026 02:10 | F0-04 | masuk, daftar, buat/pindah perusahaan dengan klaim JWT; e2e auth 5/5; staf kode+ID dipisah F0-04B | 65eb04a |
 | 31 Okt 2026 02:45 | F0-10 | korpus sintetis 42 berkas + jawaban + tes keutuhan; checkpoint konteks | 4791ad7 |
+| 31 Okt 2026 03:15 | F0-04B | staf masuk dengan kode usaha + ID + PIN; tes SQL 13/13; e2e staf lulus | 49a52bd |
