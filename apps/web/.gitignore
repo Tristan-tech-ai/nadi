@@ -44,3 +44,6 @@ next-env.d.ts
 AGENTS.md
 /test-results/
 /playwright-report/
+
+# Cache data bahasa tesseract.js saat OCR dijalankan di Node
+*.traineddata
