@@ -15,5 +15,5 @@ export default defineConfig({
   ],
   webServer: process.env.E2E_BASE_URL
     ? undefined
-    : { command: "pnpm start -p 3100", url: base, reuseExistingServer: true, timeout: 120_000 },
+    : { command: "pnpm start -p 3100", url: base, reuseExistingServer: true, timeout: 120_000, env: { NADI_CIMD_IZINKAN_LOKAL: "1" } },
 });

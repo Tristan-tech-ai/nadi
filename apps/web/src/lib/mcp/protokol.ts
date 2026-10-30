@@ -1,0 +1,185 @@
+// Protokol MCP Nadi (docs/research/mcp.md): JSON-RPC tanpa sesi, dua era.
+// Modern (2026-07-28): versi dan identitas klien di `_meta` setiap permintaan, header dicerminkan dan wajib cocok.
+// Lama (2025-xx): jabat tangan `initialize`; dilayani tanpa sesi (tidak mencetak Mcp-Session-Id).
+// Murni: akses database lewat `rpc` yang disuntikkan, jadi bisa diuji tanpa jaringan.
+
+export const VERSI_MODERN = "2026-07-28";
+export const VERSI_LAMA = ["2025-11-25", "2025-06-18", "2025-03-26"] as const;
+export const VERSI_DIDUKUNG = [VERSI_MODERN, ...VERSI_LAMA];
+const META = "io.modelcontextprotocol/";
+
+export class RpcGalat extends Error {
+  constructor(message: string, public code?: string) {
+    super(message);
+  }
+}
+
+export type Rpc = (fungsi: string, param: Record<string, unknown>) => Promise<unknown>;
+export type Jawaban = { status: number; body?: unknown; galatAuth?: "token" | "cakupan"; cakupanPerlu?: string };
+
+type Pesan = { jsonrpc?: unknown; id?: string | number | null; method?: unknown; params?: Record<string, unknown> };
+type Siapa = { peran: string; cakupan: string[]; usaha: { nama: string } };
+
+const INSTRUKSI =
+  "Nadi: sistem kerja usaha (orang, usulan, uang, absen). Mulai dengan siapa_saya untuk melihat usaha, peran, dan izin token. " +
+  "Semua perubahan dari asisten AI menjadi usulan lewat buat_usulan dan baru berlaku setelah disetujui pemilik atau admin di aplikasi Nadi. " +
+  "Rupiah ditulis sebagai angka utuh, tanggal YYYY-MM-DD.";
+const INFO = { name: "nadi", title: "Nadi", version: "0.9.0" };
+
+type Alat = {
+  name: string;
+  title: string;
+  description: string;
+  inputSchema: Record<string, unknown>;
+  annotations: Record<string, boolean>;
+  cakupan: "nadi.baca" | "nadi.usul";
+  pengelola?: boolean;
+  fungsi: string;
+  param: (a: Record<string, unknown>) => Record<string, unknown>;
+  bungkus?: string;
+};
+
+const objek = (properties: Record<string, unknown>, required: string[] = []) => ({
+  type: "object", properties, ...(required.length ? { required } : {}), additionalProperties: false,
+});
+
+export const ALAT: Alat[] = [
+  {
+    name: "siapa_saya", title: "Siapa saya", cakupan: "nadi.baca", fungsi: "mcp_siapa_saya",
+    description: "Usaha yang tersambung, peran pengguna, izin token (cakupan), jumlah orang aktif, dan jumlah usulan yang menunggu keputusan.",
+    inputSchema: objek({}), annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    param: () => ({}),
+  },
+  {
+    name: "daftar_orang", title: "Daftar orang", cakupan: "nadi.baca", pengelola: true, fungsi: "mcp_daftar_orang", bungkus: "orang",
+    description: "Orang di usaha ini (karyawan, kandidat) dengan ID staf, status, dan jabatan. Tanpa NIK dan gaji. Hanya untuk pemilik dan admin.",
+    inputSchema: objek({
+      cari: { type: "string", description: "Potongan nama, tidak peka huruf besar" },
+      batas: { type: "integer", minimum: 1, maximum: 200, description: "Jumlah maksimal, bawaan 50" },
+    }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    param: (a) => ({ p_cari: a.cari ?? null, p_batas: a.batas ?? 50 }),
+  },
+  {
+    name: "daftar_usulan", title: "Daftar usulan", cakupan: "nadi.baca", fungsi: "mcp_daftar_usulan", bungkus: "usulan",
+    description: "Usulan terbaru di Feed Nadi (dari Lempar Saja, aturan, atau asisten AI) beserta dampak rupiahnya.",
+    inputSchema: objek({
+      status: { type: "string", enum: ["menunggu", "diterima", "ditolak"], description: "Bawaan menunggu" },
+      batas: { type: "integer", minimum: 1, maximum: 100, description: "Jumlah maksimal, bawaan 20" },
+    }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    param: (a) => ({ p_status: a.status ?? "menunggu", p_batas: a.batas ?? 20 }),
+  },
+  {
+    name: "buat_usulan", title: "Buat usulan", cakupan: "nadi.usul", fungsi: "mcp_buat_usulan",
+    description:
+      "Ajukan perubahan ke Nadi sebagai usulan yang harus disetujui pemilik atau admin. Aksi: orang.buat (bidang: nama, jabatan, telepon), " +
+      "uang.keluar (bidang: tanggal, pemasok, keterangan; isi dampak_rp), izin.sakit (bidang: nama, mulai YYYY-MM-DD, lama_hari), catatan (bidang: isi). Jangan kirim NIK.",
+    inputSchema: objek({
+      aksi: { type: "string", enum: ["orang.buat", "uang.keluar", "izin.sakit", "catatan"] },
+      judul: { type: "string", minLength: 3, maxLength: 140, description: "Kalimat pendek diawali kata kerja, mis. Tambah Budi sebagai kasir" },
+      penjelasan: { type: "string", maxLength: 1000, description: "Alasan dan sumber informasinya" },
+      bidang: { type: "object", description: "Data untuk aksi itu" },
+      dampak_rp: { type: "number", minimum: 0, description: "Nilai rupiah utuh bila ada" },
+    }, ["aksi", "judul", "bidang"]),
+    annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
+    param: (a) => ({ p_aksi: a.aksi, p_judul: a.judul, p_penjelasan: a.penjelasan ?? null, p_bidang: a.bidang ?? {}, p_dampak_rp: a.dampak_rp ?? null }),
+  },
+];
+
+/** Daftar alat untuk pemanggil ini: alat pengelola disembunyikan dari staf, alat tulis dari token tanpa nadi.usul. Urutan tetap. */
+export function daftarAlat(siapa: Pick<Siapa, "peran" | "cakupan">) {
+  return ALAT.filter((t) => siapa.cakupan.includes(t.cakupan) && (!t.pengelola || ["pemilik", "admin"].includes(siapa.peran)))
+    .map(({ name, title, description, inputSchema, annotations }) => ({ name, title, description, inputSchema, annotations }));
+}
+
+/** Nilai header yang boleh dikodekan `=?base64?...?=` (Mcp-Name, Mcp-Param-*). */
+export function bacaNilaiHeader(v: string | null): string | null {
+  if (v === null) return null;
+  const m = v.match(/^=\?base64\?([A-Za-z0-9+/=]*)\?=$/);
+  if (!m) return v;
+  try {
+    return new TextDecoder("utf-8", { fatal: true }).decode(Uint8Array.from(atob(m[1]), (c) => c.charCodeAt(0)));
+  } catch {
+    return null;
+  }
+}
+
+const galat = (id: Pesan["id"], code: number, message: string, data?: unknown) => ({ jsonrpc: "2.0", id: id ?? null, error: { code, message, ...(data ? { data } : {}) } });
+const hasil = (id: Pesan["id"], result: unknown) => ({ jsonrpc: "2.0", id, result });
+
+/** Tangani satu pesan JSON-RPC. `token` sudah dipastikan ada oleh route; keabsahannya diperiksa database. */
+export async function tangani(h: Headers, body: unknown, rpc: Rpc, token: string, resource: string): Promise<Jawaban> {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return { status: 400, body: galat(null, -32600, "Kirim satu pesan JSON-RPC per POST") };
+  const m = body as Pesan;
+  if (m.jsonrpc !== "2.0" || typeof m.method !== "string") return { status: 400, body: galat(m.id, -32600, "Permintaan JSON-RPC tidak valid") };
+  const params = (m.params && typeof m.params === "object" ? m.params : {}) as Record<string, unknown>;
+  const meta = (params._meta && typeof params._meta === "object" ? params._meta : {}) as Record<string, unknown>;
+  const versiMeta = meta[META + "protocolVersion"];
+  const versiHeader = h.get("mcp-protocol-version");
+  const modern = typeof versiMeta === "string" || versiHeader === VERSI_MODERN;
+
+  if (modern) {
+    // Validasi header terhadap body (spesifikasi: 400 + -32020 HeaderMismatch).
+    if (typeof versiMeta !== "string" || versiHeader !== versiMeta) return { status: 400, body: galat(m.id, -32020, "Header MCP-Protocol-Version tidak sama dengan _meta protocolVersion") };
+    if (versiMeta !== VERSI_MODERN) {
+      return { status: 400, body: galat(m.id, -32022, "Unsupported protocol version", { supported: VERSI_DIDUKUNG, requested: versiMeta }) };
+    }
+    if (h.get("mcp-method") !== m.method) return { status: 400, body: galat(m.id, -32020, "Header Mcp-Method tidak sama dengan method") };
+    if (["tools/call", "resources/read", "prompts/get"].includes(m.method)) {
+      const nama = m.method === "resources/read" ? params.uri : params.name;
+      if (typeof nama !== "string" || bacaNilaiHeader(h.get("mcp-name")) !== nama) return { status: 400, body: galat(m.id, -32020, "Header Mcp-Name tidak sama dengan nama di body") };
+    }
+  } else if (versiHeader !== null && !VERSI_DIDUKUNG.includes(versiHeader)) {
+    return { status: 400, body: galat(m.id, -32022, "Unsupported protocol version", { supported: VERSI_DIDUKUNG, requested: versiHeader }) };
+  }
+
+  if (m.id === undefined) return { status: 202 }; // notifikasi (mis. notifications/initialized era lama)
+  const selesai = (r: Record<string, unknown>) => ({ status: 200, body: hasil(m.id, modern ? { resultType: "complete", ...r } : r) });
+
+  try {
+    switch (m.method) {
+      case "server/discover": {
+        if (!modern) break;
+        await rpc("mcp_siapa_saya", { p_token: token, p_resource: resource });
+        return selesai({
+          supportedVersions: VERSI_DIDUKUNG, capabilities: { tools: { listChanged: false } },
+          _meta: { [META + "serverInfo"]: INFO }, instructions: INSTRUKSI, ttlMs: 3_600_000, cacheScope: "public",
+        });
+      }
+      case "initialize": {
+        if (modern) break;
+        await rpc("mcp_siapa_saya", { p_token: token, p_resource: resource });
+        const minta = String(params.protocolVersion ?? "");
+        return selesai({ protocolVersion: (VERSI_LAMA as readonly string[]).includes(minta) ? minta : VERSI_LAMA[0], capabilities: { tools: { listChanged: false } }, serverInfo: INFO, instructions: INSTRUKSI });
+      }
+      case "ping":
+        return selesai({});
+      case "tools/list": {
+        const s = (await rpc("mcp_siapa_saya", { p_token: token, p_resource: resource })) as Siapa;
+        // Daftar berbeda per peran dan cakupan, jadi tembolok hanya untuk pemanggil ini.
+        return selesai({ tools: daftarAlat(s), ...(modern ? { ttlMs: 300_000, cacheScope: "private" } : {}) });
+      }
+      case "tools/call": {
+        const alat = ALAT.find((t) => t.name === params.name);
+        if (!alat) return { status: 200, body: galat(m.id, -32602, `Alat tidak dikenal: ${String(params.name)}`) };
+        const a = (params.arguments && typeof params.arguments === "object" ? params.arguments : {}) as Record<string, unknown>;
+        try {
+          const keluar = await rpc(alat.fungsi, { p_token: token, p_resource: resource, ...alat.param(a) });
+          const terstruktur = alat.bungkus ? { [alat.bungkus]: keluar } : keluar;
+          return selesai({ content: [{ type: "text", text: JSON.stringify(terstruktur) }], structuredContent: terstruktur, isError: false });
+        } catch (e) {
+          if (!(e instanceof RpcGalat)) throw e;
+          if (e.code === "P0401") throw e;
+          if (e.code === "P0403" && /cakupan/.test(e.message)) return { status: 403, galatAuth: "cakupan", cakupanPerlu: alat.cakupan, body: galat(m.id, -32001, e.message) };
+          // Galat yang bisa diperbaiki model (isian salah, peran, batas laju) dikembalikan sebagai hasil alat.
+          return selesai({ content: [{ type: "text", text: e.message.slice(0, 500) }], isError: true });
+        }
+      }
+    }
+    return modern ? { status: 404, body: galat(m.id, -32601, `Metode tidak dikenal: ${m.method}`) } : { status: 200, body: galat(m.id, -32601, `Metode tidak dikenal: ${m.method}`) };
+  } catch (e) {
+    if (e instanceof RpcGalat && e.code === "P0401") return { status: 401, galatAuth: "token", body: galat(m.id, -32001, "Token tidak sah atau kedaluwarsa. Sambungkan ulang Nadi.") };
+    throw e;
+  }
+}
