@@ -30,8 +30,9 @@
    "accept": "docs/research/jev.md berisi sumber primer bertanggal; satu panggilan nyata atau bukti tidak tersedia + fallback model kecil terdokumentasi",
    "how": "WebSearch/WebFetch docs resmi; uji via AI Gateway dari Vercel (OIDC) bila tersedia",
    "blocked_by": "F0-02",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "running",
+   "created": "2026-10-30T20:05:52",
+   "started": "2026-10-31T03:55:09"
   },
   {
    "id": "R-03",
@@ -1074,6 +1075,34 @@
    "started": "2026-10-31T03:08:04",
    "done": "2026-10-31T03:18:50",
    "result": "commit ed800ba; layar /app/lempar (Foto/Pilih berkas, seret-lepas, kompres JPEG 2000px, sha256, unggah RLS, baca via server action), share target daftar+unggah lalu ?berkas=; RPC putuskan_usulan (tes SQL 13/13: orang dari KTP dengan NIK hash, impor Excel lewati duplikat, kejadian nota/absen, staf dan usaha lain ditolak, NIK mentah dihapus); e2e lempar 2/2 + desktop 20/20; axe bersih Lempar+Feed 390/1440 terang+gelap; migrasi 10/10 identik. Lighthouse halaman ber-login belum diukur"
+  },
+  {
+   "id": "F0-13",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 8,
+   "size": "m",
+   "wajib": false,
+   "title": "Deploy produksi terbaru (auth, Lempar Saja, push) lewat unggah berkas Vercel",
+   "accept": "get_deployment READY di https://nadi-well-13fd.vercel.app; dari luar: /masuk 200, /app mengalihkan ke /masuk tanpa sesi, manifest share_target ada, e2e asap + auth jalan dengan E2E_BASE_URL produksi; env NEXT_PUBLIC_SUPABASE_* terpasang",
+   "how": "create_deployment dengan berkas repo (tanpa node_modules/.next), atau redeploy bila GitHub App sudah terpasang",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T03:57:21"
+  },
+  {
+   "id": "R-02B",
+   "fase": "R",
+   "kind": "research",
+   "priority": 8,
+   "size": "s",
+   "wajib": false,
+   "title": "Spike Jev lewat Vercel AI Gateway dengan OIDC dari route di deployment",
+   "accept": "satu panggilan /v1/evaluate typesafe-ai/jev berhasil (jawaban + usage + biaya dicatat di docs/research/jev.md), atau galat kredit/akses dicatat dan diteruskan ke UNTUK-TRISTAN",
+   "how": "route server sementara /api/cek-jev (hanya pemilik, dimatikan setelah uji), VERCEL_OIDC_TOKEN tidak dicetak",
+   "blocked_by": "F0-13",
+   "status": "blocked",
+   "created": "2026-10-31T03:57:22"
   }
  ]
 }
