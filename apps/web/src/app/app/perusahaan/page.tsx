@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { pindahPerusahaan } from "@/app/app/actions";
+import { HematAi } from "@/components/app/hemat-ai";
 import { Pemberitahuan } from "@/components/app/pemberitahuan";
 import { createClient } from "@/lib/supabase/server";
 import { wajibSesi } from "@/lib/sesi";
@@ -63,6 +64,9 @@ export default function Perusahaan() {
       <Link href="/app/mulai" className="mt-6 inline-block text-sm font-semibold underline underline-offset-4">Tambah usaha lain</Link>
       <Suspense fallback={<div className="mt-10 h-28 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <BagianPemberitahuan />
+      </Suspense>
+      <Suspense fallback={<div className="mt-10 h-32 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+        <HematAi />
       </Suspense>
     </main>
   );

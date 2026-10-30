@@ -1152,8 +1152,9 @@
    "accept": "halaman /app/perusahaan (pengelola) menampilkan token dipakai vs dihemat 30 hari dari pemakaian_ai; docs/quality/eval-ekstraktor.md: >= 95% bidang benar, berkas kedua 0 token",
    "how": "ringkasan SQL dari pemakaian_ai + kolom berkas.lewat_aturan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T04:14:06"
+   "status": "running",
+   "created": "2026-10-31T04:14:06",
+   "started": "2026-10-31T04:55:04"
   }
  ]
 }

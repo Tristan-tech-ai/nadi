@@ -45,3 +45,8 @@ export function formatJam(tanggal: Date, zona = "Asia/Makassar", denganZona = tr
 export function formatPersen(rasio: number): string {
   return `${Math.round(rasio * 100)}%`;
 }
+
+/** 20.021 dari 20021 (pemisah ribuan titik, EYD) */
+export function formatAngka(nilai: number): string {
+  return Math.round(nilai).toLocaleString("id-ID");
+}

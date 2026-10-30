@@ -54,6 +54,12 @@ test("lempar KTP dan nota, lalu setujui keduanya di Feed", async ({ page }) => {
   // Orang hasil KTP muncul di daftar orang.
   await page.goto("/app/orang");
   await expect(page.getByText("Agus Astuti").first()).toBeVisible();
+
+  // Pemilik melihat ringkasan pemakaian AI: dua berkas tadi dibaca AI, token tercatat.
+  await page.goto("/app/perusahaan");
+  const hemat = page.getByTestId("hemat-ai");
+  await expect(hemat).toContainText("Dibaca AI");
+  await expect(page.getByTestId("ringkas-token")).toContainText(/Token terpakai \d/);
 });
 
 test("berkas yang tidak bisa dibaca ditolak dengan pesan jelas", async ({ page }) => {

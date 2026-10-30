@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatJam, formatPersen, formatRupiah, formatTanggal } from "./format";
+import { formatAngka, formatJam, formatPersen, formatRupiah, formatTanggal } from "./format";
 
 describe("formatRupiah", () => {
   it("tanpa spasi dan tanpa titik setelah Rp, titik ribuan", () => expect(formatRupiah(1250000)).toBe("Rp1.250.000"));
@@ -22,3 +22,8 @@ describe("formatTanggal dan formatJam", () => {
 });
 
 it("formatPersen", () => expect(formatPersen(0.92)).toBe("92%"));
+it("formatAngka", () => {
+  expect(formatAngka(20021)).toBe("20.021");
+  expect(formatAngka(0)).toBe("0");
+  expect(formatAngka(7499.6)).toBe("7.500");
+});
