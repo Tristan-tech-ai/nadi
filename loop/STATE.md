@@ -3,9 +3,11 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 ~04:30, setelah tick 11 (F0-08B selesai). KONTEKS KRITIS: kompaksi segera; baca loop/MUST_READ.txt dulu.
-- Fase: F0. Progres wajib: 12/67. Enam migrasi identik repo (fondasi, graf_usaha, mode_hemat, akun_staf, paket_industri, aturan_resmi).
-- Berikutnya: F0-05B (Web Push), F0-06 (Lempar Saja v1), F0-11 (landing). Aturan yang belum terverifikasi: UMP/UMK Bali (buka teks SK), BPJS Kesehatan, tabel PPh 21 TER (wajib sebelum F1-05).
+- Tanggal: 31 Okt 2026 ~02:45 WITA, setelah tick 12 (F0-05B Web Push selesai). Catatan jam tick 11 di sini sebelumnya (~04:30) salah.
+- Fase: F0. Progres wajib: 13/67. Delapan migrasi identik repo (fondasi, graf_usaha, mode_hemat, akun_staf, paket_industri, aturan_resmi, web_push, web_push_unik).
+- Berikutnya: F0-06 (Lempar Saja v1), F0-11 (landing), F0-09 (MCP). Aturan belum terverifikasi: UMP/UMK Bali (teks SK), BPJS Kesehatan, tabel PPh 21 TER (wajib sebelum F1-05).
+- Web Push: tabel langganan_push (unik perusahaan+pengguna+endpoint, RLS milik sendiri); kunci VAPID dibuat Edge Function `push` (supabase/functions/push, jsr:@negrel/webpush 0.5.0) dan disimpan di Vault (app.vapid + RPC kunci_push_publik / vapid_ambil khusus service_role); aksi 'siapkan' dan 'uji'. UI di /app/perusahaan (src/components/app/pemberitahuan.tsx, src/app/app/push-actions.ts); sw.js v2 menangani push + notificationclick. e2e push butuh Google Chrome + launchPersistentContext (profil penyamaran menolak push). Env publik lokal di apps/web/.env.local (diabaikan git).
+- Jebakan Windows: skrip node dengan path /c/... menulis ke C:\c\... (pakai path C:/...). Folder kosong sisa ada di C:\c\Users\Tristan\AppData\Local\Temp (penghapusan diblok penjaga, dibiarkan; C:\c juga berisi data lain milik Tristan).
 - Paket industri: tabel paket_industri (fnb, toko); RPC pasang_paket(kode) dipanggil di buatPerusahaan setelah refreshSession.
 - Aplikasi: layout /app punya kepala + nav bawah (src/components/app/nav-bawah.tsx, isi per peran) di balik Suspense; service worker didaftarkan di layout akar (src/components/app/daftar-sw.tsx, public/sw.js); /app = Feed Keputusan (usulan menunggu); /app/lempar halaman sementara jujur ('pembaca berkas sedang disiapkan'). Ikon dibuat ulang: node scripts/buat-ikon.mjs.
 - Staf: perusahaan.kode (6 huruf), orang.id_staf (S001..), RPC buat_akun_staf(p_orang,p_pin) membuat akun email sintetis {kode}-{id}@staf.nadi.local; /masuk/staf; /app/orang (pengelola). e2e auth menambah satu 'Staf Uji <waktu>' per jalan di usaha uji A (data uji tumbuh pelan; bersihkan nanti lewat arsip, bukan delete).
