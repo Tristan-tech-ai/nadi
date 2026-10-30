@@ -3,7 +3,7 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 ~02:45 WITA, setelah tick 12 (F0-05B Web Push selesai). Catatan jam tick 11 di sini sebelumnya (~04:30) salah.
+- Tanggal: 31 Okt 2026 ~02:20 (jam lokal), setelah tick 12 (F0-05B Web Push selesai). Catatan jam tick 11 di sini sebelumnya (~04:30) salah.
 - Fase: F0. Progres wajib: 13/67. Delapan migrasi identik repo (fondasi, graf_usaha, mode_hemat, akun_staf, paket_industri, aturan_resmi, web_push, web_push_unik).
 - Berikutnya: F0-06 (Lempar Saja v1), F0-11 (landing), F0-09 (MCP). Aturan belum terverifikasi: UMP/UMK Bali (teks SK), BPJS Kesehatan, tabel PPh 21 TER (wajib sebelum F1-05).
 - Web Push: tabel langganan_push (unik perusahaan+pengguna+endpoint, RLS milik sendiri); kunci VAPID dibuat Edge Function `push` (supabase/functions/push, jsr:@negrel/webpush 0.5.0) dan disimpan di Vault (app.vapid + RPC kunci_push_publik / vapid_ambil khusus service_role); aksi 'siapkan' dan 'uji'. UI di /app/perusahaan (src/components/app/pemberitahuan.tsx, src/app/app/push-actions.ts); sw.js v2 menangani push + notificationclick. e2e push butuh Google Chrome + launchPersistentContext (profil penyamaran menolak push). Env publik lokal di apps/web/.env.local (diabaikan git).
