@@ -173,9 +173,11 @@
    "accept": "Lighthouse PWA installable; push uji sampai di Chromium; berbagi gambar dari menu Share Android/Chromium masuk ke Lempar",
    "how": "kunci VAPID dibuat sendiri dan disimpan sebagai env sensitive Vercel/secret Supabase",
    "blocked_by": "F0-04",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-30T20:05:52",
-   "started": "2026-10-31T01:31:07"
+   "started": "2026-10-31T01:31:07",
+   "done": "2026-10-31T01:34:47",
+   "result": "commit 0b09263: nav bawah per peran, Feed Keputusan (KartuUsulan + keadaan kosong), app/manifest.ts dengan share_target -> /app/lempar/terima (303), sw.js luring + header no-store, ikon 192/512/maskable; e2e 24/24 termasuk installability CDP tanpa galat; Web Push dipisah ke F0-05B"
   },
   {
    "id": "F0-06",

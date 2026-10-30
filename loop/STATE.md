@@ -3,9 +3,10 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 ~03:15, setelah tick 8 (F0-04B selesai).
-- Fase: F0. Progres wajib: 9/65.
-- Berikutnya: F0-05 (kerangka aplikasi: navigasi per peran, Feed Keputusan, bilah perintah, PWA manifest/offline/Web Push, Web Share Target), F0-08 (paket industri F&B+toko + aturan bertanggal bersumber), lalu F0-06 (Lempar Saja v1).
+- Tanggal: 31 Okt 2026 ~03:50, setelah tick 9 (F0-05 selesai). KONTEKS KRITIS: kompaksi segera; baca loop/MUST_READ.txt dulu setelahnya.
+- Fase: F0. Progres wajib: 10/66.
+- Berikutnya: F0-08 (paket industri F&B+toko + aturan bertanggal bersumber), F0-05B (Web Push VAPID), F0-06 (Lempar Saja v1: unggah ke Storage, antrean, Edge Function AI, usulan; route share target /app/lempar/terima sudah menerima POST).
+- Aplikasi: layout /app punya kepala + nav bawah (src/components/app/nav-bawah.tsx, isi per peran) di balik Suspense; service worker didaftarkan di layout akar (src/components/app/daftar-sw.tsx, public/sw.js); /app = Feed Keputusan (usulan menunggu); /app/lempar halaman sementara jujur ('pembaca berkas sedang disiapkan'). Ikon dibuat ulang: node scripts/buat-ikon.mjs.
 - Staf: perusahaan.kode (6 huruf), orang.id_staf (S001..), RPC buat_akun_staf(p_orang,p_pin) membuat akun email sintetis {kode}-{id}@staf.nadi.local; /masuk/staf; /app/orang (pengelola). e2e auth menambah satu 'Staf Uji <waktu>' per jalan di usaha uji A (data uji tumbuh pelan; bersihkan nanti lewat arsip, bukan delete).
 - Korpus: fixtures/korpus (42 berkas, 10 jenis, jawaban JSON per berkas, indeks.json), dibuat ulang `node scripts/korpus/buat.mjs` dari apps/web (seed 20261031; JSON/PNG/CSV identik tiap kali; PDF dan XLSX beda hanya di cap waktu metadata (Chromium, entri zip exceljs), isi sel diuji sama). Tes: apps/web/src/lib/korpus.test.ts.
 - Auth: src/app/auth-actions.ts (masuk/daftar/keluar), src/lib/sesi.ts (bacaSesi/wajibSesi/wajibPerusahaan, hanya di balik Suspense), src/app/app/actions.ts (buatPerusahaan, pindahPerusahaan + refreshSession). createClient memanggil connection(). Akun uji e2e e2e-a/e2e-b@uji.nadi.local, sandi di apps/web/.env.e2e.local (diabaikan git; salinan di scratchpad e2e_sandi.txt). Produksi belum memuat auth (deploy berkas berikutnya bersama landing/F0-05).
