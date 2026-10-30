@@ -1,27 +1,105 @@
 @import "tailwindcss";
 
-/* Token sementara; diganti sistem desain di D-02. */
+/* Token Nadi (docs/design/DIRECTION.md). Nilai harus sama dengan src/lib/tokens.ts (dicek tokens.test.ts). */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --kertas: #F6F2EA;
+  --kertas-2: #EFE9DD;
+  --tinta: #1C1B18;
+  --tinta-2: #5B574F;
+  --garis: #DDD5C6;
+  --garis-kuat: #8C8476;
+  --kunyit: #E9A825;
+  --cap: #B4372A;
+  --daun: #23704A;
+  --laut: #2D5B86;
+  --stabilo-teks: #1C1B18;
+  color-scheme: light;
+}
+
+/* Gelap: "kertas di bawah lampu malam". Ikut sistem kecuali pengguna memilih tema terang. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-tema="terang"]) {
+    --kertas: #141311;
+    --kertas-2: #1C1A17;
+    --tinta: #ECE7DD;
+    --tinta-2: #A8A196;
+    --garis: #2E2B26;
+    --garis-kuat: #6E685D;
+    --kunyit: #F0B53D;
+    --cap: #E0654F;
+    --daun: #4FB07F;
+    --laut: #78A6D6;
+    color-scheme: dark;
+  }
+}
+:root[data-tema="gelap"] {
+  --kertas: #141311;
+  --kertas-2: #1C1A17;
+  --tinta: #ECE7DD;
+  --tinta-2: #A8A196;
+  --garis: #2E2B26;
+  --garis-kuat: #6E685D;
+  --kunyit: #F0B53D;
+  --cap: #E0654F;
+  --daun: #4FB07F;
+  --laut: #78A6D6;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0b0b0c;
-    --foreground: #ededed;
-  }
+  --color-kertas: var(--kertas);
+  --color-kertas-2: var(--kertas-2);
+  --color-tinta: var(--tinta);
+  --color-tinta-2: var(--tinta-2);
+  --color-garis: var(--garis);
+  --color-garis-kuat: var(--garis-kuat);
+  --color-kunyit: var(--kunyit);
+  --color-cap: var(--cap);
+  --color-daun: var(--daun);
+  --color-laut: var(--laut);
+  --color-stabilo-teks: var(--stabilo-teks);
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-judul: var(--font-bricolage), var(--font-jakarta), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --ease-nadi: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --radius-isian: 6px;
+  --radius-kartu: 10px;
+  --radius-lembar: 16px;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: system-ui, sans-serif;
+  background: var(--kertas);
+  color: var(--tinta);
+  font-family: var(--font-sans);
+  font-feature-settings: "kern";
+}
+
+/* Angka uang selalu sejajar kolom. */
+.angka {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Stabilo: sorot kunyit di belakang teks, seperti spidol di nota. */
+.stabilo {
+  background: var(--kunyit);
+  color: var(--stabilo-teks);
+  box-decoration-break: clone;
+  padding: 0 0.2em;
+  border-radius: 2px;
+}
+
+/* Kartu Usulan: tepi bawah sobekan kertas thermal (DIRECTION §1). */
+.kartu-thermal {
+  border-radius: var(--radius-kartu) var(--radius-kartu) 0 0;
+  /* slop-ok: mask bentuk sobekan thermal, bukan hiasan warna */
+  -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 12px 6px repeat-x, linear-gradient(#000 0 0) top / 100% calc(100% - 5px) no-repeat;
+  /* slop-ok: mask bentuk sobekan thermal, bukan hiasan warna */
+  mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 12px 6px repeat-x, linear-gradient(#000 0 0) top / 100% calc(100% - 5px) no-repeat;
+}
+
+:focus-visible {
+  outline: 2px solid var(--kunyit);
+  outline-offset: 2px;
 }
 
 /* Gerak selalu menghormati pilihan pengguna (ANTI-SLOP S43). */

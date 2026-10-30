@@ -7,7 +7,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TOKEN_FILES = ("globals.css",)
+TOKEN_FILES = ("globals.css", "tokens.ts")
 BANNED_WORDS = ["silakan", "revolusioner", "inovatif", "memberdayakan", "solusi terbaik", "all-in-one", "seamless",
                 "tingkatkan produktivitas", "game changer", "mudah dan cepat", "mohon maaf atas ketidaknyamanan"]
 EMOJI = re.compile("[\U0001F300-\U0001FAFF\U00002600-\U000027BF\U0001F000-\U0001F2FF]")
