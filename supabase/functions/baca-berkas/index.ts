@@ -155,7 +155,7 @@ Deno.serve(async (req) => {
     global: { headers: { Authorization: otorisasi } },
     auth: { persistSession: false },
   });
-  const { data: berkas } = await pengguna.from("berkas").select("id, perusahaan_id, jalur, nama_asli, mime, status").eq("id", berkas_id).maybeSingle();
+  const { data: berkas } = await pengguna.from("berkas").select("id, perusahaan_id, jalur, nama_asli, mime, status, teks_ocr, ocr_keyakinan").eq("id", berkas_id).maybeSingle();
   if (!berkas) return json({ galat: "Berkas tidak ditemukan" }, 404);
 
   const admin = createClient(URL_SUPABASE, kunciEnv("SUPABASE_SECRET_KEYS", "SUPABASE_SERVICE_ROLE_KEY"), { auth: { persistSession: false } });
@@ -173,7 +173,9 @@ Deno.serve(async (req) => {
     const { data: unduh, error: eUnduh } = await admin.storage.from("berkas").download(berkas.jalur);
     if (eUnduh || !unduh) return await gagal("Berkas belum terunggah. Lempar ulang berkasnya.", 409);
     const byte = new Uint8Array(await unduh.arrayBuffer());
-    const teks = await teksBerkas(berkas.mime, byte);
+    // Foto: pakai teks OCR dari perangkat bila keyakinannya cukup (>= 85, docs/research/ml-browser.md).
+    const ocrCukup = berkas.mime.startsWith("image/") && berkas.teks_ocr && Number(berkas.ocr_keyakinan) >= 85;
+    const teks = ocrCukup ? (berkas.teks_ocr as string) : await teksBerkas(berkas.mime, byte);
 
     let hasil: Hasil | null = null;
     let sumber: "aturan" | "model" = "model";
