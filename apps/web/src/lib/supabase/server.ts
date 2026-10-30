@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 import { cache } from "react";
 import { readPublicEnv } from "@/lib/env";
 
@@ -16,6 +17,8 @@ const traced: typeof fetch | undefined = process.env.DB_TRACE
   : undefined;
 
 export const createClient = cache(async function createClient() {
+  // Klien Supabase memanggil Date.now() saat dibuat; connection() menandai render ini milik waktu-permintaan (Cache Components).
+  await connection();
   const cookieStore = await cookies();
   const { supabaseUrl, supabasePublishableKey } = readPublicEnv();
   return createServerClient(supabaseUrl, supabasePublishableKey, {

@@ -4,6 +4,8 @@ Setiap keputusan produk, desain, atau teknis yang diambil loop, dengan alasan da
 
 | Tanggal | Keputusan | Alasan | Sumber |
 |---|---|---|---|
+| 31 Okt 2026 | Auth: email + kata sandi lewat @supabase/ssr; sesi dibaca hanya di dalam <Suspense>; createClient memanggil connection() lebih dulu; perusahaan aktif diganti lewat RPC lalu refreshSession agar klaim pid/prn masuk JWT | Cache Components melarang membaca cookie di luar Suspense; konstruktor Supabase memanggil Date.now() (galat blocking-prerender-current-time); klaim app_metadata baru hanya terbawa token setelah refresh | docs bawaan Next 02-guides/authentication-with-cache-components.md, connection.md; docs Supabase |
+| 31 Okt 2026 | Akun uji e2e sintetis (e2e-a/e2e-b@uji.nadi.local) dibuat lewat SQL dengan email terkonfirmasi; kata sandi acak hanya di apps/web/.env.e2e.local (diabaikan git) | Pendaftaran lewat email terhambat batas email bawaan | |
 | 31 Okt 2026 | Deploy produksi sementara lewat unggahan berkas (create_deployment) sampai Vercel GitHub App terpasang; deploy hanya di titik penting karena tiap deploy mengirim isi berkas | Repo tidak terlihat oleh Vercel (repo_not_found); menunggu satu klik Tristan (UNTUK-TRISTAN, F0-02B) | Vercel MCP |
 | 31 Okt 2026 | Proyek Vercel nadi: region fungsi sin1, Node 24.x, Fluid, proteksi SSO hanya preview | Dekat dengan Supabase Singapura; produksi harus bisa dibuka publik | update_project |
 | 30 Okt 2026 | Mode hemat: kejadian mentah 90 hari, audit 180 hari (pg_partman), ringkasan_harian per perusahaan/jenis/orang dihitung pg_cron 17:30 UTC | DB Free 500 MB; KPI dan insight cukup dari ringkasan; retensi membuang partisi utuh, bukan DELETE baris | supabase.com/pricing; pg_partman 5.3.1 |

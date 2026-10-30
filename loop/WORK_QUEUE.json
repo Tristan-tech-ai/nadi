@@ -156,8 +156,9 @@
    "accept": "e2e Playwright: daftar -> buat perusahaan -> klaim pid ada di JWT -> data perusahaan B tidak terlihat; staf masuk tanpa email",
    "how": "Supabase Auth; atasi batas email konfirmasi (cek pengaturan, catat di UNTUK-TRISTAN.md bila butuh klik dasbor)",
    "blocked_by": "F0-01,F0-03,D-02",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "running",
+   "created": "2026-10-30T20:05:52",
+   "started": "2026-10-31T00:42:13"
   },
   {
    "id": "F0-05",
@@ -942,6 +943,20 @@
    "blocked_by": "menunggu Tristan memasang Vercel GitHub App (UNTUK-TRISTAN.md)",
    "status": "blocked",
    "created": "2026-10-30T23:50:52"
+  },
+  {
+   "id": "F0-04B",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 6,
+   "size": "m",
+   "wajib": true,
+   "title": "Masuk staf dengan kode perusahaan + ID karyawan (tanpa email)",
+   "accept": "pemilik membuat akun staf dari daftar orang; staf masuk di /masuk/staf dengan kode+ID+PIN; e2e: staf masuk, hanya melihat data perusahaannya, tidak bisa membuka halaman pengelola; tes SQL fungsi pembuat akun",
+   "how": "fungsi SECURITY DEFINER membuat auth.users+auth.identities dengan email sintetis {id}@staf.nadi.local; pelajari pola akun murid repo lama (supabase/pending/20261005010000_student_accounts.sql) tapi verifikasi ulang",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T00:49:20"
   }
  ]
 }

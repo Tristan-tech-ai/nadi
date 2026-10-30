@@ -15,3 +15,13 @@ test("area aplikasi mengalihkan tamu ke halaman masuk", async ({ page }) => {
   expect(page.url()).toContain("/masuk?next=%2Fapp");
   expect(res).not.toBeNull();
 });
+
+for (const jalur of ["/masuk", "/daftar"]) {
+  test(`halaman ${jalur} tanpa pelanggaran aksesibilitas serius`, async ({ page }, info) => {
+    await page.goto(jalur);
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    const hasil = await new AxeBuilder({ page }).analyze();
+    expect(hasil.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+    await page.screenshot({ path: info.outputPath(`${jalur.slice(1)}-${info.project.name}.png`) });
+  });
+}
