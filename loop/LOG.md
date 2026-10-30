@@ -29,3 +29,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 05:35 | F0-07D1 | OCR foto di perangkat + simpan_ocr (SQL 6/6, e2e 2/2, OCR tersimpan keyakinan 87) | lihat git log |
 | 31 Okt 2026 05:45 | F0-07D2 (kode) | baca-berkas memakai teks OCR foto untuk aturan; deploy + bukti di tick berikut | lihat git log |
 | 31 Okt 2026 06:25 | F0-07D2, F0-07D | baca-berkas v7: foto nota 0 token lewat OCR (tabel_gabung, uji longgar teks), hafalan nilai dibuang; eval ekstraktor 5/5, bidang 99,2% | 3ec9308 |
+| 31 Okt 2026 06:55 | F0-09 (DB) | riset MCP 2026-07-28 + rancangan dua era; migrasi mcp_oauth (OAuth kode+PKCE+penyegar, token terikat usaha/cakupan/resource, 4 alat), tes SQL 31/31 | 8fbca89 |
