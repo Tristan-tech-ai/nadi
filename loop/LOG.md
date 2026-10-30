@@ -22,3 +22,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 03:25 | F0-06C, F0-06 | layar Lempar + share target + Setujui/Tolak (putuskan_usulan, SQL 13/13), e2e lempar 2/2, desktop 20/20, axe bersih; Lempar Saja v1 selesai | ed800ba |
 | 31 Okt 2026 03:50 | F0-05C | push otomatis usulan baru: cron+pg_net+token Vault, SQL 11/11, e2e 2/2 (pemberitahuan 32,6 dtk) | a1bb53a |
 | 31 Okt 2026 04:00 | R-02 | riset Jev: akses TypeSafe + AI Gateway, harga, batas, format; bukti 403/401 tanpa kredensial; fallback; tambah F0-13 deploy, R-02B spike | f31ec68 |
+| 31 Okt 2026 04:20 | F0-07A, F0-13 | ekstraktor terkompilasi: pelari aturan + teks PDF tanpa model, vitest 9/9 (18 berkas korpus); F0-13 deploy diblokir sampai GitHub App | 40c5f6f |

@@ -1118,9 +1118,11 @@
    "accept": "vitest: satu aturan per tata letak membaca semua invoice/slip PDF, mutasi CSV, absen XLSX korpus dengan bidang kunci benar dan akurasi bidang >= 95%; angka tak konsisten dan baris tak terbaca ditolak",
    "how": "supabase/functions/baca-berkas/ekstraktor.ts, unpdf 1.9.1",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-31T04:14:06",
-   "started": "2026-10-31T04:14:06"
+   "started": "2026-10-31T04:14:06",
+   "done": "2026-10-31T04:14:40",
+   "result": "commit 40c5f6f; supabase/functions/baca-berkas/ekstraktor.ts (ubah tipe, jalankan teks/kolom, konsisten, sidik); vitest ekstraktor 9/9: aturan tunggal membaca 6/6 invoice, 6/6 slip, 3/3 mutasi, 3/3 absen korpus dengan bidang kunci benar dan akurasi bidang >= 95%; pemeriksaan silang menangkap baris kasbon yang terlewat (merah lalu diperbaiki dengan bidang opsional)"
   },
   {
    "id": "F0-07B",
