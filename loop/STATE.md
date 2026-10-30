@@ -3,9 +3,10 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 30 Okt 2026 23:50, setelah tick 2.
-- Fase: F0. Progres wajib: 3/63 (R-01, F0-01, F0-03).
-- Berikutnya: F0-02 (proyek Vercel 'nadi' + env + deploy), lalu D-01 (riset desain) dan F0-10 (korpus contoh).
+- Tanggal: 31 Okt 2026 00:25, setelah tick 3.
+- Fase: F0. Progres wajib: 4/64 (R-01, F0-01, F0-03, F0-02).
+- Berikutnya: D-01 (sprint riset desain: DIRECTION, ANTI-SLOP, VOICE), lalu F0-10 (korpus contoh) dan F0-08 (paket industri).
+- Produksi: https://nadi-well-13fd.vercel.app (proyek Vercel prj_FEXfQJCj2AulucGiuO6WniLz4KJ4, sin1, Node 24, install `npx --yes pnpm@10.29.2 install`). Deploy lewat create_deployment dengan berkas (atau redeploy deploymentId) karena GitHub App belum terpasang (F0-02B terblokir, UNTUK-TRISTAN). Deploy hanya di titik penting.
 - Database: migrasi fondasi, graf_usaha, mode_hemat ter-apply; sidik md5 identik repo (cek: scripts/cek-migrasi.py dengan json dari supabase_migrations). Tes: supabase/tests/isolasi_tenant.test.sql (38 asersi). pg_cron: nadi-ringkas-harian 17:30 UTC, nadi-partman 18:00 UTC.
 - Anti-macet: hook macet_guard (pre/post/elisitasi/start) di loop/hooks, pengawas loop/watchdog.py (pid di loop/.watchdog.pid), hook git pre-push (jejak + gerbang hijau) dan commit-msg dipasang dari scripts/git-hooks oleh gate.sh.
 - Insiden tick 2: loop diam 20:34-23:26 menunggu dialog konfirmasi MCP (drop policy). Diperbaiki dengan hook Elicitation. Commit dengan jejak sempat ter-push karena `gate.sh | tail && git push`; ditulis ulang (force-with-lease, satu commit milik loop) dan dicegah pre-push.

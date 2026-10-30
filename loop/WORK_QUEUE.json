@@ -116,9 +116,11 @@
    "accept": "URL produksi menjawab 200; get_deployment READY; env NEXT_PUBLIC_SUPABASE_* terpasang; push berikutnya memicu deploy otomatis",
    "how": "Vercel MCP create_project/create_git_project (teamId team_DIFMD08eDgAex5GasIRHz7Fj); bila GitHub App belum terpasang, catat di UNTUK-TRISTAN.md dan deploy lewat jalur lain",
    "blocked_by": "F0-01",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-30T20:05:52",
-   "started": "2026-10-30T23:49:07"
+   "started": "2026-10-30T23:49:07",
+   "done": "2026-10-30T23:57:06",
+   "result": "commit 190336e: proyek Vercel prj_FEXfQJCj2AulucGiuO6WniLz4KJ4 sin1, deploy dpl_8Jt69GMfm5xAoEaMm4m2TZMU6Zmo READY, https://nadi-well-13fd.vercel.app 200, e2e produksi 4/4; deploy otomatis per push dipindah ke F0-02B (menunggu GitHub App)"
   },
   {
    "id": "F0-03",
