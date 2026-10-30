@@ -1173,9 +1173,39 @@
    "title": "OCR foto di perangkat (tesseract.js ind) agar foto nota dengan tata letak dikenal dibaca tanpa token",
    "accept": "foto nota korpus kedua dengan tata letak sama: token_ai 0 dan bidang kunci benar; OCR keyakinan < 85 atau pemeriksaan silang gagal jatuh balik ke model; unduhan OCR hanya saat melempar foto; e2e",
    "how": "Pelempar mengirim teks OCR + keyakinan lewat RPC/kolom berkas; baca-berkas memakai teks itu untuk cobaAturan dan tulisAturan",
+   "blocked_by": "F0-07D1,F0-07D2",
+   "status": "blocked",
+   "created": "2026-10-31T05:13:00",
+   "started": "2026-10-31T05:25:11"
+  },
+  {
+   "id": "F0-07D1",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 8,
+   "size": "s",
+   "wajib": false,
+   "title": "OCR foto: kolom berkas.teks_ocr/ocr_keyakinan, RPC simpan_ocr, Pelempar menjalankan tesseract.js (ind) hanya untuk foto",
+   "accept": "tes SQL: hanya pengunggah berkas berstatus unggah yang bisa menyimpan OCR, usaha lain ditolak; unit: OCR dimuat dinamis hanya untuk image/*; e2e lempar tetap lulus",
+   "how": "migrasi + src/lib/ocr.ts",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T05:13:00"
+   "status": "running",
+   "created": "2026-10-31T05:25:11",
+   "started": "2026-10-31T05:25:11"
+  },
+  {
+   "id": "F0-07D2",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 8,
+   "size": "s",
+   "wajib": false,
+   "title": "baca-berkas v6 memakai teks OCR untuk aturan tersimpan dan menulis aturan dari foto",
+   "accept": "foto nota kedua tata letak sama (nota-05 setelah nota-01) token_ai 0 dan bidang kunci benar; OCR < 85 atau tidak konsisten jatuh balik ke model",
+   "how": "deploy dengan isi berkas persis dari repo",
+   "blocked_by": "F0-07D1",
+   "status": "blocked",
+   "created": "2026-10-31T05:25:11"
   }
  ]
 }

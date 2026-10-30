@@ -6,6 +6,7 @@ import { CameraIcon, CheckCircleIcon, FileArrowUpIcon, WarningCircleIcon } from 
 import { Tombol } from "@/components/ui/tombol";
 import { bacaBerkasAksi } from "@/app/app/lempar/actions";
 import { lemparBerkas, mimeBerkas, ukuranKompres, type HasilLempar } from "@/lib/lempar";
+import { bacaTeksFoto, perluOcr } from "@/lib/ocr";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 
 type Baris = { kunci: string; nama: string; tahap: "siap" | "unggah" | "baca" | "selesai"; hasil?: HasilLempar };
@@ -91,6 +92,11 @@ export function Pelempar({ antre = [] }: { antre?: string[] }) {
         const daftarHasil = await lemparBerkas(sb, siap, { baca: false });
         if (daftarHasil.status !== "diunggah") return ubah(kunci, { tahap: "selesai", hasil: daftarHasil });
         ubah(kunci, { tahap: "baca" });
+        // Foto: baca teksnya di perangkat dulu, supaya tata letak yang sudah dikenal bisa dibaca tanpa AI.
+        if (perluOcr(siap.mime)) {
+          const ocr = await bacaTeksFoto(new Blob([siap.isi], { type: siap.mime }));
+          if (ocr) await sb.rpc("simpan_ocr", { p_berkas: daftarHasil.berkasId, p_teks: ocr.teks, p_keyakinan: ocr.keyakinan });
+        }
         ubah(kunci, { tahap: "selesai", hasil: await bacaBerkasAksi(daftarHasil.berkasId) });
       }),
     );
