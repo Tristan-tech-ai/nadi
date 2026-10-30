@@ -982,9 +982,11 @@
    "accept": "kunci VAPID dibuat sendiri dan disimpan sebagai env sensitive Vercel + secret Supabase; tabel langganan_push ber-RLS; tombol Nyalakan pemberitahuan; e2e Chromium menerima push uji",
    "how": "docs bawaan Next progressive-web-apps.md (bagian push), web-push di server, service worker menangani push",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-31T01:34:26",
-   "started": "2026-10-31T02:03:08"
+   "started": "2026-10-31T02:03:08",
+   "done": "2026-10-31T02:17:53",
+   "result": "commit 401c0cc; Edge Function push v1 (Vault VAPID, jsr:@negrel/webpush 0.5.0); migrasi web_push + web_push_unik identik (cek-migrasi 8/8); tes SQL web_push 15/15; unit push.test 9/9; e2e push.spec lulus (Chrome profil persisten, FCM, SW menampilkan 'Pemberitahuan Nadi menyala'); e2e desktop 17/17; axe bersih 390/1440 terang+gelap; advisor: WARN kunci_push_publik diterima. Penyimpangan kriteria: kunci di Vault, bukan env Vercel (DECISIONS)"
   },
   {
    "id": "F0-08B",
@@ -1002,6 +1004,20 @@
    "started": "2026-10-31T01:59:13",
    "done": "2026-10-31T02:00:34",
    "result": "commit d6a9d4d: migrasi aturan_resmi (sidik identik), 8 aturan semua bersumber, 4 terverifikasi dari situs resmi BPJS TK, 4 bertanda belum (UMP/UMK Bali dari berita, BPJS Kesehatan, tabel TER belum dimuat)"
+  },
+  {
+   "id": "F0-05C",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 8,
+   "size": "s",
+   "wajib": false,
+   "title": "Push otomatis saat usulan baru menunggu keputusan",
+   "accept": "trigger usulan insert (status menunggu) -> pgmq/pg_net memanggil Edge Function push aksi 'usulan' dengan kunci rahasia dari Vault (header apikey), dikirim ke langganan anggota berperan untuk_peran di perusahaan itu; digabung per 5 menit agar tidak membanjiri; tes SQL + e2e: menyisipkan usulan memunculkan pemberitahuan di Chrome",
+   "how": "docs Supabase pg_net + Vault (apikey header untuk kunci sb_secret), Edge Function push v2",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T02:18:04"
   }
  ]
 }
