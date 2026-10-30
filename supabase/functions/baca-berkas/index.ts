@@ -133,7 +133,8 @@ async function tulisAturan(db: SupabaseClient, model: string, perusahaan_id: str
       }
       console.log("aturan ditolak", berkas_id, `percobaan ${coba}`, uji.alasan, JSON.stringify(aturan).slice(0, 1500));
       percakapan.push(
-        { role: "assistant", content: t.text },
+        // Kirim balik isi jawaban utuh (termasuk blok pemikiran) agar riwayat tidak dianggap diubah.
+        { role: "assistant", content: r.content },
         { role: "user", content: `Aturanmu diuji pada berkas ini dan ditolak: ${uji.alasan}. Perbaiki pola dan tipenya, lalu kirim aturan lengkap sekali lagi.` },
       );
     }

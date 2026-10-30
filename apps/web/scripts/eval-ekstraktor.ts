@@ -30,7 +30,9 @@ const tunggu = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 async function lempar(jalur: string, mime: string, garam: boolean) {
   let isi = readFileSync(join(KORPUS, jalur));
-  if (garam) isi = Buffer.concat([isi, Buffer.from(`\n%${Date.now()}`)]);
+  // PDF: byte unik setelah %%EOF; CSV: baris koma kosong (dibuang pembaca) dengan panjang unik. Keduanya mengubah sha256.
+  if (garam && mime === "application/pdf") isi = Buffer.concat([isi, Buffer.from(`\n%${Date.now()}`)]);
+  if (garam && mime === "text/csv") isi = Buffer.concat([isi, Buffer.from("\n" + ",".repeat(5 + (Date.now() % 997)))]);
   const sha = createHash("sha256").update(isi).digest("hex");
   const { data: d, error } = await sb.rpc("lempar_berkas", { p_sha256: sha, p_nama: jalur.split("/")[1], p_mime: mime, p_ukuran: isi.length });
   if (error) throw error;
