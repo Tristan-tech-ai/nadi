@@ -97,6 +97,17 @@ body {
   mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) bottom / 12px 6px repeat-x, linear-gradient(#000 0 0) top / 100% calc(100% - 5px) no-repeat;
 }
 
+/* Satu gerak bermakna di landing: nota "tercetak" baris demi baris (DIRECTION §5). Hanya opacity dan transform. */
+.cetak {
+  animation: cetak 260ms var(--ease-nadi) both;
+}
+@keyframes cetak {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
 :focus-visible {
   outline: 2px solid var(--kunyit);
   outline-offset: 2px;
