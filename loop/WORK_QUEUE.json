@@ -407,8 +407,10 @@
    "accept": "kandidat melamar dari HP < 2 menit; CV terurai jadi profil",
    "how": "",
    "blocked_by": "F1-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T15:10:48",
+   "result": "commit 4c74c11..44596e6: migrasi rekrut + rekrut_slot (tes SQL 21/21), baca-berkas v8 jalur x-nadi-token (hash sama, token salah 401), /lamar/[kode], kartu Lowongan; e2e lamar lokal + produksi lulus (Vercel READY 44596e6, 11,6 dtk): tamu 390 px melamar dengan CV PDF jauh di bawah 2 menit, usulan rekrut.pelamar 'Wulan Astuti' muncul di Feed; axe 390/1440 terang/gelap bersih"
   },
   {
    "id": "F2-02",
