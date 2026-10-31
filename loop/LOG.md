@@ -186,3 +186,7 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 1 Nov 2026 tick 184 | Peta penulis pakai_topi (docs/quality/zona-hari-ini-pemakai.md): putuskan_usulan orang.topi ikut bawaan CURRENT_DATE UTC, 2 penulis lain current_date; rancangan drop default + trigger; brief Q-26 siap, menunggu Q-25 selesai |
 | 1 Nov 2026 tick 185 | Tinjauan diff Q-25 (docs/quality/review-q25-diff.md): zona tetap tinggal 2 tempat sah, bawaan zona dihapus, tenggat ditafsir di server action dengan zona usaha, tanpa temuan memblokir; menunggu commit agen |
 | 1 Nov 2026 tick 186 | Q-25 SELESAI (gate LULUS 48b00a6, Vercel READY, e2e produksi kerja+izin 2/2, tenggat 17.00 WIB = 10.00 UTC di database); Q-26 dikirim ke agen latar; Q-27 ditambah dari foto (Rata-rata tim 0) |
+| 1 Nov 2026 tick 187 | Rancangan Q-27 (docs/design/rata-rata-beban.md) dan keputusan rata-rata beban dicatat; Q-26 masih di agen latar |
+| 1 Nov 2026 tick 188 | Tinjauan Q-26 (docs/quality/review-q26.md): sidik 13857dd4 = db, hitung_lintas_topi definer + pembatas usaha diterima; tes ulang terpisah 8 berkas dimulai saat tanggal WIB != UTC |
+| 1 Nov 2026 tick 189 | Q-26 laporan agen (52/52 setelah merah 25, regresi 11 berkas gagal=[]); kueri loop current_date 0, pemicu aktif, exec tertutup; brief Q-27 ditulis; menunggu tes ulang terpisah |
+| 1 Nov 2026 tick 190 | Rencana uji Q-27 ditulis (docs/quality/rencana-uji-q27.md); menunggu tes ulang terpisah Q-26 |
