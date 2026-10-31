@@ -27,6 +27,9 @@ const nextConfig: NextConfig = {
     ];
   },
   partialPrefetching: true,
+  // F3-01: tombol Mulai/Tunggu/Selesai staf saat luring diantre dan dikirim ulang otomatis saat sinyal kembali; useOffline()
+  // dari next/offline menampilkan tanda luring (docs bawaan Next 05-config/01-next-config-js/useOffline.md).
+  experimental: { useOffline: true },
   turbopack: {
     rules: {
       "*.css": {

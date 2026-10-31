@@ -108,6 +108,17 @@ body {
   }
 }
 
+/* Satu gerak bermakna di papan kerja: kerja yang baru diselesaikan bergeser masuk ke daftar Selesai (200 ms). */
+.geser-selesai {
+  animation: geser-selesai 200ms var(--ease-nadi) both;
+}
+@keyframes geser-selesai {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+}
+
 :focus-visible {
   outline: 2px solid var(--kunyit);
   outline-offset: 2px;
