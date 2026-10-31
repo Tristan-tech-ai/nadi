@@ -439,8 +439,10 @@
    "accept": "transkrip korpus suara uji WER tercatat; penilai melihat ringkasan + klip",
    "how": "",
    "blocked_by": "F2-02,R-03",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T20:52:37",
+   "result": "commit 5c031b3 (rekam di /lamar) + c7fc548 (layar penilai /app/wawancara/[lamaran]: ringkasan rubrik + kutipan, klip signed URL, transkrip whisper-small q8 di perangkat lewat public/transkrip-worker.js, simpan_transkrip) + 8667ebb; WER korpus tiny 3,96 / base 0,86 / small 0,43 (docs/quality/wawancara.md); e2e wawancara.spec lulus lokal (32 dtk) dan produksi https://nadi-tristan-tech-ais-projects.vercel.app (1,1 mnt, model diunduh asli, transkrip memuat 'pelayan', nilai tersimpan); tes transkrip 3/3 merah sengaja; axe 390/1440 terang/gelap 0 serius"
   },
   {
    "id": "F2-04",
