@@ -584,8 +584,8 @@
    "size": "l",
    "wajib": true,
    "title": "Shift: penyusun jadwal (solver), ramalan kebutuhan, tukar shift",
-   "accept": "jadwal memenuhi semua batasan pada 3 skenario uji; keadilan shift malam terukur",
-   "how": "",
+   "accept": "jadwal memenuhi semua batasan pada 3 skenario uji; keadilan shift malam terukur; jadwal menegakkan aturan terverifikasi di docs/research/shift-f3-06.md: kerja biasa 7 jam/hari pola 6 atau 8 jam/hari pola 5 dan 40 jam/minggu (selebihnya lembur dengan persetujuan staf tercatat), lembur maks 4 jam/hari 18 jam/minggu ditolak, istirahat >= 30 menit setelah 4 jam dan hari libur mingguan (1 atau 2) diberi peringatan; tes SQL untuk tiap aturan; layar docs/design/jadwal-shift.md",
+   "how": "docs/research/shift-f3-06.md, docs/design/jadwal-shift.md, tabel lembur + catat_lembur (F1-05B)",
    "blocked_by": "F3-01",
    "status": "ready",
    "created": "2026-10-30T20:05:52"
@@ -1536,6 +1536,20 @@
    "created": "2026-11-01T00:00:57",
    "done": "2026-11-01T00:06:10",
    "result": "f57684e: offsetBerikut + context HalamanFeed (halaman-feed.tsx), putusan.tsx mencatat keputusan; tes feed 16/16; e2e baru merah di produksi lama (lagi=20) lalu hijau lokal dan produksi (READY f57684e, 2 lulus 24,9 dtk)"
+  },
+  {
+   "id": "Q-16",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 30,
+   "size": "s",
+   "wajib": false,
+   "title": "Kunci idempoten untuk aksi pembuat baris (lowongan, rencana magang)",
+   "accept": "buatLowongan dan simpan_rencana_magang yang dikirim dua kali dengan kunci sama (pengiriman ulang experimental.useOffline) menghasilkan satu baris dan id sama; kunci sama di usaha lain tidak bentrok; tes SQL untuk keduanya; putuskan_usulan yang diulang mengembalikan hasil lama tanpa galat",
+   "how": "docs/research/idempotensi-aksi.md (kolom kunci uuid unik per usaha, ON CONFLICT DO NOTHING lalu baca id lama, crypto.randomUUID di klien), docs/quality/review-f3-01.md",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T00:32:11"
   }
  ]
 }

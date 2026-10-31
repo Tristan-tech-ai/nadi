@@ -108,3 +108,13 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 1 Nov 2026 tick 108 | D-05 masih di agen (e2e feed-penuh.spec ditulis); docs/research/feed-urutan.md: offset Feed bisa melewatkan usulan setelah memutuskan, uji saat verifikasi |
 | 1 Nov 2026 tick 109 | D-05 selesai (e044bd1 agen, verifikasi: foto 8, e2e produksi lulus, READY 2095e43); D-05B ditambah (offset Feed melewatkan usulan setelah memutuskan) |
 | 1 Nov 2026 tick 110 | D-05B selesai: tautan halaman berikut Feed mundur sebanyak kartu yang diputuskan (f57684e); e2e merah di produksi lama, hijau lokal + produksi |
+| 1 Nov 2026 tick 111 | F3-01 didelegasikan ke agen latar dengan brief lengkap; docs/design/bagi-adil.md (tampilan pembagi kerja adil untuk F3-02) |
+| 1 Nov 2026 tick 112 | F3-01 masih di agen; docs/research/shift-f3-06.md (batas jam kerja terverifikasi vs belum untuk jadwal shift) |
+| 1 Nov 2026 tick 113 | F3-01 masih di agen; riset shift dari teks resmi UU 6/2023 + PP 35/2021: istirahat 30 menit/4 jam, istirahat mingguan, cuti 12 hari terverifikasi, F&B/toko bukan sektor pengecualian |
+| 1 Nov 2026 tick 114 | F3-01 masih di agen (migrasi ditulis); docs/design/jadwal-shift.md (layar F3-03 dari aturan terverifikasi, persetujuan lembur staf) |
+| 1 Nov 2026 tick 115 | F3-01 masih di agen; UU 13/2003 Pasal 76 (shift malam perempuan) dibaca dari teks resmi, keputusan: tanpa simpan jenis kelamin, hanya peringatan |
+| 1 Nov 2026 tick 116 | Koreksi: shift adalah F3-06 (F3-03 = KPI); riset/desain diganti nama ke shift-f3-06, kriteria F3-06 di antrean ditambah aturan terverifikasi |
+| 1 Nov 2026 tick 117 | F3-01 masih di agen; docs/research/bagi-adil-algoritma.md (Gini beban per jam, rakus 0,3129 vs adil 0,0769 pada contoh) |
+| 1 Nov 2026 tick 118 | Tinjauan diff agen F3-01: header Q-01 utuh; experimental.useOffline global bisa mengulang Server Action yang sedang jalan, agen diminta idempotensi transisi + kunci buat kerja (docs/quality/review-f3-01.md) |
+| 1 Nov 2026 tick 119 | Agen F3-01 menanggapi: migrasi papan_kerja_idempoten; docs/research/idempotensi-aksi.md (pola kunci klien + ON CONFLICT, dasar Q-16) |
+| 1 Nov 2026 tick 120 | Q-16 ditambah (kunci idempoten lowongan/rencana magang, kriteria tertulis); F3-01 masih di agen |
