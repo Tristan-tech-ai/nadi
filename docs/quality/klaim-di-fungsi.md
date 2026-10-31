@@ -14,3 +14,6 @@ Tugas kecil Q-23: ganti `app.prn() = 'pemilik'` dengan `app.peran_aktif() = 'pem
 
 ## Temuan sampingan: zona waktu tetap (tick 168)
 18 fungsi di public/app menyebut 'Asia/Makassar' (execute_sql 1 Nov 2026): gerbang_gaji 7x; isi_demo, ajukan_izin, batas_berkas, peringatan_rencana, rute_model_uji_mulai, antre_rute_model, batalkan_keputusan, beban_orang, beban_minggu 2x; izin_ringkas, catat_izin, laporan_rekrut, putuskan_usulan, ukur_kuota, awal_minggu, papan_kerja, catat_jam_rekrut 1x. Sebagian hanya cadangan coalesce(p.zona_waktu, 'Asia/Makassar') (benar, karena zona_waktu not null); sisanya menghitung batas hari/minggu dengan WITA untuk semua usaha, padahal bawaan perusahaan.zona_waktu adalah Asia/Jakarta. Dicatat sebagai Q-24.
+
+## Koreksi (tick 171)
+Audit di atas dijalankan setelah migrasi peta_organisasi (F3-04) ter-apply. Sebelum itu public.putuskan_usulan juga memakai `app.prn() = any(u.untuk_peran)` dan `case app.prn()`; agen F3-04 menggantinya dengan app.peran_aktif() di migrasi 20261101010000_peta_organisasi.sql. Jadi daftar "hanya dua fungsi" benar untuk keadaan sekarang, tetapi bukan untuk keadaan sebelum F3-04. Tes struktur Q-23 tetap diperlukan agar tidak kembali.

@@ -565,8 +565,10 @@
    "accept": "graf tampil untuk perusahaan demo; lintas topi terlihat",
    "how": "docs/design/peta-organisasi.md (RPC peta_organisasi dengan app.peran_aktif, tab ?tab=peta di /app/kerja, graf SVG buatan sendiri di desktop dan daftar per topi di HP)",
    "blocked_by": "F3-03",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T03:07:55",
+   "result": "63539e9+d275ae6+fc81283 (agen) + bcdb1f1 (F3-04B loop); sidik peta_organisasi 52bbe2d1 dan peta_kalimat f6c8edc2 = db (53 migrasi); tes SQL peta 47/47 sebelum dan sesudah F3-04B, regresi jwt_cabut_q21 17, kpi 40, izin_otopilot 26; vitest peta 15/15; foto scratchpad/f3-04-foto; Vercel READY 2c4a1c0; e2e produksi peta.spec lulus 23,1 dtk lalu 16,5 dtk dengan kalimat baru; docs/quality/review-f3-04.md"
   },
   {
    "id": "F3-05",
@@ -1676,7 +1678,7 @@
    "wajib": true,
    "title": "Batas hari dan minggu memakai zona usaha, bukan WITA tetap",
    "accept": "setiap fungsi public/app yang memakai 'Asia/Makassar' selain sebagai cadangan coalesce(zona_waktu, ...) diganti ke perusahaan.zona_waktu (lewat fungsi app.zona(pid)); tes struktur: 0 fungsi memakai 'Asia/Makassar' di luar coalesce zona_waktu (merah dulu); tes perilaku untuk usaha Asia/Jakarta dan Asia/Jayapura di ajukan_izin, gerbang_gaji, papan_kerja; regresi izin_otopilot, gerbang_gaji, papan_kerja, kpi, bagi_adil, isolasi_tenant hijau; sidik = database",
-   "how": "docs/quality/zona-fungsi.md (kelompok C: catat_izin, batalkan_keputusan, ajukan_izin, gerbang_gaji, izin_ringkas, peringatan_rencana, putuskan_usulan, catat_jam_rekrut; D: antre_rute_model, rute_model_uji_mulai, batas_berkas; A/B dibiarkan); app.zona(pid) + app.hari_ini(pid)",
+   "how": "docs/quality/zona-fungsi.md (kelompok C: catat_izin, batalkan_keputusan, ajukan_izin, gerbang_gaji, izin_ringkas, peringatan_rencana, putuskan_usulan, catat_jam_rekrut; D: antre_rute_model, rute_model_uji_mulai, batas_berkas; A/B dibiarkan); app.zona(pid) + app.hari_ini(pid); juga current_date (UTC) di putuskan_usulan cabang orang.topi",
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-01T02:56:44"
