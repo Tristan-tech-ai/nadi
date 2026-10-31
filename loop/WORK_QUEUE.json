@@ -343,8 +343,10 @@
    "accept": "aturan otopilot menyetujui kasus sesuai kebijakan tanpa manusia dan mencatat alasannya; kasus lain masuk Feed",
    "how": "",
    "blocked_by": "F1-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T11:07:19",
+   "result": "commit 8661e55 (migrasi izin_otopilot sidik 9b6de221, tes SQL 26/26, regresi 13/13) + bb225f7 (UI /app/izin, Aturan izin di Usahamu, nav Izin, tes unit izin 5/5); e2e izin lokal + produksi lulus: sakit 1 hari berbukti 'Disetujui otomatis', 3 hari masuk Feed lalu disetujui pemilik; axe 390/1440 terang/gelap tanpa pelanggaran serius. Dampak ke shift: kejadian izin.<jenis> tercatat untuk dipakai F1-04"
   },
   {
    "id": "F1-04",
