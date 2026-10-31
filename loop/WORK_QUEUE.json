@@ -549,8 +549,10 @@
    "accept": "setiap skor punya penjelasan dari kejadian nyata; karyawan hanya melihat datanya sendiri (tes RLS)",
    "how": "",
    "blocked_by": "F3-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T02:30:17",
+   "result": "5bfe732+045c561+6419abd (push 5015321); sidik kpi 3444a0fc = db; tes SQL kpi 40/40 (dijalankan ulang agen regresi terpisah setelah Q-21); vitest kpi 15/15 (merah sengaja 1), suite 393/393; putuskan_usulan diff hanya cabang kpi.banding; foto scratchpad/f3-03-foto 16 berkas; Vercel READY 5015321; e2e produksi kpi.spec lulus 27,4 dtk; docs/quality/review-f3-03.md"
   },
   {
    "id": "F3-04",
@@ -1632,8 +1634,10 @@
    "accept": "17 kebijakan SELECT/ALL yang hanya memakai klaim (daftar di docs/quality/jwt-setelah-cabut.md) ditambah app.anggota_aktif(); tes SQL: staf dan admin dengan JWT lama setelah anggota.aktif=false melihat 0 baris di ke-17 tabel (merah dulu: topi=1 kebijakan=1), regresi isolasi_tenant/keamanan_q12/bagi_adil/papan_kerja/usulan_pemilik_q17 hijau, sidik migrasi = database, get_advisors tanpa temuan baru",
    "how": "docs/quality/jwt-setelah-cabut.md; harus selesai sebelum F3-07 yang pertama kali mencabut anggota",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T02:20:17"
+   "status": "done",
+   "created": "2026-11-01T02:20:17",
+   "done": "2026-11-01T02:30:17",
+   "result": "c96..5015321 migrasi 20261101009000_jwt_cabut_q21.sql sidik d4287477 = db (51 migrasi); 17 kebijakan baca + storage berkas_unduh memeriksa anggota_aktif/peran_aktif; tes jwt_cabut_q21 merah 8/17 lalu 17/17; regresi isolasi_tenant 38, keamanan_q12 19, usulan_pemilik_q17 6, bagi_adil 27, papan_kerja 58, kpi 40, keputusan 23 semua gagal=[]; e2e produksi bagi-adil/keputusan-model/izin lulus; get_advisors anon tetap 21; docs/quality/jwt-setelah-cabut.md"
   }
  ]
 }
