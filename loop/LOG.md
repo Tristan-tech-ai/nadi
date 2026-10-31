@@ -76,3 +76,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 22:15 | F2-03 (sebagian) | migrasi wawancara (pertanyaan lowongan, jawaban audio anon, simpan_transkrip): tes merah lalu 18/18, keamanan_q01 20/20, rekrut diperbarui untuk kunci pertanyaan | 564a350 |
 | 31 Okt 2026 22:35 | F2-03 (sebagian) | modul pertanyaanDariTopi + ringkasanWawancara (kutipan per kriteria) tes 9/9 dengan merah nyata (kutipan kurang tepat) | - |
 | 31 Okt 2026 22:50 | F2-03 (sebagian) | buatLowongan mengisi pertanyaan wawancara dari topi | - |
+| 31 Okt 2026 23:00 | F2-03 (sebagian) | modul rekam (pilihMime, mimeDasar, formatDurasi) tes 4/4 | - |
