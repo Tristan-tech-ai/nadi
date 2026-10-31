@@ -68,6 +68,8 @@ const angkaSah = (x: unknown) => {
   return Number.isFinite(n) ? Math.max(0, n) : 0;
 };
 const bersih = (x: unknown) => Math.min(1, angkaSah(x));
+// Tanda pisah en dan em dibuat dari kode karakter, bukan escape unicode di regex: escape itu tidak bertahan utuh lewat alat deploy.
+const PISAH_PANJANG = new RegExp(`[${String.fromCharCode(8211, 8212)}]`, "g");
 
 /**
  * Rapikan jawaban model: peluang dinormalkan (jumlah 1); pilihan yang tidak dikenal diganti pilihan berpeluang terbesar;
@@ -83,7 +85,7 @@ export function rapikan(mentah: unknown): Rute {
   const terbesar = PILIHAN.reduce((a, b) => (peluang[b] > peluang[a] ? b : a));
   const pilihan = (PILIHAN as readonly string[]).includes(String(m.pilihan)) ? (m.pilihan as Pilihan) : terbesar;
   const yakin = Math.round(Math.min(m.yakin === undefined ? 1 : bersih(m.yakin), peluang[pilihan]) * 1000) / 1000;
-  const alasan = String(m.alasan ?? "").replace(/[\u2013\u2014]/g, ",").replace(/\s+/g, " ").trim().slice(0, 200);
+  const alasan = String(m.alasan ?? "").replace(PISAH_PANJANG, ",").replace(/\s+/g, " ").trim().slice(0, 200);
   return { pilihan, peluang, yakin, alasan };
 }
 
