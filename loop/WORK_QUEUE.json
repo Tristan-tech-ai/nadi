@@ -1568,8 +1568,10 @@
    "accept": "public.usulan punya CHECK 'pemilik' = any(untuk_peran); data produksi lolos (0 baris tanpa pemilik saat dicek 1 Nov 2026); tes SQL: update/insert ke {admin} ditolak 23514; regresi keputusan, keputusan_model, isolasi_tenant hijau",
    "how": "docs/quality/review-f1-06b.md bagian Invarian; kerjakan setelah F1-06B ter-push agar migrasi tidak bertabrakan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T01:10:28"
+   "status": "done",
+   "created": "2026-11-01T01:10:28",
+   "done": "2026-11-01T01:28:21",
+   "result": "1c6870a: migrasi usulan_pemilik CHECK pemilik = any(untuk_peran) (sidik 5ce06739 cocok, 47 migrasi; constraint terpasang di produksi); data produksi 0 baris tanpa pemilik; tes usulan_pemilik_q17 merah 3/6 lalu 6/6; regresi setelah constraint keputusan_model 53/53, keputusan 23/23, keamanan_q12 19/19, isolasi_tenant 38/38; get_advisors TIDAK dijalankan ulang (migrasi hanya CHECK, tanpa fungsi/tabel baru)"
   },
   {
    "id": "Q-18",

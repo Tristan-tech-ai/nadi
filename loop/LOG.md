@@ -133,3 +133,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 1 Nov 2026 tick 133 | F1-06B masih di agen (eval-keputusan + fixtures); docs/quality/injeksi-prompt.md: peta 7 jalur model yang mengubah data, dampak terburuk, aturan wajib fitur model berikutnya |
 | 1 Nov 2026 tick 134 | F1-06B masih di agen (kartu keputusan + e2e); aturan keluaran model tak tepercaya masuk loop/README.md |
 | 1 Nov 2026 tick 136 | F1-06B selesai (verifikasi loop), Q-17 di-commit/push (1c6870a) menunggu regresi; Q-18 ditambah; checkpoint STATE ditulis sebelum kompaksi |
+| 1 Nov 2026 tick 136 | Q-17 selesai (regresi 133/133 setelah constraint); berikut Q-18 |
