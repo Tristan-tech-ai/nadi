@@ -9,6 +9,15 @@ describe("buatUji", () => {
     for (const k of ["kasir", "pelayan", "koki", "barista", "gudang", "pramuniaga", "sales"]) expect(TOPI_UJI).toContain(k);
     expect(buatUji("tukang_sulap", 1)).toBeNull();
   });
+  it("satu soal kasir atau pelayan tidak menyebut barang yang sama dua kali", () => {
+    for (let b = 1; b <= 100; b++) {
+      for (const k of ["kasir", "pelayan"]) {
+        const [s] = buatUji(k, b, 1)!;
+        const nama = [...s.teks.matchAll(/(\d+) (?:x )?([a-z][a-z ]*?\d* ?(?:kg|liter)?)(?:,| @| \(|\.)/g)].map((m) => m[2].trim()).slice(0, 3);
+        expect(new Set(nama).size, `${k} ${b}: ${s.teks}`).toBe(3);
+      }
+    }
+  });
   it("benih sama = soal sama; benih beda = angka beda", () => {
     expect(buatUji("kasir", 42)).toEqual(buatUji("kasir", 42));
     expect(buatUji("kasir", 42)).not.toEqual(buatUji("kasir", 43));

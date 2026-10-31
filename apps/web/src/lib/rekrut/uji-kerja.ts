@@ -16,7 +16,16 @@ function acak(benih: number) {
   };
   const antara = (min: number, max: number) => min + Math.floor(r() * (max - min + 1));
   const pilih = <T,>(xs: readonly T[]) => xs[Math.floor(r() * xs.length)];
-  return { antara, pilih };
+  /** n unsur berbeda (Fisher-Yates sebagian), agar satu soal tidak menyebut barang yang sama dua kali. */
+  const pilihBeda = <T,>(xs: readonly T[], n: number) => {
+    const sisa = [...xs];
+    for (let i = 0; i < n; i++) {
+      const j = i + Math.floor(r() * (sisa.length - i));
+      [sisa[i], sisa[j]] = [sisa[j], sisa[i]];
+    }
+    return sisa.slice(0, n);
+  };
+  return { antara, pilih, pilihBeda };
 }
 
 type Acak = ReturnType<typeof acak>;
@@ -27,18 +36,18 @@ const BARANG = [["beras 5 kg", 72000], ["minyak 2 liter", 38500], ["gula 1 kg", 
 
 const TEMPLAT: Record<string, (a: Acak) => Omit<Soal, "topi">> = {
   kasir: (a) => {
-    const isi = [0, 1, 2].map(() => [a.pilih(BARANG), a.antara(1, 3)] as const);
+    const isi = a.pilihBeda(BARANG, 3).map((b) => [b, a.antara(1, 3)] as const);
     const total = isi.reduce((s, [[, h], q]) => s + h * q, 0);
     const bayar = Math.ceil((total + 1) / 50000) * 50000;
     const daftar = isi.map(([[n, h], q]) => `${q} x ${n} @ ${rp(h)}`).join(", ");
     return { teks: `Pembeli membeli ${daftar}. Ia membayar ${rp(bayar)}. Berapa kembaliannya?`, jawaban: bayar - total, satuan: "rupiah" };
   },
   pelayan: (a) => {
-    const isi = [0, 1, 2].map(() => [a.pilih(MENU), a.antara(1, 3)] as const);
+    const isi = a.pilihBeda(MENU, 3).map((m) => [m, a.antara(1, 3)] as const);
     const total = isi.reduce((s, [[, h], q]) => s + h * q, 0);
     const orang = a.antara(2, 4);
     const daftar = isi.map(([[n], q]) => `${q} ${n}`).join(", ");
-    const harga = [...new Map(isi.map(([[n, h]]) => [n, h])).entries()].map(([n, h]) => `${n} ${rp(h)}`).join(", ");
+    const harga = isi.map(([[n, h]]) => `${n} ${rp(h)}`).join(", ");
     return {
       teks: `Meja 5 memesan ${daftar} (harga: ${harga}). Tagihan dibagi rata untuk ${orang} orang, dibulatkan ke atas ke ratusan rupiah. Berapa yang dibayar tiap orang?`,
       jawaban: Math.ceil(total / orang / 100) * 100,

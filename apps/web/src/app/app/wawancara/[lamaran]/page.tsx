@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { HasilUji, type BarisUji } from "@/components/app/hasil-uji";
 import { TranskripJawaban } from "@/components/app/transkrip-jawaban";
 import { formatDurasi } from "@/lib/wawancara/rekam";
 import { ringkasanWawancara } from "@/lib/wawancara/pertanyaan";
@@ -9,7 +10,7 @@ import { formatTanggal } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 
-export const metadata: Metadata = { title: "Wawancara suara" };
+export const metadata: Metadata = { title: "Wawancara dan uji pelamar" };
 
 type Topi = { nama: string; keahlian: unknown; tanggung_jawab: unknown };
 type Lamaran = { id: string; nama: string; dibuat_at: string; lowongan: { judul: string; topi: Topi | null } | null };
@@ -24,10 +25,11 @@ async function Isi({ params }: { params: Promise<{ lamaran: string }> }) {
     return <p className="mt-8 text-tinta-2" data-testid="ditolak">Wawancara pelamar hanya dibuka pemilik dan admin.</p>;
   }
   const supabase = await createClient();
-  const [{ data: la }, { data: jw }, { data: konf }] = await Promise.all([
+  const [{ data: la }, { data: jw }, { data: konf }, { data: uji }] = await Promise.all([
     ID_SAH.test(id) ? supabase.from("lamaran").select("id, nama, dibuat_at, lowongan(judul, topi(nama, keahlian, tanggung_jawab))").eq("id", id).maybeSingle() : Promise.resolve({ data: null }),
     ID_SAH.test(id) ? supabase.from("jawaban_wawancara").select("id, urutan, pertanyaan, durasi_detik, transkrip, berkas(jalur)").eq("lamaran_id", id).eq("status", "masuk").order("urutan") : Promise.resolve({ data: null }),
     supabase.from("konfigurasi").select("nilai").eq("kunci", "model_transkrip").maybeSingle(),
+    ID_SAH.test(id) ? supabase.from("uji_lamaran").select("jenis, topi_kode, benih, jawaban, selesai_at").eq("lamaran_id", id) : Promise.resolve({ data: null }),
   ]);
   const lamaran = la as unknown as Lamaran | null;
   if (!lamaran) return <p role="alert" className="mt-8 text-tinta-2" data-testid="lamaran-tidak-ada">Lamaran ini tidak ditemukan di usahamu.</p>;
@@ -43,6 +45,8 @@ async function Isi({ params }: { params: Promise<{ lamaran: string }> }) {
     <>
       <p className="mt-8 text-sm text-tinta-2">{lamaran.lowongan?.judul} · melamar {formatTanggal(new Date(lamaran.dibuat_at))}</p>
       <h1 className="font-judul text-3xl font-extrabold tracking-tight">{lamaran.nama}</h1>
+
+      <HasilUji baris={(uji ?? []) as BarisUji[]} />
 
       <section className="mt-6 rounded-[var(--radius-kartu)] bg-kertas-2 p-4" data-testid="ringkasan-wawancara" aria-labelledby="judul-ringkasan">
         <h2 id="judul-ringkasan" className="font-semibold">Ringkasan</h2>

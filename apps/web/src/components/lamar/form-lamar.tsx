@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { KenaliDiri } from "@/components/lamar/kenali-diri";
 import { RekamWawancara } from "@/components/lamar/rekam-wawancara";
+import { UjiKerja } from "@/components/lamar/uji-kerja";
 import { Tombol } from "@/components/ui/tombol";
 import { periksaLamaran } from "@/lib/lamar";
 import { mimeBerkas, sha256Hex } from "@/lib/lempar";
@@ -52,7 +54,9 @@ export function FormLamar({ kode, usaha, pertanyaan = [] }: { kode: string; usah
           <p className="text-lg font-semibold">Lamaran terkirim</p>
           <p className="mt-1 text-tinta-2">{usaha} akan membaca CV-mu dan menghubungi lewat nomor HP yang kamu tulis.</p>
         </div>
+        <UjiKerja lamaran={lamaran} />
         {pertanyaan.length > 0 && <RekamWawancara lamaran={lamaran} pertanyaan={pertanyaan} usaha={usaha} />}
+        <KenaliDiri lamaran={lamaran} usaha={usaha} />
       </>
     );
   }

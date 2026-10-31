@@ -11,7 +11,7 @@ type Topi = { nama: string; keahlian: unknown; tanggung_jawab: unknown };
 type UsulanFeed = { id: string; aksi: string; payload: unknown; berkas_id: string | null };
 
 type Pelamar = { catatan?: string; tautan?: { href: string; label: string } };
-type LamaranFeed = { id: string; berkas_id: string; lowongan: { topi: Topi | null } | null; jawaban_wawancara: { count: number }[] };
+type LamaranFeed = { id: string; berkas_id: string; lowongan: { topi: Topi | null } | null; jawaban_wawancara: { count: number }[]; uji_lamaran: { count: number }[] };
 
 /** Skor rubrik untuk usulan pelamar yang datang lewat lowongan bertopi (CV dinilai tanpa atribut terlindungi, F2-02),
  *  dan tautan ke wawancara suaranya bila ada jawaban (F2-03). */
@@ -19,7 +19,7 @@ async function catatanPelamar(supabase: Awaited<ReturnType<typeof createClient>>
   const hasil = new Map<string, Pelamar>();
   const pelamar = usulan.filter((u) => u.aksi === "rekrut.pelamar" && u.berkas_id);
   if (!pelamar.length) return hasil;
-  const { data } = await supabase.from("lamaran").select("id, berkas_id, lowongan(topi(nama, keahlian, tanggung_jawab)), jawaban_wawancara(count)").in("berkas_id", pelamar.map((u) => u.berkas_id!));
+  const { data } = await supabase.from("lamaran").select("id, berkas_id, lowongan(topi(nama, keahlian, tanggung_jawab)), jawaban_wawancara(count), uji_lamaran(count)").in("berkas_id", pelamar.map((u) => u.berkas_id!));
   const lamaranDari = new Map(((data ?? []) as unknown as LamaranFeed[]).map((l) => [l.berkas_id, l]));
   for (const u of pelamar) {
     const l = lamaranDari.get(u.berkas_id!);
@@ -28,7 +28,9 @@ async function catatanPelamar(supabase: Awaited<ReturnType<typeof createClient>>
     const bidang = (u.payload as { bidang?: unknown } | null)?.bidang;
     const catatan = topi ? (catatanRubrik(topi.nama, nilaiPelamar(rubrikDariTopi(topi), saringCv(bidang))) ?? undefined) : undefined;
     const n = l.jawaban_wawancara?.[0]?.count ?? 0;
-    hasil.set(u.id, { catatan, tautan: n ? { href: `/app/wawancara/${l.id}`, label: `Dengar wawancara suara (${n} jawaban)` } : undefined });
+    const uji = l.uji_lamaran?.[0]?.count ?? 0;
+    const label = n ? `Dengar wawancara suara (${n} jawaban)${uji ? " dan lihat uji" : ""}` : "Lihat hasil uji pelamar";
+    hasil.set(u.id, { catatan, tautan: n || uji ? { href: `/app/wawancara/${l.id}`, label } : undefined });
   }
   return hasil;
 }

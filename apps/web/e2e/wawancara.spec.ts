@@ -2,8 +2,9 @@ import { createReadStream, existsSync, readFileSync, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { join } from "node:path";
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
+import { buatUji } from "../src/lib/rekrut/uji-kerja";
 
 // F2-03: lowongan bertopi Pelayan otomatis berisi pertanyaan; tamu melamar di HP lalu merekam jawaban pertanyaan 1
 // dengan mikrofon palsu Chromium yang memutar kalimat korpus s01, memutarnya, mengirimnya lewat slot anon, dan jawaban
@@ -18,6 +19,8 @@ function bacaEnv(nama: string): Record<string, string> {
   }
 }
 const E = { ...bacaEnv(".env.local"), ...bacaEnv(".env.e2e.local") };
+const axeSerius = async (p: Page, ket: string) =>
+  expect((await new AxeBuilder({ page: p }).analyze()).violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), ket).toEqual([]);
 const CV = join(__dirname, "..", "..", "..", "fixtures", "korpus", "cv", "cv-01.pdf");
 const SUARA = join(__dirname, "..", "..", "..", "fixtures", "korpus", "suara", "s01.wav");
 
@@ -67,6 +70,33 @@ test("wawancara suara: tamu merekam dan mengirim jawaban pertanyaan 1 setelah me
   await expect(tamu.getByTestId("jawaban-terkirim-0")).toBeVisible({ timeout: 30_000 });
   await expect(wawancara).toContainText("1 dari");
 
+  // F2-04 uji kerja: benih dibaca pemilik (RLS), soal disusun dengan modul yang sama; dua jawaban benar, satu salah.
+  const { data: laUji } = await sb.from("lamaran").select("id").eq("nama", nama).single();
+  const ujiKerja = tamu.getByTestId("uji-kerja");
+  await expect(ujiKerja.getByTestId("uji-jawaban-2")).toBeVisible();
+  const { data: barisUji } = await sb.from("uji_lamaran").select("topi_kode, benih").eq("lamaran_id", laUji!.id).eq("jenis", "kerja").single();
+  const soal = buatUji(barisUji!.topi_kode!, barisUji!.benih!)!;
+  await expect(ujiKerja).toContainText(soal[0].teks);
+  await ujiKerja.getByTestId("uji-jawaban-0").fill(String(soal[0].jawaban));
+  await ujiKerja.getByTestId("uji-jawaban-1").fill(`Rp${soal[1].jawaban.toLocaleString("id-ID")}`);
+  await ujiKerja.getByTestId("uji-jawaban-2").fill(String(soal[2].jawaban + 1));
+  await axeSerius(tamu, "formulir uji kerja");
+  await ujiKerja.screenshot({ path: test.info().outputPath("uji-kerja-isi-390.png") });
+  await tamu.getByTestId("kirim-uji").click();
+  await expect(tamu.getByTestId("uji-terkirim")).toBeVisible();
+
+  // IPIP opsional: hanya 10 butir ekstraversi dijawab "Sangat sesuai" -> 5 butir + (5) + 5 butir - (1) = 30; faktor lain belum lengkap.
+  await tamu.getByTestId("buka-diri").click();
+  const diri = tamu.getByTestId("kenali-diri");
+  for (const no of [1, 6, 11, 16, 21, 26, 31, 36, 41, 46]) {
+    await diri.getByRole("group", { name: new RegExp(`^${no}\\. `) }).getByLabel("Sangat sesuai").check();
+  }
+  await expect(diri).toContainText("10 dari 50 dijawab");
+  await axeSerius(tamu, "kuesioner IPIP terbuka");
+  await diri.getByRole("listitem").first().screenshot({ path: test.info().outputPath("ipip-butir-390.png") });
+  await tamu.getByTestId("kirim-diri").click();
+  await expect(tamu.getByTestId("diri-terkirim")).toContainText("10 dari 50");
+
   for (const [lebar, tinggi] of [[390, 844], [1440, 900]]) {
     for (const skema of ["light", "dark"] as const) {
       await tamu.setViewportSize({ width: lebar, height: tinggi });
@@ -75,6 +105,7 @@ test("wawancara suara: tamu merekam dan mengirim jawaban pertanyaan 1 setelah me
       const axe = await new AxeBuilder({ page: tamu }).analyze();
       expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), `${lebar} ${skema}`).toEqual([]);
       await wawancara.screenshot({ path: test.info().outputPath(`wawancara-${lebar}-${skema}.png`) });
+      await ujiKerja.screenshot({ path: test.info().outputPath(`uji-kerja-${lebar}-${skema}.png`) });
     }
   }
   await tamu.context().close();
@@ -114,6 +145,10 @@ test("wawancara suara: tamu merekam dan mengirim jawaban pertanyaan 1 setelah me
   await page.getByTestId("transkrip-0").click();
   await expect(page.getByTestId("teks-transkrip-0")).toContainText(/pelayan/i, { timeout: 300_000 });
   await expect(page.getByTestId("skor-wawancara")).toBeVisible();
+  await expect(page.getByTestId("uji-benar")).toHaveText("2");
+  await expect(page.getByTestId("hasil-uji-kerja")).toContainText("seharusnya");
+  await expect(page.getByTestId("hasil-ipip").getByRole("definition").first()).toHaveText("30 dari 50");
+  await expect(page.getByTestId("hasil-ipip")).toContainText("belum lengkap");
   await expect(page.getByTestId("ringkasan-wawancara")).toContainText("Pernah bekerja sebagai pelayan");
   const { data: tersimpan } = await sb.from("jawaban_wawancara").select("transkrip, nilai").eq("lamaran_id", la!.id).single();
   expect(tersimpan!.transkrip).toMatch(/pelayan/i);
