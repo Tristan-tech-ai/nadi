@@ -1494,8 +1494,10 @@
    "accept": "foto dikompres ke sisi 1600 px JPEG 0,7 (terukur 118 KB vs 289 KB) dan eval foto nota tetap 5/5 (scripts eval-ekstraktor + OCR korpus); bila turun, setelan lama dipertahankan dan hasil dicatat di docs/quality/kapasitas.md",
    "how": "ubah ukuranKompres sisiMaks dan kualitas di pelempar.tsx; jalankan eval OCR foto korpus dengan setelan baru",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T22:31:35"
+   "status": "done",
+   "created": "2026-10-31T22:31:35",
+   "done": "2026-10-31T22:46:44",
+   "result": "commit 7bdc398: ukuranKompres sisi 1600 + KUALITAS_FOTO 0,7; foto HP domain publik 3,3 MB -> 118 KB (sebelumnya 289 KB); dibaca model lewat jalur Lempar sungguhan sama benar di kedua setelan (HOFER KG, 2024-03-25, 9 baris, total 22,41), token 3776 vs 5277; tes lempar 6/6 merah sengaja; e2e lempar + wawancara produksi lulus"
   },
   {
    "id": "F2-03B",
@@ -1508,8 +1510,10 @@
    "accept": "MediaRecorder audioBitsPerSecond 24000 (cek docs MDN); korpus suara dikodekan ulang Opus 24 kbps dengan ffmpeg lalu WER whisper-small tetap <= 0,5 (sekarang 0,43); e2e wawancara lulus",
    "how": "rekam-wawancara.tsx opsi audioBitsPerSecond; scripts/eval-wawancara.ts dengan korpus opus 24k",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T22:31:35"
+   "status": "done",
+   "created": "2026-10-31T22:31:35",
+   "done": "2026-10-31T22:46:44",
+   "result": "commit 35929b1: MediaRecorder audioBitsPerSecond 32000 (BITRATE_SUARA); WER korpus whisper-small Opus 32 kbps 0,4286 (asli 0,43; 24 kbps 0,448 ditolak karena e2e salah dengar kata kunci); terukur produksi 22 KB per 6,1 dtk (29 kbps) vs 90 KB (118 kbps); e2e wawancara lokal + produksi lulus dengan cek ukuran < 40 KB"
   }
  ]
 }

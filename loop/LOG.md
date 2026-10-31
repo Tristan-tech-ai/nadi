@@ -90,3 +90,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 23.15 | F2-04 (sebagian) | IPIP 50 butir dari sumber resmi terverifikasi 50/50, skor resmi, 7 templat uji kerja, tes 11/11 | e3584021 |
 | 1 Nov 2026 00.10 | F2-04 | uji kerja 7 templat + IPIP 50 butir resmi, migrasi uji_lamaran 19/19, e2e lokal+produksi, Lighthouse /lamar 99/100 | 5ca1e92 |
 | 1 Nov 2026 00.40 | Q-02 | uji muat 50 usaha terukur: DB ±300 usaha, storage foto mentok duluan; Q-02B dan F2-03B diantrekan | - |
+| 1 Nov 2026 01.20 | F2-03B, Q-02B | suara 32 kbps (WER tetap, -75%), foto 1600 px q0,7 (-59%, token -28%), e2e produksi lulus | 35929b1, 7bdc398 |
