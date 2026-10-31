@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { ringkasKomponen, susunSlip, type PetaAturan } from "./susun";
+import { MASUK_BRUTO_PPH, ringkasKomponen, susunSlip, type PetaAturan } from "./susun";
 
 // Aturan seperti di aturan_bertanggal setelah migrasi slip_gaji (nilai dari docs/research/gaji-aturan.json).
 const J = JSON.parse(readFileSync(join(__dirname, "../../../../../docs/research/gaji-aturan.json"), "utf8"));
@@ -56,5 +56,41 @@ describe("susun slip", () => {
     // Bruto setahun 100.358.400; biaya jabatan 5.017.920; iuran JHT 1.920.000; neto 93.420.480; PKP 39.420.000; PPh 1.971.000; dipotong 11 x 125.448.
     expect(nilai(des.komponen, "pph21")).toBe(1_971_000 - 11 * 125_448);
     expect(des.komponen.find((k) => k.kode === "pph21")?.sumber).toBe("aturan:pph21.pasal17");
+  });
+});
+
+describe("lembur di slip (F1-05B)", () => {
+  // Nilai sama dengan aturan bertanggal lembur.pp35 di database (PP 35/2021 Pasal 31).
+  const PP35 = ok({ upah_sejam_pembagi: 173, hari_kerja: [[1, 1, 1.5], [2, null, 2]], libur_pola_6_hari: [[1, 7, 2], [8, 8, 3], [9, 11, 4]], libur_pola_6_hari_jatuh_hari_kerja_terpendek: [[1, 5, 2], [6, 6, 3], [7, 9, 4]], libur_pola_5_hari: [[1, 8, 2], [9, 9, 3], [10, 12, 4]] });
+  const A = { ...ATURAN, "lembur.pp35": PP35 };
+  const bruto = (k: { kode: string; jenis: string; nilai: number }[]) => k.filter((x) => x.jenis === "pendapatan" || MASUK_BRUTO_PPH.includes(x.kode)).reduce((t, x) => t + x.nilai, 0);
+
+  it("kasus L1: upah Rp3.460.000, 4 jam hari kerja menambah Rp150.000 dan masuk bruto PPh 21", () => {
+    const tanpa = susunSlip({ pokok: 3_460_000, ptkp: "TK/0" }, A, 11).komponen;
+    const dengan = susunSlip({ pokok: 3_460_000, ptkp: "TK/0" }, A, 11, undefined, [{ tanggal: "2026-11-02", jenis: "hari_kerja", jam: 4 }]).komponen;
+    expect(nilai(dengan, "lembur")).toBe(150_000);
+    expect(dengan.find((k) => k.kode === "lembur")).toMatchObject({ label: "Lembur 4 jam", jenis: "pendapatan", sumber: "aturan:lembur.pp35" });
+    expect(bruto(dengan) - bruto(tanpa)).toBe(150_000);
+  });
+
+  it("dasar upah = pokok + tunjangan tetap; beberapa hari dijumlah; jam 0 diabaikan", () => {
+    const { komponen } = susunSlip({ pokok: 3_000_000, tunjangan_tetap: 460_000 }, A, 11, undefined, [
+      { tanggal: "2026-11-02", jenis: "hari_kerja", jam: 1 },
+      { tanggal: "2026-11-07", jenis: "libur_pola_6_hari", jam: 8 },
+      { tanggal: "2026-11-09", jenis: "hari_kerja", jam: 0 },
+    ]);
+    // 1,5 x 20.000 + (7 x 2 + 3) x 20.000 = 30.000 + 340.000
+    expect(nilai(komponen, "lembur")).toBe(370_000);
+    expect(komponen.find((k) => k.kode === "lembur")?.label).toBe("Lembur 9 jam");
+  });
+
+  it("aturan lembur belum terverifikasi atau jam berlebih: tidak ditebak, ada peringatan", () => {
+    const l = [{ tanggal: "2026-11-02", jenis: "hari_kerja" as const, jam: 2 }];
+    const a = susunSlip({ pokok: 3_460_000 }, { ...A, "lembur.pp35": { ...PP35, terverifikasi: false } }, 11, undefined, l);
+    expect(nilai(a.komponen, "lembur")).toBeUndefined();
+    expect(a.peringatan.join(" ")).toContain("lembur belum dihitung");
+    const b = susunSlip({ pokok: 3_460_000 }, A, 11, undefined, [...l, { tanggal: "2026-11-07", jenis: "libur_pola_5_hari", jam: 13 }]);
+    expect(nilai(b.komponen, "lembur")).toBe(70_000);
+    expect(b.peringatan.join(" ")).toContain("2026-11-07 (13 jam) melebihi batas");
   });
 });

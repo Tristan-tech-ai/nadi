@@ -1,6 +1,6 @@
 // Penyusun slip gaji: aturan bertanggal + data gaji satu orang -> komponen slip dan peringatan. Murni (tanpa jaringan).
 // Aturan yang belum terverifikasi tidak dipakai: komponennya tidak dihitung dan slip memberi peringatan (docs/research/slip-gaji.md).
-import { iuranBpjs, type TarifBpjs } from "./bpjs-lembur";
+import { iuranBpjs, upahLembur, type AturanLembur, type JenisHariLembur, type TarifBpjs } from "./bpjs-lembur";
 import { pph21Bulanan, pph21MasaTerakhir, type LapisanP17, type Ptkp, type TabelTer } from "./pph21";
 
 export type Aturan = { nilai: unknown; terverifikasi: boolean };
@@ -10,6 +10,8 @@ export type RisikoJkk = "sangat_rendah" | "rendah" | "sedang" | "tinggi" | "sang
 export type DataGaji = { pokok: number; tunjangan_tetap?: number; ptkp?: string; risiko_jkk?: RisikoJkk };
 /** Akumulasi Januari s.d. bulan sebelumnya di tahun yang sama (untuk masa Desember). */
 export type Riwayat = { brutoPph: number; pphDipotong: number; iuranPegawai: number; bulan: number };
+/** Satu hari lembur yang dicatat pengelola (tabel lembur). */
+export type LemburHari = { tanggal: string; jenis: JenisHariLembur; jam: number };
 
 /** Kode komponen pemberi kerja yang masuk penghasilan bruto PPh 21 (PMK 168/2023 Pasal 6 ayat (3)). */
 export const MASUK_BRUTO_PPH = ["jkk", "jkm", "bpjs_kes_pk"];
@@ -18,7 +20,7 @@ export const IURAN_PEGAWAI = ["jht", "jp"];
 
 const pakai = <T>(a: PetaAturan, kunci: string): T | null => (a[kunci]?.terverifikasi ? (a[kunci]!.nilai as T) : null);
 
-export function susunSlip(g: DataGaji, aturan: PetaAturan, bulan: number, riwayat?: Riwayat): { komponen: Komponen[]; peringatan: string[] } {
+export function susunSlip(g: DataGaji, aturan: PetaAturan, bulan: number, riwayat?: Riwayat, lembur: LemburHari[] = []): { komponen: Komponen[]; peringatan: string[] } {
   const komponen: Komponen[] = [];
   const peringatan: string[] = [];
   const tambah = (k: Komponen) => {
@@ -27,6 +29,28 @@ export function susunSlip(g: DataGaji, aturan: PetaAturan, bulan: number, riwaya
   tambah({ kode: "pokok", label: "Gaji pokok", jenis: "pendapatan", nilai: g.pokok, sumber: "orang_rahasia" });
   tambah({ kode: "tunjangan_tetap", label: "Tunjangan tetap", jenis: "pendapatan", nilai: g.tunjangan_tetap ?? 0, sumber: "orang_rahasia" });
   const upah = g.pokok + (g.tunjangan_tetap ?? 0);
+
+  // Lembur (PP 35/2021 Pasal 31-32): dasar upah sebulan = pokok + tunjangan tetap (Nadi belum mencatat tunjangan tidak tetap,
+  // jadi aturan 75% Pasal 32 ayat (4) tidak berlaku). Pendapatan, sehingga masuk bruto PPh 21.
+  const hariLembur = lembur.filter((l) => l.jam > 0);
+  if (hariLembur.length) {
+    const al = pakai<AturanLembur>(aturan, "lembur.pp35");
+    if (!al) {
+      peringatan.push("Aturan upah lembur belum diperiksa ke sumber resmi; lembur belum dihitung.");
+    } else {
+      let nilai = 0;
+      let jam = 0;
+      for (const l of hariLembur) {
+        try {
+          nilai += upahLembur(upah, l.jenis, l.jam, al).upah;
+          jam += l.jam;
+        } catch {
+          peringatan.push(`Lembur ${l.tanggal} (${l.jam} jam) melebihi batas PP 35/2021; tidak dihitung.`);
+        }
+      }
+      tambah({ kode: "lembur", label: `Lembur ${jam} jam`, jenis: "pendapatan", nilai, sumber: "aturan:lembur.pp35" });
+    }
+  }
 
   // BPJS: masing-masing program hanya dihitung bila aturannya terverifikasi.
   const kes = pakai<{ pemberi_kerja: number; pekerja: number; batas_upah: number }>(aturan, "bpjs.kesehatan");

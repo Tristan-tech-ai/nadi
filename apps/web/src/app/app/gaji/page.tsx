@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { FormBagikan, FormLepas, FormSetujui, FormSiapkan } from "@/components/app/aksi-gaji";
+import { FormBagikan, FormLembur, FormLepas, FormSetujui, FormSiapkan } from "@/components/app/aksi-gaji";
 import { Cap } from "@/components/ui/cap";
 import { Rupiah } from "@/components/ui/rupiah";
+import type { JenisHariLembur } from "@/lib/gaji/bpjs-lembur";
+import { JENIS_LEMBUR } from "@/lib/gaji/lembur";
 import type { Komponen } from "@/lib/gaji/susun";
+import { formatTanggal } from "@/lib/format";
 import { hariIni } from "@/lib/izin";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
@@ -77,6 +80,13 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
     );
   }
 
+  const akhir = new Date(Date.UTC(Number(bulan.slice(0, 4)), Number(bulan.slice(5, 7)), 0)).toISOString().slice(0, 10);
+  const [{ data: lem }, { data: org }] = await Promise.all([
+    supabase.from("lembur").select("id, tanggal, jenis, jam, orang:orang_id(nama)").gte("tanggal", `${bulan}-01`).lte("tanggal", akhir).gt("jam", 0).order("tanggal"),
+    supabase.from("orang").select("id, nama").eq("status", "aktif").overlaps("jenis", ["karyawan", "magang"]).order("nama"),
+  ]);
+  const lembur = (lem ?? []) as unknown as { id: string; tanggal: string; jenis: JenisHariLembur; jam: number; orang: { nama: string } | null }[];
+
   return (
     <>
       <div className="mt-6 flex flex-wrap items-baseline justify-between gap-2">
@@ -112,6 +122,23 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
         </ul>
       )}
       {per && !disetujui && slip.length > 0 && <div className="mt-6"><FormSetujui periode={per.id} jumlah={slip.length} /></div>}
+      <section className="mt-10 border-t border-garis pt-6" aria-labelledby="judul-lembur" data-testid="lembur">
+        <h2 id="judul-lembur" className="text-lg font-semibold">Lembur {namaBulan(bulan)}</h2>
+        <p className="mt-1 text-sm text-tinta-2">Upah lembur dihitung menurut PP 35/2021: upah sejam 1/173 dari gaji pokok dan tunjangan tetap. Hari kerja paling lama 4 jam sehari dan 18 jam seminggu.</p>
+        {lembur.length === 0 ? (
+          <p className="mt-3 text-sm text-tinta-2" data-testid="lembur-kosong">Belum ada lembur tercatat bulan ini.</p>
+        ) : (
+          <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm" data-testid="daftar-lembur">
+            {lembur.map((l) => (
+              <li key={l.id} className="flex flex-wrap justify-between gap-2 py-2">
+                <span>{l.orang?.nama}, {formatTanggal(new Date(`${l.tanggal}T12:00:00+08:00`))}</span>
+                <span className="text-tinta-2"><span className="angka font-semibold text-tinta">{l.jam} jam</span>, {JENIS_LEMBUR[l.jenis].toLowerCase()}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+        {!disetujui && <FormLembur orang={(org ?? []) as { id: string; nama: string }[]} awal={`${bulan}-01`} akhir={akhir} />}
+      </section>
     </>
   );
 }

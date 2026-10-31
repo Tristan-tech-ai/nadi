@@ -2,12 +2,15 @@
 
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
-import { ringkasKomponen, susunSlip, type DataGaji, type Komponen, type PetaAturan } from "@/lib/gaji/susun";
+import type { JenisHariLembur } from "@/lib/gaji/bpjs-lembur";
+import { ringkasKomponen, susunSlip, type DataGaji, type Komponen, type LemburHari, type PetaAturan } from "@/lib/gaji/susun";
+import { JENIS_LEMBUR } from "@/lib/gaji/lembur";
 import { asal } from "@/lib/mcp/http";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 
-export type HasilGaji = { pesan: string } | { galat: string } | null;
+/** isian: nilai formulir yang dikembalikan saat galat, karena React mengosongkan formulir setelah action. */
+export type HasilGaji = { pesan: string } | { galat: string; isian?: Record<string, string> } | null;
 
 const bulanSah = (x: string) => /^\d{4}-(0[1-9]|1[0-2])$/.test(x);
 
@@ -46,10 +49,15 @@ export async function siapkanGaji(_: HasilGaji, form: FormData): Promise<HasilGa
     }
   }
 
+  // Lembur bulan ini per orang (tabel lembur; jam 0 = dibatalkan).
+  const { data: lem } = await supabase.from("lembur").select("orang_id, tanggal, jenis, jam").gte("tanggal", awal).lte("tanggal", akhir).gt("jam", 0);
+  const lemburDari = new Map<string, LemburHari[]>();
+  for (const l of lem ?? []) lemburDari.set(l.orang_id, [...(lemburDari.get(l.orang_id) ?? []), { tanggal: l.tanggal, jenis: l.jenis as JenisHariLembur, jam: l.jam }]);
+
   let ditahan = 0;
   for (const o of digaji) {
     const rw = riwayat.get(o.id);
-    const { komponen, peringatan } = susunSlip(o.g, aturan, bln, rw && rw.bulan === 11 ? rw : undefined);
+    const { komponen, peringatan } = susunSlip(o.g, aturan, bln, rw && rw.bulan === 11 ? rw : undefined, lemburDari.get(o.id));
     const { data, error } = await supabase.rpc("simpan_slip", { p_periode: per, p_orang: o.id, p_komponen: komponen, p_peringatan: peringatan });
     if (error) return { galat: error.code === "55000" ? error.message : "Sebagian slip gagal disimpan. Coba siapkan ulang; slip yang sudah tersimpan tidak hilang." };
     if ((data as { ditahan: boolean }).ditahan) ditahan++;
@@ -110,4 +118,22 @@ export async function aturGajiOrang(_: HasilGaji, form: FormData): Promise<Hasil
   if (error) return { galat: "Gaji gagal disimpan. Hanya pemilik atau admin yang bisa mengubahnya." };
   revalidatePath("/app/orang");
   return { pesan: "Tersimpan." };
+}
+
+/** Catat jam lembur satu orang satu hari (RPC catat_lembur memeriksa batas PP 35/2021 dan kunci bulan yang sudah disetujui). */
+export async function catatLembur(_: HasilGaji, form: FormData): Promise<HasilGaji> {
+  const orang = String(form.get("orang") ?? "");
+  const tanggal = String(form.get("tanggal") ?? "");
+  const jenis = String(form.get("jenis") ?? "");
+  const jam = Number(form.get("jam"));
+  const isian = { orang, tanggal, jenis, jam: String(form.get("jam") ?? "") };
+  if (!orang) return { galat: "Pilih orang yang lembur.", isian };
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(tanggal)) return { galat: "Pilih tanggal lembur.", isian };
+  if (!(jenis in JENIS_LEMBUR)) return { galat: "Pilih jenis hari.", isian };
+  if (!Number.isInteger(jam) || jam < 0 || jam > 12) return { galat: "Isi jam lembur 1 sampai 12, atau 0 untuk membatalkan.", isian };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("catat_lembur", { p_orang: orang, p_tanggal: tanggal, p_jenis: jenis, p_jam: jam });
+  if (error) return { galat: error.code === "42501" ? "Hanya pemilik atau admin yang bisa mencatat lembur." : error.message, isian };
+  revalidatePath("/app/gaji");
+  return { pesan: jam ? "Lembur tercatat. Hitung ulang draf supaya masuk slip." : "Lembur dibatalkan. Hitung ulang draf supaya slip ikut berubah." };
 }

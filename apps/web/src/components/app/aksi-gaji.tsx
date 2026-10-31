@@ -1,8 +1,9 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { aturGajiOrang, bagikanSlip, lepasTahan, setujuiGaji, siapkanGaji, type HasilGaji, type HasilTautanSlip } from "@/app/app/gaji/actions";
+import { aturGajiOrang, bagikanSlip, catatLembur, lepasTahan, setujuiGaji, siapkanGaji, type HasilGaji, type HasilTautanSlip } from "@/app/app/gaji/actions";
 import { Tombol } from "@/components/ui/tombol";
+import { JENIS_LEMBUR } from "@/lib/gaji/lembur";
 
 function Hasil({ h }: { h: HasilGaji }) {
   if (!h) return null;
@@ -112,5 +113,33 @@ export function FormGajiOrang({ orang, nama, awal }: { orang: string; nama: stri
         </div>
       </form>
     </details>
+  );
+}
+
+/** Isian lembur per orang per hari di halaman Gaji (pengelola, bulan yang belum disetujui). */
+export function FormLembur({ orang, awal, akhir }: { orang: { id: string; nama: string }[]; awal: string; akhir: string }) {
+  const [h, aksi, sibuk] = useActionState<HasilGaji, FormData>(catatLembur, null);
+  // Setelah galat, isian dikembalikan agar orang dan tanggal tidak perlu dipilih ulang (key memasang ulang nilai awal).
+  const isi = h && "galat" in h ? (h.isian ?? {}) : {};
+  return (
+    <form key={JSON.stringify(isi)} action={aksi} className="mt-3 grid grid-cols-2 gap-2 text-sm" aria-label="Catat lembur">
+      <label className="col-span-2 flex flex-col gap-1 sm:col-span-1"><span className="text-tinta-2">Orang</span>
+        <select name="orang" required defaultValue={isi.orang ?? ""} className={pilihan}>
+          <option value="" disabled>Pilih</option>
+          {orang.map((o) => <option key={o.id} value={o.id}>{o.nama}</option>)}
+        </select></label>
+      <label className="col-span-2 flex flex-col gap-1 sm:col-span-1"><span className="text-tinta-2">Tanggal</span>
+        <input type="date" name="tanggal" required min={awal} max={akhir} defaultValue={isi.tanggal || awal} className={pilihan} /></label>
+      <label className="col-span-2 flex flex-col gap-1 sm:col-span-1"><span className="text-tinta-2">Jenis hari</span>
+        <select name="jenis" defaultValue={isi.jenis || "hari_kerja"} className={pilihan}>
+          {Object.entries(JENIS_LEMBUR).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+        </select></label>
+      <label className="col-span-2 flex flex-col gap-1 sm:col-span-1"><span className="text-tinta-2">Jam lembur</span>
+        <input type="number" name="jam" required min={0} max={12} step={1} defaultValue={isi.jam || 1} inputMode="numeric" className={pilihan} /></label>
+      <div className="col-span-2 flex flex-wrap items-center gap-3">
+        <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? "Menyimpan..." : "Catat lembur"}</Tombol>
+        <Hasil h={h} />
+      </div>
+    </form>
   );
 }
