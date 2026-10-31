@@ -1125,8 +1125,10 @@
    "accept": "satu panggilan /v1/evaluate typesafe-ai/jev berhasil (jawaban + usage + biaya dicatat di docs/research/jev.md), atau galat kredit/akses dicatat dan diteruskan ke UNTUK-TRISTAN",
    "how": "route server sementara /api/cek-jev (hanya pemilik, dimatikan setelah uji), VERCEL_OIDC_TOKEN tidak dicetak",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T03:57:22"
+   "status": "done",
+   "created": "2026-10-31T03:57:22",
+   "done": "2026-10-31T10:10:50",
+   "result": "commit 3285a9f route /api/cek-jev di produksi: OIDC diterima, gateway 403 butuh kartu kredit (694 ms); dicatat docs/research/jev.md + UNTUK-TRISTAN; pustaka src/lib/jev.ts 7 tes; route dihapus"
   },
   {
    "id": "F0-07A",
@@ -1258,6 +1260,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-10-31T08:48:46"
+  },
+  {
+   "id": "R-02C",
+   "fase": "R",
+   "kind": "research",
+   "priority": 30,
+   "size": "s",
+   "wajib": false,
+   "title": "Ulangi uji Jev setelah kartu Vercel ada",
+   "accept": "satu panggilan /v1/evaluate berhasil dari produksi: jawaban, usage, biaya, latensi dicatat di docs/research/jev.md; gerbang keputusan izin memakai Jev bila yakin >= 0,85",
+   "how": "route uji sementara lagi atau langsung dari ajukan izin; pustaka src/lib/jev.ts",
+   "blocked_by": "kartu Vercel belum ada (UNTUK-TRISTAN, pembayaran)",
+   "status": "blocked",
+   "created": "2026-10-31T10:10:41"
   }
  ]
 }

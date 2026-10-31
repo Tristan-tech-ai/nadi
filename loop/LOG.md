@@ -39,3 +39,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 11:50 | F1-02 | kios QR berganti 15 dtk + absen staf dengan cek wajah MediaPipe (kedip + menoleh acak) di perangkat; vitest 8/8, e2e 2/2 (kamera tanpa wajah ditolak), SQL 21/21 | 35666c4 |
 | 31 Okt 2026 12:05 | F1-03 (riset) | rencana izin/cuti + otopilot ditulis di STATE; cuti tahunan 12 hari dicari, belum terverifikasi dari teks UU (dicatat di LEARN) | lihat git log |
 | 31 Okt 2026 09:45 | F0-02B, F0-13 | produksi hidup di Vercel akun tristan-tech-ai (deploy otomatis dari GitHub), uji luar lulus; BLOCKED karena email commit placeholder diperbaiki | 49723c8 |
+| 31 Okt 2026 10:15 | R-02B | route /api/cek-jev di produksi; OIDC diterima, AI Gateway 403 butuh kartu kredit; ke UNTUK-TRISTAN, R-02C terblokir; pustaka jev.ts 7 tes; route dihapus | 3285a9f |

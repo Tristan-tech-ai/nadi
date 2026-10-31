@@ -45,10 +45,11 @@ Ambang: keyakinan >= 0,85 langsung dipakai; 0,5-0,85 diteruskan ke model ringan 
 Model ringan yang sudah dipakai baca-berkas (ID di tabel `konfigurasi.model_ai`), dengan keluaran terstruktur yang meniru bentuk jawaban Jev: `{ choice: enum, probabilities: {...}, confidence }`. Bentuk ini dipilih supaya pemanggil tidak berubah saat Jev diaktifkan; hanya adapternya yang berganti.
 
 ## Status spike
-**Belum ada panggilan nyata yang berhasil**; yang terbukti hanya bahwa endpoint hidup dan menolak tanpa kredensial (dua respons di tabel atas).
-- Jalur termurah tanpa langkah dari Tristan: AI Gateway lewat `VERCEL_OIDC_TOKEN` dari route di deployment Vercel. OIDC ini hanya ada di dalam deployment, bukan di mesin lokal.
-- Spike dicoba lagi saat deploy produksi berikutnya (tugas R-02B).
-- Bila AI Gateway menolak karena kredit atau kartu belum ada, itu urusan pembayaran dan dicatat di loop/UNTUK-TRISTAN.md. Loop tidak membeli apa pun.
+**Uji nyata 31 Okt 2026 10.10 WITA (tick 34, R-02B):** route sementara `/api/cek-jev` di produksi (commit 3285a9f, dihapus setelah uji) memanggil `POST https://ai-gateway.vercel.sh/v1/evaluate` dengan token OIDC dari header `x-vercel-oidc-token` dan model dari env `NADI_MODEL_KEPUTUSAN`.
+- Tanpa JWT pemilik: 401 (817 ms dari luar). Dengan JWT pemilik: route jalan, OIDC **diterima** (bukan 401), tetapi gateway menjawab **403** dalam 694 ms: `AI Gateway requires a valid credit card on file to service requests ... add a card and unlock your free credits.`
+- Artinya: jalur teknis (OIDC deployment, bentuk permintaan, auth pemilik) sudah benar; yang kurang hanya kartu di tim Vercel. Itu urusan pembayaran, diteruskan ke loop/UNTUK-TRISTAN.md. Loop tidak menambah kartu atau membeli apa pun.
+- Belum ada jawaban model, usage, atau biaya nyata. Saat kartu sudah ada, ulangi uji (tugas R-02C) dengan pustaka `apps/web/src/lib/jev.ts` (panggilKeputusan, bentukKeputusan, langkahBerikut; 7 tes unit).
+- Sampai itu, gerbang keputusan memakai fallback model ringan dengan bentuk jawaban yang sama (`Keputusan`: pilihan, peluang, yakin).
 
 ## Sumber (diakses 31 Okt 2026)
 1. TypeSafe, ringkasan model Jev: https://docs.typesafe.ai/models
