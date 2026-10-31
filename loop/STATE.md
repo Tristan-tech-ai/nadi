@@ -3,9 +3,10 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 ~09:00 (jam lokal), tick 28: F0-11 DONE (landing statis dengan demo nota hidup; Lighthouse mobile 100 semua kategori; naskah docs/design/landing.md).
-- Fase: F0. Progres wajib: lihat next_task.py progress. Tujuh belas migrasi (cocok).
-- LANGKAH BERIKUTNYA PERSIS: tugas READY teratas dari next_task.py (F0-12 data demo perusahaan?). Baca kriteria terimanya dulu. Landing memakai kelas .cetak (globals.css) untuk gerak tercetak; axe di halaman beranda harus menunggu animasi selesai (2,6 dtk).
+- Tanggal: 31 Okt 2026 ~09:45 (jam lokal), tick 29: F0-12 DONE (usaha demo /demo dan /demo/toko, baca-saja tanpa akun; penyegaran waktu tiap malam).
+- Fase: F0. Delapan belas migrasi (usaha_demo 086e748a, cocok).
+- LANGKAH BERIKUTNYA PERSIS: tugas READY teratas dari next_task.py; baca kriteria terimanya dan sumber primer yang relevan dulu.
+- Demo: public.demo_lihat(p_kunci fnb|toko) anon; app.isi_demo() (sekali, idempoten), app.segarkan_demo() lewat cron nadi-demo-segar. Komponen src/components/demo/halaman-demo.tsx (kerangka statis + isi di Suspense; ambilDemo 'use cache' hours, gagal -> seconds). Gerbang membangun dengan kunci palsu: halaman yang memanggil database saat prerender harus tahan gagal.
 - Lighthouse: `npx --yes lighthouse@13.6.0 http://localhost:3100/ --chrome-flags="--headless=new" --output=json` dari scratchpad, server `pnpm start -p 3100` dijalankan di latar lalu dimatikan lewat PID port 3100.
 - Feed (/app) urut: tenggat, dampak_rp desc, dibuat_at desc, batas 20. Akun e2e A punya banyak usulan menunggu sisa uji; e2e mcp menolak usulannya sendiri lewat Feed.
 - MCP: src/lib/mcp/protokol.ts (tangani: modern = ada _meta protocolVersion atau header 2026-07-28; header MCP-Protocol-Version/Mcp-Method/Mcp-Name wajib cocok; -32022, 404 -32601; era lama initialize tanpa sesi), http.ts (asal/resourceMcp dari x-forwarded-*, anonRpc), cimd.ts (SSRF: https, DNS ke IP publik, tanpa redirect, 5 KB, 5 dtk; http://localhost hanya bila NADI_CIMD_IZINKAN_LOKAL=1 dan bukan VERCEL; playwright webServer menyetelnya). Route: /api/mcp, /.well-known/oauth-protected-resource[/api/mcp], /.well-known/oauth-authorization-server, /api/oauth/token, /api/oauth/daftar, /oauth/izinkan (dilindungi proxy). e2e: e2e/mcp.spec.ts (server klien CIMD lokal port 4010, serial). Akun e2e A punya banyak usaha 'Cabang Uji A2' sisa uji.

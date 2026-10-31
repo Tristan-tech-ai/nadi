@@ -294,8 +294,10 @@
    "accept": "tombol 'coba demo' membuka perusahaan demo baca-saja dalam < 3 dtk; data di-reset tiap malam",
    "how": "seed SQL + pg_cron",
    "blocked_by": "F0-08",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T08:00:15",
+   "result": "commit 2b73e7a: /demo (warung) dan /demo/toko prerender (use cache + cacheLife hours) dari RPC anon demo_lihat; migrasi usaha_demo 086e748a (2 usaha contoh, pg_cron nadi-demo-segar 01.00 WITA menggeser waktu, tanpa hapus); SQL usaha_demo 12/12; e2e asap 10/10: klik 'Coba usaha contoh' sampai Feed tampil < 3 dtk, Setujui hanya di layar, axe 390/1440 terang/gelap; Lighthouse /demo 100/100 LCP 0,76 dtk"
   },
   {
    "id": "F1-01",
