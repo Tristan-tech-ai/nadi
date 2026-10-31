@@ -3,20 +3,37 @@ import { ubahBukaLowongan } from "@/app/app/lowongan-actions";
 import { FormLowongan } from "@/components/app/form-lowongan";
 import { Cap } from "@/components/ui/cap";
 import { asalTautan } from "@/lib/mcp/http";
+import { formatTanggal } from "@/lib/format";
 import type { PeringatanBias } from "@/lib/rekrut/bias";
+import { bankTalenta, pesanWa, sejakBank, tautanWa, type LamaranBank } from "@/lib/rekrut/keputusan";
 import { createClient } from "@/lib/supabase/server";
 
-type Lowongan = { id: string; judul: string; kode: string; buka: boolean; peringatan: PeringatanBias[]; lamaran: { count: number }[] };
+type Lowongan = {
+  id: string; judul: string; kode: string; buka: boolean; topi_id: string | null; peringatan: PeringatanBias[]; lamaran: { count: number }[];
+  perusahaan: { nama: string } | null;
+};
+type BarisLamaran = Omit<LamaranBank, "topi_id"> & { lowongan: { topi_id: string | null } | null };
 
 /** Lowongan per topi dengan tautan lamar publik (P01). Pengelola saja (RLS). */
 export async function KartuLowongan() {
+  const dasar = asalTautan(await headers());
   const supabase = await createClient();
-  const [{ data: l }, { data: t }] = await Promise.all([
-    supabase.from("lowongan").select("id, judul, kode, buka, peringatan, lamaran(count)").order("dibuat_at", { ascending: false }).limit(20),
+  // F2-05 Bank Talenta: pelamar 365 hari terakhir yang mengizinkan dihubungi lagi (RLS: usaha aktif, pengelola).
+  const sejak = sejakBank();
+  const [{ data: l }, { data: t }, { data: izin }] = await Promise.all([
+    supabase.from("lowongan").select("id, judul, kode, buka, topi_id, peringatan, lamaran(count), perusahaan(nama)").order("dibuat_at", { ascending: false }).limit(20),
     supabase.from("topi").select("id, nama").order("nama"),
+    supabase.from("lamaran").select("id, lowongan_id, nama, telepon, tahap, boleh_dihubungi, dibuat_at, lowongan(topi_id)")
+      .eq("boleh_dihubungi", true).neq("tahap", "diterima").gte("dibuat_at", sejak).order("dibuat_at", { ascending: false }).limit(500),
   ]);
   const daftar = (l ?? []) as unknown as Lowongan[];
-  const dasar = asalTautan(await headers());
+  const bertopi = daftar.filter((x) => x.buka && x.topi_id).map((x) => x.id);
+  // Nomor yang sudah melamar di lowongan itu sendiri tidak ditawarkan lagi.
+  const { data: diSini } = bertopi.length && izin?.length
+    ? await supabase.from("lamaran").select("id, lowongan_id, nama, telepon, tahap, boleh_dihubungi, dibuat_at, lowongan(topi_id)").in("lowongan_id", bertopi).limit(1000)
+    : { data: [] };
+  const keBank = (b: BarisLamaran): LamaranBank => ({ ...b, topi_id: b.lowongan?.topi_id ?? null });
+  const bank = bankTalenta(daftar, [...((izin ?? []) as unknown as BarisLamaran[]).map(keBank), ...((diSini ?? []) as unknown as BarisLamaran[]).map((b) => ({ ...keBank(b), boleh_dihubungi: false }))]);
   return (
     <section className="mt-10 border-t border-garis pt-6" aria-labelledby="judul-lowongan" data-testid="kartu-lowongan">
       <h2 id="judul-lowongan" className="text-lg font-semibold">Lowongan</h2>
@@ -48,6 +65,27 @@ export async function KartuLowongan() {
                     </ul>
                   </div>
                 ) : null}
+                {bank.get(x.id) && (
+                  <div className="mt-2 rounded-[var(--radius-isian)] bg-kertas-2 p-3" data-testid="bank-talenta">
+                    <p className="font-semibold">Pelamar lama yang cocok</p>
+                    <p className="text-tinta-2">Pernah melamar untuk topi yang sama dan mengizinkan dihubungi lagi.</p>
+                    <ul className="mt-2 grid gap-2">
+                      {bank.get(x.id)!.map((b) => {
+                        const wa = tautanWa(b.telepon, pesanWa("undangan", { nama: b.nama, usaha: x.perusahaan?.nama ?? "usaha kami", lowongan: x.judul, tautan }));
+                        return (
+                          <li key={b.lamaran} className="flex flex-wrap items-center justify-between gap-2">
+                            <span>{b.nama} <span className="text-tinta-2">· melamar {formatTanggal(new Date(b.dibuat_at))}</span></span>
+                            {wa && (
+                              <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center rounded-[var(--radius-isian)] border border-garis-kuat px-3 font-semibold">
+                                <span>Undang<span className="sr-only"> {b.nama}</span> lewat WhatsApp</span>
+                              </a>
+                            )}
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                )}
                 <div className="mt-2 flex flex-wrap gap-2">
                   <a href={`https://wa.me/?text=${encodeURIComponent(`Lowongan ${x.judul}. Lamar lewat HP di ${tautan}`)}`} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center rounded-[var(--radius-isian)] border border-garis-kuat px-3 font-semibold">
                     Kirim lewat WhatsApp

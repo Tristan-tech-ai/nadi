@@ -2,18 +2,23 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { HasilUji, type BarisUji } from "@/components/app/hasil-uji";
+import { KeputusanLamaran } from "@/components/app/keputusan-lamaran";
 import { TranskripJawaban } from "@/components/app/transkrip-jawaban";
 import { formatDurasi } from "@/lib/wawancara/rekam";
 import { ringkasanWawancara } from "@/lib/wawancara/pertanyaan";
 import type { ModelTranskrip } from "@/lib/wawancara/transkrip";
 import { formatTanggal } from "@/lib/format";
+import { pesanWa, tahapSah, tampilHp, tautanWa } from "@/lib/rekrut/keputusan";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 
 export const metadata: Metadata = { title: "Wawancara dan uji pelamar" };
 
 type Topi = { nama: string; keahlian: unknown; tanggung_jawab: unknown };
-type Lamaran = { id: string; nama: string; dibuat_at: string; lowongan: { judul: string; topi: Topi | null } | null };
+type Lamaran = {
+  id: string; nama: string; dibuat_at: string; telepon: string | null; tahap: string; pesan_tahap: string | null; tahap_at: string | null;
+  boleh_dihubungi: boolean; perusahaan: { nama: string } | null; lowongan: { judul: string; topi: Topi | null } | null;
+};
 type Jawaban = { id: string; urutan: number; pertanyaan: string; durasi_detik: number; transkrip: string | null; berkas: { jalur: string } | null };
 
 const ID_SAH = /^[0-9a-f-]{36}$/i;
@@ -26,7 +31,7 @@ async function Isi({ params }: { params: Promise<{ lamaran: string }> }) {
   }
   const supabase = await createClient();
   const [{ data: la }, { data: jw }, { data: konf }, { data: uji }] = await Promise.all([
-    ID_SAH.test(id) ? supabase.from("lamaran").select("id, nama, dibuat_at, lowongan(judul, topi(nama, keahlian, tanggung_jawab))").eq("id", id).maybeSingle() : Promise.resolve({ data: null }),
+    ID_SAH.test(id) ? supabase.from("lamaran").select("id, nama, dibuat_at, telepon, tahap, pesan_tahap, tahap_at, boleh_dihubungi, perusahaan(nama), lowongan(judul, topi(nama, keahlian, tanggung_jawab))").eq("id", id).maybeSingle() : Promise.resolve({ data: null }),
     ID_SAH.test(id) ? supabase.from("jawaban_wawancara").select("id, urutan, pertanyaan, durasi_detik, transkrip, berkas(jalur)").eq("lamaran_id", id).eq("status", "masuk").order("urutan") : Promise.resolve({ data: null }),
     supabase.from("konfigurasi").select("nilai").eq("kunci", "model_transkrip").maybeSingle(),
     ID_SAH.test(id) ? supabase.from("uji_lamaran").select("jenis, topi_kode, benih, jawaban, selesai_at").eq("lamaran_id", id) : Promise.resolve({ data: null }),
@@ -40,6 +45,12 @@ async function Isi({ params }: { params: Promise<{ lamaran: string }> }) {
   const model = (konf?.nilai ?? null) as ModelTranskrip | null;
   const topi = lamaran.lowongan?.topi ?? null;
   const ringkas = topi && jawaban.some((j) => j.transkrip) ? ringkasanWawancara(topi, jawaban) : null;
+  // F2-05: setelah memutuskan, teks tawaran atau penolakan yang sopan dikirim pemilik sendiri lewat wa.me.
+  const tahap = tahapSah(lamaran.tahap) ? lamaran.tahap : "masuk";
+  const jenisWa = tahap === "ditawari" ? "tawaran" : tahap === "ditolak" ? "penolakan" : null;
+  const hrefWa = jenisWa
+    ? tautanWa(lamaran.telepon, pesanWa(jenisWa, { nama: lamaran.nama, usaha: lamaran.perusahaan?.nama ?? "usaha kami", lowongan: lamaran.lowongan?.judul ?? "lowongan ini", pesan: lamaran.pesan_tahap, simpan: lamaran.boleh_dihubungi }))
+    : null;
 
   return (
     <>
@@ -75,6 +86,16 @@ async function Isi({ params }: { params: Promise<{ lamaran: string }> }) {
         )}
         <p className="mt-3 text-xs text-tinta-2">Transkrip dibuat mesin dan bisa salah dengar. Dengarkan klipnya sebelum memutuskan. Logat, suara, dan nama tidak dinilai.</p>
       </section>
+
+      <KeputusanLamaran
+        lamaran={lamaran.id}
+        nama={lamaran.nama}
+        tahap={tahap}
+        tanggal={lamaran.tahap_at ? formatTanggal(new Date(lamaran.tahap_at)) : null}
+        pesan={lamaran.pesan_tahap}
+        hp={lamaran.telepon ? tampilHp(lamaran.telepon) : null}
+        wa={hrefWa ? { href: hrefWa, label: jenisWa === "tawaran" ? "Kirim tawaran lewat WhatsApp" : "Kirim kabar lewat WhatsApp" } : null}
+      />
 
       <ol className="mt-6 flex flex-col gap-4">
         {jawaban.map((j) => {

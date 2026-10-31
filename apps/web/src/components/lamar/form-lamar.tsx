@@ -16,6 +16,8 @@ export function FormLamar({ kode, usaha, pertanyaan = [] }: { kode: string; usah
   const [galat, setGalat] = useState("");
   const [sibuk, setSibuk] = useState(false);
   const [lamaran, setLamaran] = useState<string | null>(null);
+  const [tautan, setTautan] = useState<string | null>(null);
+  const [tersalin, setTersalin] = useState(false);
 
   async function kirim(form: FormData) {
     setGalat("");
@@ -39,6 +41,9 @@ export function FormLamar({ kode, usaha, pertanyaan = [] }: { kode: string; usah
       }
       const { error: eSelesai } = await sb.rpc("lamar_selesai", { p_lamaran: d.lamaran });
       if (eSelesai) return setGalat(eSelesai.message);
+      // F2-05: izin dihubungi lagi + tautan status tanpa akun. Gagal di sini tidak membatalkan lamaran.
+      const { data: token } = await sb.rpc("lamar_lanjut", { p_lamaran: d.lamaran, p_boleh_dihubungi: form.get("boleh_dihubungi") === "ya" });
+      if (typeof token === "string") setTautan(`${window.location.origin}/lamar/status#${token}`);
       setLamaran(d.lamaran);
     } catch {
       setGalat("Lamaran gagal terkirim. Periksa sinyal, lalu coba lagi.");
@@ -53,6 +58,18 @@ export function FormLamar({ kode, usaha, pertanyaan = [] }: { kode: string; usah
         <div role="status" className="mt-8 rounded-[var(--radius-kartu)] bg-kertas-2 p-5" data-testid="lamaran-terkirim">
           <p className="text-lg font-semibold">Lamaran terkirim</p>
           <p className="mt-1 text-tinta-2">{usaha} akan membaca CV-mu dan menghubungi lewat nomor HP yang kamu tulis.</p>
+          {tautan && (
+            <div className="mt-4 border-t border-garis pt-3" data-testid="tautan-status">
+              <p className="text-sm font-semibold">Simpan tautan ini untuk melihat kabar lamaranmu.</p>
+              <p className="mt-1 break-all font-mono text-sm" data-testid="tautan-status-isi">{tautan}</p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <Tombol ragam="kedua" onClick={async () => { try { await navigator.clipboard.writeText(tautan); setTersalin(true); } catch {} }}>
+                  {tersalin ? "Tersalin" : "Salin tautan"}
+                </Tombol>
+                <a href={tautan} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center px-2 text-sm font-semibold underline underline-offset-4">Buka halaman status</a>
+              </div>
+            </div>
+          )}
         </div>
         <UjiKerja lamaran={lamaran} />
         {pertanyaan.length > 0 && <RekamWawancara lamaran={lamaran} pertanyaan={pertanyaan} usaha={usaha} />}
@@ -73,6 +90,10 @@ export function FormLamar({ kode, usaha, pertanyaan = [] }: { kode: string; usah
       <label className="flex flex-col gap-1 text-sm">
         <span className="text-tinta-2">CV: foto atau PDF, paling besar 10 MB</span>
         <input name="cv" type="file" required accept="image/*,application/pdf" className="text-base file:mr-3 file:h-10 file:rounded-[var(--radius-isian)] file:border file:border-garis-kuat file:bg-kertas-2 file:px-3 file:font-semibold file:text-tinta" />
+      </label>
+      <label className="flex items-start gap-3 text-sm">
+        <input name="boleh_dihubungi" type="checkbox" value="ya" className="mt-0.5 size-5 shrink-0 accent-tinta" />
+        <span>Boleh dihubungi lagi untuk lowongan lain di {usaha}</span>
       </label>
       <Tombol type="submit" ukuran="besar" disabled={sibuk}>{sibuk ? "Mengirim..." : "Kirim lamaran"}</Tombol>
       {galat && <p role="alert" className="text-sm text-cap">{galat}</p>}
