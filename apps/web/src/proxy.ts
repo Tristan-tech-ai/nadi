@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { readPublicEnv } from "@/lib/env";
 
 // Area yang butuh masuk. Selain ini publik (landing, lamaran kandidat, verifikasi surat).
-const DILINDUNGI = ["/app", "/oauth/izinkan"];
+const DILINDUNGI = ["/app", "/oauth/izinkan", "/absen", "/kios"];
 
 // Menyegarkan sesi Supabase di setiap permintaan dan melindungi area aplikasi.
 export async function proxy(request: NextRequest) {
