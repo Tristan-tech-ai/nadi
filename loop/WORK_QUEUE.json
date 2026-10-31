@@ -1330,8 +1330,10 @@
    "accept": "pengelola mencatat jam lembur per orang per hari (jenis hari kerja/libur pola 5 atau 6 hari) dan slip menambah komponen lembur dari upahLembur PP 35/2021 (masuk bruto PPh 21); e2e: 4 jam hari kerja dengan upah Rp3.460.000 menambah Rp150.000",
    "how": "kejadian lembur.* atau tabel lembur; susunSlip menerima daftar lembur",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T12:48:05"
+   "status": "done",
+   "created": "2026-10-31T12:48:05",
+   "done": "2026-10-31T16:25:50",
+   "result": "commit 9181af8 + 4db944c; migrasi lembur (sidik 0a5a6c27, 31 migrasi) tabel lembur + RPC catat_lembur (PP 35/2021: hari kerja maks 4 jam/hari dan 18 jam/minggu, batas per jenis libur, bulan disetujui terkunci, batal = jam 0) tes SQL 19/19; susunSlip menerima lembur (dasar pokok + tunjangan tetap, pendapatan -> bruto PPh 21) tes 22/22 dengan merah sengaja; isian lembur di /app/gaji; e2e gaji.spec 'lembur 4 jam hari kerja menambah Rp150.000' (neto Rp3.356.200 -> Rp3.506.200, baris Lembur 4 jam Rp150.000, galat 5 jam, axe 390/1440 terang/gelap) lulus lokal + produksi READY 9181af85"
   },
   {
    "id": "F1-06B",
@@ -1362,6 +1364,20 @@
    "created": "2026-10-31T15:11:53",
    "done": "2026-10-31T15:29:12",
    "result": "commit fa952d6+56f29ee; next.config.ts distDir dari NEXT_DIST_DIR, gate.sh build NEXT_DIST_DIR=.next-gate; bukti: pnpm build (BUILD_ID 1793435186) -> gate LULUS -> BUILD_ID tetap 1793435186 -> e2e lamar 1 passed; produksi READY 56f29eed, / 200"
+  },
+  {
+   "id": "Q-10",
+   "fase": "Q",
+   "kind": "test",
+   "priority": 21,
+   "size": "s",
+   "wajib": false,
+   "title": "Seluruh e2e aman dijalankan paralel",
+   "accept": "pnpm e2e penuh (semua spec, worker bawaan) lulus dua kali berturut-turut lokal; spec yang memanggil pindah_perusahaan (gaji, topi) tidak lagi berbagi akun dengan spec lain yang memakai usaha aktif akun A",
+   "how": "akun uji e2e-c khusus spec yang memindah usaha (dibuat lewat SQL seperti e2e-a/b, sandi di .env.e2e.local), atau proyek Playwright terpisah dengan dependencies agar berjalan setelah yang lain",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T16:25:18"
   }
  ]
 }
