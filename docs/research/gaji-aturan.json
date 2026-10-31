@@ -1,0 +1,1716 @@
+{
+ "versi": "2026-10-31",
+ "satuan": "rupiah bilangan bulat; persen sebagai angka (0.25 = 0,25%)",
+ "sumber": [
+  {
+   "id": "pmk168",
+   "judul": "PMK 168 Tahun 2023 tentang Petunjuk Pelaksanaan Pemotongan Pajak atas Penghasilan Sehubungan dengan Pekerjaan, Jasa, atau Kegiatan Orang Pribadi",
+   "url": "https://jdih.kemenkeu.go.id/api/download/e60a82e0-b218-40f5-9d18-b924aa1e11ce/2023pmkeuangan168.pdf",
+   "status": "Berlaku; halaman JDIH Kemenkeu tidak mencatat perubahan atau pencabutan",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "pp58",
+   "judul": "PP 58 Tahun 2023 tentang Tarif Pemotongan PPh Pasal 21 atas Penghasilan Sehubungan dengan Pekerjaan, Jasa, atau Kegiatan Wajib Pajak Orang Pribadi",
+   "url": "https://jdih.kemenkeu.go.id/api/download/e47c3fc4-a912-4bf1-bcad-335fee3f71f8/2023pp058.pdf",
+   "status": "Berlaku sejak 1 Jan 2024; JDIH Kemenkeu tidak mencatat perubahan; berkas identik di peraturan.bpk.go.id",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "pmk105",
+   "judul": "PMK 105 Tahun 2025 tentang PPh Pasal 21 atas Penghasilan Tertentu yang Ditanggung Pemerintah (2026)",
+   "url": "https://jdih.kemenkeu.go.id/api/download/cb203b0c-bdc8-409d-bf9c-a71264d96f60/2025pmkeuangan105.pdf",
+   "status": "Berlaku, masa pajak Jan s.d. Des 2026",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "pmk101",
+   "judul": "PMK 101/PMK.010/2016 tentang Penyesuaian Besarnya Penghasilan Tidak Kena Pajak",
+   "url": "https://peraturan.bpk.go.id/Download/111866/PMK%20Nomor%20101%20Tahun%202016.pdf",
+   "status": "Berlaku; JDIH Kemenkeu tidak mencatat perubahan",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "uuhpp",
+   "judul": "UU 7 Tahun 2021 tentang Harmonisasi Peraturan Perpajakan",
+   "url": "https://peraturan.bpk.go.id/Download/178620/UU%20Nomor%207%20Tahun%202021.pdf",
+   "status": "Berlaku",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "pp35",
+   "judul": "PP 35 Tahun 2021 tentang PKWT, Alih Daya, Waktu Kerja dan Waktu Istirahat, dan PHK",
+   "url": "https://peraturan.bpk.go.id/Download/154582/PP%20Nomor%2035%20Tahun%202021.pdf",
+   "status": "JDIH BPK tidak mencatat perubahan",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "perpres82",
+   "judul": "Perpres 82 Tahun 2018 tentang Jaminan Kesehatan",
+   "url": "https://peraturan.bpk.go.id/Download/254897/Perpres%20Nomor%2082%20Tahun%202018.pdf",
+   "status": "Berlaku, diubah Perpres 75/2019, 64/2020, 59/2024",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "perpres64",
+   "judul": "Perpres 64 Tahun 2020 (perubahan kedua Perpres 82/2018)",
+   "url": "https://peraturan.bpk.go.id/Download/127554/Perpres%20Nomor%2064%20Tahun%202020.pdf",
+   "status": "Berlaku",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "perpres59",
+   "judul": "Perpres 59 Tahun 2024 (perubahan ketiga Perpres 82/2018)",
+   "url": "https://peraturan.bpk.go.id/Download/344279/Perpres%20Nomor%2059%20Tahun%202024.pdf",
+   "status": "Berlaku sejak 8 Mei 2024",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "pp44",
+   "judul": "PP 44 Tahun 2015 tentang Penyelenggaraan Program JKK dan JKM",
+   "url": "https://peraturan.bpk.go.id/Download/28927/PP%20Nomor%2044%20Tahun%202015.pdf",
+   "status": "Berlaku, diubah PP 82/2019 dan PP 49/2023",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "pp49",
+   "judul": "PP 49 Tahun 2023 (perubahan kedua PP 44/2015)",
+   "url": "https://peraturan.bpk.go.id/Download/323386/PP%20Nomor%2049%20Tahun%202023.pdf",
+   "status": "Berlaku",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "pp45",
+   "judul": "PP 45 Tahun 2015 tentang Penyelenggaraan Program Jaminan Pensiun",
+   "url": "https://peraturan.bpk.go.id/Download/28931/PP%20Nomor%2045%20Tahun%202015.pdf",
+   "status": "JDIH BPK tidak mencatat perubahan",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "pp46",
+   "judul": "PP 46 Tahun 2015 tentang Penyelenggaraan Program JHT",
+   "url": "https://peraturan.bpk.go.id/Download/28934/PP%20Nomor%2046%20Tahun%202015.pdf",
+   "status": "Berlaku, diubah PP 60/2015",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "pp6_2025",
+   "judul": "PP 6 Tahun 2025 (perubahan PP 37/2021 tentang JKP)",
+   "url": "https://peraturan.bpk.go.id/Download/375603/PP%20Nomor%206%20Tahun%202025.pdf",
+   "status": "Berlaku sejak 7 Feb 2025",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "bpjstk_artikel",
+   "judul": "BPJS Ketenagakerjaan, artikel 'Berapa Besaran Iuran JHT, JKK, JKM, JP dan JKP?' (17 Des 2025)",
+   "url": "https://www.bpjsketenagakerjaan.go.id/artikel/18913/artikel-berapa-besaran-iuran-jht,-jkk,-jkm,-jp-dan-jkp",
+   "status": "Publikasi resmi BPJS Ketenagakerjaan",
+   "diakses": "2026-10-31"
+  },
+  {
+   "id": "bpjstk_pu",
+   "judul": "BPJS Ketenagakerjaan, halaman Penerima Upah",
+   "url": "https://www.bpjsketenagakerjaan.go.id/penerima-upah.html",
+   "status": "Publikasi resmi BPJS Ketenagakerjaan",
+   "diakses": "2026-10-31"
+  }
+ ],
+ "ter": {
+  "A": [
+   [
+    0,
+    5400000,
+    0
+   ],
+   [
+    5400000,
+    5650000,
+    0.25
+   ],
+   [
+    5650000,
+    5950000,
+    0.5
+   ],
+   [
+    5950000,
+    6300000,
+    0.75
+   ],
+   [
+    6300000,
+    6750000,
+    1
+   ],
+   [
+    6750000,
+    7500000,
+    1.25
+   ],
+   [
+    7500000,
+    8550000,
+    1.5
+   ],
+   [
+    8550000,
+    9650000,
+    1.75
+   ],
+   [
+    9650000,
+    10050000,
+    2
+   ],
+   [
+    10050000,
+    10350000,
+    2.25
+   ],
+   [
+    10350000,
+    10700000,
+    2.5
+   ],
+   [
+    10700000,
+    11050000,
+    3
+   ],
+   [
+    11050000,
+    11600000,
+    3.5
+   ],
+   [
+    11600000,
+    12500000,
+    4
+   ],
+   [
+    12500000,
+    13750000,
+    5
+   ],
+   [
+    13750000,
+    15100000,
+    6
+   ],
+   [
+    15100000,
+    16950000,
+    7
+   ],
+   [
+    16950000,
+    19750000,
+    8
+   ],
+   [
+    19750000,
+    24150000,
+    9
+   ],
+   [
+    24150000,
+    26450000,
+    10
+   ],
+   [
+    26450000,
+    28000000,
+    11
+   ],
+   [
+    28000000,
+    30050000,
+    12
+   ],
+   [
+    30050000,
+    32400000,
+    13
+   ],
+   [
+    32400000,
+    35400000,
+    14
+   ],
+   [
+    35400000,
+    39100000,
+    15
+   ],
+   [
+    39100000,
+    43850000,
+    16
+   ],
+   [
+    43850000,
+    47800000,
+    17
+   ],
+   [
+    47800000,
+    51400000,
+    18
+   ],
+   [
+    51400000,
+    56300000,
+    19
+   ],
+   [
+    56300000,
+    62200000,
+    20
+   ],
+   [
+    62200000,
+    68600000,
+    21
+   ],
+   [
+    68600000,
+    77500000,
+    22
+   ],
+   [
+    77500000,
+    89000000,
+    23
+   ],
+   [
+    89000000,
+    103000000,
+    24
+   ],
+   [
+    103000000,
+    125000000,
+    25
+   ],
+   [
+    125000000,
+    157000000,
+    26
+   ],
+   [
+    157000000,
+    206000000,
+    27
+   ],
+   [
+    206000000,
+    337000000,
+    28
+   ],
+   [
+    337000000,
+    454000000,
+    29
+   ],
+   [
+    454000000,
+    550000000,
+    30
+   ],
+   [
+    550000000,
+    695000000,
+    31
+   ],
+   [
+    695000000,
+    910000000,
+    32
+   ],
+   [
+    910000000,
+    1400000000,
+    33
+   ],
+   [
+    1400000000,
+    null,
+    34
+   ]
+  ],
+  "B": [
+   [
+    0,
+    6200000,
+    0
+   ],
+   [
+    6200000,
+    6500000,
+    0.25
+   ],
+   [
+    6500000,
+    6850000,
+    0.5
+   ],
+   [
+    6850000,
+    7300000,
+    0.75
+   ],
+   [
+    7300000,
+    9200000,
+    1
+   ],
+   [
+    9200000,
+    10750000,
+    1.5
+   ],
+   [
+    10750000,
+    11250000,
+    2
+   ],
+   [
+    11250000,
+    11600000,
+    2.5
+   ],
+   [
+    11600000,
+    12600000,
+    3
+   ],
+   [
+    12600000,
+    13600000,
+    4
+   ],
+   [
+    13600000,
+    14950000,
+    5
+   ],
+   [
+    14950000,
+    16400000,
+    6
+   ],
+   [
+    16400000,
+    18450000,
+    7
+   ],
+   [
+    18450000,
+    21850000,
+    8
+   ],
+   [
+    21850000,
+    26000000,
+    9
+   ],
+   [
+    26000000,
+    27700000,
+    10
+   ],
+   [
+    27700000,
+    29350000,
+    11
+   ],
+   [
+    29350000,
+    31450000,
+    12
+   ],
+   [
+    31450000,
+    33950000,
+    13
+   ],
+   [
+    33950000,
+    37100000,
+    14
+   ],
+   [
+    37100000,
+    41100000,
+    15
+   ],
+   [
+    41100000,
+    45800000,
+    16
+   ],
+   [
+    45800000,
+    49500000,
+    17
+   ],
+   [
+    49500000,
+    53800000,
+    18
+   ],
+   [
+    53800000,
+    58500000,
+    19
+   ],
+   [
+    58500000,
+    64000000,
+    20
+   ],
+   [
+    64000000,
+    71000000,
+    21
+   ],
+   [
+    71000000,
+    80000000,
+    22
+   ],
+   [
+    80000000,
+    93000000,
+    23
+   ],
+   [
+    93000000,
+    109000000,
+    24
+   ],
+   [
+    109000000,
+    129000000,
+    25
+   ],
+   [
+    129000000,
+    163000000,
+    26
+   ],
+   [
+    163000000,
+    211000000,
+    27
+   ],
+   [
+    211000000,
+    374000000,
+    28
+   ],
+   [
+    374000000,
+    459000000,
+    29
+   ],
+   [
+    459000000,
+    555000000,
+    30
+   ],
+   [
+    555000000,
+    704000000,
+    31
+   ],
+   [
+    704000000,
+    957000000,
+    32
+   ],
+   [
+    957000000,
+    1405000000,
+    33
+   ],
+   [
+    1405000000,
+    null,
+    34
+   ]
+  ],
+  "C": [
+   [
+    0,
+    6600000,
+    0
+   ],
+   [
+    6600000,
+    6950000,
+    0.25
+   ],
+   [
+    6950000,
+    7350000,
+    0.5
+   ],
+   [
+    7350000,
+    7800000,
+    0.75
+   ],
+   [
+    7800000,
+    8850000,
+    1
+   ],
+   [
+    8850000,
+    9800000,
+    1.25
+   ],
+   [
+    9800000,
+    10950000,
+    1.5
+   ],
+   [
+    10950000,
+    11200000,
+    1.75
+   ],
+   [
+    11200000,
+    12050000,
+    2
+   ],
+   [
+    12050000,
+    12950000,
+    3
+   ],
+   [
+    12950000,
+    14150000,
+    4
+   ],
+   [
+    14150000,
+    15550000,
+    5
+   ],
+   [
+    15550000,
+    17050000,
+    6
+   ],
+   [
+    17050000,
+    19500000,
+    7
+   ],
+   [
+    19500000,
+    22700000,
+    8
+   ],
+   [
+    22700000,
+    26600000,
+    9
+   ],
+   [
+    26600000,
+    28100000,
+    10
+   ],
+   [
+    28100000,
+    30100000,
+    11
+   ],
+   [
+    30100000,
+    32600000,
+    12
+   ],
+   [
+    32600000,
+    35400000,
+    13
+   ],
+   [
+    35400000,
+    38900000,
+    14
+   ],
+   [
+    38900000,
+    43000000,
+    15
+   ],
+   [
+    43000000,
+    47400000,
+    16
+   ],
+   [
+    47400000,
+    51200000,
+    17
+   ],
+   [
+    51200000,
+    55800000,
+    18
+   ],
+   [
+    55800000,
+    60400000,
+    19
+   ],
+   [
+    60400000,
+    66700000,
+    20
+   ],
+   [
+    66700000,
+    74500000,
+    21
+   ],
+   [
+    74500000,
+    83200000,
+    22
+   ],
+   [
+    83200000,
+    95600000,
+    23
+   ],
+   [
+    95600000,
+    110000000,
+    24
+   ],
+   [
+    110000000,
+    134000000,
+    25
+   ],
+   [
+    134000000,
+    169000000,
+    26
+   ],
+   [
+    169000000,
+    221000000,
+    27
+   ],
+   [
+    221000000,
+    390000000,
+    28
+   ],
+   [
+    390000000,
+    463000000,
+    29
+   ],
+   [
+    463000000,
+    561000000,
+    30
+   ],
+   [
+    561000000,
+    709000000,
+    31
+   ],
+   [
+    709000000,
+    965000000,
+    32
+   ],
+   [
+    965000000,
+    1419000000,
+    33
+   ],
+   [
+    1419000000,
+    null,
+    34
+   ]
+  ]
+ },
+ "ter_format": "[batas_bawah_eksklusif, batas_atas_inklusif_atau_null, tarif_persen]; baris pertama 'sampai dengan' batas atas, baris berikutnya 'di atas' batas bawah 'sampai dengan' batas atas",
+ "ter_sumber": "PP 58/2023 Lampiran huruf A (PDF hlm 11-15), B (hlm 16-20), C (hlm 20-24). Berkas resmi berupa pindaian; tabel dibaca dari gambar halaman lalu dicocokkan dengan angka dan terbilang pada lapisan teks PDF",
+ "ter_harian": [
+  [
+   0,
+   450000,
+   0
+  ],
+  [
+   450000,
+   2500000,
+   0.5
+  ]
+ ],
+ "ter_harian_sumber": "PP 58/2023 Lampiran huruf D (PDF hlm 25). Bruto sehari di atas 2.500.000 memakai tarif Pasal 17 x 50% bruto sehari (PMK 168 Lampiran B Bagian Pertama III.1 angka 5, PDF hlm 31)",
+ "kategori_ptkp": {
+  "TK/0": "A",
+  "TK/1": "A",
+  "K/0": "A",
+  "TK/2": "B",
+  "TK/3": "B",
+  "K/1": "B",
+  "K/2": "B",
+  "K/3": "C"
+ },
+ "kategori_ptkp_sumber": "PP 58/2023 Pasal 2 ayat (3)-(4) (PDF hlm 4)",
+ "ptkp": {
+  "dasar_hukum": "UU PPh Pasal 7 ayat (1) sebagaimana diubah UU 7/2021 (PDF hlm 48); PMK 101/PMK.010/2016 Pasal 1 (PDF hlm 2-3)",
+  "diri": 54000000,
+  "kawin": 4500000,
+  "istri_penghasilan_digabung": 54000000,
+  "per_tanggungan": 4500000,
+  "maks_tanggungan": 3,
+  "penentuan": "keadaan awal tahun pajak atau awal bagian tahun pajak (UU PPh Pasal 7 ayat (2); PMK 168 Pasal 9 ayat (4))",
+  "terverifikasi": true
+ },
+ "pasal17": [
+  [
+   60000000,
+   5
+  ],
+  [
+   250000000,
+   15
+  ],
+  [
+   500000000,
+   25
+  ],
+  [
+   5000000000,
+   30
+  ],
+  [
+   null,
+   35
+  ]
+ ],
+ "pasal17_format": "[batas_atas_lapisan_pkp_inklusif_atau_null, tarif_persen]",
+ "pasal17_sumber": "UU PPh Pasal 17 ayat (1) huruf a sebagaimana diubah UU 7/2021 (PDF hlm 56); PKP dibulatkan ke bawah hingga ribuan rupiah penuh (PMK 168 Pasal 8 ayat (4))",
+ "pph21_aturan": {
+  "masa_selain_terakhir": "TER bulanan x bruto sebulan (PMK 168 Pasal 15 ayat (1) huruf a)",
+  "masa_terakhir": "PPh setahun dengan tarif Pasal 17 atas PKP dikurangi PPh yang telah dipotong pada masa sebelumnya (PMK 168 Pasal 15 ayat (1) huruf b dan ayat (2)); masa terakhir = Desember atau bulan berhenti bekerja (Lampiran B Bagian Pertama I)",
+  "disetahunkan": "bila kewajiban subjektif baru dimulai setelah Januari atau berakhir sebelum Desember: neto disetahunkan, pajak proporsional jumlah bulan (PMK 168 Pasal 15 ayat (3))",
+  "biaya_jabatan": {
+   "persen": 5,
+   "maks_setahun": 6000000,
+   "maks_sebulan": 500000,
+   "sumber": "PMK 168 Pasal 10 ayat (2)"
+  },
+  "biaya_pensiun": {
+   "persen": 5,
+   "maks_setahun": 2400000,
+   "maks_sebulan": 200000,
+   "sumber": "PMK 168 Pasal 11 ayat (2)"
+  },
+  "pengurang_lain": "iuran pensiun dan hari tua yang dibayar pegawai melalui pemberi kerja (termasuk ke BPJS Ketenagakerjaan) serta zakat atau sumbangan keagamaan wajib melalui pemberi kerja (PMK 168 Pasal 10 ayat (1))",
+  "masuk_bruto": "gaji, semua tunjangan, lembur, bonus, THR, iuran JKK dan JKM yang dibayar pemberi kerja, iuran jaminan kesehatan BPJS yang dibayar pemberi kerja, premi asuransi yang dibayar pemberi kerja (PMK 168 Pasal 6 ayat (3))",
+  "kelebihan_potong": "dikembalikan paling lambat akhir bulan berikutnya setelah masa pajak terakhir (PMK 168 Lampiran B Bagian Pertama I.2 angka 7)",
+  "ptkp_karyawati": "karyawati kawin: PTKP diri sendiri saja, kecuali ada keterangan suami tidak berpenghasilan (PMK 168 Pasal 9 ayat (2)-(3))",
+  "pembulatan_pph_bulanan": {
+   "aturan": "tidak ditemukan aturan eksplisit; contoh Tuan G menulis hasil tanpa sen",
+   "terverifikasi": false
+  },
+  "insentif_dtp_2026": "PMK 105/2025 Pasal 2-4: PPh 21 ditanggung pemerintah masa Jan s.d. Des 2026 untuk pegawai dengan bruto tetap teratur paling banyak 10.000.000 sebulan (pegawai tidak tetap: rata-rata paling banyak 500.000 sehari atau 10.000.000 sebulan) pada pemberi kerja bidang alas kaki, tekstil dan pakaian jadi, furnitur, kulit dan barang dari kulit, atau pariwisata dengan KLU di Lampiran A"
+ },
+ "lembur": {
+  "dasar_hukum": "PP 35/2021 Pasal 21, 26, 27, 29, 31, 32, 33 (PDF hlm 14-20)",
+  "waktu_kerja_normal": {
+   "6_hari": {
+    "jam_per_hari": 7,
+    "jam_per_minggu": 40
+   },
+   "5_hari": {
+    "jam_per_hari": 8,
+    "jam_per_minggu": 40
+   }
+  },
+  "batas_lembur": {
+   "jam_per_hari": 4,
+   "jam_per_minggu": 18,
+   "catatan": "tidak termasuk lembur pada istirahat mingguan dan/atau hari libur resmi (Pasal 26 ayat (2))"
+  },
+  "upah_sejam_pembagi": 173,
+  "dasar_upah": {
+   "pokok_dan_tunjangan_tetap_persen": 100,
+   "aturan_75_persen": "bila ada tunjangan tidak tetap dan (upah pokok + tunjangan tetap) < 75% keseluruhan upah, dasar = 75% keseluruhan upah (Pasal 32 ayat (4))",
+   "upah_harian_ke_bulanan": {
+    "6_hari": 25,
+    "5_hari": 21
+   },
+   "upah_satuan_hasil": "rata-rata 12 bulan terakhir, tidak lebih rendah dari upah minimum (Pasal 33 ayat (2)-(3))"
+  },
+  "keterangan_baris": "[jam_ke_dari, jam_ke_sampai_atau_null, pengali_upah_sejam]",
+  "hari_kerja": [
+   [
+    1,
+    1,
+    1.5
+   ],
+   [
+    2,
+    null,
+    2
+   ]
+  ],
+  "libur_pola_6_hari": [
+   [
+    1,
+    7,
+    2
+   ],
+   [
+    8,
+    8,
+    3
+   ],
+   [
+    9,
+    11,
+    4
+   ]
+  ],
+  "libur_pola_6_hari_jatuh_hari_kerja_terpendek": [
+   [
+    1,
+    5,
+    2
+   ],
+   [
+    6,
+    6,
+    3
+   ],
+   [
+    7,
+    9,
+    4
+   ]
+  ],
+  "libur_pola_5_hari": [
+   [
+    1,
+    8,
+    2
+   ],
+   [
+    9,
+    9,
+    3
+   ],
+   [
+    10,
+    12,
+    4
+   ]
+  ],
+  "makan_minum_min_kkal": 1400,
+  "makan_minum_bila_lembur_jam_minimal": 4,
+  "pembulatan": {
+   "aturan": "PP 35/2021 tidak mengatur pembulatan upah sejam atau upah lembur",
+   "terverifikasi": false
+  },
+  "terverifikasi": true
+ },
+ "bpjs": {
+  "kesehatan": {
+   "dasar_hukum": "Perpres 82/2018 Pasal 30 jo. Perpres 64/2020 (PDF hlm 3); Pasal 32 jo. Perpres 59/2024 (PDF hlm 11-12); Pasal 33 ayat (3) Perpres 82/2018 (PDF hlm 23)",
+   "total_persen": 5,
+   "pemberi_kerja_persen": 4,
+   "pekerja_persen": 1,
+   "batas_atas_upah": 12000000,
+   "batas_bawah_upah": "UMK; UMP bila UMK tidak ditetapkan (Perpres 59/2024 Pasal 32 ayat (2)-(3))",
+   "pengecualian_batas_bawah": "tidak berlaku bagi Peserta PPU pada usaha mikro dan kecil; batas bawahnya ditetapkan setelah kajian aktuaria (Perpres 59/2024 Pasal 32 ayat (4)-(5))",
+   "batas_bawah_usaha_mikro_kecil": null,
+   "batas_bawah_usaha_mikro_kecil_terverifikasi": false,
+   "dasar_upah": "gaji atau upah pokok dan tunjangan tetap (Perpres 82/2018 Pasal 33 ayat (3))",
+   "terverifikasi": true
+  },
+  "ketenagakerjaan": {
+   "jkk": {
+    "dasar_hukum": "PP 44/2015 Pasal 16 ayat (1) (PDF hlm 11-12)",
+    "dibayar": "pemberi_kerja",
+    "tarif_persen": {
+     "sangat_rendah": 0.24,
+     "rendah": 0.54,
+     "sedang": 0.89,
+     "tinggi": 1.27,
+     "sangat_tinggi": 1.74
+    },
+    "setelah_rekomposisi_jkp_persen": {
+     "sangat_rendah": 0.1,
+     "rendah": 0.4,
+     "sedang": 0.75,
+     "tinggi": 1.13,
+     "sangat_tinggi": 1.6
+    },
+    "rekomposisi_ke_jkp_persen": 0.14,
+    "catatan": "Rekomposisi berlaku untuk peserta JKP (PP 49/2023 Pasal 16A; PP 6/2025 Pasal 11 ayat (5)). Penjelasan umum PP 49/2023: JKP dilaksanakan tanpa menambah beban iuran, dengan mengalihkan sebagian iuran JKK dan JKM. Jumlah yang dibayar pemberi kerja tetap tarif_persen.",
+    "terverifikasi": true
+   },
+   "jkm": {
+    "dasar_hukum": "PP 44/2015 Pasal 18 ayat (1) (PDF hlm 13)",
+    "dibayar": "pemberi_kerja",
+    "tarif_persen": 0.3,
+    "setelah_rekomposisi_jkp_persen": 0.2,
+    "rekomposisi_ke_jkp_persen": 0.1,
+    "catatan": "PP 49/2023 Pasal 18A: 0,20% setelah rekomposisi 0,10%. PP 6/2025 Pasal 11 ayat (5) hanya menyebut rekomposisi dari JKK. Alokasi internal JKM sesudah PP 6/2025 belum pasti; jumlah yang dibayar pemberi kerja tetap 0,30%.",
+    "terverifikasi": true,
+    "alokasi_internal_terverifikasi": false
+   },
+   "jht": {
+    "dasar_hukum": "PP 46/2015 Pasal 16-17 (PDF hlm 11)",
+    "total_persen": 5.7,
+    "pemberi_kerja_persen": 3.7,
+    "pekerja_persen": 2,
+    "batas_atas_upah": null,
+    "dasar_upah": "upah pokok dan tunjangan tetap",
+    "terverifikasi": true
+   },
+   "jp": {
+    "dasar_hukum": "PP 45/2015 Pasal 28-29 (PDF hlm 20-21)",
+    "total_persen": 3,
+    "pemberi_kerja_persen": 2,
+    "pekerja_persen": 1,
+    "dasar_upah": "upah pokok dan tunjangan tetap",
+    "batas_atas_upah_2015": 7000000,
+    "aturan_penyesuaian": "setiap tahun dikali (1 + pertumbuhan PDB tahun sebelumnya), ditetapkan dan diumumkan BPJS TK paling lama 1 bulan setelah BPS mengumumkan PDB (Pasal 29 ayat (3)-(4))",
+    "batas_atas_upah_tampil_di_situs_resmi": 10547400,
+    "sumber_batas_atas": "bpjsketenagakerjaan.go.id/penerima-upah.html (diakses 31 Okt 2026); artikel BPJS TK 17 Des 2025 menulis Rp10.547.000",
+    "batas_atas_upah_2026": null,
+    "terverifikasi": false,
+    "catatan": "Surat penetapan batas upah JP yang berlaku 2026 tidak ditemukan di situs resmi. Rp10.547.400 adalah angka yang tampil di situs resmi BPJS TK."
+   },
+   "jkp": {
+    "dasar_hukum": "PP 37/2021 Pasal 11 sebagaimana diubah PP 6/2025 (PDF hlm 3-4)",
+    "total_persen": 0.36,
+    "pemerintah_pusat_persen": 0.22,
+    "rekomposisi_jkk_persen": 0.14,
+    "batas_atas_upah": 5000000,
+    "tambahan_beban_pemberi_kerja_persen": 0,
+    "terverifikasi": true
+   },
+   "kepesertaan_usaha_mikro_kecil": "pekerja usaha mikro dan kecil sekurang-kurangnya diikutsertakan JKK, JHT, JKM dan terdaftar JKN; usaha besar dan menengah juga JP (PP 6/2025 Pasal 4 ayat (3), sebagai syarat peserta JKP)"
+  }
+ },
+ "contoh": [
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua I.1 Tuan A, PDF hlm 33-35",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "K/0",
+    "tahun": 2024,
+    "bulanan": [
+     {
+      "bulan": 1,
+      "gaji": 10000000,
+      "tunjangan": 20000000,
+      "premi_jkk_jkm": 80000,
+      "bruto": 30080000
+     },
+     {
+      "bulan": 2,
+      "gaji": 10000000,
+      "tunjangan": 20000000,
+      "lembur": 5000000,
+      "premi_jkk_jkm": 80000,
+      "bruto": 35080000
+     },
+     {
+      "bulan": 5,
+      "gaji": 10000000,
+      "tunjangan": 20000000,
+      "lembur": 5000000,
+      "premi_jkk_jkm": 80000,
+      "bruto": 35080000
+     },
+     {
+      "bulan": 7,
+      "gaji": 10000000,
+      "tunjangan": 20000000,
+      "bonus": 20000000,
+      "premi_jkk_jkm": 80000,
+      "bruto": 50080000
+     },
+     {
+      "bulan": 12,
+      "gaji": 10000000,
+      "tunjangan": 20000000,
+      "thr": 60000000,
+      "premi_jkk_jkm": 80000,
+      "bruto": 90080000
+     }
+    ],
+    "bulan_lain_bruto": 30080000,
+    "jkk_persen_dari_gaji": 0.5,
+    "jkm_persen_dari_gaji": 0.3,
+    "iuran_pensiun_pemberi_kerja_per_bulan": 200000,
+    "iuran_pensiun_pegawai_per_bulan": 100000,
+    "zakat_per_bulan": 200000
+   },
+   "hasil": {
+    "tarif": {
+     "30080000": 13,
+     "35080000": 14,
+     "50080000": 18
+    },
+    "pph_per_bulan": {
+     "30080000": 3910400,
+     "35080000": 4911200,
+     "50080000": 9014400
+    },
+    "jumlah_jan_nov": 50120000,
+    "desember": {
+     "bruto_setahun": 450960000,
+     "biaya_jabatan": 6000000,
+     "iuran_pensiun": 1200000,
+     "zakat": 2400000,
+     "neto": 441360000,
+     "ptkp": 58500000,
+     "pkp": 382860000,
+     "pph_setahun": 64715000,
+     "pph_desember": 14595000
+    }
+   },
+   "terverifikasi": true,
+   "catatan": "Iuran pensiun yang dibayar pemberi kerja tidak dimasukkan ke bruto dalam contoh ini; premi JKK dan JKM dimasukkan."
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua I.2.1.1 Tuan B, PDF hlm 35-36",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "TK/0",
+    "tahun": 2024,
+    "mulai_bekerja": "2024-09-01",
+    "gaji_per_bulan": 15500000,
+    "iuran_pensiun_per_bulan": 100000
+   },
+   "hasil": {
+    "tarif": 7,
+    "pph_sep_nov_per_bulan": 1085000,
+    "jumlah_sep_nov": 3255000,
+    "desember": {
+     "bruto_setahun": 62000000,
+     "biaya_jabatan": 2000000,
+     "iuran_pensiun": 400000,
+     "neto": 59600000,
+     "ptkp": 54000000,
+     "pkp": 5600000,
+     "pph_setahun": 280000,
+     "pph_desember": -2975000
+    }
+   },
+   "terverifikasi": true,
+   "catatan": "Negatif = lebih dipotong, dikembalikan ke pegawai paling lambat akhir bulan berikutnya. Biaya jabatan maksimal 4 x 500.000."
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua I.2.1.2 Tuan C, PDF hlm 37-38",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "TK/0",
+    "tahun": 2024,
+    "mulai_subjek_pajak_dalam_negeri": "2024-09-01",
+    "gaji_per_bulan": 15500000,
+    "sumbangan_keagamaan_wajib_per_bulan": 775000
+   },
+   "hasil": {
+    "tarif": 7,
+    "pph_sep_nov_per_bulan": 1085000,
+    "desember": {
+     "bruto": 62000000,
+     "biaya_jabatan": 2000000,
+     "sumbangan": 3100000,
+     "neto": 56900000,
+     "neto_disetahunkan": 170700000,
+     "ptkp": 54000000,
+     "pkp": 116700000,
+     "pph_setahun_penuh": 11505000,
+     "pph_terutang_4_per_12": 3835000,
+     "pph_desember": 580000
+    }
+   },
+   "terverifikasi": true
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua I.2.2.1 Tuan D, PDF hlm 38-39",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "TK/0",
+    "tahun": 2024,
+    "berhenti": "2024-09-01",
+    "gaji_per_bulan": 17500000,
+    "iuran_pensiun_per_bulan": 100000,
+    "bulan_bekerja": 8
+   },
+   "hasil": {
+    "tarif": 8,
+    "pph_jan_jul_per_bulan": 1400000,
+    "jumlah_jan_jul": 9800000,
+    "agustus": {
+     "bruto": 140000000,
+     "biaya_jabatan": 4000000,
+     "iuran_pensiun": 800000,
+     "neto": 135200000,
+     "ptkp": 54000000,
+     "pkp": 81200000,
+     "pph_terutang": 6180000,
+     "pph_agustus": -3620000
+    }
+   },
+   "terverifikasi": true,
+   "catatan": "Masa pajak terakhir = bulan berhenti. Neto tidak disetahunkan karena kewajiban subjektif tetap ada."
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua I.2.2.2 Tuan D di pemberi kerja baru, PDF hlm 40-42",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "TK/0",
+    "tahun": 2024,
+    "mulai": "2024-09",
+    "gaji_per_bulan": 22500000,
+    "iuran_pensiun_per_bulan": 100000,
+    "neto_pemberi_kerja_sebelumnya": 135200000,
+    "pph_dipotong_pemberi_kerja_sebelumnya": 6180000
+   },
+   "hasil": {
+    "tarif": 9,
+    "pph_sep_nov_per_bulan": 2025000,
+    "jumlah_sep_nov": 6075000,
+    "tanpa_bukti_potong_sebelumnya": {
+     "bruto": 90000000,
+     "biaya_jabatan": 2000000,
+     "iuran_pensiun": 400000,
+     "neto": 87600000,
+     "ptkp": 54000000,
+     "pkp": 33600000,
+     "pph_setahun": 1680000,
+     "pph_desember": -4395000
+    },
+    "dengan_bukti_potong_sebelumnya": {
+     "neto_gabungan": 222800000,
+     "ptkp": 54000000,
+     "pkp": 168800000,
+     "pph_setahun": 19320000,
+     "pph_sep_des": 13140000,
+     "pph_desember": 7065000
+    }
+   },
+   "terverifikasi": true
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua I.2.2.3 Tuan E, PDF hlm 42-43",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "TK/0",
+    "tahun": 2024,
+    "berhenti_dan_meninggalkan_indonesia": "2024-09-01",
+    "gaji_per_bulan": 17500000,
+    "bulan_bekerja": 8
+   },
+   "hasil": {
+    "tarif": 8,
+    "pph_jan_jul_per_bulan": 1400000,
+    "agustus": {
+     "bruto": 140000000,
+     "biaya_jabatan": 4000000,
+     "neto": 136000000,
+     "neto_disetahunkan": 204000000,
+     "ptkp": 54000000,
+     "pkp": 150000000,
+     "pph_setahun_penuh": 16500000,
+     "pph_terutang_8_per_12": 11000000,
+     "pph_agustus": 1200000
+    }
+   },
+   "terverifikasi": true
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua I.3 Tuan F, PDF hlm 44",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "K/3",
+    "bulan": "2024-01",
+    "gaji_usd": 2000,
+    "kurs_kmk": 15000,
+    "bruto": 30000000
+   },
+   "hasil": {
+    "kategori": "C",
+    "tarif": 11,
+    "pph": 3300000
+   },
+   "terverifikasi": true
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua I.4 Tuan G, PDF hlm 44",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "TK/0",
+    "bulan": "2024-08",
+    "gaji": 51827997,
+    "pph_ditanggung_pemberi_kerja": true,
+    "bruto_gross_up": 65605059
+   },
+   "hasil": {
+    "kategori": "A",
+    "tarif": 21,
+    "pph": 13777062
+   },
+   "terverifikasi": true,
+   "catatan": "21% x 65.605.059 = 13.777.062,39; dokumen menulis Rp13.777.062,00. Cara gross-up tidak dijabarkan."
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua I.5 Tuan H, PDF hlm 45",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "K/2",
+    "bulan": "2024-07",
+    "gaji": 6500000,
+    "tunjangan_pajak": 300000,
+    "iuran_pensiun_pegawai": 100000,
+    "bruto": 6800000
+   },
+   "hasil": {
+    "kategori": "B",
+    "tarif": 0.5,
+    "pph": 34000
+   },
+   "terverifikasi": true,
+   "catatan": "Iuran pensiun yang dibayar pegawai tidak mengurangi bruto untuk TER."
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua I.6 Tuan I, PDF hlm 45-46",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "K/1",
+    "bulan": "2024-01",
+    "gaji": 35000000,
+    "beasiswa": 20000000,
+    "bruto": 55000000
+   },
+   "hasil": {
+    "kategori": "B",
+    "tarif": 19,
+    "pph_tertulis": 10545000
+   },
+   "terverifikasi": false,
+   "catatan": "Dokumen menulis '19% x Rp55.500.000,00 = Rp10.545.000,00' padahal bruto Rp55.000.000; 19% x 55.000.000 = 10.450.000. Jangan dipakai untuk tes nominal; tarif 19% konsisten dengan tabel B."
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua II Tuan J (pensiunan), PDF hlm 46-47",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "K/2",
+    "tahun": 2024,
+    "uang_pensiun_per_bulan": 6300000
+   },
+   "hasil": {
+    "kategori": "B",
+    "tarif": 0.25,
+    "pph_jan_nov_per_bulan": 15750,
+    "jumlah_jan_nov": 173250,
+    "desember": {
+     "bruto": 75600000,
+     "biaya_pensiun": 2400000,
+     "neto": 73200000,
+     "ptkp": 67500000,
+     "pkp": 5700000,
+     "pph_setahun": 285000,
+     "pph_desember": 111750
+    }
+   },
+   "terverifikasi": true
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua III Tuan P (komisaris tidak teratur), PDF hlm 47-48",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "TK/0",
+    "bulan": "2024-12",
+    "honorarium": 60000000
+   },
+   "hasil": {
+    "kategori": "A",
+    "tarif": 20,
+    "pph": 12000000
+   },
+   "terverifikasi": true
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua IV.1.1 Tuan K (upah harian), PDF hlm 48",
+   "jenis": "pph21_ter_harian",
+   "contoh_resmi": true,
+   "input": {
+    "upah_sehari": 500000,
+    "hari": 20
+   },
+   "hasil": {
+    "tarif_harian": 0.5,
+    "pph_per_hari": 2500
+   },
+   "terverifikasi": true
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua IV.1.2 Tuan L (upah borongan), PDF hlm 49",
+   "jenis": "pph21_ter_harian",
+   "contoh_resmi": true,
+   "input": {
+    "upah_borongan": 4500000,
+    "hari": 10,
+    "rata_rata_sehari": 450000
+   },
+   "hasil": {
+    "tarif_harian": 0,
+    "pph_per_hari": 0
+   },
+   "terverifikasi": true
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua IV.1.3 Tuan M (upah satuan di atas 2,5 juta sehari), PDF hlm 49-50",
+   "jenis": "pph21_harian_pasal17",
+   "contoh_resmi": true,
+   "input": {
+    "upah_sehari": 3000000
+   },
+   "hasil": {
+    "rumus": "5% x 50% x bruto sehari",
+    "pph": 75000
+   },
+   "terverifikasi": true
+  },
+  {
+   "sumber": "PMK 168/2023 Lampiran huruf B Bagian Kedua IV.2 Tuan N (pegawai tidak tetap dibayar bulanan), PDF hlm 50-51",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "TK/0",
+    "tahun": 2024,
+    "bruto_per_bulan": [
+     4000000,
+     7000000,
+     1000000,
+     7000000,
+     8000000,
+     6000000,
+     7000000,
+     8000000,
+     6000000,
+     9000000,
+     2000000,
+     8000000
+    ]
+   },
+   "hasil": {
+    "kategori": "A",
+    "tarif_per_bulan": [
+     0,
+     1.25,
+     0,
+     1.25,
+     1.5,
+     0.75,
+     1.25,
+     1.5,
+     0.75,
+     1.75,
+     0,
+     1.5
+    ],
+    "pph_per_bulan": [
+     0,
+     87500,
+     0,
+     87500,
+     120000,
+     45000,
+     87500,
+     120000,
+     45000,
+     157500,
+     0,
+     120000
+    ],
+    "jumlah": 870000
+   },
+   "terverifikasi": true,
+   "catatan": "Pegawai tidak tetap bulanan memakai TER setiap bulan termasuk Desember, tanpa penghitungan ulang Pasal 17."
+  },
+  {
+   "sumber": "PP 58/2023 Penjelasan Pasal 2 ayat (1) Tuan R, PDF hlm 8-9",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "K/0",
+    "tahun": 2024,
+    "gaji_per_bulan": 10000000,
+    "iuran_pensiun_per_bulan": 100000
+   },
+   "hasil": {
+    "kategori": "A",
+    "tarif": 2,
+    "pph_jan_nov_per_bulan": 200000,
+    "desember": {
+     "bruto": 120000000,
+     "biaya_jabatan": 6000000,
+     "iuran_pensiun": 1200000,
+     "neto": 112800000,
+     "ptkp": 58500000,
+     "pkp": 54300000,
+     "pph_setahun": 2715000,
+     "pph_desember": 515000
+    }
+   },
+   "terverifikasi": true
+  },
+  {
+   "sumber": "PMK 105/2025 Lampiran huruf B contoh 1 Tuan A, PDF hlm 38-39",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "TK/0",
+    "tahun": 2026,
+    "gaji_per_bulan": 8000000
+   },
+   "hasil": {
+    "kategori": "A",
+    "tarif": 1.5,
+    "pph_jan_nov_per_bulan": 120000,
+    "desember": {
+     "bruto": 96000000,
+     "biaya_jabatan": 4800000,
+     "neto": 91200000,
+     "ptkp": 54000000,
+     "pkp": 37200000,
+     "pph_setahun": 1860000,
+     "pph_desember": 540000
+    }
+   },
+   "terverifikasi": true,
+   "catatan": "Seluruh PPh 21 ditanggung pemerintah bila pemberi kerja dan pegawai memenuhi syarat PMK 105/2025."
+  },
+  {
+   "sumber": "PMK 105/2025 Lampiran huruf B contoh 2 Tuan B, PDF hlm 39-41",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "K/1",
+    "tahun": 2026,
+    "bruto_per_bulan": [
+     15000000,
+     10000000,
+     15000000,
+     10000000,
+     10000000,
+     10000000,
+     10000000,
+     10000000,
+     10000000,
+     12000000,
+     12000000,
+     12000000
+    ]
+   },
+   "hasil": {
+    "kategori": "B",
+    "tarif_jan_nov": [
+     6,
+     1.5,
+     6,
+     1.5,
+     1.5,
+     1.5,
+     1.5,
+     1.5,
+     1.5,
+     3,
+     3
+    ],
+    "pph_jan_nov": [
+     900000,
+     150000,
+     900000,
+     150000,
+     150000,
+     150000,
+     150000,
+     150000,
+     150000,
+     360000,
+     360000
+    ],
+    "jumlah_jan_nov": 3570000,
+    "desember": {
+     "bruto": 136000000,
+     "biaya_jabatan": 6000000,
+     "neto": 130000000,
+     "ptkp": 63000000,
+     "pkp": 67000000,
+     "pph_setahun": 4050000,
+     "pph_desember": 480000
+    }
+   },
+   "terverifikasi": true
+  },
+  {
+   "sumber": "PMK 105/2025 Lampiran huruf B contoh 3 Tuan C, PDF hlm 41-42",
+   "jenis": "pph21_ter",
+   "contoh_resmi": true,
+   "input": {
+    "status_ptkp": "TK/0",
+    "tahun": 2026,
+    "mulai": "2026-03",
+    "bruto_per_bulan_mar_des": [
+     9000000,
+     9000000,
+     9000000,
+     9000000,
+     9000000,
+     9000000,
+     9000000,
+     14000000,
+     9000000,
+     9000000
+    ]
+   },
+   "hasil": {
+    "kategori": "A",
+    "tarif": {
+     "9000000": 1.75,
+     "14000000": 6
+    },
+    "pph": {
+     "9000000": 157500,
+     "14000000": 840000
+    },
+    "jumlah_mar_nov": 2100000,
+    "desember": {
+     "bruto": 95000000,
+     "biaya_jabatan": 4750000,
+     "neto": 90250000,
+     "ptkp": 54000000,
+     "pkp": 36250000,
+     "pph_setahun": 1812500,
+     "pph_desember": -287500
+    }
+   },
+   "terverifikasi": true,
+   "catatan": "Baris Total tabel di dokumen menulis 1.822.500, sedangkan rincian menghasilkan 1.812.500; pakai rincian. Biaya jabatan maksimal 10 x 500.000; neto tidak disetahunkan."
+  },
+  {
+   "sumber": "BPJS Ketenagakerjaan, artikel 17 Des 2025, contoh gaji Rp6.000.000",
+   "jenis": "bpjs",
+   "contoh_resmi": true,
+   "input": {
+    "upah": 6000000
+   },
+   "hasil": {
+    "jht_pekerja": 120000,
+    "jht_pemberi_kerja": 222000,
+    "jkm_pemberi_kerja": 18000,
+    "jp_pekerja": 60000,
+    "jp_pemberi_kerja": 120000,
+    "jkp_pemerintah": 13200,
+    "jkp_rekomposisi_jkk": 8400,
+    "jkp_rekomposisi_jkm": 6000
+   },
+   "terverifikasi": true,
+   "catatan": "Rekomposisi JKM Rp6.000 dalam artikel tidak sejalan dengan PP 6/2025 Pasal 11 ayat (5) yang hanya menyebut JKK; bagian JKP bukan tambahan beban pemberi kerja."
+  },
+  {
+   "sumber": "Turunan rumus Perpres 82/2018 Pasal 30 jo. Perpres 64/2020 dan Pasal 32 jo. Perpres 59/2024 (bukan contoh resmi)",
+   "jenis": "bpjs",
+   "contoh_resmi": false,
+   "input": {
+    "upah_pokok_dan_tunjangan_tetap": 15000000
+   },
+   "hasil": {
+    "dasar_iuran": 12000000,
+    "kesehatan_pemberi_kerja": 480000,
+    "kesehatan_pekerja": 120000
+   },
+   "terverifikasi": true,
+   "catatan": "Dihitung langsung dari bunyi pasal; contoh hitung resmi BPJS Kesehatan tidak ditemukan."
+  },
+  {
+   "sumber": "Turunan rumus PP 35/2021 Pasal 31 ayat (1) dan Pasal 32 ayat (2), PDF hlm 18-20 (bukan contoh resmi)",
+   "jenis": "lembur",
+   "contoh_resmi": false,
+   "input": {
+    "upah_sebulan": 3460000,
+    "jenis_hari": "hari_kerja",
+    "jam_lembur": 4
+   },
+   "hasil": {
+    "upah_sejam": 20000,
+    "upah_lembur": 150000
+   },
+   "terverifikasi": true,
+   "catatan": "1,5 x 20.000 + 3 x 2 x 20.000. Upah dipilih agar habis dibagi 173."
+  },
+  {
+   "sumber": "Turunan rumus PP 35/2021 Pasal 31 ayat (2) huruf a, PDF hlm 19 (bukan contoh resmi)",
+   "jenis": "lembur",
+   "contoh_resmi": false,
+   "input": {
+    "upah_sebulan": 3460000,
+    "jenis_hari": "libur_pola_6_hari",
+    "jam_lembur": 9
+   },
+   "hasil": {
+    "upah_sejam": 20000,
+    "upah_lembur": 420000
+   },
+   "terverifikasi": true,
+   "catatan": "7 x 2 x 20.000 + 1 x 3 x 20.000 + 1 x 4 x 20.000."
+  },
+  {
+   "sumber": "Turunan rumus PP 35/2021 Pasal 31 ayat (3), PDF hlm 19-20 (bukan contoh resmi)",
+   "jenis": "lembur",
+   "contoh_resmi": false,
+   "input": {
+    "upah_sebulan": 3460000,
+    "jenis_hari": "libur_pola_5_hari",
+    "jam_lembur": 10
+   },
+   "hasil": {
+    "upah_sejam": 20000,
+    "upah_lembur": 460000
+   },
+   "terverifikasi": true,
+   "catatan": "8 x 2 x 20.000 + 1 x 3 x 20.000 + 1 x 4 x 20.000."
+  }
+ ]
+}
