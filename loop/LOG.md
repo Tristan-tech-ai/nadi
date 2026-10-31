@@ -190,3 +190,9 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 1 Nov 2026 tick 188 | Tinjauan Q-26 (docs/quality/review-q26.md): sidik 13857dd4 = db, hitung_lintas_topi definer + pembatas usaha diterima; tes ulang terpisah 8 berkas dimulai saat tanggal WIB != UTC |
 | 1 Nov 2026 tick 189 | Q-26 laporan agen (52/52 setelah merah 25, regresi 11 berkas gagal=[]); kueri loop current_date 0, pemicu aktif, exec tertutup; brief Q-27 ditulis; menunggu tes ulang terpisah |
 | 1 Nov 2026 tick 190 | Rencana uji Q-27 ditulis (docs/quality/rencana-uji-q27.md); menunggu tes ulang terpisah Q-26 |
+| 1 Nov 2026 tick 192 | Riset beban per jam (docs/research/beban-per-jam.md): jam = 40 tetap di app.beban_orang, poin per jam ditunda sampai F3-06; Q-28 ditambah; Q-27 di agen latar; Q-26 menunggu tes ulang |
+| 1 Nov 2026 tick 192 | Q-26 SELESAI (tes ulang terpisah 8 berkas gagal=[] saat WIB != UTC, Vercel READY b7e8032, e2e produksi kerja 47,3 dtk) |
+| 1 Nov 2026 tick 193 | Temuan: 5 kebijakan RLS masih klaim JWT (slip_gaji, lembur, pengajuan_izin, berkas ubah/hapus), docs/quality/klaim-kebijakan-sisa.md; Q-23 diperluas jadi wajib prioritas 20; brief siap |
+| 1 Nov 2026 tick 194 | Rencana uji Q-23 (docs/quality/rencana-uji-q23.md): orang_saya/peran_aktif/anggota_aktif memeriksa anggota.aktif, jadi hanya cabang pengelola() yang terbuka; Q-27 belum push |
+| 1 Nov 2026 tick 195 | Bukti celah Q-23 (19/19 slip terbaca dengan JWT basi); agen Q-23 dimulai; Q-27 diverifikasi kecuali produksi (Vercel tidak men-deploy push agen 846c2df), docs/quality/review-q27.md |
+| 1 Nov 2026 tick 196 | Q-23 diverifikasi (JWT basi 19 slip -> 0, klaim 0, sidik ebf335d2); CI GitHub merah 25+ push karena tes buffer soket, diperbaiki bersama tes slip_gaji bergantung tanggal (27/27); docs/quality/ci-merah.md |
