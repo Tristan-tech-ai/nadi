@@ -94,3 +94,24 @@ describe("lembur di slip (F1-05B)", () => {
     expect(b.peringatan.join(" ")).toContain("2026-11-07 (13 jam) melebihi batas");
   });
 });
+
+describe("insentif beban kerja di slip (F3-05)", () => {
+  // PP 36/2021 Pasal 8 ayat (2) dan Pasal 10: insentif = pendapatan non-upah. Masuk bruto PPh 21 bulan dibayar; dasar iuran BPJS
+  // di Nadi tetap pokok + tunjangan tetap (perilaku Nadi, belum diverifikasi ke aturan BPJS: docs/design/kolam-bonus-beban.md).
+  it("Rp500.000 untuk gaji Rp8.000.000 TK/0: PPh 21 naik ke TER A 1,75%, iuran BPJS tidak berubah", () => {
+    const tanpa = susunSlip({ pokok: 8_000_000, ptkp: "TK/0" }, ATURAN, 10).komponen;
+    const dengan = susunSlip({ pokok: 8_000_000, ptkp: "TK/0" }, ATURAN, 10, undefined, [], 500_000).komponen;
+    expect(dengan.find((k) => k.kode === "insentif_beban")).toEqual({
+      kode: "insentif_beban", label: "Insentif beban kerja", jenis: "pendapatan", nilai: 500_000, sumber: "PP 36/2021 Pasal 8 dan 10",
+    });
+    expect(nilai(tanpa, "pph21")).toBe(125_448);
+    expect(nilai(dengan, "pph21")).toBe(155_106);
+    for (const kode of ["bpjs_kes_pk", "jkk", "jkm", "jht_pk", "bpjs_kes", "jht"]) expect(nilai(dengan, kode), kode).toBe(nilai(tanpa, kode));
+    expect(nilai(tanpa, "insentif_beban")).toBeUndefined();
+  });
+
+  it("insentif nol atau tidak bulat: tidak ada komponen, bukan ditebak", () => {
+    expect(nilai(susunSlip({ pokok: 3_000_000 }, ATURAN, 10, undefined, [], 0).komponen, "insentif_beban")).toBeUndefined();
+    expect(nilai(susunSlip({ pokok: 3_000_000 }, ATURAN, 10, undefined, [], 12.5).komponen, "insentif_beban")).toBeUndefined();
+  });
+});

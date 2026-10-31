@@ -54,16 +54,24 @@ export async function siapkanGaji(_: HasilGaji, form: FormData): Promise<HasilGa
   const lemburDari = new Map<string, LemburHari[]>();
   for (const l of lem ?? []) lemburDari.set(l.orang_id, [...(lemburDari.get(l.orang_id) ?? []), { tanggal: l.tanggal, jenis: l.jenis as JenisHariLembur, jam: l.jam }]);
 
+  // Insentif beban kerja dari kolam yang disetujui untuk bulan ini (F3-05; RLS kolam_bagian: pemilik/admin).
+  const { data: kb } = await supabase.from("kolam_bagian").select("orang_id, rupiah, kolam_bonus!inner(bulan, status)").eq("kolam_bonus.bulan", awal).eq("kolam_bonus.status", "disetujui");
+  const insentifDari = new Map<string, number>((kb ?? []).map((b) => [b.orang_id as string, Number(b.rupiah)]));
+
   let ditahan = 0;
   for (const o of digaji) {
     const rw = riwayat.get(o.id);
-    const { komponen, peringatan } = susunSlip(o.g, aturan, bln, rw && rw.bulan === 11 ? rw : undefined, lemburDari.get(o.id));
+    const { komponen, peringatan } = susunSlip(o.g, aturan, bln, rw && rw.bulan === 11 ? rw : undefined, lemburDari.get(o.id), insentifDari.get(o.id) ?? 0);
     const { data, error } = await supabase.rpc("simpan_slip", { p_periode: per, p_orang: o.id, p_komponen: komponen, p_peringatan: peringatan });
     if (error) return { galat: error.code === "55000" ? error.message : "Sebagian slip gagal disimpan. Coba siapkan ulang; slip yang sudah tersimpan tidak hilang." };
     if ((data as { ditahan: boolean }).ditahan) ditahan++;
   }
   revalidatePath("/app/gaji");
-  return { pesan: `Draf gaji siap untuk ${digaji.length} orang.${ditahan ? ` ${ditahan} ditahan Gerbang Gaji; periksa alasannya.` : ""}` };
+  const tanpaSlip = [...insentifDari.keys()].filter((id) => !digaji.some((o) => o.id === id)).length;
+  return {
+    pesan: `Draf gaji siap untuk ${digaji.length} orang.${ditahan ? ` ${ditahan} ditahan Gerbang Gaji; periksa alasannya.` : ""}${
+      tanpaSlip ? ` ${tanpaSlip} orang punya insentif beban kerja bulan ini tetapi gaji pokoknya belum diisi, jadi slipnya belum dibuat.` : ""}`,
+  };
 }
 
 export async function setujuiGaji(_: HasilGaji, form: FormData): Promise<HasilGaji> {
