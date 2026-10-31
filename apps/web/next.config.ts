@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Gerbang loop membangun ke folder terpisah (NEXT_DIST_DIR=.next-gate) agar tidak menimpa build lokal untuk e2e.
+  ...(process.env.NEXT_DIST_DIR ? { distDir: process.env.NEXT_DIST_DIR } : {}),
   cacheComponents: true,
   // Header keamanan untuk service worker (docs bawaan Next 02-guides/progressive-web-apps.md).
   async headers() {
