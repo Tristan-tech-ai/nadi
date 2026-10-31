@@ -63,16 +63,11 @@ begin
     perform pg_temp.cek('tanpa cek wajah lolos ditolak', false);
   exception when others then perform pg_temp.cek('tanpa cek wajah lolos ditolak', sqlerrm like 'Cek wajah%', sqlerrm);
   end;
-  begin
-    perform public.absen_catat(tp, kode_basi, 'absen.masuk', ok_wajah);
-    perform pg_temp.cek('kode dua langkah lalu (kedaluwarsa) ditolak', false);
-  exception when others then perform pg_temp.cek('kode dua langkah lalu (kedaluwarsa) ditolak', sqlerrm like '%kedaluwarsa%', sqlerrm);
-  end;
-  begin
-    perform public.absen_catat(tp, '000000', 'absen.masuk', ok_wajah);
-    perform pg_temp.cek('kode karangan ditolak', kode_kini = '000000' or kode_lalu = '000000');
-  exception when others then perform pg_temp.cek('kode karangan ditolak', sqlerrm like '%kedaluwarsa%', sqlerrm);
-  end;
+  -- Sejak Q-13 kode salah dikembalikan sebagai galat berupa data (dicatat untuk penguncian), bukan exception.
+  r := public.absen_catat(tp, kode_basi, 'absen.masuk', ok_wajah);
+  perform pg_temp.cek('kode dua langkah lalu (kedaluwarsa) ditolak', r ->> 'galat' like '%kedaluwarsa%', r::text);
+  r := public.absen_catat(tp, '000000', 'absen.masuk', ok_wajah);
+  perform pg_temp.cek('kode karangan ditolak', kode_kini = '000000' or kode_lalu = '000000' or r ->> 'galat' like '%kedaluwarsa%', r::text);
   begin
     perform public.absen_catat(tb, kode_kini, 'absen.masuk', ok_wajah);
     perform pg_temp.cek('tempat usaha lain ditolak', false);
