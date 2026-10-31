@@ -44,3 +44,5 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 11:05 | F1-03 (sebagian) | database izin otopilot: kebijakan_izin, pengajuan_izin, ajukan_izin, izin_ringkas, cabang izin.setujui; tes SQL 26/26, regresi 13/13, sidik cocok; UI menyusul | lihat git log |
 | 31 Okt 2026 11:30 | F1-03 | izin dan cuti selesai: UI /app/izin, aturan izin di Usahamu, nav Izin; e2e izin lokal + produksi lulus (otomatis 1 hari, 3 hari ke Feed lalu disetujui) | bb225f7 |
 | 31 Okt 2026 11:45 | F1-04 | Gerbang Gaji: 6 sinyal siluman, tes SQL 17/17 (0 positif palsu pada korpus 30 karyawan), indeks FK token_kios | lihat git log |
+| 31 Okt 2026 12:00 | Q-03 | pemantau kuota Free (DB 34 MB = 6,5%, storage 1,5 MB), peringatan 80%, tes 7/7; cadangan dipisah ke Q-03B | 8213fbc |
+| 31 Okt 2026 12:10 | F1-05 (sebagian) | riset aturan gaji resmi (dicek manual 3 baris TER + 1 contoh), modul PPh 21 TER/BPJS/lembur, tes 14/14 cocok contoh resmi, merah sengaja terbukti | 8eb9c94 |
