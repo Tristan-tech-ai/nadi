@@ -43,3 +43,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 10:45 | F1-02B | tautan tablet absen tanpa akun: token_kios (tes SQL 20/20, sidik cocok), /kios/tablet, kartu Tablet absen; e2e tablet 2/2 lokal + produksi; uji wajah nyata ke F1-02D (terblokir) | 715e5ac |
 | 31 Okt 2026 11:05 | F1-03 (sebagian) | database izin otopilot: kebijakan_izin, pengajuan_izin, ajukan_izin, izin_ringkas, cabang izin.setujui; tes SQL 26/26, regresi 13/13, sidik cocok; UI menyusul | lihat git log |
 | 31 Okt 2026 11:30 | F1-03 | izin dan cuti selesai: UI /app/izin, aturan izin di Usahamu, nav Izin; e2e izin lokal + produksi lulus (otomatis 1 hari, 3 hari ke Feed lalu disetujui) | bb225f7 |
+| 31 Okt 2026 11:45 | F1-04 | Gerbang Gaji: 6 sinyal siluman, tes SQL 17/17 (0 positif palsu pada korpus 30 karyawan), indeks FK token_kios | lihat git log |

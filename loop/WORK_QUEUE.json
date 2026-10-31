@@ -359,8 +359,10 @@
    "accept": "tes SQL: 6 skenario pegawai siluman tertangkap, 0 positif palsu pada data bersih korpus",
    "how": "",
    "blocked_by": "F1-02",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T11:23:53",
+   "result": "commit 923553f: migrasi gerbang_gaji (sidik b0e01d8e cocok), RPC public.gerbang_gaji(tanggal); tes SQL gerbang_gaji 17/17: 6 siluman tertangkap dengan kode tepat, 0 temuan pada 30 karyawan korpus karyawan-30 + karyawan baru + izin sakit (pemilik dan admin), sinyal sama menangkap 32 bila digeser 40 hari; get_advisors tanpa ERROR; rancangan docs/research/gerbang-gaji.md"
   },
   {
    "id": "F1-05",
