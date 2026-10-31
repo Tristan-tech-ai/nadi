@@ -1682,6 +1682,34 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-01T02:56:44"
+  },
+  {
+   "id": "F3-07B",
+   "fase": "F3",
+   "kind": "build",
+   "priority": 34,
+   "size": "m",
+   "wajib": false,
+   "title": "Kartu 'Beban dan kabar tim' (sinyal risiko beban)",
+   "accept": "fungsi sinyal per orang per minggu (beban > 1,5x rata-rata tim 3 minggu berturut-turut dengan n>=3, lintas topi >=2x dan >=3 kerja, izin sakit >=3 hari dan >=2x rata-rata 12 minggu) dihitung di zona usaha; kartu info untuk pemilik saja (untuk_peran {pemilik}, app.peran_aktif), idempoten per orang per minggu, teks angka tanpa kata berisiko/keluar dan tanpa alasan/bukti sakit; tes SQL (2 minggu tidak, tim 2 orang tidak, 0->1 lintas tidak, riwayat <12 minggu tanpa sinyal sakit, staf/admin 42501, JWT lama ditolak) + e2e + foto 390/1440 terang/gelap",
+   "how": "docs/research/sinyal-risiko-beban.md, docs/design/sinyal-beban-layar.md; setelah Q-24 (zona) dan F3-06 bila jam jadwal diperlukan",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T03:18:12"
+  },
+  {
+   "id": "Q-25",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 27,
+   "size": "m",
+   "wajib": true,
+   "title": "Aplikasi memakai zona usaha, bukan WITA tetap (tenggat, hari ini, format jam)",
+   "accept": "tenggat kerja dari datetime-local ditafsirkan di zona usaha (bukan +08); hariIni/formatJam/formatTanggal/formatTenggat tanpa bawaan Asia/Makassar (zona wajib, TypeScript menunjuk pemanggil); zona usaha dibaca dari sesi; vitest Jakarta/Jayapura 23.30 lokal (merah dulu); tes SQL buat_kerja tenggat teks lokal usaha WIB; e2e kerja.spec usaha WIB: jam tenggat tampil = yang diketik; gate hijau; Vercel READY + e2e produksi",
+   "how": "docs/quality/zona-aplikasi.md; setelah Q-24 (app.zona)",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T03:26:16"
   }
  ]
 }
