@@ -90,7 +90,8 @@ test("wawancara suara: tamu merekam dan mengirim jawaban pertanyaan 1 setelah me
 
   // Layar penilai: klip lewat tautan bertanda, transkrip whisper di perangkat, ringkasan rubrik dari transkrip.
   // route.fulfill dengan berkas ratusan MB membuat Chromium tumbang; berkas dilayani server statis lokal lewat pengalihan 302.
-  const cache = E.E2E_MODEL_CACHE;
+  // Hanya untuk server lokal http: halaman https (produksi) tidak boleh mengambil dari http://localhost, jadi model diunduh asli.
+  const cache = (process.env.E2E_BASE_URL ?? "http://").startsWith("http://") ? E.E2E_MODEL_CACHE : undefined;
   const srv = cache
     ? createServer((req, res) => {
         const f = join(cache, decodeURIComponent(new URL(req.url ?? "/", "http://x").pathname));
