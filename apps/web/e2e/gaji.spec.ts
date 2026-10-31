@@ -20,7 +20,7 @@ const NAMA_USAHA_LEMBUR = "Uji Lembur E2E";
 
 test.beforeEach(({ page }, info) => {
   void page;
-  test.skip(info.project.name !== "desktop" || !E.E2E_SANDI || !E.NEXT_PUBLIC_SUPABASE_URL, "sekali (desktop), butuh .env.local dan .env.e2e.local");
+  test.skip(!info.project.name.startsWith("pindah-") || !E.E2E_SANDI || !E.NEXT_PUBLIC_SUPABASE_URL, "sekali (proyek pindah-*, desktop), butuh .env.local dan .env.e2e.local");
 });
 // Berurutan: usaha aktif melekat di akun A (klaim JWT), jadi dua tes yang memanggil pindah_perusahaan tidak boleh jalan bersamaan.
 test.describe.configure({ mode: "serial" });

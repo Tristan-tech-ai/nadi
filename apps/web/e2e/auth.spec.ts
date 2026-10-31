@@ -17,7 +17,7 @@ const E = envUji();
 test.describe.configure({ mode: "serial" });
 test.beforeEach(({ page }, info) => {
   void page;
-  test.skip(info.project.name !== "desktop" || !E.E2E_SANDI, "alur akun dijalankan sekali (desktop) dan butuh .env.e2e.local");
+  test.skip((info.project.name !== "desktop" && info.project.name !== "pindah-auth") || !E.E2E_SANDI, "alur akun dijalankan sekali (desktop) dan butuh .env.e2e.local");
 });
 
 async function masukSebagai(page: Page, email: string) {
@@ -81,7 +81,7 @@ test("pemilik B tidak melihat usaha A", async ({ page }) => {
   await expect(page.getByRole("main").getByText("Warung Uji A")).toHaveCount(0);
 });
 
-test("pemilik A pindah antar dua usaha, klaim ikut berganti", async ({ page, context }) => {
+test("pemilik A pindah antar dua usaha, klaim ikut berganti", { tag: "@pindah" }, async ({ page, context }) => {
   await masukSebagai(page, E.E2E_EMAIL_A);
   await pastikanUsaha(page, "Warung Uji A");
   await page.goto("/app/perusahaan");
@@ -95,6 +95,14 @@ test("pemilik A pindah antar dua usaha, klaim ikut berganti", async ({ page, con
   await page.waitForURL((u) => u.pathname === "/app");
   const sesudah = klaimDariCookie(await context.cookies()).app_metadata.pid;
   expect(sesudah).not.toBe(sebelum);
+  // Kembalikan akun A ke usaha bawaan tes lain (Warung Uji A), kalau tidak run berikutnya mulai di usaha yang salah.
+  await page.goto("/app/perusahaan");
+  const bukaWarung = page.getByRole("listitem").filter({ hasText: "Warung Uji A" }).getByRole("button", { name: "Buka" });
+  if (await bukaWarung.count()) {
+    await bukaWarung.first().click();
+    await page.waitForURL((u) => u.pathname === "/app");
+  }
+  await expect(page.getByTestId("nama-perusahaan")).toHaveText("Warung Uji A");
 });
 
 test("pemilik membuat akun staf; staf masuk tanpa email dan ditolak di halaman pengelola", async ({ page, browser }) => {

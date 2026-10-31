@@ -21,7 +21,7 @@ const NAMA_USAHA = "Uji Topi E2E";
 
 test.beforeEach(({ page }, info) => {
   void page;
-  test.skip(info.project.name !== "desktop" || !E.E2E_SANDI || !E.NEXT_PUBLIC_SUPABASE_URL, "sekali (desktop), butuh .env.local dan .env.e2e.local");
+  test.skip(!info.project.name.startsWith("pindah-") || !E.E2E_SANDI || !E.NEXT_PUBLIC_SUPABASE_URL, "sekali (proyek pindah-*, desktop), butuh .env.local dan .env.e2e.local");
 });
 
 test("impor 30 karyawan dari Excel: semua bertopi, kerja lintas topi tertanda, tampil di halaman Orang", async ({ page }) => {

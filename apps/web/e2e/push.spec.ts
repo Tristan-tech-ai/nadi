@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync } from "node:fs";
+import { mkdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium, expect, test, type BrowserContext } from "@playwright/test";
@@ -17,7 +17,13 @@ function envUji(): Record<string, string> {
 const E = envUji();
 
 // Chrome menolak push di profil penyamaran ("Registration failed - permission denied"), padahal konteks bawaan Playwright
-// adalah profil seperti itu. Jadi tes ini memakai profil persisten sekali pakai di Google Chrome (layanan push FCM sungguhan).
+// adalah profil seperti itu. Jadi tes ini memakai profil persisten di Google Chrome (layanan push FCM sungguhan).
+// Profil dipakai ulang antar jalan: registrasi GCM profil baru butuh 6-29 detik sebelum pushManager.subscribe menjawab (Q-15).
+function profilPush(): string {
+  const dir = join(tmpdir(), "nadi-push-profil");
+  mkdirSync(dir, { recursive: true });
+  return dir;
+}
 
 // Kedua tes memakai akun dan usaha yang sama; berurutan agar jumlah perangkat berlangganan tidak saling mengganggu.
 test.describe.configure({ mode: "serial" });
@@ -28,8 +34,8 @@ test.beforeEach(({ page }, info) => {
 });
 
 test("nyalakan pemberitahuan lalu terima push uji", async ({ baseURL }) => {
-  test.setTimeout(60_000);
-  const context = await chromium.launchPersistentContext(mkdtempSync(join(tmpdir(), "nadi-push-")), {
+  test.setTimeout(150_000);
+  const context = await chromium.launchPersistentContext(profilPush(), {
     channel: "chrome",
     headless: true,
     baseURL,
@@ -54,7 +60,7 @@ test("nyalakan pemberitahuan lalu terima push uji", async ({ baseURL }) => {
   await page.evaluate(async () => (await (await navigator.serviceWorker.ready).getNotifications()).forEach((n) => n.close()));
 
   await page.getByTestId("nyalakan-pemberitahuan").click();
-  await expect(page.getByTestId("pesan-pemberitahuan")).toHaveText(/Pemberitahuan uji terkirim ke \d+ perangkat/, { timeout: 20_000 });
+  await expect(page.getByTestId("pesan-pemberitahuan")).toHaveText(/Pemberitahuan uji terkirim ke \d+ perangkat/, { timeout: 90_000 });
   await expect(bagian).toHaveAttribute("data-keadaan", "menyala");
 
   await expect
@@ -71,7 +77,7 @@ test("nyalakan pemberitahuan lalu terima push uji", async ({ baseURL }) => {
 test("usulan baru memunculkan pemberitahuan tanpa ada yang menekan tombol", async ({ baseURL }) => {
   test.setTimeout(9 * 60_000);
   const envLokal = Object.fromEntries(readFileSync(join(__dirname, "..", ".env.local"), "utf8").split(/\r?\n/).filter((l) => l.includes("=")).map((l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1).trim()]));
-  const context: BrowserContext = await chromium.launchPersistentContext(mkdtempSync(join(tmpdir(), "nadi-push-")), { channel: "chrome", headless: true, baseURL, locale: "id-ID" });
+  const context: BrowserContext = await chromium.launchPersistentContext(profilPush(), { channel: "chrome", headless: true, baseURL, locale: "id-ID" });
   await context.grantPermissions(["notifications"]);
   const page = await context.newPage();
   await page.goto("/masuk?next=/app/perusahaan");
@@ -83,7 +89,7 @@ test("usulan baru memunculkan pemberitahuan tanpa ada yang menekan tombol", asyn
   await expect(bagian).not.toHaveAttribute("data-keadaan", "memeriksa");
   if ((await bagian.getAttribute("data-keadaan")) !== "menyala") {
     await page.getByTestId("nyalakan-pemberitahuan").click();
-    await expect(bagian).toHaveAttribute("data-keadaan", "menyala", { timeout: 20_000 });
+    await expect(bagian).toHaveAttribute("data-keadaan", "menyala", { timeout: 90_000 });
   }
   await page.evaluate(async () => (await (await navigator.serviceWorker.ready).getNotifications()).forEach((n) => n.close()));
 
