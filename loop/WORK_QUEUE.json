@@ -1356,8 +1356,10 @@
    "accept": "loop/gate.sh membangun ke distDir terpisah (mis. NEXT_DIST_DIR=.next-gate dibaca next.config.ts) sehingga gate di antara pnpm build dan e2e tidak menanam kunci placeholder di bundle klien; dibuktikan: build, gate, lalu e2e lamar tetap lulus",
    "how": "next.config.ts distDir dari env; gate.sh step build dengan env itu",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T15:11:53"
+   "status": "done",
+   "created": "2026-10-31T15:11:53",
+   "done": "2026-10-31T15:29:12",
+   "result": "commit fa952d6+56f29ee; next.config.ts distDir dari NEXT_DIST_DIR, gate.sh build NEXT_DIST_DIR=.next-gate; bukti: pnpm build (BUILD_ID 1793435186) -> gate LULUS -> BUILD_ID tetap 1793435186 -> e2e lamar 1 passed; produksi READY 56f29eed, / 200"
   }
  ]
 }
