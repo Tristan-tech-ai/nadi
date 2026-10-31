@@ -1424,8 +1424,10 @@
    "accept": "absen_catat menolak setelah N kode salah per orang per menit; login staf dikunci sementara setelah N PIN salah per akun (bukan per IP); cek wajah diperlakukan sebagai sinyal lunak dengan penanda di laporan absen; tes SQL",
    "how": "docs/quality/keamanan-f0.md S6, S7, A7, A8",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T16:49:03"
+   "status": "done",
+   "created": "2026-10-31T16:49:03",
+   "done": "2026-10-31T18:05:15",
+   "result": "commit b70432c + 912d75b + fbcd2a3; migrasi percobaan_q13 (sidik 75d7632e) + percobaan_q13_jam (36e7cad9), 36 migrasi; tes percobaan_q13 merah 7/11 sebelum, 12/12 sesudah; regresi absen_qr 21/21 (diperbarui: kode salah jadi galat data), akun_staf 13/13, keamanan_q01 20/20; e2e auth+absen+tablet lokal 11/11 dan auth+absen produksi 9/9 (READY fbcd2a3d); hook verifikasi sandi Supabase hanya Teams/Enterprise, dicatat di LEARN dan DECISIONS"
   },
   {
    "id": "Q-14",

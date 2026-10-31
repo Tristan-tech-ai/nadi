@@ -69,3 +69,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 18:05 | Q-11 | lampiran lamaran tanpa akun hanya jadi usulan pelamar; tes 12/12 (merah sengaja), baca-berkas v9 hash cocok, e2e lamar lulus lokal + produksi | 49a8482 |
 | 31 Okt 2026 18:50 | Q-12 (sebagian) | migrasi keamanan_q12 + tes 19/19 (merah 14/20 dulu), regresi 11/12 tes lama hijau, isolasi_tenant diperbarui untuk aturan baca staf, e2e produksi 12/12 | 6ebd774 |
 | 31 Okt 2026 19:00 | Q-12 | selesai: regresi 12 tes SQL lama gagal=[] (isolasi_tenant 38, keputusan 23), keamanan_q12 19/19, e2e produksi 12/12 | 0ba85ba |
+| 31 Okt 2026 19:40 | Q-13 | penguncian kode absen (5/menit) dan PIN staf (5/15 menit, banned_until), absen_ragu; tes 7/11 merah lalu 12/12, absen_qr 21, akun_staf 13, keamanan_q01 20; e2e auth+absen lulus lokal dan produksi | fbcd2a3 |
