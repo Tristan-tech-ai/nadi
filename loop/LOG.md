@@ -51,3 +51,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 13:05 | F1-05 | slip gaji selesai: isian gaji/PTKP, layar Gaji, slip tautan; e2e lokal + produksi (PPh 21 Rp125.448, neto Rp7.634.552); F1-05B lembur ditambahkan | c7042d0 |
 | 31 Okt 2026 13:10 | F1-06 (mulai) | rancangan docs/research/keputusan.md: jejak, pembatalan, p50, titik pakai izin.otopilot dan usulan.rute | lihat git log |
 | 31 Okt 2026 13:25 | F1-06 (sebagian) | database gerbang keputusan: jejak, pembatalan membalik akibat, rute usulan uang besar ke pemilik, p50/p95; tes SQL 22/22; kartu UI menyusul | lihat git log |
+| 31 Okt 2026 13:40 | F1-06 | gerbang keputusan selesai: kartu jejak + batal, regresi SQL lulus, e2e lokal + produksi, p50 izin 11,1 ms / rute 1,2 ms; F1-06B tingkat model ditambahkan | 2640a2b |

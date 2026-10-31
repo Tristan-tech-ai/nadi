@@ -391,8 +391,10 @@
    "accept": "latensi p50 tercatat; setiap keputusan otomatis punya jejak alasan dan bisa dibatalkan",
    "how": "",
    "blocked_by": "R-02,F1-03",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T13:29:46",
+   "result": "commit 9028ddf/2640a2b: migrasi keputusan (sidik 2565b173) tes SQL 22/22, regresi izin_otopilot 26/26 dan topi_impor 13/13; kartu Keputusan otomatis di /app/perusahaan; e2e izin lokal + produksi membatalkan izin otomatis dari kartu lalu pengajuan kembali menunggu; p50 produksi izin.otopilot 11,1 ms, usulan.rute 1,2 ms (docs/quality/keputusan.md). Tingkat model dipisah ke F1-06B"
   },
   {
    "id": "F2-01",
@@ -1326,6 +1328,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-10-31T12:48:05"
+  },
+  {
+   "id": "F1-06B",
+   "fase": "F1",
+   "kind": "build",
+   "priority": 25,
+   "size": "m",
+   "wajib": false,
+   "title": "Tingkat model di gerbang keputusan (model ringan, lalu Jev bila kartu ada)",
+   "accept": "usulan yang tidak tertangkap aturan dinilai Edge Function model ringan dengan keluaran {pilihan, peluang, yakin}; yakin >= 0,85 diterapkan otomatis dan tercatat tingkat model dengan latensi; di bawahnya tetap ke manusia; eval 20 usulan sintetis berlabel dengan akurasi dan p50 tercatat",
+   "how": "pg_net dari trigger ke Edge Function putuskan, ID model dari konfigurasi",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T13:29:46"
   }
  ]
 }
