@@ -10,20 +10,25 @@ const SUMBER: Record<string, string> = { lempar: "Dari Lempar Saja", analis: "Da
 type Topi = { nama: string; keahlian: unknown; tanggung_jawab: unknown };
 type UsulanFeed = { id: string; aksi: string; payload: unknown; berkas_id: string | null };
 
-/** Skor rubrik untuk usulan pelamar yang datang lewat lowongan bertopi. CV dinilai tanpa atribut terlindungi (F2-02). */
-async function catatanPelamar(supabase: Awaited<ReturnType<typeof createClient>>, usulan: UsulanFeed[]): Promise<Map<string, string>> {
-  const hasil = new Map<string, string>();
+type Pelamar = { catatan?: string; tautan?: { href: string; label: string } };
+type LamaranFeed = { id: string; berkas_id: string; lowongan: { topi: Topi | null } | null; jawaban_wawancara: { count: number }[] };
+
+/** Skor rubrik untuk usulan pelamar yang datang lewat lowongan bertopi (CV dinilai tanpa atribut terlindungi, F2-02),
+ *  dan tautan ke wawancara suaranya bila ada jawaban (F2-03). */
+async function catatanPelamar(supabase: Awaited<ReturnType<typeof createClient>>, usulan: UsulanFeed[]): Promise<Map<string, Pelamar>> {
+  const hasil = new Map<string, Pelamar>();
   const pelamar = usulan.filter((u) => u.aksi === "rekrut.pelamar" && u.berkas_id);
   if (!pelamar.length) return hasil;
-  const { data } = await supabase.from("lamaran").select("berkas_id, lowongan(topi(nama, keahlian, tanggung_jawab))").in("berkas_id", pelamar.map((u) => u.berkas_id!));
-  const topiDari = new Map<string, Topi>();
-  for (const l of (data ?? []) as unknown as { berkas_id: string; lowongan: { topi: Topi | null } | null }[]) if (l.lowongan?.topi) topiDari.set(l.berkas_id, l.lowongan.topi);
+  const { data } = await supabase.from("lamaran").select("id, berkas_id, lowongan(topi(nama, keahlian, tanggung_jawab)), jawaban_wawancara(count)").in("berkas_id", pelamar.map((u) => u.berkas_id!));
+  const lamaranDari = new Map(((data ?? []) as unknown as LamaranFeed[]).map((l) => [l.berkas_id, l]));
   for (const u of pelamar) {
-    const topi = topiDari.get(u.berkas_id!);
-    if (!topi) continue;
+    const l = lamaranDari.get(u.berkas_id!);
+    if (!l) continue;
+    const topi = l.lowongan?.topi;
     const bidang = (u.payload as { bidang?: unknown } | null)?.bidang;
-    const c = catatanRubrik(topi.nama, nilaiPelamar(rubrikDariTopi(topi), saringCv(bidang)));
-    if (c) hasil.set(u.id, c);
+    const catatan = topi ? (catatanRubrik(topi.nama, nilaiPelamar(rubrikDariTopi(topi), saringCv(bidang))) ?? undefined) : undefined;
+    const n = l.jawaban_wawancara?.[0]?.count ?? 0;
+    hasil.set(u.id, { catatan, tautan: n ? { href: `/app/wawancara/${l.id}`, label: `Dengar wawancara suara (${n} jawaban)` } : undefined });
   }
   return hasil;
 }
@@ -37,7 +42,7 @@ async function Ringkasan() {
     supabase.from("usulan").select("id, judul, penjelasan, sumber, keyakinan, dampak_rp, aksi, payload, berkas_id").eq("status", "menunggu")
       .order("tenggat", { ascending: true, nullsFirst: false }).order("dampak_rp", { ascending: false, nullsFirst: false }).order("dibuat_at", { ascending: false }).limit(20),
   ]);
-  const catatan = await catatanPelamar(supabase, usulan ?? []);
+  const pelamar = await catatanPelamar(supabase, usulan ?? []);
   return (
     <section className="mx-auto w-full max-w-2xl px-4 py-8">
       <h1 className="font-judul text-3xl font-extrabold tracking-tight">Hari ini</h1>
@@ -56,7 +61,7 @@ async function Ringkasan() {
       {usulan?.length ? (
         <div className="mt-3 grid gap-3">
           {usulan.map((u) => (
-            <KartuUsulan key={u.id} usulan={{ judul: u.judul, penjelasan: u.penjelasan ?? "", sumber: SUMBER[u.sumber] ?? u.sumber, keyakinan: u.keyakinan ?? undefined, dampakRp: u.dampak_rp ?? undefined, catatan: catatan.get(u.id) }} aksi={<AksiPutusan usulanId={u.id} />} />
+            <KartuUsulan key={u.id} usulan={{ judul: u.judul, penjelasan: u.penjelasan ?? "", sumber: SUMBER[u.sumber] ?? u.sumber, keyakinan: u.keyakinan ?? undefined, dampakRp: u.dampak_rp ?? undefined, catatan: pelamar.get(u.id)?.catatan, tautan: pelamar.get(u.id)?.tautan }} aksi={<AksiPutusan usulanId={u.id} />} />
           ))}
         </div>
       ) : (

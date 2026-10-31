@@ -1,11 +1,15 @@
-import { readFileSync } from "node:fs";
+import { createReadStream, existsSync, readFileSync, statSync } from "node:fs";
+import { createServer } from "node:http";
 import { join } from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 
 // F2-03: lowongan bertopi Pelayan otomatis berisi pertanyaan; tamu melamar di HP lalu merekam jawaban pertanyaan 1
-// dengan mikrofon palsu Chromium (nada uji), memutarnya, mengirimnya lewat slot anon, dan jawaban tercatat berstatus masuk.
+// dengan mikrofon palsu Chromium yang memutar kalimat korpus s01, memutarnya, mengirimnya lewat slot anon, dan jawaban
+// tercatat berstatus masuk. Lalu pemilik membuka layar penilai: klip, transkrip di perangkat, dan ringkasan rubrik.
+// E2E_MODEL_CACHE (opsional, .env.e2e.local) = folder cache model transformers.js; berkas model dilayani dari sana
+// agar tes tidak mengunduh ratusan MB tiap jalan.
 function bacaEnv(nama: string): Record<string, string> {
   try {
     return Object.fromEntries(readFileSync(join(__dirname, "..", nama), "utf8").split("\n").filter((l) => l.includes("=")).map((l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1).trim()]));
@@ -15,15 +19,16 @@ function bacaEnv(nama: string): Record<string, string> {
 }
 const E = { ...bacaEnv(".env.local"), ...bacaEnv(".env.e2e.local") };
 const CV = join(__dirname, "..", "..", "..", "fixtures", "korpus", "cv", "cv-01.pdf");
+const SUARA = join(__dirname, "..", "..", "..", "fixtures", "korpus", "suara", "s01.wav");
 
-test.use({ launchOptions: { args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"] } });
+test.use({ launchOptions: { args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream", `--use-file-for-fake-audio-capture=${SUARA}`] } });
 test.beforeEach(({ page }, info) => {
   void page;
   test.skip(info.project.name !== "desktop" || !E.E2E_SANDI || !E.NEXT_PUBLIC_SUPABASE_URL, "sekali (desktop), butuh .env.local dan .env.e2e.local");
 });
 
 test("wawancara suara: tamu merekam dan mengirim jawaban pertanyaan 1 setelah melamar", async ({ page, browser }) => {
-  test.setTimeout(180_000);
+  test.setTimeout(420_000);
   const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
   expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
   expect((await sb.rpc("pasang_paket", { p_kode: "fnb" })).error).toBeNull();
@@ -55,7 +60,7 @@ test("wawancara suara: tamu merekam dan mengirim jawaban pertanyaan 1 setelah me
   await expect(wawancara.getByRole("listitem")).not.toHaveCount(0);
   await tamu.getByTestId("rekam-0").click();
   await expect(tamu.getByRole("timer")).toBeVisible();
-  await tamu.waitForTimeout(3200);
+  await tamu.waitForTimeout(6000);
   await tamu.getByTestId("berhenti-0").click();
   await expect(wawancara.locator("audio")).toHaveCount(1);
   await tamu.getByTestId("kirim-jawaban-0").click();
@@ -82,4 +87,46 @@ test("wawancara suara: tamu merekam dan mengirim jawaban pertanyaan 1 setelah me
   expect(jw![0].urutan).toBe(0);
   expect(jw![0].status).toBe("masuk");
   expect(Number(jw![0].durasi_detik)).toBeGreaterThan(2);
+
+  // Layar penilai: klip lewat tautan bertanda, transkrip whisper di perangkat, ringkasan rubrik dari transkrip.
+  // route.fulfill dengan berkas ratusan MB membuat Chromium tumbang; berkas dilayani server statis lokal lewat pengalihan 302.
+  const cache = E.E2E_MODEL_CACHE;
+  const srv = cache
+    ? createServer((req, res) => {
+        const f = join(cache, decodeURIComponent(new URL(req.url ?? "/", "http://x").pathname));
+        if (!existsSync(f)) return res.writeHead(404, { "access-control-allow-origin": "*" }).end();
+        res.writeHead(200, { "access-control-allow-origin": "*", "content-length": statSync(f).size });
+        createReadStream(f).pipe(res);
+      }).listen(4011)
+    : null;
+  if (cache) {
+    await page.context().route("https://huggingface.co/**", async (route) => {
+      const m = new URL(route.request().url()).pathname.match(/^\/([^/]+\/[^/]+)\/resolve\/[^/]+\/(.+)$/);
+      if (m && existsSync(join(cache, m[1], decodeURIComponent(m[2])))) return route.fulfill({ status: 302, headers: { location: `http://localhost:4011/${m[1]}/${m[2]}`, "access-control-allow-origin": "*" } });
+      return route.continue();
+    });
+  }
+  await page.goto(`/app/wawancara/${la!.id}`);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(nama);
+  await expect(page.getByTestId("ringkasan-wawancara")).toContainText("1 jawaban suara masuk");
+  await expect(page.getByTestId("jawaban-0").locator("audio")).toHaveAttribute("src", /\/storage\/v1\/object\/sign\//);
+  await page.getByTestId("transkrip-0").click();
+  await expect(page.getByTestId("teks-transkrip-0")).toContainText(/pelayan/i, { timeout: 300_000 });
+  await expect(page.getByTestId("skor-wawancara")).toBeVisible();
+  await expect(page.getByTestId("ringkasan-wawancara")).toContainText("Pernah bekerja sebagai pelayan");
+  const { data: tersimpan } = await sb.from("jawaban_wawancara").select("transkrip, nilai").eq("lamaran_id", la!.id).single();
+  expect(tersimpan!.transkrip).toMatch(/pelayan/i);
+  expect((tersimpan!.nilai as { cocok: string[] }).cocok).toContain("Pernah bekerja sebagai pelayan");
+
+  for (const [lebar, tinggi] of [[390, 844], [1440, 900]]) {
+    for (const skema of ["light", "dark"] as const) {
+      await page.setViewportSize({ width: lebar, height: tinggi });
+      await page.emulateMedia({ colorScheme: skema });
+      await page.waitForTimeout(400);
+      const axe = await new AxeBuilder({ page }).analyze();
+      expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), `penilai ${lebar} ${skema}`).toEqual([]);
+      await page.screenshot({ path: test.info().outputPath(`penilai-${lebar}-${skema}.png`), fullPage: true });
+    }
+  }
+  srv?.close();
 });

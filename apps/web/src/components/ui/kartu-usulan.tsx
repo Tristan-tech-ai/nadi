@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { formatPersen } from "@/lib/format";
 import { Cap, type JenisCap } from "./cap";
@@ -13,6 +14,8 @@ export type Usulan = {
   status?: JenisCap;
   /** Keterangan tambahan dari Nadi, misalnya skor rubrik pelamar. */
   catatan?: string;
+  /** Tautan lanjutan, misalnya ke wawancara suara pelamar. */
+  tautan?: { href: string; label: string };
 };
 
 /** Kartu di Feed Keputusan. Tepi bawahnya sobekan kertas thermal (satu-satunya ornamen bentuk, DIRECTION §1). */
@@ -25,6 +28,11 @@ export function KartuUsulan({ usulan, aksi }: { usulan: Usulan; aksi?: ReactNode
       </header>
       <p className="mt-1 text-sm text-tinta-2">{usulan.penjelasan}</p>
       {usulan.catatan ? <p className="mt-2 text-sm" data-testid="catatan-usulan">{usulan.catatan}</p> : null}
+      {usulan.tautan ? (
+        <Link href={usulan.tautan.href} className="mt-2 inline-block text-sm font-semibold text-laut underline underline-offset-4" data-testid="tautan-usulan">
+          {usulan.tautan.label}
+        </Link>
+      ) : null}
       <dl className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-tinta-2">
         <div>
           <dt className="sr-only">Sumber</dt>
