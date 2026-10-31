@@ -68,3 +68,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 17:40 | Q-01 | tinjauan keamanan: 3 TINGGI + 5 SEDANG diperbaiki (SQL 20/20, unit 14/14, e2e keamanan 6/6 merah lalu hijau), header produksi aktif; Q-11..Q-14, D-05 ditambah | bda6222 |
 | 31 Okt 2026 18:05 | Q-11 | lampiran lamaran tanpa akun hanya jadi usulan pelamar; tes 12/12 (merah sengaja), baca-berkas v9 hash cocok, e2e lamar lulus lokal + produksi | 49a8482 |
 | 31 Okt 2026 18:50 | Q-12 (sebagian) | migrasi keamanan_q12 + tes 19/19 (merah 14/20 dulu), regresi 11/12 tes lama hijau, isolasi_tenant diperbarui untuk aturan baca staf, e2e produksi 12/12 | 6ebd774 |
+| 31 Okt 2026 19:00 | Q-12 | selesai: regresi 12 tes SQL lama gagal=[] (isolasi_tenant 38, keputusan 23), keamanan_q12 19/19, e2e produksi 12/12 | 0ba85ba |

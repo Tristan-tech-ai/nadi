@@ -1408,8 +1408,10 @@
    "accept": "kebijakan tulis orang, orang_rahasia, lowongan, usulan, perusahaan memakai app.anggota_aktif; admin tidak bisa membatalkan rute usulan uang besar, mengubah untuk_peran langsung, atau mengubah slip yang sudah dilepas pemilik tanpa ditahan ulang; penanda demo tidak bisa ditulis pengguna; cakupan baca staf atas kejadian/orang diputuskan dan dicatat; tes SQL merah dulu",
    "how": "docs/quality/keamanan-f0.md S3, S4b, S5, S8",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T16:49:03"
+   "status": "done",
+   "created": "2026-10-31T16:49:03",
+   "done": "2026-10-31T17:43:44",
+   "result": "commit 988dc99 + 6ebd774 + 0ba85ba; migrasi keamanan_q12 (sidik 5827c9a2, 34 migrasi): kebijakan tulis dan baca sensitif memakai app.anggota_aktif; staf membaca orang/kejadian miliknya saja (DECISIONS); usulan tanpa UPDATE/DELETE klien + trigger a_usulan_jaga_klien; batalkan_keputusan rute hanya pemilik; simpan_slip menahan ulang bila komponen berubah; trigger perusahaan_jaga_demo. Tes keamanan_q12 merah 14/20 sebelum, 19/19 sesudah; regresi 12 tes SQL lama gagal=[] (isolasi_tenant 38, keputusan 23 diperbarui mengikuti aturan baru); e2e lokal auth/izin/absen/lempar/tablet/gaji/topi dan produksi izin/lempar/auth/absen 12/12 lulus"
   },
   {
    "id": "Q-13",
