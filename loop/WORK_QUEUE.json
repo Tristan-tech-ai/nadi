@@ -517,8 +517,10 @@
    "accept": "estimasi poin tersimpan beserta alasannya; dikalibrasi dari durasi nyata",
    "how": "",
    "blocked_by": "F1-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T00:37:19",
+   "result": "e5d08a2 (agen) + 6bc914e: migrasi papan_kerja + papan_kerja_idempoten (sidik 0c1c1317, 2656d100 cocok DB, 43 migrasi), tes SQL 58/58, unit 12/12, Edge Function estimasi-kerja v2 (isi = repo), /app/kerja; e2e produksi kerja.spec gagal (model 0 menit -> 422) lalu lulus 30,7 dtk setelah perbaikan; foto 16 di scratchpad/f3-01-foto; advisor tanpa anon baru"
   },
   {
    "id": "F3-02",

@@ -118,3 +118,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 1 Nov 2026 tick 118 | Tinjauan diff agen F3-01: header Q-01 utuh; experimental.useOffline global bisa mengulang Server Action yang sedang jalan, agen diminta idempotensi transisi + kunci buat kerja (docs/quality/review-f3-01.md) |
 | 1 Nov 2026 tick 119 | Agen F3-01 menanggapi: migrasi papan_kerja_idempoten; docs/research/idempotensi-aksi.md (pola kunci klien + ON CONFLICT, dasar Q-16) |
 | 1 Nov 2026 tick 120 | Q-16 ditambah (kunci idempoten lowongan/rencana magang, kriteria tertulis); F3-01 masih di agen |
+| 1 Nov 2026 tick 121 | F3-01 selesai: verifikasi sidik, advisor, foto; e2e produksi gagal (model 0 menit -> 422), diperbaiki 6bc914e, Edge Function v2, e2e produksi lulus |
