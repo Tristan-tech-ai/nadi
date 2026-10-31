@@ -9,7 +9,7 @@ Pemilik usaha kecil di Indonesia (warung makan, kedai kopi, toko) yang pembukuan
 - **Judul:** Lempar nota, slip, atau Excel apa saja. Nadi yang merapikan.
 - **Sub:** Foto nota belanja, slip gaji, atau rekap absen. Nadi membacanya dan menyiapkan usulan: catat belanja, tambah karyawan, masukkan absen. Tidak ada yang tercatat sebelum kamu setujui.
 - **Tombol utama:** Mulai dari satu nota → /daftar
-- **Tautan kecil:** Sudah punya akun? Masuk
+- **Tautan kecil:** Coba usaha contoh tanpa daftar → /demo (F0-12). "Masuk" ada di kepala halaman.
 - **Demo hidup (kanan, 40%):** nota UD Sumber Rejeki (berkas korpus uji nota-01, sintetis) tercetak baris demi baris, lalu menjadi kartu usulan "Catat belanja Rp376.500 di UD Sumber Rejeki" dengan keterangan "3 barang, nota NT-4671. Dibaca dari nota, yakin 92%". Pengunjung bisa menekan Setujui (cap DITERIMA) atau Tolak (cap DITOLAK), lalu Ulangi. Angka nota dan total adalah isi berkas uji yang benar-benar dibaca Nadi, bukan klaim.
 
 ## Masalah yang dikerjakan (baris buku kas, bukan tiga kartu)

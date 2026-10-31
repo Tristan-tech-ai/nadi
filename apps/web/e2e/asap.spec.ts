@@ -54,3 +54,31 @@ test("landing: demo nota bisa disetujui, axe bersih di 390 dan 1440 px terang da
     }
   }
 });
+
+test("coba usaha contoh dari landing: Feed demo tampil < 3 dtk, baca-saja, axe bersih", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "sekali (desktop), lebar diatur sendiri");
+  await page.goto("/");
+  const mulai = Date.now();
+  await page.getByRole("link", { name: "Coba usaha contoh tanpa daftar" }).click();
+  // Cache Components menyimpan halaman sebelumnya (tersembunyi) saat pindah rute, jadi batasi ke Feed yang terlihat.
+  const feed = page.getByTestId("feed-demo").filter({ visible: true });
+  await expect(feed.locator("article")).toHaveCount(4);
+  expect(Date.now() - mulai).toBeLessThan(3000);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Warung Makan Bu Ratna (contoh)");
+  const kartu = feed.locator("article", { hasText: "Catat izin sakit Komang Ayu" });
+  await kartu.getByRole("button", { name: "Setujui" }).click();
+  await expect(kartu.getByTestId("hasil-demo")).toContainText("tidak disimpan");
+  await page.getByRole("link", { name: "Toko grosir" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Toko Grosir Sinar Jaya (contoh)");
+  await expect(feed.locator("article")).toHaveCount(3);
+  for (const [lebar, tinggi] of [[390, 844], [1440, 900]]) {
+    for (const skema of ["light", "dark"] as const) {
+      await page.setViewportSize({ width: lebar, height: tinggi });
+      await page.emulateMedia({ colorScheme: skema });
+      await page.waitForTimeout(400);
+      const hasil = await new AxeBuilder({ page }).analyze();
+      expect(hasil.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), `${lebar} ${skema}`).toEqual([]);
+      await page.screenshot({ path: info.outputPath(`demo-${lebar}-${skema}.png`), fullPage: true });
+    }
+  }
+});

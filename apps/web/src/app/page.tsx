@@ -47,9 +47,7 @@ export default function Beranda() {
               <Link href="/daftar" className="inline-flex h-12 items-center rounded-[var(--radius-isian)] bg-tinta px-6 font-semibold text-kertas transition-[background-color,transform] duration-150 hover:bg-tinta/90 active:translate-y-px">
                 Mulai dari satu nota
               </Link>
-              <p className="text-sm text-tinta-2">
-                Sudah punya akun? <Link href="/masuk" className="font-semibold text-tinta underline underline-offset-4">Masuk</Link>
-              </p>
+              <Link href="/demo" className="text-sm font-semibold underline underline-offset-4">Coba usaha contoh tanpa daftar</Link>
             </div>
           </div>
           <DemoNota />
