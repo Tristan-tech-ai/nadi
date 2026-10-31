@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Tombol } from "@/components/ui/tombol";
 import { sha256Hex } from "@/lib/lempar";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
-import { DURASI_MAKS_DETIK, formatDurasi, mimeDasar, pilihMime } from "@/lib/wawancara/rekam";
+import { BITRATE_SUARA, DURASI_MAKS_DETIK, formatDurasi, mimeDasar, pilihMime } from "@/lib/wawancara/rekam";
 
 type Rekaman = { blob: Blob; url: string; mime: string; detik: number };
 type Slot = { jawaban: string; jalur: string; perlu_unggah: boolean };
@@ -86,7 +86,8 @@ function Pertanyaan(p: { urutan: number; teks: string; lamaran: string; terkunci
       return setGalat(pesanMikrofon(e));
     }
     aliran.current = s;
-    const r = new MediaRecorder(s, { mimeType: mime });
+    // Bawaan Chromium ±112 kbps (1,3 MB per 90 detik); BITRATE_SUARA memangkasnya tanpa menurunkan WER korpus.
+    const r = new MediaRecorder(s, { mimeType: mime, audioBitsPerSecond: BITRATE_SUARA });
     const potongan: Blob[] = [];
     const awal = performance.now();
     r.ondataavailable = (e) => { if (e.data.size > 0) potongan.push(e.data); };

@@ -41,9 +41,9 @@ Satu warung yang melempar 5 foto nota sehari: 150 × 289 KB ≈ **43 MB per bula
 
 Batas pertama yang nyata adalah storage. Penghematan yang diantrekan (dengan kriteria terima, agar akurasi tidak turun diam-diam):
 - **Q-02B**: foto ke 1600 px JPEG 0,7 (118 KB, hemat 59%) hanya bila eval foto nota tetap 5/5 (docs/quality/eval-ekstraktor.md).
-- **F2-03B**: rekaman suara 24 kbps (±270 KB per 90 detik, hemat ±80%) hanya bila WER korpus whisper-small tetap ≤ 0,5.
+- **F2-03B (selesai 1 Nov 2026)**: rekaman suara Opus 32 kbps. WER korpus whisper-small: WAV asli 0,43, Opus 32 kbps 0,4286, Opus 24 kbps 0,448 (24 kbps ditolak karena di e2e Chromium kata kunci "pelayan" salah dengar). Terukur di produksi: 6,1 detik = 22 KB (29 kbps), sebelumnya 90 KB (118 kbps); jawaban 90 detik ±330 KB.
 
-Sesudah keduanya: 5 nota sehari ≈ 18 MB per bulan per usaha. Usaha yang aktif melempar foto tetap butuh paket berbayar setelah beberapa puluh usaha; itu keputusan pembayaran Tristan, dicatat di sini sebagai angka, bukan permintaan.
+Sesudah keduanya: 5 nota sehari ≈ 18 MB per bulan per usaha; pelamar 5 jawaban suara penuh ±1,6 MB. Usaha yang aktif melempar foto tetap butuh paket berbayar setelah beberapa puluh usaha; itu keputusan pembayaran Tristan, dicatat di sini sebagai angka, bukan permintaan.
 
 ## 3. Egress (sebagian terukur)
 

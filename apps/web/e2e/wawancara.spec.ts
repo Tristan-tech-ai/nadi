@@ -118,6 +118,9 @@ test("wawancara suara: tamu merekam dan mengirim jawaban pertanyaan 1 setelah me
   expect(jw![0].urutan).toBe(0);
   expect(jw![0].status).toBe("masuk");
   expect(Number(jw![0].durasi_detik)).toBeGreaterThan(2);
+  // F2-03B: Opus 32 kbps. Rekaman ±6 detik bawaan Chromium dulu ±84 KB; sekarang harus jauh di bawah 40 KB.
+  const { data: bk } = await sb.from("jawaban_wawancara").select("berkas(ukuran)").eq("lamaran_id", la!.id).single();
+  expect(Number((bk as unknown as { berkas: { ukuran: number } }).berkas.ukuran)).toBeLessThan(40_000);
 
   // Layar penilai: klip lewat tautan bertanda, transkrip whisper di perangkat, ringkasan rubrik dari transkrip.
   // route.fulfill dengan berkas ratusan MB membuat Chromium tumbang; berkas dilayani server statis lokal lewat pengalihan 302.

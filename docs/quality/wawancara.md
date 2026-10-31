@@ -29,3 +29,6 @@ Contoh (s02, rujukan: "Saya biasa menyambut tamu, mencatat pesanan, dan membersi
 - **Klip suara selalu tersedia di samping transkrip.** Keputusan tetap di pemilik.
 - Bila perangkat penilai tidak sanggup memuat model, transkrip ditunda dan penilai tetap bisa memutar klip.
 - Sebelum diterapkan, WER diukur ulang pada rekaman suara manusia sintetis yang lebih alami bila sudah ada suara TTS Bahasa Indonesia berlisensi jelas.
+
+## Bitrate rekaman (F2-03B, 1 Nov 2026)
+Korpus dikodekan ulang dengan ffmpeg libopus lalu ditranskrip whisper-small q8 (`KORPUS_SUARA=<folder> node scripts/eval-wawancara.ts onnx-community/whisper-small`): WAV asli 0,43; Opus 32 kbps **0,4286**; Opus 24 kbps 0,448. Dipilih 32 kbps (`BITRATE_SUARA` di src/lib/wawancara/rekam.ts): di e2e Chromium 24 kbps membuat "pelayan" terdengar "berlain", 32 kbps tidak. Ukuran terukur di produksi 29 kbps (22 KB per 6,1 detik), turun dari 118 kbps bawaan.

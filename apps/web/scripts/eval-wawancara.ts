@@ -6,7 +6,8 @@ import { join } from "node:path";
 import { pathToFileURL } from "node:url";
 import { wer, werKorpus } from "../src/lib/wawancara/wer.ts";
 
-const AKAR = join(import.meta.dirname, "..", "..", "..", "fixtures", "korpus", "suara");
+// KORPUS_SUARA (opsional): folder lain berisi s01.wav.. + jawaban.json, mis. korpus yang dikodekan ulang Opus 24 kbps (F2-03B).
+const AKAR = process.env.KORPUS_SUARA ?? join(import.meta.dirname, "..", "..", "..", "fixtures", "korpus", "suara");
 const jawaban: { id: string; teks: string }[] = JSON.parse(readFileSync(join(AKAR, "jawaban.json"), "utf8"));
 
 /** WAV PCM 16 bit mono 16 kHz -> Float32Array [-1, 1]. */
