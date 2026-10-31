@@ -973,8 +973,10 @@
    "accept": "push ke main memicu deploy produksi READY tanpa langkah manual; get_project menunjukkan link repo Tristan-tech-ai/nadi",
    "how": "setelah Vercel GitHub App terpasang: create_git_project atau sambungkan proyek nadi yang sudah ada",
    "blocked_by": "menunggu Tristan memasang Vercel GitHub App (UNTUK-TRISTAN.md)",
-   "status": "blocked",
-   "created": "2026-10-30T23:50:52"
+   "status": "done",
+   "created": "2026-10-30T23:50:52",
+   "done": "2026-10-31T09:42:20",
+   "result": "proyek Vercel nadi (tim tristan-tech-ais-projects, akun tristan-tech-ai) tersambung ke GitHub Tristan-tech-ai/nadi; push 49723c8 memicu deploy otomatis READY"
   },
   {
    "id": "F0-04B",
@@ -1106,9 +1108,11 @@
    "accept": "get_deployment READY di https://nadi-well-13fd.vercel.app; dari luar: /masuk 200, /app mengalihkan ke /masuk tanpa sesi, manifest share_target ada, e2e asap + auth jalan dengan E2E_BASE_URL produksi; env NEXT_PUBLIC_SUPABASE_* terpasang",
    "how": "create_deployment dengan berkas repo (tanpa node_modules/.next), atau redeploy bila GitHub App sudah terpasang",
    "blocked_by": "F0-02B",
-   "status": "blocked",
+   "status": "done",
    "created": "2026-10-31T03:57:21",
-   "started": "2026-10-31T04:09:04"
+   "started": "2026-10-31T04:09:04",
+   "done": "2026-10-31T09:42:20",
+   "result": "https://nadi-tristan-tech-ais-projects.vercel.app READY dari commit 49723c8 (root apps/web, sin1, Node 24, env publik Supabase); uji luar: / 200 (landing), /demo 200 (Warung Makan Bu Ratna), /masuk 200, /.well-known/oauth-authorization-server 200, /app 307 ke masuk, POST /api/mcp 401; proteksi SSO hanya preview"
   },
   {
    "id": "R-02B",
@@ -1120,8 +1124,8 @@
    "title": "Spike Jev lewat Vercel AI Gateway dengan OIDC dari route di deployment",
    "accept": "satu panggilan /v1/evaluate typesafe-ai/jev berhasil (jawaban + usage + biaya dicatat di docs/research/jev.md), atau galat kredit/akses dicatat dan diteruskan ke UNTUK-TRISTAN",
    "how": "route server sementara /api/cek-jev (hanya pemilik, dimatikan setelah uji), VERCEL_OIDC_TOKEN tidak dicetak",
-   "blocked_by": "F0-13",
-   "status": "blocked",
+   "blocked_by": "",
+   "status": "ready",
    "created": "2026-10-31T03:57:22"
   },
   {
@@ -1251,8 +1255,8 @@
    "title": "Uji lapangan absen dengan wajah sungguhan + token kios khusus",
    "accept": "absen masuk berhasil dari HP sungguhan dengan wajah hidup (tangkapan layar hasil), ambang kedip/menoleh disetel bila perlu; tablet kios bisa memakai token khusus yang hanya boleh meminta kode (tes SQL)",
    "how": "perlu HP + orang; token kios lewat RPC baru",
-   "blocked_by": "F0-13",
-   "status": "blocked",
+   "blocked_by": "",
+   "status": "ready",
    "created": "2026-10-31T08:48:46"
   }
  ]
