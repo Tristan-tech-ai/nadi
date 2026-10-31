@@ -1380,8 +1380,10 @@
    "accept": "pnpm e2e penuh (semua spec, worker bawaan) lulus dua kali berturut-turut lokal; spec yang memanggil pindah_perusahaan (gaji, topi) tidak lagi berbagi akun dengan spec lain yang memakai usaha aktif akun A",
    "how": "akun uji e2e-c khusus spec yang memindah usaha (dibuat lewat SQL seperti e2e-a/b, sandi di .env.e2e.local), atau proyek Playwright terpisah dengan dependencies agar berjalan setelah yang lain",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T16:25:18"
+   "status": "done",
+   "created": "2026-10-31T16:25:18",
+   "done": "2026-10-31T21:51:21",
+   "result": "commit e079053 + 5a6d94e: playwright.config proyek berantai (hp+desktop -> pindah-topi -> pindah-gaji -> pindah-auth @pindah) sehingga tes pemindah usaha akun A tidak berjalan bersamaan dengan spec lain; e2e penuh dua putaran berturut lulus lokal 50 lulus 0 gagal (1,7 mnt dan 5,8 mnt; 30 dilewati per proyek); akar flake lain: locator.count() tanpa menunggu Suspense, profil push terkunci"
   },
   {
    "id": "Q-11",
