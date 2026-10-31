@@ -60,3 +60,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 14:40 | F2-01 (sebagian) | halaman lamar publik /lamar/[kode] (daftar slot, unggah CV, minta baca, terkirim; tutup/tidak ada ditangani), tes unit 2 | 3810c49 |
 | 31 Okt 2026 14:50 | F2-01 (sebagian) | kartu Lowongan untuk pengelola di /app/orang; tinggal e2e lamar sampai usulan di Feed | lihat git log |
 | 31 Okt 2026 15:00 | F2-01 (sebagian) | e2e/lamar.spec.ts ditulis (belum dijalankan; konteks penuh) | lihat git log |
+| 31 Okt 2026 15:10 | F2-01 (sebagian) | e2e lamar dijalankan lewat agen (konteks utama hampir penuh); hasil menyusul | c257b55 |
