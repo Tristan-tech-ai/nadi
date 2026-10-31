@@ -1532,8 +1532,10 @@
    "accept": "setelah memutuskan k usulan di halaman 1 lalu membuka halaman berikut, semua sisa usulan tampil tanpa celah; e2e 25 usulan: tolak 3 di halaman 1 lewat tombol, halaman 2 memuat 5 sisa yang benar; tes unit kunci kursor dengan tenggat/dampak null",
    "how": "kursor keyset ?setelah= (tenggat, dampak_rp, dibuat_at, id) atau offset tautan berikut dikurangi jumlah kartu yang diputuskan di halaman ini (putusan.tsx client); docs/research/feed-urutan.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T00:00:57"
+   "status": "done",
+   "created": "2026-11-01T00:00:57",
+   "done": "2026-11-01T00:06:10",
+   "result": "f57684e: offsetBerikut + context HalamanFeed (halaman-feed.tsx), putusan.tsx mencatat keputusan; tes feed 16/16; e2e baru merah di produksi lama (lagi=20) lalu hijau lokal dan produksi (READY f57684e, 2 lulus 24,9 dtk)"
   }
  ]
 }
