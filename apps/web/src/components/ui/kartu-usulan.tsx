@@ -16,6 +16,8 @@ export type Usulan = {
   catatan?: string;
   /** Tautan lanjutan, misalnya ke wawancara suara pelamar. */
   tautan?: { href: string; label: string };
+  /** Usulan berumur kurang dari 24 jam (D-05): penanda teks, bukan warna saja. */
+  baru?: boolean;
 };
 
 /** Kartu di Feed Keputusan. Tepi bawahnya sobekan kertas thermal (satu-satunya ornamen bentuk, DIRECTION §1). */
@@ -24,7 +26,16 @@ export function KartuUsulan({ usulan, aksi }: { usulan: Usulan; aksi?: ReactNode
     <article className="kartu-thermal relative bg-kertas-2 px-4 pt-4 pb-6 text-tinta">
       <header className="flex items-start justify-between gap-3">
         <h3 className="text-base font-semibold leading-snug">{usulan.judul}</h3>
-        {usulan.status ? <Cap jenis={usulan.status} /> : null}
+        {usulan.baru || usulan.status ? (
+          <div className="flex shrink-0 items-center gap-2">
+            {usulan.baru ? (
+              <span className="rounded-full border border-garis-kuat px-2 py-0.5 text-xs font-semibold" data-testid="penanda-baru">
+                Baru
+              </span>
+            ) : null}
+            {usulan.status ? <Cap jenis={usulan.status} /> : null}
+          </div>
+        ) : null}
       </header>
       <p className="mt-1 text-sm text-tinta-2">{usulan.penjelasan}</p>
       {usulan.catatan ? <p className="mt-2 text-sm" data-testid="catatan-usulan">{usulan.catatan}</p> : null}
