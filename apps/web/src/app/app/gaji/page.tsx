@@ -48,10 +48,11 @@ function RincianSlip({ s }: { s: Slip }) {
   );
 }
 
-async function Isi() {
+async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["searchParams"] }) {
   const sesi = await wajibPerusahaan();
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
-  const bulan = hariIni().slice(0, 7);
+  const sp = await searchParams;
+  const bulan = typeof sp.bulan === "string" && /^\d{4}-(0[1-9]|1[0-2])$/.test(sp.bulan) ? sp.bulan : hariIni().slice(0, 7);
   const supabase = await createClient();
   const { data: per } = await supabase.from("periode_gaji").select("id, status").eq("bulan", `${bulan}-01`).maybeSingle();
   const { data } = per
@@ -115,13 +116,13 @@ async function Isi() {
   );
 }
 
-export default function Gaji() {
+export default function Gaji(props: PageProps<"/app/gaji">) {
   return (
     <main className="mx-auto w-full max-w-xl px-5 py-10">
       <h1 className="font-judul text-3xl font-extrabold tracking-tight">Gaji</h1>
       <p className="mt-2 text-tinta-2">PPh 21 dan BPJS dihitung dari aturan resmi yang sudah diperiksa. Yang belum pasti ditandai, tidak ditebak.</p>
       <Suspense fallback={<div className="mt-6 h-64 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
-        <Isi />
+        <Isi searchParams={props.searchParams} />
       </Suspense>
     </main>
   );

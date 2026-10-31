@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { bagikanSlip, lepasTahan, setujuiGaji, siapkanGaji, type HasilGaji, type HasilTautanSlip } from "@/app/app/gaji/actions";
+import { aturGajiOrang, bagikanSlip, lepasTahan, setujuiGaji, siapkanGaji, type HasilGaji, type HasilTautanSlip } from "@/app/app/gaji/actions";
 import { Tombol } from "@/components/ui/tombol";
 
 function Hasil({ h }: { h: HasilGaji }) {
@@ -76,5 +76,41 @@ export function FormBagikan({ slip, nama }: { slip: string; nama: string }) {
       <Tombol type="submit" ragam="kedua" disabled={sibuk} aria-label={`Bagikan slip ${nama}`}>{sibuk ? "Membuat..." : "Bagikan slip"}</Tombol>
       {h && "galat" in h && <p role="alert" className="mt-1 text-sm text-cap">{h.galat}</p>}
     </form>
+  );
+}
+
+export type GajiOrang = { pokok?: number; tunjangan_tetap?: number; ptkp?: string | null; risiko_jkk?: string };
+const pilihan = "h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-2 text-base";
+
+/** Isian gaji per orang di halaman Orang (pengelola). */
+export function FormGajiOrang({ orang, nama, awal }: { orang: string; nama: string; awal: GajiOrang | null }) {
+  const [h, aksi, sibuk] = useActionState<HasilGaji, FormData>(aturGajiOrang, null);
+  return (
+    <details className="w-full text-sm" data-testid="gaji-orang">
+      <summary className="cursor-pointer text-tinta-2">
+        Gaji {awal?.pokok ? `Rp${new Intl.NumberFormat("id-ID").format(awal.pokok)}` : "belum diisi"}{awal?.ptkp ? `, ${awal.ptkp}` : ""}
+      </summary>
+      <form action={aksi} className="mt-2 grid grid-cols-2 gap-2" aria-label={`Gaji ${nama}`}>
+        <input type="hidden" name="orang" value={orang} />
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">Gaji pokok (Rp)</span>
+          <input name="pokok" inputMode="numeric" required defaultValue={awal?.pokok ?? ""} className={pilihan} /></label>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">Tunjangan tetap (Rp)</span>
+          <input name="tunjangan_tetap" inputMode="numeric" defaultValue={awal?.tunjangan_tetap ?? ""} className={pilihan} /></label>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">Status PTKP</span>
+          <select name="ptkp" defaultValue={awal?.ptkp ?? ""} className={pilihan}>
+            <option value="">Belum tahu</option>
+            {["TK/0", "TK/1", "TK/2", "TK/3", "K/0", "K/1", "K/2", "K/3"].map((p) => <option key={p} value={p}>{p}</option>)}
+          </select></label>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">Risiko kerja (JKK)</span>
+          <select name="risiko_jkk" defaultValue={awal?.risiko_jkk ?? "sangat_rendah"} className={pilihan}>
+            <option value="sangat_rendah">Sangat rendah</option><option value="rendah">Rendah</option><option value="sedang">Sedang</option>
+            <option value="tinggi">Tinggi</option><option value="sangat_tinggi">Sangat tinggi</option>
+          </select></label>
+        <div className="col-span-2 flex items-center gap-3">
+          <Tombol type="submit" ragam="kedua" disabled={sibuk} aria-label={`Simpan gaji ${nama}`}>{sibuk ? "Menyimpan..." : "Simpan gaji"}</Tombol>
+          <Hasil h={h} />
+        </div>
+      </form>
+    </details>
   );
 }

@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { formatPersen } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { FormGajiOrang, type GajiOrang } from "@/components/app/aksi-gaji";
 import { FormAkunStaf, FormTambahOrang } from "./form-orang";
 
 export const metadata: Metadata = { title: "Orang" };
@@ -36,7 +37,7 @@ async function Isi() {
   }
   const supabase = await createClient();
   const [{ data: orang }, { data: usaha }] = await Promise.all([
-    supabase.from("orang").select("id, nama, id_staf, user_id, pakai_topi(porsi, selesai, topi(nama))").order("dibuat_at", { ascending: true }),
+    supabase.from("orang").select("id, nama, id_staf, user_id, pakai_topi(porsi, selesai, topi(nama)), orang_rahasia(gaji)").order("dibuat_at", { ascending: true }),
     supabase.from("perusahaan").select("kode").eq("id", sesi.perusahaanId).maybeSingle(),
   ]);
   return (
@@ -56,6 +57,7 @@ async function Isi() {
                 <TopiOrang pakai={o.pakai_topi as unknown as PakaiTopi[]} />
               </div>
               <FormAkunStaf orangId={o.id} sudahAda={Boolean(o.user_id)} />
+              <FormGajiOrang orang={o.id} nama={o.nama} awal={((Array.isArray(o.orang_rahasia) ? o.orang_rahasia[0] : o.orang_rahasia)?.gaji as GajiOrang | undefined) ?? null} />
             </li>
           ))}
         </ul>

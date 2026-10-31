@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import { ringkasKomponen, susunSlip, type DataGaji, type Komponen, type PetaAturan } from "@/lib/gaji/susun";
 import { asal } from "@/lib/mcp/http";
+import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 
 export type HasilGaji = { pesan: string } | { galat: string } | null;
@@ -82,4 +83,31 @@ export async function bagikanSlip(_: HasilTautanSlip, form: FormData): Promise<H
   const { data, error } = await supabase.rpc("buat_tautan_slip", { p_slip: String(form.get("slip") ?? "") });
   if (error || !data) return { galat: error?.message ?? "Tautan slip gagal dibuat." };
   return { tautan: `${asal(await headers())}/slip#${data as string}`, nama: String(form.get("nama") ?? "") };
+}
+
+const PTKP = ["TK/0", "TK/1", "TK/2", "TK/3", "K/0", "K/1", "K/2", "K/3"];
+const RISIKO = ["sangat_rendah", "rendah", "sedang", "tinggi", "sangat_tinggi"];
+const rupiahIsian = (x: FormDataEntryValue | null) => {
+  const t = String(x ?? "").replace(/[^\d]/g, "");
+  return t === "" ? 0 : Number(t);
+};
+
+/** Gaji pokok, tunjangan tetap, status PTKP, dan risiko JKK satu orang (orang_rahasia.gaji; RLS khusus pengelola). */
+export async function aturGajiOrang(_: HasilGaji, form: FormData): Promise<HasilGaji> {
+  const sesi = await wajibPerusahaan();
+  const orang = String(form.get("orang") ?? "");
+  const pokok = rupiahIsian(form.get("pokok"));
+  const tunjangan = rupiahIsian(form.get("tunjangan_tetap"));
+  const ptkp = String(form.get("ptkp") ?? "");
+  const risiko = String(form.get("risiko_jkk") ?? "sangat_rendah");
+  if (pokok <= 0 || pokok > 1_000_000_000) return { galat: "Isi gaji pokok dalam rupiah, misalnya 3500000." };
+  if (ptkp && !PTKP.includes(ptkp)) return { galat: "Status PTKP tidak dikenal." };
+  if (!RISIKO.includes(risiko)) return { galat: "Tingkat risiko kerja tidak dikenal." };
+  const supabase = await createClient();
+  const { data: lama } = await supabase.from("orang_rahasia").select("gaji").eq("orang_id", orang).maybeSingle();
+  const gaji = { ...((lama?.gaji as Record<string, unknown>) ?? {}), pokok, tunjangan_tetap: tunjangan, ptkp: ptkp || null, risiko_jkk: risiko };
+  const { error } = await supabase.from("orang_rahasia").upsert({ orang_id: orang, perusahaan_id: sesi.perusahaanId, gaji }, { onConflict: "orang_id" });
+  if (error) return { galat: "Gaji gagal disimpan. Hanya pemilik atau admin yang bisa mengubahnya." };
+  revalidatePath("/app/orang");
+  return { pesan: "Tersimpan." };
 }
