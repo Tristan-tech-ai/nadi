@@ -108,8 +108,13 @@ test("keputusan rekrut: status tanpa akun, tawaran lewat wa.me, Bank Talenta ber
   await expect(keputusan.getByTestId("wa-kandidat")).toHaveCount(0);
   const pesan = "Datang Senin 09.00 ke warung, bawa KTP.";
   await keputusan.getByLabel(/Pesan untuk /).fill(pesan);
+  // F2-06: menit menilai masuk buku jam rekrutmen (jenis penilai) untuk lamaran ini.
+  await keputusan.getByLabel(/^Menit menilai/).fill("20");
   await keputusan.getByRole("button", { name: "Tawarkan kerja" }).click();
   await expect(keputusan.getByTestId("tahap-sekarang")).toHaveText("Sudah ditawari kerja");
+  await expect(keputusan.getByRole("status")).toContainText("20 menit menilai tercatat di Dana Rekrutmen.");
+  const { data: jam } = await sb.from("jam_rekrut").select("jenis, menit").eq("lamaran_id", la!.id);
+  expect(jam).toEqual([{ jenis: "penilai", menit: 20 }]);
   const wa = keputusan.getByTestId("wa-kandidat");
   await expect(wa).toHaveAttribute("href", new RegExp(`^https://wa\\.me/62${hp1.slice(1)}\\?text=`));
   const teks = decodeURIComponent((await wa.getAttribute("href"))!.split("?text=")[1]);

@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { ubahBukaLowongan } from "@/app/app/lowongan-actions";
 import { FormLowongan } from "@/components/app/form-lowongan";
 import { Cap } from "@/components/ui/cap";
+import { Rupiah } from "@/components/ui/rupiah";
 import { asalTautan } from "@/lib/mcp/http";
 import { formatTanggal } from "@/lib/format";
 import type { PeringatanBias } from "@/lib/rekrut/bias";
@@ -9,7 +10,7 @@ import { bankTalenta, pesanWa, sejakBank, tautanWa, type LamaranBank } from "@/l
 import { createClient } from "@/lib/supabase/server";
 
 type Lowongan = {
-  id: string; judul: string; kode: string; buka: boolean; topi_id: string | null; peringatan: PeringatanBias[]; lamaran: { count: number }[];
+  id: string; judul: string; kode: string; buka: boolean; topi_id: string | null; peringatan: PeringatanBias[]; lamaran: { count: number }[]; biaya_iklan: number;
   perusahaan: { nama: string } | null;
 };
 type BarisLamaran = Omit<LamaranBank, "topi_id"> & { lowongan: { topi_id: string | null } | null };
@@ -21,7 +22,7 @@ export async function KartuLowongan() {
   // F2-05 Bank Talenta: pelamar 365 hari terakhir yang mengizinkan dihubungi lagi (RLS: usaha aktif, pengelola).
   const sejak = sejakBank();
   const [{ data: l }, { data: t }, { data: izin }] = await Promise.all([
-    supabase.from("lowongan").select("id, judul, kode, buka, topi_id, peringatan, lamaran(count), perusahaan(nama)").order("dibuat_at", { ascending: false }).limit(20),
+    supabase.from("lowongan").select("id, judul, kode, buka, topi_id, peringatan, biaya_iklan, lamaran(count), perusahaan(nama)").order("dibuat_at", { ascending: false }).limit(20),
     supabase.from("topi").select("id, nama").order("nama"),
     supabase.from("lamaran").select("id, lowongan_id, nama, telepon, tahap, boleh_dihubungi, dibuat_at, lowongan(topi_id)")
       .eq("boleh_dihubungi", true).neq("tahap", "diterima").gte("dibuat_at", sejak).order("dibuat_at", { ascending: false }).limit(500),
@@ -52,7 +53,7 @@ export async function KartuLowongan() {
                   <Cap jenis={x.buka ? "diterima" : "ditolak"} label={x.buka ? "Buka" : "Tutup"} />
                 </div>
                 <p className="mt-1 break-all font-mono" data-testid="tautan-lamar">{tautan}</p>
-                <p className="text-tinta-2">{x.lamaran?.[0]?.count ?? 0} lamaran masuk</p>
+                <p className="text-tinta-2">{x.lamaran?.[0]?.count ?? 0} lamaran masuk{x.biaya_iklan ? <>, biaya iklan <Rupiah nilai={x.biaya_iklan} /></> : null}</p>
                 {x.peringatan?.length ? (
                   <div className="mt-2 rounded-[var(--radius-isian)] border border-cap/40 p-3" data-testid="peringatan-lowongan">
                     <p className="font-semibold text-cap">Periksa {x.peringatan.length} syarat sebelum dibuka</p>

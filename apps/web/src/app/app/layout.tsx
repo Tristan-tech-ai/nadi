@@ -26,7 +26,15 @@ async function NamaPerusahaan() {
 
 async function Navigasi() {
   const sesi = await bacaSesi();
-  return sesi?.peran ? <NavBawah peran={sesi.peran} /> : null;
+  if (!sesi?.peran) return null;
+  // Staf: tautan Magang hanya bila dia mentor atau peserta (RLS rencana_magang hanya memperlihatkan rencananya sendiri).
+  let magang = false;
+  if (sesi.peran === "staf") {
+    const supabase = await createClient();
+    const { count } = await supabase.from("rencana_magang").select("id", { count: "exact", head: true });
+    magang = (count ?? 0) > 0;
+  }
+  return <NavBawah peran={sesi.peran} magang={magang} />;
 }
 
 export default function LayoutApp({ children }: LayoutProps<"/app">) {

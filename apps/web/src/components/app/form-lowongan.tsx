@@ -21,6 +21,10 @@ export function FormLowongan({ topi }: { topi: { id: string; nama: string }[] })
           {topi.map((t) => <option key={t.id} value={t.id}>{t.nama}</option>)}
         </select>
       </label>
+      <label className="flex flex-col gap-1 text-sm">
+        <span className="text-tinta-2">Biaya iklan (Rp, boleh kosong)</span>
+        <input name="biaya_iklan" inputMode="numeric" placeholder="0" className={isian} />
+      </label>
       <label className="flex flex-col gap-1 text-sm sm:col-span-2">
         <span className="text-tinta-2">Ringkasan tugas dan jam kerja (boleh kosong)</span>
         <textarea name="ringkasan" maxLength={1000} rows={2} className="rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-3 py-2 text-base" />

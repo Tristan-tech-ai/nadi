@@ -34,6 +34,10 @@ export function KeputusanLamaran({ lamaran, nama, tahap, tanggal, pesan, hp, wa 
           <span className="text-tinta-2">Pesan untuk {nama} (boleh kosong, tampil di halaman status lamarannya)</span>
           <textarea name="pesan" maxLength={500} rows={3} placeholder="Misalnya: datang Senin 09.00, bawa KTP." className="rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-3 py-2 text-base" />
         </label>
+        <label className="flex flex-col gap-1 text-sm">
+          <span className="text-tinta-2">Menit menilai (boleh kosong, masuk Dana Rekrutmen)</span>
+          <input type="number" name="menit" min={1} max={600} step={1} inputMode="numeric" className="h-10 w-32 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-3 text-base" />
+        </label>
         <div className="flex flex-wrap gap-2">
           {ditawari && <Tombol type="submit" name="tahap" value="diterima" disabled={sibuk}>Tandai diterima</Tombol>}
           <Tombol type="submit" name="tahap" value="ditawari" ragam={ditawari ? "kedua" : "utama"} disabled={sibuk}>Tawarkan kerja</Tombol>
