@@ -1378,6 +1378,76 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-10-31T16:25:18"
+  },
+  {
+   "id": "Q-11",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 21,
+   "size": "s",
+   "wajib": false,
+   "title": "Lamaran tanpa akun hanya boleh menjadi usulan pelamar",
+   "accept": "berkas dengan sumber lamar yang dibaca model sebagai jenis selain cv tidak menghasilkan usulan uang/impor; tercatat gagal atau dipaksa rekrut.pelamar; aturan ekstraktor tidak ditulis dari berkas lamar; tes inti baca-berkas + deploy hash cocok",
+   "how": "baca-berkas index.ts/inti.ts: cabang sumber lamar",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T16:49:03"
+  },
+  {
+   "id": "Q-12",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 22,
+   "size": "m",
+   "wajib": false,
+   "title": "Kebijakan tulis memakai keanggotaan sungguhan dan aturan khusus pemilik tidak bisa dilewati admin",
+   "accept": "kebijakan tulis orang, orang_rahasia, lowongan, usulan, perusahaan memakai app.anggota_aktif; admin tidak bisa membatalkan rute usulan uang besar, mengubah untuk_peran langsung, atau mengubah slip yang sudah dilepas pemilik tanpa ditahan ulang; penanda demo tidak bisa ditulis pengguna; cakupan baca staf atas kejadian/orang diputuskan dan dicatat; tes SQL merah dulu",
+   "how": "docs/quality/keamanan-f0.md S3, S4b, S5, S8",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T16:49:03"
+  },
+  {
+   "id": "Q-13",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 23,
+   "size": "s",
+   "wajib": false,
+   "title": "Penguncian percobaan kode absen dan PIN staf",
+   "accept": "absen_catat menolak setelah N kode salah per orang per menit; login staf dikunci sementara setelah N PIN salah per akun (bukan per IP); cek wajah diperlakukan sebagai sinyal lunak dengan penanda di laporan absen; tes SQL",
+   "how": "docs/quality/keamanan-f0.md S6, S7, A7, A8",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T16:49:03"
+  },
+  {
+   "id": "Q-14",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 30,
+   "size": "s",
+   "wajib": false,
+   "title": "Pengerasan push, CIMD, asal tautan, dan token MCP",
+   "accept": "endpoint push hanya host layanan push dikenal; CIMD memakai IP yang sudah dicek dan membaca body bertahap maks 5 KB, IPv6 NAT64/6to4 ditolak; tautan slip/kios/lamar/OAuth memakai env NADI_ASAL; resource null ditolak di mcp_konteks; pengguna tidak bisa membatalkan pencabutan token; tes unit dan SQL",
+   "how": "docs/quality/keamanan-f0.md A6 dan RENDAH",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T16:49:03"
+  },
+  {
+   "id": "D-05",
+   "fase": "D",
+   "kind": "design",
+   "priority": 24,
+   "size": "s",
+   "wajib": false,
+   "title": "Feed tidak menyembunyikan usulan di luar 20 teratas",
+   "accept": "bila usulan menunggu lebih dari 20, Feed menyebut jumlah sisanya dan ada cara melihat semuanya (halaman berikut atau saring per jenis); usulan baru tanpa tenggat/dampak tetap bisa ditemukan; e2e dengan 25 usulan",
+   "how": "src/app/app/page.tsx (batas 20)",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T16:51:11"
   }
  ]
 }

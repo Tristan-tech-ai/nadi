@@ -3,6 +3,7 @@ import { join } from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
+import { tolakUsulanLama } from "./bersih";
 
 // F2-01: pemilik membuat lowongan; tamu tanpa akun di HP (390 px) melamar dengan CV PDF korpus dalam < 2 menit;
 // CV dibaca baca-berkas (pg_net, jalur token) dan usulan rekrut.pelamar muncul di Feed pemilik dalam 60 detik,
@@ -28,6 +29,7 @@ test("lamar tanpa akun: < 2 menit dari HP, CV menjadi usulan pelamar di Feed", a
   expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
   // Topi Pelayan dari paket fnb (idempoten) agar lowongan punya rubrik.
   expect((await sb.rpc("pasang_paket", { p_kode: "fnb" })).error).toBeNull();
+  await tolakUsulanLama(sb);
   await page.goto("/masuk?next=/app/orang");
   await page.getByLabel("Email").fill(E.E2E_EMAIL_A);
   await page.getByLabel("Kata sandi").fill(E.E2E_SANDI);

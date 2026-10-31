@@ -1,18 +1,20 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test } from "@playwright/test";
+import { createClient } from "@supabase/supabase-js";
+import { tolakUsulanLama } from "./bersih";
 
 // Lempar Saja ujung ke ujung lewat layar: pilih berkas -> unggah -> dibaca AI -> usulan di Feed -> Setujui membuat data.
-function envUji(): Record<string, string> {
+function envUji(nama: string): Record<string, string> {
   try {
     return Object.fromEntries(
-      readFileSync(join(__dirname, "..", ".env.e2e.local"), "utf8").split("\n").filter((l) => l.includes("=")).map((l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1).trim()]),
+      readFileSync(join(__dirname, "..", nama), "utf8").split("\n").filter((l) => l.includes("=")).map((l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1).trim()]),
     );
   } catch {
     return {};
   }
 }
-const E = envUji();
+const E = { ...envUji(".env.local"), ...envUji(".env.e2e.local") };
 const KORPUS = join(__dirname, "..", "..", "..", "fixtures", "korpus");
 // Byte unik di ujung PNG (diabaikan pembaca gambar) agar setiap jalan benar-benar dibaca ulang, bukan dianggap berkas lama.
 const unik = (jalur: string) => Buffer.concat([readFileSync(join(KORPUS, jalur)), Buffer.from(`\n${Date.now()}`)]);
@@ -24,6 +26,9 @@ test.beforeEach(({ page }, info) => {
 
 test("lempar KTP dan nota, lalu setujui keduanya di Feed", async ({ page }) => {
   test.setTimeout(120_000);
+  const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
+  expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
+  await tolakUsulanLama(sb);
   await page.goto("/masuk?next=/app/lempar");
   await page.getByLabel("Email").fill(E.E2E_EMAIL_A);
   await page.getByLabel("Kata sandi").fill(E.E2E_SANDI);

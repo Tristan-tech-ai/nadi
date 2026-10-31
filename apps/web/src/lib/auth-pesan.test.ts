@@ -19,4 +19,10 @@ describe("jalurAman", () => {
   it("protocol-relative ditolak", () => expect(jalurAman("//jahat.example")).toBe("/app"));
   it("backslash ditolak", () => expect(jalurAman("/\\jahat.example")).toBe("/app"));
   it("kosong memakai cadangan", () => expect(jalurAman(null, "/masuk")).toBe("/masuk"));
+  // Q-01: browser membuang tab/baris baru dari URL, jadi "/\t/x" menjadi "//x" (protocol-relative).
+  it("tab atau baris baru di depan ditolak", () => {
+    for (const x of ["/\t/jahat.example", "/\n/jahat.example", "/\r/jahat.example", "/\t\t/jahat.example/app"]) expect(jalurAman(x), JSON.stringify(x)).toBe("/app");
+  });
+  it("backslash di mana pun ditolak", () => expect(jalurAman("/app\\..\\..\\jahat")).toBe("/app"));
+  it("kueri dan fragmen internal dipertahankan", () => expect(jalurAman("/oauth/izinkan?client_id=a%2Fb&state=x#z")).toBe("/oauth/izinkan?client_id=a%2Fb&state=x#z"));
 });

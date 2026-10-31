@@ -24,7 +24,17 @@ export function cekIsianDaftar(email: string, sandi: string): string | null {
   return null;
 }
 
-/** Hanya izinkan pengalihan ke jalur internal (cegah open redirect). */
+/**
+ * Hanya izinkan pengalihan ke jalur internal (cegah open redirect). Karakter kendali dan garis miring terbalik ditolak dulu
+ * karena parser URL browser membuang tab/baris baru ("/\t/evil.com" menjadi "//evil.com"); lalu hasil parse harus tetap
+ * di asal yang sama (Q-01).
+ */
 export function jalurAman(next: string | null | undefined, cadangan = "/app"): string {
-  return next && next.startsWith("/") && !next.startsWith("//") && !next.startsWith("/\\") ? next : cadangan;
+  if (!next || !next.startsWith("/") || /[\u0000-\u001f\u007f\\]/.test(next)) return cadangan;
+  try {
+    const u = new URL(next, "https://nadi.invalid");
+    return u.origin === "https://nadi.invalid" && !next.startsWith("//") ? u.pathname + u.search + u.hash : cadangan;
+  } catch {
+    return cadangan;
+  }
 }
