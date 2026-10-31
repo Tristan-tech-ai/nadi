@@ -63,13 +63,14 @@ begin
   perform pg_temp.cek('gaji pokok masuk ke orang_rahasia, bukan orang.data', exists (select 1 from public.orang_rahasia s join public.orang o on o.id = s.orang_id where o.nama = 'Made Putra' and (s.gaji ->> 'pokok')::numeric = 4500000)
     and not exists (select 1 from public.orang where nama = 'Made Putra' and data ? 'gaji_pokok'));
 
+  -- Q-24: tanggal di nota dan jam absen dibaca di zona usaha (bawaan Asia/Jakarta, +07), bukan WITA tetap.
   r := public.putuskan_usulan(u_nota, true);
-  perform pg_temp.cek('nota menjadi kejadian uang.keluar bernilai total', exists (select 1 from public.kejadian where perusahaan_id = pa and jenis = 'uang.keluar' and nilai = 376500 and terjadi_at = '2026-10-13 00:00+08'));
+  perform pg_temp.cek('nota menjadi kejadian uang.keluar bernilai total', exists (select 1 from public.kejadian where perusahaan_id = pa and jenis = 'uang.keluar' and nilai = 376500 and terjadi_at = '2026-10-13 00:00+07'));
   r := public.putuskan_usulan(u_tolak, false);
   perform pg_temp.cek('menolak tidak membuat kejadian', r ->> 'status' = 'ditolak' and not exists (select 1 from public.kejadian where nilai = 1000));
   r := public.putuskan_usulan(u_absen, true);
   perform pg_temp.cek('absen: 2 kejadian, nama dikenal ditautkan, tanggal rusak tidak menggagalkan', (r ->> 'dibuat')::int = 2
-    and exists (select 1 from public.kejadian where jenis = 'absen.harian' and orang_id = o1 and terjadi_at = '2026-10-01 07:15+08'));
+    and exists (select 1 from public.kejadian where jenis = 'absen.harian' and orang_id = o1 and terjadi_at = '2026-10-01 07:15+07'));
 
   perform set_config('request.jwt.claims', kb, true);
   select count(*) into n from public.kejadian;
