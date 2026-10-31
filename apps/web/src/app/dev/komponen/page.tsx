@@ -10,7 +10,9 @@ import { WARNA } from "@/lib/tokens";
 
 export const metadata: Metadata = { title: "Komponen Nadi", robots: { index: false, follow: false } };
 
+// Lembar contoh statis tanpa usaha: zona contoh ditulis jelas, bukan bawaan fungsi format.
 const contohWaktu = new Date("2026-10-31T06:30:00Z");
+const ZONA_CONTOH = "Asia/Makassar";
 
 export default function Komponen() {
   return (
@@ -85,7 +87,7 @@ export default function Komponen() {
               <tr><td className="py-2 text-tinta-2">Tagihan belum dibayar</td><td className="py-2 text-right"><Rupiah nilai={12500000} /></td></tr>
               <tr><td className="py-2 text-tinta-2">Kas kecil</td><td className="py-2 text-right"><Rupiah nilai={-75000} /></td></tr>
               <tr><td className="py-2 text-tinta-2">Ringkas</td><td className="py-2 text-right"><Rupiah nilai={1250000} ringkas /></td></tr>
-              <tr><td className="py-2 text-tinta-2">Waktu</td><td className="py-2 text-right angka">{formatTanggal(contohWaktu)}, {formatJam(contohWaktu)}</td></tr>
+              <tr><td className="py-2 text-tinta-2">Waktu</td><td className="py-2 text-right angka">{formatTanggal(contohWaktu, ZONA_CONTOH)}, {formatJam(contohWaktu, ZONA_CONTOH)}</td></tr>
             </tbody>
           </table>
         </div>

@@ -2,6 +2,7 @@
 
 import { formatJam } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
+import { zonaSesi } from "@/lib/zona-usaha";
 
 export type HasilAbsen = { ok?: string; galat?: string };
 // Kode galat yang pesannya ditulis untuk pengguna di fungsi absen_catat (bahasa sehari-hari).
@@ -15,5 +16,5 @@ export async function catatAbsen(tempat: string, kode: string, jenis: "absen.mas
   // Kode salah dikembalikan sebagai data (bukan galat) agar percobaannya tercatat untuk penguncian (Q-13).
   if (data && typeof data === "object" && "galat" in data) return { galat: String((data as { galat: string }).galat) };
   const saat = new Date((data as { saat: string }).saat);
-  return { ok: `${jenis === "absen.masuk" ? "Absen masuk" : "Absen pulang"} tercatat ${formatJam(saat)}.` };
+  return { ok: `${jenis === "absen.masuk" ? "Absen masuk" : "Absen pulang"} tercatat ${formatJam(saat, await zonaSesi())}.` };
 }

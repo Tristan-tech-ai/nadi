@@ -16,10 +16,15 @@ describe("izin: tanggal dan isian", () => {
     expect(zonaSah("")).toBe("Asia/Jakarta");
     expect(zonaSah("Bukan/Zona")).toBe("Asia/Jakarta");
   });
-  it("hari ini memakai zona WITA, bukan UTC", () => {
-    expect(hariIni(new Date("2026-10-31T17:30:00Z"))).toBe("2026-11-01");
-    expect(hariIni(new Date("2026-10-31T15:30:00Z"))).toBe("2026-10-31");
+  it("hari ini memakai zona yang diberikan, bukan UTC", () => {
+    expect(hariIni(new Date("2026-10-31T17:30:00Z"), "Asia/Makassar")).toBe("2026-11-01");
+    expect(hariIni(new Date("2026-10-31T15:30:00Z"), "Asia/Makassar")).toBe("2026-10-31");
   });
+  it("23.30 lokal masih hari itu untuk usaha WIB dan WIT (Q-25)", () => {
+    expect(hariIni(new Date("2026-10-31T16:30:00Z"), "Asia/Jakarta")).toBe("2026-10-31");
+    expect(hariIni(new Date("2026-10-31T14:30:00Z"), "Asia/Jayapura")).toBe("2026-10-31");
+  });
+  it("zona wajib diisi pemanggil, tanpa bawaan WITA (Q-25)", () => expect(hariIni.length).toBe(2));
   it("jumlah hari termasuk hari pertama dan terakhir, juga lintas bulan dan tahun kabisat", () => {
     expect(jumlahHari("2026-11-03", "2026-11-03")).toBe(1);
     expect(jumlahHari("2026-11-30", "2026-12-02")).toBe(3);

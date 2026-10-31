@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { ArrowDownIcon, ArrowLeftIcon, ArrowUpIcon, ArrowsLeftRightIcon, EqualsIcon } from "@phosphor-icons/react/dist/ssr";
 import { BandingKpi } from "@/components/app/banding-kpi";
-import { formatTanggal } from "@/lib/format";
+import { formatTanggalKalender } from "@/lib/format";
 import { MIN_BANDING, namaHari, teksBanding, ukuranKpi, type Banding, type Kpi, type KpiMinggu, type RataTim, type RincianKerja } from "@/lib/kerja/kpi";
 import { formatMenit, formatPoin } from "@/lib/kerja/poin";
 
-const tanggal = (iso: string) => formatTanggal(new Date(`${iso}T00:00:00Z`), "UTC");
+const tanggal = formatTanggalKalender;
 const rentang = (mulai: string, akhir: string) => `${tanggal(mulai)} sampai ${tanggal(akhir)}`;
 
 /** Panah dengan teks: status tidak pernah hanya warna atau ikon (ANTI-SLOP S06). Turun tidak diberi warna bahaya: bukan teguran. */

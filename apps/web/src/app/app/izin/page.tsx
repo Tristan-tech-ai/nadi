@@ -5,6 +5,7 @@ import { Cap } from "@/components/ui/cap";
 import { capStatus, rentangTanggal } from "@/lib/izin";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { zonaUsahaIni } from "@/lib/zona-usaha";
 
 export const metadata: Metadata = { title: "Izin dan cuti" };
 
@@ -26,13 +27,14 @@ const LABEL: Record<string, string> = { sakit: "Sakit", izin: "Izin", cuti: "Cut
 async function Isi() {
   const sesi = await wajibPerusahaan();
   const supabase = await createClient();
-  const [{ data: r }, { data: daftar }] = await Promise.all([
+  const [{ data: r }, { data: daftar }, zona] = await Promise.all([
     supabase.rpc("izin_ringkas"),
     supabase
       .from("pengajuan_izin")
       .select("id, jenis, mulai, selesai, hari, status, oleh_otopilot, alasan_putusan, orang:orang_id(nama)")
       .order("dibuat_at", { ascending: false })
       .limit(30),
+    zonaUsahaIni(sesi.perusahaanId),
   ]);
   const ringkas = r as Ringkas | null;
   const baris = (daftar ?? []) as unknown as Pengajuan[];
@@ -46,7 +48,7 @@ async function Isi() {
               Sisa cuti {ringkas.tahun}: <span className="angka font-semibold">{ringkas.cuti.sisa}</span> dari {ringkas.cuti.jatah} hari
             </p>
           )}
-          <FormIzin />
+          <FormIzin zona={zona} />
         </>
       ) : (
         <p className="mt-6 text-tinta-2" data-testid="izin-tanpa-orang">

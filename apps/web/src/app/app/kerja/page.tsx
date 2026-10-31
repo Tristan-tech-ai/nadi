@@ -13,6 +13,7 @@ import { formatJam } from "@/lib/format";
 import { bacaKolom, formatTenggat, LABEL_STATUS, ringkasStatus, STATUS_KERJA, teksPoin, teksSelesai, type KerjaPapan, type StatusKerja } from "@/lib/kerja/poin";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { zonaUsahaIni } from "@/lib/zona-usaha";
 
 export const metadata: Metadata = { title: "Kerja" };
 
@@ -138,15 +139,15 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
     );
   }
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("papan_kerja");
+  const [{ data, error }, zona] = await Promise.all([supabase.rpc("papan_kerja"), zonaUsahaIni(sesi.perusahaanId)]);
   if (error) {
     return <p role="alert" className="mt-6 text-cap" data-testid="kerja-galat">Papan kerja gagal dimuat. Muat ulang halaman ini sebentar lagi.</p>;
   }
   const sekarang = new Date();
   const daftar: KerjaTampil[] = ((data ?? []) as KerjaPapan[]).map((k) => ({
     ...k,
-    tenggatTeks: k.tenggat ? formatTenggat(k.tenggat, sekarang) : null,
-    mulaiTeks: k.mulai_at ? formatJam(new Date(k.mulai_at), "Asia/Makassar", false) : null,
+    tenggatTeks: k.tenggat ? formatTenggat(k.tenggat, sekarang, zona) : null,
+    mulaiTeks: k.mulai_at ? formatJam(new Date(k.mulai_at), zona, false) : null,
   }));
 
   if (sesi.peran === "staf") {

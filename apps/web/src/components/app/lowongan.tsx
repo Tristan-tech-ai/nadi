@@ -8,6 +8,7 @@ import { formatTanggal } from "@/lib/format";
 import type { PeringatanBias } from "@/lib/rekrut/bias";
 import { bankTalenta, pesanWa, sejakBank, tautanWa, type LamaranBank } from "@/lib/rekrut/keputusan";
 import { createClient } from "@/lib/supabase/server";
+import { zonaSesi } from "@/lib/zona-usaha";
 
 type Lowongan = {
   id: string; judul: string; kode: string; buka: boolean; topi_id: string | null; peringatan: PeringatanBias[]; lamaran: { count: number }[]; biaya_iklan: number;
@@ -18,6 +19,7 @@ type BarisLamaran = Omit<LamaranBank, "topi_id"> & { lowongan: { topi_id: string
 /** Lowongan per topi dengan tautan lamar publik (P01). Pengelola saja (RLS). */
 export async function KartuLowongan() {
   const dasar = asalTautan(await headers());
+  const zona = await zonaSesi();
   const supabase = await createClient();
   // F2-05 Bank Talenta: pelamar 365 hari terakhir yang mengizinkan dihubungi lagi (RLS: usaha aktif, pengelola).
   const sejak = sejakBank();
@@ -75,7 +77,7 @@ export async function KartuLowongan() {
                         const wa = tautanWa(b.telepon, pesanWa("undangan", { nama: b.nama, usaha: x.perusahaan?.nama ?? "usaha kami", lowongan: x.judul, tautan }));
                         return (
                           <li key={b.lamaran} className="flex flex-wrap items-center justify-between gap-2">
-                            <span>{b.nama} <span className="text-tinta-2">· melamar {formatTanggal(new Date(b.dibuat_at))}</span></span>
+                            <span>{b.nama} <span className="text-tinta-2">· melamar {formatTanggal(new Date(b.dibuat_at), zona)}</span></span>
                             {wa && (
                               <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex h-10 items-center rounded-[var(--radius-isian)] border border-garis-kuat px-3 font-semibold">
                                 <span>Undang<span className="sr-only"> {b.nama}</span> lewat WhatsApp</span>

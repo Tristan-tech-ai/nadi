@@ -6,10 +6,11 @@ import { Rupiah } from "@/components/ui/rupiah";
 import type { JenisHariLembur } from "@/lib/gaji/bpjs-lembur";
 import { JENIS_LEMBUR } from "@/lib/gaji/lembur";
 import type { Komponen } from "@/lib/gaji/susun";
-import { formatTanggal } from "@/lib/format";
+import { formatTanggalKalender } from "@/lib/format";
 import { hariIni } from "@/lib/izin";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { zonaUsahaIni } from "@/lib/zona-usaha";
 
 export const metadata: Metadata = { title: "Gaji" };
 
@@ -55,7 +56,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
   const sesi = await wajibPerusahaan();
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
   const sp = await searchParams;
-  const bulan = typeof sp.bulan === "string" && /^\d{4}-(0[1-9]|1[0-2])$/.test(sp.bulan) ? sp.bulan : hariIni().slice(0, 7);
+  const bulan = typeof sp.bulan === "string" && /^\d{4}-(0[1-9]|1[0-2])$/.test(sp.bulan) ? sp.bulan : hariIni(new Date(), await zonaUsahaIni(sesi.perusahaanId)).slice(0, 7);
   const supabase = await createClient();
   const { data: per } = await supabase.from("periode_gaji").select("id, status").eq("bulan", `${bulan}-01`).maybeSingle();
   const { data } = per
@@ -131,7 +132,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
           <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm" data-testid="daftar-lembur">
             {lembur.map((l) => (
               <li key={l.id} className="flex flex-wrap justify-between gap-2 py-2">
-                <span>{l.orang?.nama}, {formatTanggal(new Date(`${l.tanggal}T12:00:00+08:00`))}</span>
+                <span>{l.orang?.nama}, {formatTanggalKalender(l.tanggal)}</span>
                 <span className="text-tinta-2"><span className="angka font-semibold text-tinta">{l.jam} jam</span>, {JENIS_LEMBUR[l.jenis].toLowerCase()}</span>
               </li>
             ))}

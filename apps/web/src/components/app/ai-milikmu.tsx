@@ -3,6 +3,7 @@ import { cabutAsisten } from "@/app/app/ai-actions";
 import { formatTanggal } from "@/lib/format";
 import { resourceMcp } from "@/lib/mcp/http";
 import { createClient } from "@/lib/supabase/server";
+import { zonaSesi } from "@/lib/zona-usaha";
 
 type Token = { client_id: string; nama_klien: string; cakupan: string[]; dibuat_at: string; dipakai_at: string | null };
 
@@ -33,6 +34,7 @@ export async function AiMilikmu() {
   }
   const daftar = [...perKlien.values()];
   const alamat = resourceMcp(await headers());
+  const zona = await zonaSesi();
   return (
     <section className="mt-10 border-t border-garis pt-6" aria-labelledby="judul-ai-milikmu" data-testid="ai-milikmu">
       <h2 id="judul-ai-milikmu" className="text-lg font-semibold">Asisten AI milikmu</h2>
@@ -49,7 +51,7 @@ export async function AiMilikmu() {
                 <p className="truncate font-semibold">{t.nama_klien}</p>
                 <p className="text-sm text-tinta-2">
                   {asalKlien(t.client_id)}. {t.cakupan.includes("nadi.usul") ? "Boleh membaca dan mengajukan usulan" : "Hanya membaca"}.{" "}
-                  {t.dipakai_at ? `Terakhir dipakai ${formatTanggal(new Date(t.dipakai_at))}.` : `Tersambung ${formatTanggal(new Date(t.dibuat_at))}.`}
+                  {t.dipakai_at ? `Terakhir dipakai ${formatTanggal(new Date(t.dipakai_at), zona)}.` : `Tersambung ${formatTanggal(new Date(t.dibuat_at), zona)}.`}
                 </p>
               </div>
               <form action={cabutAsisten}>

@@ -88,7 +88,7 @@ function bagian(d: Date, zona: string) {
 }
 
 /** "Hari ini, 15.00", "Besok, 09.30", "Kemarin, 09.30", "5 Nov, 09.30", "5 Jan 2027, 09.30" di zona usaha. */
-export function formatTenggat(iso: string, sekarang: Date = new Date(), zona = "Asia/Makassar"): string {
+export function formatTenggat(iso: string, sekarang: Date, zona: string): string {
   const t = bagian(new Date(iso), zona);
   const s = bagian(sekarang, zona);
   const hari = (b: { tahun: number; bulan: number; hari: number }) => Date.UTC(b.tahun, b.bulan - 1, b.hari) / 86_400_000;

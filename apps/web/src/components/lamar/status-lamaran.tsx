@@ -58,17 +58,19 @@ export function StatusLamaran() {
     );
   }
   const tahap = tahapSah(status.tahap) ? status.tahap : "masuk";
+  // Pelamar bukan anggota usaha (perusahaan tertutup untuk anon): tanggal kiriman ditampilkan di zona perangkat pelamar sendiri.
+  const zona = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const diperbarui = status.tahap_at ?? status.dibuat_at;
   return (
     <article className="mt-8" data-testid="status-lamaran">
       <p className="text-sm text-tinta-2">{status.usaha}</p>
       <h1 className="font-judul text-3xl font-extrabold tracking-tight">{status.lowongan}</h1>
-      <p className="mt-1 text-sm text-tinta-2">Lamaran {status.nama}, dikirim {formatTanggal(new Date(status.dibuat_at))}</p>
+      <p className="mt-1 text-sm text-tinta-2">Lamaran {status.nama}, dikirim {formatTanggal(new Date(status.dibuat_at), zona)}</p>
 
       <section className="mt-6 rounded-[var(--radius-kartu)] bg-kertas-2 p-5" aria-labelledby="judul-tahap">
         <h2 id="judul-tahap" className="text-sm text-tinta-2">Kabar terakhir</h2>
         <p className="mt-1 text-xl font-semibold" data-testid="status-tahap" data-tahap={tahap}>{LABEL_PELAMAR[tahap]}</p>
-        <p className="mt-1 text-sm text-tinta-2">Diperbarui {formatTanggal(new Date(diperbarui))}</p>
+        <p className="mt-1 text-sm text-tinta-2">Diperbarui {formatTanggal(new Date(diperbarui), zona)}</p>
         {status.pesan && (
           <figure className="mt-4 border-l-2 border-kunyit pl-3" data-testid="status-pesan">
             <figcaption className="text-sm text-tinta-2">Pesan dari {status.usaha}</figcaption>

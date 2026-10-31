@@ -6,14 +6,14 @@ import { useOffline } from "next/offline";
 import { ArrowsLeftRightIcon, CheckIcon, WifiSlashIcon } from "@phosphor-icons/react";
 import { usulkanTopi, type HasilKerja } from "@/app/app/kerja/actions";
 import { Tombol } from "@/components/ui/tombol";
-import { formatTanggal } from "@/lib/format";
+import { formatTanggalKalender } from "@/lib/format";
 import {
   bagianTopi, dasarSaran, kalimatOrang, kalimatSerah, kalimatTopi, ringkasanGraf, tataLetak, teksPasang,
   type Peta, type SaranPeta,
 } from "@/lib/kerja/peta";
 import { formatPoin } from "@/lib/kerja/poin";
 
-const tanggal = (iso: string) => formatTanggal(new Date(`${iso}T00:00:00Z`), "UTC");
+const tanggal = formatTanggalKalender;
 
 /** Penanda lintas topi: teks di atas stabilo kunyit, tidak pernah hanya warna (ANTI-SLOP S06). */
 function TandaLintas() {

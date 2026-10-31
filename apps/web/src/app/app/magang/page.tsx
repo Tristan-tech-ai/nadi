@@ -4,17 +4,18 @@ import { WarningIcon } from "@phosphor-icons/react/dist/ssr";
 import { FormDana, FormRencana, FormSesi, FormStatus } from "@/components/app/magang";
 import { Cap, type JenisCap } from "@/components/ui/cap";
 import { Rupiah } from "@/components/ui/rupiah";
-import { formatTanggal } from "@/lib/format";
+import { formatTanggalKalender } from "@/lib/format";
 import { hariIni } from "@/lib/izin";
 import { formatLamaMenit, STATUS_RENCANA, totalUangSaku, type BarisMinggu, type Peringatan, type StatusRencana, type UangSaku } from "@/lib/rekrut/magang";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { zonaUsahaIni } from "@/lib/zona-usaha";
 
 export const metadata: Metadata = { title: "Magang" };
 
 const BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
 const namaBulan = (b: string) => `${BULAN[Number(b.slice(5, 7)) - 1]} ${b.slice(0, 4)}`;
-const tgl = (d: string) => formatTanggal(new Date(`${d}T12:00:00+08:00`));
+const tgl = formatTanggalKalender;
 
 type Rencana = {
   id: string;
@@ -165,7 +166,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/magang">["s
   const sesi = await wajibPerusahaan();
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
   const sp = await searchParams;
-  const hari = hariIni();
+  const hari = hariIni(new Date(), await zonaUsahaIni(sesi.perusahaanId));
   const bulan = typeof sp.bulan === "string" && /^\d{4}-(0[1-9]|1[0-2])$/.test(sp.bulan) ? sp.bulan : hari.slice(0, 7);
   const supabase = await createClient();
   const { data: d, error } = await supabase.rpc("daftar_rencana_magang");

@@ -2,13 +2,14 @@ import { cabutTablet } from "@/app/app/kios-actions";
 import { BuatTautanTablet } from "@/components/app/buat-tautan-tablet";
 import { formatTanggal } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
+import { zonaSesi } from "@/lib/zona-usaha";
 
 type Tablet = { id: string; nama: string; dibuat_at: string; dipakai_at: string | null };
 
 /** Tablet absen yang terpasang di usaha ini (pemilik/admin). RPC menolak peran lain, maka kartu tidak tampil. */
 export async function TabletAbsen() {
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("daftar_token_kios");
+  const [{ data, error }, zona] = await Promise.all([supabase.rpc("daftar_token_kios"), zonaSesi()]);
   if (error) return null;
   const daftar = (data ?? []) as Tablet[];
   return (
@@ -26,7 +27,7 @@ export async function TabletAbsen() {
               <div className="min-w-0">
                 <p className="truncate font-semibold">{t.nama}</p>
                 <p className="text-sm text-tinta-2">
-                  {t.dipakai_at ? `Terakhir menyala ${formatTanggal(new Date(t.dipakai_at))}.` : `Dibuat ${formatTanggal(new Date(t.dibuat_at))}, belum dibuka.`}
+                  {t.dipakai_at ? `Terakhir menyala ${formatTanggal(new Date(t.dipakai_at), zona)}.` : `Dibuat ${formatTanggal(new Date(t.dibuat_at), zona)}, belum dibuka.`}
                 </p>
               </div>
               <form action={cabutTablet}>

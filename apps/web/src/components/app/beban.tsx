@@ -1,10 +1,10 @@
 import { ArrowsLeftRightIcon } from "@phosphor-icons/react/dist/ssr";
-import { formatTanggal } from "@/lib/format";
+import { formatTanggalKalender } from "@/lib/format";
 import { kalimatTerberat, MIN_SELESAI, ringkasBeban, teksBebanSaya, type BebanMinggu, type BebanSaya } from "@/lib/kerja/adil";
 import { formatPoin } from "@/lib/kerja/poin";
 
 const angka = (x: number, digit = 2) => String(Math.round(x * 10 ** digit) / 10 ** digit).replace(".", ",");
-const tanggal = (iso: string) => formatTanggal(new Date(`${iso}T00:00:00Z`), "UTC");
+const tanggal = formatTanggalKalender;
 
 /**
  * Layar pemilik/admin "Beban minggu ini" (docs/design/bagi-adil.md): satu kalimat angka, satu baris per orang bergaris buku kas,

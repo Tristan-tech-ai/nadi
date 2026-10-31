@@ -10,8 +10,8 @@ import { createBrowserSupabase } from "@/lib/supabase/browser";
 
 const isian = "h-12 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-3 text-base";
 
-/** Formulir izin untuk staf: satu layar, tombol besar. Bukti (foto surat) diunggah dulu dari browser, lalu id-nya dikirim. */
-export function FormIzin() {
+/** Formulir izin untuk staf: satu layar, tombol besar. Bukti (foto surat) diunggah dulu dari browser, lalu id-nya dikirim. Tanggal awal = hari ini di zona usaha. */
+export function FormIzin({ zona }: { zona: string }) {
   const [hasil, aksi, sibuk] = useActionState<HasilAjukan, FormData>(async (sebelum, form) => {
     const bukti = form.get("bukti");
     form.delete("bukti");
@@ -24,8 +24,8 @@ export function FormIzin() {
     }
     return ajukanIzin(sebelum, form);
   }, null);
-  const [mulai, setMulai] = useState(() => hariIni());
-  const [selesai, setSelesai] = useState(() => hariIni());
+  const [mulai, setMulai] = useState(() => hariIni(new Date(), zona));
+  const [selesai, setSelesai] = useState(() => hariIni(new Date(), zona));
   const hari = jumlahHari(mulai, selesai);
 
   return (

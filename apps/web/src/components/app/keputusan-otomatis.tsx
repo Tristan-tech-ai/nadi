@@ -4,6 +4,7 @@ import { formatJam, formatTanggal } from "@/lib/format";
 import { bisaDibatalkan, labelKeputusan } from "@/lib/keputusan";
 import { bacaSesi } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
+import { zonaSesi } from "@/lib/zona-usaha";
 
 type Ringkas = { jenis: string; tingkat: string; jumlah: number; dibatalkan: number; p50_ms: number | null; p95_ms: number | null };
 type Keputusan = { id: string; jenis: string; tingkat: string; pilihan: string; yakin: number | null; alasan: string; latensi_ms: number; dibuat_at: string; dibatalkan_at: string | null; alasan_batal: string | null };
@@ -16,9 +17,10 @@ export async function KeputusanOtomatis() {
   const sesi = await bacaSesi();
   if (sesi?.peran !== "pemilik" && sesi?.peran !== "admin") return null;
   const supabase = await createClient();
-  const [{ data: r }, { data: d }] = await Promise.all([
+  const [{ data: r }, { data: d }, zona] = await Promise.all([
     supabase.rpc("ringkasan_keputusan", { p_hari: 30 }),
     supabase.from("keputusan").select("id, jenis, tingkat, pilihan, yakin, alasan, latensi_ms, dibuat_at, dibatalkan_at, alasan_batal").neq("tingkat", "manusia").order("dibuat_at", { ascending: false }).limit(10),
+    zonaSesi(),
   ]);
   const ringkas = ((r ?? []) as Ringkas[]).filter((x) => x.tingkat !== "manusia");
   const keManusia = ((r ?? []) as Ringkas[]).filter((x) => x.tingkat === "manusia").reduce((n, x) => n + Number(x.jumlah), 0);
@@ -47,7 +49,7 @@ export async function KeputusanOtomatis() {
             <li key={k.id} className="py-3 text-sm" data-keputusan={k.id} data-tingkat={k.tingkat}>
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <p className="font-semibold">{JENIS[k.jenis] ?? k.jenis}</p>
-                {k.dibatalkan_at ? <Cap jenis="ditolak" label="Dibatalkan" /> : <span className="text-xs text-tinta-2">{formatTanggal(new Date(k.dibuat_at))}, {formatJam(new Date(k.dibuat_at))}</span>}
+                {k.dibatalkan_at ? <Cap jenis="ditolak" label="Dibatalkan" /> : <span className="text-xs text-tinta-2">{formatTanggal(new Date(k.dibuat_at), zona)}, {formatJam(new Date(k.dibuat_at), zona)}</span>}
               </div>
               {k.tingkat === "model" && <p className="mt-1 text-xs font-semibold text-laut" data-testid="label-model">{labelKeputusan(k)}</p>}
               <p className="mt-1">{k.alasan}</p>

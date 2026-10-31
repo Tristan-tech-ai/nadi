@@ -11,6 +11,7 @@ import { formatTanggal } from "@/lib/format";
 import { pesanWa, tahapSah, tampilHp, tautanWa } from "@/lib/rekrut/keputusan";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { zonaUsahaIni } from "@/lib/zona-usaha";
 
 export const metadata: Metadata = { title: "Wawancara dan uji pelamar" };
 
@@ -43,6 +44,7 @@ async function Isi({ params }: { params: Promise<{ lamaran: string }> }) {
   const { data: tautan } = jalur.length ? await supabase.storage.from("berkas").createSignedUrls(jalur, 3600) : { data: [] };
   const urlDari = new Map((tautan ?? []).map((t) => [t.path, t.signedUrl]));
   const model = (konf?.nilai ?? null) as ModelTranskrip | null;
+  const zona = await zonaUsahaIni(sesi.perusahaanId);
   const topi = lamaran.lowongan?.topi ?? null;
   const ringkas = topi && jawaban.some((j) => j.transkrip) ? ringkasanWawancara(topi, jawaban) : null;
   // F2-05: setelah memutuskan, teks tawaran atau penolakan yang sopan dikirim pemilik sendiri lewat wa.me.
@@ -54,7 +56,7 @@ async function Isi({ params }: { params: Promise<{ lamaran: string }> }) {
 
   return (
     <>
-      <p className="mt-8 text-sm text-tinta-2">{lamaran.lowongan?.judul} · melamar {formatTanggal(new Date(lamaran.dibuat_at))}</p>
+      <p className="mt-8 text-sm text-tinta-2">{lamaran.lowongan?.judul} · melamar {formatTanggal(new Date(lamaran.dibuat_at), zona)}</p>
       <h1 className="font-judul text-3xl font-extrabold tracking-tight">{lamaran.nama}</h1>
 
       <HasilUji baris={(uji ?? []) as BarisUji[]} />
@@ -91,7 +93,7 @@ async function Isi({ params }: { params: Promise<{ lamaran: string }> }) {
         lamaran={lamaran.id}
         nama={lamaran.nama}
         tahap={tahap}
-        tanggal={lamaran.tahap_at ? formatTanggal(new Date(lamaran.tahap_at)) : null}
+        tanggal={lamaran.tahap_at ? formatTanggal(new Date(lamaran.tahap_at), zona) : null}
         pesan={lamaran.pesan_tahap}
         hp={lamaran.telepon ? tampilHp(lamaran.telepon) : null}
         wa={hrefWa ? { href: hrefWa, label: jenisWa === "tawaran" ? "Kirim tawaran lewat WhatsApp" : "Kirim kabar lewat WhatsApp" } : null}

@@ -65,12 +65,24 @@ describe("durasi dan teks", () => {
   });
   it("tenggat: Hari ini / Besok / tanggal, jam WITA tanpa zona", () => {
     const sekarang = new Date("2026-11-01T02:00:00Z"); // 1 Nov 10.00 WITA
-    expect(formatTenggat("2026-11-01T07:00:00Z", sekarang)).toBe("Hari ini, 15.00");
-    expect(formatTenggat("2026-11-02T01:30:00Z", sekarang)).toBe("Besok, 09.30");
-    expect(formatTenggat("2026-10-31T01:30:00Z", sekarang)).toBe("Kemarin, 09.30");
-    expect(formatTenggat("2026-11-05T01:30:00Z", sekarang)).toBe("5 Nov, 09.30");
-    expect(formatTenggat("2027-01-05T01:30:00Z", sekarang)).toBe("5 Jan 2027, 09.30");
+    const z = "Asia/Makassar";
+    expect(formatTenggat("2026-11-01T07:00:00Z", sekarang, z)).toBe("Hari ini, 15.00");
+    expect(formatTenggat("2026-11-02T01:30:00Z", sekarang, z)).toBe("Besok, 09.30");
+    expect(formatTenggat("2026-10-31T01:30:00Z", sekarang, z)).toBe("Kemarin, 09.30");
+    expect(formatTenggat("2026-11-05T01:30:00Z", sekarang, z)).toBe("5 Nov, 09.30");
+    expect(formatTenggat("2027-01-05T01:30:00Z", sekarang, z)).toBe("5 Jan 2027, 09.30");
   });
+  it("tenggat di zona usaha WIB dan WIT pada 23.30 lokal (Q-25)", () => {
+    // 31 Okt 23.30 WIB; tenggat 17.00 WIB besok = 1 Nov 10.00 UTC.
+    const wib = new Date("2026-10-31T16:30:00Z");
+    expect(formatTenggat("2026-11-01T10:00:00Z", wib, "Asia/Jakarta")).toBe("Besok, 17.00");
+    expect(formatTenggat("2026-10-31T16:45:00Z", wib, "Asia/Jakarta")).toBe("Hari ini, 23.45");
+    // 31 Okt 23.30 WIT; tenggat 1 Nov 08.00 WIT = 31 Okt 23.00 UTC.
+    const wit = new Date("2026-10-31T14:30:00Z");
+    expect(formatTenggat("2026-10-31T23:00:00Z", wit, "Asia/Jayapura")).toBe("Besok, 08.00");
+    expect(formatTenggat("2026-10-31T14:45:00Z", wit, "Asia/Jayapura")).toBe("Hari ini, 23.45");
+  });
+  it("zona wajib diisi pemanggil, tanpa bawaan WITA (Q-25)", () => expect(formatTenggat.length).toBe(3));
 });
 
 describe("papan", () => {

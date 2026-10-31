@@ -1,4 +1,4 @@
-// Pembantu layar izin dan cuti (F1-03). Tanggal izin adalah tanggal kalender WITA (YYYY-MM-DD), bukan waktu.
+// Pembantu layar izin dan cuti (F1-03). Tanggal izin adalah tanggal kalender di zona usaha (YYYY-MM-DD), bukan waktu.
 import type { JenisCap } from "@/components/ui/cap";
 
 export const JENIS_IZIN = [
@@ -11,8 +11,8 @@ export type JenisIzin = (typeof JENIS_IZIN)[number]["kode"];
 const BULAN = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
 const POLA = /^(\d{4})-(\d{2})-(\d{2})$/;
 
-/** Tanggal hari ini di zona usaha, bentuk YYYY-MM-DD (nilai bawaan isian tanggal). */
-export function hariIni(sekarang: Date = new Date(), zona = "Asia/Makassar"): string {
+/** Tanggal hari ini di zona usaha (lib/zona-usaha.ts), bentuk YYYY-MM-DD. Zona wajib, tanpa bawaan. */
+export function hariIni(sekarang: Date, zona: string): string {
   return new Intl.DateTimeFormat("en-CA", { timeZone: zona, year: "numeric", month: "2-digit", day: "2-digit" }).format(sekarang);
 }
 
