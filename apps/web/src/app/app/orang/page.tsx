@@ -1,10 +1,28 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { formatPersen } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { FormAkunStaf, FormTambahOrang } from "./form-orang";
 
 export const metadata: Metadata = { title: "Orang" };
+
+type PakaiTopi = { porsi: number; selesai: string | null; topi: { nama: string } | null };
+
+/** Topi yang sedang dipakai, mis. "Kasir 50% · Gudang 50%". Topi = peran kerja; satu orang bisa memakai beberapa. */
+function TopiOrang({ pakai }: { pakai: PakaiTopi[] }) {
+  const aktif = (pakai ?? []).filter((p) => !p.selesai && p.topi).sort((a, b) => b.porsi - a.porsi);
+  if (!aktif.length) return <p className="mt-1 text-sm text-tinta-2">Belum memakai topi</p>;
+  return (
+    <ul className="mt-1 flex flex-wrap gap-1.5" aria-label="Topi yang dipakai" data-testid="topi-orang">
+      {aktif.map((p) => (
+        <li key={p.topi!.nama} className="rounded-full border border-garis px-2 py-0.5 text-xs">
+          {p.topi!.nama} <span className="angka text-tinta-2">{formatPersen(p.porsi / 100)}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 async function Isi() {
   const sesi = await wajibPerusahaan();
@@ -18,7 +36,7 @@ async function Isi() {
   }
   const supabase = await createClient();
   const [{ data: orang }, { data: usaha }] = await Promise.all([
-    supabase.from("orang").select("id, nama, id_staf, user_id").order("dibuat_at", { ascending: true }),
+    supabase.from("orang").select("id, nama, id_staf, user_id, pakai_topi(porsi, selesai, topi(nama))").order("dibuat_at", { ascending: true }),
     supabase.from("perusahaan").select("kode").eq("id", sesi.perusahaanId).maybeSingle(),
   ]);
   return (
@@ -35,6 +53,7 @@ async function Isi() {
               <div>
                 <p className="font-semibold">{o.nama}</p>
                 <p className="text-sm text-tinta-2">{o.id_staf ? <>ID staf <span className="font-mono">{o.id_staf}</span></> : "Belum punya akun staf"}</p>
+                <TopiOrang pakai={o.pakai_topi as unknown as PakaiTopi[]} />
               </div>
               <FormAkunStaf orangId={o.id} sudahAda={Boolean(o.user_id)} />
             </li>
