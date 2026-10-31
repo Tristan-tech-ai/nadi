@@ -157,3 +157,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 1 Nov 2026 tick 156 | Q-21: 17 kebijakan baca + storage berkas_unduh memeriksa anggota_aktif/peran_aktif (app.peran_aktif baru); tes jwt_cabut_q21 merah 8/17 lalu 17/17; sidik d4287477 = db; push 5015321 (memuat 3 commit F3-03 agen) |
 | 1 Nov 2026 tick 157 | Verifikasi F3-03 (docs/quality/review-f3-03.md): sidik 3444a0fc = db, diff putuskan_usulan hanya cabang kpi.banding, foto dilihat, e2e produksi kpi.spec lulus 27,4 dtk; tes SQL kpi + regresi Q-21 menunggu agen |
 | 1 Nov 2026 tick 158 | Q-21 dan F3-03 done: regresi SQL isolasi_tenant 38, keamanan_q12 19, usulan_pemilik_q17 6, bagi_adil 27, papan_kerja 58, kpi 40, keputusan 23 semua gagal=[]; progres wajib 41/69 |
+| 1 Nov 2026 tick 159 | Rancangan Peta Organisasi Nyata F3-04 (docs/design/peta-organisasi.md): kertas (pakai_topi) vs nyata (kerja selesai 4 minggu), lintas topi bertanda teks, graf SVG desktop, daftar HP, RPC peran_aktif |

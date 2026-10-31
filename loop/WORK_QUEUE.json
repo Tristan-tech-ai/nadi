@@ -563,7 +563,7 @@
    "wajib": true,
    "title": "Peta Organisasi Nyata (graf siapa mengerjakan apa)",
    "accept": "graf tampil untuk perusahaan demo; lintas topi terlihat",
-   "how": "",
+   "how": "docs/design/peta-organisasi.md (RPC peta_organisasi dengan app.peran_aktif, tab ?tab=peta di /app/kerja, graf SVG buatan sendiri di desktop dan daftar per topi di HP)",
    "blocked_by": "F3-03",
    "status": "ready",
    "created": "2026-10-30T20:05:52"
@@ -1637,7 +1637,7 @@
    "status": "done",
    "created": "2026-11-01T02:20:17",
    "done": "2026-11-01T02:30:17",
-   "result": "c96..5015321 migrasi 20261101009000_jwt_cabut_q21.sql sidik d4287477 = db (51 migrasi); 17 kebijakan baca + storage berkas_unduh memeriksa anggota_aktif/peran_aktif; tes jwt_cabut_q21 merah 8/17 lalu 17/17; regresi isolasi_tenant 38, keamanan_q12 19, usulan_pemilik_q17 6, bagi_adil 27, papan_kerja 58, kpi 40, keputusan 23 semua gagal=[]; e2e produksi bagi-adil/keputusan-model/izin lulus; get_advisors anon tetap 21; docs/quality/jwt-setelah-cabut.md"
+   "result": "ae17fb9 (push 5015321) migrasi 20261101009000_jwt_cabut_q21.sql sidik d4287477 = db (51 migrasi); 17 kebijakan baca + storage berkas_unduh memeriksa anggota_aktif/peran_aktif; tes jwt_cabut_q21 merah 8/17 lalu 17/17; regresi isolasi_tenant 38, keamanan_q12 19, usulan_pemilik_q17 6, bagi_adil 27, papan_kerja 58, kpi 40, keputusan 23 semua gagal=[]; e2e produksi bagi-adil/keputusan-model/izin lulus; get_advisors anon tetap 21; docs/quality/jwt-setelah-cabut.md"
   }
  ]
 }
