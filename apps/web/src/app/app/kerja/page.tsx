@@ -5,7 +5,9 @@ import { ArrowsLeftRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { BebanMingguIni, BebanSayaIni } from "@/components/app/beban";
 import { CerminKpi, KembaliKeTabel, KerangkaKpi, KpiMingguIni, KpiTanpaOrang } from "@/components/app/kpi";
 import { PapanStaf, TambahKerja, UbahPoin, type KerjaTampil } from "@/components/app/kerja";
+import { InsentifSaya, IsianKolam, KerangkaKolam, KolamBonus, KolamDisetujui, type KolamTersimpan } from "@/components/app/kolam";
 import { KerangkaPeta, PetaOrganisasi } from "@/components/app/peta";
+import { bacaPengecualian, bulanKolam, rupiahIsian, type HitungKolam, type KolamSaya } from "@/lib/gaji/kolam";
 import type { BebanMinggu, BebanSaya } from "@/lib/kerja/adil";
 import type { KpiMinggu, KpiSaya } from "@/lib/kerja/kpi";
 import { bacaPeta, type Peta } from "@/lib/kerja/peta";
@@ -54,10 +56,18 @@ const galatKpi = <p role="alert" className="mt-6 text-cap" data-testid="kpi-gala
 async function BagianKpi({ semua, orang }: { semua: boolean; orang: string | null }) {
   const supabase = await createClient();
   if (!semua) {
-    const { data, error } = await supabase.rpc("kpi_saya", { p_mulai: null });
+    const [{ data, error }, { data: insentif }] = await Promise.all([
+      supabase.rpc("kpi_saya", { p_mulai: null }),
+      supabase.rpc("kolam_saya", { p_bulan: null }),
+    ]);
     if (error || !data) return galatKpi;
     const d = data as KpiSaya;
-    return d.orang ? <CerminKpi k={d.orang} tim={d.rata_rata_tim} mulai={d.mulai} akhir={d.akhir} milikSendiri /> : <KpiTanpaOrang />;
+    return (
+      <>
+        <InsentifSaya k={(insentif ?? null) as KolamSaya} />
+        {d.orang ? <CerminKpi k={d.orang} tim={d.rata_rata_tim} mulai={d.mulai} akhir={d.akhir} milikSendiri /> : <KpiTanpaOrang />}
+      </>
+    );
   }
   const { data, error } = await supabase.rpc("kpi_minggu", { p_mulai: null });
   if (error || !data) return galatKpi;
@@ -86,6 +96,44 @@ async function BagianPeta({ bolehUsul }: { bolehUsul: boolean }) {
   return <PetaOrganisasi p={bacaPeta(data as Peta)} bolehUsul={bolehUsul} />;
 }
 
+/** Bulan berjalan (YYYY-MM) di zona usaha. */
+const bulanIni = (zona: string) => new Intl.DateTimeFormat("en-CA", { timeZone: zona, year: "numeric", month: "2-digit" }).format(new Date()).slice(0, 7);
+
+/**
+ * Tab kolam bonus beban (F3-05, docs/design/kolam-bonus-beban.md): pemilik dan admin. Bulan yang sudah disetujui menampilkan
+ * pembagian tersimpan (public.kolam_bagian); selain itu pratinjau public.hitung_kolam dari ?bulan=&jumlah=&k=<id>~<alasan>.
+ */
+async function BagianKolam({ sp, pemilik, zona }: { sp: Awaited<PageProps<"/app/kerja">["searchParams"]>; pemilik: boolean; zona: string }) {
+  const bulan = bulanKolam(pertama(sp.bulan), bulanIni(zona));
+  const jumlah = rupiahIsian(pertama(sp.jumlah));
+  const kecualiBaru = pertama(sp.kecuali);
+  const alasanBaru = pertama(sp.alasan);
+  const daftarK = [...(Array.isArray(sp.k) ? sp.k : sp.k ? [sp.k] : []), ...(kecualiBaru && alasanBaru ? [`${kecualiBaru}~${alasanBaru}`] : [])];
+  const kecuali = bacaPengecualian(daftarK);
+  const supabase = await createClient();
+  const [{ data: k, error: ek }, { data: per }] = await Promise.all([
+    supabase.from("kolam_bonus")
+      .select("id, jumlah, disetujui_at, dikecualikan, kolam_bagian(orang_id, poin, kerja_n, persen, rupiah, alasan, dibanding_ids, orang(nama, id_staf))")
+      .eq("bulan", `${bulan}-01`).eq("status", "disetujui").maybeSingle(),
+    supabase.from("periode_gaji").select("status").eq("bulan", `${bulan}-01`).maybeSingle(),
+  ]);
+  if (ek) return <p role="alert" className="mt-6 text-cap" data-testid="kolam-galat">Kolam bonus gagal dimuat. Muat ulang halaman ini sebentar lagi.</p>;
+  if (k) {
+    const namaBulan = new Intl.DateTimeFormat("id-ID", { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(`${bulan}-01T00:00:00Z`));
+    return <KolamDisetujui k={k as unknown as KolamTersimpan} bulan={bulan} namaBulan={namaBulan} terkunci={per?.status === "disetujui"} pemilik={pemilik}
+      isian={<IsianKolam bulan={bulan} jumlah={jumlah} kecuali={kecuali} />} />;
+  }
+  let h: HitungKolam | null = null;
+  let galat: string | null = null;
+  if (pertama(sp.jumlah) !== undefined && !jumlah) galat = "Isi jumlah kolam dalam rupiah, misalnya 1000000.";
+  else if (jumlah) {
+    const { data, error } = await supabase.rpc("hitung_kolam", { p_bulan: `${bulan}-01`, p_jumlah: jumlah, p_dikecualikan: kecuali });
+    if (error) galat = error.code === "22023" ? error.message : error.code === "42501" ? "Hanya pemilik atau admin yang bisa melihat kolam bonus." : "Pratinjau kolam gagal dihitung. Coba lagi sebentar.";
+    else h = data as HitungKolam;
+  }
+  return <KolamBonus bulan={bulan} jumlah={jumlah} kecuali={kecuali} h={h} galat={galat} pemilik={pemilik} />;
+}
+
 async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["searchParams"] }) {
   const sesi = await wajibPerusahaan();
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
@@ -97,11 +145,13 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
   // Akuntan ikut membaca tabel kinerja (sama dengan public.kpi_minggu) dan peta organisasi; peran lain melihat cermin miliknya.
   const lihatSemua = pengelola || sesi.peran === "akuntan";
   const tabPeta = lihatSemua && namaTab === "peta";
+  const tabBonus = pengelola && namaTab === "bonus";
   const daftarTab = [
-    { href: "/app/kerja", label: "Papan hari ini", aktif: !tabBeban && !tabKpi && !tabPeta },
+    { href: "/app/kerja", label: "Papan hari ini", aktif: !tabBeban && !tabKpi && !tabPeta && !tabBonus },
     ...(pengelola ? [{ href: "/app/kerja?tab=beban", label: "Beban minggu ini", aktif: tabBeban }] : []),
     { href: "/app/kerja?tab=kpi", label: lihatSemua ? "Kinerja minggu ini" : "Kerjamu minggu ini", aktif: tabKpi },
     ...(lihatSemua ? [{ href: "/app/kerja?tab=peta", label: "Peta organisasi", aktif: tabPeta }] : []),
+    ...(pengelola ? [{ href: "/app/kerja?tab=bonus", label: "Kolam bonus", aktif: tabBonus }] : []),
   ];
   const tab = (
     <nav aria-label="Bagian kerja" className="mt-4">
@@ -117,6 +167,16 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
       </ul>
     </nav>
   );
+  if (tabBonus) {
+    return (
+      <>
+        {tab}
+        <Suspense fallback={<KerangkaKolam />}>
+          <BagianKolam sp={sp} pemilik={sesi.peran === "pemilik"} zona={await zonaUsahaIni(sesi.perusahaanId)} />
+        </Suspense>
+      </>
+    );
+  }
   if (tabPeta) {
     return (
       <>

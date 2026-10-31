@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { bacaPengecualian, rupiahIsian, type Pengecualian } from "@/lib/gaji/kolam";
 import { bacaPoin, menitDariPoin, teksPoin, teksSelesai, type Estimasi } from "@/lib/kerja/poin";
 import { waktuLokalKeIso } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
@@ -161,4 +162,50 @@ export async function usulkanTopi(_: HasilKerja, form: FormData): Promise<HasilK
   // sudah memuat usulan ini.
   const r = data as { id: string; sudah: boolean };
   return { id: r.id, pesan: r.sudah ? "Usulan ini sudah ada di Feed pemilik." : "Terkirim ke Feed pemilik. Topi dipasang setelah pemilik menyetujui." };
+}
+
+/**
+ * Setujui pembagian kolam bonus beban (F3-05, pemilik saja): simpan_kolam (draf, kunci idempoten dari browser) lalu
+ * setujui_kolam. Database menghitung ulang dan menolak bila kerja berubah sejak pratinjau, bila gaji bulan itu sudah disetujui,
+ * atau bila kurang dari 5 kerja berpoin.
+ */
+export async function setujuiKolam(_: HasilKerja, form: FormData): Promise<HasilKerja> {
+  await wajibPerusahaan();
+  const bulan = teks(form, "bulan");
+  const jumlah = rupiahIsian(teks(form, "jumlah"));
+  const kunci = teks(form, "kunci");
+  if (!/^\d{4}-(0[1-9]|1[0-2])$/.test(bulan) || !jumlah) return { galat: "Isi bulan dan jumlah kolam dulu, lalu lihat pembagiannya." };
+  if (kunci && !ID_SAH.test(kunci)) return { galat: "Pilihan tidak dikenal. Muat ulang halaman ini." };
+  let dikecualikan: Pengecualian[];
+  try {
+    dikecualikan = bacaPengecualian((JSON.parse(teks(form, "dikecualikan") || "[]") as Pengecualian[]).map((x) => `${x.orang_id}~${x.alasan}`));
+  } catch {
+    return { galat: "Daftar pengecualian tidak terbaca. Muat ulang halaman ini." };
+  }
+  const supabase = await createClient();
+  const { data: d, error: e1 } = await supabase.rpc("simpan_kolam", { p_bulan: `${bulan}-01`, p_jumlah: jumlah, p_dikecualikan: dikecualikan, p_kunci: kunci || null });
+  if (e1) return { galat: galatDb(e1, "pemilik") };
+  const { data, error } = await supabase.rpc("setujui_kolam", { p_kolam: (d as { id: string }).id });
+  if (error) return { galat: galatDb(error, "pemilik") };
+  const r = data as { slip: number };
+  revalidatePath("/app/kerja");
+  revalidatePath("/app/gaji");
+  return {
+    pesan: r.slip
+      ? `Disetujui. Insentif masuk slip draf ${r.slip} orang; siapkan ulang gaji bulan itu supaya PPh 21 ikut dihitung.`
+      : "Disetujui. Insentif ikut masuk slip saat gaji bulan itu disiapkan di menu Gaji.",
+  };
+}
+
+/** Batalkan pembagian yang disetujui (pemilik, dengan alasan) selama gaji bulan itu belum disetujui. */
+export async function batalkanKolam(_: HasilKerja, form: FormData): Promise<HasilKerja> {
+  await wajibPerusahaan();
+  const kolam = teks(form, "kolam");
+  if (!ID_SAH.test(kolam)) return { galat: "Pilihan tidak dikenal. Muat ulang halaman ini." };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("batal_kolam", { p_kolam: kolam, p_alasan: teks(form, "alasan") });
+  if (error) return { galat: galatDb(error, "pemilik") };
+  revalidatePath("/app/kerja");
+  revalidatePath("/app/gaji");
+  return { pesan: "Dibatalkan. Insentif dicabut dari slip draf; alasanmu tercatat." };
 }
