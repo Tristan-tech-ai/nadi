@@ -21,6 +21,9 @@ const foto = (nama: string) => (process.env.E2E_FOTO_DIR ? join(process.env.E2E_
 const N = 25;
 const nomor = (i: number) => String(i).padStart(2, "0");
 
+// Kedua tes menyisipkan usulan dokumen ke usaha yang sama dan menghitung halaman; paralel akan saling menggeser.
+test.describe.configure({ mode: "serial" });
+
 test.beforeEach(({ page }, info) => {
   void page;
   test.skip(info.project.name !== "desktop" || !E.E2E_SANDI, "sekali (desktop), butuh .env.e2e.local");
@@ -131,6 +134,60 @@ test("Feed menyebut sisa usulan, membuka halaman berikut, dan menyaring per jeni
     await expect(page.getByTestId("pil-dokumen")).toContainText(String(dok - 1));
   } finally {
     // Sisanya ditolak lewat RPC yang sama dengan tombol Tolak (bukan dihapus).
+    for (const u of dibuat ?? []) await sb.rpc("putuskan_usulan", { p_usulan: u.id, p_setuju: false });
+    const { count: sisa } = await sb.from("usulan").select("id", { count: "exact", head: true }).eq("status", "menunggu").like("judul", `${tanda}%`);
+    expect(sisa).toBe(0);
+  }
+});
+
+// D-05B: kartu yang diputuskan tetap tampil di halaman 1, tetapi sudah tidak menunggu. Tautan halaman berikut harus mundur
+// sebanyak itu; dulu offset tetap 20 dan usulan yang bergeser ke posisi 18-20 tidak pernah tampil.
+test("memutuskan usulan di halaman 1 tidak membuat sisanya terlewat di halaman 2", async ({ page }) => {
+  test.setTimeout(180_000);
+  const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
+  expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
+  await tolakUsulanLama(sb);
+  const { data: klaim } = await sb.auth.getClaims();
+  const pid = (klaim?.claims.app_metadata as { pid: string }).pid;
+  const tanda = `Uji Feed celah ${Date.now()}`;
+  const awal = Date.now() - 10 * 60_000;
+  const baris = Array.from({ length: N }, (_, k) => ({
+    perusahaan_id: pid, sumber: "aturan", aksi: "dokumen.surat", judul: `${tanda} #${nomor(k + 1)}`,
+    penjelasan: "Usulan sintetis untuk uji Feed. Ditolak lagi setelah uji.", payload: { uji: "feed-celah" },
+    dibuat_at: new Date(awal + k * 1000).toISOString(), diberitahu_at: new Date().toISOString(),
+  }));
+  const { data: dibuat, error } = await sb.from("usulan").insert(baris).select("id");
+  expect(error).toBeNull();
+  expect(dibuat).toHaveLength(N);
+
+  try {
+    await page.goto("/masuk?next=/app");
+    await page.getByLabel("Email").fill(E.E2E_EMAIL_A);
+    await page.getByLabel("Kata sandi").fill(E.E2E_SANDI);
+    await page.getByRole("button", { name: "Masuk" }).click();
+    await page.waitForURL((u) => u.pathname === "/app");
+    // Terbaru + Dokumen: urutan pasti (waktu masuk), usulan uji ini di atas karena paling baru di antara usulan dokumen.
+    await page.goto("/app?jenis=dokumen&urut=terbaru");
+    const daftar = page.getByTestId("daftar-usulan");
+    await expect(daftar.locator("article")).toHaveCount(20);
+    const halaman1 = await daftar.locator("article h3").allTextContents();
+    expect(halaman1.slice(0, 3)).toEqual([`${tanda} #25`, `${tanda} #24`, `${tanda} #23`]);
+
+    // Tolak tiga kartu teratas lewat tombol; kartu tetap tampil dengan capnya.
+    for (let i = 0; i < 3; i++) {
+      const kartu = daftar.locator("article").nth(i);
+      await kartu.getByRole("button", { name: "Tolak" }).click();
+      await expect(kartu.getByTestId("hasil-putusan")).toContainText("Ditolak");
+    }
+    await expect(page.getByTestId("lihat-berikutnya")).toHaveAttribute("href", /lagi=17(&|$)/);
+    await page.getByTestId("lihat-berikutnya").click();
+    await page.waitForURL((u) => u.searchParams.get("lagi") === "17");
+    await expect(page.getByTestId("posisi-feed")).toContainText("Usulan 18 sampai");
+    const halaman2 = await daftar.locator("article h3").allTextContents();
+    // Setiap usulan uji tampil di halaman 1 atau 2; tidak ada yang terlewat.
+    const terlihat = new Set([...halaman1, ...halaman2].filter((j) => j.startsWith(tanda)));
+    expect([...terlihat].sort()).toEqual(baris.map((b) => b.judul).sort());
+  } finally {
     for (const u of dibuat ?? []) await sb.rpc("putuskan_usulan", { p_usulan: u.id, p_setuju: false });
     const { count: sisa } = await sb.from("usulan").select("id", { count: "exact", head: true }).eq("status", "menunggu").like("judul", `${tanda}%`);
     expect(sisa).toBe(0);

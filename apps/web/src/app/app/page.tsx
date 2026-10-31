@@ -1,6 +1,7 @@
 import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { Suspense } from "react";
+import { HalamanFeed, TautanBerikut } from "@/components/app/halaman-feed";
 import { AksiPutusan } from "@/components/app/putusan";
 import { KartuUsulan } from "@/components/ui/kartu-usulan";
 import { bacaTampilan, halaman, hitungJenis, hrefFeed, JENIS, JENIS_DIKENAL, LABEL_JENIS, PER_HALAMAN, usulanBaru, type Jenis, type JenisDikenal, type Tampilan, type Urut } from "@/lib/feed";
@@ -147,7 +148,7 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
           Belum ada usulan. Lempar berkas pertamamu, misalnya foto nota hari ini, dan Nadi akan menyiapkan isinya untuk kamu setujui.
         </p>
       ) : (
-        <>
+        <HalamanFeed>
           <Saringan t={t} total={semua} perJenis={perJenis} />
           {h.dari > 0 ? (
             <p className="mt-4 text-sm text-tinta-2" data-testid="posisi-feed">
@@ -181,9 +182,9 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
               )}
               <div className="mt-1 flex flex-wrap gap-x-5">
                 {h.berikut !== null ? (
-                  <Link href={hrefFeed({ ...t, lagi: h.berikut })} className={TAUTAN} data-testid="lihat-berikutnya">
+                  <TautanBerikut t={t} berikut={h.berikut} className={TAUTAN}>
                     Lihat {h.ukuranBerikut} berikutnya
-                  </Link>
+                  </TautanBerikut>
                 ) : null}
                 {h.sebelum !== null && h.sebelum > 0 ? (
                   <Link href={hrefFeed({ ...t, lagi: h.sebelum })} className={TAUTAN} data-testid="lihat-sebelumnya">
@@ -198,7 +199,7 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
               </div>
             </nav>
           ) : null}
-        </>
+        </HalamanFeed>
       )}
     </section>
   );

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { bacaTampilan, halaman, hitungJenis, hrefFeed, jenisDariAksi, SATU_HARI_MS, usulanBaru } from "./feed";
+import { bacaTampilan, halaman, hitungJenis, hrefFeed, jenisDariAksi, offsetBerikut, SATU_HARI_MS, usulanBaru } from "./feed";
 
 describe("feed: jenis dari aksi", () => {
   it("memakai awalan sebelum titik pertama", () => {
@@ -26,9 +26,9 @@ describe("feed: membaca parameter", () => {
   it("bawaan bila kosong", () => {
     expect(bacaTampilan({})).toEqual({ jenis: null, urut: "mendesak", lagi: 0 });
   });
-  it("offset dibulatkan ke kelipatan 20 dan nilai aneh ditolak", () => {
+  it("offset diterima apa adanya (bisa bukan kelipatan 20 setelah memutuskan) dan nilai aneh ditolak", () => {
     expect(bacaTampilan({ lagi: "20" }).lagi).toBe(20);
-    expect(bacaTampilan({ lagi: "45" }).lagi).toBe(40);
+    expect(bacaTampilan({ lagi: "17" }).lagi).toBe(17);
     expect(bacaTampilan({ lagi: "-20" }).lagi).toBe(0);
     expect(bacaTampilan({ lagi: "1e3" }).lagi).toBe(0);
     expect(bacaTampilan({ lagi: "abc" }).lagi).toBe(0);
@@ -86,5 +86,17 @@ describe("feed: jumlah per jenis dan penanda baru", () => {
     expect(usulanBaru("2026-10-30T04:00:00+00:00", sekarang)).toBe(false);
     expect(usulanBaru("2026-11-01T04:00:05Z", sekarang)).toBe(true);
     expect(usulanBaru("bukan tanggal", sekarang)).toBe(false);
+  });
+});
+
+describe("feed: halaman berikut setelah memutuskan (D-05B)", () => {
+  it("usulan yang diputuskan di halaman ini keluar dari daftar, jadi offset berikut mundur sebanyak itu", () => {
+    expect(offsetBerikut(20, 0)).toBe(20);
+    expect(offsetBerikut(20, 3)).toBe(17);
+    expect(offsetBerikut(40, 20)).toBe(20);
+    expect(offsetBerikut(20, 25)).toBe(0);
+  });
+  it("halaman dari offset 17 menomori 18 sampai akhir tanpa celah", () => {
+    expect(halaman(22, 17)).toMatchObject({ dari: 18, sampai: 22, sisa: 0, berikut: null, sebelum: 0 });
   });
 });

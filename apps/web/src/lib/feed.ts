@@ -23,14 +23,15 @@ export function jenisDariAksi(aksi: string): Jenis {
 
 const pertama = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
 
-/** Membaca searchParams Feed. Nilai yang tidak dikenal jatuh ke bawaan; offset dibulatkan ke kelipatan 20. */
+/** Membaca searchParams Feed. Nilai yang tidak dikenal jatuh ke bawaan. Offset tidak dibulatkan: setelah memutuskan usulan,
+ *  tautan halaman berikut mundur sebanyak usulan yang diputuskan (offsetBerikut), jadi bisa bukan kelipatan 20. */
 export function bacaTampilan(sp: Record<string, string | string[] | undefined>): Tampilan {
   const j = pertama(sp.jenis);
   const jenis = j && (JENIS as readonly string[]).includes(j) ? (j as Jenis) : null;
   const urut: Urut = pertama(sp.urut) === "terbaru" ? "terbaru" : "mendesak";
   const l = pertama(sp.lagi) ?? "";
   const angka = /^\d{1,9}$/.test(l) ? Number(l) : 0;
-  const lagi = Math.min(Math.floor(angka / PER_HALAMAN) * PER_HALAMAN, LAGI_MAKS);
+  const lagi = Math.min(angka, LAGI_MAKS);
   return { jenis, urut, lagi };
 }
 
@@ -85,4 +86,10 @@ export function hitungJenis(total: number, dikenal: Record<JenisDikenal, number>
 export function usulanBaru(dibuatAt: string, sekarang: number): boolean {
   const t = Date.parse(dibuatAt);
   return Number.isFinite(t) && sekarang - t < SATU_HARI_MS;
+}
+
+/** Offset halaman berikut setelah `diputuskan` usulan di halaman ini disetujui/ditolak. Usulan itu tidak lagi menunggu, sehingga
+ *  daftar saat tautan dibuka lebih pendek sebanyak itu; tanpa pengurangan, usulan sebanyak itu terlewat (docs/research/feed-urutan.md). */
+export function offsetBerikut(berikut: number, diputuskan: number): number {
+  return Math.max(0, berikut - Math.max(0, diputuskan));
 }
