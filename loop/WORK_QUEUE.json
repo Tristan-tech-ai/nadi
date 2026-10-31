@@ -1480,6 +1480,34 @@
    "created": "2026-10-31T18:23:54",
    "done": "2026-10-31T21:24:33",
    "result": "commit e079053: pushManager.subscribe di profil Chrome baru 6-29 dtk (diukur 4 kali: 6,5/28,7/28,1/6,7 dtk; jaringan FCM mtalk:5228 terbuka), push.spec memakai profil tetap tmpdir/nadi-push-profil + batas 90 dtk; push.spec 2/2 lulus (1,8 mnt)"
+  },
+  {
+   "id": "Q-02B",
+   "fase": "Q",
+   "kind": "build",
+   "priority": 22,
+   "size": "s",
+   "wajib": false,
+   "title": "Foto nota lebih hemat storage",
+   "accept": "foto dikompres ke sisi 1600 px JPEG 0,7 (terukur 118 KB vs 289 KB) dan eval foto nota tetap 5/5 (scripts eval-ekstraktor + OCR korpus); bila turun, setelan lama dipertahankan dan hasil dicatat di docs/quality/kapasitas.md",
+   "how": "ubah ukuranKompres sisiMaks dan kualitas di pelempar.tsx; jalankan eval OCR foto korpus dengan setelan baru",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T22:31:35"
+  },
+  {
+   "id": "F2-03B",
+   "fase": "F2",
+   "kind": "build",
+   "priority": 22,
+   "size": "s",
+   "wajib": false,
+   "title": "Rekaman wawancara 24 kbps",
+   "accept": "MediaRecorder audioBitsPerSecond 24000 (cek docs MDN); korpus suara dikodekan ulang Opus 24 kbps dengan ffmpeg lalu WER whisper-small tetap <= 0,5 (sekarang 0,43); e2e wawancara lulus",
+   "how": "rekam-wawancara.tsx opsi audioBitsPerSecond; scripts/eval-wawancara.ts dengan korpus opus 24k",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T22:31:35"
   }
  ]
 }

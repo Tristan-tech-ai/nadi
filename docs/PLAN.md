@@ -473,7 +473,7 @@ Beban utama aplikasi ini adalah I/O dan database, jadi efisiensi dicari di desai
 - partisi bulanan;
 - tolak secara bawaan.
 
-**Kapasitas Supabase Free (perkiraan, diukur di Q-02):** ±50 perusahaan × ±15 orang. Batas yang mentok duluan adalah DB 500 MB dan egress 5 GB. Mode hemat yang dipasang:
+**Kapasitas Supabase Free (terukur di Q-02, docs/quality/kapasitas.md):** database ±300 usaha × 15 orang di tahun pertama (±1,5 MB per usaha); egress ±300 usaha (perkiraan ±15 MB per usaha per bulan); storage 1 GB mentok duluan karena foto nota (289 KB per foto, ±43 MB per bulan untuk 5 nota sehari). Mode hemat yang dipasang:
 - retensi kejadian mentah 90 hari;
 - kompresi foto di HP;
 - selfie tidak disimpan;
