@@ -26,7 +26,7 @@ export function BebanMingguIni({ data }: { data: BebanMinggu }) {
         {tanggal(data.mulai)} sampai {tanggal(data.akhir)}. Dihitung dari poin perkiraan kerja yang selesai dan yang sedang berjalan, bukan dari lama orang mengerjakannya.
       </p>
       {cukup ? (
-        ringkas.terberat && <p className="mt-3 text-base font-semibold" data-testid="kalimat-beban">{kalimatTerberat(ringkas)}</p>
+        ringkas.terberat && <p className="mt-3 text-base font-semibold" data-testid="kalimat-beban">{kalimatTerberat(ringkas, data.jam_sama_rata)}</p>
       ) : (
         <p className="mt-3 rounded-[var(--radius-isian)] border border-garis-kuat p-3 text-sm" data-testid="beban-belum">
           Beban belum bisa dibandingkan. Butuh minimal {MIN_SELESAI} kerja selesai minggu ini; sekarang baru {data.selesai_n}.

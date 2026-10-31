@@ -9,7 +9,7 @@ Ditulis 1 Nov 2026. F3-01 memberi setiap kerja Poin Beban (1 poin = 15 menit waj
 
 ## Layar pemilik (/app/kerja, tab "Beban minggu ini")
 - Satu baris per orang, bergaris buku kas: nama, topi, poin minggu ini, jam jadwal, beban per jam, batang tipis (token `tinta-2`, yang paling berat ditandai stabilo `kunyit` beserta teks "paling berat").
-- Di atas daftar satu kalimat angka: "Sari memikul 31% kerja minggu ini dengan 20% jam kerja." Tanpa kata sifat.
+- Di atas daftar satu kalimat angka: "Sari memikul 31% kerja minggu ini dengan 20% jam kerja." Tanpa kata sifat. Selama jam kerja belum diatur (semua orang dianggap sama), porsi jam tidak disebut: "Sari memikul 31% kerja minggu ini." (Q-28, docs/research/beban-per-jam.md).
 - Saat menambah kerja tanpa pelaksana, usulan pelaksana: orang bertopi cocok dengan beban per jam terendah, dengan alasan tertulis ("Budi: 6 poin minggu ini, paling ringan di antara kasir"). Pemilik bisa memilih orang lain; pilihan itu tidak dipersoalkan.
 
 ## Layar staf

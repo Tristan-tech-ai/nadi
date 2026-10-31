@@ -169,9 +169,14 @@ export const MIN_KELOMPOK = 3;
 
 const angka = (x: number) => String(Math.round(x * 100) / 100).replace(".", ",");
 
-/** "Sari memikul 31% kerja minggu ini dengan 20% jam kerja." Tanpa kata sifat (docs/design/bagi-adil.md). */
-export function kalimatTerberat(r: RingkasBeban): string | null {
-  return r.terberat ? `${r.terberat.nama} memikul ${r.terberat.porsiPoin}% kerja minggu ini dengan ${r.terberat.porsiJam}% jam kerja.` : null;
+/**
+ * "Sari memikul 31% kerja minggu ini dengan 20% jam kerja." Tanpa kata sifat (docs/design/bagi-adil.md).
+ * Bila jam kerja belum diatur (semua orang dianggap sama), porsi jam hanya anggapan, jadi tidak disebut (Q-28, docs/research/beban-per-jam.md).
+ */
+export function kalimatTerberat(r: RingkasBeban, jamSamaRata = false): string | null {
+  if (!r.terberat) return null;
+  const awal = `${r.terberat.nama} memikul ${r.terberat.porsiPoin}% kerja minggu ini`;
+  return jamSamaRata ? `${awal}.` : `${awal} dengan ${r.terberat.porsiJam}% jam kerja.`;
 }
 
 /**

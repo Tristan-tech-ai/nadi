@@ -105,7 +105,9 @@ test("bagi adil: beban minggu ini, usulan ke yang paling ringan beserta alasan, 
     // Paling berat: teks di atas stabilo, satu orang, yaitu Sari (staf lain di usaha uji paling banyak 2 poin dan dinonaktifkan).
     await expect(page.getByTestId("paling-berat")).toHaveCount(1);
     await expect(baris(nama.berat).getByTestId("paling-berat")).toHaveText("paling berat");
-    await expect(page.getByTestId("kalimat-beban")).toHaveText(new RegExp(`^${nama.berat} memikul \\d+% kerja minggu ini dengan \\d+% jam kerja\\.$`));
+    await expect(page.getByTestId("kalimat-beban")).toHaveText(new RegExp(`^${nama.berat} memikul \\d+% kerja minggu ini(?: dengan \\d+% jam kerja)?\\.$`));
+    // Q-28: selama jam kerja belum diatur, kalimat tidak menyebut porsi jam anggapan.
+    if ((await page.getByTestId("jam-sama-rata").count()) > 0) await expect(page.getByTestId("kalimat-beban")).not.toContainText("jam kerja");
     await axeDanFoto(page, "beban-pemilik");
 
     // Tambah kerja tanpa pelaksana: usulan ke Dewi beserta alasan; memilih orang lain menyembunyikan usulan.

@@ -187,6 +187,12 @@ describe("teks layar beban", () => {
     expect(kalimatTerberat(ringkasBeban(contoh() as (OrangBeban & { nama: string })[]))).toBe("Sari memikul 59% kerja minggu ini dengan 40% jam kerja.");
     expect(kalimatTerberat({ terberat: null, gini: 0, totalPoin: 0 })).toBeNull();
   });
+  it("jam kerja belum diatur (sama rata): kalimat tidak menyebut porsi jam anggapan", async () => {
+    const { kalimatTerberat } = await import("./adil");
+    const r = ringkasBeban(contoh() as (OrangBeban & { nama: string })[]);
+    expect(kalimatTerberat(r, true)).toBe("Sari memikul 59% kerja minggu ini.");
+    expect(kalimatTerberat(r, false)).toBe("Sari memikul 59% kerja minggu ini dengan 40% jam kerja.");
+  });
   it("staf: poin sendiri dan rata-rata tim, tanpa nama", async () => {
     const { teksBebanSaya } = await import("./adil");
     const dasar = { mulai: "2026-10-26", akhir: "2026-11-01", n: 4, di_atas: false };
