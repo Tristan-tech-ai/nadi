@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import type { JenisHariLembur } from "@/lib/gaji/bpjs-lembur";
 import { ringkasKomponen, susunSlip, type DataGaji, type Komponen, type LemburHari, type PetaAturan } from "@/lib/gaji/susun";
 import { JENIS_LEMBUR } from "@/lib/gaji/lembur";
-import { asal } from "@/lib/mcp/http";
+import { asalTautan } from "@/lib/mcp/http";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 
@@ -90,7 +90,7 @@ export async function bagikanSlip(_: HasilTautanSlip, form: FormData): Promise<H
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("buat_tautan_slip", { p_slip: String(form.get("slip") ?? "") });
   if (error || !data) return { galat: error?.message ?? "Tautan slip gagal dibuat." };
-  return { tautan: `${asal(await headers())}/slip#${data as string}`, nama: String(form.get("nama") ?? "") };
+  return { tautan: `${asalTautan(await headers())}/slip#${data as string}`, nama: String(form.get("nama") ?? "") };
 }
 
 const PTKP = ["TK/0", "TK/1", "TK/2", "TK/3", "K/0", "K/1", "K/2", "K/3"];

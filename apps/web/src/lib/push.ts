@@ -11,11 +11,28 @@ export function bytesDariBase64Url(teks: string): Uint8Array<ArrayBuffer> {
 
 export type LanggananPush = { endpoint: string; p256dh: string; auth: string };
 
+// Host layanan push peramban yang dikenal (Q-14, cegah SSRF lewat endpoint buatan). Sumber: docs Microsoft WNS (domain
+// notify.windows.com, resmi); FCM, Mozilla autopush, Apple dari sumber sekunder (loop/LEARN.md 31 Okt 2026).
+const HOST_PUSH = ["fcm.googleapis.com", "updates.push.services.mozilla.com"];
+const AKHIRAN_PUSH = [".push.services.mozilla.com", ".push.apple.com", ".notify.windows.com"];
+
+/** Endpoint https ke layanan push yang dikenal (host persis atau subdomain dari akhiran yang dikenal). */
+export function hostPushDikenal(endpoint: string): boolean {
+  let u: URL;
+  try {
+    u = new URL(endpoint);
+  } catch {
+    return false;
+  }
+  const host = u.hostname.toLowerCase();
+  return u.protocol === "https:" && !u.port && (HOST_PUSH.includes(host) || AKHIRAN_PUSH.some((a) => host.endsWith(a)));
+}
+
 /** Memeriksa bentuk PushSubscription.toJSON() dari klien sebelum disimpan. Null bila tidak sah. */
 export function bacaLangganan(masukan: unknown): LanggananPush | null {
   if (!masukan || typeof masukan !== "object") return null;
   const { endpoint, keys } = masukan as { endpoint?: unknown; keys?: { p256dh?: unknown; auth?: unknown } };
-  if (typeof endpoint !== "string" || !endpoint.startsWith("https://") || endpoint.length > 2048) return null;
+  if (typeof endpoint !== "string" || !endpoint.startsWith("https://") || endpoint.length > 2048 || !hostPushDikenal(endpoint)) return null;
   const p256dh = keys?.p256dh;
   const auth = keys?.auth;
   const b64url = /^[A-Za-z0-9_-]+={0,2}$/;

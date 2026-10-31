@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { ubahBukaLowongan } from "@/app/app/lowongan-actions";
 import { FormLowongan } from "@/components/app/form-lowongan";
 import { Cap } from "@/components/ui/cap";
-import { asal } from "@/lib/mcp/http";
+import { asalTautan } from "@/lib/mcp/http";
 import type { PeringatanBias } from "@/lib/rekrut/bias";
 import { createClient } from "@/lib/supabase/server";
 
@@ -16,7 +16,7 @@ export async function KartuLowongan() {
     supabase.from("topi").select("id, nama").order("nama"),
   ]);
   const daftar = (l ?? []) as unknown as Lowongan[];
-  const dasar = asal(await headers());
+  const dasar = asalTautan(await headers());
   return (
     <section className="mt-10 border-t border-garis pt-6" aria-labelledby="judul-lowongan" data-testid="kartu-lowongan">
       <h2 id="judul-lowongan" className="text-lg font-semibold">Lowongan</h2>

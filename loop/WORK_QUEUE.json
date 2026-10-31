@@ -1456,6 +1456,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-10-31T16:51:11"
+  },
+  {
+   "id": "Q-15",
+   "fase": "Q",
+   "kind": "test",
+   "priority": 25,
+   "size": "s",
+   "wajib": false,
+   "title": "e2e push lulus lagi",
+   "accept": "e2e/push.spec lulus lokal dan produksi; penyebab pesan kosong 20 detik (31 Okt 2026, gagal di kode lama dan baru) ditemukan dan dicatat: subscribe Chrome macet, FCM tidak terjangkau, atau host endpoint baru di luar daftar izin",
+   "how": "jalankan dengan trace, cetak endpoint langganan dan galat pushManager.subscribe; bandingkan dengan HOST_PUSH di src/lib/push.ts",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T18:23:54"
   }
  ]
 }

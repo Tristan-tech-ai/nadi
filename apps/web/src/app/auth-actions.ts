@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { cekIsianDaftar, jalurAman, pesanGalatAuth, type HasilForm } from "@/lib/auth-pesan";
+import { asalTautan } from "@/lib/mcp/http";
 import { createClient } from "@/lib/supabase/server";
 
 const teks = (f: FormData, k: string) => String(f.get(k) ?? "").trim();
@@ -50,8 +51,7 @@ export async function daftar(_: HasilForm, form: FormData): Promise<HasilForm> {
   if (salah) return { galat: salah, isian: { email } };
   const supabase = await createClient();
   const h = await headers();
-  const asal = `${h.get("x-forwarded-proto") ?? "https"}://${h.get("x-forwarded-host") ?? h.get("host")}`;
-  const { data, error } = await supabase.auth.signUp({ email, password: sandi, options: { emailRedirectTo: `${asal}/auth/konfirmasi?next=/app/mulai` } });
+  const { data, error } = await supabase.auth.signUp({ email, password: sandi, options: { emailRedirectTo: `${asalTautan(h)}/auth/konfirmasi?next=/app/mulai` } });
   if (error) return { galat: pesanGalatAuth(error.code), isian: { email } };
   // Konfirmasi email mati: sesi langsung ada. Menyala: minta pengguna membuka email.
   if (data.session) redirect("/app/mulai");

@@ -3,7 +3,7 @@
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { tautanTablet } from "@/lib/absen/kios";
-import { asal } from "@/lib/mcp/http";
+import { asalTautan } from "@/lib/mcp/http";
 import { createClient } from "@/lib/supabase/server";
 
 export type HasilTautan = { tautan: string; nama: string } | { galat: string } | null;
@@ -15,7 +15,7 @@ export async function buatTautanTablet(_: HasilTautan, form: FormData): Promise<
   const { data, error } = await supabase.rpc("buat_token_kios", { p_nama: nama });
   if (error || !data) return { galat: "Tautan tablet gagal dibuat. Hanya pemilik atau admin yang bisa membuatnya." };
   revalidatePath("/app/perusahaan");
-  return { tautan: tautanTablet(asal(await headers()), (data as { token: string }).token), nama };
+  return { tautan: tautanTablet(asalTautan(await headers()), (data as { token: string }).token), nama };
 }
 
 export async function cabutTablet(form: FormData): Promise<void> {

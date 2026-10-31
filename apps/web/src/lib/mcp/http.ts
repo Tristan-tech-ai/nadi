@@ -9,6 +9,17 @@ export function asal(h: Headers): string {
   return `${proto}://${host}`;
 }
 
+/**
+ * Asal untuk tautan yang dibagikan ke orang lain (slip, tablet absen, lamar, email konfirmasi): dari konfigurasi, bukan header
+ * permintaan (Q-14). NADI_ASAL bila diisi; di produksi Vercel memakai VERCEL_PROJECT_PRODUCTION_URL (docs Vercel system env);
+ * selain itu sama dengan asal(). Resource dan metadata OAuth/MCP tetap memakai asal() karena harus sama dengan URL yang dipakai klien.
+ */
+export function asalTautan(h: Headers): string {
+  const tetap = process.env.NADI_ASAL?.trim()
+    || (process.env.VERCEL_ENV === "production" && process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "");
+  return tetap ? tetap.replace(/\/+$/, "").toLowerCase() : asal(h);
+}
+
 /** URI kanonis server MCP (RFC 8707 `resource`), dipakai sebagai audiens token. */
 export const resourceMcp = (h: Headers) => `${asal(h)}/api/mcp`;
 export const urlPrm = (h: Headers) => `${asal(h)}/.well-known/oauth-protected-resource/api/mcp`;
