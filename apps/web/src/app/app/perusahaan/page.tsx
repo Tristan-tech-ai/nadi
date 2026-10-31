@@ -5,6 +5,7 @@ import { pindahPerusahaan } from "@/app/app/actions";
 import { AiMilikmu } from "@/components/app/ai-milikmu";
 import { HematAi } from "@/components/app/hemat-ai";
 import { KebijakanIzin } from "@/components/app/kebijakan-izin";
+import { KeputusanOtomatis } from "@/components/app/keputusan-otomatis";
 import { Pemberitahuan } from "@/components/app/pemberitahuan";
 import { TabletAbsen } from "@/components/app/tablet-absen";
 import { createClient } from "@/lib/supabase/server";
@@ -70,6 +71,9 @@ export default function Perusahaan() {
       </Suspense>
       <Suspense fallback={<div className="mt-10 h-64 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <KebijakanIzin />
+      </Suspense>
+      <Suspense fallback={<div className="mt-10 h-40 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+        <KeputusanOtomatis />
       </Suspense>
       <Suspense fallback={<div className="mt-10 h-28 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <TabletAbsen />

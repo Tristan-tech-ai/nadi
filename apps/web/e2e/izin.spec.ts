@@ -119,5 +119,17 @@ test("izin: otopilot menyetujui sesuai aturan, sisanya masuk Feed dan diputuskan
   await staf.reload();
   const item = staf.getByTestId("daftar-izin").getByRole("listitem").filter({ hasText: "3 hari" });
   await expect(item).toContainText("Disetujui pemilik.");
+
+  // F1-06: pemilik membatalkan persetujuan otomatis 1 hari dari kartu Keputusan otomatis; pengajuan kembali menunggu.
+  await page.goto("/app/perusahaan");
+  const keputusan = page.getByTestId("daftar-keputusan").getByRole("listitem").filter({ hasText: "Disetujui otomatis: sakit 1 hari dengan bukti" }).first();
+  await keputusan.getByRole("button", { name: "Batalkan" }).click();
+  await keputusan.getByLabel("Alasan membatalkan").fill("Hari itu ada pesanan besar");
+  await keputusan.getByRole("button", { name: "Batalkan keputusan" }).click();
+  // Halaman dirender ulang: tombol diganti cap Dibatalkan dan alasan batal.
+  await expect(page.getByText("Alasan batal: Hari itu ada pesanan besar").first()).toBeVisible();
+  await expect(page.getByTestId("keputusan-otomatis")).toContainText("biasanya");
+  await staf.reload();
+  await expect(staf.getByTestId("daftar-izin").getByRole("listitem").filter({ hasText: "1 hari" })).toContainText("Persetujuan otomatis dibatalkan: Hari itu ada pesanan besar");
   await staf.context().close();
 });
