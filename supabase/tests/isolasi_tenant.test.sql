@@ -94,7 +94,8 @@ begin
   klaim_s := json_build_object('sub', us, 'role', 'authenticated', 'app_metadata', json_build_object('pid', pa, 'prn', 'staf'))::text;
   perform set_config('request.jwt.claims', klaim_s, true);
   execute 'set local role authenticated';
-  perform pg_temp.cek('staf melihat orang di perusahaannya', (select count(*) from public.orang) = 2);
+  -- Q-12 S8: staf hanya membaca baris orang dirinya; staf ini belum tertaut ke orang mana pun.
+  perform pg_temp.cek('staf tidak melihat data orang lain', (select count(*) from public.orang) = 0);
   perform pg_temp.cek('staf tidak melihat data rahasia', (select count(*) from public.orang_rahasia) = 0);
   perform pg_temp.cek('staf tidak melihat audit', (select count(*) from public.audit_log) = 0);
   begin
