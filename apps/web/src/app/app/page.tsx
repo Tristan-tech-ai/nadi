@@ -9,7 +9,7 @@ import { catatanRubrik, nilaiPelamar, rubrikDariTopi, saringCv } from "@/lib/rek
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 
-const SUMBER: Record<string, string> = { lempar: "Dari Lempar Saja", analis: "Dari Analis Malam", aturan: "Dari aturan", mcp: "Dari asisten AI-mu", mata: "Dari kamera", staf: "Dari karyawan" };
+const SUMBER: Record<string, string> = { lempar: "Dari Lempar Saja", analis: "Dari Analis Malam", aturan: "Dari aturan", mcp: "Dari asisten AI-mu", mata: "Dari kamera", staf: "Dari karyawan", peta: "Dari peta organisasi" };
 
 type Topi = { nama: string; keahlian: unknown; tanggung_jawab: unknown };
 type UsulanFeed = { id: string; aksi: string; payload: unknown; berkas_id: string | null };

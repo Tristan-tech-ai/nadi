@@ -134,3 +134,27 @@ export async function tandaiKeliru(_: HasilKerja, form: FormData): Promise<Hasil
   const r = data as { id: string; sudah: boolean };
   return { id: r.id, pesan: r.sudah ? "Kerja ini sudah ditandai. Pemilik akan melihatnya di Feed." : "Terkirim ke pemilik. Pemilik akan melihat tandamu di Feed." };
 }
+
+/**
+ * "Pasang topi X ke Y" (F3-04, peta organisasi): membuat usulan orang.topi untuk pemilik lewat public.usulkan_pasang_topi, bukan
+ * memasang langsung. Database memeriksa ulang dasarnya (lintas topi >= 30% poin orang itu 4 minggu terakhir). Kunci idempoten dari
+ * browser: kiriman ulang useOffline mengembalikan usulan yang sama.
+ */
+export async function usulkanTopi(_: HasilKerja, form: FormData): Promise<HasilKerja> {
+  await wajibPerusahaan();
+  const orang = teks(form, "orang");
+  const topi = teks(form, "topi");
+  const kunci = teks(form, "kunci");
+  if (!ID_SAH.test(orang) || !ID_SAH.test(topi) || (kunci && !ID_SAH.test(kunci))) return { galat: "Pilihan tidak dikenal. Muat ulang halaman ini." };
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("usulkan_pasang_topi", { p_orang: orang, p_topi: topi, p_kunci: kunci || null });
+  if (error) {
+    if (error.code === "42501" || error.code === "22023") return { galat: error.message };
+    return { galat: "Nadi gagal menyimpan usulan. Coba lagi sebentar." };
+  }
+  // Tanpa revalidatePath: penyegaran halaman yang sedang dilihat akan mengganti tombol dengan teks "sudah menunggu" sebelum pesan
+  // hasil terbaca (role=status). Feed dan peta dirender per permintaan (staleTimes.dynamic bawaan 0), jadi kunjungan berikutnya
+  // sudah memuat usulan ini.
+  const r = data as { id: string; sudah: boolean };
+  return { id: r.id, pesan: r.sudah ? "Usulan ini sudah ada di Feed pemilik." : "Terkirim ke Feed pemilik. Topi dipasang setelah pemilik menyetujui." };
+}

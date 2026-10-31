@@ -5,8 +5,10 @@ import { ArrowsLeftRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { BebanMingguIni, BebanSayaIni } from "@/components/app/beban";
 import { CerminKpi, KembaliKeTabel, KerangkaKpi, KpiMingguIni, KpiTanpaOrang } from "@/components/app/kpi";
 import { PapanStaf, TambahKerja, UbahPoin, type KerjaTampil } from "@/components/app/kerja";
+import { KerangkaPeta, PetaOrganisasi } from "@/components/app/peta";
 import type { BebanMinggu, BebanSaya } from "@/lib/kerja/adil";
 import type { KpiMinggu, KpiSaya } from "@/lib/kerja/kpi";
+import { bacaPeta, type Peta } from "@/lib/kerja/peta";
 import { formatJam } from "@/lib/format";
 import { bacaKolom, formatTenggat, LABEL_STATUS, ringkasStatus, STATUS_KERJA, teksPoin, teksSelesai, type KerjaPapan, type StatusKerja } from "@/lib/kerja/poin";
 import { createClient } from "@/lib/supabase/server";
@@ -70,6 +72,19 @@ async function BagianKpi({ semua, orang }: { semua: boolean; orang: string | nul
   );
 }
 
+/**
+ * Tab peta organisasi (F3-04, docs/design/peta-organisasi.md): pemilik, admin, akuntan (public.peta_organisasi, 4 minggu terakhir).
+ * Tombol "Pasang topi" hanya untuk pemilik/admin; akuntan membaca.
+ */
+async function BagianPeta({ bolehUsul }: { bolehUsul: boolean }) {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("peta_organisasi", { p_minggu: 4 });
+  if (error || !data) {
+    return <p role="alert" className="mt-6 text-cap" data-testid="peta-galat">Peta organisasi gagal dimuat. Muat ulang halaman ini sebentar lagi; kerja di papan tidak terpengaruh.</p>;
+  }
+  return <PetaOrganisasi p={bacaPeta(data as Peta)} bolehUsul={bolehUsul} />;
+}
+
 async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["searchParams"] }) {
   const sesi = await wajibPerusahaan();
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
@@ -78,12 +93,14 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
   const namaTab = pertama(sp.tab);
   const tabBeban = pengelola && namaTab === "beban";
   const tabKpi = namaTab === "kpi";
-  // Akuntan ikut membaca tabel kinerja (sama dengan public.kpi_minggu); peran lain melihat cermin miliknya.
+  // Akuntan ikut membaca tabel kinerja (sama dengan public.kpi_minggu) dan peta organisasi; peran lain melihat cermin miliknya.
   const lihatSemua = pengelola || sesi.peran === "akuntan";
+  const tabPeta = lihatSemua && namaTab === "peta";
   const daftarTab = [
-    { href: "/app/kerja", label: "Papan hari ini", aktif: !tabBeban && !tabKpi },
+    { href: "/app/kerja", label: "Papan hari ini", aktif: !tabBeban && !tabKpi && !tabPeta },
     ...(pengelola ? [{ href: "/app/kerja?tab=beban", label: "Beban minggu ini", aktif: tabBeban }] : []),
     { href: "/app/kerja?tab=kpi", label: lihatSemua ? "Kinerja minggu ini" : "Kerjamu minggu ini", aktif: tabKpi },
+    ...(lihatSemua ? [{ href: "/app/kerja?tab=peta", label: "Peta organisasi", aktif: tabPeta }] : []),
   ];
   const tab = (
     <nav aria-label="Bagian kerja" className="mt-4">
@@ -99,6 +116,16 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
       </ul>
     </nav>
   );
+  if (tabPeta) {
+    return (
+      <>
+        {tab}
+        <Suspense fallback={<KerangkaPeta />}>
+          <BagianPeta bolehUsul={pengelola} />
+        </Suspense>
+      </>
+    );
+  }
   if (tabKpi) {
     const orang = pertama(sp.orang);
     return (
