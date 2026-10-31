@@ -29,7 +29,7 @@ begin
   execute 'set local role anon';
   perform set_config('request.jwt.claims', json_build_object('role', 'anon')::text, true);
   r := public.lowongan_publik(lower(v_kode));
-  perform pg_temp.cek('halaman publik: judul, ringkasan, usaha saja', r = jsonb_build_object('judul', 'Pelayan shift malam', 'ringkasan', 'Melayani tamu 17.00 sampai 23.00', 'usaha', 'Warung Uji A', 'buka', true), r::text);
+  perform pg_temp.cek('halaman publik: judul, ringkasan, usaha saja', r = jsonb_build_object('judul', 'Pelayan shift malam', 'ringkasan', 'Melayani tamu 17.00 sampai 23.00', 'usaha', 'Warung Uji A', 'buka', true, 'pertanyaan', '[]'::jsonb), r::text);
   r := public.lamar_daftar(v_kode, 'Dewi Lestari', '0812-3456-7890', sha, 'application/pdf', 120000);
   la := (r ->> 'lamaran')::uuid; bid := (r ->> 'berkas')::uuid; jalur := r ->> 'jalur';
   perform pg_temp.cek('lamar mendapat slot unggah di jalur lamar', (r ->> 'perlu_unggah')::boolean and jalur = pa || '/lamar/' || sha || '.pdf', r::text);
