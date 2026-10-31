@@ -577,7 +577,7 @@
    "wajib": true,
    "title": "Kolam Bonus Beban",
    "accept": "pembagian bonus menurut poin kontribusi, dapat diekspor",
-   "how": "",
+   "how": "docs/design/kolam-bonus-beban.md (insentif beban, PP 36/2021 Pasal 8/10/11; sisa terbesar; komponen slip insentif_beban; CSV)",
    "blocked_by": "F3-03",
    "status": "ready",
    "created": "2026-10-30T20:05:52"
@@ -1638,6 +1638,48 @@
    "created": "2026-11-01T02:20:17",
    "done": "2026-11-01T02:30:17",
    "result": "ae17fb9 (push 5015321) migrasi 20261101009000_jwt_cabut_q21.sql sidik d4287477 = db (51 migrasi); 17 kebijakan baca + storage berkas_unduh memeriksa anggota_aktif/peran_aktif; tes jwt_cabut_q21 merah 8/17 lalu 17/17; regresi isolasi_tenant 38, keamanan_q12 19, usulan_pemilik_q17 6, bagi_adil 27, papan_kerja 58, kpi 40, keputusan 23 semua gagal=[]; e2e produksi bagi-adil/keputusan-model/izin lulus; get_advisors anon tetap 21; docs/quality/jwt-setelah-cabut.md"
+  },
+  {
+   "id": "Q-22",
+   "fase": "Q",
+   "kind": "build",
+   "priority": 28,
+   "size": "s",
+   "wajib": true,
+   "title": "Pola kerja usaha satu sumber (5 atau 6 hari)",
+   "accept": "app.pola_kerja(pid) membaca perusahaan.pengaturan pola_kerja (bawaan 6_hari); pemilik mengubahnya di /app/perusahaan (kartu Aturan kerja, tercatat audit); catat_lembur menolak jenis libur yang tidak cocok dengan pola usaha; tes SQL (isolasi tenant, staf/admin tidak bisa mengubah, pola 6 menolak libur_pola_5_hari, lembur lama tidak berubah) + e2e + foto 390/1440",
+   "how": "docs/research/pola-kerja.md; prasyarat F3-06 (batas jam harian) dan F3-07 (upah sehari /25 atau /21)",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T02:47:25"
+  },
+  {
+   "id": "Q-23",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 45,
+   "size": "s",
+   "wajib": false,
+   "title": "Fungsi tidak memakai klaim peran JWT (gerbang_gaji, lempar_berkas)",
+   "accept": "gerbang_gaji memakai app.peran_aktif() = 'pemilik', lempar_berkas memakai app.peran_aktif() in ('pemilik','admin'); tes struktur di jwt_cabut_q21: tidak ada fungsi public/app selain definisinya yang memanggil app.prn()/app.pengelola() (merah dulu: 2 fungsi); regresi gerbang_gaji, lempar (tes SQL), isolasi_tenant hijau; sidik = database",
+   "how": "docs/quality/klaim-di-fungsi.md",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T02:53:34"
+  },
+  {
+   "id": "Q-24",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 26,
+   "size": "m",
+   "wajib": true,
+   "title": "Batas hari dan minggu memakai zona usaha, bukan WITA tetap",
+   "accept": "setiap fungsi public/app yang memakai 'Asia/Makassar' selain sebagai cadangan coalesce(zona_waktu, ...) diganti ke perusahaan.zona_waktu (lewat fungsi app.zona(pid)); tes struktur: 0 fungsi memakai 'Asia/Makassar' di luar coalesce zona_waktu (merah dulu); tes perilaku untuk usaha Asia/Jakarta dan Asia/Jayapura di ajukan_izin, gerbang_gaji, papan_kerja; regresi izin_otopilot, gerbang_gaji, papan_kerja, kpi, bagi_adil, isolasi_tenant hijau; sidik = database",
+   "how": "docs/quality/zona-fungsi.md (kelompok C: catat_izin, batalkan_keputusan, ajukan_izin, gerbang_gaji, izin_ringkas, peringatan_rencana, putuskan_usulan, catat_jam_rekrut; D: antre_rute_model, rute_model_uji_mulai, batas_berkas; A/B dibiarkan); app.zona(pid) + app.hari_ini(pid)",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T02:56:44"
   }
  ]
 }
