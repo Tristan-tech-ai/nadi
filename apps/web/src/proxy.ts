@@ -4,6 +4,8 @@ import { readPublicEnv } from "@/lib/env";
 
 // Area yang butuh masuk. Selain ini publik (landing, lamaran kandidat, verifikasi surat).
 const DILINDUNGI = ["/app", "/oauth/izinkan", "/absen", "/kios"];
+// Pengecualian di dalam area terlindung: tablet kios memakai token tablet sendiri, bukan sesi.
+const TERBUKA = ["/kios/tablet"];
 
 // Menyegarkan sesi Supabase di setiap permintaan dan melindungi area aplikasi.
 export async function proxy(request: NextRequest) {
@@ -28,7 +30,7 @@ export async function proxy(request: NextRequest) {
   // getClaims memeriksa JWT secara lokal (tanpa jaringan) dan menyegarkan sesi bila kedaluwarsa.
   const { data } = await supabase.auth.getClaims();
   const path = request.nextUrl.pathname;
-  if (!data?.claims?.sub && DILINDUNGI.some((p) => path === p || path.startsWith(p + "/"))) {
+  if (!data?.claims?.sub && !TERBUKA.includes(path) && DILINDUNGI.some((p) => path === p || path.startsWith(p + "/"))) {
     const url = request.nextUrl.clone();
     url.pathname = "/masuk";
     url.search = `?next=${encodeURIComponent(path + request.nextUrl.search)}`;

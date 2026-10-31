@@ -4,8 +4,8 @@ import QRCode from "qrcode";
 import { useEffect, useState } from "react";
 import { ambilKodeKios, type KodeKios } from "@/app/kios/actions";
 
-/** Layar kios: QR absen yang berganti tiap 15 detik, dengan kode angka dan hitung mundur. */
-export function LayarKios() {
+/** Layar kios: QR absen yang berganti tiap 15 detik, dengan kode angka dan hitung mundur. `ambil` default lewat sesi pemilik/admin. */
+export function LayarKios({ ambil = ambilKodeKios }: { ambil?: () => Promise<KodeKios> }) {
   const [k, setK] = useState<KodeKios | null>(null);
   const [svg, setSvg] = useState("");
   const [sisa, setSisa] = useState(0);
@@ -14,7 +14,7 @@ export function LayarKios() {
     let aktif = true;
     let jeda: ReturnType<typeof setTimeout>;
     const muat = async () => {
-      const baru = await ambilKodeKios().catch((): KodeKios => ({ galat: "Kode absen gagal dimuat. Periksa internet tablet ini." }));
+      const baru = await ambil().catch((): KodeKios => ({ galat: "Kode absen gagal dimuat. Periksa internet tablet ini." }));
       if (!aktif) return;
       setK(baru);
       if ("kode" in baru) {
@@ -31,7 +31,7 @@ export function LayarKios() {
       clearTimeout(jeda);
       clearInterval(detik);
     };
-  }, []);
+  }, [ambil]);
 
   if (!k) return <div className="mx-auto aspect-square w-full max-w-md animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />;
   if ("galat" in k) return <p role="alert" className="text-lg text-tinta-2">{k.galat}</p>;
