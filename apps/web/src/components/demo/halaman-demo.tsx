@@ -24,8 +24,15 @@ const SUMBER: Record<string, string> = { lempar: "Dari Lempar Saja", mcp: "Dari 
 /** Data usaha contoh; berubah hanya saat penyegaran malam, jadi disimpan di cache server (prerender + segarkan per jam). */
 async function ambilDemo(kunci: "fnb" | "toko") {
   "use cache";
-  cacheLife("hours");
-  return (await anonRpc("demo_lihat", { p_kunci: kunci })) as Demo | null;
+  try {
+    const d = (await anonRpc("demo_lihat", { p_kunci: kunci })) as Demo | null;
+    cacheLife("hours");
+    return d;
+  } catch {
+    // Database tidak terjangkau (mis. build tanpa kunci asli): jangan simpan kegagalan lama-lama.
+    cacheLife("seconds");
+    return null;
+  }
 }
 
 export async function HalamanDemo({ kunci }: { kunci: "fnb" | "toko" }) {
