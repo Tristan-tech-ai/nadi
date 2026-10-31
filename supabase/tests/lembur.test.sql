@@ -40,7 +40,10 @@ begin
     perform pg_temp.cek('hari kerja lebih dari 4 jam ditolak', false);
   exception when others then perform pg_temp.cek('hari kerja lebih dari 4 jam ditolak', sqlerrm like '%paling lama 4 jam%', sqlerrm);
   end;
+  -- Q-22: jenis libur mengikuti pola usaha (bawaan 6 hari); batas 12 jam pola 5 diuji setelah pemilik memilih pola 5.
+  perform public.atur_pola_kerja('5_hari');
   perform pg_temp.cek('libur pola 5 hari boleh 12 jam', public.catat_lembur(o2, senin + 5, 'libur_pola_5_hari', 12) is not null);
+  perform public.atur_pola_kerja('6_hari');
   begin
     perform public.catat_lembur(o2, senin + 6, 'libur_pola_6_hari', 12);
     perform pg_temp.cek('libur pola 6 hari lebih dari 11 jam ditolak', false);
