@@ -9,7 +9,7 @@ grant execute on function pg_temp.cek(text, boolean, text) to public;
 
 do $$
 declare
-  ua uuid := gen_random_uuid(); ub uuid := gen_random_uuid(); pa uuid; pb uuid; ka text; kb text; lw uuid; kode text; r jsonb; n int; x text;
+  ua uuid := gen_random_uuid(); ub uuid := gen_random_uuid(); pa uuid; pb uuid; ka text; kb text; lw uuid; v_kode text; r jsonb; n int; x text;
   la uuid; bid uuid; jalur text;
   sha text := repeat('a', 64);
 begin
@@ -22,15 +22,15 @@ begin
   ka := json_build_object('sub', ua, 'role', 'authenticated', 'app_metadata', json_build_object('pid', pa, 'prn', 'pemilik'))::text;
   kb := json_build_object('sub', ub, 'role', 'authenticated', 'app_metadata', json_build_object('pid', pb, 'prn', 'pemilik'))::text;
   perform set_config('request.jwt.claims', ka, true);
-  insert into public.lowongan (perusahaan_id, judul, ringkasan) values (pa, 'Pelayan shift malam', 'Melayani tamu 17.00 sampai 23.00') returning id, kode into lw, kode;
-  perform pg_temp.cek('kode lowongan 8 huruf tanpa karakter mirip', kode ~ '^[A-HJ-NP-Z2-9]{8}$', kode);
+  insert into public.lowongan (perusahaan_id, judul, ringkasan) values (pa, 'Pelayan shift malam', 'Melayani tamu 17.00 sampai 23.00') returning lowongan.id, lowongan.kode into lw, v_kode;
+  perform pg_temp.cek('kode lowongan 8 huruf tanpa karakter mirip', v_kode ~ '^[A-HJ-NP-Z2-9]{8}$', v_kode);
 
   -- Tanpa akun.
   execute 'set local role anon';
   perform set_config('request.jwt.claims', json_build_object('role', 'anon')::text, true);
-  r := public.lowongan_publik(lower(kode));
+  r := public.lowongan_publik(lower(v_kode));
   perform pg_temp.cek('halaman publik: judul, ringkasan, usaha saja', r = jsonb_build_object('judul', 'Pelayan shift malam', 'ringkasan', 'Melayani tamu 17.00 sampai 23.00', 'usaha', 'Warung Uji A', 'buka', true), r::text);
-  r := public.lamar_daftar(kode, 'Dewi Lestari', '0812-3456-7890', sha, 'application/pdf', 120000);
+  r := public.lamar_daftar(v_kode, 'Dewi Lestari', '0812-3456-7890', sha, 'application/pdf', 120000);
   la := (r ->> 'lamaran')::uuid; bid := (r ->> 'berkas')::uuid; jalur := r ->> 'jalur';
   perform pg_temp.cek('lamar mendapat slot unggah di jalur lamar', (r ->> 'perlu_unggah')::boolean and jalur = pa || '/lamar/' || sha || '.pdf', r::text);
   begin
@@ -53,20 +53,20 @@ begin
   r := public.lamar_selesai(la);
   perform pg_temp.cek('selesai: lamaran diproses', r ->> 'status' = 'diproses', r::text);
   begin
-    perform public.lamar_daftar(kode, 'Dewi', '0812 0000 0000', sha, 'image/gif', 1000);
+    perform public.lamar_daftar(v_kode, 'Dewi', '0812 0000 0000', sha, 'image/gif', 1000);
     perform pg_temp.cek('jenis berkas selain foto/PDF ditolak', false);
   exception when others then perform pg_temp.cek('jenis berkas selain foto/PDF ditolak', sqlerrm like 'CV harus berupa foto atau PDF%', sqlerrm);
   end;
   begin
-    perform public.lamar_daftar(kode, ' ', '0812 0000 0000', sha, 'application/pdf', 1000);
+    perform public.lamar_daftar(v_kode, ' ', '0812 0000 0000', sha, 'application/pdf', 1000);
     perform pg_temp.cek('nama kosong ditolak', false);
   exception when others then perform pg_temp.cek('nama kosong ditolak', sqlerrm like 'Tulis nama%', sqlerrm);
   end;
   -- Nomor HP sama (format beda) paling banyak 3 kali.
-  perform public.lamar_daftar(kode, 'Dewi Lestari', '+62 812 3456 7890', repeat('d', 64), 'image/jpeg', 1000);
-  perform public.lamar_daftar(kode, 'Dewi Lestari', '081234567890', repeat('e', 64), 'image/jpeg', 1000);
+  perform public.lamar_daftar(v_kode, 'Dewi Lestari', '+62 812 3456 7890', repeat('d', 64), 'image/jpeg', 1000);
+  perform public.lamar_daftar(v_kode, 'Dewi Lestari', '081234567890', repeat('e', 64), 'image/jpeg', 1000);
   begin
-    perform public.lamar_daftar(kode, 'Dewi Lestari', '0812-3456-7890', repeat('f', 64), 'image/jpeg', 1000);
+    perform public.lamar_daftar(v_kode, 'Dewi Lestari', '0812-3456-7890', repeat('f', 64), 'image/jpeg', 1000);
     perform pg_temp.cek('nomor HP yang sama ke-4 ditolak', false);
   exception when others then perform pg_temp.cek('nomor HP yang sama ke-4 ditolak', sqlerrm like 'Nomor HP ini sudah melamar%', sqlerrm);
   end;
@@ -88,7 +88,7 @@ begin
   execute 'set local role anon';
   perform set_config('request.jwt.claims', json_build_object('role', 'anon')::text, true);
   begin
-    perform public.lamar_daftar(kode, 'Bagus', '0813 1111 2222', repeat('9', 64), 'application/pdf', 1000);
+    perform public.lamar_daftar(v_kode, 'Bagus', '0813 1111 2222', repeat('9', 64), 'application/pdf', 1000);
     perform pg_temp.cek('kuota harian penuh ditolak', false);
   exception when others then perform pg_temp.cek('kuota harian penuh ditolak', sqlerrm like 'Lowongan ini sedang menerima banyak lamaran%', sqlerrm);
   end;
@@ -97,7 +97,7 @@ begin
   execute 'set local role anon';
   perform set_config('request.jwt.claims', json_build_object('role', 'anon')::text, true);
   begin
-    perform public.lamar_daftar(kode, 'Bagus', '0813 1111 2222', repeat('9', 64), 'application/pdf', 1000);
+    perform public.lamar_daftar(v_kode, 'Bagus', '0813 1111 2222', repeat('9', 64), 'application/pdf', 1000);
     perform pg_temp.cek('lowongan tutup ditolak', false);
   exception when others then perform pg_temp.cek('lowongan tutup ditolak', sqlerrm like 'Lowongan ini sudah ditutup%', sqlerrm);
   end;
