@@ -72,3 +72,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 19:40 | Q-13 | penguncian kode absen (5/menit) dan PIN staf (5/15 menit, banned_until), absen_ragu; tes 7/11 merah lalu 12/12, absen_qr 21, akun_staf 13, keamanan_q01 20; e2e auth+absen lulus lokal dan produksi | fbcd2a3 |
 | 31 Okt 2026 20:20 | Q-14 | pengerasan CIMD/push/asal tautan/token MCP: unit 7 merah lalu 38/38, SQL 5 merah lalu 7/7, regresi mcp_oauth 31, web_push 15, push_usulan 11; e2e produksi 10/10; Q-15 (e2e push) ditambah | bce21ba |
 | 31 Okt 2026 20:50 | F2-03 (sebagian) | rancangan wawancara suara + WER korpus (tes 5/5, merah sengaja); riset model ASR dan lisensi korpus; alat TTS espeak via echogarden siap di scratchpad | f4eccca |
+| 31 Okt 2026 21:30 | F2-03 (sebagian) | korpus suara sintetis 20 klip; WER tercatat: whisper-tiny 3,96, base 0,86, small 0,43; keputusan whisper-small q8 di perangkat penilai | ada3ff2 |
