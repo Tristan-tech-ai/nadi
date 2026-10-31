@@ -122,8 +122,11 @@ begin
     -- Staf: hanya bebannya dan rata-rata tim, tanpa nama atau angka rekan.
     perform set_config('request.jwt.claims', ks, true);
     r := public.beban_saya();
-    perform pg_temp.cek('staf: bebannya 9, rata-rata tim (9 + 3 + 3 + 0) / 4 = 3,8, di atas 1,5 kali',
-      (r ->> 'poin')::numeric = 9 and (r ->> 'rata_rata')::numeric = 3.8 and (r ->> 'n')::int = 4 and (r ->> 'di_atas')::boolean, r::text);
+    -- Q-27: rata-rata dari orang yang memakai papan kerja minggu ini (Tono tanpa kerja tidak ikut); di atas butuh > 1,5 kali dan
+    -- selisih minimal 4 poin.
+    perform pg_temp.cek('staf: bebannya 9, rata-rata kelompok (9 + 3 + 3) / 3 = 5, di atas (9 > 7,5 dan selisih 4)',
+      (r ->> 'poin')::numeric = 9 and (r ->> 'rata_rata')::numeric = 5 and (r ->> 'n')::int = 3 and (r ->> 'n_kelompok')::int = 3
+      and (r ->> 'di_atas')::boolean, r::text);
     perform pg_temp.cek('staf: jawaban tanpa nama dan tanpa daftar orang',
       not (r ? 'orang') and r::text not like '%Budi%' and r::text not like '%Dewi%' and r::text not like '%Tono%', r::text);
     begin
@@ -148,7 +151,8 @@ begin
     perform pg_temp.cek('usaha lain hanya melihat orangnya sendiri', jsonb_array_length(r -> 'orang') = 1 and r -> 'orang' -> 0 ->> 'nama' = 'Rahasia B'
       and r::text not like '%Uji%' and (r ->> 'selesai_n')::int = 0, r::text);
     r := public.beban_saya();
-    perform pg_temp.cek('usaha lain: tim kurang dari 3 orang, rata-rata disembunyikan', r -> 'rata_rata' = 'null'::jsonb and (r ->> 'n')::int = 1, r::text);
+    perform pg_temp.cek('usaha lain: kelompok kurang dari 3 orang, rata-rata disembunyikan', r -> 'rata_rata' = 'null'::jsonb and (r ->> 'n')::int = 0
+      and not (r ->> 'di_atas')::boolean, r::text);
     execute 'set local role anon';
     begin
       perform public.beban_minggu();

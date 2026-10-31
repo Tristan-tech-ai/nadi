@@ -192,6 +192,45 @@ describe("teks layar beban", () => {
     const dasar = { mulai: "2026-10-26", akhir: "2026-11-01", n: 4, di_atas: false };
     expect(teksBebanSaya({ ...dasar, poin: 18, rata_rata: 15 })).toBe("Minggu ini 18 poin. Rata-rata tim 15.");
     expect(teksBebanSaya({ ...dasar, poin: 9, rata_rata: 3.8 })).toBe("Minggu ini 9 poin. Rata-rata tim 3,8.");
-    expect(teksBebanSaya({ ...dasar, n: 2, poin: 2.5, rata_rata: null })).toBe("Minggu ini 2,5 poin. Rata-rata tim tampil bila tim minimal 3 orang.");
+    expect(teksBebanSaya({ ...dasar, n: 2, poin: 2.5, rata_rata: null })).toBe("Minggu ini 2,5 poin. Rata-rata tim tampil bila minimal 3 orang memakai papan kerja minggu ini.");
+  });
+  // Q-27 (docs/design/rata-rata-beban.md): rata-rata dari orang yang memakai papan kerja minggu ini, rata-rata tim tidak pernah tertulis nol.
+  it("staf: kelompok kurang dari 3 orang, rata-rata tidak tampil", async () => {
+    const { teksBebanSaya } = await import("./adil");
+    const dasar = { mulai: "2026-10-26", akhir: "2026-11-01", di_atas: false };
+    const kecil = "Rata-rata tim tampil bila minimal 3 orang memakai papan kerja minggu ini.";
+    expect(teksBebanSaya({ ...dasar, n: 2, n_kelompok: 2, poin: 5, rata_rata: null })).toBe(`Minggu ini 5 poin. ${kecil}`);
+    expect(teksBebanSaya({ ...dasar, n: 0, n_kelompok: 0, poin: 0, rata_rata: null })).toBe(`Minggu ini 0 poin. ${kecil}`);
+    // Angka rata-rata dari kelompok kecil tidak dipakai walau terkirim.
+    expect(teksBebanSaya({ ...dasar, n: 2, n_kelompok: 2, poin: 5, rata_rata: 3.5 })).toBe(`Minggu ini 5 poin. ${kecil}`);
+  });
+  it("staf: rata-rata di bawah 0,1 ditulis belum ada, bukan 0", async () => {
+    const { teksBebanSaya } = await import("./adil");
+    const dasar = { mulai: "2026-10-26", akhir: "2026-11-01", di_atas: false };
+    expect(teksBebanSaya({ ...dasar, n: 50, n_kelompok: 50, poin: 2, rata_rata: 0 })).toBe("Minggu ini 2 poin. Rata-rata tim belum ada.");
+    expect(teksBebanSaya({ ...dasar, n: 50, n_kelompok: 50, poin: 2, rata_rata: 0.04 })).toBe("Minggu ini 2 poin. Rata-rata tim belum ada.");
+    // Batas: 0,1 sudah tampil sebagai angka.
+    expect(teksBebanSaya({ ...dasar, n: 3, n_kelompok: 3, poin: 1, rata_rata: 0.1 })).toBe("Minggu ini 1 poin. Rata-rata tim " + "0,1.");
+  });
+  it("staf: tabel contoh rancangan", async () => {
+    const { teksBebanSaya } = await import("./adil");
+    const dasar = { mulai: "2026-10-26", akhir: "2026-11-01", n: 3, n_kelompok: 3 };
+    expect(teksBebanSaya({ ...dasar, poin: 6, rata_rata: 4, di_atas: false })).toBe("Minggu ini 6 poin. Rata-rata tim 4.");
+    expect(teksBebanSaya({ ...dasar, poin: 12, rata_rata: 6, di_atas: true })).toBe("Minggu ini 12 poin. Rata-rata tim 6.");
+    expect(teksBebanSaya({ ...dasar, poin: 3, rata_rata: 1.7, di_atas: false })).toBe("Minggu ini 3 poin. Rata-rata tim 1,7.");
+    expect(teksBebanSaya({ ...dasar, poin: 0, rata_rata: 4, di_atas: false })).toBe("Minggu ini 0 poin. Rata-rata tim 4.");
+  });
+  it("staf: tidak ada masukan yang menghasilkan rata-rata tim bernilai 0", async () => {
+    const { teksBebanSaya } = await import("./adil");
+    // "tim 0" diikuti titik atau spasi = rata-rata nol; "tim 0,4" boleh.
+    const nol = /tim 0(?![,\d])/;
+    for (const n of [0, 1, 2, 3, 4, 50]) {
+      for (const rata of [null, 0, 0.01, 0.04, 0.05, 0.09, 0.0999, 0.1, 0.2, 1, 4]) {
+        for (const poin of [null, 0, 0.25, 2, 6]) {
+          const t = teksBebanSaya({ mulai: "2026-10-26", akhir: "2026-11-01", n, n_kelompok: n, poin, rata_rata: rata, di_atas: false });
+          expect(t, JSON.stringify({ n, rata, poin })).not.toMatch(nol);
+        }
+      }
+    }
   });
 });

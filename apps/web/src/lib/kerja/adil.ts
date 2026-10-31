@@ -158,7 +158,14 @@ export type BarisBeban = {
   terakhir_diberi: string | null;
 };
 export type BebanMinggu = { mulai: string; akhir: string; jam_sama_rata: boolean; jam_bawaan: number; selesai_n: number; orang: BarisBeban[] };
-export type BebanSaya = { mulai: string; akhir: string; poin: number | null; n: number; rata_rata: number | null; di_atas: boolean };
+/**
+ * Satu jawaban public.beban_saya. Sejak Q-27, n dan n_kelompok = jumlah orang yang memakai papan kerja minggu itu (poin, antre,
+ * atau kerja selesai > 0); rata_rata null bila kelompok itu kurang dari 3 orang.
+ */
+export type BebanSaya = { mulai: string; akhir: string; poin: number | null; n: number; n_kelompok?: number; rata_rata: number | null; di_atas: boolean };
+
+/** Minimal orang di kelompok pembanding sebelum rata-rata tim tampil (sama dengan public.beban_saya). */
+export const MIN_KELOMPOK = 3;
 
 const angka = (x: number) => String(Math.round(x * 100) / 100).replace(".", ",");
 
@@ -167,9 +174,16 @@ export function kalimatTerberat(r: RingkasBeban): string | null {
   return r.terberat ? `${r.terberat.nama} memikul ${r.terberat.porsiPoin}% kerja minggu ini dengan ${r.terberat.porsiJam}% jam kerja.` : null;
 }
 
-/** Layar staf: "Minggu ini 18 poin. Rata-rata tim 15." Tanpa nama rekan. */
+/**
+ * Layar staf: "Minggu ini 18 poin. Rata-rata tim 15." Tanpa nama rekan. Rata-rata tim tidak pernah tertulis nol (Q-27,
+ * docs/design/rata-rata-beban.md): kelompok di bawah 3 orang menjelaskan kapan rata-rata tampil, rata-rata di bawah 0,1 ditulis
+ * belum ada.
+ */
 export function teksBebanSaya(b: BebanSaya): string {
   if (b.poin === null) return "Bebanmu minggu ini belum tercatat karena akunmu belum terhubung ke data orang di usaha ini.";
-  const rata = b.rata_rata === null ? "Rata-rata tim tampil bila tim minimal 3 orang." : `Rata-rata tim ${angka(b.rata_rata)}.`;
+  const kelompok = b.n_kelompok ?? b.n;
+  const rata = b.rata_rata === null || kelompok < MIN_KELOMPOK
+    ? "Rata-rata tim tampil bila minimal 3 orang memakai papan kerja minggu ini."
+    : b.rata_rata < 0.1 ? "Rata-rata tim belum ada." : `Rata-rata tim ${angka(b.rata_rata)}.`;
   return `Minggu ini ${angka(b.poin)} poin. ${rata}`;
 }
