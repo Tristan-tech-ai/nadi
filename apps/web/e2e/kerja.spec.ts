@@ -46,8 +46,11 @@ test("kerja: pemilik menambah kerja berpoin, staf mulai sampai selesai, durasi n
   expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
   const pid = ((await sb.auth.getClaims()).data?.claims?.app_metadata as { pid?: string } | undefined)?.pid;
   expect(pid).toBeTruthy();
-  const { data: usaha } = await sb.from("perusahaan").select("nama, kode").eq("id", pid!).single();
+  const { data: usaha } = await sb.from("perusahaan").select("nama, kode, zona_waktu").eq("id", pid!).single();
   expect(usaha?.nama, "usaha aktif akun A harus Warung Uji A").toBe("Warung Uji A");
+  expect(usaha?.zona_waktu, "Warung Uji A memakai WIB, beda dari zona browser uji (WITA)").toBe("Asia/Jakarta");
+  const besokWib = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jakarta", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date(Date.now() + 86_400_000));
+  const jamWib = (ms: number) => new Intl.DateTimeFormat("en-GB", { timeZone: "Asia/Jakarta", hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(new Date(ms)).replace(":", ".");
 
   const jejak = String(Date.now());
   const namaStaf = `Staf Kerja ${jejak}`;
@@ -76,14 +79,15 @@ test("kerja: pemilik menambah kerja berpoin, staf mulai sampai selesai, durasi n
     await expect(form).toBeVisible();
     await form.getByLabel("Judul kerja").fill(judul);
     await form.getByRole("combobox", { name: /^Pelaksana/ }).selectOption({ label: namaStaf });
-    const tenggat = new Date(Date.now() + 11 * 3600_000).toISOString().slice(0, 16); // 3 jam lagi, jam WITA
-    await form.getByLabel("Tenggat (boleh kosong)").fill(tenggat);
+    // Q-25: usaha uji WIB, browser uji WITA (playwright.config). Jam yang diketik dibaca di zona usaha: besok 17.00 WIB = 10.00 UTC.
+    await form.getByLabel("Tenggat (boleh kosong)").fill(`${besokWib}T17:00`);
     await form.getByRole("button", { name: "Simpan kerja" }).click();
     await expect(page.getByTestId("hasil-tambah")).toContainText("Tersimpan.", { timeout: 40_000 });
 
     // Poin dari riwayat (0 token) atau model ringan; keduanya membawa alasan.
-    const { data: kr } = await sb.from("kerja").select("id, data, poin_beban").eq("judul", judul).single();
+    const { data: kr } = await sb.from("kerja").select("id, data, poin_beban, tenggat").eq("judul", judul).single();
     const idKerja = kr!.id as string;
+    expect(new Date(kr!.tenggat as string).toISOString(), "17.00 WIB tersimpan 10.00 UTC").toBe(`${besokWib}T10:00:00.000Z`);
     const sumberAwal = (kr!.data as { estimasi?: { sumber?: string } }).estimasi?.sumber ?? null;
     test.info().annotations.push({ type: "sumber poin awal", description: String(sumberAwal) });
     expect(["riwayat", "model"], "estimasi otomatis tersimpan").toContain(sumberAwal);
@@ -92,6 +96,7 @@ test("kerja: pemilik menambah kerja berpoin, staf mulai sampai selesai, durasi n
     await expect(kartu.getByTestId("poin-kerja")).toHaveText(/^\d+(,\d+)? poin, (dari \d+ kerja serupa|perkiraan model)$/);
     await expect(kartu.getByTestId("alasan-poin")).not.toBeEmpty();
     await expect(kartu).toContainText(namaStaf);
+    await expect(kartu, "jam tenggat yang tampil sama dengan yang diketik").toContainText("Tenggat Besok, 17.00");
 
     // Ubah poin manual: 2 poin = 30 menit.
     await kartu.getByText("Ubah poin").click();
@@ -118,11 +123,17 @@ test("kerja: pemilik menambah kerja berpoin, staf mulai sampai selesai, durasi n
     await expect(aktif).toContainText(judul);
     await expect(staf.getByTestId("status-aktif")).toHaveText("Belum dimulai");
     await expect(aktif).toContainText("2 poin, sekitar 30 menit");
+    await expect(aktif).toContainText("Tenggat Besok, 17.00");
     await axeDanFoto(staf, "kerja-staf-mulai");
 
     await aktif.getByRole("button", { name: "Mulai" }).click();
     await expect(staf.getByTestId("hasil-kerja")).toHaveText("Dimulai. Tekan Selesai bila sudah beres.");
     await expect(staf.getByTestId("status-aktif")).toContainText("Sedang jalan sejak");
+    // Jam mulai di zona usaha (WIB), bukan zona browser (WITA): satu menit toleransi untuk jam server dan pergantian menit.
+    const kini = Date.now();
+    expect([kini - 60_000, kini, kini + 60_000].map((t) => `Sedang jalan sejak ${jamWib(t)}`)).toContain((await staf.getByTestId("status-aktif").textContent())?.trim());
+    await staf.setViewportSize({ width: 390, height: 844 });
+    await staf.screenshot({ path: foto("kerja-staf-jalan-wib-390-light.png"), fullPage: true });
     await aktif.getByRole("button", { name: "Tunggu dulu" }).click();
     await expect(staf.getByTestId("hasil-kerja")).toHaveText("Ditunda. Waktu menunggu tidak dihitung.");
     await expect(staf.getByTestId("status-aktif")).toHaveText("Ditunda dulu");
