@@ -6,6 +6,7 @@ import { LABEL_PEMILIK, tahapSah } from "@/lib/rekrut/keputusan";
 import { formatLamaMenit, menitSah } from "@/lib/rekrut/magang";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { zonaUsaha } from "@/lib/zona-usaha";
 
 export type HasilKeputusan = { pesan: string } | { galat: string } | null;
 
@@ -13,7 +14,7 @@ const ID_SAH = /^[0-9a-f-]{36}$/i;
 
 /** Ubah tahap lamaran (F2-05). Database memeriksa pemilik/admin dan usaha yang sama; pesan maks 500 huruf. */
 export async function ubahTahap(_: HasilKeputusan, form: FormData): Promise<HasilKeputusan> {
-  await wajibPerusahaan();
+  const sesi = await wajibPerusahaan();
   const lamaran = String(form.get("lamaran") ?? "");
   const tahap = String(form.get("tahap") ?? "");
   const pesan = String(form.get("pesan") ?? "").trim();
@@ -30,7 +31,7 @@ export async function ubahTahap(_: HasilKeputusan, form: FormData): Promise<Hasi
   revalidatePath("/app/orang");
   const tersimpan = `Tersimpan: ${LABEL_PEMILIK[tahap].toLowerCase()}. Pelamar melihatnya di tautan statusnya.`;
   if (menit !== null) {
-    const { error: e2 } = await supabase.rpc("catat_jam_rekrut", { p_jenis: "penilai", p_rencana: null, p_lamaran: lamaran, p_tanggal: hariIni(), p_menit: menit, p_catatan: null });
+    const { error: e2 } = await supabase.rpc("catat_jam_rekrut", { p_jenis: "penilai", p_rencana: null, p_lamaran: lamaran, p_tanggal: hariIni(new Date(), await zonaUsaha(supabase, sesi.perusahaanId)), p_menit: menit, p_catatan: null });
     if (e2) return { galat: `${tersimpan} Tapi ${menit} menit menilai belum tercatat; isi lagi lalu simpan.` };
     revalidatePath("/app/magang");
     return { pesan: `${tersimpan} ${formatLamaMenit(menit)} menilai tercatat di Dana Rekrutmen.` };

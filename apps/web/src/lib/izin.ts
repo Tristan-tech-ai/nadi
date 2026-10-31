@@ -16,6 +16,17 @@ export function hariIni(sekarang: Date = new Date(), zona = "Asia/Makassar"): st
   return new Intl.DateTimeFormat("en-CA", { timeZone: zona, year: "numeric", month: "2-digit", day: "2-digit" }).format(sekarang);
 }
 
+/** Zona IANA usaha dari perusahaan.zona_waktu; cadangan Asia/Jakarta sama dengan bawaan kolom dan app.zona di database. */
+export function zonaSah(zona: unknown): string {
+  if (typeof zona !== "string" || zona === "") return "Asia/Jakarta";
+  try {
+    new Intl.DateTimeFormat("en-CA", { timeZone: zona });
+    return zona;
+  } catch {
+    return "Asia/Jakarta";
+  }
+}
+
 const pecah = (t: string) => {
   const m = POLA.exec(t);
   return m ? { tahun: Number(m[1]), bulan: Number(m[2]), hari: Number(m[3]) } : null;

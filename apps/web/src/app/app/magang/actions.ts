@@ -5,6 +5,7 @@ import { hariIni } from "@/lib/izin";
 import { bacaRupiahBulat, formatLamaMenit, menitSah, rapikanMinggu, statusRencanaSah, STATUS_RENCANA, type Peringatan } from "@/lib/rekrut/magang";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { zonaUsaha } from "@/lib/zona-usaha";
 
 export type HasilMagang = { pesan: string } | { galat: string } | null;
 
@@ -84,14 +85,14 @@ export async function ubahStatusRencana(_: HasilMagang, form: FormData): Promise
 
 /** Catat satu sesi bimbingan (mentor rencana itu, pemilik, atau admin). Tarif usaha disalin database ke baris ini. */
 export async function catatSesi(_: HasilMagang, form: FormData): Promise<HasilMagang> {
-  await wajibPerusahaan();
+  const sesi = await wajibPerusahaan();
   const rencana = teks(form, "rencana");
   const tanggal = teks(form, "tanggal");
   const menit = Number(teks(form, "menit"));
   const catatan = teks(form, "catatan");
   if (!ID_SAH.test(rencana)) return { galat: "Rencana tidak dikenal. Muat ulang halaman ini." };
   if (!TANGGAL_SAH.test(tanggal)) return { galat: "Isi tanggal sesi." };
-  if (tanggal > hariIni()) return { galat: "Tanggal sesi tidak boleh di masa depan." };
+  if (tanggal > hariIni(new Date(), await zonaUsaha(await createClient(), sesi.perusahaanId))) return { galat: "Tanggal sesi tidak boleh di masa depan." };
   if (!menitSah(menit)) return { galat: "Isi lama bimbingan 1 sampai 600 menit." };
   if (catatan.length > 300) return { galat: `Catatan ${catatan.length} huruf. Pendekkan jadi paling banyak 300 huruf.` };
   const supabase = await createClient();

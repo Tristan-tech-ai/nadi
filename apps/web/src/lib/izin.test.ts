@@ -1,7 +1,21 @@
 import { describe, expect, it } from "vitest";
-import { angkaIsian, capStatus, hariIni, jumlahHari, rentangTanggal } from "./izin";
+import { angkaIsian, capStatus, hariIni, jumlahHari, rentangTanggal, zonaSah } from "./izin";
 
 describe("izin: tanggal dan isian", () => {
+  it("hari ini mengikuti zona usaha di batas tengah malam (Q-24)", () => {
+    // 31 Okt 23.30 WIB = 1 Nov 00.30 WITA: usaha WIB masih 31 Okt.
+    expect(hariIni(new Date("2026-10-31T16:30:00Z"), "Asia/Jakarta")).toBe("2026-10-31");
+    expect(hariIni(new Date("2026-10-31T16:30:00Z"), "Asia/Makassar")).toBe("2026-11-01");
+    // 1 Nov 00.30 WIT = 31 Okt 23.30 WITA: usaha WIT sudah 1 Nov.
+    expect(hariIni(new Date("2026-10-31T15:30:00Z"), "Asia/Jayapura")).toBe("2026-11-01");
+    expect(hariIni(new Date("2026-10-31T15:30:00Z"), "Asia/Makassar")).toBe("2026-10-31");
+  });
+  it("zona usaha yang kosong atau tidak dikenal jatuh ke Asia/Jakarta seperti bawaan kolom", () => {
+    expect(zonaSah("Asia/Jayapura")).toBe("Asia/Jayapura");
+    expect(zonaSah(null)).toBe("Asia/Jakarta");
+    expect(zonaSah("")).toBe("Asia/Jakarta");
+    expect(zonaSah("Bukan/Zona")).toBe("Asia/Jakarta");
+  });
   it("hari ini memakai zona WITA, bukan UTC", () => {
     expect(hariIni(new Date("2026-10-31T17:30:00Z"))).toBe("2026-11-01");
     expect(hariIni(new Date("2026-10-31T15:30:00Z"))).toBe("2026-10-31");
