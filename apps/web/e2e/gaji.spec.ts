@@ -194,3 +194,175 @@ test("lembur 4 jam hari kerja menambah Rp150.000 ke slip", async ({ page }) => {
     if (pidAwal) await sb.rpc("pindah_perusahaan", { p_perusahaan: pidAwal });
   }
 });
+
+// Q-22 (docs/design/aturan-kerja.md): pola kerja satu sumber per usaha. Usaha sendiri "Uji Aturan Kerja E2E" milik akun A, mulai dari
+// 6 hari. Dua lembur libur pola 6 dicatat lewat RPC; pemilik memilih 5 hari, lembar dampak menyebut jumlah lembur libur yang nyata
+// (dihitung dari database), simpan, audit mencatat lama dan baru, lembur lama tidak berubah; di halaman Gaji lembur libur pola 6
+// ditolak dengan pesan yang menyebut pola usaha, libur pola 5 diterima. Admin (akun staf yang dinaikkan pemilik) melihat kartu
+// baca saja; staf tidak melihat kartu. Pola dikembalikan ke 6 hari lewat kartu. Bersih tanpa penghapusan: orang dan anggota uji
+// dinonaktifkan, pola 6 hari, usaha aktif dikembalikan.
+const NAMA_USAHA_POLA = "Uji Aturan Kerja E2E";
+
+async function axeKartu(p: Page, kartu: ReturnType<Page["getByTestId"]>, nama: string) {
+  for (const [lebar, tinggi] of [[390, 844], [1440, 900]]) {
+    for (const skema of ["light", "dark"] as const) {
+      await p.setViewportSize({ width: lebar, height: tinggi });
+      await p.emulateMedia({ colorScheme: skema });
+      await p.waitForTimeout(400);
+      const axe = await new AxeBuilder({ page: p }).analyze();
+      expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), `${nama} ${lebar} ${skema}`).toEqual([]);
+      expect(await p.evaluate(() => document.documentElement.scrollWidth), `${nama} ${lebar}: tanpa gulir mendatar`).toBeLessThanOrEqual(lebar);
+      await kartu.screenshot({ path: test.info().outputPath(`${nama}-${lebar}-${skema}.png`) });
+    }
+  }
+  await p.setViewportSize({ width: 1440, height: 900 });
+  await p.emulateMedia({ colorScheme: "light" });
+}
+
+test("aturan kerja: pemilik ganti pola lewat lembar dampak, lembur libur pola lain ditolak, admin baca saja, staf tidak melihat", async ({ page, browser }) => {
+  test.setTimeout(300_000);
+  const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
+  expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
+  let pidAwal = ((await sb.auth.getClaims()).data?.claims?.app_metadata as { pid?: string } | undefined)?.pid;
+  // Jalan sebelumnya yang terhenti bisa meninggalkan usaha uji ini aktif: kembalikan ke usaha utama akun A.
+  const { data: utama } = await sb.from("perusahaan").select("id, nama").in("nama", [NAMA_USAHA_POLA, "Warung Uji A"]);
+  if (utama?.find((u) => u.id === pidAwal)?.nama === NAMA_USAHA_POLA) pidAwal = utama.find((u) => u.nama === "Warung Uji A")?.id as string | undefined;
+  const id: Record<string, string> = {};
+  let pid: string | undefined;
+  try {
+    const { data: ada } = await sb.from("perusahaan").select("id").eq("nama", NAMA_USAHA_POLA).limit(1);
+    pid = ada?.[0]?.id as string | undefined;
+    if (!pid) {
+      const { data, error } = await sb.rpc("buat_perusahaan", { p_nama: NAMA_USAHA_POLA, p_industri: "toko" });
+      expect(error).toBeNull();
+      pid = data as string;
+    } else {
+      expect((await sb.rpc("pindah_perusahaan", { p_perusahaan: pid })).error).toBeNull();
+    }
+    await sb.auth.refreshSession();
+    // Sisa jalan sebelumnya yang terhenti: pola 5 hari, orang, dan anggota uji.
+    expect((await sb.rpc("atur_pola_kerja", { p_pola: "6_hari", p_diatur_sendiri: false })).error).toBeNull();
+    await sb.from("anggota").update({ aktif: false }).eq("perusahaan_id", pid).neq("peran", "pemilik").eq("aktif", true);
+    await sb.from("orang").update({ status: "nonaktif" }).eq("perusahaan_id", pid).eq("status", "aktif");
+    const { data: usaha } = await sb.from("perusahaan").select("kode, zona_waktu").eq("id", pid).single();
+    // Bulan berjalan di zona usaha; gaji tidak pernah disetujui di usaha ini, jadi lembur bulan ini tidak terkunci.
+    const bulan = new Intl.DateTimeFormat("en-CA", { timeZone: usaha!.zona_waktu as string, year: "numeric", month: "2-digit" }).format(new Date()).slice(0, 7);
+
+    const jejak = String(Date.now()).slice(-6);
+    const nama = { rina: `Rina Pola ${jejak}`, admin: `Admin Pola ${jejak}`, staf: `Staf Pola ${jejak}` };
+    for (const [k, n] of Object.entries(nama)) {
+      const { data: o, error } = await sb.from("orang").insert({ perusahaan_id: pid, nama: n, data: {} }).select("id").single();
+      expect(error).toBeNull();
+      id[k] = o!.id as string;
+    }
+    // Lembur lama di pola 6 hari.
+    expect((await sb.rpc("catat_lembur", { p_orang: id.rina, p_tanggal: `${bulan}-02`, p_jenis: "libur_pola_6_hari", p_jam: 3 })).error).toBeNull();
+    expect((await sb.rpc("catat_lembur", { p_orang: id.rina, p_tanggal: `${bulan}-03`, p_jenis: "libur_pola_6_hari_jatuh_hari_kerja_terpendek", p_jam: 2 })).error).toBeNull();
+    const { count: liburLama } = await sb.from("lembur").select("id", { count: "exact", head: true }).eq("perusahaan_id", pid).neq("jenis", "hari_kerja").gt("jam", 0);
+    expect(liburLama).toBeGreaterThanOrEqual(2);
+    const { data: lemburSebelum } = await sb.from("lembur").select("id, jenis, jam, diubah_at").eq("perusahaan_id", pid).order("id");
+
+    const pin = { admin: "864213", staf: "753124" };
+    for (const k of ["admin", "staf"] as const) expect((await sb.rpc("buat_akun_staf", { p_orang: id[k], p_pin: pin[k] })).error).toBeNull();
+    expect((await sb.from("anggota").update({ peran: "admin" }).eq("perusahaan_id", pid).eq("orang_id", id.admin)).error).toBeNull();
+    const { data: idStaf } = await sb.from("orang").select("id, id_staf").in("id", [id.admin, id.staf]);
+    const kodeStaf = (k: "admin" | "staf") => idStaf!.find((o) => o.id === id[k])!.id_staf as string;
+
+    // Pemilik.
+    await page.goto("/masuk?next=/app/perusahaan");
+    await page.getByLabel("Email").fill(E.E2E_EMAIL_A);
+    await page.getByLabel("Kata sandi").fill(E.E2E_SANDI);
+    await page.getByRole("button", { name: "Masuk" }).click();
+    await page.waitForURL((u) => u.pathname === "/app/perusahaan");
+    const kartu = page.getByTestId("aturan-kerja");
+    await expect(kartu.getByTestId("pola-6_hari")).toContainText("dipakai sekarang");
+    await expect(kartu.getByTestId("pola-5_hari")).not.toContainText("dipakai sekarang");
+    await expect(kartu).toContainText("Mengikuti PP 35/2021 Pasal 21 dan 22 serta PP 36/2021 Pasal 17. Total tetap 40 jam seminggu.");
+    await axeKartu(page, kartu, "aturan-kerja-pemilik");
+
+    await kartu.getByRole("radio", { name: /5 hari seminggu/ }).check();
+    await kartu.getByRole("button", { name: "Simpan aturan kerja" }).click();
+    const lembar = page.getByTestId("lembar-dampak");
+    await expect(lembar).toBeVisible();
+    await expect(lembar).toContainText(`Lembur hari libur yang sudah tercatat (${liburLama} baris) tidak berubah.`);
+    await expect(lembar).toContainText("Mulai sekarang, lembur hari libur dicatat dengan aturan pola 5 hari.");
+    await axeKartu(page, lembar, "aturan-kerja-lembar");
+    // Batal tidak menyimpan apa pun.
+    await lembar.getByRole("button", { name: "Batal" }).click();
+    await expect(lembar).toBeHidden();
+    await expect(kartu.getByTestId("pola-6_hari")).toContainText("dipakai sekarang");
+    await kartu.getByRole("button", { name: "Simpan aturan kerja" }).click();
+    await lembar.getByRole("button", { name: "Ganti ke 5 hari" }).click();
+    await expect(kartu.getByTestId("aturan-kerja-hasil")).toHaveText("Tersimpan. Usahamu bekerja 5 hari seminggu.");
+    await expect(kartu.getByTestId("pola-5_hari")).toContainText("dipakai sekarang");
+    await expect(kartu.getByTestId("pola-6_hari")).not.toContainText("dipakai sekarang");
+
+    const { data: audit } = await sb.from("audit_log").select("sebelum, sesudah").eq("perusahaan_id", pid).eq("aksi", "atur_pola_kerja").order("terjadi_at", { ascending: false }).limit(1);
+    expect(audit![0]).toMatchObject({ sebelum: { pola_kerja: "6_hari" }, sesudah: { pola_kerja: "5_hari" } });
+    const { data: lemburSesudah } = await sb.from("lembur").select("id, jenis, jam, diubah_at").eq("perusahaan_id", pid).order("id");
+    expect(lemburSesudah).toEqual(lemburSebelum);
+
+    // Halaman Gaji: libur pola 6 ditolak dengan pesan pola usaha, libur pola 5 diterima.
+    await page.goto(`/app/gaji?bulan=${bulan}`);
+    const form = page.getByRole("form", { name: "Catat lembur" });
+    await form.getByLabel("Orang").selectOption({ label: nama.rina });
+    await form.getByLabel("Tanggal").fill(`${bulan}-04`);
+    await form.getByLabel("Jenis hari").selectOption("libur_pola_6_hari");
+    await form.getByLabel("Jam lembur").fill("3");
+    await form.getByRole("button", { name: "Catat lembur" }).click();
+    await expect(form.getByRole("alert")).toContainText("Usahamu bekerja 5 hari seminggu");
+    const { count: ditolak } = await sb.from("lembur").select("id", { count: "exact", head: true }).eq("orang_id", id.rina).eq("tanggal", `${bulan}-04`);
+    expect(ditolak).toBe(0);
+    await form.getByLabel("Jenis hari").selectOption("libur_pola_5_hari");
+    await form.getByRole("button", { name: "Catat lembur" }).click();
+    await expect(page.getByTestId("daftar-lembur").getByRole("listitem").filter({ hasText: nama.rina }).filter({ hasText: "kerja 5 hari seminggu" })).toBeVisible();
+
+    // Admin: baca saja.
+    const konteksAdmin = await browser.newContext({ locale: "id-ID", timezoneId: "Asia/Makassar" });
+    const admin = await konteksAdmin.newPage();
+    await admin.goto("/masuk/staf");
+    await admin.getByLabel("Kode usaha").fill(usaha!.kode as string);
+    await admin.getByLabel("ID kamu").fill(kodeStaf("admin"));
+    await admin.getByLabel("PIN").fill(pin.admin);
+    await admin.getByRole("button", { name: "Masuk" }).click();
+    await expect(admin.getByTestId("peran")).toContainText("admin");
+    await admin.goto("/app/perusahaan");
+    const kartuAdmin = admin.getByTestId("aturan-kerja");
+    await expect(kartuAdmin.getByTestId("pola-5_hari")).toContainText("dipakai sekarang");
+    await expect(kartuAdmin.getByTestId("aturan-kerja-baca")).toHaveText("Hanya pemilik yang bisa mengubah aturan kerja. Kamu melihatnya saja.");
+    await expect(kartuAdmin.getByRole("radio", { name: /6 hari seminggu/ })).toBeDisabled();
+    await expect(kartuAdmin.getByRole("button", { name: "Simpan aturan kerja" })).toHaveCount(0);
+    await axeKartu(admin, kartuAdmin, "aturan-kerja-admin");
+    await konteksAdmin.close();
+
+    // Staf: kartu tidak ada.
+    const konteksStaf = await browser.newContext({ locale: "id-ID", timezoneId: "Asia/Makassar" });
+    const staf = await konteksStaf.newPage();
+    await staf.goto("/masuk/staf");
+    await staf.getByLabel("Kode usaha").fill(usaha!.kode as string);
+    await staf.getByLabel("ID kamu").fill(kodeStaf("staf"));
+    await staf.getByLabel("PIN").fill(pin.staf);
+    await staf.getByRole("button", { name: "Masuk" }).click();
+    await expect(staf.getByTestId("peran")).toContainText("staf");
+    await staf.goto("/app/perusahaan");
+    await expect(staf.getByRole("listitem").filter({ hasText: NAMA_USAHA_POLA })).toBeVisible();
+    await expect(staf.getByTestId("aturan-kerja")).toHaveCount(0);
+    await konteksStaf.close();
+
+    // Kembalikan ke 6 hari lewat kartu (lembar dampak muncul lagi karena ada lembur libur).
+    await page.goto("/app/perusahaan");
+    await kartu.getByRole("radio", { name: /6 hari seminggu/ }).check();
+    await kartu.getByRole("button", { name: "Simpan aturan kerja" }).click();
+    await expect(lembar).toContainText("aturan pola 6 hari");
+    await lembar.getByRole("button", { name: "Ganti ke 6 hari" }).click();
+    await expect(kartu.getByTestId("aturan-kerja-hasil")).toHaveText("Tersimpan. Usahamu bekerja 6 hari seminggu.");
+    await expect(kartu.getByTestId("pola-6_hari")).toContainText("dipakai sekarang");
+  } finally {
+    if (pid) await sb.rpc("atur_pola_kerja", { p_pola: "6_hari", p_diatur_sendiri: false });
+    for (const o of Object.values(id)) {
+      await sb.from("anggota").update({ aktif: false }).eq("orang_id", o);
+      await sb.from("orang").update({ status: "nonaktif" }).eq("id", o);
+    }
+    if (pidAwal) await sb.rpc("pindah_perusahaan", { p_perusahaan: pidAwal });
+  }
+});
