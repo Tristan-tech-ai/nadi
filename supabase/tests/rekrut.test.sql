@@ -41,12 +41,12 @@ begin
   begin
     insert into storage.objects (bucket_id, name) values ('berkas', pa || '/lamar/' || repeat('b', 64) || '.pdf');
     perform pg_temp.cek('anon tidak bisa unggah ke jalur tak terdaftar', false);
-  exception when others then perform pg_temp.cek('anon tidak bisa unggah ke jalur tak terdaftar', sqlstate = '42501', sqlerrm);
+  exception when others then perform pg_temp.cek('anon tidak bisa unggah ke jalur tak terdaftar', sqlerrm like '%row-level security%', sqlerrm);
   end;
   begin
     insert into storage.objects (bucket_id, name) values ('berkas', pa || '/lempar/' || repeat('c', 64) || '.pdf');
     perform pg_temp.cek('anon tidak bisa unggah ke jalur lempar', false);
-  exception when others then perform pg_temp.cek('anon tidak bisa unggah ke jalur lempar', sqlstate = '42501', sqlerrm);
+  exception when others then perform pg_temp.cek('anon tidak bisa unggah ke jalur lempar', sqlerrm like '%row-level security%', sqlerrm);
   end;
   insert into storage.objects (bucket_id, name) values ('berkas', jalur);
   perform pg_temp.cek('anon bisa unggah ke jalur lamar terdaftar', true);
