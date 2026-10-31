@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { HasilForm } from "@/lib/auth-pesan";
+import { hasilUlangPutusan } from "@/lib/putusan";
 import { createClient } from "@/lib/supabase/server";
 
 const INDUSTRI = new Set(["fnb", "toko", "kantor", "bengkel", "klinik", "konstruksi", "gudang", "hotel", "salon", "laundry", "lainnya"]);
@@ -71,6 +72,8 @@ export async function putuskan(_: HasilPutusan, form: FormData): Promise<HasilPu
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("putuskan_usulan", { p_usulan: id, p_setuju: setuju });
   if (error) return { galat: error.code === "42501" ? "Hanya pemilik atau admin yang bisa memutuskan." : "Nadi gagal menyimpan keputusan. Coba lagi sebentar." };
+  // Kiriman ulang (Q-16): usulan sudah diputuskan; tampilkan keputusan yang tersimpan, bukan tombol yang baru diklik.
+  if (data.sudah) return hasilUlangPutusan(String(data.status));
   // Tanpa revalidatePath: kartu tetap tampil dengan cap hasilnya sampai Feed dimuat ulang, supaya keputusan terlihat.
   if (!setuju) return { status: "ditolak", pesan: "Ditolak. Tidak ada yang dicatat." };
   const buat = PESAN_AKSI[data.aksi as string];

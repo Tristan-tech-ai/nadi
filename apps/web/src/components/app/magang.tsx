@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 import { PlusIcon, TrashIcon } from "@phosphor-icons/react";
 import { aturDana, catatSesi, simpanRencana, ubahStatusRencana, type HasilMagang } from "@/app/app/magang/actions";
 import { Tombol } from "@/components/ui/tombol";
@@ -44,9 +44,14 @@ export function FormRencana({ orang, topi, hariIni }: { orang: Opsi[]; topi: Ops
   const [baris, setBaris] = useState<Baris[]>([barisBaru(1, 1)]);
   const [kunci, setKunci] = useState(2);
   const [versi, setVersi] = useState(0);
+  // Q-16: satu kunci per isian; kiriman ulang (experimental.useOffline) tidak membuat rencana kembar.
+  const kunciKirim = useRef<string | null>(null);
   const [h, aksi, sibuk] = useActionState<HasilMagang, FormData>(async (lalu, fd) => {
+    kunciKirim.current ??= crypto.randomUUID();
+    fd.set("kunci", kunciKirim.current);
     const r = await simpanRencana(lalu, fd);
     if (r && "pesan" in r) {
+      kunciKirim.current = null;
       setBaris([barisBaru(1, 1)]);
       setVersi((v) => v + 1);
     }

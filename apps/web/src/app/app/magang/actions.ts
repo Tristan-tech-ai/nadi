@@ -27,6 +27,8 @@ export async function simpanRencana(_: HasilMagang, form: FormData): Promise<Has
   const mulai = teks(form, "mulai");
   const selesai = teks(form, "selesai");
   const tujuan = teks(form, "tujuan");
+  const kunci = teks(form, "kunci");
+  if (kunci && !ID_SAH.test(kunci)) return { galat: "Isian tidak dikenal. Muat ulang halaman ini." };
   if (!ID_SAH.test(peserta)) return { galat: "Pilih peserta magang." };
   if (!ID_SAH.test(mentor)) return { galat: "Pilih mentor." };
   if (peserta === mentor) return { galat: "Mentor dan peserta harus orang yang berbeda." };
@@ -51,6 +53,7 @@ export async function simpanRencana(_: HasilMagang, form: FormData): Promise<Has
   const { data, error } = await supabase.rpc("simpan_rencana_magang", {
     p_id: null, p_orang: peserta, p_mentor: mentor, p_topi: topi || null, p_mulai: mulai, p_selesai: selesai,
     p_uang_saku: saku, p_tujuan: tujuan, p_minggu: minggu.baris, p_uji_akhir: teks(form, "uji_akhir") || null,
+    p_kunci: kunci || null,
   });
   if (error) return { galat: galatDb(error, "pemilik atau admin") };
   revalidatePath("/app/magang");

@@ -1,13 +1,21 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useRef } from "react";
 import { buatLowongan, type HasilLowongan } from "@/app/app/lowongan-actions";
 import { Tombol } from "@/components/ui/tombol";
 
 const isian = "h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-3 text-base";
 
 export function FormLowongan({ topi }: { topi: { id: string; nama: string }[] }) {
-  const [h, aksi, sibuk] = useActionState<HasilLowongan, FormData>(buatLowongan, null);
+  // Q-16: satu kunci per isian; kiriman ulang (experimental.useOffline) membawa kunci yang sama sehingga tidak ada lowongan kembar.
+  const kunci = useRef<string | null>(null);
+  const [h, aksi, sibuk] = useActionState<HasilLowongan, FormData>(async (lalu, fd) => {
+    kunci.current ??= crypto.randomUUID();
+    fd.set("kunci", kunci.current);
+    const r = await buatLowongan(lalu, fd);
+    if (r && "pesan" in r) kunci.current = null;
+    return r;
+  }, null);
   return (
     <form action={aksi} className="mt-4 grid gap-2 sm:grid-cols-2" aria-label="Buat lowongan">
       <label className="flex flex-col gap-1 text-sm">
