@@ -84,3 +84,6 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 21.20 | tick 76 | Q-10: proyek Playwright berantai untuk tes pemindah usaha, e2e penuh putaran 1 berjalan |
 | 31 Okt 2026 21.45 | tick 76 | Q-15 akar masalah: subscribe GCM profil Chrome baru 6-29 dtk; profil tetap + batas 90 dtk, push.spec 2/2; dua putaran e2e penuh berjalan |
 | 31 Okt 2026 21.55 | tick 77 | Q-10: putaran gagal karena server 3100 manual tanpa env CIMD lokal (ulahku), diulang dua putaran |
+| 31 Okt 2026 22.20 | tick 78 | Q-10 menangkap bug kepala usaha basi setelah pindah (revalidatePath layout), cadangan profil push; dua putaran e2e diulang |
+| 31 Okt 2026 22.45 | tick 79 | Q-10: klaim bug kepala basi dibantah lewat uji tanpa perbaikan; akar: count() tidak menunggu Suspense; dua putaran diulang |
+| 31 Okt 2026 22.55 | Q-10 | e2e penuh dua putaran berturut 50/50 lulus; tes pemindah usaha berantai, count() menunggu Suspense, cadangan profil push | - |

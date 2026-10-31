@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { chromium, expect, test, type BrowserContext } from "@playwright/test";
@@ -25,6 +25,15 @@ function profilPush(): string {
   return dir;
 }
 
+/** Profil tetap; bila masih dikunci Chrome sisa jalan yang terputus, pakai profil sekali pakai (lebih lambat, tetap benar). */
+async function luncurkan(opsi: Parameters<typeof chromium.launchPersistentContext>[1]): Promise<BrowserContext> {
+  try {
+    return await chromium.launchPersistentContext(profilPush(), opsi);
+  } catch {
+    return chromium.launchPersistentContext(mkdtempSync(join(tmpdir(), "nadi-push-")), opsi);
+  }
+}
+
 // Kedua tes memakai akun dan usaha yang sama; berurutan agar jumlah perangkat berlangganan tidak saling mengganggu.
 test.describe.configure({ mode: "serial" });
 
@@ -35,7 +44,7 @@ test.beforeEach(({ page }, info) => {
 
 test("nyalakan pemberitahuan lalu terima push uji", async ({ baseURL }) => {
   test.setTimeout(150_000);
-  const context = await chromium.launchPersistentContext(profilPush(), {
+  const context = await luncurkan({
     channel: "chrome",
     headless: true,
     baseURL,
@@ -77,7 +86,7 @@ test("nyalakan pemberitahuan lalu terima push uji", async ({ baseURL }) => {
 test("usulan baru memunculkan pemberitahuan tanpa ada yang menekan tombol", async ({ baseURL }) => {
   test.setTimeout(9 * 60_000);
   const envLokal = Object.fromEntries(readFileSync(join(__dirname, "..", ".env.local"), "utf8").split(/\r?\n/).filter((l) => l.includes("=")).map((l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1).trim()]));
-  const context: BrowserContext = await chromium.launchPersistentContext(profilPush(), { channel: "chrome", headless: true, baseURL, locale: "id-ID" });
+  const context: BrowserContext = await luncurkan({ channel: "chrome", headless: true, baseURL, locale: "id-ID" });
   await context.grantPermissions(["notifications"]);
   const page = await context.newPage();
   await page.goto("/masuk?next=/app/perusahaan");

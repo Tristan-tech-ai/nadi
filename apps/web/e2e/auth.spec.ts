@@ -84,8 +84,12 @@ test("pemilik B tidak melihat usaha A", async ({ page }) => {
 test("pemilik A pindah antar dua usaha, klaim ikut berganti", { tag: "@pindah" }, async ({ page, context }) => {
   await masukSebagai(page, E.E2E_EMAIL_A);
   await pastikanUsaha(page, "Warung Uji A");
+  // Daftar usaha dimuat lewat Suspense dan count() tidak menunggu: tunggu baris usaha aktif dulu. Tanpa ini count() sempat
+  // membaca 0 dan tes membuat 'Cabang Uji A2' baru di setiap jalan.
+  const siapDaftar = () => expect(page.getByRole("main").getByText("Sedang dibuka")).toBeVisible();
   await page.goto("/app/perusahaan");
-  if ((await page.getByRole("listitem").count()) < 2) {
+  await siapDaftar();
+  if ((await page.getByRole("main").getByRole("listitem").count()) < 2) {
     await page.goto("/app/mulai");
     await pastikanUsaha(page, "Cabang Uji A2");
     await page.goto("/app/perusahaan");
@@ -97,7 +101,8 @@ test("pemilik A pindah antar dua usaha, klaim ikut berganti", { tag: "@pindah" }
   expect(sesudah).not.toBe(sebelum);
   // Kembalikan akun A ke usaha bawaan tes lain (Warung Uji A), kalau tidak run berikutnya mulai di usaha yang salah.
   await page.goto("/app/perusahaan");
-  const bukaWarung = page.getByRole("listitem").filter({ hasText: "Warung Uji A" }).getByRole("button", { name: "Buka" });
+  await siapDaftar();
+  const bukaWarung = page.getByRole("main").getByRole("listitem").filter({ hasText: "Warung Uji A" }).getByRole("button", { name: "Buka" });
   if (await bukaWarung.count()) {
     await bukaWarung.first().click();
     await page.waitForURL((u) => u.pathname === "/app");
