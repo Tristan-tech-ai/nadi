@@ -1588,6 +1588,36 @@
    "created": "2026-11-01T01:24:23",
    "done": "2026-11-01T01:32:32",
    "result": "59d3edb: migrasi rute_model_macet (sidik b2437131 cocok, 48 migrasi), cron nadi-rute-macet */5 terdaftar, tes rute_model_macet_q18 merah lalu 7/7 (baris 11 menit gagal, 5 menit tetap proses, rute tidak berubah, authenticated tidak bisa memanggil)"
+  },
+  {
+   "id": "Q-19",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 24,
+   "size": "s",
+   "wajib": false,
+   "title": "Absen QR tercatat di kejadian produksi",
+   "accept": "e2e absen.spec dijalankan terhadap URL produksi lulus, lalu kueri produksi menunjukkan minimal 1 baris kejadian absen.masuk baru di usaha uji A; bila tidak tercatat, temukan penyebab dan perbaiki dengan tes",
+   "how": "docs/research/kpi-sumber.md (0 baris absen.masuk di produksi per 1 Nov 2026), apps/web/e2e/absen.spec.ts, RPC absen_catat",
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-01T01:38:25",
+   "done": "2026-11-01T01:39:23",
+   "result": "Penyebab 0 baris absen.masuk ditemukan, bukan bug: tes SQL absen_qr (baris 87) membuktikan absen_catat menulis kejadian absen.masuk/pulang; e2e absen.spec terhadap produksi lulus 2/2 tetapi hanya jalur penolakan (cek wajah perangkat tidak lolos kamera palsu), dan produksi belum punya pengguna sungguhan; dicatat di docs/research/kpi-sumber.md. Kriteria 'minimal 1 baris baru' TIDAK terpenuhi secara harfiah; dipenuhi cabang 'temukan penyebab'"
+  },
+  {
+   "id": "Q-20",
+   "fase": "Q",
+   "kind": "test",
+   "priority": 28,
+   "size": "s",
+   "wajib": false,
+   "title": "Jalur absen berhasil teruji ujung ke ujung",
+   "accept": "fixture urutan landmark sintetis (kedip, menoleh kiri/kanan) di fixtures/absen dengan uji unit nilaiWajah lolos dan gagal (merah sengaja sekali); e2e lokal jalur berhasil mencatat kejadian absen.masuk dan menampilkan konfirmasi, dengan penanda uji yang terbukti tidak berlaku saat NODE_ENV=production",
+   "how": "docs/research/absen-ujung.md pilihan 2 + 3; src/lib/absen/wajah.ts; e2e/absen.spec.ts",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T01:41:25"
   }
  ]
 }

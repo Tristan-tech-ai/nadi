@@ -135,3 +135,11 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 1 Nov 2026 tick 136 | F1-06B selesai (verifikasi loop), Q-17 di-commit/push (1c6870a) menunggu regresi; Q-18 ditambah; checkpoint STATE ditulis sebelum kompaksi |
 | 1 Nov 2026 tick 136 | Q-17 selesai (regresi 133/133 setelah constraint); berikut Q-18 |
 | 1 Nov 2026 tick 137 | Q-18 selesai: cron nadi-rute-macet menandai antrean model macet > 10 menit gagal, tes 7/7 |
+| 1 Nov 2026 tick 138 | F3-02 didelegasikan ke agen latar; docs/quality/rencana-uji-f3-02.md (8 butir verifikasi loop) |
+| 1 Nov 2026 tick 139 | docs/research/kpi-sumber.md: kejadian produksi per jenis; 0 absen.masuk, Q-19 ditambah; F3-02 masih di agen |
+| 1 Nov 2026 tick 139 | Q-19 selesai: 0 absen.masuk di produksi bukan bug (tes SQL absen_qr membuktikan pencatatan; e2e hanya jalur penolakan) |
+| 1 Nov 2026 tick 140 | F3-02 masih di agen (adil.ts + tes ditulis); docs/research/absen-ujung.md, Q-20 ditambah |
+| 1 Nov 2026 tick 141 | Sakelar use-file-for-fake-video-capture (.y4m) diverifikasi di sumber Chromium; F3-02 masih di agen (migrasi + tes ditulis) |
+| 1 Nov 2026 tick 142 | Tinjauan migrasi F3-02 (docs/quality/review-f3-02.md): beban dari poin estimasi, staf hanya dirinya + rata-rata n>=3, tanpa temuan memblokir |
+| 1 Nov 2026 tick 143 | Rancangan SQL KPI F3-03 (docs/research/kpi-f3-03-sql.md); koreksi: kueri contoh kpi-sumber.md memakai zona Asia/Makassar tetap, seharusnya perusahaan.zona_waktu; agen F3-02 belum push |
+| 1 Nov 2026 tick 144 | kpi-sumber.md: kueri contoh memakai app.awal_minggu + perusahaan.zona_waktu, diuji baca saja (9 baris, minggu Senin WIB); database 49 migrasi (bagi_adil sudah di-apply agen, belum di-commit) |
