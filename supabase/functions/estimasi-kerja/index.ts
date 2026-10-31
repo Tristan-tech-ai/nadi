@@ -93,7 +93,10 @@ Deno.serve(async (req) => {
     console.error("estimasi_kerja", kerja_id, e instanceof Error ? e.message : e);
     return json({ galat: "Model gagal dipanggil" }, 502);
   }
-  if (!Number.isFinite(menit) || menit < 1 || menit > 1485) return json({ galat: "Perkiraan model di luar batas" }, 422);
+  // Kerja serupa yang selesai dalam hitungan detik membuat model menjawab < 1 menit (dibulatkan 0). Itu tetap perkiraan yang sah:
+  // dinaikkan ke 1 menit (poin minimum 0,25 tetap berlaku), agar token yang sudah terpakai tercatat dan kerja tidak tanpa poin.
+  if (!Number.isFinite(menit) || menit < 0 || menit > 1485) return json({ galat: "Perkiraan model di luar batas" }, 422);
+  menit = Math.max(1, menit);
 
   const { data: estimasi, error: eSimpan } = await db.rpc("simpan_estimasi_kerja", {
     p_kerja: kerja_id, p_menit: menit, p_sumber: "model", p_alasan: alasan,
