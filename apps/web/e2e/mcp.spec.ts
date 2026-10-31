@@ -112,12 +112,13 @@ test("asisten AI menyambung lewat OAuth + CIMD, membaca, dan mengajukan usulan y
   const disc = await (await panggil("server/discover")).json();
   expect(disc.result).toMatchObject({ resultType: "complete", supportedVersions: expect.arrayContaining(["2026-07-28"]) });
   const daftar = await (await panggil("tools/list")).json();
-  expect(daftar.result.tools.map((x: { name: string }) => x.name)).toEqual(["siapa_saya", "daftar_orang", "daftar_usulan", "buat_usulan"]);
+  expect(daftar.result.tools.map((x: { name: string }) => x.name)).toEqual(["siapa_saya", "daftar_orang", "daftar_usulan", "ringkasan_ai", "buat_usulan"]);
   const siapa = await (await panggil("tools/call", { name: "siapa_saya", arguments: {} }, "siapa_saya")).json();
   expect(siapa.result.structuredContent).toMatchObject({ peran: "pemilik", klien: "Asisten Uji" });
 
-  const judul = `Catat stok gula dari asisten uji ${Date.now()}`;
-  const usul = await (await panggil("tools/call", { name: "buat_usulan", arguments: { aksi: "catatan", judul, penjelasan: "Dari percakapan uji otomatis", bidang: { isi: "Stok gula tinggal 2 kg" } } }, "buat_usulan")).json();
+  // Nilai rupiah besar agar kartu ini di urutan teratas Feed walau akun uji punya banyak usulan menunggu.
+  const judul = `Catat belanja gula dari asisten uji ${Date.now()}`;
+  const usul = await (await panggil("tools/call", { name: "buat_usulan", arguments: { aksi: "uang.keluar", judul, penjelasan: "Dari percakapan uji otomatis", bidang: { tanggal: "2026-10-31", pemasok: "Toko Uji" }, dampak_rp: 999_000_000 } }, "buat_usulan")).json();
   expect(usul.result).toMatchObject({ isError: false, structuredContent: { status: "menunggu" } });
 
   // 6. Header tidak cocok ditolak.
@@ -127,12 +128,42 @@ test("asisten AI menyambung lewat OAuth + CIMD, membaca, dan mengajukan usulan y
 
   // 7. Usulan dari asisten muncul di Feed pemilik.
   await page.goto("/app");
-  await expect(page.getByText(judul)).toBeVisible({ timeout: 15_000 });
+  const kartu = page.locator("article", { hasText: judul });
+  await expect(kartu).toBeVisible({ timeout: 15_000 });
+  // Bersihkan: tolak usulan uji lewat Feed (sekaligus menguji keputusan atas usulan dari asisten).
+  await kartu.getByRole("button", { name: "Tolak" }).click();
+  await expect(kartu.getByTestId("hasil-putusan")).toBeVisible({ timeout: 15_000 });
 
   // 8. Token penyegar berotasi.
   const segar = await request.post(as.token_endpoint, { form: { grant_type: "refresh_token", refresh_token: t.refresh_token, client_id: KLIEN, resource: mcp } });
   expect(segar.status()).toBe(200);
-  expect((await segar.json()).access_token).not.toBe(t.access_token);
+  const t2 = await segar.json();
+  expect(t2.access_token).not.toBe(t.access_token);
+
+  // 9. Pemilik mencabut asisten di halaman Usahamu: token akses dan penyegar langsung tidak berlaku.
+  await page.goto("/app/perusahaan");
+  const bagian = page.getByTestId("ai-milikmu");
+  await expect(bagian).toContainText("Asisten Uji");
+  await expect(bagian).toContainText(`${baseURL}/api/mcp`);
+  for (const [lebar, tinggi] of [[390, 844], [1440, 900]]) {
+    for (const skema of ["light", "dark"] as const) {
+      await page.setViewportSize({ width: lebar, height: tinggi });
+      await page.emulateMedia({ colorScheme: skema });
+      await page.waitForTimeout(400);
+      const axe = await new AxeBuilder({ page }).include('[data-testid="ai-milikmu"]').analyze();
+      expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), `${lebar} ${skema}`).toEqual([]);
+      await bagian.screenshot({ path: test.info().outputPath(`ai-milikmu-${lebar}-${skema}.png`) });
+    }
+  }
+  await bagian.getByRole("button", { name: "Cabut izin Asisten Uji" }).click();
+  await expect(bagian.getByRole("button", { name: "Cabut izin Asisten Uji" })).toHaveCount(0, { timeout: 15_000 });
+  const setelah = await request.post(mcp, {
+    data: { jsonrpc: "2.0", id: 99, method: "tools/list", params: { _meta: META } },
+    headers: { Authorization: `Bearer ${t2.access_token}`, "MCP-Protocol-Version": "2026-07-28", "Mcp-Method": "tools/list" },
+  });
+  expect(setelah.status()).toBe(401);
+  const segarLagi = await request.post(as.token_endpoint, { form: { grant_type: "refresh_token", refresh_token: t2.refresh_token, client_id: KLIEN, resource: mcp } });
+  expect(segarLagi.status()).toBe(400);
 });
 
 test("klien era initialize (lama) tetap bisa memakai alat; GET ditolak 405", async ({ request, baseURL }) => {

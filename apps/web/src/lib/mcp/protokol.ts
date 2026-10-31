@@ -24,7 +24,8 @@ const INSTRUKSI =
   "Nadi: sistem kerja usaha (orang, usulan, uang, absen). Mulai dengan siapa_saya untuk melihat usaha, peran, dan izin token. " +
   "Semua perubahan dari asisten AI menjadi usulan lewat buat_usulan dan baru berlaku setelah disetujui pemilik atau admin di aplikasi Nadi. " +
   "Rupiah ditulis sebagai angka utuh, tanggal YYYY-MM-DD.";
-const INFO = { name: "nadi", title: "Nadi", version: "0.9.0" };
+const INFO = { name: "nadi", title: "Nadi", version: "0.9.1" };
+const KAPABILITAS = { tools: { listChanged: false }, resources: {}, prompts: { listChanged: false } };
 
 type Alat = {
   name: string;
@@ -71,6 +72,13 @@ export const ALAT: Alat[] = [
     param: (a) => ({ p_status: a.status ?? "menunggu", p_batas: a.batas ?? 20 }),
   },
   {
+    name: "ringkasan_ai", title: "Ringkasan pemakaian AI", cakupan: "nadi.baca", pengelola: true, fungsi: "mcp_ringkasan_ai",
+    description: "Pemakaian AI Nadi untuk usaha ini: berkas dibaca model vs dibaca aturan tersimpan (tanpa token), token terpakai, dan perkiraan token yang dihemat. Hanya untuk pemilik dan admin.",
+    inputSchema: objek({ hari: { type: "integer", minimum: 1, maximum: 365, description: "Jendela waktu dalam hari, bawaan 30" } }),
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    param: (a) => ({ p_hari: a.hari ?? 30 }),
+  },
+  {
     name: "buat_usulan", title: "Buat usulan", cakupan: "nadi.usul", fungsi: "mcp_buat_usulan",
     description:
       "Ajukan perubahan ke Nadi sebagai usulan yang harus disetujui pemilik atau admin. Aksi: orang.buat (bidang: nama, jabatan, telepon), " +
@@ -92,6 +100,39 @@ export function daftarAlat(siapa: Pick<Siapa, "peran" | "cakupan">) {
   return ALAT.filter((t) => siapa.cakupan.includes(t.cakupan) && (!t.pengelola || ["pemilik", "admin"].includes(siapa.peran)))
     .map(({ name, title, description, inputSchema, annotations }) => ({ name, title, description, inputSchema, annotations }));
 }
+
+type Sumber = { uri: string; name: string; title: string; description: string; pengelola?: boolean; fungsi: string; param: Record<string, unknown> };
+
+/** Resources: paket konteks ringkas (hemat token) yang bisa dipilih pengguna untuk dimasukkan ke percakapan. */
+export const SUMBER: Sumber[] = [
+  { uri: "nadi://usaha", name: "usaha", title: "Usaha dan peranmu", description: "Nama usaha, peran, izin token, jumlah orang aktif, dan usulan menunggu.", fungsi: "mcp_siapa_saya", param: {} },
+  { uri: "nadi://usulan/menunggu", name: "usulan-menunggu", title: "Usulan yang menunggu", description: "Usulan di Feed yang belum diputuskan.", fungsi: "mcp_daftar_usulan", param: { p_status: "menunggu", p_batas: 50 } },
+  { uri: "nadi://orang", name: "orang", title: "Daftar orang", description: "Orang di usaha ini tanpa NIK dan gaji.", pengelola: true, fungsi: "mcp_daftar_orang", param: { p_cari: null, p_batas: 200 } },
+];
+
+type Arg = { name: string; description: string; required: boolean };
+type Prompt = { name: string; title: string; description: string; arguments: Arg[]; cakupan: "nadi.baca" | "nadi.usul"; teks: (a: Record<string, string>) => string };
+
+/** Prompts: alur kerja siap pakai yang dipilih pengguna (mis. sebagai perintah garis miring). */
+export const PROMPT: Prompt[] = [
+  {
+    name: "tutup_hari", title: "Tutup hari", cakupan: "nadi.baca", arguments: [],
+    description: "Ringkas yang perlu diputuskan hari ini di Nadi.",
+    teks: () => "Pakai alat Nadi. Panggil siapa_saya lalu daftar_usulan (status menunggu). Tulis ringkasan singkat dalam bahasa Indonesia: berapa usulan menunggu, tiga yang dampak rupiahnya paling besar, dan mana yang sebaiknya diputuskan hari ini. Jangan mengubah apa pun.",
+  },
+  {
+    name: "catat_dari_catatan", title: "Ubah catatan jadi usulan", cakupan: "nadi.usul",
+    arguments: [{ name: "catatan", description: "Catatan bebas, mis. hasil obrolan dengan karyawan atau pemasok", required: true }],
+    description: "Ubah catatan bebas menjadi usulan Nadi yang menunggu persetujuan.",
+    teks: (a) => `Ubah catatan berikut menjadi usulan Nadi lewat alat buat_usulan. Satu usulan per hal yang perlu dicatat, aksi dipilih dari orang.buat, uang.keluar, izin.sakit, atau catatan. Judul diawali kata kerja, rupiah sebagai angka utuh, tanggal YYYY-MM-DD, tanpa NIK. Sebutkan usulan apa saja yang kamu buat.\n\nCatatan:\n${a.catatan}`,
+  },
+];
+
+const pengelola = (peran: string) => ["pemilik", "admin"].includes(peran);
+export const daftarSumber = (s: Pick<Siapa, "peran">) =>
+  SUMBER.filter((x) => !x.pengelola || pengelola(s.peran)).map(({ uri, name, title, description }) => ({ uri, name, title, description, mimeType: "application/json" }));
+export const daftarPrompt = (s: Pick<Siapa, "cakupan">) =>
+  PROMPT.filter((x) => s.cakupan.includes(x.cakupan)).map(({ name, title, description, arguments: args }) => ({ name, title, description, arguments: args }));
 
 /** Nilai header yang boleh dikodekan `=?base64?...?=` (Mcp-Name, Mcp-Param-*). */
 export function bacaNilaiHeader(v: string | null): string | null {
@@ -143,7 +184,7 @@ export async function tangani(h: Headers, body: unknown, rpc: Rpc, token: string
         if (!modern) break;
         await rpc("mcp_siapa_saya", { p_token: token, p_resource: resource });
         return selesai({
-          supportedVersions: VERSI_DIDUKUNG, capabilities: { tools: { listChanged: false } },
+          supportedVersions: VERSI_DIDUKUNG, capabilities: KAPABILITAS,
           _meta: { [META + "serverInfo"]: INFO }, instructions: INSTRUKSI, ttlMs: 3_600_000, cacheScope: "public",
         });
       }
@@ -151,7 +192,7 @@ export async function tangani(h: Headers, body: unknown, rpc: Rpc, token: string
         if (modern) break;
         await rpc("mcp_siapa_saya", { p_token: token, p_resource: resource });
         const minta = String(params.protocolVersion ?? "");
-        return selesai({ protocolVersion: (VERSI_LAMA as readonly string[]).includes(minta) ? minta : VERSI_LAMA[0], capabilities: { tools: { listChanged: false } }, serverInfo: INFO, instructions: INSTRUKSI });
+        return selesai({ protocolVersion: (VERSI_LAMA as readonly string[]).includes(minta) ? minta : VERSI_LAMA[0], capabilities: KAPABILITAS, serverInfo: INFO, instructions: INSTRUKSI });
       }
       case "ping":
         return selesai({});
@@ -159,6 +200,34 @@ export async function tangani(h: Headers, body: unknown, rpc: Rpc, token: string
         const s = (await rpc("mcp_siapa_saya", { p_token: token, p_resource: resource })) as Siapa;
         // Daftar berbeda per peran dan cakupan, jadi tembolok hanya untuk pemanggil ini.
         return selesai({ tools: daftarAlat(s), ...(modern ? { ttlMs: 300_000, cacheScope: "private" } : {}) });
+      }
+      case "resources/list": {
+        const s = (await rpc("mcp_siapa_saya", { p_token: token, p_resource: resource })) as Siapa;
+        return selesai({ resources: daftarSumber(s), ...(modern ? { ttlMs: 300_000, cacheScope: "private" } : {}) });
+      }
+      case "resources/read": {
+        const sb = SUMBER.find((x) => x.uri === params.uri);
+        if (!sb) return { status: 200, body: galat(m.id, -32602, "Resource not found", { uri: params.uri }) };
+        try {
+          const isi = await rpc(sb.fungsi, { p_token: token, p_resource: resource, ...sb.param });
+          return selesai({ contents: [{ uri: sb.uri, mimeType: "application/json", text: JSON.stringify(isi) }], ...(modern ? { ttlMs: 60_000, cacheScope: "private" } : {}) });
+        } catch (e) {
+          if (e instanceof RpcGalat && e.code === "P0403") return { status: 200, body: galat(m.id, -32602, e.message, { uri: sb.uri }) };
+          throw e;
+        }
+      }
+      case "prompts/list": {
+        const s = (await rpc("mcp_siapa_saya", { p_token: token, p_resource: resource })) as Siapa;
+        return selesai({ prompts: daftarPrompt(s), ...(modern ? { ttlMs: 600_000, cacheScope: "private" } : {}) });
+      }
+      case "prompts/get": {
+        const pr = PROMPT.find((x) => x.name === params.name);
+        if (!pr) return { status: 200, body: galat(m.id, -32602, `Prompt tidak dikenal: ${String(params.name)}`) };
+        const a = (params.arguments && typeof params.arguments === "object" ? params.arguments : {}) as Record<string, string>;
+        const kurang = pr.arguments.filter((x) => x.required && !String(a[x.name] ?? "").trim()).map((x) => x.name);
+        if (kurang.length) return { status: 200, body: galat(m.id, -32602, `Argumen wajib belum diisi: ${kurang.join(", ")}`) };
+        await rpc("mcp_siapa_saya", { p_token: token, p_resource: resource });
+        return selesai({ description: pr.description, messages: [{ role: "user", content: { type: "text", text: pr.teks(a) } }] });
       }
       case "tools/call": {
         const alat = ALAT.find((t) => t.name === params.name);

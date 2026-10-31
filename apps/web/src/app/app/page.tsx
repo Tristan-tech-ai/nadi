@@ -13,7 +13,7 @@ async function Ringkasan() {
   const [{ count: orang }, { data: usulan }] = await Promise.all([
     supabase.from("orang").select("id", { count: "exact", head: true }),
     supabase.from("usulan").select("id, judul, penjelasan, sumber, keyakinan, dampak_rp").eq("status", "menunggu")
-      .order("tenggat", { ascending: true, nullsFirst: false }).order("dampak_rp", { ascending: false, nullsFirst: false }).limit(20),
+      .order("tenggat", { ascending: true, nullsFirst: false }).order("dampak_rp", { ascending: false, nullsFirst: false }).order("dibuat_at", { ascending: false }).limit(20),
   ]);
   return (
     <section className="mx-auto w-full max-w-2xl px-4 py-8">

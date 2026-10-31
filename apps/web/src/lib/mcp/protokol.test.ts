@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ALAT, RpcGalat, VERSI_MODERN, bacaNilaiHeader, daftarAlat, tangani, type Rpc } from "./protokol";
+import { ALAT, PROMPT, RpcGalat, SUMBER, VERSI_MODERN, bacaNilaiHeader, daftarAlat, tangani, type Rpc } from "./protokol";
 
 const RES = "https://nadi.uji/api/mcp";
 const meta = { "io.modelcontextprotocol/protocolVersion": VERSI_MODERN, "io.modelcontextprotocol/clientInfo": { name: "Uji", version: "1" }, "io.modelcontextprotocol/clientCapabilities": {} };
@@ -15,7 +15,11 @@ function rpcPalsu(peran = "pemilik", cakupan = ["nadi.baca", "nadi.usul"]) {
     panggilan.push({ fungsi, param });
     if (param.p_token === "salah") throw new RpcGalat("Token tidak sah", "P0401");
     if (fungsi === "mcp_siapa_saya") return { peran, cakupan, usaha: { nama: "Warung Uji" } };
-    if (fungsi === "mcp_daftar_orang") return [{ nama: "Sari" }];
+    if (fungsi === "mcp_daftar_orang") {
+      if (!["pemilik", "admin"].includes(peran)) throw new RpcGalat("Daftar orang hanya untuk pemilik dan admin", "P0403");
+      return [{ nama: "Sari" }];
+    }
+    if (fungsi === "mcp_daftar_usulan") return [{ judul: "Catat belanja", status: param.p_status }];
     if (fungsi === "mcp_buat_usulan") {
       if (!cakupan.includes("nadi.usul")) throw new RpcGalat("Butuh cakupan nadi.usul", "P0403");
       if (param.p_aksi === "gaji.bayar") throw new RpcGalat("Aksi tidak dikenal", "22023");
@@ -115,6 +119,44 @@ describe("era lama (initialize)", () => {
   });
   it("notifications/initialized: 202; metode tak dikenal era lama: 200 -32601", async () => {
     expect((await tangani(hdr({}), { jsonrpc: "2.0", method: "notifications/initialized" }, rpcPalsu().rpc, "t", RES)).status).toBe(202);
-    expect(await tangani(hdr({}), { jsonrpc: "2.0", id: 3, method: "resources/list" }, rpcPalsu().rpc, "t", RES)).toMatchObject({ status: 200, body: { error: { code: -32601 } } });
+    expect(await tangani(hdr({}), { jsonrpc: "2.0", id: 3, method: "sampling/createMessage" }, rpcPalsu().rpc, "t", RES)).toMatchObject({ status: 200, body: { error: { code: -32601 } } });
+  });
+});
+
+describe("resources dan prompts (2026-07-28)", () => {
+  it("resources/list per peran; resources/read mengembalikan JSON; uri asing -32602", async () => {
+    const a = modern("resources/list");
+    const r = await tangani(a.h, a.body, rpcPalsu("staf").rpc, "t", RES);
+    const daftar = (r.body as { result: { resultType: string; resources: { uri: string }[] } }).result;
+    expect(daftar.resultType).toBe("complete");
+    expect(daftar.resources.map((x) => x.uri)).toEqual(["nadi://usaha", "nadi://usulan/menunggu"]);
+    const b = modern("resources/read", { uri: "nadi://usulan/menunggu" }, { "Mcp-Name": "nadi://usulan/menunggu" });
+    const isi = (await tangani(b.h, b.body, rpcPalsu().rpc, "t", RES)).body as { result: { contents: { uri: string; mimeType: string; text: string }[] } };
+    expect(isi.result.contents[0]).toMatchObject({ uri: "nadi://usulan/menunggu", mimeType: "application/json" });
+    expect(JSON.parse(isi.result.contents[0].text)).toEqual([{ judul: "Catat belanja", status: "menunggu" }]);
+    const c = modern("resources/read", { uri: "nadi://rahasia" }, { "Mcp-Name": "nadi://rahasia" });
+    expect(await tangani(c.h, c.body, rpcPalsu().rpc, "t", RES)).toMatchObject({ body: { error: { code: -32602, data: { uri: "nadi://rahasia" } } } });
+    const d = modern("resources/read", { uri: "nadi://orang" }, { "Mcp-Name": "nadi://orang" });
+    expect(await tangani(d.h, d.body, rpcPalsu("staf").rpc, "t", RES)).toMatchObject({ body: { error: { code: -32602 } } });
+  });
+  it("prompts/list menurut cakupan; prompts/get mengisi argumen; argumen wajib kosong -32602", async () => {
+    const a = modern("prompts/list");
+    const baca = (await tangani(a.h, a.body, rpcPalsu("pemilik", ["nadi.baca"]).rpc, "t", RES)).body as { result: { prompts: { name: string }[] } };
+    expect(baca.result.prompts.map((x) => x.name)).toEqual(["tutup_hari"]);
+    const b = modern("prompts/get", { name: "catat_dari_catatan", arguments: { catatan: "Sari izin sakit 2 hari mulai besok" } }, { "Mcp-Name": "catat_dari_catatan" });
+    const g = (await tangani(b.h, b.body, rpcPalsu().rpc, "t", RES)).body as { result: { messages: { role: string; content: { type: string; text: string } }[] } };
+    expect(g.result.messages[0]).toMatchObject({ role: "user", content: { type: "text" } });
+    expect(g.result.messages[0].content.text).toContain("Sari izin sakit 2 hari mulai besok");
+    const c = modern("prompts/get", { name: "catat_dari_catatan", arguments: {} }, { "Mcp-Name": "catat_dari_catatan" });
+    expect(await tangani(c.h, c.body, rpcPalsu().rpc, "t", RES)).toMatchObject({ body: { error: { code: -32602 } } });
+  });
+  it("discover mengiklankan tools, resources, prompts; ringkasan_ai hanya untuk pengelola", async () => {
+    const a = modern("server/discover");
+    const d = (await tangani(a.h, a.body, rpcPalsu().rpc, "t", RES)).body as { result: { capabilities: Record<string, unknown> } };
+    expect(Object.keys(d.result.capabilities)).toEqual(["tools", "resources", "prompts"]);
+    expect(daftarAlat({ peran: "admin", cakupan: ["nadi.baca"] }).map((t) => t.name)).toContain("ringkasan_ai");
+    expect(daftarAlat({ peran: "staf", cakupan: ["nadi.baca"] }).map((t) => t.name)).not.toContain("ringkasan_ai");
+    expect(SUMBER.every((x) => x.uri.startsWith("nadi://"))).toBe(true);
+    expect(PROMPT.every((x) => /^[a-z_]+$/.test(x.name))).toBe(true);
   });
 });
