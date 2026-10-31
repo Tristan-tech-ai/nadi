@@ -32,3 +32,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 06:55 | F0-09 (DB) | riset MCP 2026-07-28 + rancangan dua era; migrasi mcp_oauth (OAuth kode+PKCE+penyegar, token terikat usaha/cakupan/resource, 4 alat), tes SQL 31/31 | 8fbca89 |
 | 31 Okt 2026 07:40 | F0-09 | server MCP dua era + OAuth 2.1 (CIMD, DCR, PKCE, iss, refresh) + halaman izin; vitest 16, e2e 2/2, axe 0 serius; perbaikan migrasi CIMD lokal | e809280 |
 | 31 Okt 2026 08:25 | F0-09B | cabut asisten AI di Usahamu, ringkasan_ai + resources + prompts MCP, kejadian bersumber usulan; SQL 8/8 + regresi 13/13, 6/6; vitest 19; e2e 2/2 | d8a7364 |
+| 31 Okt 2026 09:00 | F0-11 | landing dengan demo nota hidup, status fitur jujur; Lighthouse mobile 100/100/100/100, LCP 0,76 dtk; axe bersih 390/1440 terang/gelap | 1e42af3 |

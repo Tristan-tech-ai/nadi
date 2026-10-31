@@ -278,8 +278,10 @@
    "accept": "lolos ANTI-SLOP.md dan VOICE.md; Lighthouse mobile >= 90 performa dan 100 aksesibilitas; LCP < 2,5 dtk; ditinjau di 390 px dan 1440 px terang/gelap",
    "how": "setelah D-02; tulis naskah dulu, lalu desain",
    "blocked_by": "D-02,F0-02",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T07:37:33",
+   "result": "commit 1e42af3: src/app/page.tsx + components/landing/demo-nota.tsx, naskah docs/design/landing.md; Lighthouse 13.6.0 mobile 100/100/100/100, LCP 0,76 dtk, CLS 0 (docs/quality/landing.md); e2e asap 9/9 termasuk axe 390/1440 terang/gelap dan judul <= 3 baris; cek-slop bersih. Produksi menunggu F0-13"
   },
   {
    "id": "F0-12",

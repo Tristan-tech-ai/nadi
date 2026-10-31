@@ -3,9 +3,10 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 ~08:25 (jam lokal), tick 27: F0-09B DONE (cabut asisten di /app/perusahaan, ringkasan_ai/resources/prompts MCP, kejadian.sumber dari usulan).
-- Fase: F0. Progres wajib: lihat next_task.py progress. Tujuh belas migrasi (mcp_lanjutan 78e59def, cocok). ringkasan_ai kini SECURITY DEFINER (cek anggota_aktif pemilik/admin) memanggil app.ringkasan_ai_usaha.
-- LANGKAH BERIKUTNYA PERSIS: tugas READY teratas dari next_task.py (kemungkinan F0-11 landing). F0-11: baca docs/design/DIRECTION.md bagian landing (pahlawan 60/40 rata kiri, demo hidup nota -> usulan berjalan di halaman, satu tombol utama, bukti hanya yang nyata), ANTI-SLOP, VOICE; tulis naskah dulu di docs/design/landing.md, lalu bangun src/app/page.tsx; Lighthouse mobile performa >= 90 dan aksesibilitas 100, LCP < 2,5 dtk; tangkapan 390/1440 terang/gelap.
+- Tanggal: 31 Okt 2026 ~09:00 (jam lokal), tick 28: F0-11 DONE (landing statis dengan demo nota hidup; Lighthouse mobile 100 semua kategori; naskah docs/design/landing.md).
+- Fase: F0. Progres wajib: lihat next_task.py progress. Tujuh belas migrasi (cocok).
+- LANGKAH BERIKUTNYA PERSIS: tugas READY teratas dari next_task.py (F0-12 data demo perusahaan?). Baca kriteria terimanya dulu. Landing memakai kelas .cetak (globals.css) untuk gerak tercetak; axe di halaman beranda harus menunggu animasi selesai (2,6 dtk).
+- Lighthouse: `npx --yes lighthouse@13.6.0 http://localhost:3100/ --chrome-flags="--headless=new" --output=json` dari scratchpad, server `pnpm start -p 3100` dijalankan di latar lalu dimatikan lewat PID port 3100.
 - Feed (/app) urut: tenggat, dampak_rp desc, dibuat_at desc, batas 20. Akun e2e A punya banyak usulan menunggu sisa uji; e2e mcp menolak usulannya sendiri lewat Feed.
 - MCP: src/lib/mcp/protokol.ts (tangani: modern = ada _meta protocolVersion atau header 2026-07-28; header MCP-Protocol-Version/Mcp-Method/Mcp-Name wajib cocok; -32022, 404 -32601; era lama initialize tanpa sesi), http.ts (asal/resourceMcp dari x-forwarded-*, anonRpc), cimd.ts (SSRF: https, DNS ke IP publik, tanpa redirect, 5 KB, 5 dtk; http://localhost hanya bila NADI_CIMD_IZINKAN_LOKAL=1 dan bukan VERCEL; playwright webServer menyetelnya). Route: /api/mcp, /.well-known/oauth-protected-resource[/api/mcp], /.well-known/oauth-authorization-server, /api/oauth/token, /api/oauth/daftar, /oauth/izinkan (dilindungi proxy). e2e: e2e/mcp.spec.ts (server klien CIMD lokal port 4010, serial). Akun e2e A punya banyak usaha 'Cabang Uji A2' sisa uji.
 - Jebakan axe: setelah emulateMedia ganti skema, tunggu transisi warna (150 ms) sebelum axe, kalau tidak kontras terbaca di tengah transisi.
