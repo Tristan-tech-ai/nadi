@@ -1760,8 +1760,10 @@
    "accept": "selama app.beban_orang.jam tetap 40 untuk semua orang (BebanMinggu.jam_sama_rata true), kalimatTerberat hanya menyebut porsi poin ('Sari memikul 31% kerja minggu ini.'), tanpa '% jam kerja'; bila jam berasal dari jadwal (setelah F3-06) porsi jam boleh tampil; vitest kedua kasus (merah dulu); e2e bagi-adil/kerja lulus; foto 390 terang kartu pemilik; dikerjakan SETELAH Q-27 (berkas lib/kerja/adil.ts sama)",
    "how": "docs/research/beban-per-jam.md; app.beban_orang jam = 40::numeric tetap",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T04:07:38"
+   "status": "done",
+   "created": "2026-11-01T04:07:38",
+   "done": "2026-11-01T04:48:39",
+   "result": "commit 6d76733 (adil.ts kalimatTerberat(r, jamSamaRata), beban.tsx, adil.test.ts, bagi-adil.spec.ts, docs/design/bagi-adil.md), gate LULUS, CI GitHub success 6d76733; vitest merah 1/74 lalu 74/74, tsc bersih; deploy produksi lewat Vercel CLI dpl_HDLdqSr9j3LP6anJnZj1KrxrJfPu READY (kuota deploy git Hobby 100/hari habis); e2e produksi bagi-adil.spec lulus 29,1 dtk; foto 390 terang: 'Sari Adil 267401 memikul 60% kerja minggu ini.' tanpa porsi jam, keterangan jam-sama-rata tetap tampil; foto 8 berkas 390/1440 terang/gelap di scratchpad/foto-q28"
   },
   {
    "id": "Q-29",
@@ -1776,6 +1778,34 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-01T04:31:56"
+  },
+  {
+   "id": "Q-30",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 35,
+   "size": "s",
+   "wajib": false,
+   "title": "Kolom jam dan poin per jam di daftar beban disembunyikan selama jam kerja belum diatur",
+   "accept": "saat BebanMinggu.jam_sama_rata, baris beban tidak menampilkan '40 jam' dan 'x per jam' (HP) dan kolom Jam jadwal/Poin per jam (desktop) disembunyikan; batang perbandingan memakai poin; bila jam dari jadwal (setelah F3-06) kolom kembali; vitest/e2e bagi-adil memeriksa kedua keadaan; foto 390/1440 terang+gelap; axe bersih",
+   "how": "foto Q-28 tick 197: baris 'Sari 6 poin · 40 jam · 0,15 per jam' dari jam anggapan; docs/research/beban-per-jam.md",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T04:48:39"
+  },
+  {
+   "id": "R-UUPK",
+   "fase": "R",
+   "kind": "research",
+   "priority": 40,
+   "size": "s",
+   "wajib": false,
+   "title": "Teks resmi UU Pelindungan Ketenagakerjaan (disahkan 6 Okt 2026): daftar perbedaan dengan aturan_bertanggal",
+   "accept": "nomor UU dan teks resmi ditemukan di JDIH (peraturan.go.id atau peraturan.bpk.go.id) atau dicatat 'belum terbit' dengan tanggal cek; bila terbit: tanggal berlaku, pasal waktu kerja, lembur, upah, PKWT, PHK, pesangon dikutip; tabel perbedaan terhadap aturan_bertanggal dan fitur F1-05/F3-07/F4-09/Q-22; aturan baru dimasukkan sebagai baris bertanggal mulai berlaku (terverifikasi=true hanya dari teks resmi); dicek ulang paling lambat tiap 7 hari selama belum terbit",
+   "how": "docs/research/uu-pelindungan-ketenagakerjaan.md; dpr.go.id berita 6 Okt 2026",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T05:06:39"
   }
  ]
 }

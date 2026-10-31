@@ -197,3 +197,10 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 1 Nov 2026 tick 195 | Bukti celah Q-23 (19/19 slip terbaca dengan JWT basi); agen Q-23 dimulai; Q-27 diverifikasi kecuali produksi (Vercel tidak men-deploy push agen 846c2df), docs/quality/review-q27.md |
 | 1 Nov 2026 tick 196 | Q-23 diverifikasi (JWT basi 19 slip -> 0, klaim 0, sidik ebf335d2); CI GitHub merah 25+ push karena tes buffer soket, diperbaiki bersama tes slip_gaji bergantung tanggal (27/27); docs/quality/ci-merah.md |
 | 1 Nov 2026 tick 196 | Q-27 dan Q-23 SELESAI (Vercel READY bb073f8, CI hijau pertama kali sejak 25+ run, e2e produksi kerja+gaji+izin); Q-29 ditambah (izin.spec rapuh saat paralel) |
+| 1 Nov 2026 tick 197 | Q-28 SELESAI (CLI deploy dpl_HDLdqSr9, e2e produksi bagi-adil, foto); penyebab push tak ter-deploy: kuota Vercel Hobby 100/hari habis (docs/quality/kuota-deploy.md, DECISIONS); F3-05 dikirim ke agen; Q-30 ditambah |
+| 1 Nov 2026 tick 198 | Q-29: penyebab izin.spec rapuh = penantian teks .first() lolos oleh sisa jalan lama, alasan batal dibuat unik, paralel produksi 3/3 lulus; menunggu agen F3-05 commit sebelum commit |
+| 1 Nov 2026 tick 199 | Patch Q-29 disimpan di scratchpad (folder kerja dikembalikan agar push agen F3-05 tidak terblokir); rancangan Q-30 docs/design/beban-tanpa-jam.md |
+| 1 Nov 2026 tick 200 | Rencana uji Q-30 ditulis (docs/quality/rencana-uji-q30.md); agen F3-05 belum push |
+| 1 Nov 2026 tick 201 | Brief Q-22 (pola kerja satu sumber) siap di scratchpad/brief-q22.md, dikirim setelah agen F3-05 push; F3-05 masih berjalan |
+| 1 Nov 2026 tick 202 | PP 35/2021 Pasal 21-22, 26 diverifikasi dari PDF resmi (docs/research/pola-kerja.md, LEARN); brief Q-22 diperbarui; F3-05 masih di agen |
+| 1 Nov 2026 tick 202 | Temuan: UU Pelindungan Ketenagakerjaan disahkan DPR 6 Okt 2026 (dpr.go.id), isi dan tanggal berlaku belum resmi; docs/research/uu-pelindungan-ketenagakerjaan.md; tugas R-UUPK ditambah |
