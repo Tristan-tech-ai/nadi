@@ -244,9 +244,11 @@
    "accept": "Klien MCP (asisten AI pelanggan) bisa menyambung ke /api/mcp, menjalankan siapa_saya dan buat usulan; tes otomatis untuk alur OAuth",
    "how": "baca spesifikasi resmi dulu; adaptasi kode repo lama",
    "blocked_by": "F0-05",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-30T20:05:52",
-   "started": "2026-10-31T06:37:48"
+   "started": "2026-10-31T06:37:48",
+   "done": "2026-10-31T07:00:20",
+   "result": "commit e809280: /api/mcp dua era (2026-07-28 + initialize), PRM/AS metadata (CIMD, iss), /api/oauth/token, /api/oauth/daftar, /oauth/izinkan; migrasi mcp_oauth (1dbbb8de) + mcp_oauth_cimd_lokal (f0f1ae76); SQL 31/31; vitest protokol+cimd 16/16; e2e mcp.spec 2/2 (401->PRM->AS->izin CIMD->kode+iss->token PKCE->server/discover->siapa_saya->buat_usulan muncul di Feed->refresh), axe 0 serius 390/1440 terang/gelap. Lokal; produksi menunggu F0-13"
   },
   {
    "id": "F0-10",
@@ -1213,6 +1215,20 @@
    "created": "2026-10-31T05:25:11",
    "done": "2026-10-31T06:17:58",
    "result": "baca-berkas v7 (deploy MCP, sha 150db9ce); commit 025be91, 2a969eb, 9928a80; eval-ekstraktor 5/5: nota-05.png aturan 0 token (total/tanggal/6 baris benar, nomor OCR NI-5841), aturan nota tabel_gabung 2 ditulis model dari OCR nota-01; vitest ekstraktor 19/19; aturan invoice berhafalan dinonaktifkan"
+  },
+  {
+   "id": "F0-09B",
+   "fase": "F0",
+   "kind": "build",
+   "priority": 9,
+   "size": "m",
+   "wajib": true,
+   "title": "MCP lanjutan: halaman AI milikmu (lihat dan cabut token), ringkasan_ai + resources + prompts, putuskan_usulan memakai sumber usulan",
+   "accept": "halaman /app/perusahaan menampilkan token MCP aktif dan tombol Cabut yang membuat panggilan berikutnya 401 (e2e); tools/list memuat ringkasan_ai untuk pemilik; resources/list dan prompts/list modern lulus vitest; usulan mcp yang disetujui mencatat kejadian.sumber mcp (tes SQL)",
+   "how": "migrasi kecil + komponen + perluas protokol.ts",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T07:00:20"
   }
  ]
 }
