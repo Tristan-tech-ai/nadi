@@ -2,8 +2,10 @@
 
 import { revalidatePath } from "next/cache";
 import { bacaPoin, menitDariPoin, teksPoin, teksSelesai, type Estimasi } from "@/lib/kerja/poin";
+import { waktuLokalKeIso } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { zonaUsaha } from "@/lib/zona-usaha";
 
 export type HasilKerja = { pesan: string; id?: string; aksi?: string } | { galat: string } | null;
 
@@ -22,7 +24,7 @@ function galatDb(e: { code?: string; message: string }, peran: string): string {
  * dipanggil sekali dengan JWT pengguna. Kerja tetap tersimpan walau model gagal; layar lalu jujur meminta isi manual.
  */
 export async function tambahKerja(_: HasilKerja, form: FormData): Promise<HasilKerja> {
-  await wajibPerusahaan();
+  const sesi = await wajibPerusahaan();
   const judul = teks(form, "judul");
   const topi = teks(form, "topi");
   const pelaksana = teks(form, "pelaksana");
@@ -34,10 +36,12 @@ export async function tambahKerja(_: HasilKerja, form: FormData): Promise<HasilK
   if (tenggat && !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(tenggat)) return { galat: "Isi tenggat dengan tanggal dan jam, atau kosongkan." };
 
   const supabase = await createClient();
+  // Isian datetime-local tanpa zona = jam dinding usaha (perusahaan.zona_waktu, sumber yang sama dengan app.zona), dikirim sebagai ISO UTC.
+  const tenggatIso = tenggat ? waktuLokalKeIso(tenggat, await zonaUsaha(supabase, sesi.perusahaanId)) : null;
+  if (tenggat && !tenggatIso) return { galat: "Tanggal atau jam tenggat tidak ada di kalender. Periksa lagi, atau kosongkan." };
   const { data, error } = await supabase.rpc("buat_kerja", {
     p_judul: judul, p_topi: topi || null, p_pelaksana: pelaksana || null,
-    // Isian datetime-local dibaca sebagai jam WITA (zona bawaan usaha).
-    p_tenggat: tenggat ? `${tenggat}:00+08:00` : null,
+    p_tenggat: tenggatIso,
     // Kunci idempoten dari browser: kiriman ulang mengembalikan kerja yang sama (migrasi papan_kerja_idempoten).
     p_kunci: kunci || null,
   });
