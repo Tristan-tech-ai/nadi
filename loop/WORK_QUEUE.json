@@ -471,8 +471,10 @@
    "accept": "kandidat melihat status tanpa akun; kandidat lama muncul saat lowongan cocok dibuka",
    "how": "",
    "blocked_by": "F2-02",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T23:09:18",
+   "result": "commit 78a1d71 (riset) + ad598f9: migrasi keputusan_rekrut (sidik 741ed5e0 cocok, tes SQL merah lalu 21/21, regresi rekrut 21/21 wawancara 18/18 uji_lamaran 19/19; advisors hanya WARN definer yang diterima), /lamar/status tanpa akun (token nml_ hash, 180 hari), kartu Keputusan + wa.me tawaran/penolakan, Bank Talenta berbasis izin; unit 13 + merah sengaja; e2e rekrut-keputusan lokal dan produksi https://nadi-tristan-tech-ais-projects.vercel.app lulus (29,4 dtk); axe 390/1440 terang/gelap 0 serius; Lighthouse mobile /lamar/status 98/100"
   },
   {
    "id": "F2-06",
