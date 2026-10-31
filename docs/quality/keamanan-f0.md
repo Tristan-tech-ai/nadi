@@ -35,9 +35,9 @@ Cara kerja:
 | S4b | Admin bisa melewati aturan khusus pemilik: membatalkan rute usulan uang besar, mengubah `usulan.untuk_peran` langsung, dan mengubah komponen slip yang sudah dilepas pemilik. | **Diperbaiki (Q-12)**: rute uang besar dibuka hanya pemilik; klien tidak bisa mengubah usulan dan usulan dari klien selalu lewat trigger rute; slip yang komponennya berubah setelah dilepas ditahan lagi |
 | S5 | Pemilik mana pun bisa merusak demo publik dengan menyetel `pengaturan.demo` di usahanya sendiri. | **Diperbaiki (Q-12)**: trigger `perusahaan_jaga_demo` |
 | S8 | Staf bisa membaca semua `kejadian` dan `orang` usahanya (mutasi bank, nomor HP, tanggal lahir). | **Diperbaiki (Q-12)**: staf membaca baris orang dan kejadian miliknya saja; pemilik, admin, akuntan membaca semua |
-| S6/S7/A7 | Kode absen QR 6 angka dan PIN staf 6 angka tanpa penguncian percobaan; login staf lewat server action terlihat dari IP Vercel. | Q-13 |
+| S6/S7/A7 | Kode absen QR 6 angka dan PIN staf 6 angka tanpa penguncian percobaan; login staf lewat server action terlihat dari IP Vercel. | **Diperbaiki (Q-13)**: 5 kode absen salah per orang per menit = ditolak sementara (galat dikembalikan sebagai data agar tercatat); 5 PIN salah per akun staf dalam 15 menit = akun dikunci 15 menit lewat banned_until (berlaku juga untuk login langsung ke Auth). Sisa risiko: tebakan PIN langsung ke Auth yang tidak lewat server action hanya dibatasi batas laju per IP (hook verifikasi sandi butuh paket Teams) |
 | A6 | Edge Function push mengirim ke endpoint https apa pun (SSRF buta, status dikembalikan). | Q-14 |
-| A8 | Hasil cek wajah dipercaya dari klien. Sudah dicatat jujur di docs/research/absen.md; sinyalnya akan diperlakukan sebagai sinyal lunak. | Q-13 |
+| A8 | Hasil cek wajah dipercaya dari klien. Sudah dicatat jujur di docs/research/absen.md; sinyalnya akan diperlakukan sebagai sinyal lunak. | **Diperbaiki (Q-13)**: sinyal wajah dan jumlah kode salah sebelum berhasil disimpan di kejadian; laporan `absen_ragu` menandai absen yang patut dicek pemilik |
 
 ## RENDAH / INFO (dicatat)
 - CIMD: DNS di-resolve dua kali (rebinding), body dibaca penuh sebelum cek 5 KB, IPv6 NAT64/6to4 belum ditolak (Q-14).
