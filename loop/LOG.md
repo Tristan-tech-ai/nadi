@@ -41,3 +41,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 09:45 | F0-02B, F0-13 | produksi hidup di Vercel akun tristan-tech-ai (deploy otomatis dari GitHub), uji luar lulus; BLOCKED karena email commit placeholder diperbaiki | 49723c8 |
 | 31 Okt 2026 10:15 | R-02B | route /api/cek-jev di produksi; OIDC diterima, AI Gateway 403 butuh kartu kredit; ke UNTUK-TRISTAN, R-02C terblokir; pustaka jev.ts 7 tes; route dihapus | 3285a9f |
 | 31 Okt 2026 10:45 | F1-02B | tautan tablet absen tanpa akun: token_kios (tes SQL 20/20, sidik cocok), /kios/tablet, kartu Tablet absen; e2e tablet 2/2 lokal + produksi; uji wajah nyata ke F1-02D (terblokir) | 715e5ac |
+| 31 Okt 2026 11:05 | F1-03 (sebagian) | database izin otopilot: kebijakan_izin, pengajuan_izin, ajukan_izin, izin_ringkas, cabang izin.setujui; tes SQL 26/26, regresi 13/13, sidik cocok; UI menyusul | lihat git log |
