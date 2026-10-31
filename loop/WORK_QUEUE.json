@@ -1392,8 +1392,10 @@
    "accept": "berkas dengan sumber lamar yang dibaca model sebagai jenis selain cv tidak menghasilkan usulan uang/impor; tercatat gagal atau dipaksa rekrut.pelamar; aturan ekstraktor tidak ditulis dari berkas lamar; tes inti baca-berkas + deploy hash cocok",
    "how": "baca-berkas index.ts/inti.ts: cabang sumber lamar",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T16:49:03"
+   "status": "done",
+   "created": "2026-10-31T16:49:03",
+   "done": "2026-10-31T17:11:20",
+   "result": "commit 49a8482; supabase/functions/baca-berkas inti.ts usulanLamar + index.ts (lamar tanpa cobaAturan/tulisAturan); tes baca-berkas 12/12 dengan merah sengaja (mutasi meneruskan jenis apa adanya gagal); baca-berkas v9 verify_jwt=false, sha256 index ae8435e2, inti 8e38a94a, ekstraktor d65b8546 cocok repo; e2e lamar lulus lokal + produksi"
   },
   {
    "id": "Q-12",
