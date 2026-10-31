@@ -1344,6 +1344,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-10-31T13:29:46"
+  },
+  {
+   "id": "Q-09",
+   "fase": "Q",
+   "kind": "maint",
+   "priority": 19,
+   "size": "s",
+   "wajib": false,
+   "title": "Build gerbang tidak menimpa build e2e",
+   "accept": "loop/gate.sh membangun ke distDir terpisah (mis. NEXT_DIST_DIR=.next-gate dibaca next.config.ts) sehingga gate di antara pnpm build dan e2e tidak menanam kunci placeholder di bundle klien; dibuktikan: build, gate, lalu e2e lamar tetap lulus",
+   "how": "next.config.ts distDir dari env; gate.sh step build dengan env itu",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T15:11:53"
   }
  ]
 }
