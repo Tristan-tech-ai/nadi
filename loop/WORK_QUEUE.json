@@ -375,8 +375,10 @@
    "accept": "hasil hitung cocok dengan contoh resmi DJP/BPJS (minimal 5 kasus); aturan belum terverifikasi menampilkan peringatan dan tidak dipakai otomatis",
    "how": "",
    "blocked_by": "F1-04,F0-08",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T12:48:05",
+   "result": "commit 8eb9c94/7c4b7f5/8317406/c7042d0: riset resmi docs/research/gaji.md (TER A44/B40/C41 dicek manual ke Lampiran PP 58/2023); src/lib/gaji tes 19/19 cocok sampai rupiah dengan 13 contoh resmi PMK 168/PP 58/PMK 105 + contoh resmi BPJS TK; migrasi slip_gaji (sidik 5112c480) tes SQL 27/27; batas upah JP 2026 belum terverifikasi -> tidak dihitung + peringatan di slip; e2e gaji lokal + produksi: gaji 8 jt TK/0 -> PPh 21 Rp125.448, neto Rp7.634.552, setujui, slip /slip#nms_ terbuka tanpa akun; axe 390/1440 terang/gelap bersih"
   },
   {
    "id": "F1-06",
@@ -1310,6 +1312,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-10-31T11:49:38"
+  },
+  {
+   "id": "F1-05B",
+   "fase": "F1",
+   "kind": "build",
+   "priority": 20,
+   "size": "s",
+   "wajib": false,
+   "title": "Lembur di slip gaji",
+   "accept": "pengelola mencatat jam lembur per orang per hari (jenis hari kerja/libur pola 5 atau 6 hari) dan slip menambah komponen lembur dari upahLembur PP 35/2021 (masuk bruto PPh 21); e2e: 4 jam hari kerja dengan upah Rp3.460.000 menambah Rp150.000",
+   "how": "kejadian lembur.* atau tabel lembur; susunSlip menerima daftar lembur",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T12:48:05"
   }
  ]
 }
