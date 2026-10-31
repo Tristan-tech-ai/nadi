@@ -7,7 +7,7 @@ import Anthropic from "npm:@anthropic-ai/sdk@1.3.0";
 import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2.118.0";
 import { unzipSync } from "npm:fflate@0.8.3";
 import { extractText, getDocumentProxy } from "npm:unpdf@1.9.1";
-import { BIDANG, INSTRUKSI, SKEMA_HASIL, hasilDari, rapikan, usulanDari, xlsxKeTeks, type Hasil, type Jenis } from "./inti.ts";
+import { BIDANG, INSTRUKSI, SKEMA_HASIL, hasilDari, rapikan, usulanDari, usulanLamar, xlsxKeTeks, type Hasil, type Jenis } from "./inti.ts";
 import { INSTRUKSI_ATURAN, SKEMA_ATURAN, aturanDari, cocok, jalankan, konsisten, perbaikiTipe, sidik, ujiAturan, type Aturan, type AturanMentah } from "./ekstraktor.ts";
 
 declare const EdgeRuntime: { waitUntil(p: Promise<unknown>): void };
@@ -193,7 +193,9 @@ Deno.serve(async (req) => {
     let token = 0;
     const model: string[] = [];
 
-    const dariAturan = teks ? await cobaAturan(admin, berkas.perusahaan_id, teks) : null;
+    // Lampiran lamaran dari orang luar tidak mencoba dan tidak menulis aturan ekstraktor usaha (Q-11).
+    const lamar = sumberUsulan === "lamar";
+    const dariAturan = teks && !lamar ? await cobaAturan(admin, berkas.perusahaan_id, teks) : null;
     if (dariAturan) {
       hasil = dariAturan.hasil;
       sumber = "aturan";
@@ -216,10 +218,15 @@ Deno.serve(async (req) => {
         return await gagal(`Nadi belum bisa membaca berkas ini (${akhir.berhenti}). Coba foto ulang lebih jelas.`);
       }
       // Berkas berteks dan jenisnya dikenal: tulis aturan sekali agar berkas kembarannya nanti tanpa token.
-      if (teks && hasil.jenis !== "lainnya") EdgeRuntime.waitUntil(tulisAturan(admin, tangga.berat, berkas.perusahaan_id, berkas_id, teks, hasil, Boolean(ocrCukup)));
+      if (teks && hasil.jenis !== "lainnya" && !lamar) EdgeRuntime.waitUntil(tulisAturan(admin, tangga.berat, berkas.perusahaan_id, berkas_id, teks, hasil, Boolean(ocrCukup)));
     }
 
-    const u = usulanDari(hasil);
+    // Lamaran tanpa akun hanya boleh menjadi usulan pelamar, apa pun isi berkasnya (Q-11).
+    let u = usulanDari(hasil);
+    if (lamar) {
+      const { data: la } = await admin.from("lamaran").select("nama").eq("berkas_id", berkas_id).maybeSingle();
+      ({ usulan: u, hasil } = usulanLamar(hasil, la?.nama ?? "pelamar"));
+    }
     const { data: usulan } = await admin.from("usulan").insert({
       perusahaan_id: berkas.perusahaan_id, sumber: sumberUsulan, aksi: u.aksi, judul: u.judul,
       penjelasan: sumber === "aturan"

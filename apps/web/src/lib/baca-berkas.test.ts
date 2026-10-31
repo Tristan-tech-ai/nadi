@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { unzipSync } from "fflate";
 import { describe, expect, it } from "vitest";
-import { INSTRUKSI, JENIS, SKEMA_HASIL, hasilDari, nilai, seriKeTanggal, usulanDari, xlsxKeTeks, type Hasil } from "../../../../supabase/functions/baca-berkas/inti";
+import { INSTRUKSI, JENIS, SKEMA_HASIL, hasilDari, nilai, seriKeTanggal, usulanDari, usulanLamar, xlsxKeTeks, type Hasil } from "../../../../supabase/functions/baca-berkas/inti";
 
 const KORPUS = join(__dirname, "..", "..", "..", "..", "fixtures", "korpus");
 const jawaban = (p: string) => JSON.parse(readFileSync(join(KORPUS, p), "utf8"));
@@ -69,6 +69,19 @@ describe("usulanDari dan nilai", () => {
     expect(nilai("nota", nota.bidang, hasil).benar).toBe(true);
     expect(nilai("nota", nota.bidang, { ...hasil, bidang: { ...nota.bidang, total: 1 } }).salah).toContain("total");
     expect(nilai("invoice", nota.bidang, hasil).benar).toBe(false);
+  });
+  it("Q-11: lampiran lamaran yang bukan CV tetap jadi usulan pelamar, isinya tidak dipakai", () => {
+    for (const j of JENIS.filter((x) => x !== "cv")) {
+      const { usulan, hasil: h } = usulanLamar({ ...hasil, jenis: j }, "Dewi Lestari");
+      expect(usulan.aksi, j).toBe("rekrut.pelamar");
+      expect(usulan.dampak_rp, j).toBeNull();
+      expect(usulan.judul).toBe("Catat Dewi Lestari sebagai pelamar");
+      expect(usulan.penjelasan).toContain("bukan CV");
+      expect(h).toMatchObject({ jenis: "cv", keyakinan: 0, bidang: { nama: "Dewi Lestari", pengalaman: [] } });
+      expect(JSON.stringify(h)).not.toContain("376500");
+    }
+    const cv: Hasil = { jenis: "cv", keyakinan: 0.9, ringkasan: "", bidang: { nama: "Wulan Astuti", posisi: "Kasir", pengalaman: [], keahlian: [] } };
+    expect(usulanLamar(cv, "Nama Formulir").usulan).toEqual(usulanDari(cv));
   });
   it("setiap jenis menghasilkan judul tanpa tanda pisah panjang", () => {
     for (const j of JENIS) {

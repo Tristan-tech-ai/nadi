@@ -216,6 +216,25 @@ export function usulanDari(h: Hasil): Usulan {
   }
 }
 
+/**
+ * Lampiran lamaran tanpa akun (Q-11, docs/quality/keamanan-f0.md A5): hanya boleh menjadi usulan pelamar. Bila model membacanya
+ * sebagai jenis lain (nota, Excel karyawan, mutasi, ...), isinya tidak dipercaya: usulan tetap "catat pelamar" dengan nama dari
+ * formulir lamaran dan peringatan untuk membuka berkasnya, sehingga orang luar tidak bisa menyelipkan usulan uang atau impor orang.
+ */
+export function usulanLamar(h: Hasil, namaPelamar: string): { usulan: Usulan; hasil: Hasil } {
+  if (h.jenis === "cv") return { usulan: usulanDari(h), hasil: h };
+  const aman: Hasil = {
+    jenis: "cv",
+    keyakinan: 0,
+    ringkasan: `Lampiran lamaran terbaca sebagai ${h.jenis.replace(/_/g, " ")}, bukan CV.`,
+    bidang: { nama: namaPelamar, posisi: "", pengalaman: [], keahlian: [] },
+  };
+  return {
+    usulan: { ...usulanDari(aman), penjelasan: `Lampirannya bukan CV (terbaca sebagai ${h.jenis.replace(/_/g, " ")}). Buka berkasnya sebelum menyetujui.` },
+    hasil: aman,
+  };
+}
+
 // ---------- penilai eval ----------
 
 const sama = (a: unknown, b: unknown) => String(a ?? "").trim().toLowerCase().replace(/\s+/g, " ") === String(b ?? "").trim().toLowerCase().replace(/\s+/g, " ");
