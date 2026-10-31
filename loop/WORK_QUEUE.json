@@ -326,8 +326,9 @@
    "accept": "QR kedaluwarsa ditolak; selfie foto statis ditolak oleh cek kedip/menoleh; selfie tidak tersimpan; absen tercatat sebagai kejadian",
    "how": "MediaPipe face landmarker; HMAC rahasia per tempat",
    "blocked_by": "F1-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "running",
+   "created": "2026-10-30T20:05:52",
+   "started": "2026-10-31T08:32:40"
   },
   {
    "id": "F1-03",
