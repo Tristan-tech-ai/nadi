@@ -5,7 +5,7 @@ import Link from "next/link";
 import { CameraIcon, CheckCircleIcon, FileArrowUpIcon, WarningCircleIcon } from "@phosphor-icons/react/dist/ssr";
 import { Tombol } from "@/components/ui/tombol";
 import { bacaBerkasAksi } from "@/app/app/lempar/actions";
-import { lemparBerkas, mimeBerkas, ukuranKompres, type HasilLempar } from "@/lib/lempar";
+import { KUALITAS_FOTO, lemparBerkas, mimeBerkas, ukuranKompres, type HasilLempar } from "@/lib/lempar";
 import { bacaTeksFoto, perluOcr } from "@/lib/ocr";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 
@@ -22,7 +22,7 @@ async function siapkanFoto(f: File): Promise<{ isi: ArrayBuffer; nama: string; m
   kanvas.height = tinggi;
   kanvas.getContext("2d")!.drawImage(bitmap, 0, 0, lebar, tinggi);
   bitmap.close();
-  const blob = await new Promise<Blob>((ok, gagal) => kanvas.toBlob((b) => (b ? ok(b) : gagal(new Error("kompres"))), "image/jpeg", 0.85));
+  const blob = await new Promise<Blob>((ok, gagal) => kanvas.toBlob((b) => (b ? ok(b) : gagal(new Error("kompres"))), "image/jpeg", KUALITAS_FOTO));
   return { isi: await blob.arrayBuffer(), nama: f.name.replace(/\.\w+$/, "") + ".jpg", mime: "image/jpeg" };
 }
 

@@ -14,8 +14,12 @@ export function mimeBerkas(nama: string, tipe: string): string | null {
   return dariExt[ext] ?? null;
 }
 
-/** Ukuran baru foto agar sisi terpanjang tidak lebih dari batas (cukup untuk dibaca, jauh lebih hemat kuota). */
-export function ukuranKompres(lebar: number, tinggi: number, sisiMaks = 2000): { lebar: number; tinggi: number } {
+/** Kualitas JPEG foto yang dikompres di HP (Q-02B, docs/quality/kapasitas.md). */
+export const KUALITAS_FOTO = 0.7;
+
+/** Ukuran baru foto agar sisi terpanjang tidak lebih dari batas. 1600 px q0,7: foto nota HP 3,3 MB jadi 118 KB (2000 px q0,85: 289 KB),
+ *  dibaca model sama benar (total, tanggal, 9 baris) dengan token 28% lebih sedikit. */
+export function ukuranKompres(lebar: number, tinggi: number, sisiMaks = 1600): { lebar: number; tinggi: number } {
   const skala = Math.min(1, sisiMaks / Math.max(lebar, tinggi));
   return { lebar: Math.round(lebar * skala), tinggi: Math.round(tinggi * skala) };
 }

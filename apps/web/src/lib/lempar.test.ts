@@ -16,11 +16,11 @@ describe("mimeBerkas", () => {
 });
 
 describe("ukuranKompres", () => {
-  it("foto 4000x3000 diperkecil ke sisi terpanjang 2000", () => {
-    expect(ukuranKompres(4000, 3000)).toEqual({ lebar: 2000, tinggi: 1500 });
+  it("foto 4000x3000 diperkecil ke sisi terpanjang 1600", () => {
+    expect(ukuranKompres(4000, 3000)).toEqual({ lebar: 1600, tinggi: 1200 });
   });
   it("foto potret dan foto kecil", () => {
-    expect(ukuranKompres(3024, 4032)).toEqual({ lebar: 1500, tinggi: 2000 });
+    expect(ukuranKompres(3024, 4032)).toEqual({ lebar: 1200, tinggi: 1600 });
     expect(ukuranKompres(800, 600)).toEqual({ lebar: 800, tinggi: 600 });
   });
 });
