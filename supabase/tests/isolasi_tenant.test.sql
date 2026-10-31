@@ -101,12 +101,15 @@ begin
     insert into public.orang (perusahaan_id, nama) values (pa, 'Tambahan staf');
     perform pg_temp.cek('staf tidak bisa menambah orang', false, 'seharusnya ditolak');
   exception when others then perform pg_temp.cek('staf tidak bisa menambah orang', true, sqlerrm); end;
+  -- Sejak Q-01 berkas hanya ditulis fungsi server (lempar_berkas); di sini dibuat sebagai postgres atas nama staf.
+  execute 'reset role';
   insert into public.berkas (perusahaan_id, jalur, diunggah_oleh) values (pa, pa || '/lempar/s.jpg', us);
+  execute 'set local role authenticated';
   perform pg_temp.cek('staf hanya melihat berkas miliknya', (select count(*) from public.berkas) = 1);
   begin
     insert into public.berkas (perusahaan_id, jalur, diunggah_oleh) values (pa, pa || '/lempar/x.jpg', ua);
-    perform pg_temp.cek('staf tidak bisa mengunggah atas nama orang lain', false, 'seharusnya ditolak');
-  exception when others then perform pg_temp.cek('staf tidak bisa mengunggah atas nama orang lain', true, sqlerrm); end;
+    perform pg_temp.cek('staf tidak bisa menulis berkas langsung', false, 'seharusnya ditolak');
+  exception when others then perform pg_temp.cek('staf tidak bisa menulis berkas langsung', true, sqlerrm); end;
   begin
     perform count(*) from public.kejadian_p20261001;
     perform pg_temp.cek('partisi anak tertutup dari API', false, 'seharusnya ditolak');

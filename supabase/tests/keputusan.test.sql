@@ -94,8 +94,15 @@ begin
   exception when others then perform pg_temp.cek('admin tidak bisa memutuskan usulan uang besar', sqlerrm like 'Usulan tidak ditemukan%', sqlerrm);
   end;
   select id into k from public.keputusan where subjek_id = u1;
+  begin
+    perform public.batalkan_keputusan(k, 'Admin ingin memutuskan sendiri');
+    perform pg_temp.cek('admin tidak bisa membuka rute uang besar untuk dirinya', false);
+  exception when others then perform pg_temp.cek('admin tidak bisa membuka rute uang besar untuk dirinya', sqlstate = '42501', sqlerrm);
+  end;
+  perform set_config('request.jwt.claims', ka, true);
   perform public.batalkan_keputusan(k, 'Admin boleh memutuskan tagihan ini');
-  perform pg_temp.cek('pembatalan rute: admin kini melihat usulan', exists (select 1 from public.usulan where id = u1));
+  perform set_config('request.jwt.claims', kadm, true);
+  perform pg_temp.cek('pembatalan rute oleh pemilik: admin kini melihat usulan', exists (select 1 from public.usulan where id = u1));
 
   -- Ringkasan p50.
   select count(*) into n from public.ringkasan_keputusan(30) where p50_ms is not null and p95_ms >= p50_ms;
