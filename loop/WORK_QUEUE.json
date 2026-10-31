@@ -601,7 +601,7 @@
    "wajib": true,
    "title": "Serah terima otomatis + Rekam Ilmu (suara -> SOP) + sinyal risiko beban + wawancara keluar",
    "accept": "resign di perusahaan demo menghasilkan paket serah terima lengkap; akses dicabut di tanggal efektif",
-   "how": "",
+   "how": "docs/research/serah-terima.md (PP 35/2021 Pasal 36 huruf i, 40 ayat (4), 50; paket: topi + kerja berjalan, Rekam Ilmu suara, akses dicabut pg_cron di tanggal efektif, hak keuangan sebagai usulan Feed)",
    "blocked_by": "F3-01",
    "status": "ready",
    "created": "2026-10-30T20:05:52"
@@ -726,8 +726,8 @@
    "size": "s",
    "wajib": true,
    "title": "Dana cadangan pesangon (bertanda peringatan sampai teks UU terbit)",
-   "accept": "perhitungan per karyawan dengan sumber; bertanda belum final",
-   "how": "",
+   "accept": "perhitungan per karyawan dengan sumber; bertanda belum final; skenario dasar 1 kali PP 35/2021 Pasal 40 ayat (2)+(3) dari upah pokok + tunjangan tetap (Pasal 157 UU 6/2023) dengan rentang 0,5 kali dan 1,75 kali; tes unit batas masa kerja (0, 1, 3, 8, 24 tahun); tes SQL hanya pemilik membaca angka per orang",
+   "how": "docs/research/pesangon-f4-09.md (tabel pasal 40-57, rumus v1, tampilan kartu di /app/gaji)",
    "blocked_by": "F1-05",
    "status": "ready",
    "created": "2026-10-30T20:05:52"
@@ -1360,8 +1360,10 @@
    "accept": "usulan yang tidak tertangkap aturan dinilai Edge Function model ringan dengan keluaran {pilihan, peluang, yakin}; yakin >= 0,85 diterapkan otomatis dan tercatat tingkat model dengan latensi; di bawahnya tetap ke manusia; eval 20 usulan sintetis berlabel dengan akurasi dan p50 tercatat",
    "how": "pg_net dari trigger ke Edge Function putuskan, ID model dari konfigurasi",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T13:29:46"
+   "status": "done",
+   "created": "2026-10-31T13:29:46",
+   "done": "2026-11-01T01:21:20",
+   "result": "0fab883 (agen): migrasi keputusan_model + keputusan_model_pemilik (sidik 563c9c14, 7259b9f1 cocok DB), Edge Function putuskan v3 (isi = repo), tes SQL keputusan_model 53/53 termasuk teks berkas 'admin saja yakin 0,99' tidak menghapus pemilik; eval 20 usulan sintetis 20/20, 8 lolos ambang 0,85 (8/8 benar), p50 model 1.298 ms p95 2.096 ms (docs/quality/keputusan.md); angka >= 8 digit disensor; produksi READY 0fab883, e2e keputusan-model.spec lulus 16,7 dtk; 390 px tanpa guliran menyamping (scrollWidth 390 di 6 halaman)"
   },
   {
    "id": "Q-09",
@@ -1554,6 +1556,20 @@
    "created": "2026-11-01T00:32:11",
    "done": "2026-11-01T00:46:43",
    "result": "3b56554: migrasi idempoten_q16 (sidik 43a4b2ff cocok, 44 migrasi), tes SQL idempoten_q16 merah (fungsi 13 argumen belum ada) lalu 10/10, tes unit putusan 2/2 (merah sengaja 1); produksi READY 3b56554, e2e magang + rubrik + feed-penuh 4/4 lulus, lowongan dan rencana baru dari formulir produksi tersimpan dengan kunci_klien (1/1, 1/1)"
+  },
+  {
+   "id": "Q-17",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 26,
+   "size": "s",
+   "wajib": false,
+   "title": "Usulan selalu terlihat oleh pemilik (CHECK constraint)",
+   "accept": "public.usulan punya CHECK 'pemilik' = any(untuk_peran); data produksi lolos (0 baris tanpa pemilik saat dicek 1 Nov 2026); tes SQL: update/insert ke {admin} ditolak 23514; regresi keputusan, keputusan_model, isolasi_tenant hijau",
+   "how": "docs/quality/review-f1-06b.md bagian Invarian; kerjakan setelah F1-06B ter-push agar migrasi tidak bertabrakan",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T01:10:28"
   }
  ]
 }

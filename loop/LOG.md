@@ -120,3 +120,15 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 1 Nov 2026 tick 120 | Q-16 ditambah (kunci idempoten lowongan/rencana magang, kriteria tertulis); F3-01 masih di agen |
 | 1 Nov 2026 tick 121 | F3-01 selesai: verifikasi sidik, advisor, foto; e2e produksi gagal (model 0 menit -> 422), diperbaiki 6bc914e, Edge Function v2, e2e produksi lulus |
 | 1 Nov 2026 tick 122 | Q-16 selesai: kunci idempoten lowongan + rencana magang, ulangan keputusan Feed jujur (3b56554), e2e produksi 4/4 |
+| 1 Nov 2026 tick 123 | F1-06B didelegasikan ke agen latar; docs/research/serah-terima.md (F3-07, aturan resign PP 35/2021 dari teks resmi) |
+| 1 Nov 2026 tick 124 | F1-06B masih di agen; docs/research/pesangon-f4-09.md (tabel PP 35/2021 Pasal 40 + dasar upah Pasal 157 dari teks resmi, skenario dasar belum final) |
+| 1 Nov 2026 tick 125 | F1-06B masih di agen; tabel pengali PHK PP 35/2021 Pasal 41-57 ditambahkan ke docs/research/pesangon-f4-09.md |
+| 1 Nov 2026 tick 126 | F1-06B masih di agen (migrasi + tes ditulis); tabel pesangon Pasal 43(2)-47 dicek ke gambar PDF hlm 29-31; kriteria F4-09 dan cara F3-07 di antrean merujuk riset |
+| 1 Nov 2026 tick 127 | Cek gambar PDF PP 35/2021 hlm 34-36: tabel pesangon dikoreksi (Pasal 54 ayat (2)/(5) UPMK 1 kali, bukan 0), Pasal 53 bantuan keluarga dicatat |
+| 1 Nov 2026 tick 128 | Tabel pesangon PP 35/2021 dicek ke gambar PDF hlm 28-37: tambah Pasal 42 ayat (2) 0,5 kali, Pasal 58 (iuran dana pensiun mengurangi kewajiban); hanya Pasal 41 dari teks |
+| 1 Nov 2026 tick 129 | F1-06B masih di agen (Edge Function putuskan ditulis); docs/design/serah-terima-layar.md (paket serah terima F3-07: kerja + pengganti, Rekam Ilmu, akses, hak keuangan) |
+| 1 Nov 2026 tick 130 | Tinjauan keamanan F1-06B: TINGGI rute admin menyembunyikan usulan dari pemilik (RLS usulan_baca + prompt injection lewat berkas/MCP), SEDANG angka panjang ke model; dikirim ke agen |
+| 1 Nov 2026 tick 131 | Agen F1-06B menanggapi temuan (migrasi keputusan_model_pemilik); invarian pemilik selalu melihat diperiksa (0 baris produksi tanpa pemilik); Q-17 ditambah (CHECK constraint) |
+| 1 Nov 2026 tick 132 | Q-17: tes SQL merah ditulis dan dijalankan (6 asersi, 3 gagal tanpa constraint); migrasi menunggu push agen F1-06B |
+| 1 Nov 2026 tick 133 | F1-06B masih di agen (eval-keputusan + fixtures); docs/quality/injeksi-prompt.md: peta 7 jalur model yang mengubah data, dampak terburuk, aturan wajib fitur model berikutnya |
+| 1 Nov 2026 tick 134 | F1-06B masih di agen (kartu keputusan + e2e); aturan keluaran model tak tepercaya masuk loop/README.md |

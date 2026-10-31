@@ -23,6 +23,7 @@ Dikerjakan oleh loop otonom: baca `loop/wake_header.txt` (kontrak tick, perintah
 - **ID**: `app.uuid7()`. Tabel bervolume tinggi (kejadian, audit_log) dipartisi per bulan dengan pg_partman.
 - **Konfigurasi adalah data**: tarif pajak, BPJS, UMP, paket industri ada di tabel bertanggal dengan sumber. Yang belum diverifikasi ke teks resmi berstatus `terverifikasi=false` dan tidak dipakai sebagai preset.
 - **AI**: tangga kecerdasan, dari aturan pasti ke model kecil ke model menengah/besar. Ekstraktor terkompilasi dan Bank Data untuk menghemat token. Data nyata tidak lewat kunci AI gratis.
+- **Keluaran model = masukan tak tepercaya** (docs/quality/injeksi-prompt.md): model tidak pernah mengurangi kendali pemilik (tidak menyembunyikan dari pemilik, tidak menyetujui uang, tidak menghapus); tindakan otomatis tercatat di public.keputusan dan bisa dibatalkan; angka panjang disamarkan sebelum dikirim; batas harian per usaha dan token tercatat walau gagal; ada tes SQL untuk jawaban model terburuk.
 - **Bahasa UI**: Indonesia sehari-hari, mobile-first, ikuti `docs/design/VOICE.md` dan `ANTI-SLOP.md`.
 - **Tanpa jejak**: nama asisten pengembang tidak muncul di repo, pesan commit, atau riwayat; ID model AI hidup di konfigurasi database/env, bukan di kode.
 - **Git**: commit kecil per tugas dengan pathspec eksplisit (bukan `git add -A`), push setiap commit, tanpa force push.
