@@ -49,3 +49,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 12:25 | F1-05 (sebagian) | database slip gaji: aturan resmi termuat, periode/slip/tautan aman, tahan otomatis Gerbang Gaji, kunci setelah disetujui; tes SQL 27/27, sidik cocok | lihat git log |
 | 31 Okt 2026 12:45 | F1-05 (sebagian) | susun slip + layar Gaji + halaman slip publik; tes gaji 19/19; isian gaji per orang dan e2e menyusul | lihat git log |
 | 31 Okt 2026 13:05 | F1-05 | slip gaji selesai: isian gaji/PTKP, layar Gaji, slip tautan; e2e lokal + produksi (PPh 21 Rp125.448, neto Rp7.634.552); F1-05B lembur ditambahkan | c7042d0 |
+| 31 Okt 2026 13:10 | F1-06 (mulai) | rancangan docs/research/keputusan.md: jejak, pembatalan, p50, titik pakai izin.otopilot dan usulan.rute | lihat git log |
