@@ -69,8 +69,10 @@ begin
   -- S4b: admin aktif tidak bisa melewati aturan khusus pemilik.
   perform set_config('request.jwt.claims', ke, true);
   insert into public.usulan (perusahaan_id, sumber, aksi, judul, payload, dampak_rp, untuk_peran)
-  values (pa, 'aturan', 'uang.keluar', 'Bayar besar', '{}', 10000000, array['admin']) returning id into u1;
+  values (pa, 'aturan', 'uang.keluar', 'Bayar besar', '{}', 10000000, array['admin']);
+  -- Tanpa RETURNING: setelah dirutekan ke pemilik, admin memang tidak boleh membaca usulan ini.
   execute 'reset role';
+  select id into u1 from public.usulan where perusahaan_id = pa and judul = 'Bayar besar';
   perform pg_temp.cek('S4b usulan uang besar tetap hanya untuk pemilik walau admin menulis untuk_peran sendiri',
     (select untuk_peran = array['pemilik'] from public.usulan where id = u1), (select untuk_peran::text from public.usulan where id = u1));
   select id into kp from public.keputusan where subjek_id = u1 and jenis = 'usulan.rute';
