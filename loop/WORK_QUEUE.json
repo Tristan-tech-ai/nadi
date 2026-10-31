@@ -326,9 +326,11 @@
    "accept": "QR kedaluwarsa ditolak; selfie foto statis ditolak oleh cek kedip/menoleh; selfie tidak tersimpan; absen tercatat sebagai kejadian",
    "how": "MediaPipe face landmarker; HMAC rahasia per tempat",
    "blocked_by": "F1-01",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-30T20:05:52",
-   "started": "2026-10-31T08:32:40"
+   "started": "2026-10-31T08:32:40",
+   "done": "2026-10-31T08:48:46",
+   "result": "commit 35666c4 + d925264: TOTP 15 dtk di Postgres (SQL absen_qr 21/21: vektor RFC 6238, kode kedaluwarsa/karangan/dipakai ulang ditolak, cek wajah wajib, rahasia tertutup); /kios QR berganti (e2e: kode berubah setelah sisa waktu); /absen cek wajah MediaPipe 1.2.0 di perangkat, penilai kedip+menoleh acak (vitest 8/8: foto statis/diputar ditolak); e2e kamera palsu tanpa wajah ditolak dan tidak ada POST absen; selfie tidak dikirim; axe 390/1440 terang/gelap. Belum diuji dengan wajah manusia sungguhan"
   },
   {
    "id": "F1-03",
@@ -1238,6 +1240,20 @@
    "created": "2026-10-31T07:00:20",
    "done": "2026-10-31T07:19:46",
    "result": "commit d8a7364: /app/perusahaan bagian Asisten AI milikmu + Cabut (e2e: cabut -> tools/list 401, penyegar 400); alat ringkasan_ai (pengelola), resources nadi://usaha|usulan/menunggu|orang, prompts tutup_hari|catat_dari_catatan (vitest 19/19); migrasi mcp_lanjutan 78e59def: kejadian.sumber = usulan.sumber (SQL mcp_lanjutan 8/8, regresi putuskan_usulan 13/13, ringkasan_ai 6/6); axe 0 serius 390/1440 terang/gelap"
+  },
+  {
+   "id": "F1-02B",
+   "fase": "F1",
+   "kind": "build",
+   "priority": 14,
+   "size": "s",
+   "wajib": false,
+   "title": "Uji lapangan absen dengan wajah sungguhan + token kios khusus",
+   "accept": "absen masuk berhasil dari HP sungguhan dengan wajah hidup (tangkapan layar hasil), ambang kedip/menoleh disetel bila perlu; tablet kios bisa memakai token khusus yang hanya boleh meminta kode (tes SQL)",
+   "how": "perlu HP + orang; token kios lewat RPC baru",
+   "blocked_by": "F0-13",
+   "status": "blocked",
+   "created": "2026-10-31T08:48:46"
   }
  ]
 }
