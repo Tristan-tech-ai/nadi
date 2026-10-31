@@ -1584,8 +1584,10 @@
    "accept": "baris app.rute_model berstatus proses lebih dari 10 menit ditandai gagal dengan galat 'Edge Function tidak menjawab' oleh pg_cron tiap 5 menit, untuk_peran tidak berubah; tes SQL dengan baris proses buatan bertanggal mundur; cron terdaftar di cron.job",
    "how": "supabase/migrations/20261101003000_keputusan_model.sql (app.rute_model), pola cron nadi-push-usulan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T01:24:23"
+   "status": "done",
+   "created": "2026-11-01T01:24:23",
+   "done": "2026-11-01T01:32:32",
+   "result": "59d3edb: migrasi rute_model_macet (sidik b2437131 cocok, 48 migrasi), cron nadi-rute-macet */5 terdaftar, tes rute_model_macet_q18 merah lalu 7/7 (baris 11 menit gagal, 5 menit tetap proses, rute tidak berubah, authenticated tidak bisa memanggil)"
   }
  ]
 }
