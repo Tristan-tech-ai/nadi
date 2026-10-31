@@ -3,9 +3,10 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
-- Tanggal: 31 Okt 2026 ~09:45 (jam lokal), tick 29: F0-12 DONE (usaha demo /demo dan /demo/toko, baca-saja tanpa akun; penyegaran waktu tiap malam).
-- Fase: F0. Delapan belas migrasi (usaha_demo 086e748a, cocok).
-- LANGKAH BERIKUTNYA PERSIS: tugas READY teratas dari next_task.py; baca kriteria terimanya dan sumber primer yang relevan dulu.
+- Tanggal: 31 Okt 2026 ~10:30 (jam lokal), tick 30: F1-01 DONE (topi dari impor karyawan, porsi, tampil di /app/orang; e2e 30 karyawan).
+- Fase: F1. Dua puluh migrasi (topi_impor 822c72f6, topi_impor_tanggal 7706e32e, cocok).
+- LANGKAH BERIKUTNYA PERSIS: F1-02 absen QR berputar (TOTP 15 dtk) + selfie cek keaktifan di perangkat (MediaPipe face landmarker; repo lama punya contoh dan public/mediapipe/face_landmarker.task sudah ada) + mode kios. Mulai dari riset primer: RFC 6238 (TOTP) dan docs MediaPipe Face Landmarker untuk web (versi @mediapipe/tasks-vision terbaru, catat di LEARN); rancang rahasia per tempat (Vault atau kolom terenkripsi), RPC absen_masuk(kode_qr, ...) yang memvalidasi kode +-1 langkah, catat kejadian absen.masuk; selfie TIDAK disimpan.
+- Topi: app.topi_dari_jabatan / app.pasang_topi_dari_jabatan; putuskan_usulan memasang topi untuk orang.impor dan orang.buat (bidang.jabatan). e2e topi.spec memakai usaha 'Uji Topi E2E' milik akun A lalu mengembalikan usaha aktif.
 - Demo: public.demo_lihat(p_kunci fnb|toko) anon; app.isi_demo() (sekali, idempoten), app.segarkan_demo() lewat cron nadi-demo-segar. Komponen src/components/demo/halaman-demo.tsx (kerangka statis + isi di Suspense; ambilDemo 'use cache' hours, gagal -> seconds). Gerbang membangun dengan kunci palsu: halaman yang memanggil database saat prerender harus tahan gagal.
 - Lighthouse: `npx --yes lighthouse@13.6.0 http://localhost:3100/ --chrome-flags="--headless=new" --output=json` dari scratchpad, server `pnpm start -p 3100` dijalankan di latar lalu dimatikan lewat PID port 3100.
 - Feed (/app) urut: tenggat, dampak_rp desc, dibuat_at desc, batas 20. Akun e2e A punya banyak usulan menunggu sisa uji; e2e mcp menolak usulannya sendiri lewat Feed.

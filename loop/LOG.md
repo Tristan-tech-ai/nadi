@@ -34,3 +34,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 08:25 | F0-09B | cabut asisten AI di Usahamu, ringkasan_ai + resources + prompts MCP, kejadian bersumber usulan; SQL 8/8 + regresi 13/13, 6/6; vitest 19; e2e 2/2 | d8a7364 |
 | 31 Okt 2026 09:00 | F0-11 | landing dengan demo nota hidup, status fitur jujur; Lighthouse mobile 100/100/100/100, LCP 0,76 dtk; axe bersih 390/1440 terang/gelap | 1e42af3 |
 | 31 Okt 2026 09:45 | F0-12 | usaha demo baca-saja /demo + /demo/toko (RPC anon, prerender per jam, cron geser waktu), SQL 12/12, e2e < 3 dtk, Lighthouse 100/100 | 2b73e7a |
+| 31 Okt 2026 10:30 | F1-01 | jabatan impor -> topi berporsi (sinonim, topi baru, impor ulang aman), bug tanggal UTC tertangkap tes; SQL 13/13, e2e 30 karyawan bertopi + lintas topi, /app/orang menampilkan topi | e541c26 |

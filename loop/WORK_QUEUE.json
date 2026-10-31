@@ -310,8 +310,10 @@
    "accept": "e2e: impor 30 karyawan dari xlsx korpus -> semua masuk dengan topi; kerja lintas topi tertanda otomatis",
    "how": "",
    "blocked_by": "F0-06",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T08:17:39",
+   "result": "commit e541c26: migrasi topi_impor (822c72f6) + topi_impor_tanggal (7706e32e): jabatan -> topi berporsi (sinonim, topi baru, impor ulang aman), SQL topi_impor 13/13 (termasuk kerja lintas topi); e2e topi.spec 1/1: karyawan-30.xlsx lewat Lempar -> 30/30 orang bertopi, porsi 100%, kerja koki oleh kasir lintas_topi=true, /app/orang menampilkan topi, axe 0 serius 390/1440 terang/gelap"
   },
   {
    "id": "F1-02",
