@@ -54,3 +54,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 13:40 | F1-06 | gerbang keputusan selesai: kartu jejak + batal, regresi SQL lulus, e2e lokal + produksi, p50 izin 11,1 ms / rute 1,2 ms; F1-06B tingkat model ditambahkan | 2640a2b |
 | 31 Okt 2026 13:50 | F2-01 (mulai) | rancangan docs/research/rekrut.md: lowongan per topi, /lamar/<kode> tanpa akun, RPC anon berbatas laju, baca-berkas lewat jalur token internal | lihat git log |
 | 31 Okt 2026 14:05 | F2-01 (sebagian) | migrasi rekrut: lowongan berkode, lamar tanpa akun berbatas laju, unggah CV anon terbatas, pg_net ke baca-berkas; tes SQL ditulis | lihat git log |
+| 31 Okt 2026 14:15 | F2-01 (sebagian) | tes SQL rekrut menemukan kebijakan Storage anon membaca berkas tanpa izin; diperbaiki migrasi rekrut_slot (fungsi security definer); tes diperketat; 21/21 | 43c8fe0 |
