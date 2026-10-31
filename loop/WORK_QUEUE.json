@@ -1710,8 +1710,10 @@
    "accept": "tenggat kerja dari datetime-local ditafsirkan di zona usaha (bukan +08); hariIni/formatJam/formatTanggal/formatTenggat tanpa bawaan Asia/Makassar (zona wajib, TypeScript menunjuk pemanggil); zona usaha dibaca dari sesi; vitest Jakarta/Jayapura 23.30 lokal (merah dulu); tes SQL buat_kerja tenggat teks lokal usaha WIB; e2e kerja.spec usaha WIB: jam tenggat tampil = yang diketik; gate hijau; Vercel READY + e2e produksi",
    "how": "docs/quality/zona-aplikasi.md; setelah Q-24 (app.zona)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T03:26:16"
+   "status": "done",
+   "created": "2026-11-01T03:26:16",
+   "done": "2026-11-01T03:52:06",
+   "result": "commit a4f6bd7+f7ba09f+48b27e1 (agen, gate LULUS), loop 48b00a6 gate LULUS; vitest merah 7 gagal/37 lalu 44/44, seluruh 420/420, kasus 23.30 Asia/Jakarta dan Asia/Jayapura; zona tetap di apps/web/src tinggal peta singkatan format.ts + ZONA_CONTOH /dev/komponen; tenggat lewat waktuLokalKeIso di server action dengan zonaUsaha (tanpa migrasi, jadi tes SQL buat_kerja tidak berlaku); tsc menunjuk 21 pemanggil di 13 berkas, semua diperbaiki; e2e lokal kerja+izin+magang+kpi+peta+tablet+rekrut-keputusan+absen+komponen+gaji lulus; Vercel READY 48b00a6; e2e produksi kerja.spec+izin.spec 2/2 (47,1 dtk), database: tenggat diketik 17.00 di usaha Asia/Jakarta tersimpan 2026-11-02 10:00 UTC; foto 390 terang 'Tenggat Besok, 17.00', 'Sedang jalan sejak 03.45' WIB; docs/quality/review-q25-diff.md"
   },
   {
    "id": "Q-26",
@@ -1726,6 +1728,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-01T03:36:22"
+  },
+  {
+   "id": "Q-27",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 24,
+   "size": "s",
+   "wajib": false,
+   "title": "Rata-rata beban tim tidak menyesatkan (bukan 'Rata-rata tim 0', bukan 'di atas rata-rata' karena 2 poin)",
+   "accept": "beban_saya menghitung rata-rata hanya dari orang yang punya jam kerja atau kerja minggu itu (n>=3 dari kelompok itu), bukan semua orang bertopi; di_atas butuh selisih mutlak minimal 4 poin (1 jam) selain 1,5x rata-rata; teksBebanSaya tidak pernah mencetak 'Rata-rata tim 0' (rata-rata < 0,1 ditulis 'hampir 0' atau disembunyikan); tes SQL: 50 orang tanpa kerja + 3 orang berkerja 2/4/6 poin -> rata-rata 4, orang 6 poin tidak di_atas; vitest teksBebanSaya; e2e kerja tetap lulus; foto 390 terang",
+   "how": "temuan tick 186 dari foto Q-25: Warung Uji A 50 orang di beban_orang, avg dibulatkan 0, staf 2 poin ditandai di atas rata-rata; fungsi public.beban_saya (avg semua baris app.beban_orang)",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T03:52:49"
   }
  ]
 }
