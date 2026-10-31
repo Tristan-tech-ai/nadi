@@ -1440,8 +1440,10 @@
    "accept": "endpoint push hanya host layanan push dikenal; CIMD memakai IP yang sudah dicek dan membaca body bertahap maks 5 KB, IPv6 NAT64/6to4 ditolak; tautan slip/kios/lamar/OAuth memakai env NADI_ASAL; resource null ditolak di mcp_konteks; pengguna tidak bisa membatalkan pencabutan token; tes unit dan SQL",
    "how": "docs/quality/keamanan-f0.md A6 dan RENDAH",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T16:49:03"
+   "status": "done",
+   "created": "2026-10-31T16:49:03",
+   "done": "2026-10-31T18:27:33",
+   "result": "commit 637fa20 + bce21ba; cimd.ts lookupAman/ambilTeksAman/ipTerlarang IPv6, push.ts hostPushDikenal, http.ts asalTautan dipakai slip/tablet/lowongan/email; migrasi pengerasan_q14 (sidik 7f783eb3, 37 migrasi); tes unit pengerasan 7 merah lalu 38/38; tes SQL pengerasan_q14 5 merah lalu 7/7; regresi mcp_oauth 31, web_push 15, push_usulan 11 (fixture diganti ke host FCM); e2e lokal mcp/tablet/lamar/auth 12/12, produksi tablet/lamar/mcp/keamanan 10/10 READY bce21baf"
   },
   {
    "id": "D-05",
