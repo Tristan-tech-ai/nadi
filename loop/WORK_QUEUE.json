@@ -1550,8 +1550,10 @@
    "accept": "buatLowongan dan simpan_rencana_magang yang dikirim dua kali dengan kunci sama (pengiriman ulang experimental.useOffline) menghasilkan satu baris dan id sama; kunci sama di usaha lain tidak bentrok; tes SQL untuk keduanya; putuskan_usulan yang diulang mengembalikan hasil lama tanpa galat",
    "how": "docs/research/idempotensi-aksi.md (kolom kunci uuid unik per usaha, ON CONFLICT DO NOTHING lalu baca id lama, crypto.randomUUID di klien), docs/quality/review-f3-01.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T00:32:11"
+   "status": "done",
+   "created": "2026-11-01T00:32:11",
+   "done": "2026-11-01T00:46:43",
+   "result": "3b56554: migrasi idempoten_q16 (sidik 43a4b2ff cocok, 44 migrasi), tes SQL idempoten_q16 merah (fungsi 13 argumen belum ada) lalu 10/10, tes unit putusan 2/2 (merah sengaja 1); produksi READY 3b56554, e2e magang + rubrik + feed-penuh 4/4 lulus, lowongan dan rencana baru dari formulir produksi tersimpan dengan kunci_klien (1/1, 1/1)"
   }
  ]
 }
