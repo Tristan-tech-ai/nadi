@@ -5,7 +5,8 @@ import { expect, test } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 
 // F2-01: pemilik membuat lowongan; tamu tanpa akun di HP (390 px) melamar dengan CV PDF korpus dalam < 2 menit;
-// CV dibaca baca-berkas (pg_net, jalur token) dan usulan rekrut.pelamar muncul di Feed pemilik dalam 60 detik.
+// CV dibaca baca-berkas (pg_net, jalur token) dan usulan rekrut.pelamar muncul di Feed pemilik dalam 60 detik,
+// dengan skor rubrik dari topi lowongan (F2-02).
 function bacaEnv(nama: string): Record<string, string> {
   try {
     return Object.fromEntries(readFileSync(join(__dirname, "..", nama), "utf8").split("\n").filter((l) => l.includes("=")).map((l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1).trim()]));
@@ -23,6 +24,10 @@ test.beforeEach(({ page }, info) => {
 
 test("lamar tanpa akun: < 2 menit dari HP, CV menjadi usulan pelamar di Feed", async ({ page, browser }) => {
   test.setTimeout(240_000);
+  const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
+  expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
+  // Topi Pelayan dari paket fnb (idempoten) agar lowongan punya rubrik.
+  expect((await sb.rpc("pasang_paket", { p_kode: "fnb" })).error).toBeNull();
   await page.goto("/masuk?next=/app/orang");
   await page.getByLabel("Email").fill(E.E2E_EMAIL_A);
   await page.getByLabel("Kata sandi").fill(E.E2E_SANDI);
@@ -31,6 +36,7 @@ test("lamar tanpa akun: < 2 menit dari HP, CV menjadi usulan pelamar di Feed", a
   const judul = `Pelayan uji ${Date.now()}`;
   const kartu = page.getByTestId("kartu-lowongan");
   await kartu.getByLabel("Judul lowongan").fill(judul);
+  await kartu.getByLabel("Topi (posisi)").selectOption({ label: "Pelayan" });
   await kartu.getByRole("button", { name: "Buat lowongan" }).click();
   const baris = kartu.getByTestId("daftar-lowongan").getByRole("listitem").filter({ hasText: judul });
   await expect(baris).toBeVisible();
@@ -61,8 +67,6 @@ test("lamar tanpa akun: < 2 menit dari HP, CV menjadi usulan pelamar di Feed", a
   await tamu.context().close();
 
   // Usulan pelamar dari CV (nama di CV korpus: Wulan Astuti) untuk berkas lamaran ini, dalam 60 detik.
-  const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
-  expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
   let judulUsulan = "";
   for (let i = 0; i < 30 && !judulUsulan; i++) {
     const { data: la } = await sb.from("lamaran").select("berkas_id, status").eq("nama", nama).maybeSingle();
@@ -75,4 +79,8 @@ test("lamar tanpa akun: < 2 menit dari HP, CV menjadi usulan pelamar di Feed", a
   expect(judulUsulan).toContain("Wulan Astuti");
   await page.goto("/app");
   await expect(page.getByText(judulUsulan).first()).toBeVisible();
+  // F2-02: kartu pelamar membawa skor rubrik topi Pelayan, tanpa atribut terlindungi.
+  const kartuPelamar = page.locator("article").filter({ hasText: judulUsulan }).first();
+  await expect(kartuPelamar.getByTestId("catatan-usulan")).toContainText(/Rubrik topi Pelayan: cocok \d dari \d \(skor \d+\)/);
+  await expect(kartuPelamar.getByTestId("catatan-usulan")).toContainText("tidak dinilai");
 });

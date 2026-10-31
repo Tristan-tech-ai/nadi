@@ -11,6 +11,8 @@ export type Usulan = {
   keyakinan?: number;
   dampakRp?: number;
   status?: JenisCap;
+  /** Keterangan tambahan dari Nadi, misalnya skor rubrik pelamar. */
+  catatan?: string;
 };
 
 /** Kartu di Feed Keputusan. Tepi bawahnya sobekan kertas thermal (satu-satunya ornamen bentuk, DIRECTION §1). */
@@ -22,6 +24,7 @@ export function KartuUsulan({ usulan, aksi }: { usulan: Usulan; aksi?: ReactNode
         {usulan.status ? <Cap jenis={usulan.status} /> : null}
       </header>
       <p className="mt-1 text-sm text-tinta-2">{usulan.penjelasan}</p>
+      {usulan.catatan ? <p className="mt-2 text-sm" data-testid="catatan-usulan">{usulan.catatan}</p> : null}
       <dl className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-tinta-2">
         <div>
           <dt className="sr-only">Sumber</dt>
