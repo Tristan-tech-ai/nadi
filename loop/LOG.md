@@ -58,3 +58,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 31 Okt 2026 14:25 | F2-01 (sebagian) | baca-berkas: jalur internal x-nadi-token, klaim status antre, usulan bersumber lamar; deploy didelegasikan ke agen dengan cek hash | 1b524dd |
 | 31 Okt 2026 14:30 | F2-01 (sebagian) | baca-berkas v8 terdeploy persis dari repo (hash 3 berkas sama), verify_jwt false, token salah dan tanpa header 401 | 1b524dd |
 | 31 Okt 2026 14:40 | F2-01 (sebagian) | halaman lamar publik /lamar/[kode] (daftar slot, unggah CV, minta baca, terkirim; tutup/tidak ada ditangani), tes unit 2 | 3810c49 |
+| 31 Okt 2026 14:50 | F2-01 (sebagian) | kartu Lowongan untuk pengelola di /app/orang; tinggal e2e lamar sampai usulan di Feed | lihat git log |
