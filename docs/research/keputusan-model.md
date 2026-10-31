@@ -21,3 +21,6 @@ Hanya **rute usulan** (`usulan.rute`): untuk usulan yang tidak tertangkap aturan
 - Usulan `catatan` uji dirute model dan tercatat di `public.keputusan` tingkat `model` dengan alasan dan latensi; p50 latensi tercatat di docs/quality/keputusan.md.
 - Kegagalan Edge Function (timeout, kunci salah) tidak mengubah `untuk_peran` dan tercatat.
 - Pembatalan mengembalikan rute; batas harian dihormati (tes SQL).
+
+## Perubahan setelah tinjauan keamanan (1 Nov 2026)
+Kebijakan baca usulan memakai `untuk_peran`, sehingga rute `{admin}` menyembunyikan usulan dari pemilik, padahal teks yang dinilai model bisa berasal dari luar (catatan asisten MCP, isi berkas pemasok). Karena itu model hanya boleh **mempersempit ke pemilik**: pilihan `admin` dengan yakin >= 0,85 dicatat sebagai keputusan model `admin (saran)` tanpa mengubah `untuk_peran`, dan tidak ada yang perlu dibatalkan. Pembatalan rute model hanya untuk pilihan `pemilik`, oleh pemilik. Deret angka 8 digit atau lebih (NIK, rekening, HP) disensor menjadi `[angka]` sebelum dikirim ke model. Migrasi `keputusan_model_pemilik`, hasil eval di docs/quality/keputusan.md.
