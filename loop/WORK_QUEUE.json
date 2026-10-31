@@ -1680,8 +1680,10 @@
    "accept": "setiap fungsi public/app yang memakai 'Asia/Makassar' selain sebagai cadangan coalesce(zona_waktu, ...) diganti ke perusahaan.zona_waktu (lewat fungsi app.zona(pid)); tes struktur: 0 fungsi memakai 'Asia/Makassar' di luar coalesce zona_waktu (merah dulu); tes perilaku untuk usaha Asia/Jakarta dan Asia/Jayapura di ajukan_izin, gerbang_gaji, papan_kerja; regresi izin_otopilot, gerbang_gaji, papan_kerja, kpi, bagi_adil, isolasi_tenant hijau; sidik = database",
    "how": "docs/quality/zona-fungsi.md (kelompok C: catat_izin, batalkan_keputusan, ajukan_izin, gerbang_gaji, izin_ringkas, peringatan_rencana, putuskan_usulan, catat_jam_rekrut; D: antre_rute_model, rute_model_uji_mulai, batas_berkas; A/B dibiarkan); app.zona(pid) + app.hari_ini(pid); juga current_date (UTC) di putuskan_usulan cabang orang.topi",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T02:56:44"
+   "status": "done",
+   "created": "2026-11-01T02:56:44",
+   "done": "2026-11-01T03:40:36",
+   "result": "commit 9042ed8+11f2bbb+839adc3 (push fe800b9/839adc3); migrasi 20261101012000_zona_usaha_q24 sidik b22530bf + 20261101013000_waktu_lokal_q24 sidik 2b7f4b84 = database (55 migrasi); tes ulang terpisah: zona_q24 60/60, putuskan_usulan 13/13, gerbang_gaji 17/17 gagal=[]; regresi agen 15 berkas gagal=[]; kueri data: Asia/Makassar hanya daftar putih isi_demo/ukur_kuota, fungsi pemakai tanggal_aman/+08 = 0, uang.keluar lempar usaha WIB 23.00 lokal 0 (sebelum 20/20), izin 23.00 lokal 0 (sebelum 44/44); koreksi 81 kejadian + 35 ringkasan_harian, cadangan audit_log koreksi_zona_q24 116; pembantu baru tanpa execute anon/authenticated; Vercel READY fe800b9, e2e produksi izin+magang 2/2; docs/quality/review-q24.md"
   },
   {
    "id": "F3-07B",
@@ -1710,6 +1712,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-01T03:26:16"
+  },
+  {
+   "id": "Q-26",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 29,
+   "size": "s",
+   "wajib": true,
+   "title": "Tanggal hari ini di database memakai zona usaha, bukan current_date (UTC)",
+   "accept": "app.beban_orang, app.hitung_lintas_topi, app.pasang_topi_dari_jabatan, simpan_rencana_magang dan bawaan kolom pakai_topi.mulai memakai app.hari_ini(pid) bersamaan (satu migrasi, supaya pemasangan topi dan hitungan lintas topi tetap konsisten); tes struktur: 0 current_date di fungsi public/app kecuali daftar putih bertulis alasan (merah dulu); tes perilaku usaha Asia/Jakarta pukul 00.30 WIB (= 17.30 UTC hari sebelumnya): topi yang dipasang hari ini langsung terhitung; regresi papan_kerja, bagi_adil, peta_organisasi, topi_impor, magang, zona_q24 hijau; sidik = database",
+   "how": "laporan akhir agen Q-24 (yang tidak selesai); pola ganti_zona di 20261101012000_zona_usaha_q24.sql",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T03:36:22"
   }
  ]
 }
