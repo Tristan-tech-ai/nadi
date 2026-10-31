@@ -455,8 +455,10 @@
    "accept": "minimal 6 templat uji kerja; skor IPIP sesuai kunci resmi",
    "how": "",
    "blocked_by": "F2-02",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T22:21:09",
+   "result": "commit e358402 + 5ca1e92: 7 templat uji kerja per topi (kasir, pelayan, koki, barista, gudang, pramuniaga, sales; soal dari benih database, dinilai server, tes 8/8 + merah sengaja); IPIP 50 butir terjemahan Indonesia resmi (Hanif Akhtar) diurai dari ipip.ori.org, faktor+kunci cocok 50/50 dengan kunci resmi, skor sesuai petunjuk resmi (tes ipip 4/4: semua 5 -> 30/34/34/18/38); migrasi uji_lamaran (sidik 2cf5525c, tes SQL 19/19, regresi wawancara 18/18 rekrut 21/21, advisors hanya WARN definer anon yang diterima); e2e wawancara.spec lokal dan produksi https://nadi-tristan-tech-ais-projects.vercel.app lulus (uji 2 dari 3 benar, Ekstraversi 30 dari 50), axe 0 serius termasuk formulir terisi; Lighthouse mobile /lamar performa 99 aksesibilitas 100"
   },
   {
    "id": "F2-05",
