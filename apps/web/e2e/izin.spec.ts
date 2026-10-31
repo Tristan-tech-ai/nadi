@@ -125,12 +125,14 @@ test("izin: otopilot menyetujui sesuai aturan, sisanya masuk Feed dan diputuskan
   await page.goto("/app/perusahaan");
   const keputusan = page.getByTestId("daftar-keputusan").getByRole("listitem").filter({ hasText: "Disetujui otomatis: sakit 1 hari dengan bukti" }).first();
   await keputusan.getByRole("button", { name: "Batalkan" }).click();
-  await keputusan.getByLabel("Alasan membatalkan").fill("Hari itu ada pesanan besar");
+  // Alasan unik per jalan: teks yang sama dari jalan sebelumnya membuat penantian di bawah lolos sebelum pembatalan tersimpan (Q-29).
+  const alasanBatal = `Hari itu ada pesanan besar ${nama}`;
+  await keputusan.getByLabel("Alasan membatalkan").fill(alasanBatal);
   await keputusan.getByRole("button", { name: "Batalkan keputusan" }).click();
   // Halaman dirender ulang: tombol diganti cap Dibatalkan dan alasan batal.
-  await expect(page.getByText("Alasan batal: Hari itu ada pesanan besar").first()).toBeVisible();
+  await expect(page.getByText(`Alasan batal: ${alasanBatal}`)).toBeVisible();
   await expect(page.getByTestId("keputusan-otomatis")).toContainText("biasanya");
   await staf.reload();
-  await expect(staf.getByTestId("daftar-izin").getByRole("listitem").filter({ hasText: "1 hari" })).toContainText("Persetujuan otomatis dibatalkan: Hari itu ada pesanan besar");
+  await expect(staf.getByTestId("daftar-izin").getByRole("listitem").filter({ hasText: "1 hari" })).toContainText(`Persetujuan otomatis dibatalkan: ${alasanBatal}`);
   await staf.context().close();
 });
