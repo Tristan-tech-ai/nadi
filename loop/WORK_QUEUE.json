@@ -533,8 +533,10 @@
    "accept": "uji unit: indeks ketimpangan turun dibanding pembagian rakus pada data sintetis",
    "how": "",
    "blocked_by": "F3-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T01:57:35",
+   "result": "ed2e96c+0c72ad7; sidik bagi_adil 23c4a873 = db (49 migrasi); tes SQL bagi_adil 27/27 dijalankan loop; vitest adil 69/69 (Gini 0,2105/0,3129/0,0769, 50 benih adil<rakus); advisors tanpa anon baru; foto scratchpad/f3-02-foto 12 layar; Vercel READY 0c72ad7, e2e bagi-adil produksi lulus 27,8 dtk; docs/quality/review-f3-02.md"
   },
   {
    "id": "F3-03",
