@@ -1258,8 +1258,10 @@
    "accept": "absen masuk berhasil dari HP sungguhan dengan wajah hidup (tangkapan layar hasil), ambang kedip/menoleh disetel bila perlu; tablet kios bisa memakai token khusus yang hanya boleh meminta kode (tes SQL)",
    "how": "perlu HP + orang; token kios lewat RPC baru",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T08:48:46"
+   "status": "done",
+   "created": "2026-10-31T08:48:46",
+   "done": "2026-10-31T10:32:19",
+   "result": "commit 715e5ac: migrasi token_kios (sidik b77b6174 cocok), tes SQL token_kios 20/20, advisor hanya WARN definer yang diterima; /kios/tablet + kartu Tablet absen; e2e tablet 2/2 lokal dan produksi, absen 2/2; uji wajah sungguhan dipisah ke F1-02D (terblokir: butuh orang)"
   },
   {
    "id": "R-02C",
@@ -1274,6 +1276,20 @@
    "blocked_by": "kartu Vercel belum ada (UNTUK-TRISTAN, pembayaran)",
    "status": "blocked",
    "created": "2026-10-31T10:10:41"
+  },
+  {
+   "id": "F1-02D",
+   "fase": "F1",
+   "kind": "build",
+   "priority": 40,
+   "size": "s",
+   "wajib": false,
+   "title": "Uji lapangan absen dengan wajah dan HP sungguhan",
+   "accept": "absen masuk berhasil dari HP sungguhan dengan wajah hidup lewat tablet produksi (tangkapan layar hasil); ambang kedip/menoleh disetel bila perlu dan tes unit wajah diperbarui",
+   "how": "buka /app/perusahaan, buat tautan tablet, buka di tablet/laptop, pindai dari HP staf uji",
+   "blocked_by": "butuh orang dengan HP dan wajah sungguhan (tidak bisa disimulasikan loop)",
+   "status": "blocked",
+   "created": "2026-10-31T10:32:19"
   }
  ]
 }
