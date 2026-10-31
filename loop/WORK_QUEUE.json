@@ -1227,8 +1227,10 @@
    "accept": "halaman /app/perusahaan menampilkan token MCP aktif dan tombol Cabut yang membuat panggilan berikutnya 401 (e2e); tools/list memuat ringkasan_ai untuk pemilik; resources/list dan prompts/list modern lulus vitest; usulan mcp yang disetujui mencatat kejadian.sumber mcp (tes SQL)",
    "how": "migrasi kecil + komponen + perluas protokol.ts",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T07:00:20"
+   "status": "done",
+   "created": "2026-10-31T07:00:20",
+   "done": "2026-10-31T07:19:46",
+   "result": "commit d8a7364: /app/perusahaan bagian Asisten AI milikmu + Cabut (e2e: cabut -> tools/list 401, penyegar 400); alat ringkasan_ai (pengelola), resources nadi://usaha|usulan/menunggu|orang, prompts tutup_hari|catat_dari_catatan (vitest 19/19); migrasi mcp_lanjutan 78e59def: kejadian.sumber = usulan.sumber (SQL mcp_lanjutan 8/8, regresi putuskan_usulan 13/13, ringkasan_ai 6/6); axe 0 serius 390/1440 terang/gelap"
   }
  ]
 }
