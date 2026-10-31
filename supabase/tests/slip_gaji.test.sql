@@ -43,7 +43,8 @@ begin
   ks := json_build_object('sub', us, 'role', 'authenticated', 'app_metadata', json_build_object('pid', pa, 'prn', 'staf'))::text;
   execute 'reset role';
   insert into public.kejadian (perusahaan_id, terjadi_at, jenis, sumber, orang_id)
-  select pa, now() - interval '2 days', 'absen.masuk', 'pwa', id from public.orang where id in (o1, o2);
+  -- Tanda hidup harus jatuh di jendela 30 hari gerbang_gaji(akhir bulan periode); now() - 2 hari keluar jendela di hari pertama bulan (temuan Q-23).
+  select pa, now() - interval '1 hour', 'absen.masuk', 'pwa', id from public.orang where id in (o1, o2);
 
   execute 'set local role authenticated';
   perform set_config('request.jwt.claims', ka, true);

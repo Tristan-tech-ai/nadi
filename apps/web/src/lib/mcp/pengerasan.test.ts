@@ -32,11 +32,13 @@ describe("ambilTeksAman: body dibaca bertahap dan dipotong di 5 KB", () => {
   let tutup: (() => void) | null = null;
   afterEach(() => tutup?.());
   it("dokumen lebih dari 5 KB ditolak tanpa membaca semuanya; dokumen kecil terbaca", async () => {
+    // Batas jauh di atas buffer soket kernel (Linux CI bisa menampung sekitar 1 MB sebelum klien menutup); yang diuji: pengiriman berhenti, tidak dibaca habis.
+    const TOTAL = 32 * 1024 * 1024;
     let terkirim = 0;
     const server = createServer((req, res) => {
       if (req.url === "/besar") {
         res.writeHead(200, { "content-type": "application/json" });
-        const kirim = () => { while (terkirim < 1_000_000 && res.write("x".repeat(1024))) terkirim += 1024; if (terkirim < 1_000_000) res.once("drain", kirim); else res.end(); };
+        const kirim = () => { while (terkirim < TOTAL && res.write("x".repeat(1024))) terkirim += 1024; if (terkirim < TOTAL) res.once("drain", kirim); else res.end(); };
         kirim();
       } else res.end(JSON.stringify({ ok: true }));
     });
@@ -44,7 +46,7 @@ describe("ambilTeksAman: body dibaca bertahap dan dipotong di 5 KB", () => {
     tutup = () => server.close();
     const port = (server.address() as AddressInfo).port;
     await expect(ambilTeksAman(new URL(`http://127.0.0.1:${port}/besar`), { lokal: true })).rejects.toThrow(/lebih dari 5 KB/);
-    expect(terkirim).toBeLessThan(1_000_000);
+    expect(terkirim).toBeLessThan(TOTAL);
     expect(await ambilTeksAman(new URL(`http://127.0.0.1:${port}/kecil`), { lokal: true })).toEqual({ status: 200, teks: '{"ok":true}' });
   });
 });
