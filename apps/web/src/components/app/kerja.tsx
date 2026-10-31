@@ -1,9 +1,9 @@
 "use client";
 
-import { useActionState, useRef, useState } from "react";
+import { useActionState, useRef, useState, useTransition } from "react";
 import { useOffline } from "next/offline";
 import { PlusIcon, WifiSlashIcon } from "@phosphor-icons/react";
-import { tambahKerja, ubahPoin, ubahStatus, type HasilKerja } from "@/app/app/kerja/actions";
+import { tambahKerja, ubahPoin, ubahStatus, usulkanPelaksana, type HasilKerja, type HasilUsulan } from "@/app/app/kerja/actions";
 import { Tombol } from "@/components/ui/tombol";
 import { formatPoin, pilihStaf, teksSelesai, type KerjaPapan } from "@/lib/kerja/poin";
 
@@ -21,10 +21,46 @@ function Hasil({ h, testid }: { h: HasilKerja; testid?: string }) {
     : <p role="status" className="text-sm text-daun" data-testid={testid}>{h.pesan}</p>;
 }
 
-/** Tombol utama "Tambah kerja" membuka lembar bawah: judul, topi, pelaksana opsional, tenggat. */
+/**
+ * Usulan pelaksana (F3-02): muncul setelah topi dipilih dan selama pelaksana masih kosong atau sama dengan usulan. Bila pemilik
+ * memilih orang lain, usulan disembunyikan tanpa komentar (pilihan pemilik tidak dipersoalkan).
+ */
+function UsulanPelaksana({ hasil, sibuk, pelaksana, pilih }: { hasil: HasilUsulan | null; sibuk: boolean; pelaksana: string; pilih: (id: string) => void }) {
+  if (sibuk) return <p className="text-sm text-tinta-2" data-testid="usulan-memuat">Mencari pelaksana yang bebannya paling ringan...</p>;
+  if (!hasil) return null;
+  if ("galat" in hasil) return <p className="text-sm text-cap" data-testid="usulan-galat">{hasil.galat}</p>;
+  if ("kosong" in hasil) return <p className="text-sm text-tinta-2" data-testid="usulan-kosong">{hasil.kosong}</p>;
+  if (pelaksana && pelaksana !== hasil.orang) return null;
+  const dipilih = pelaksana === hasil.orang;
+  return (
+    <div className="grid gap-2 rounded-[var(--radius-isian)] border border-garis bg-kertas-2 p-3 text-sm" data-testid="usulan-pelaksana" data-orang={hasil.orang}>
+      <p>Usulan pelaksana: <span className="font-semibold" data-testid="usulan-nama">{hasil.nama}</span></p>
+      <p className="text-tinta-2" data-testid="usulan-alasan">{hasil.alasan}</p>
+      <div className="flex flex-wrap items-center gap-2">
+        <Tombol ragam="kedua" onClick={() => pilih(hasil.orang)} disabled={dipilih}>{dipilih ? `${hasil.nama} dipilih` : `Pilih ${hasil.nama}`}</Tombol>
+        <span className="text-xs text-tinta-2">Kamu bebas memilih orang lain.</span>
+      </div>
+    </div>
+  );
+}
+
+/** Tombol utama "Tambah kerja" membuka lembar bawah: judul, topi, pelaksana opsional (dengan usulan), tenggat. */
 export function TambahKerja({ topi, orang }: { topi: Opsi[]; orang: Opsi[] }) {
   const lembar = useRef<HTMLDialogElement>(null);
   const [versi, setVersi] = useState(0);
+  const [pelaksana, setPelaksana] = useState("");
+  const [usulan, setUsulan] = useState<HasilUsulan | null>(null);
+  const [mencari, mulaiCari] = useTransition();
+  const topiTerakhir = useRef("");
+  const gantiTopi = (id: string) => {
+    topiTerakhir.current = id;
+    setUsulan(null);
+    if (!id) return;
+    mulaiCari(async () => {
+      const r = await usulkanPelaksana(id);
+      if (topiTerakhir.current === id) setUsulan(r);
+    });
+  };
   // Kunci idempoten per isian: kiriman ulang (useOffline mengulang aksi yang jawabannya hilang) tidak membuat kerja kembar.
   const kunci = useRef<string | null>(null);
   const [h, aksi, sibuk] = useActionState<HasilKerja, FormData>(async (lalu, fd) => {
@@ -35,6 +71,9 @@ export function TambahKerja({ topi, orang }: { topi: Opsi[]; orang: Opsi[] }) {
       kunci.current = null;
       lembar.current?.close();
       setVersi((v) => v + 1);
+      setPelaksana("");
+      setUsulan(null);
+      topiTerakhir.current = "";
     }
     return r;
   }, null);
@@ -57,18 +96,21 @@ export function TambahKerja({ topi, orang }: { topi: Opsi[]; orang: Opsi[] }) {
           </label>
           <label className={label}>
             <span className="text-tinta-2">Topi (peran kerja)</span>
-            <select name="topi" defaultValue="" className={isian}>
+            <select name="topi" defaultValue="" className={isian} onChange={(e) => gantiTopi(e.target.value)}>
               <option value="">Tanpa topi</option>
               {topi.map((t) => <option key={t.id} value={t.id}>{t.nama}</option>)}
             </select>
           </label>
           <label className={label}>
             <span className="text-tinta-2">Pelaksana (boleh kosong)</span>
-            <select name="pelaksana" defaultValue="" className={isian}>
+            <select name="pelaksana" value={pelaksana} onChange={(e) => setPelaksana(e.target.value)} className={isian}>
               <option value="">Belum ditentukan</option>
               {orang.map((o) => <option key={o.id} value={o.id}>{o.nama}</option>)}
             </select>
           </label>
+          <div aria-live="polite">
+            <UsulanPelaksana hasil={usulan} sibuk={mencari} pelaksana={pelaksana} pilih={setPelaksana} />
+          </div>
           <label className={label}>
             <span className="text-tinta-2">Tenggat (boleh kosong)</span>
             <input name="tenggat" type="datetime-local" className={isian} />

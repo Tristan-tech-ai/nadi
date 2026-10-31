@@ -91,3 +91,21 @@ export async function ubahPoin(_: HasilKerja, form: FormData): Promise<HasilKerj
   revalidatePath("/app/kerja");
   return { pesan: `Tersimpan. ${teksPoin(data as Estimasi)}.`, id };
 }
+
+export type HasilUsulan = { orang: string; nama: string; alasan: string } | { kosong: string } | { galat: string };
+
+/**
+ * Usulan pelaksana untuk kerja baru bertopi `topi` (pemilik/admin): orang bertopi cocok dengan beban per jam paling ringan,
+ * beserta alasan satu kalimat dari public.usulan_pelaksana (aturan sama dengan src/lib/kerja/adil.ts). Hanya membaca, jadi
+ * tidak butuh kunci idempoten. Pemilik bebas memilih orang lain.
+ */
+export async function usulkanPelaksana(topi: string): Promise<HasilUsulan> {
+  await wajibPerusahaan();
+  if (!ID_SAH.test(topi)) return { galat: "Topi tidak dikenal. Muat ulang halaman ini." };
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("usulan_pelaksana", { p_topi: topi, p_poin: null });
+  if (error) return { galat: error.code === "42501" ? "Usulan pelaksana hanya untuk pemilik atau admin." : error.code === "P0002" ? error.message : "Usulan pelaksana gagal dimuat. Pilih pelaksana sendiri, atau coba lagi." };
+  if (!data) return { kosong: "Belum ada orang aktif yang memakai topi ini. Pilih pelaksana sendiri, atau biarkan kosong." };
+  const u = data as { orang_id: string; nama: string; alasan: string };
+  return { orang: u.orang_id, nama: u.nama, alasan: u.alasan };
+}

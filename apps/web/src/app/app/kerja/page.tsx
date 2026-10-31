@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowsLeftRightIcon } from "@phosphor-icons/react/dist/ssr";
+import { BebanMingguIni, BebanSayaIni } from "@/components/app/beban";
 import { PapanStaf, TambahKerja, UbahPoin, type KerjaTampil } from "@/components/app/kerja";
+import type { BebanMinggu, BebanSaya } from "@/lib/kerja/adil";
 import { formatJam } from "@/lib/format";
 import { bacaKolom, formatTenggat, LABEL_STATUS, ringkasStatus, STATUS_KERJA, teksPoin, teksSelesai, type KerjaPapan, type StatusKerja } from "@/lib/kerja/poin";
 import { createClient } from "@/lib/supabase/server";
@@ -39,7 +41,9 @@ function KartuKerja({ k, pengelola }: { k: KerjaTampil; pengelola: boolean }) {
 async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["searchParams"] }) {
   const sesi = await wajibPerusahaan();
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
-  const kolom = bacaKolom((await searchParams).kolom);
+  const sp = await searchParams;
+  const kolom = bacaKolom(sp.kolom);
+  const tabBeban = pengelola && (Array.isArray(sp.tab) ? sp.tab[0] : sp.tab) === "beban";
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("papan_kerja");
   if (error) {
@@ -52,7 +56,15 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
     mulaiTeks: k.mulai_at ? formatJam(new Date(k.mulai_at), "Asia/Makassar", false) : null,
   }));
 
-  if (sesi.peran === "staf") return <PapanStaf daftar={daftar} />;
+  if (sesi.peran === "staf") {
+    const { data: saya } = await supabase.rpc("beban_saya", { p_mulai: null });
+    return (
+      <>
+        {saya && <BebanSayaIni data={saya as BebanSaya} />}
+        <PapanStaf daftar={daftar} />
+      </>
+    );
+  }
 
   const jumlah = ringkasStatus(daftar);
   let tambah = null;
@@ -64,8 +76,37 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
     tambah = <TambahKerja topi={(topi ?? []) as { id: string; nama: string }[]} orang={(orang ?? []) as { id: string; nama: string }[]} />;
   }
 
+  const tab = pengelola && (
+    <nav aria-label="Bagian kerja" className="mt-4">
+      <ul className="flex gap-1 border-b border-garis">
+        {[{ href: "/app/kerja", label: "Papan hari ini", aktif: !tabBeban }, { href: "/app/kerja?tab=beban", label: "Beban minggu ini", aktif: tabBeban }].map((t) => (
+          <li key={t.href}>
+            <Link href={t.href} aria-current={t.aktif ? "page" : undefined}
+              className={`-mb-px inline-flex min-h-11 items-center border-b-2 px-3 text-sm ${t.aktif ? "border-tinta font-semibold text-tinta" : "border-transparent text-tinta-2"}`}>
+              {t.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+
+  if (tabBeban) {
+    const { data: beban, error: eb } = await supabase.rpc("beban_minggu", { p_mulai: null });
+    return (
+      <>
+        {tab}
+        <div className="mt-4">{tambah}</div>
+        {eb || !beban
+          ? <p role="alert" className="mt-6 text-cap" data-testid="beban-galat">Beban minggu ini gagal dimuat. Muat ulang halaman ini sebentar lagi.</p>
+          : <BebanMingguIni data={beban as BebanMinggu} />}
+      </>
+    );
+  }
+
   return (
     <>
+      {tab}
       <dl className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-sm" data-testid="ringkasan-kerja" aria-label="Ringkasan kerja hari ini">
         {STATUS_KERJA.map((s) => (
           <div key={s} className="flex gap-1">
