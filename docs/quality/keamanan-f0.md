@@ -36,14 +36,14 @@ Cara kerja:
 | S5 | Pemilik mana pun bisa merusak demo publik dengan menyetel `pengaturan.demo` di usahanya sendiri. | **Diperbaiki (Q-12)**: trigger `perusahaan_jaga_demo` |
 | S8 | Staf bisa membaca semua `kejadian` dan `orang` usahanya (mutasi bank, nomor HP, tanggal lahir). | **Diperbaiki (Q-12)**: staf membaca baris orang dan kejadian miliknya saja; pemilik, admin, akuntan membaca semua |
 | S6/S7/A7 | Kode absen QR 6 angka dan PIN staf 6 angka tanpa penguncian percobaan; login staf lewat server action terlihat dari IP Vercel. | **Diperbaiki (Q-13)**: 5 kode absen salah per orang per menit = ditolak sementara (galat dikembalikan sebagai data agar tercatat); 5 PIN salah per akun staf dalam 15 menit = akun dikunci 15 menit lewat banned_until (berlaku juga untuk login langsung ke Auth). Sisa risiko: tebakan PIN langsung ke Auth yang tidak lewat server action hanya dibatasi batas laju per IP (hook verifikasi sandi butuh paket Teams) |
-| A6 | Edge Function push mengirim ke endpoint https apa pun (SSRF buta, status dikembalikan). | Q-14 |
+| A6 | Edge Function push mengirim ke endpoint https apa pun (SSRF buta, status dikembalikan). | **Diperbaiki (Q-14)**: daftar izin host push di aplikasi (`hostPushDikenal`) dan database (CHECK `langganan_push_host_dikenal`) |
 | A8 | Hasil cek wajah dipercaya dari klien. Sudah dicatat jujur di docs/research/absen.md; sinyalnya akan diperlakukan sebagai sinyal lunak. | **Diperbaiki (Q-13)**: sinyal wajah dan jumlah kode salah sebelum berhasil disimpan di kejadian; laporan `absen_ragu` menandai absen yang patut dicek pemilik |
 
 ## RENDAH / INFO (dicatat)
-- CIMD: DNS di-resolve dua kali (rebinding), body dibaca penuh sebelum cek 5 KB, IPv6 NAT64/6to4 belum ditolak (Q-14).
-- `asal()` percaya `x-forwarded-host`. Di Vercel kemungkinan dibatasi ke domain proyek (perlu verifikasi); ganti ke env `NADI_ASAL` (Q-14).
-- `app.mcp_konteks` melewati cek resource bila `p_resource` null; pengguna bisa mengosongkan `dicabut_at` token MCP miliknya sendiri; mencabut token akses tidak mencabut refresh token (Q-14).
-- Masa berlaku token MCP 30/90 hari; token kios tanpa kedaluwarsa; batas DCR 200/jam bersifat global (Q-14).
+- CIMD: DNS di-resolve dua kali (rebinding), body dibaca penuh sebelum cek 5 KB, IPv6 NAT64/6to4 belum ditolak. **Diperbaiki (Q-14)**: IP diperiksa di `lookup` koneksi itu sendiri, body dibaca bertahap dan diputus di 5 KB, IPv6 pembawa IPv4 (::ffff:, ::a.b.c.d, 64:ff9b::/96, 2002::/16) ditolak, status hulu tidak diteruskan.
+- `asal()` percaya `x-forwarded-host`. Di Vercel kemungkinan dibatasi ke domain proyek (perlu verifikasi); **Diperbaiki (Q-14)**: tautan yang dibagikan (slip, tablet, lamar, email daftar) memakai `asalTautan` (NADI_ASAL atau VERCEL_PROJECT_PRODUCTION_URL); resource dan metadata OAuth/MCP sengaja tetap dari host permintaan agar sama dengan URL yang dipakai klien.
+- `app.mcp_konteks` melewati cek resource bila `p_resource` null; pengguna bisa mengosongkan `dicabut_at` token MCP miliknya sendiri; mencabut token akses tidak mencabut refresh token. **Diperbaiki (Q-14)**: resource null ditolak (`is distinct from`), pencabutan tidak bisa dibatalkan pengguna (trigger `mcp_token_jaga_cabut`); pencabutan dari halaman AI milikmu sudah mencabut semua token klien itu (akses dan segar).
+- Masa berlaku token MCP 30/90 hari; token kios tanpa kedaluwarsa; batas DCR 200/jam bersifat global (belum diubah; dicatat untuk tinjauan berikutnya).
 - Pesan galat database mentah sampai ke pengguna di beberapa action gaji dan `tools/call` MCP.
 - `orang_rahasia` bisa dibuat untuk `orang_id` usaha lain (butuh uuid asing); perbaikan lewat FK komposit.
 - `app.kode_acak` memakai `random()`, bukan CSPRNG (kode usaha 6 huruf, bukan rahasia).

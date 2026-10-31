@@ -18,13 +18,13 @@ begin
   perform set_config('request.jwt.claims', json_build_object('sub', ua, 'role', 'authenticated', 'app_metadata', json_build_object('pid', pa, 'prn', 'pemilik'))::text, true);
   insert into public.orang (perusahaan_id, nama) values (pa, 'Sari') returning id into o1;
   perform public.buat_akun_staf(o1, '123456');
-  insert into public.langganan_push (endpoint, p256dh, auth) values ('https://push.uji/pemilik-a', 'BA', 'xx');
+  insert into public.langganan_push (endpoint, p256dh, auth) values ('https://fcm.googleapis.com/fcm/send/uji-pemilik-a', 'BA', 'xx');
   execute 'reset role';
   us := (select user_id from public.orang where id = o1);
-  insert into public.langganan_push (perusahaan_id, user_id, endpoint, p256dh, auth) values (pa, us, 'https://push.uji/staf-a', 'BA', 'xx');
+  insert into public.langganan_push (perusahaan_id, user_id, endpoint, p256dh, auth) values (pa, us, 'https://fcm.googleapis.com/fcm/send/uji-staf-a', 'BA', 'xx');
 
   select count(*) into n from public.target_push(pa, array['pemilik', 'admin']);
-  perform pg_temp.cek('target hanya pemilik/admin, staf tidak ikut', n = 1 and exists (select 1 from public.target_push(pa, array['pemilik', 'admin']) where endpoint = 'https://push.uji/pemilik-a'));
+  perform pg_temp.cek('target hanya pemilik/admin, staf tidak ikut', n = 1 and exists (select 1 from public.target_push(pa, array['pemilik', 'admin']) where endpoint = 'https://fcm.googleapis.com/fcm/send/uji-pemilik-a'));
   perform pg_temp.cek('token salah ditolak', not public.push_token_cocok('salah'));
 
   insert into public.usulan (perusahaan_id, sumber, aksi, judul, payload) values (pa, 'lempar', 'uang.keluar', 'Catat belanja A1', '{}'), (pa, 'lempar', 'uang.keluar', 'Catat belanja A2', '{}'), (pb, 'lempar', 'uang.keluar', 'Catat belanja B1', '{}');
