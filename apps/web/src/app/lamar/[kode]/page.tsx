@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Lamar kerja", robots: { index: false } };
 
-type Lowongan = { judul: string; ringkasan: string | null; usaha: string; buka: boolean };
+type Lowongan = { judul: string; ringkasan: string | null; usaha: string; buka: boolean; pertanyaan?: unknown };
 
 async function Isi({ params }: { params: Promise<{ kode: string }> }) {
   const { kode } = await params;
@@ -21,7 +21,7 @@ async function Isi({ params }: { params: Promise<{ kode: string }> }) {
       <h1 className="font-judul text-3xl font-extrabold tracking-tight">{l.judul}</h1>
       {l.ringkasan && <p className="mt-2 whitespace-pre-line text-tinta-2">{l.ringkasan}</p>}
       {l.buka ? (
-        <FormLamar kode={kode.toUpperCase()} usaha={l.usaha} />
+        <FormLamar kode={kode.toUpperCase()} usaha={l.usaha} pertanyaan={Array.isArray(l.pertanyaan) ? l.pertanyaan.filter((p): p is string => typeof p === "string") : []} />
       ) : (
         <p role="alert" className="mt-8 rounded-[var(--radius-kartu)] bg-kertas-2 p-4" data-testid="lowongan-tutup">Lowongan ini sudah ditutup. Terima kasih sudah tertarik.</p>
       )}
@@ -29,7 +29,7 @@ async function Isi({ params }: { params: Promise<{ kode: string }> }) {
   );
 }
 
-// Halaman lamar publik tanpa akun. Data lowongan lewat RPC anon lowongan_publik (judul, ringkasan, nama usaha saja).
+// Halaman lamar publik tanpa akun. Data lowongan lewat RPC anon lowongan_publik (judul, ringkasan, nama usaha, pertanyaan wawancara).
 export default function Lamar(props: { params: Promise<{ kode: string }> }) {
   return (
     <main className="mx-auto w-full max-w-md px-5 py-8">

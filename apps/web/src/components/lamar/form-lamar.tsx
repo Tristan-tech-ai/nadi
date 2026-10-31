@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { RekamWawancara } from "@/components/lamar/rekam-wawancara";
 import { Tombol } from "@/components/ui/tombol";
 import { periksaLamaran } from "@/lib/lamar";
 import { mimeBerkas, sha256Hex } from "@/lib/lempar";
@@ -9,10 +10,10 @@ import { createBrowserSupabase } from "@/lib/supabase/browser";
 const isian = "h-12 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-3 text-base";
 
 /** Formulir lamaran tanpa akun: daftar slot lewat RPC, unggah CV ke jalur slot, lalu minta Nadi membacanya. */
-export function FormLamar({ kode, usaha }: { kode: string; usaha: string }) {
+export function FormLamar({ kode, usaha, pertanyaan = [] }: { kode: string; usaha: string; pertanyaan?: string[] }) {
   const [galat, setGalat] = useState("");
   const [sibuk, setSibuk] = useState(false);
-  const [terkirim, setTerkirim] = useState(false);
+  const [lamaran, setLamaran] = useState<string | null>(null);
 
   async function kirim(form: FormData) {
     setGalat("");
@@ -36,7 +37,7 @@ export function FormLamar({ kode, usaha }: { kode: string; usaha: string }) {
       }
       const { error: eSelesai } = await sb.rpc("lamar_selesai", { p_lamaran: d.lamaran });
       if (eSelesai) return setGalat(eSelesai.message);
-      setTerkirim(true);
+      setLamaran(d.lamaran);
     } catch {
       setGalat("Lamaran gagal terkirim. Periksa sinyal, lalu coba lagi.");
     } finally {
@@ -44,12 +45,15 @@ export function FormLamar({ kode, usaha }: { kode: string; usaha: string }) {
     }
   }
 
-  if (terkirim) {
+  if (lamaran) {
     return (
-      <div role="status" className="mt-8 rounded-[var(--radius-kartu)] bg-kertas-2 p-5" data-testid="lamaran-terkirim">
-        <p className="text-lg font-semibold">Lamaran terkirim</p>
-        <p className="mt-1 text-tinta-2">{usaha} akan membaca CV-mu dan menghubungi lewat nomor HP yang kamu tulis.</p>
-      </div>
+      <>
+        <div role="status" className="mt-8 rounded-[var(--radius-kartu)] bg-kertas-2 p-5" data-testid="lamaran-terkirim">
+          <p className="text-lg font-semibold">Lamaran terkirim</p>
+          <p className="mt-1 text-tinta-2">{usaha} akan membaca CV-mu dan menghubungi lewat nomor HP yang kamu tulis.</p>
+        </div>
+        {pertanyaan.length > 0 && <RekamWawancara lamaran={lamaran} pertanyaan={pertanyaan} usaha={usaha} />}
+      </>
     );
   }
   return (

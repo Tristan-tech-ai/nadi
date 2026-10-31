@@ -15,6 +15,7 @@ for (const jalur of ["/", "/masuk", "/oauth/izinkan", "/slip", "/kios/tablet", "
     expect(h["content-security-policy"], jalur).toContain("frame-ancestors 'none'");
     expect(h["x-content-type-options"], jalur).toBe("nosniff");
     expect(h["referrer-policy"], jalur).toBe("strict-origin-when-cross-origin");
-    expect(h["permissions-policy"], jalur).toContain("microphone=()");
+    // Mikrofon hanya untuk halaman lamar (wawancara suara, F2-03); halaman lain tetap menolaknya.
+    expect(h["permissions-policy"], jalur).toContain(jalur.startsWith("/lamar/") ? "microphone=(self)" : "microphone=()");
   });
 }
