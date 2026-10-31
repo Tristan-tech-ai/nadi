@@ -1666,8 +1666,10 @@
    "accept": "gerbang_gaji memakai app.peran_aktif() = 'pemilik', lempar_berkas memakai app.peran_aktif() in ('pemilik','admin'); tes struktur di jwt_cabut_q21: tidak ada fungsi public/app selain definisinya yang memanggil app.prn()/app.pengelola() (merah dulu: 2 fungsi); regresi gerbang_gaji, lempar (tes SQL), isolasi_tenant hijau; sidik = database | DIPERLUAS tick 193 (docs/quality/klaim-kebijakan-sisa.md): slip_gaji_baca, lembur_baca, pengajuan_izin_baca, berkas_ubah, berkas_hapus memakai app.peran_aktif() in (pemilik,admin) bukan app.pengelola(); tes perilaku admin diturunkan dan admin dicabut dengan JWT lama membaca slip_gaji/lembur/pengajuan_izin orang lain = 0 baris (merah dulu); cek struktur 0 kebijakan memuat app.pengelola()/app.prn(); regresi slip_gaji, lembur, izin_otopilot, jwt_cabut_q21, isolasi_tenant hijau; e2e produksi gaji+izin",
    "how": "docs/quality/klaim-di-fungsi.md; brief scratchpad/brief-q23.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T02:53:34"
+   "status": "done",
+   "created": "2026-11-01T02:53:34",
+   "done": "2026-11-01T04:31:47",
+   "result": "commit 6f592af (migrasi 20261101016000_klaim_fungsi_q23.sql + tes klaim_fungsi_q23) + 9607553 (tes slip_gaji tidak bergantung tanggal) + bb073f8, gate LULUS, CI hijau, Vercel READY bb073f8; sidik ebf335d2 = database (58 migrasi); tes merah 10 lalu 26/26 (dua kali, satu oleh agen terpisah); uji JWT basi loop sendiri: pemilik diturunkan jadi staf dan dicabut membaca slip 19 -> 0, lembur 2 -> 0; kebijakan dan fungsi public/app yang memakai app.prn()/app.pengelola() = 0; regresi jwt_cabut_q21 17, gerbang_gaji 17, isolasi_tenant 38, keamanan_q01 20, keamanan_q12 19, zona_q24 60, hari_ini_q26 52, lembur 19, izin_otopilot 26, slip_gaji 27 gagal=[]; advisor tanpa kategori baru; e2e produksi gaji (pindah-gaji 2/2), izin (lulus diulang, gagal sekali saat paralel dengan kerja), kerja lulus; docs/quality/klaim-kebijakan-sisa.md"
   },
   {
    "id": "Q-24",
@@ -1742,8 +1744,10 @@
    "accept": "beban_saya menghitung rata-rata hanya dari orang yang punya jam kerja atau kerja minggu itu (n>=3 dari kelompok itu), bukan semua orang bertopi; di_atas butuh selisih mutlak minimal 4 poin (1 jam) selain 1,5x rata-rata; teksBebanSaya tidak pernah mencetak 'Rata-rata tim 0' (rata-rata < 0,1 ditulis 'hampir 0' atau disembunyikan); tes SQL: 50 orang tanpa kerja + 3 orang berkerja 2/4/6 poin -> rata-rata 4, orang 6 poin tidak di_atas; vitest teksBebanSaya; e2e kerja tetap lulus; foto 390 terang",
    "how": "temuan tick 186 dari foto Q-25: Warung Uji A 50 orang di beban_orang, avg dibulatkan 0, staf 2 poin ditandai di atas rata-rata; fungsi public.beban_saya (avg semua baris app.beban_orang)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T03:52:49"
+   "status": "done",
+   "created": "2026-11-01T03:52:49",
+   "done": "2026-11-01T04:31:47",
+   "result": "commit 846c2df (agen, gate LULUS) dibawa push loop bb073f8, Vercel READY bb073f8; migrasi 20261101015000_rata_beban_q27.sql sidik b54660dd = database; rata_beban_q27 merah 11/14 lalu 14/14; regresi bagi_adil 27, kpi 40, papan_kerja 58, hari_ini_q26 52, isolasi_tenant 38 gagal=[]; vitest merah 4 lalu 424/424; grep 'Rata-rata tim 0' = 0; Warung Uji A: n_kelompok 0 (lama 50), rata null, di_atas false; foto 390 terang layar staf; e2e produksi kerja.spec lulus 48 dtk; CI GitHub hijau bb073f8; docs/quality/review-q27.md"
   },
   {
    "id": "Q-28",
@@ -1758,6 +1762,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-01T04:07:38"
+  },
+  {
+   "id": "Q-29",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 30,
+   "size": "s",
+   "wajib": false,
+   "title": "e2e izin tidak gagal saat berjalan paralel dengan kerja di produksi",
+   "accept": "penyebab kegagalan izin.spec saat dijalankan bersama kerja.spec (2 worker, akun A, Warung Uji A) ditemukan dari trace (bukan ditebak) dan diperbaiki di tes atau aplikasi; izin.spec + kerja.spec paralel lulus 3 kali berturut-turut terhadap produksi; dicatat di docs/quality",
+   "how": "tick 196: izin.spec gagal sekali paralel dengan kerja.spec di produksi bb073f8, lulus saat diulang sendiri",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T04:31:56"
   }
  ]
 }

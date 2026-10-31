@@ -196,3 +196,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 1 Nov 2026 tick 194 | Rencana uji Q-23 (docs/quality/rencana-uji-q23.md): orang_saya/peran_aktif/anggota_aktif memeriksa anggota.aktif, jadi hanya cabang pengelola() yang terbuka; Q-27 belum push |
 | 1 Nov 2026 tick 195 | Bukti celah Q-23 (19/19 slip terbaca dengan JWT basi); agen Q-23 dimulai; Q-27 diverifikasi kecuali produksi (Vercel tidak men-deploy push agen 846c2df), docs/quality/review-q27.md |
 | 1 Nov 2026 tick 196 | Q-23 diverifikasi (JWT basi 19 slip -> 0, klaim 0, sidik ebf335d2); CI GitHub merah 25+ push karena tes buffer soket, diperbaiki bersama tes slip_gaji bergantung tanggal (27/27); docs/quality/ci-merah.md |
+| 1 Nov 2026 tick 196 | Q-27 dan Q-23 SELESAI (Vercel READY bb073f8, CI hijau pertama kali sejak 25+ run, e2e produksi kerja+gaji+izin); Q-29 ditambah (izin.spec rapuh saat paralel) |
