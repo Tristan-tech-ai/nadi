@@ -581,8 +581,10 @@
    "accept": "pembagian bonus menurut poin kontribusi, dapat diekspor",
    "how": "docs/design/kolam-bonus-beban.md (insentif beban, PP 36/2021 Pasal 8/10/11; sisa terbesar; komponen slip insentif_beban; CSV)",
    "blocked_by": "F3-03",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T05:14:07",
+   "result": "commit bb70242+a1756c8+f05a266 (agen, gate LULUS, CI success), deploy git f05a266 READY; migrasi 20261101017000_kolam_bonus.sql sidik fed04553 = database (59 migrasi); tes ulang terpisah: kolam_bonus 63, slip_gaji 27, kpi 40 gagal=[]; regresi agen 10 berkas gagal=[]; vitest 436/436 (sisa terbesar 333.334+333.333+333.333, CSV aman, PPh 21 Rp125.448 -> Rp155.106 dengan insentif Rp500.000, iuran BPJS tetap); e2e produksi kolam.spec (pindah-kolam) lulus 35,5 dtk; 20 foto produksi 390/1440 terang/gelap; docs/quality/review-f3-05.md; sisa: dasar BPJS untuk insentif belum diverifikasi ke teks resmi"
   },
   {
    "id": "F3-06",
@@ -1776,8 +1778,10 @@
    "accept": "penyebab kegagalan izin.spec saat dijalankan bersama kerja.spec (2 worker, akun A, Warung Uji A) ditemukan dari trace (bukan ditebak) dan diperbaiki di tes atau aplikasi; izin.spec + kerja.spec paralel lulus 3 kali berturut-turut terhadap produksi; dicatat di docs/quality",
    "how": "tick 196: izin.spec gagal sekali paralel dengan kerja.spec di produksi bb073f8, lulus saat diulang sendiri",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T04:31:56"
+   "status": "done",
+   "created": "2026-11-01T04:31:56",
+   "done": "2026-11-01T05:10:26",
+   "result": "commit d747bb4 (apps/web/e2e/izin.spec.ts alasan batal unik per jalan + docs/quality/izin-paralel.md), push 562dd28, gate LULUS, CI GitHub success 562dd28; penyebab dari bukti: penantian getByText('Alasan batal: ...').first() lolos oleh sisa jalan lama sebelum aksi batal tersimpan (database: keputusan dibatalkan 21.51.34 UTC, pengajuan menunggu); izin.spec + kerja.spec paralel (2 worker) terhadap produksi 3 putaran berturut-turut lulus 43,5/41,5/42,9 dtk; aplikasi tidak diubah"
   },
   {
    "id": "Q-30",
@@ -1806,6 +1810,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-01T05:06:39"
+  },
+  {
+   "id": "Q-31",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 40,
+   "size": "s",
+   "wajib": false,
+   "title": "Teks kolam bonus menyebut dasar iuran BPJS dengan sumber, bukan 'belum Nadi periksa'",
+   "accept": "kalimat di components/app/kolam.tsx diganti: insentif bukan upah (PP 36/2021 Pasal 8) sehingga tidak masuk dasar iuran BPJS yang memakai upah pokok dan tunjangan tetap (Perpres 82/2018 Pasal 33 ayat (3), PP 44/2015 Pasal 19 ayat (2), PP 46/2015 Pasal 17 ayat (2), PP 45/2015 Pasal 29 ayat (1)); singkat, tanpa tanda pisah panjang; e2e kolam tetap lulus; foto 390 terang; docs/quality/review-f3-05.md diperbarui",
+   "how": "docs/research/dasar-bpjs-insentif.md",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T05:16:26"
   }
  ]
 }

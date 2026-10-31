@@ -27,3 +27,12 @@ Ditulis 1 Nov 2026 (tick 202). Ditemukan saat memeriksa apakah PP 35/2021 sudah 
   - Q-22 pola kerja, bila ketentuan waktu kerja diubah.
 - **Kenapa arsitektur sekarang aman:** angka hukum disimpan di tabel aturan_bertanggal dengan tanggal berlaku. Aturan baru cukup ditambah sebagai baris bertanggal mulai, tanpa mengubah kode, asalkan bentuk hitungannya sama.
 - **Yang perlu dilakukan:** begitu teks resmi dan nomor UU terbit di JDIH (peraturan.go.id / peraturan.bpk.go.id), baca pasal waktu kerja, upah, PKWT, PHK, dan pesangon, lalu tulis daftar perbedaannya dengan aturan_bertanggal. Ini dicatat sebagai tugas R-UUPK di antrean, dengan pemeriksaan berkala dan tanpa menunggu.
+
+## Cek R-UUPK pertama (1 Nov 2026, tick 204)
+- **Hasil:** nomor UU dan teks resmi belum ditemukan. Pencarian luas tidak menemukan "UU Nomor ... Tahun 2026 tentang Pelindungan Ketenagakerjaan" dalam Lembaran Negara.
+- **LBH Surakarta** (https://www.lbhsurakarta.id/2026/10/uu-ketenagakerjaan-baru.html, sumber sekunder):
+  - per 14 Okt 2026 teks resmi belum terbit dan nomornya belum ada di basis data hukum pemerintah;
+  - UU ini berdiri sendiri, 23 bab 313 pasal, dimaksudkan menggantikan kerangka UU 13/2003 beserta perubahan di UU Cipta Kerja.
+- **The Conversation** (https://theconversation.com/uu-ketenagakerjaan-baru-persoalan-upah-dan-eksploitasi-pekerja-masih-menghantui-293826) menyebut pengesahan 6 Okt 2026. Di artikel yang sama ada tanggal 1 Okt 2026 untuk tahap sebelumnya.
+- **Batas waktu pengesahan:** UUD 1945 Pasal 20 ayat (5) menyatakan RUU yang disetujui bersama tetapi tidak disahkan Presiden dalam 30 hari tetap sah menjadi undang-undang dan wajib diundangkan. Ini dari ingatan dan BELUM dicek ke teks resmi. Bila benar, batasnya sekitar 5 Nov 2026, jadi nomor UU kemungkinan terbit dalam beberapa hari.
+- **Cek berikutnya:** paling lambat 8 Nov 2026 di jdih.setkab.go.id, peraturan.go.id, dan peraturan.bpk.go.id. Sampai ada teks resmi, aturan_bertanggal tidak diubah.

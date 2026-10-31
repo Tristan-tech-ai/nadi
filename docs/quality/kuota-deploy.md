@@ -16,3 +16,12 @@ Ditemukan 1 Nov 2026 (tick 197). Menggantikan dugaan di docs/quality/ci-merah.md
 1. **Hemat deploy dari git.** Dokumen loop (docs/, loop/) tidak di-push sendirian setiap tick. Dokumen itu menunggu dan ikut push kode berikutnya, atau dikumpulkan paling sering sekali per jam. Wake_guard hanya menolak commit yang belum di-push, bukan berkas yang belum di-commit.
 2. **Setelah setiap push yang menyentuh apps/web**, periksa deployment untuk commit itu. Bila tidak ada dalam 5 menit dan `git status --short apps` kosong, deploy lewat CLI dari akar repo, lalu catat id deploy-nya di bukti.
 3. **Bila CLI juga ditolak**, tugas yang butuh e2e produksi menunggu slot kuota. Waktunya dihitung dari daftar deployment 24 jam terakhir (yang tertua + 24 jam). Loop tidak menunggu: ia mengerjakan tugas lain.
+
+## Koreksi (tick 203): deploy CLI JUGA dihitung kuota
+- `npx vercel@latest deploy --prod --yes` pada tick 203 ditolak: "Resource is limited - try again in 1 day (more than 100, code: "api-deployments-free-per-day")".
+- Keberhasilan CLI di tick 197 terjadi karena satu slot kuota baru saja bebas. Bukan karena CLI dikecualikan. Pada tick 203 slot berikutnya dipakai deploy git f05a266 (F3-05), lalu CLI ditolak.
+- **Aturan yang berlaku:**
+  - Tidak ada jalan pintas. Kuota 100 per 24 jam berlaku untuk semua deploy.
+  - Deploy hanya untuk commit yang mengubah apps/web.
+  - Dokumen dan tes saja tidak perlu deploy. Keduanya tetap ikut push, karena setiap push memicu deploy git selama slot ada. Itu sebabnya push dokumen harus jarang.
+  - Bila produksi tertinggal dari main, catat commit mana yang belum tayang di STATE.

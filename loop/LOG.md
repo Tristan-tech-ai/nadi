@@ -204,3 +204,14 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 1 Nov 2026 tick 201 | Brief Q-22 (pola kerja satu sumber) siap di scratchpad/brief-q22.md, dikirim setelah agen F3-05 push; F3-05 masih berjalan |
 | 1 Nov 2026 tick 202 | PP 35/2021 Pasal 21-22, 26 diverifikasi dari PDF resmi (docs/research/pola-kerja.md, LEARN); brief Q-22 diperbarui; F3-05 masih di agen |
 | 1 Nov 2026 tick 202 | Temuan: UU Pelindungan Ketenagakerjaan disahkan DPR 6 Okt 2026 (dpr.go.id), isi dan tanggal berlaku belum resmi; docs/research/uu-pelindungan-ketenagakerjaan.md; tugas R-UUPK ditambah |
+| 1 Nov 2026 tick 203 | F3-05 di-push agen (f05a266), deploy git READY, e2e produksi kolam lulus; Q-29 SELESAI (d747bb4); deploy CLI ditolak kuota (klaim tick 197 dikoreksi); Q-22 dikirim ke agen; docs/quality/review-f3-05.md |
+| 1 Nov 2026 tick 204 | R-UUPK cek pertama: nomor UU dan teks resmi belum terbit (LBH Surakarta 14 Okt); cek ulang paling lambat 8 Nov 2026 |
+| 1 Nov 2026 tick 205 | F3-05 SELESAI (tes ulang terpisah kolam_bonus 63, slip_gaji 27, kpi 40 gagal=[]) |
+| 1 Nov 2026 tick 206 | Dasar BPJS insentif terjawab dari kutipan resmi yang sudah ada (docs/research/dasar-bpjs-insentif.md): insentif tidak masuk dasar iuran; Q-31 ditambah untuk teks layar kolam |
+| 1 Nov 2026 tick 207 | Rencana uji Q-20 (docs/quality/rencana-uji-q20.md) dan brief scratchpad/brief-q20.md siap; Q-22 masih di agen |
+| 1 Nov 2026 tick 208 | Peta 27 tugas wajib tersisa (docs/quality/peta-sisa-wajib.md): urutan Q-22 -> Q-30/31 -> F4-01 -> F3-06 -> F4-04, pasangan paralel kode+riset; Q-22 masih di agen |
+| 1 Nov 2026 tick 209 | Riset ledger dan nomor sakti ternyata sudah ada; rencana uji F4-01 (docs/quality/rencana-uji-f4-01.md) + brief scratchpad/brief-f4-01.md (migrasi 20261101019000) siap; Q-22 masih di agen |
+| 1 Nov 2026 tick 210 | Rencana uji F4-04 ledger ditulis (docs/quality/rencana-uji-f4-04.md); Q-22 masih di agen (9 berkas belum di-commit) |
+| 1 Nov 2026 tick 211 | Brief F4-04 siap (scratchpad/brief-f4-04.md, migrasi 20261101020000); STATE diperbarui; Q-22 masih di agen |
+| 1 Nov 2026 tick 212 | Tinjauan berkas Q-22 (docs/quality/review-q22-diff.md): hak lewat peran_aktif, audit, nilai tidak sah ditolak, pesan lembur menyebut jalan keluar; dicek setelah commit: lembar dampak nyata, kotak centang Pasal 21(4) |
+| 1 Nov 2026 tick 213 | Q-22 di-push agen (8ac5650+6214445, CI hijau, 39/39); verifikasi loop + e2e produksi menunggu; dokumen loop di-commit; batas pemakaian sesi tercapai |
