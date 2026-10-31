@@ -487,8 +487,10 @@
    "accept": "biaya per rekrutmen (jam mentor + penilai) tampil di laporan",
    "how": "",
    "blocked_by": "F2-05",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T23:40:39",
+   "result": "commit 3e9c519 (riset) + 26c0421: migrasi magang (sidik 3035b5ba cocok, tes SQL merah lalu 64/64, regresi keputusan_rekrut 21, rekrut 21, isolasi_tenant 38; advisors hanya WARN definer yang diterima + indeks belum dipakai), rencana_magang + jam_rekrut + Dana Rekrutmen + laporan biaya per rekrutmen (90 menit mentor x Rp30.000/jam = Rp45.000), peringatan Permenaker 6/2020 belum terverifikasi; unit 9/9; e2e magang lokal + produksi https://nadi-tristan-tech-ais-projects.vercel.app lulus (13,9 dtk); axe 390/1440 terang/gelap 0 serius"
   },
   {
    "id": "F2-07",
