@@ -1570,6 +1570,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-01T01:10:28"
+  },
+  {
+   "id": "Q-18",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 27,
+   "size": "s",
+   "wajib": false,
+   "title": "Antrean rute model tidak macet di status proses",
+   "accept": "baris app.rute_model berstatus proses lebih dari 10 menit ditandai gagal dengan galat 'Edge Function tidak menjawab' oleh pg_cron tiap 5 menit, untuk_peran tidak berubah; tes SQL dengan baris proses buatan bertanggal mundur; cron terdaftar di cron.job",
+   "how": "supabase/migrations/20261101003000_keputusan_model.sql (app.rute_model), pola cron nadi-push-usulan",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T01:24:23"
   }
  ]
 }
