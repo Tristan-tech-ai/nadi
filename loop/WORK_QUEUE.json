@@ -1468,8 +1468,10 @@
    "accept": "bila usulan menunggu lebih dari 20, Feed menyebut jumlah sisanya dan ada cara melihat semuanya (halaman berikut atau saring per jenis); usulan baru tanpa tenggat/dampak tetap bisa ditemukan; e2e dengan 25 usulan",
    "how": "src/app/app/page.tsx (batas 20)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T16:51:11"
+   "status": "done",
+   "created": "2026-10-31T16:51:11",
+   "done": "2026-11-01T00:00:47",
+   "result": "e044bd1: lib/feed.ts (14 tes, merah sengaja 4), page.tsx hitungan exact + ?lagi= + pil jenis + Terbaru + penanda Baru; e2e feed-penuh.spec 25 usulan lulus lokal dan produksi (18,6 dtk, deploy READY 2095e43); axe 0 serius 390/1440 terang/gelap; foto scratchpad/d-05-foto"
   },
   {
    "id": "Q-15",
@@ -1518,6 +1520,20 @@
    "created": "2026-10-31T22:31:35",
    "done": "2026-10-31T22:46:44",
    "result": "commit 35929b1: MediaRecorder audioBitsPerSecond 32000 (BITRATE_SUARA); WER korpus whisper-small Opus 32 kbps 0,4286 (asli 0,43; 24 kbps 0,448 ditolak karena e2e salah dengar kata kunci); terukur produksi 22 KB per 6,1 dtk (29 kbps) vs 90 KB (118 kbps); e2e wawancara lokal + produksi lulus dengan cek ukuran < 40 KB"
+  },
+  {
+   "id": "D-05B",
+   "fase": "D",
+   "kind": "build",
+   "priority": 24,
+   "size": "s",
+   "wajib": false,
+   "title": "Feed: halaman berikut tidak melewatkan usulan setelah memutuskan",
+   "accept": "setelah memutuskan k usulan di halaman 1 lalu membuka halaman berikut, semua sisa usulan tampil tanpa celah; e2e 25 usulan: tolak 3 di halaman 1 lewat tombol, halaman 2 memuat 5 sisa yang benar; tes unit kunci kursor dengan tenggat/dampak null",
+   "how": "kursor keyset ?setelah= (tenggat, dampak_rp, dibuat_at, id) atau offset tautan berikut dikurangi jumlah kartu yang diputuskan di halaman ini (putusan.tsx client); docs/research/feed-urutan.md",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T00:00:57"
   }
  ]
 }
