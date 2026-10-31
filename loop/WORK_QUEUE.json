@@ -423,8 +423,10 @@
    "accept": "lowongan 'maks 25 th, berpenampilan menarik' diberi peringatan; atribut terlindungi tidak ikut skor",
    "how": "",
    "blocked_by": "F2-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T15:55:07",
+   "result": "commit 06738d5; src/lib/rekrut/bias.ts + rubrik.ts (tes 9/9, merah sengaja: nama bocor ke skor tertangkap); migrasi lowongan_peringatan (sidik e7fd4417, 30 migrasi) + tes SQL 9/9, advisor tanpa temuan baru; e2e rubrik ('maks 25 th, berpenampilan menarik' -> peringatan usia+penampilan, tertutup, Tetap buka; axe 390/1440 terang/gelap) dan lamar (skor rubrik topi Pelayan di Feed) lulus lokal + produksi READY 06738d5f. Lighthouse tidak diukur (halaman di balik login)"
   },
   {
    "id": "F2-03",
