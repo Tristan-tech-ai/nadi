@@ -907,8 +907,10 @@
    "accept": "peringatan muncul di 80%; cadangan mingguan tersimpan",
    "how": "",
    "blocked_by": "F0-03",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T11:49:38",
+   "result": "commit 8213fbc: migrasi pantau_kuota (sidik aec5e3bc cocok, 25 migrasi), cron nadi-kuota 17:15 UTC, app.ukur_kuota + app.kuota_harian + app.peringatan_platform; tes SQL pantau_kuota 7/7 (merah sengaja dengan batas kecil memunculkan 2 peringatan, tidak berulang); ukuran nyata 31 Okt: database 34 MB (6,5%), storage 1,5 MB (0,1%). Cadangan mingguan dipisah ke Q-03B"
   },
   {
    "id": "Q-04",
@@ -1294,6 +1296,20 @@
    "blocked_by": "butuh orang dengan HP dan wajah sungguhan (tidak bisa disimulasikan loop)",
    "status": "blocked",
    "created": "2026-10-31T10:32:19"
+  },
+  {
+   "id": "Q-03B",
+   "fase": "Q",
+   "kind": "maint",
+   "priority": 30,
+   "size": "m",
+   "wajib": false,
+   "title": "Cadangan mingguan data usaha ke bucket pribadi",
+   "accept": "pg_cron mingguan memanggil Edge Function yang mengekspor tabel usaha (JSON per tabel, tanpa kolom rahasia mentah) ke bucket cadangan pribadi; satu cadangan nyata tersimpan dan bisa dipulihkan ke skema uji (tes pemulihan tercatat); cadangan lebih dari 8 minggu dirotasi",
+   "how": "Edge Function memakai kunci bawaan runtime seperti fungsi push; tanpa service-role di repo atau Vercel",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-10-31T11:49:38"
   }
  ]
 }
