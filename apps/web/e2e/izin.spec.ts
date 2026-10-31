@@ -110,7 +110,8 @@ test("izin: otopilot menyetujui sesuai aturan, sisanya masuk Feed dan diputuskan
 
   // Pemilik memutuskan di Feed.
   await page.goto("/app");
-  const kartu = page.locator("article, li, section").filter({ hasText: `Setujui sakit ${nama} 3 hari` }).filter({ has: page.getByRole("button", { name: "Setujui" }) }).last();
+  // Disaring dengan judul saja: setelah diputuskan, tombol Setujui diganti cap hasil, jadi penyaring tombol akan kehilangan kartunya.
+  const kartu = page.locator("article").filter({ hasText: `Setujui sakit ${nama} 3 hari` }).last();
   await expect(kartu).toBeVisible();
   await expect(kartu).toContainText("lebih dari batas otomatis 1 hari");
   await kartu.getByRole("button", { name: "Setujui" }).click();
