@@ -146,22 +146,33 @@ async function tulisAturan(db: SupabaseClient, model: string, perusahaan_id: str
 Deno.serve(async (req) => {
   if (req.method !== "POST") return json({ galat: "Pakai POST" }, 405);
   const otorisasi = req.headers.get("Authorization");
-  if (!otorisasi) return json({ galat: "Masuk dulu" }, 401);
-  const { berkas_id } = await req.json().catch(() => ({ berkas_id: null }));
+  // Jalur internal: database (pg_net, mis. lamaran tanpa akun) memanggil dengan token dari Vault, bukan JWT pengguna.
+  const tokenInternal = req.headers.get("x-nadi-token");
+  if (!otorisasi && !tokenInternal) return json({ galat: "Masuk dulu" }, 401);
+  const { berkas_id, sumber: sumberPanggil } = await req.json().catch(() => ({ berkas_id: null, sumber: null }));
   if (typeof berkas_id !== "string") return json({ galat: "berkas_id wajib" }, 400);
 
-  // Hak akses diperiksa atas nama pemanggil (RLS): hanya berkas yang boleh ia lihat.
-  const pengguna = createClient(URL_SUPABASE, kunciEnv("SUPABASE_PUBLISHABLE_KEYS", "SUPABASE_ANON_KEY"), {
-    global: { headers: { Authorization: otorisasi } },
-    auth: { persistSession: false },
-  });
-  const { data: berkas } = await pengguna.from("berkas").select("id, perusahaan_id, jalur, nama_asli, mime, status, teks_ocr, ocr_keyakinan").eq("id", berkas_id).maybeSingle();
-  if (!berkas) return json({ galat: "Berkas tidak ditemukan" }, 404);
-
   const admin = createClient(URL_SUPABASE, kunciEnv("SUPABASE_SECRET_KEYS", "SUPABASE_SERVICE_ROLE_KEY"), { auth: { persistSession: false } });
+  const kolom = "id, perusahaan_id, jalur, nama_asli, mime, status, teks_ocr, ocr_keyakinan";
+  let berkas;
+  if (tokenInternal) {
+    const { data: cocok } = await admin.rpc("push_token_cocok", { p_token: tokenInternal });
+    if (cocok !== true) return json({ galat: "Token tidak sah" }, 401);
+    ({ data: berkas } = await admin.from("berkas").select(kolom).eq("id", berkas_id).maybeSingle());
+  } else {
+    // Hak akses diperiksa atas nama pemanggil (RLS): hanya berkas yang boleh ia lihat.
+    const pengguna = createClient(URL_SUPABASE, kunciEnv("SUPABASE_PUBLISHABLE_KEYS", "SUPABASE_ANON_KEY"), {
+      global: { headers: { Authorization: otorisasi! } },
+      auth: { persistSession: false },
+    });
+    ({ data: berkas } = await pengguna.from("berkas").select(kolom).eq("id", berkas_id).maybeSingle());
+  }
+  if (!berkas) return json({ galat: "Berkas tidak ditemukan" }, 404);
+  const sumberUsulan = tokenInternal && sumberPanggil === "lamar" ? "lamar" : "lempar";
+
   // Klaim atomik: hanya satu pemanggil yang memproses; berkas selesai tidak diproses ulang.
   const { data: diklaim } = await admin.from("berkas").update({ status: "proses", galat: null, diubah_at: new Date().toISOString() })
-    .eq("id", berkas_id).in("status", ["unggah", "gagal"]).select("id");
+    .eq("id", berkas_id).in("status", ["unggah", "antre", "gagal"]).select("id");
   if (!diklaim?.length) return json({ status: berkas.status, diproses_ulang: false });
 
   const gagal = async (pesan: string, status = 422) => {
@@ -210,7 +221,7 @@ Deno.serve(async (req) => {
 
     const u = usulanDari(hasil);
     const { data: usulan } = await admin.from("usulan").insert({
-      perusahaan_id: berkas.perusahaan_id, sumber: "lempar", aksi: u.aksi, judul: u.judul,
+      perusahaan_id: berkas.perusahaan_id, sumber: sumberUsulan, aksi: u.aksi, judul: u.judul,
       penjelasan: sumber === "aturan"
         ? u.penjelasan.replace(/Dibaca dari berkas, yakin \d+%\./, ocrCukup
           ? "Dibaca dari foto dengan aturan tersimpan, tanpa AI. Angka sudah dicocokkan; periksa ejaan nama dan nomor."
