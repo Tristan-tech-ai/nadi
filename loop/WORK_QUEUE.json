@@ -887,8 +887,10 @@
    "accept": "laporan di docs/quality/; semua temuan tinggi diperbaiki",
    "how": "skill security-review + get_advisors",
    "blocked_by": "F0-06",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-10-31T16:54:05",
+   "result": "laporan docs/quality/keamanan-f0.md; commit 8fdf0f1 + bda6222; migrasi keamanan_q01 (sidik b5ab7deb) + keamanan_q01_berkas (33 migrasi); 3 TINGGI diperbaiki (T1 ambil alih akun lewat orang.user_id+buat_akun_staf, T2 admin menurunkan pemilik/memulihkan diri, T3 unggah tanpa batas) + S1 S2 S4 + open redirect + clickjacking; tes SQL keamanan_q01 20/20, auth-pesan 14/14 (merah di kode lama), e2e keamanan.spec 6/6 (merah di produksi lama); produksi READY bda62225 header X-Frame-Options DENY + CSP frame-ancestors terverifikasi curl; sisa SEDANG ke Q-11..Q-14"
   },
   {
    "id": "Q-02",

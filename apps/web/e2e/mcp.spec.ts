@@ -47,6 +47,8 @@ const META = { "io.modelcontextprotocol/protocolVersion": "2026-07-28", "io.mode
 
 test("asisten AI menyambung lewat OAuth + CIMD, membaca, dan mengajukan usulan yang muncul di Feed", async ({ page, request, baseURL }) => {
   test.setTimeout(90_000);
+  // Klien CIMD uji berjalan di localhost:4010 dan hanya diizinkan bila NADI_CIMD_IZINKAN_LOKAL=1 (bukan di Vercel).
+  test.skip(!!process.env.E2E_BASE_URL, "klien CIMD lokal tidak bisa dijangkau dari produksi");
   const mcp = `${baseURL}/api/mcp`;
 
   // 1. Tanpa token: 401 dengan petunjuk metadata.
