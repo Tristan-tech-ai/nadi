@@ -3,8 +3,10 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowsLeftRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { BebanMingguIni, BebanSayaIni } from "@/components/app/beban";
+import { CerminKpi, KembaliKeTabel, KerangkaKpi, KpiMingguIni, KpiTanpaOrang } from "@/components/app/kpi";
 import { PapanStaf, TambahKerja, UbahPoin, type KerjaTampil } from "@/components/app/kerja";
 import type { BebanMinggu, BebanSaya } from "@/lib/kerja/adil";
+import type { KpiMinggu, KpiSaya } from "@/lib/kerja/kpi";
 import { formatJam } from "@/lib/format";
 import { bacaKolom, formatTenggat, LABEL_STATUS, ringkasStatus, STATUS_KERJA, teksPoin, teksSelesai, type KerjaPapan, type StatusKerja } from "@/lib/kerja/poin";
 import { createClient } from "@/lib/supabase/server";
@@ -38,12 +40,76 @@ function KartuKerja({ k, pengelola }: { k: KerjaTampil; pengelola: boolean }) {
   );
 }
 
+const pertama = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
+const ID_SAH = /^[0-9a-f-]{36}$/i;
+const galatKpi = <p role="alert" className="mt-6 text-cap" data-testid="kpi-galat">Kinerja minggu ini gagal dimuat. Muat ulang halaman ini sebentar lagi.</p>;
+
+/**
+ * Tab kinerja (F3-03). Staf: cermin miliknya (public.kpi_saya). Pemilik/admin/akuntan: tabel semua orang (public.kpi_minggu);
+ * ?orang=<id> membuka cermin orang itu, layar yang sama dengan yang dilihat orangnya, tanpa formulir banding.
+ */
+async function BagianKpi({ semua, orang }: { semua: boolean; orang: string | null }) {
+  const supabase = await createClient();
+  if (!semua) {
+    const { data, error } = await supabase.rpc("kpi_saya", { p_mulai: null });
+    if (error || !data) return galatKpi;
+    const d = data as KpiSaya;
+    return d.orang ? <CerminKpi k={d.orang} tim={d.rata_rata_tim} mulai={d.mulai} akhir={d.akhir} milikSendiri /> : <KpiTanpaOrang />;
+  }
+  const { data, error } = await supabase.rpc("kpi_minggu", { p_mulai: null });
+  if (error || !data) return galatKpi;
+  const d = data as KpiMinggu;
+  if (!orang) return <KpiMingguIni data={d} />;
+  const k = d.orang.find((o) => o.id === orang);
+  return (
+    <>
+      <KembaliKeTabel />
+      {k ? <CerminKpi k={k} tim={d.rata_rata_tim} mulai={d.mulai} akhir={d.akhir} milikSendiri={false} />
+        : <p className="mt-4 text-tinta-2" data-testid="kpi-orang-hilang">Orang ini tidak ada di daftar orang aktif minggu ini. Pilih orang lain dari tabel.</p>}
+    </>
+  );
+}
+
 async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["searchParams"] }) {
   const sesi = await wajibPerusahaan();
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
   const sp = await searchParams;
   const kolom = bacaKolom(sp.kolom);
-  const tabBeban = pengelola && (Array.isArray(sp.tab) ? sp.tab[0] : sp.tab) === "beban";
+  const namaTab = pertama(sp.tab);
+  const tabBeban = pengelola && namaTab === "beban";
+  const tabKpi = namaTab === "kpi";
+  // Akuntan ikut membaca tabel kinerja (sama dengan public.kpi_minggu); peran lain melihat cermin miliknya.
+  const lihatSemua = pengelola || sesi.peran === "akuntan";
+  const daftarTab = [
+    { href: "/app/kerja", label: "Papan hari ini", aktif: !tabBeban && !tabKpi },
+    ...(pengelola ? [{ href: "/app/kerja?tab=beban", label: "Beban minggu ini", aktif: tabBeban }] : []),
+    { href: "/app/kerja?tab=kpi", label: lihatSemua ? "Kinerja minggu ini" : "Kerjamu minggu ini", aktif: tabKpi },
+  ];
+  const tab = (
+    <nav aria-label="Bagian kerja" className="mt-4">
+      <ul className="flex flex-wrap gap-1 border-b border-garis">
+        {daftarTab.map((t) => (
+          <li key={t.href}>
+            <Link href={t.href} aria-current={t.aktif ? "page" : undefined}
+              className={`-mb-px inline-flex min-h-11 items-center border-b-2 px-3 text-sm ${t.aktif ? "border-tinta font-semibold text-tinta" : "border-transparent text-tinta-2"}`}>
+              {t.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  );
+  if (tabKpi) {
+    const orang = pertama(sp.orang);
+    return (
+      <>
+        {tab}
+        <Suspense fallback={<KerangkaKpi />}>
+          <BagianKpi semua={lihatSemua} orang={lihatSemua && orang && ID_SAH.test(orang) ? orang : null} />
+        </Suspense>
+      </>
+    );
+  }
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("papan_kerja");
   if (error) {
@@ -60,6 +126,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
     const { data: saya } = await supabase.rpc("beban_saya", { p_mulai: null });
     return (
       <>
+        {tab}
         {saya && <BebanSayaIni data={saya as BebanSaya} />}
         <PapanStaf daftar={daftar} />
       </>
@@ -75,21 +142,6 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
     ]);
     tambah = <TambahKerja topi={(topi ?? []) as { id: string; nama: string }[]} orang={(orang ?? []) as { id: string; nama: string }[]} />;
   }
-
-  const tab = pengelola && (
-    <nav aria-label="Bagian kerja" className="mt-4">
-      <ul className="flex gap-1 border-b border-garis">
-        {[{ href: "/app/kerja", label: "Papan hari ini", aktif: !tabBeban }, { href: "/app/kerja?tab=beban", label: "Beban minggu ini", aktif: tabBeban }].map((t) => (
-          <li key={t.href}>
-            <Link href={t.href} aria-current={t.aktif ? "page" : undefined}
-              className={`-mb-px inline-flex min-h-11 items-center border-b-2 px-3 text-sm ${t.aktif ? "border-tinta font-semibold text-tinta" : "border-transparent text-tinta-2"}`}>
-              {t.label}
-            </Link>
-          </li>
-        ))}
-      </ul>
-    </nav>
-  );
 
   if (tabBeban) {
     const { data: beban, error: eb } = await supabase.rpc("beban_minggu", { p_mulai: null });

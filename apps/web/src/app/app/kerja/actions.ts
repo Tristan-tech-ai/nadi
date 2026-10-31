@@ -109,3 +109,28 @@ export async function usulkanPelaksana(topi: string): Promise<HasilUsulan> {
   const u = data as { orang_id: string; nama: string; alasan: string };
   return { orang: u.orang_id, nama: u.nama, alasan: u.alasan };
 }
+
+/**
+ * "Ada yang keliru?" (F3-03): staf menandai kerjanya sendiri yang keliru dihitung di Kerjamu minggu ini. Menjadi usulan
+ * kpi.banding untuk pemilik lewat public.banding_kpi. Kunci idempoten dari browser: kiriman ulang useOffline mengembalikan usulan
+ * yang sama, bukan usulan kembar.
+ */
+export async function tandaiKeliru(_: HasilKerja, form: FormData): Promise<HasilKerja> {
+  await wajibPerusahaan();
+  const kerja = teks(form, "kerja");
+  const alasan = teks(form, "alasan");
+  const kunci = teks(form, "kunci");
+  if (!ID_SAH.test(kerja)) return { galat: "Pilih kerja yang keliru dihitung dulu." };
+  if (kunci && !ID_SAH.test(kunci)) return { galat: "Pilihan tidak dikenal. Muat ulang halaman ini." };
+  if (alasan.length < 3) return { galat: "Tulis alasannya, misalnya Tenggatnya diundur pemilik hari Senin." };
+  if (alasan.length > 500) return { galat: `Alasan ${alasan.length} huruf. Pendekkan jadi paling banyak 500 huruf.` };
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("banding_kpi", { p_kerja: kerja, p_alasan: alasan, p_kunci: kunci || null });
+  if (error) {
+    if (error.code === "42501" || error.code === "22023" || error.code === "P0002") return { galat: error.message };
+    return { galat: "Nadi gagal menyimpan. Coba lagi sebentar; isianmu tidak hilang." };
+  }
+  revalidatePath("/app/kerja");
+  const r = data as { id: string; sudah: boolean };
+  return { id: r.id, pesan: r.sudah ? "Kerja ini sudah ditandai. Pemilik akan melihatnya di Feed." : "Terkirim ke pemilik. Pemilik akan melihat tandamu di Feed." };
+}

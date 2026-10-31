@@ -151,7 +151,7 @@ test("bagi adil: beban minggu ini, usulan ke yang paling ringan beserta alasan, 
     const isiStaf = await staf.locator("body").innerText();
     expect(isiStaf).not.toContain(nama.sedang);
     expect(isiStaf).not.toContain(nama.ringan);
-    await expect(staf.getByRole("navigation", { name: "Bagian kerja" })).toHaveCount(0);
+    await expect(staf.getByRole("link", { name: "Beban minggu ini" })).toHaveCount(0);
     await axeDanFoto(staf, "beban-staf");
     await konteksStaf.close();
   } finally {
