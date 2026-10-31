@@ -174,7 +174,7 @@ begin
       (select count(*) from public.kerja where perusahaan_id = pa and status = 'selesai' and lintas_topi and selesai_at > now() - interval '28 days')
       = (select sum((x ->> 'lintas_n')::int) from jsonb_array_elements(r -> 'garis') x), r ->> 'garis');
 
-    perform pg_temp.cek('kalimat kepala dari SQL', r ->> 'kepala' = 'Dewi Uji mengerjakan 60% urusan kasir walau topinya pelayan.', r ->> 'kepala');
+    perform pg_temp.cek('kalimat kepala dari SQL', r ->> 'kepala' = '60% kerja Dewi Uji 4 minggu terakhir adalah urusan kasir, walau topinya pelayan.', r ->> 'kepala');
     perform pg_temp.cek('saran pasang topi: hanya Dewi-kasir (>= 30% dan belum dipakai)', jsonb_array_length(r -> 'saran') = 1
       and (r #>> '{saran,0,orang_id}')::uuid = o_dewi and (r #>> '{saran,0,topi_id}')::uuid = t_kasir and (r #>> '{saran,0,persen}')::int = 60
       and r #> '{saran,0,usulan_id}' = 'null'::jsonb, r ->> 'saran');
@@ -233,7 +233,7 @@ begin
     perform pg_temp.cek('satu usulan orang.topi untuk pemilik dengan payload, kunci, judul',
       v_n = 1 and e -> 'untuk_peran' = '["pemilik"]'::jsonb and e ->> 'sumber' = 'peta' and e ->> 'judul' = 'Pasang topi kasir ke Dewi Uji'
       and e -> 'payload' = jsonb_build_object('orang_id', o_dewi, 'topi_id', t_kasir, 'persen', 60, 'minggu', 4) and (e ->> 'kunci_klien')::uuid = kunci
-      and e ->> 'penjelasan' like 'Dewi Uji mengerjakan 60% urusan kasir 4 minggu terakhir (6 dari 10 poin kerjanya) walau topinya pelayan.%', e::text);
+      and e ->> 'penjelasan' like '60% kerja Dewi Uji 4 minggu terakhir (6 dari 10 poin) adalah urusan kasir, walau topinya pelayan.%', e::text);
     perform pg_temp.cek('usulan pemilik saja tidak diantre ke rute model',
       not exists (select 1 from public.keputusan where subjek_id = id_usulan) and not exists (select 1 from app.rute_model where usulan_id = id_usulan));
     execute 'set local role authenticated';

@@ -93,7 +93,7 @@ test("peta organisasi: kalimat kepala, lintas topi sebagai teks, tabel, usulan p
     }
 
     // Database langsung.
-    const kepala = `${nama.dewi} mengerjakan 75% urusan kasir Peta ${jejak} walau topinya pelayan Peta ${jejak}.`;
+    const kepala = `75% kerja ${nama.dewi} 4 minggu terakhir adalah urusan kasir Peta ${jejak}, walau topinya pelayan Peta ${jejak}.`;
     const { data: d, error: ep } = await sb.rpc("peta_organisasi", { p_minggu: 4 });
     expect(ep).toBeNull();
     const peta = d as PetaRpc;

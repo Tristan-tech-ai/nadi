@@ -9,7 +9,7 @@ const g = (orang_id: string, topi_id: string, x: Partial<GarisPeta>): GarisPeta 
 });
 const contoh = (): Peta => bacaPeta({
   mulai: "2026-10-05", akhir: "2026-11-01", zona: "Asia/Jakarta", minggu: 4, ambang: 3, selesai_n: 11, poin: "25.00" as unknown as number,
-  kepala: "Dewi mengerjakan 60% urusan kasir walau topinya pelayan.",
+  kepala: "60% kerja Dewi 4 minggu terakhir adalah urusan kasir, walau topinya pelayan.",
   orang: [
     { id: "budi", nama: "Budi", jabatan: null, n: 1, poin: 2, cukup: false, tanpa_topi_poin: 0, topi_ids: ["gudang", "kasir"] },
     { id: "dewi", nama: "Dewi", jabatan: "Pelayan", n: 4, poin: 10, cukup: true, tanpa_topi_poin: 0, topi_ids: ["pelayan"] },
