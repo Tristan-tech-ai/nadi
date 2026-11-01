@@ -3,9 +3,12 @@
 # Sumber gambar CC0 di fixtures/korpus/mata/sumber (lihat docs/ASSETS.md). Kotak orang di foto sumber diambil dari deteksi
 # RF-DETR nano q8 atas foto utuh (1 Nov 2026), lalu diperlebar 8%.
 # Jalankan dari apps/web: python -I scripts/korpus/mata.py <folder keluaran cuplikan>
-# Menulis zona.json dan jawaban.json ke fixtures/korpus/mata; cuplikan JPEG ke folder keluaran (tidak disimpan di repo).
+# Menulis zona.json dan jawaban.json ke fixtures/korpus/mata; cuplikan JPEG ke folder keluaran (tidak disimpan di repo); bila ffmpeg
+# ada, juga video.webm (VP9, 640 px, tiap cuplikan tampil 2 detik) untuk e2e /app/mata.
 import json
 import os
+import shutil
+import subprocess
 import sys
 
 from PIL import Image, ImageOps
@@ -77,6 +80,9 @@ def main():
         json.dump(zona, f, ensure_ascii=False, indent=1)
     with open(os.path.join(AKAR, "jawaban.json"), "w", encoding="utf-8", newline="\n") as f:
         json.dump(jawaban, f, ensure_ascii=False, indent=1)
+    if shutil.which("ffmpeg"):
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", "0.5", "-i", os.path.join(keluar, "%03d.jpg"), "-vf", "scale=640:-2,fps=2",
+                        "-c:v", "libvpx-vp9", "-b:v", "0", "-crf", "40", "-row-mt", "1", os.path.join(AKAR, "video.webm")], check=True)
     print(f"{N} cuplikan ke {keluar}")
 
 

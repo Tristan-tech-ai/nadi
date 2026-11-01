@@ -74,6 +74,7 @@ export default function Perusahaan() {
         <Link href="/app/invoice" className="underline underline-offset-4">Invoice</Link>
         <Link href="/app/pajak" className="underline underline-offset-4">Kompas Pajak</Link>
         <Link href="/app/akuntan" className="underline underline-offset-4">Ruang Akuntan</Link>
+        <Link href="/app/mata" className="underline underline-offset-4">Mata (kamera meja dan antrean)</Link>
       </p>
       <Suspense fallback={<div className="mt-10 h-28 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <BagianPemberitahuan />
