@@ -41,6 +41,10 @@ export async function AiMilikmu() {
       <p className="mt-1 text-sm text-tinta-2">
         Asisten AI yang kamu pakai (lewat MCP) bisa membaca data usaha ini dan mengajukan usulan. Alamat untuk menyambungkan: <span className="break-all font-mono text-tinta">{alamat}</span>
       </p>
+      <p className="mt-2 text-sm text-tinta-2">
+        <a href="/app/skill" download className="font-semibold text-laut underline underline-offset-4" data-testid="unduh-skill">Unduh paket skill usaha ini (.zip)</a>.
+        Isinya cara kerja usahamu (topi, aturan izin, penomoran, bagan akun) tanpa nama orang atau gaji. Pasang di asisten yang mendukung Agent Skills: unggah zip ini, atau ekstrak foldernya ke folder skills asistenmu.
+      </p>
       {daftar.length === 0 ? (
         <p className="mt-4 text-sm text-tinta-2" data-testid="ai-milikmu-kosong">Belum ada asisten yang tersambung.</p>
       ) : (
