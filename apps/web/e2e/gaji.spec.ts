@@ -366,3 +366,66 @@ test("aturan kerja: pemilik ganti pola lewat lembar dampak, lembur libur pola la
     if (pidAwal) await sb.rpc("pindah_perusahaan", { p_perusahaan: pidAwal });
   }
 });
+
+// F4-09: cadangan pesangon di /app/gaji (pemilik). Karyawan mulai 50 bulan lalu (tanggal 1; zona usaha Indonesia di depan UTC,
+// jadi masa kerja 4 tahun lebih sedikit), pokok Rp3.500.000 + tunjangan tetap Rp500.000 -> 5 bulan pesangon + 2 bulan
+// penghargaan = Rp28.000.000; rentang rugi Rp18.000.000, pensiun Rp43.000.000. Satu karyawan tanpa tanggal mulai belum dihitung.
+// Saldo Rp4.000.000 -> kekurangan Rp24.000.000 -> sisihkan Rp2.000.000 sebulan. Usaha "Uji Gaji E2E" (akun A dekat batas 20 usaha).
+test("cadangan pesangon: perkiraan skenario dasar, rentang, saran sisihan, bertanda belum final", async ({ page }) => {
+  test.setTimeout(180_000);
+  const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
+  expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
+  const pidAwal = ((await sb.auth.getClaims()).data?.claims?.app_metadata as { pid?: string } | undefined)?.pid;
+  try {
+    const { data: ada } = await sb.from("perusahaan").select("id").eq("nama", NAMA_USAHA).limit(1);
+    const pid = ada?.[0]?.id as string;
+    expect(pid, "usaha Uji Gaji E2E dibuat tes gaji sebelumnya").toBeTruthy();
+    expect((await sb.rpc("pindah_perusahaan", { p_perusahaan: pid })).error).toBeNull();
+    await sb.auth.refreshSession();
+    await sb.from("orang").update({ status: "nonaktif" }).eq("perusahaan_id", pid).eq("status", "aktif");
+    const t = Date.now();
+    const nama = `Pesangon Sari ${t}`;
+    const tanpaMulai = `Pesangon Budi ${t}`;
+    const kini = new Date();
+    const awal = new Date(Date.UTC(kini.getUTCFullYear(), kini.getUTCMonth() - 50, 1)).toISOString().slice(0, 10);
+    expect((await sb.from("orang").insert([{ perusahaan_id: pid, nama }, { perusahaan_id: pid, nama: tanpaMulai }])).error).toBeNull();
+
+    await page.goto("/masuk?next=/app/orang");
+    await page.getByLabel("Email").fill(E.E2E_EMAIL_A);
+    await page.getByLabel("Kata sandi").fill(E.E2E_SANDI);
+    await page.getByRole("button", { name: "Masuk" }).click();
+    await page.waitForURL((u) => u.pathname === "/app/orang");
+    for (const [n, mulai] of [[nama, awal], [tanpaMulai, ""]] as const) {
+      const baris = page.getByRole("listitem").filter({ hasText: n });
+      await baris.getByText("Gaji belum diisi").click();
+      const form = baris.getByRole("form", { name: `Gaji ${n}` });
+      await form.getByLabel("Gaji pokok (Rp)").fill("3500000");
+      await form.getByLabel("Tunjangan tetap (Rp)").fill("500000");
+      if (mulai) await form.getByLabel("Mulai kerja").fill(mulai);
+      await form.getByRole("button", { name: `Simpan gaji ${n}` }).click();
+      await expect(form.getByText("Tersimpan.")).toBeVisible();
+    }
+
+    await page.goto("/app/gaji");
+    const kartu = page.getByTestId("cadangan-pesangon");
+    await expect(kartu).toContainText("Perkiraan, belum final");
+    await expect(kartu).toContainText("Rp28.000.000");
+    await expect(kartu).toContainText("1 orang belum dihitung");
+    await expect(kartu.getByTestId("rentang-pesangon")).toContainText("Rp18.000.000");
+    await expect(kartu.getByTestId("rentang-pesangon")).toContainText("Rp43.000.000");
+    await kartu.getByLabel("Sudah disisihkan (Rp)").fill("4000000");
+    await kartu.getByRole("button", { name: "Simpan saldo" }).click();
+    await expect(kartu.getByText("Saldo tersimpan.")).toBeVisible();
+    await expect(kartu.getByTestId("saran-pesangon")).toContainText("Rp2.000.000");
+    await kartu.getByText("Rincian per orang").click();
+    const rincian = kartu.getByTestId("rincian-pesangon");
+    await expect(rincian.getByRole("listitem").filter({ hasText: nama })).toContainText("5 bulan pesangon + 2 bulan penghargaan");
+    await expect(rincian.getByRole("listitem").filter({ hasText: tanpaMulai })).toContainText("Tanggal mulai kerja belum diisi");
+    await kartu.getByText("Dari mana angka ini?").click();
+    await expect(kartu).toContainText("Pasal 157 UU 13/2003");
+    await kartu.scrollIntoViewIfNeeded();
+    await periksaUi(page, "pesangon");
+  } finally {
+    if (pidAwal) await sb.rpc("pindah_perusahaan", { p_perusahaan: pidAwal });
+  }
+});

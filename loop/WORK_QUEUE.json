@@ -1796,8 +1796,10 @@
    "accept": "saat BebanMinggu.jam_sama_rata, baris beban tidak menampilkan '40 jam' dan 'x per jam' (HP) dan kolom Jam jadwal/Poin per jam (desktop) disembunyikan; batang perbandingan memakai poin; bila jam dari jadwal (setelah F3-06) kolom kembali; vitest/e2e bagi-adil memeriksa kedua keadaan; foto 390/1440 terang+gelap; axe bersih",
    "how": "foto Q-28 tick 197: baris 'Sari 6 poin · 40 jam · 0,15 per jam' dari jam anggapan; docs/research/beban-per-jam.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T04:48:39"
+   "status": "done",
+   "created": "2026-11-01T04:48:39",
+   "done": "2026-11-01T08:24:37",
+   "result": "22a00b6 (deploy 7aabf37 READY): kolomBeban + beban.tsx; vitest merah 3 lalu 77/77; e2e bagi-adil.spec baru MERAH di produksi lama lalu LULUS produksi --project=desktop (30 dtk); foto 390/1440 terang/gelap 12 berkas diperiksa: tanpa kolom jam/per jam, teks 'Perbandingan memakai poin saja sampai jadwal kerja diisi.'"
   },
   {
    "id": "R-UUPK",
@@ -1824,8 +1826,10 @@
    "accept": "kalimat di components/app/kolam.tsx diganti: insentif bukan upah (PP 36/2021 Pasal 8) sehingga tidak masuk dasar iuran BPJS yang memakai upah pokok dan tunjangan tetap (Perpres 82/2018 Pasal 33 ayat (3), PP 44/2015 Pasal 19 ayat (2), PP 46/2015 Pasal 17 ayat (2), PP 45/2015 Pasal 29 ayat (1)); singkat, tanpa tanda pisah panjang; e2e kolam tetap lulus; foto 390 terang; docs/quality/review-f3-05.md diperbarui",
    "how": "docs/research/dasar-bpjs-insentif.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T05:16:26"
+   "status": "done",
+   "created": "2026-11-01T05:16:26",
+   "done": "2026-11-01T08:24:37",
+   "result": "34bd02a (deploy 7aabf37 READY): kolam.tsx menyebut Perpres 82/2018 Pasal 33, PP 44/2015 Pasal 19, PP 45/2015 Pasal 29, PP 46/2015 Pasal 17 (docs/research/dasar-bpjs-insentif.md); e2e kolam.spec --project=pindah-kolam LULUS produksi (28 dtk), asersi memuat 'Perpres 82/2018' dan tidak memuat 'belum Nadi periksa'"
   },
   {
    "id": "Q-32",
@@ -1840,6 +1844,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-01T07:52:21"
+  },
+  {
+   "id": "F4-09B",
+   "fase": "F4",
+   "kind": "build",
+   "priority": 42,
+   "size": "s",
+   "wajib": false,
+   "title": "Cadangan pesangon: isian iuran dana pensiun sukarela per orang (PP 35/2021 Pasal 58) dan karyawan kontrak",
+   "accept": "isian per orang 'Iuran dana pensiun dari usaha yang sudah dibayar' (pemilik saja, bukan BPJS JP) mengurangi kekurangan cadangan orang itu dengan tes vitest + SQL; karyawan kontrak (orang.data.kontrak_selesai) dihitung menurut pasal PP 35/2021 tentang uang kompensasi PKWT yang dibaca dulu dari PDF resmi dan dicatat di LEARN; foto 390/1440 terang/gelap + axe",
+   "how": "docs/research/pesangon-f4-09.md bagian Pasal 58; kartu components/app/cadangan-pesangon.tsx; RPC cadangan_pesangon",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T08:35:23"
   }
  ]
 }

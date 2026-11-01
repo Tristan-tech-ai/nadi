@@ -116,16 +116,37 @@ export async function aturGajiOrang(_: HasilGaji, form: FormData): Promise<Hasil
   const tunjangan = rupiahIsian(form.get("tunjangan_tetap"));
   const ptkp = String(form.get("ptkp") ?? "");
   const risiko = String(form.get("risiko_jkk") ?? "sangat_rendah");
+  const mulai = String(form.get("mulai") ?? "");
   if (pokok <= 0 || pokok > 1_000_000_000) return { galat: "Isi gaji pokok dalam rupiah, misalnya 3500000." };
   if (ptkp && !PTKP.includes(ptkp)) return { galat: "Status PTKP tidak dikenal." };
   if (!RISIKO.includes(risiko)) return { galat: "Tingkat risiko kerja tidak dikenal." };
+  if (mulai && !/^\d{4}-\d{2}-\d{2}$/.test(mulai)) return { galat: "Pilih tanggal mulai kerja dari kalender." };
   const supabase = await createClient();
   const { data: lama } = await supabase.from("orang_rahasia").select("gaji").eq("orang_id", orang).maybeSingle();
   const gaji = { ...((lama?.gaji as Record<string, unknown>) ?? {}), pokok, tunjangan_tetap: tunjangan, ptkp: ptkp || null, risiko_jkk: risiko };
   const { error } = await supabase.from("orang_rahasia").upsert({ orang_id: orang, perusahaan_id: sesi.perusahaanId, gaji }, { onConflict: "orang_id" });
   if (error) return { galat: "Gaji gagal disimpan. Hanya pemilik atau admin yang bisa mengubahnya." };
+  // Tanggal mulai kerja di orang.data.mulai (dibaca juga oleh Gerbang Gaji dan cadangan pesangon); kosong = tidak diubah.
+  if (mulai) {
+    const { data: o } = await supabase.from("orang").select("data").eq("id", orang).maybeSingle();
+    const { error: e2 } = await supabase.from("orang").update({ data: { ...((o?.data as Record<string, unknown>) ?? {}), mulai } }).eq("id", orang);
+    if (e2) return { galat: "Gaji tersimpan, tetapi tanggal mulai kerja gagal disimpan. Coba lagi." };
+  }
   revalidatePath("/app/orang");
+  revalidatePath("/app/gaji");
   return { pesan: "Tersimpan." };
+}
+
+/** Saldo cadangan pesangon yang sudah disisihkan (pemilik saja; RPC atur_saldo_pesangon). */
+export async function aturSaldoPesangon(_: HasilGaji, form: FormData): Promise<HasilGaji> {
+  const teks = String(form.get("saldo") ?? "");
+  const saldo = rupiahIsian(teks);
+  if (teks.trim() === "" || saldo > 100_000_000_000) return { galat: "Isi saldo yang sudah disisihkan dalam rupiah, misalnya 15000000. Isi 0 bila belum ada.", isian: { saldo: teks } };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("atur_saldo_pesangon", { p_saldo: saldo });
+  if (error) return { galat: error.code === "42501" ? "Hanya pemilik yang bisa mengubah saldo cadangan." : "Saldo gagal disimpan. Coba lagi sebentar.", isian: { saldo: teks } };
+  revalidatePath("/app/gaji");
+  return { pesan: "Saldo tersimpan." };
 }
 
 /** Catat jam lembur satu orang satu hari (RPC catat_lembur memeriksa batas PP 35/2021 dan kunci bulan yang sudah disetujui). */

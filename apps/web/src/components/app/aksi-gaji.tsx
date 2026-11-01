@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { aturGajiOrang, bagikanSlip, catatLembur, lepasTahan, setujuiGaji, siapkanGaji, type HasilGaji, type HasilTautanSlip } from "@/app/app/gaji/actions";
+import { aturGajiOrang, aturSaldoPesangon, bagikanSlip, catatLembur, lepasTahan, setujuiGaji, siapkanGaji, type HasilGaji, type HasilTautanSlip } from "@/app/app/gaji/actions";
 import { Tombol } from "@/components/ui/tombol";
 import { JENIS_LEMBUR } from "@/lib/gaji/lembur";
 
@@ -84,7 +84,7 @@ export type GajiOrang = { pokok?: number; tunjangan_tetap?: number; ptkp?: strin
 const pilihan = "h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-2 text-base";
 
 /** Isian gaji per orang di halaman Orang (pengelola). */
-export function FormGajiOrang({ orang, nama, awal }: { orang: string; nama: string; awal: GajiOrang | null }) {
+export function FormGajiOrang({ orang, nama, awal, mulai }: { orang: string; nama: string; awal: GajiOrang | null; mulai?: string | null }) {
   const [h, aksi, sibuk] = useActionState<HasilGaji, FormData>(aturGajiOrang, null);
   return (
     <details className="w-full text-sm" data-testid="gaji-orang">
@@ -107,6 +107,8 @@ export function FormGajiOrang({ orang, nama, awal }: { orang: string; nama: stri
             <option value="sangat_rendah">Sangat rendah</option><option value="rendah">Rendah</option><option value="sedang">Sedang</option>
             <option value="tinggi">Tinggi</option><option value="sangat_tinggi">Sangat tinggi</option>
           </select></label>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">Mulai kerja</span>
+          <input type="date" name="mulai" defaultValue={mulai ?? ""} className={pilihan} /></label>
         <div className="col-span-2 flex items-center gap-3">
           <Tombol type="submit" ragam="kedua" disabled={sibuk} aria-label={`Simpan gaji ${nama}`}>{sibuk ? "Menyimpan..." : "Simpan gaji"}</Tombol>
           <Hasil h={h} />
@@ -140,6 +142,20 @@ export function FormLembur({ orang, awal, akhir }: { orang: { id: string; nama: 
         <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? "Menyimpan..." : "Catat lembur"}</Tombol>
         <Hasil h={h} />
       </div>
+    </form>
+  );
+}
+
+/** Saldo cadangan pesangon yang sudah disisihkan (pemilik). */
+export function FormSaldoPesangon({ saldo }: { saldo: number }) {
+  const [h, aksi, sibuk] = useActionState<HasilGaji, FormData>(aturSaldoPesangon, null);
+  const isi = h && "galat" in h ? (h.isian ?? {}) : {};
+  return (
+    <form key={JSON.stringify(isi)} action={aksi} className="mt-3 flex flex-wrap items-end gap-2 text-sm" aria-label="Saldo cadangan pesangon">
+      <label className="flex flex-col gap-1"><span className="text-tinta-2">Sudah disisihkan (Rp)</span>
+        <input name="saldo" inputMode="numeric" required defaultValue={isi.saldo ?? String(saldo)} className={pilihan} /></label>
+      <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? "Menyimpan..." : "Simpan saldo"}</Tombol>
+      <Hasil h={h} />
     </form>
   );
 }

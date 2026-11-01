@@ -38,7 +38,7 @@ async function Isi() {
   }
   const supabase = await createClient();
   const [{ data: orang }, { data: usaha }] = await Promise.all([
-    supabase.from("orang").select("id, nama, id_staf, user_id, pakai_topi(porsi, selesai, topi(nama)), orang_rahasia(gaji)").order("dibuat_at", { ascending: true }),
+    supabase.from("orang").select("id, nama, id_staf, user_id, data, pakai_topi(porsi, selesai, topi(nama)), orang_rahasia(gaji)").order("dibuat_at", { ascending: true }),
     supabase.from("perusahaan").select("kode").eq("id", sesi.perusahaanId).maybeSingle(),
   ]);
   return (
@@ -58,7 +58,7 @@ async function Isi() {
                 <TopiOrang pakai={o.pakai_topi as unknown as PakaiTopi[]} />
               </div>
               <FormAkunStaf orangId={o.id} sudahAda={Boolean(o.user_id)} />
-              <FormGajiOrang orang={o.id} nama={o.nama} awal={((Array.isArray(o.orang_rahasia) ? o.orang_rahasia[0] : o.orang_rahasia)?.gaji as GajiOrang | undefined) ?? null} />
+              <FormGajiOrang orang={o.id} nama={o.nama} awal={((Array.isArray(o.orang_rahasia) ? o.orang_rahasia[0] : o.orang_rahasia)?.gaji as GajiOrang | undefined) ?? null} mulai={tanggalMulai(o.data)} />
             </li>
           ))}
         </ul>
@@ -69,6 +69,12 @@ async function Isi() {
     </section>
   );
 }
+
+// Tanggal mulai kerja hanya dipakai bila berbentuk YYYY-MM-DD (impor lama bisa menyimpan teks lain).
+const tanggalMulai = (data: unknown) => {
+  const m = (data as { mulai?: unknown } | null)?.mulai;
+  return typeof m === "string" && /^\d{4}-\d{2}-\d{2}$/.test(m) ? m : null;
+};
 
 export default function Orang() {
   return (

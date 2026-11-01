@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { CadanganPesangon } from "@/components/app/cadangan-pesangon";
 import { FormBagikan, FormLembur, FormLepas, FormSetujui, FormSiapkan } from "@/components/app/aksi-gaji";
 import { Cap } from "@/components/ui/cap";
 import { Rupiah } from "@/components/ui/rupiah";
@@ -140,6 +141,11 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
         )}
         {!disetujui && <FormLembur orang={(org ?? []) as { id: string; nama: string }[]} awal={`${bulan}-01`} akhir={akhir} />}
       </section>
+      {sesi.peran === "pemilik" && (
+        <Suspense fallback={<div className="mt-10 h-40 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+          <CadanganPesangon />
+        </Suspense>
+      )}
     </>
   );
 }
