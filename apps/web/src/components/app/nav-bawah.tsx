@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarCheckIcon, ClipboardTextIcon, GraduationCapIcon, HouseSimpleIcon, MoneyIcon, PaperPlaneTiltIcon, StorefrontIcon, UsersThreeIcon } from "@phosphor-icons/react";
+import { CalculatorIcon, CalendarCheckIcon, ClipboardTextIcon, GraduationCapIcon, HouseSimpleIcon, MoneyIcon, PaperPlaneTiltIcon, StorefrontIcon, UsersThreeIcon } from "@phosphor-icons/react";
 
 const SEMUA = [
   { href: "/app", label: "Feed", Ikon: HouseSimpleIcon, peran: ["pemilik", "admin", "akuntan", "staf"] },
@@ -12,6 +12,7 @@ const SEMUA = [
   { href: "/app/gaji", label: "Gaji", Ikon: MoneyIcon, peran: ["pemilik", "admin", "staf"] },
   { href: "/app/magang", label: "Magang", Ikon: GraduationCapIcon, peran: ["pemilik", "admin", "staf"] },
   { href: "/app/orang", label: "Orang", Ikon: UsersThreeIcon, peran: ["pemilik", "admin"] },
+  { href: "/app/akuntan", label: "Akuntan", Ikon: CalculatorIcon, peran: ["akuntan"] },
   { href: "/app/perusahaan", label: "Usaha", Ikon: StorefrontIcon, peran: ["pemilik", "admin", "akuntan"] },
 ];
 

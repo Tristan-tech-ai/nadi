@@ -52,7 +52,9 @@ export async function pindahPerusahaan(form: FormData) {
   const supabase = await createClient();
   const { error } = await supabase.rpc("pindah_perusahaan", { p_perusahaan: id });
   if (!error) await supabase.auth.refreshSession();
-  redirect(error ? "/app/perusahaan?galat=1" : "/app");
+  // Tujuan setelah pindah hanya dari daftar putih (bukan URL bebas dari formulir).
+  const ke = form.get("ke") === "/app/akuntan" ? "/app/akuntan" : "/app";
+  redirect(error ? "/app/perusahaan?galat=1" : ke);
 }
 
 export type HasilPutusan = { galat?: string; pesan?: string; status?: "diterima" | "ditolak" };
