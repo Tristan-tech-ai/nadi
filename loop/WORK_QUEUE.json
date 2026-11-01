@@ -847,8 +847,10 @@
    "accept": "8 paket terpasang dan diuji pasang",
    "how": "",
    "blocked_by": "F0-08",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T14:17:48",
+   "result": "commit F6-01 (paket_tambahan); migrasi 032000 (9e6aa0c5), 82 migrasi; tes SQL paket_tambahan 21/21: 8 paket ada, setiap topi bernama/berkeahlian/bertanggung jawab/ber-KPI berarah, kode unik, tempat dan resep Mata terisi, tiap paket dipasang ke usaha baru lewat pasang_paket dengan jumlah topi = isi dan asal_paket tercatat, pasang ulang tidak menggandakan, usaha lain tak terpengaruh; layar /app/mulai memakai kode yang sama"
   },
   {
    "id": "F6-02",
