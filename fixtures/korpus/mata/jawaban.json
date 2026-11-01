@@ -1,0 +1,602 @@
+[
+ {
+  "cuplikan": 0,
+  "detik": 0,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 1,
+  "detik": 2,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 2,
+  "detik": 4,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 3,
+  "detik": 6,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 4,
+  "detik": 8,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 5,
+  "detik": 10,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 6,
+  "detik": 12,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 7,
+  "detik": 14,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 8,
+  "detik": 16,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 9,
+  "detik": 18,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 10,
+  "detik": 20,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 11,
+  "detik": 22,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 12,
+  "detik": 24,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 13,
+  "detik": 26,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 14,
+  "detik": 28,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 15,
+  "detik": 30,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 16,
+  "detik": 32,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 17,
+  "detik": 34,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 18,
+  "detik": 36,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 19,
+  "detik": 38,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 20,
+  "detik": 40,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": true
+ },
+ {
+  "cuplikan": 21,
+  "detik": 42,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": true
+ },
+ {
+  "cuplikan": 22,
+  "detik": 44,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 23,
+  "detik": 46,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 24,
+  "detik": 48,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 25,
+  "detik": 50,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 26,
+  "detik": 52,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 27,
+  "detik": 54,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 28,
+  "detik": 56,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 29,
+  "detik": 58,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 30,
+  "detik": 60,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 31,
+  "detik": 62,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 32,
+  "detik": 64,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 33,
+  "detik": 66,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "terisi",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 34,
+  "detik": 68,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "terisi",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 35,
+  "detik": 70,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "terisi",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 36,
+  "detik": 72,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "terisi",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 37,
+  "detik": 74,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "terisi",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 38,
+  "detik": 76,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "terisi",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 39,
+  "detik": 78,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "terisi",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 40,
+  "detik": 80,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 41,
+  "detik": 82,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "terisi"
+  },
+  "lewat": true
+ },
+ {
+  "cuplikan": 42,
+  "detik": 84,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 43,
+  "detik": 86,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 44,
+  "detik": 88,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 45,
+  "detik": 90,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "terisi",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 46,
+  "detik": 92,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 47,
+  "detik": 94,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 48,
+  "detik": 96,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 49,
+  "detik": 98,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 50,
+  "detik": 100,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": true
+ },
+ {
+  "cuplikan": 51,
+  "detik": 102,
+  "status": {
+   "meja-1": "terisi",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 52,
+  "detik": 104,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 53,
+  "detik": 106,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 54,
+  "detik": 108,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "kosong",
+   "meja-3": "terisi"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 55,
+  "detik": 110,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 56,
+  "detik": 112,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 57,
+  "detik": 114,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 58,
+  "detik": 116,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ },
+ {
+  "cuplikan": 59,
+  "detik": 118,
+  "status": {
+   "meja-1": "kosong",
+   "meja-2": "kosong",
+   "meja-3": "kosong"
+  },
+  "lewat": false
+ }
+]

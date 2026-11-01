@@ -240,3 +240,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 1 Nov 2026 tick 226 (akhir): kuota Vercel pulih, d0115ab READY, e2e sarapan prod 2/2, F5-03 done; wajib 69/76.
 - 1 Nov 2026 tick 227: Q-05 done (28 halaman produksi lolos, laporan docs/quality/aksesibilitas.md); wajib 70/76.
 - 1 Nov 2026 tick 228: F5-01 dimulai (riset mata.md, resep.ts + tes 6/6).
+- 1 Nov 2026 tick 229: F5-01 korpus Mata + eval akurasi 91,7% (target 85%), vitest 9/9.

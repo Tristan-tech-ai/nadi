@@ -30,3 +30,14 @@ Ditulis 1 Nov 2026. Kriteria: pada video uji, status meja benar >= 85%; tidak ad
 ## Keputusan terbuka
 - Kotor/bersih meja tidak diukur di v1 (butuh model lain); hanya terisi/kosong.
 - Varian model: q8 dulu (28,8 MB); bila akurasi turun di video uji, fp16.
+
+## Hasil uji akurasi (1 Nov 2026)
+- Korpus `fixtures/korpus/mata`: 60 cuplikan kolase (latar ruang makan kosong CC0 + 3 foto orang duduk CC0 ditempel ke 3 zona meja
+  sesuai jadwal, plus orang lewat di lorong pada 4 cuplikan), dibuat ulang dengan `python -I scripts/korpus/mata.py <dir>`.
+  Jawaban per cuplikan per zona di jawaban.json. Ini kolase sintetis, bukan rekaman kamera sungguhan.
+- `node scripts/eval-mata.ts <dir> q8` (transformers.js 4.3.1 di Node, CPU): 90 ms per cuplikan; akurasi status meja dengan
+  histeresis 91,7% (bilik kiri 90,0%, meja tengah 95,0%, meja kanan 90,0%), tanpa histeresis 99,4%. Selisih karena histeresis
+  menunda peralihan 1-2 cuplikan, dan kolase tidak punya deteksi berkedip yang mau diredam histeresis.
+- Deteksi per cuplikan disimpan (deteksi-q8.json) dan diuji vitest `src/lib/mata/korpus.test.ts` (>= 85%, orang lewat tidak
+  mengisi meja). Merah sengaja: histeresis dibuat tidak pernah berganti, akurasi 47,2%, tes gagal.
+- Belum: rekaman kamera sungguhan, uji di peramban (WebGPU) dengan model yang sama, editor zona, RPC kejadian.
