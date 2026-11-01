@@ -1,0 +1,253 @@
+{
+ "invoice": [
+  {
+   "id": "k1-i0",
+   "nomor": "021/INV/X/2026",
+   "pelanggan": "Hotel Melati",
+   "total": 1927000,
+   "tanggal": "2026-10-07",
+   "jatuh_tempo": "2026-10-21"
+  },
+  {
+   "id": "k1-i1",
+   "nomor": "022/INV/X/2026",
+   "pelanggan": "Katering Sari Rasa",
+   "total": 432500,
+   "tanggal": "2026-10-06",
+   "jatuh_tempo": "2026-10-20"
+  },
+  {
+   "id": "k1-i2",
+   "nomor": "023/INV/X/2026",
+   "pelanggan": "Sanggar Tari Lestari",
+   "total": 838500,
+   "tanggal": "2026-10-05",
+   "jatuh_tempo": "2026-10-19"
+  },
+  {
+   "id": "k1-i3",
+   "nomor": "024/INV/X/2026",
+   "pelanggan": "Warung Bu Tini",
+   "total": 1181500,
+   "tanggal": "2026-10-06",
+   "jatuh_tempo": "2026-10-20"
+  },
+  {
+   "id": "k1-i4",
+   "nomor": "025/INV/X/2026",
+   "pelanggan": "Apotek Sehat",
+   "total": 4002000,
+   "tanggal": "2026-10-04",
+   "jatuh_tempo": "2026-10-18"
+  },
+  {
+   "id": "k1-i5",
+   "nomor": "026/INV/X/2026",
+   "pelanggan": "Hendra Gunawan",
+   "total": 418500,
+   "tanggal": "2026-10-01",
+   "jatuh_tempo": "2026-10-15"
+  },
+  {
+   "id": "k1-i6",
+   "nomor": "027/INV/X/2026",
+   "pelanggan": "Bengkel Jaya Motor",
+   "total": 638500,
+   "tanggal": "2026-10-01",
+   "jatuh_tempo": "2026-10-15"
+  },
+  {
+   "id": "k1-i7",
+   "nomor": "028/INV/X/2026",
+   "pelanggan": "Rina Wulandari",
+   "total": 3760000,
+   "tanggal": "2026-10-05",
+   "jatuh_tempo": "2026-10-19"
+  },
+  {
+   "id": "k1-i8",
+   "nomor": "029/INV/X/2026",
+   "pelanggan": "UD Sumber Rejeki",
+   "total": 309000,
+   "tanggal": "2026-10-04",
+   "jatuh_tempo": "2026-10-18"
+  },
+  {
+   "id": "k1-i9",
+   "nomor": "030/INV/X/2026",
+   "pelanggan": "Toko Berkah",
+   "total": 378000,
+   "tanggal": "2026-10-06",
+   "jatuh_tempo": "2026-10-20"
+  },
+  {
+   "id": "k1-i10",
+   "nomor": "031/INV/X/2026",
+   "pelanggan": "CV Maju Jaya",
+   "total": 3150500,
+   "tanggal": "2026-10-04",
+   "jatuh_tempo": "2026-10-18"
+  },
+  {
+   "id": "k1-i11",
+   "nomor": "032/INV/X/2026",
+   "pelanggan": "PT Laut Biru",
+   "total": 1209500,
+   "tanggal": "2026-10-08",
+   "jatuh_tempo": "2026-10-22"
+  },
+  {
+   "id": "k1-i12",
+   "nomor": "033/INV/X/2026",
+   "pelanggan": "Villa Asri",
+   "total": 1209500,
+   "tanggal": "2026-10-08",
+   "jatuh_tempo": "2026-10-22"
+  },
+  {
+   "id": "k1-i13",
+   "nomor": "034/INV/X/2026",
+   "pelanggan": "Kafe Senja",
+   "total": 237000,
+   "tanggal": "2026-10-06",
+   "jatuh_tempo": "2026-10-20"
+  }
+ ],
+ "mutasi": [
+  {
+   "tanggal": "2026-10-06",
+   "keterangan": "TRF BIFAST 026/INV/X/2026",
+   "jumlah": 416000,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-06",
+   "keterangan": "TRSF E-BANKING CR BENGKEL JAYA MOTOR",
+   "jumlah": 638500,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-08",
+   "keterangan": "TRF BIFAST PEMBAYARAN 022 INV X 2026",
+   "jumlah": 432500,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-09",
+   "keterangan": "SETORAN KLIRING 024/inv/x/2026",
+   "jumlah": 1181500,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-09",
+   "keterangan": "TRSF E-BANKING CR 0123466081",
+   "jumlah": 3150500,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-09",
+   "keterangan": "TRSF E-BANKING CR RINA WULANDARI",
+   "jumlah": 3760000,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-10",
+   "keterangan": "TRSF E-BANKING CR BAYAR NO 025-INV-X-2026",
+   "jumlah": 4002000,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-11",
+   "keterangan": "TRSF E-BANKING CR 034/INV/X/2026",
+   "jumlah": 187000,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-11",
+   "keterangan": "TRSF E-BANKING CR KATERING SARI RASA DP",
+   "jumlah": 432500,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-12",
+   "keterangan": "QRIS SETTLEMENT",
+   "jumlah": 1249500,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-13",
+   "keterangan": "TRANSFER DR 0123987654 INV 023INVX2026",
+   "jumlah": 838500,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-14",
+   "keterangan": "PEMBAYARAN LISTRIK PLN",
+   "jumlah": 1181500,
+   "arah": "DB"
+  },
+  {
+   "tanggal": "2026-10-17",
+   "keterangan": "BIAYA ADM",
+   "jumlah": 12500,
+   "arah": "DB"
+  },
+  {
+   "tanggal": "2026-10-17",
+   "keterangan": "TRSF E-BANKING CR UD SUMBER REJEKI",
+   "jumlah": 309000,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-21",
+   "keterangan": "SETORAN TUNAI",
+   "jumlah": 2846000,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-22",
+   "keterangan": "TRSF E-BANKING CR 0123441698",
+   "jumlah": 378000,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-22",
+   "keterangan": "TRSF E-BANKING CR 021/INV/X/2026",
+   "jumlah": 1927000,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-22",
+   "keterangan": "TRSF E-BANKING CR 0987654321",
+   "jumlah": 1209500,
+   "arah": "CR"
+  },
+  {
+   "tanggal": "2026-10-22",
+   "keterangan": "TRSF E-BANKING DB UD SUMBER REJEKI",
+   "jumlah": 559500,
+   "arah": "DB"
+  }
+ ],
+ "jawaban": [
+  "k1-i5",
+  "k1-i6",
+  "k1-i1",
+  "k1-i3",
+  "k1-i10",
+  "k1-i7",
+  "k1-i4",
+  null,
+  null,
+  null,
+  "k1-i2",
+  null,
+  null,
+  "k1-i8",
+  null,
+  "k1-i9",
+  "k1-i0",
+  "k1-i11",
+  null
+ ]
+}

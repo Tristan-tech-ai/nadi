@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { randomUUID } from "node:crypto";
 import { Suspense } from "react";
-import { FormBatalInvoice, FormBayar, FormInvoice, FormLunas, TombolPengingat } from "@/components/app/invoice";
+import { CocokMutasi, FormBatalInvoice, FormBayar, FormInvoice, FormLunas, TombolPengingat } from "@/components/app/invoice";
 import { Cap } from "@/components/ui/cap";
 import { Rupiah } from "@/components/ui/rupiah";
 import { formatTanggalKalender } from "@/lib/format";
@@ -110,6 +110,12 @@ async function Isi() {
           Halaman tagihan belum menunjukkan cara bayar. <a href="#judul-bayar" className="font-semibold underline underline-offset-4">Atur QRIS atau rekening</a> di bagian bawah.
         </p>
       )}
+
+      <section className="mt-8" aria-labelledby="judul-cocok">
+        <h2 id="judul-cocok" className="text-lg font-semibold">Cocokkan mutasi bank</h2>
+        <p className="mt-1 text-sm text-tinta-2">Unggah CSV mutasi dari internet banking. Nadi mencari uang masuk yang membayar invoice; kamu yang menandai lunas.</p>
+        <CocokMutasi />
+      </section>
 
       <section className="mt-8" aria-labelledby="judul-baru">
         <h2 id="judul-baru" className="text-lg font-semibold">Invoice baru</h2>

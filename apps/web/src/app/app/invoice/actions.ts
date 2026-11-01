@@ -2,6 +2,7 @@
 
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
+import { cocokkan, uraiMutasiCsv, type InvoiceTerbuka } from "@/lib/invoice/cocok";
 import { uraiQris } from "@/lib/invoice/qris";
 import { angkaWa } from "@/lib/rekrut/keputusan";
 import { createClient } from "@/lib/supabase/server";
@@ -93,4 +94,56 @@ export async function catatPengingat(id: string): Promise<void> {
   const supabase = await createClient();
   await supabase.rpc("catat_pengingat", { p_id: id });
   revalidatePath("/app/invoice");
+}
+
+export type BarisCocok = { invoice: string; nomor: string; pelanggan: string; total: number; tanggal: string; keterangan: string; jumlah: number; alasan: string };
+export type BarisRagu = { tanggal: string; keterangan: string; jumlah: number; kandidat: { id: string; nomor: string; pelanggan: string }[] };
+export type HasilCocok = { cocok: BarisCocok[]; ragu: BarisRagu[]; kredit: number } | { selesai: string; gagal: string[] } | { galat: string } | null;
+
+/** F4-06: cocokkan CSV mutasi (dibaca di peramban) dengan invoice terbit. Belum melunasi apa pun. */
+export async function cocokkanMutasi(_: HasilCocok, form: FormData): Promise<HasilCocok> {
+  const teks = String(form.get("csv") ?? "");
+  if (!teks.trim()) return { galat: "Pilih berkas CSV mutasi dulu." };
+  if (teks.length > 2_000_000) return { galat: "Berkas terlalu besar. Unduh mutasi per bulan saja." };
+  const r = uraiMutasiCsv(teks);
+  if ("galat" in r) return { galat: r.galat };
+  const supabase = await createClient();
+  const { data, error } = await supabase.from("invoice").select("id, nomor, pelanggan, total, tanggal, jatuh_tempo").eq("status", "terbit").limit(1000);
+  if (error) return { galat: "Daftar invoice belum bisa dibaca. Coba lagi sebentar." };
+  const inv = (data ?? []).map((v) => ({ ...v, total: Number(v.total) })) as InvoiceTerbuka[];
+  const per = new Map(inv.map((v) => [v.id, v]));
+  const h = cocokkan(r.baris, inv);
+  const cocok: BarisCocok[] = [];
+  const ragu: BarisRagu[] = [];
+  for (const x of h) {
+    const m = r.baris[x.indeks];
+    if (x.invoice) {
+      const v = per.get(x.invoice)!;
+      cocok.push({ invoice: v.id, nomor: v.nomor, pelanggan: v.pelanggan, total: v.total, tanggal: m.tanggal, keterangan: m.keterangan, jumlah: m.jumlah, alasan: x.alasan! });
+    } else if (x.kandidat.length > 0) {
+      ragu.push({ tanggal: m.tanggal, keterangan: m.keterangan, jumlah: m.jumlah, kandidat: x.kandidat.map((id) => ({ id, nomor: per.get(id)!.nomor, pelanggan: per.get(id)!.pelanggan })) });
+    }
+  }
+  return { cocok, ragu, kredit: r.baris.filter((b) => b.arah === "CR").length };
+}
+
+/** Lunasi semua yang cocok (cara transfer, tanggal mutasi) lewat tandai_lunas; yang ditolak dilaporkan. */
+export async function lunasDariMutasi(_: HasilCocok, form: FormData): Promise<HasilCocok> {
+  let daftar: { invoice: string; nomor: string; tanggal: string }[];
+  try {
+    daftar = JSON.parse(String(form.get("daftar") ?? "[]"));
+  } catch {
+    return { galat: "Daftar rusak. Cocokkan ulang." };
+  }
+  if (!Array.isArray(daftar) || daftar.length === 0 || daftar.length > 500) return { galat: "Tidak ada yang dilunasi." };
+  const supabase = await createClient();
+  let n = 0;
+  const gagal: string[] = [];
+  for (const d of daftar) {
+    const { error } = await supabase.rpc("tandai_lunas", { p_id: String(d.invoice), p_cara: "transfer", p_tanggal: String(d.tanggal) });
+    if (error) gagal.push(`${d.nomor}: ${error.code === "22023" || error.code === "P0002" ? error.message : "belum tercatat"}`);
+    else n++;
+  }
+  revalidatePath("/app/invoice");
+  return { selesai: `${n} invoice tercatat lunas lewat transfer.`, gagal };
 }

@@ -1,7 +1,8 @@
 "use client";
 
 import { useActionState, useState, useTransition } from "react";
-import { aturBayar, batalkanInvoice, buatInvoice, catatPengingat, tandaiLunas, type HasilInvoice } from "@/app/app/invoice/actions";
+import { aturBayar, batalkanInvoice, buatInvoice, catatPengingat, cocokkanMutasi, lunasDariMutasi, tandaiLunas, type HasilCocok, type HasilInvoice } from "@/app/app/invoice/actions";
+import { formatTanggalKalender } from "@/lib/format";
 import { Rupiah } from "@/components/ui/rupiah";
 import { Tombol } from "@/components/ui/tombol";
 import { uraiQris } from "@/lib/invoice/qris";
@@ -167,5 +168,78 @@ export function TombolPengingat({ id, href, label }: { id: string; href: string;
       className="inline-flex h-10 items-center rounded-[var(--radius-isian)] border border-garis-kuat px-3 text-sm font-semibold hover:bg-kertas-2" data-testid="kirim-pengingat">
       {label}
     </a>
+  );
+}
+
+/** Pilih manual saat pencocok ragu: catat lunas invoice ini dengan tanggal mutasi. */
+function PilihKandidat({ invoice, nomor, pelanggan, tanggal }: { invoice: string; nomor: string; pelanggan: string; tanggal: string }) {
+  const [h, aksi, sibuk] = useActionState<HasilInvoice, FormData>(tandaiLunas, null);
+  return (
+    <form action={aksi} className="flex flex-wrap items-center gap-2">
+      <input type="hidden" name="invoice" value={invoice} />
+      <input type="hidden" name="cara" value="transfer" />
+      <input type="hidden" name="tanggal" value={tanggal} />
+      <button type="submit" disabled={sibuk} className="text-sm underline underline-offset-4">Ini untuk {nomor} ({pelanggan})</button>
+      <Hasil h={h} />
+    </form>
+  );
+}
+
+/** F4-06: unggah CSV mutasi, lihat yang cocok beserta alasannya, lunasi dengan satu tombol. */
+export function CocokMutasi() {
+  const [csv, setCsv] = useState("");
+  const [h, aksi, sibuk] = useActionState<HasilCocok, FormData>(cocokkanMutasi, null);
+  const [l, aksiLunas, sibukLunas] = useActionState<HasilCocok, FormData>(lunasDariMutasi, null);
+  const r = h && "cocok" in h ? h : null;
+  const selesai = l && "selesai" in l ? l : null;
+  return (
+    <div className="mt-3 text-sm">
+      <form action={aksi} className="flex flex-wrap items-end gap-3" aria-label="Cocokkan mutasi">
+        <input type="hidden" name="csv" value={csv} />
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">CSV mutasi rekening</span>
+          <input type="file" accept=".csv,text/csv" onChange={async (e) => setCsv((await e.target.files?.[0]?.text()) ?? "")} data-testid="csv-mutasi" /></label>
+        <Tombol type="submit" ragam="kedua" disabled={sibuk || !csv}>{sibuk ? "Mencocokkan..." : "Cocokkan"}</Tombol>
+        {h && "galat" in h && <p role="alert" className="text-cap">{h.galat}</p>}
+      </form>
+      {r && !selesai && (
+        <div className="mt-3" data-testid="hasil-cocok">
+          <p>{r.kredit} uang masuk dibaca; {r.cocok.length} cocok dengan invoice.</p>
+          {r.cocok.length > 0 && (
+            <>
+              <ul className="mt-2 divide-y divide-garis border-y border-garis">
+                {r.cocok.map((c) => (
+                  <li key={c.invoice} className="py-2" data-testid="baris-cocok">
+                    <p><span className="font-mono text-xs">{c.nomor}</span> {c.pelanggan}: <Rupiah nilai={c.jumlah} /> masuk {formatTanggalKalender(c.tanggal)}</p>
+                    <p className="text-tinta-2">{c.keterangan}. Dasar: {c.alasan}.</p>
+                  </li>
+                ))}
+              </ul>
+              <form action={aksiLunas} className="mt-2">
+                <input type="hidden" name="daftar" value={JSON.stringify(r.cocok.map((c) => ({ invoice: c.invoice, nomor: c.nomor, tanggal: c.tanggal })))} />
+                <Tombol type="submit" ragam="kedua" disabled={sibukLunas}>{sibukLunas ? "Mencatat..." : `Tandai lunas ${r.cocok.length} invoice`}</Tombol>
+              </form>
+            </>
+          )}
+          {r.ragu.length > 0 && (
+            <div className="mt-3" data-testid="cocok-ragu">
+              <p className="font-semibold">Perlu kamu pilih</p>
+              {r.ragu.map((g, i) => (
+                <div key={i} className="mt-2 border-t border-garis pt-2">
+                  <p><Rupiah nilai={g.jumlah} /> masuk {formatTanggalKalender(g.tanggal)}: {g.keterangan}. Nominalnya sama dengan lebih dari satu tagihan, atau petunjuknya kurang.</p>
+                  {g.kandidat.map((k) => <PilihKandidat key={k.id} invoice={k.id} nomor={k.nomor} pelanggan={k.pelanggan} tanggal={g.tanggal} />)}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      {selesai && (
+        <div className="mt-3" data-testid="hasil-lunas-mutasi">
+          <p role="status" className="text-daun">{selesai.selesai}</p>
+          {selesai.gagal.length > 0 && <ul className="mt-1 list-disc pl-5 text-cap">{selesai.gagal.map((g) => <li key={g}>{g}</li>)}</ul>}
+        </div>
+      )}
+      {l && "galat" in l && <p role="alert" className="mt-2 text-cap">{l.galat}</p>}
+    </div>
   );
 }

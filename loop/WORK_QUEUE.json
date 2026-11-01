@@ -1950,8 +1950,10 @@
    "accept": "pemilik mengisi kebutuhan per topi per hari/jam (tahap 0, tanpa model); tombol Usulkan jadwal memanggil susunJadwal dari kebutuhan + orang bertopi + malamLalu 4 minggu, menampilkan usulan dan kekurangan beralasan sebelum disimpan, lalu menyimpan per penugasan lewat simpan_shift (galat per baris ditampilkan, bukan dipaksa); tes vitest pemetaan kebutuhan -> slot dan simpan sebagian; e2e usulkan lalu simpan; foto 390/1440 terang/gelap",
    "how": "apps/web/src/lib/jadwal/susun.ts, docs/research/solver-shift.md, docs/design/jadwal-shift.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T11:16:24"
+   "status": "done",
+   "created": "2026-11-01T11:16:24",
+   "done": "2026-11-01T12:24:22",
+   "result": "commit 9d38c2c (deploy READY); migrasi 029000 kebutuhan_shift (e920d5e7), 78 migrasi; tes SQL kebutuhan_shift 15/15; vitest kebutuhan 7/7 (merah dulu: modul belum ada); e2e usulan-jadwal lokal + produksi lulus (kebutuhan -> Usulkan jadwal 8 baris + 'Sabtu 16.00-22.00: kurang 2' -> simpan 8 shift lewat simpan_shift); foto 390/1440 terang/gelap axe bersih; docs/quality/usulan-jadwal.md"
   }
  ]
 }
