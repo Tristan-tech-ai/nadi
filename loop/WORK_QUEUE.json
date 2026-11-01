@@ -729,8 +729,10 @@
    "accept": "setiap angka menyebut dasar hukum + tanggal; fitur penghindaran ilegal tidak ada",
    "how": "",
    "blocked_by": "F4-04,F0-08",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T13:04:01",
+   "result": "commit 6f10942 (deploy READY); naskah resmi PP 20/2026 (LN 2026/43) + PP 55/2022 dibaca, docs/research/kompas-pajak.md; migrasi 030000 kompas_pajak (1df42585), aturan pph.final_umkm terverifikasi bersumber pasal; tes SQL 13/13; vitest kompas 13/13 + merah sengaja; e2e pajak lokal + produksi lulus; setiap angka di layar menyebut pasal + tanggal berlaku; simulator hanya pilihan sah dan memperingatkan pemecahan usaha; docs/quality/kompas-pajak.md"
   },
   {
    "id": "F4-08",
