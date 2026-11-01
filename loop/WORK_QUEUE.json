@@ -879,8 +879,10 @@
    "accept": "alur rekrut dan invoice tergambar dari log kejadian demo",
    "how": "",
    "blocked_by": "F2-05,F4-05",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T15:21:28",
+   "result": "commit 9e3e93d+f6d999e; migrasi alur_proses sidik ccacf7bd (84), tes SQL 24/24 (merah dulu), vitest alur 6/6, e2e alur produksi 2/2 (/demo, /demo/toko) axe bersih 390/1440 terang/gelap; demo fnb 20 invoice 15 lamaran dari log kejadian; docs/quality/process-mining.md"
   },
   {
    "id": "F6-04",
@@ -985,8 +987,10 @@
    "accept": "minimal 10 skenario jahil per putaran; temuan jadi tugas fix",
    "how": "",
    "blocked_by": "F1-05",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T15:42:47",
+   "result": "putaran 1 commit 81dbce1: supabase/tests/buru_q04_r1.test.sql 13 skenario jahil (pemalsuan kejadian invoice/rekrut, insight palsu, analis_simpan, arsip anggota, lamaran/pengingat lintas usaha, klaim pid palsu, jendela ekstrem, nama kosong) 13/13 lulus, 0 temuan; docs/quality/buru-q04-r1.md"
   },
   {
    "id": "Q-05",
@@ -1874,8 +1878,10 @@
    "accept": "akun uji e2e A di bawah batas usaha dengan cara tanpa hapus data (arsip/nonaktif atau spes memakai ulang usaha uji yang ada); auth.spec lulus terhadap produksi; /app/perusahaan memakai satu tombol utama per layar (S22) saat kartu Pemberitahuan belum dinyalakan dan Aturan kerja tampil bersamaan, foto 390/1440 terang/gelap",
    "how": "catatan agen Q-22: Cabang Uji A2 diganti nama karena batas 20 usaha (54000); S22",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T07:52:21"
+   "status": "done",
+   "created": "2026-11-01T07:52:21",
+   "done": "2026-11-01T15:28:14",
+   "result": "commit 96b6139; migrasi batas_usaha sidik 00e303a3 (85): batas 20 dari keanggotaan aktif + plafon 50, tes SQL 4/4 (merah dulu); 13 Cabang Uji A2 kosong akun A diarsipkan (anggota.aktif=false, tanpa hapus) -> 7 aktif; Simpan aturan kerja jadi tombol kedua; e2e Usahamu satu tombol utama merah di produksi lama (2) lalu hijau; auth.spec produksi 7/7; foto 390/1440 terang/gelap"
   },
   {
    "id": "F4-09B",
