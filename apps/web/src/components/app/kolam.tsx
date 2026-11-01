@@ -28,8 +28,8 @@ function Keterangan() {
         usaha (Pasal 11) diatur di perjanjian kerja, peraturan perusahaan, atau PKB; tuliskan di sana dulu bila kamu ingin membaginya sebagai bonus.
       </p>
       <p className="mt-2">
-        Di slip, insentif masuk bruto PPh 21 bulan itu. Dasar iuran BPJS di Nadi tetap gaji pokok dan tunjangan tetap; aturan BPJS untuk insentif
-        belum Nadi periksa ke teks resmi.
+        Di slip, insentif masuk bruto PPh 21 bulan itu. Iuran BPJS tidak berubah, karena dasarnya upah pokok dan tunjangan tetap (Perpres 82/2018
+        Pasal 33, PP 44/2015 Pasal 19, PP 45/2015 Pasal 29, PP 46/2015 Pasal 17), sedangkan insentif bukan upah.
       </p>
     </div>
   );

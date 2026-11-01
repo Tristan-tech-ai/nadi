@@ -114,6 +114,9 @@ test("kolam bonus: pratinjau sisa terbesar, CSV, kecualikan, setujui pemilik, st
     await page.waitForURL((x) => x.searchParams.get("tab") === "bonus");
     await expect(page.getByTestId("kolam-kosong")).toBeVisible();
     await expect(page.getByTestId("keterangan-insentif")).toContainText("Dicatat sebagai insentif, bukan bonus.");
+    // Q-31: dasar iuran BPJS disebut dengan sumbernya (docs/research/dasar-bpjs-insentif.md), bukan "belum diperiksa".
+    await expect(page.getByTestId("keterangan-insentif")).toContainText("Perpres 82/2018");
+    await expect(page.getByTestId("keterangan-insentif")).not.toContainText("belum Nadi periksa");
     await axeDanFoto(page, "kolam-kosong");
 
     const isian = page.getByRole("form", { name: "Isian kolam bonus" });

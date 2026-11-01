@@ -1654,8 +1654,10 @@
    "accept": "app.pola_kerja(pid) membaca perusahaan.pengaturan pola_kerja (bawaan 6_hari); pemilik mengubahnya di /app/perusahaan (kartu Aturan kerja, tercatat audit); catat_lembur menolak jenis libur yang tidak cocok dengan pola usaha; tes SQL (isolasi tenant, staf/admin tidak bisa mengubah, pola 6 menolak libur_pola_5_hari, lembur lama tidak berubah) + e2e + foto 390/1440",
    "how": "docs/research/pola-kerja.md; prasyarat F3-06 (batas jam harian) dan F3-07 (upah sehari /25 atau /21)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T02:47:25"
+   "status": "done",
+   "created": "2026-11-01T02:47:25",
+   "done": "2026-11-01T07:52:21",
+   "result": "commit 8ac5650+6214445 (agen, gate LULUS, CI success) + loop fdde5b6; migrasi 20261101018000_pola_kerja_q22.sql sidik 1b2b98da = database (60 migrasi, dicek loop); pola_kerja_q22 merah 32/39 lalu 39/39; regresi lembur 19, slip_gaji 27, jwt_cabut_q21 17, klaim_fungsi_q23 26, isolasi_tenant 38 gagal=[]; vitest 441; Vercel READY fdde5b6; e2e produksi gaji.spec (pindah-gaji) 3/3 lulus 56,6 dtk termasuk ganti pola, lembar dampak, lembur jenis salah ditolak, pola dikembalikan; 12 foto scratchpad/foto-q22; tinjauan docs/quality/review-q22-diff.md"
   },
   {
    "id": "Q-23",
@@ -1824,6 +1826,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-01T05:16:26"
+  },
+  {
+   "id": "Q-32",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 32,
+   "size": "s",
+   "wajib": false,
+   "title": "Data uji akun A tidak mentok batas 20 usaha; /app/perusahaan satu tombol utama",
+   "accept": "akun uji e2e A di bawah batas usaha dengan cara tanpa hapus data (arsip/nonaktif atau spes memakai ulang usaha uji yang ada); auth.spec lulus terhadap produksi; /app/perusahaan memakai satu tombol utama per layar (S22) saat kartu Pemberitahuan belum dinyalakan dan Aturan kerja tampil bersamaan, foto 390/1440 terang/gelap",
+   "how": "catatan agen Q-22: Cabang Uji A2 diganti nama karena batas 20 usaha (54000); S22",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T07:52:21"
   }
  ]
 }
