@@ -1918,6 +1918,34 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-01T10:04:41"
+  },
+  {
+   "id": "F3-06B",
+   "fase": "F3",
+   "kind": "build",
+   "priority": 30,
+   "size": "m",
+   "wajib": true,
+   "title": "Tukar shift antarstaf: tawarkan, ambil dengan cek batas, pemilik setujui di Feed",
+   "accept": "docs/design/tukar-shift.md terpenuhi: tabel tawaran_shift + RPC tawarkan_shift/ambil_tawaran/batal_tawaran berkunci klien; ambil yang melanggar batas lembur ditolak 54000, dua pengambil satu menang, shift yang sudah mulai tidak bisa ditawarkan, staf bukan tujuan tidak membaca tawaran; usulan tukar di Feed untuk pemilik, setelah disetujui shift berpindah dalam satu transaksi tercatat audit; tes SQL tiap aturan + isolasi; e2e A tawarkan, B ambil, pemilik setujui, jadwal B bertambah; foto 390/1440 terang/gelap",
+   "how": "docs/design/tukar-shift.md, migrasi shift 022000 (simpan_shift sebagai cek batas), putuskan_usulan cabang baru lewat trigger seperti agenda surat",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T11:16:24"
+  },
+  {
+   "id": "F3-06C",
+   "fase": "F3",
+   "kind": "build",
+   "priority": 31,
+   "size": "m",
+   "wajib": true,
+   "title": "Ramalan kebutuhan tahap 0 dan tombol Usulkan jadwal",
+   "accept": "pemilik mengisi kebutuhan per topi per hari/jam (tahap 0, tanpa model); tombol Usulkan jadwal memanggil susunJadwal dari kebutuhan + orang bertopi + malamLalu 4 minggu, menampilkan usulan dan kekurangan beralasan sebelum disimpan, lalu menyimpan per penugasan lewat simpan_shift (galat per baris ditampilkan, bukan dipaksa); tes vitest pemetaan kebutuhan -> slot dan simpan sebagian; e2e usulkan lalu simpan; foto 390/1440 terang/gelap",
+   "how": "apps/web/src/lib/jadwal/susun.ts, docs/research/solver-shift.md, docs/design/jadwal-shift.md",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T11:16:24"
   }
  ]
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { alasanUsulan, bagiAdil, bagiRakus, bebanPerJam, gini, ringkasBeban, usulkanPelaksana, type KerjaBaru, type OrangBeban } from "./adil";
+import { alasanUsulan, bagiAdil, bagiRakus, bebanPerJam, gini, ringkasBeban, teksJamBeban, usulkanPelaksana, type KerjaBaru, type OrangBeban } from "./adil";
 
 // Contoh hitung docs/research/bagi-adil-algoritma.md: tiga kasir, kerja baru 4, 3, 2, 2 poin.
 const KASIR = "kasir";
@@ -258,5 +258,15 @@ describe("teks layar beban", () => {
         }
       }
     }
+  });
+});
+
+describe("teksJamBeban (jam dari jadwal shift)", () => {
+  it("jam pecahan berkoma, poin per jam dua desimal", () => {
+    expect(teksJamBeban({ poin: 6, jam: 24 })).toEqual({ jam: "24 jam", perJam: "0,25" });
+    expect(teksJamBeban({ poin: 5, jam: 37.5 })).toEqual({ jam: "37,5 jam", perJam: "0,13" });
+  });
+  it("orang tanpa shift: tanpa poin per jam, bukan Infinity", () => {
+    expect(teksJamBeban({ poin: 3, jam: 0 })).toEqual({ jam: "tanpa shift", perJam: null });
   });
 });

@@ -153,6 +153,16 @@ export function kolomBeban(jamSamaRata: boolean, orang: readonly { poin: number;
   };
 }
 
+const koma = (x: number, digit: number) => String(Math.round(x * 10 ** digit) / 10 ** digit).replace(".", ",");
+
+/**
+ * Teks kolom jam dan poin per jam bila jam dari jadwal shift (beban_jadwal): jam pecahan berkoma; orang tanpa shift minggu itu
+ * berjam 0, jadi poin per jamnya tidak ada ("-"), bukan hasil bagi nol.
+ */
+export function teksJamBeban(o: { poin: number; jam: number }): { jam: string; perJam: string | null } {
+  return o.jam > 0 ? { jam: `${koma(o.jam, 1)} jam`, perJam: koma(o.poin / o.jam, 2) } : { jam: "tanpa shift", perJam: null };
+}
+
 /** Minimal kerja selesai minggu ini sebelum beban dibandingkan (docs/design/bagi-adil.md). */
 export const MIN_SELESAI = 5;
 

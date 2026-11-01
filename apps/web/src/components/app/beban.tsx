@@ -1,9 +1,8 @@
 import { ArrowsLeftRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { formatTanggalKalender } from "@/lib/format";
-import { kalimatTerberat, kolomBeban, MIN_SELESAI, ringkasBeban, teksBebanSaya, type BebanMinggu, type BebanSaya } from "@/lib/kerja/adil";
+import { kalimatTerberat, kolomBeban, MIN_SELESAI, ringkasBeban, teksBebanSaya, teksJamBeban, type BebanMinggu, type BebanSaya } from "@/lib/kerja/adil";
 import { formatPoin } from "@/lib/kerja/poin";
 
-const angka = (x: number, digit = 2) => String(Math.round(x * 10 ** digit) / 10 ** digit).replace(".", ",");
 const tanggal = formatTanggalKalender;
 
 /**
@@ -48,7 +47,8 @@ export function BebanMingguIni({ data }: { data: BebanMinggu }) {
           </div>
           <ul className="divide-y divide-garis border-y border-garis lg:border-t-0" data-testid="daftar-beban">
             {berbeban.map((o) => {
-              const perJam = o.poin / o.jam;
+              const { jam: jamTeks, perJam } = teksJamBeban(o);
+              const perJamTeks = perJam ?? "-";
               const lebar = kolom.lebar(o);
               const berat = o.id === terberat;
               return (
@@ -67,11 +67,11 @@ export function BebanMingguIni({ data }: { data: BebanMinggu }) {
                     )}
                   </div>
                   <p className="angka text-sm lg:text-right" data-testid="beban-poin">
-                    {formatPoin(o.poin)}{kolom.pakaiJam && <span className="lg:hidden"> · {o.jam} jam · {angka(perJam)} per jam</span>}
+                    {formatPoin(o.poin)}{kolom.pakaiJam && <span className="lg:hidden"> · {jamTeks}{perJam && ` · ${perJam} per jam`}</span>}
                     {Number(o.antre) > 0 && <span className="block text-xs text-tinta-2">{formatPoin(Number(o.antre))} antre</span>}
                   </p>
-                  {kolom.pakaiJam && <p className="angka hidden text-right text-sm lg:block">{o.jam} jam</p>}
-                  {kolom.pakaiJam && <p className="angka hidden text-right text-sm lg:block" data-testid="beban-per-jam">{angka(perJam)}</p>}
+                  {kolom.pakaiJam && <p className="angka hidden text-right text-sm lg:block" data-testid="beban-jam">{jamTeks}</p>}
+                  {kolom.pakaiJam && <p className="angka hidden text-right text-sm lg:block" data-testid="beban-per-jam">{perJamTeks}</p>}
                   <div className="h-1.5 w-full rounded-full bg-garis" aria-hidden>
                     <div className="h-1.5 rounded-full bg-tinta-2" style={{ width: `${lebar}%` }} />
                   </div>
