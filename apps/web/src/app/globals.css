@@ -143,8 +143,8 @@ body {
   outline-offset: 2px;
 }
 
-/* Isian tanggal/jam Chromium memindahkan fokus ke bagian dalamnya sehingga :focus-visible tidak menyala; beri cincin saat :focus. */
-input:is([type="date"], [type="time"], [type="month"], [type="datetime-local"]):focus {
+/* Isian tanggal/jam Chromium memindahkan fokus ke bagian dalamnya (diuji: :focus dan :focus-visible tidak cocok di elemen isian), jadi cincin dipasang lewat :focus-within. */
+input:is([type="date"], [type="time"], [type="month"], [type="datetime-local"]):is(:focus, :focus-within) {
   outline: 2px solid var(--tinta);
   outline-offset: 2px;
 }

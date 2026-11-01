@@ -45,7 +45,7 @@ async function fokusTerlihat(page: Page, jumlah = 12) {
       const a = lum(rgb(s.outlineColor));
       const b = lum(rgb(getComputedStyle(document.body).backgroundColor));
       return {
-        nama: `${el.tagName.toLowerCase()} "${(el.getAttribute("aria-label") ?? el.textContent ?? "").trim().slice(0, 30)}"`,
+        nama: `${el.tagName.toLowerCase()}${el.getAttribute("type") ? `[type=${el.getAttribute("type")}]` : ""}${el.getAttribute("name") ? `[name=${el.getAttribute("name")}]` : ""} "${(el.getAttribute("aria-label") ?? el.textContent ?? "").trim().slice(0, 30)}" (${s.outlineStyle} ${s.outlineWidth})`,
         garis: s.outlineStyle !== "none" && parseFloat(s.outlineWidth) >= 2,
         kontras: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05),
       };
@@ -123,5 +123,6 @@ test("halaman aplikasi pemilik", async ({ page }) => {
   const daftar = ["/app", "/app/perusahaan", "/app/orang", "/app/gaji", "/app/izin", "/app/invoice", "/app/pajak", "/app/akuntan",
     "/app/jadwal", "/app/kerja", "/app/surat", "/app/surat-keluar", "/app/lempar", "/app/magang", "/app/serah-terima", "/app/mulai"];
   // /app/skill bukan layar: route yang mengunduh berkas skill.
-  for (const jalur of daftar) harus(jalur, await periksa(page, jalur, true), true);
+  const pilih = process.env.E2E_A11Y_HALAMAN?.split(",");
+  for (const jalur of daftar.filter((j) => !pilih || pilih.includes(j))) harus(jalur, await periksa(page, jalur, true), true);
 });
