@@ -229,3 +229,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 1 Nov 2026 tick 218: D-03 done (e2e produksi ilustrasi.spec lulus di d73d285). Wajib 57/74.
 - 1 Nov 2026 tick 218: F3-06 bagian database (shift, persetujuan lembur, exclusion, RPC) tes 25/25 setelah bug 22P02 diperbaiki migrasi 022100; di-commit.
 - 1 Nov 2026 tick 219: F3-06 bagian 2 solver jadwal (vitest 7/7, 3 skenario, merah sengaja) di-commit.
+- 1 Nov 2026 tick 219-220: F3-06 done (layar jadwal, jam beban dari jadwal, e2e produksi), F4-05 done (invoice QRIS statis, pengingat wa.me, umur piutang; tes SQL 31/31; e2e produksi), F3-06B tukar shift (tes SQL 29/29, e2e lokal) di-push beb3de0; progres wajib 59/76.
