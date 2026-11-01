@@ -601,8 +601,10 @@
    "accept": "jadwal memenuhi semua batasan pada 3 skenario uji; keadilan shift malam terukur; jadwal menegakkan aturan terverifikasi di docs/research/shift-f3-06.md: kerja biasa 7 jam/hari pola 6 atau 8 jam/hari pola 5 dan 40 jam/minggu (selebihnya lembur dengan persetujuan staf tercatat), lembur maks 4 jam/hari 18 jam/minggu ditolak, istirahat >= 30 menit setelah 4 jam dan hari libur mingguan (1 atau 2) diberi peringatan; tes SQL untuk tiap aturan; layar docs/design/jadwal-shift.md; TAMBAHAN 1 Nov 2026: skema dan RPC sesuai docs/research/shift-f3-06-sql.md (lewat tengah malam di tanggal mulai, zona usaha, tumpang tindih ditolak, hapus hanya jadwal depan dengan salinan di audit_log, kunci klien idempoten, isolasi tenant, staf hanya jadwalnya); app.jam_jadwal dipakai beban F3-02 (jam 40 hanya cadangan); e2e jadwal lokal dan produksi; foto 390/1440 terang/gelap",
    "how": "docs/research/shift-f3-06.md, docs/research/shift-f3-06-sql.md, docs/design/jadwal-shift.md, tabel lembur + catat_lembur (F1-05B). Rancangan SQL belum mencakup penyusun jadwal otomatis, ramalan kebutuhan, dan tukar shift dari judul: riset dulu sebelum membangun bagian itu.",
    "blocked_by": "F3-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T11:22:48",
+   "result": "commit 0ddcaf2+f7b7fe9+ddf11ff+5ef10ae; migrasi 022000/022100/022200 beban_jadwal (cb33aaa1)/022300 indeks_fk (a0bdf494), 74 migrasi; tes SQL shift 25/25, beban_jadwal merah 6/9 lalu 9/9, regresi bagi_adil 27/27; vitest susun 7/7 + pesan 2/2 + teksJamBeban 2; e2e jadwal + bagi-adil produksi 5ef10ae READY lulus 2/2; foto 390/1440 terang/gelap axe bersih; docs/quality/jadwal-shift.md; tukar shift F3-06B dan ramalan F3-06C dipisah"
   },
   {
    "id": "F3-07",
