@@ -697,8 +697,10 @@
    "accept": "invoice -> pengingat terjadwal -> lunas tercatat",
    "how": "",
    "blocked_by": "F4-01,F4-04",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T11:43:16",
+   "result": "commit 06858d9 (deploy 0c3e5c3 READY); migrasi 027000 invoice (8ff1b66a) + 027100 invoice_indeks (06a9f249), 76 migrasi; tes SQL invoice 31/31 (terbit->pengingat terjadwal->lunas tercatat jurnal 1-110/1-200, batal = jurnal balik, saldo piutang = invoice terbit); vitest lib/invoice 18/18 + merah sengaja CRC; e2e invoice lokal + produksi lulus (QRIS sintetis dibaca jsQR disimpan apa adanya, pengingat hari ini wa.me, halaman /i/kode, lunas, batal); axe 390/1440 terang/gelap; docs/research/invoice.md, docs/quality/invoice.md"
   },
   {
    "id": "F4-06",

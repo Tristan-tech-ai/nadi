@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { batalkanShift, jawabLembur, salinMingguLalu, tambahShift, type HasilJadwal } from "@/app/app/jadwal/actions";
+import { ambilTawaran, batalkanShift, batalTawaran, jawabLembur, salinMingguLalu, tambahShift, tawarkanShift, type HasilAmbil, type HasilJadwal } from "@/app/app/jadwal/actions";
 import { Tombol } from "@/components/ui/tombol";
 
 const isian = "h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-2 text-base";
@@ -71,6 +71,51 @@ export function FormLembur({ lembur, label }: { lembur: string; label: string })
         <Tombol type="submit" name="jawab" value="tidak" ragam="kedua" ukuran="besar" disabled={sibuk}>Tidak bisa</Tombol>
       </div>
       <Hasil h={h} />
+    </form>
+  );
+}
+
+/** Staf menawarkan shift-nya ke rekan (F3-06B). */
+export function FormTawarkan({ shift, kunci, label }: { shift: string; kunci: string; label: string }) {
+  const [h, aksi, sibuk] = useActionState<HasilJadwal, FormData>(tawarkanShift, null);
+  return (
+    <form action={aksi} className="flex flex-col items-end gap-1">
+      <input type="hidden" name="shift" value={shift} />
+      <input type="hidden" name="kunci" value={kunci} />
+      <button type="submit" disabled={sibuk} className="text-sm underline underline-offset-4" aria-label={`Tawarkan ke rekan ${label}`}>Tawarkan ke rekan</button>
+      <Hasil h={h} />
+    </form>
+  );
+}
+
+export function FormBatalTawaran({ tawaran, label }: { tawaran: string; label: string }) {
+  const [h, aksi, sibuk] = useActionState<HasilJadwal, FormData>(batalTawaran, null);
+  return (
+    <form action={aksi} className="flex flex-col items-end gap-1">
+      <input type="hidden" name="tawaran" value={tawaran} />
+      <button type="submit" disabled={sibuk} className="text-sm text-tinta-2 underline underline-offset-4" aria-label={`Batalkan tawaran ${label}`}>Batalkan tawaran</button>
+      <Hasil h={h} />
+    </form>
+  );
+}
+
+/** Ambil shift yang ditawarkan rekan; peringatan batas tampil dulu dan butuh "Tetap ambil". */
+export function FormAmbil({ tawaran, label }: { tawaran: string; label: string }) {
+  const [h, aksi, sibuk] = useActionState<HasilAmbil, FormData>(ambilTawaran, null);
+  const perlu = h && "perlu" in h ? h.perlu : null;
+  return (
+    <form action={aksi} className="mt-2 flex flex-col gap-2" aria-label={label}>
+      <input type="hidden" name="tawaran" value={tawaran} />
+      {perlu ? (
+        <>
+          <ul className="list-disc pl-5 text-sm" data-testid="peringatan-ambil">{perlu.map((p) => <li key={p}>{p}</li>)}</ul>
+          <input type="hidden" name="konfirmasi" value="1" />
+          <div><Tombol type="submit" ragam="utama" ukuran="besar" disabled={sibuk}>Tetap ambil</Tombol></div>
+        </>
+      ) : (
+        <div><Tombol type="submit" ragam="utama" ukuran="besar" disabled={sibuk}>Saya ambil</Tombol></div>
+      )}
+      {h && !("perlu" in h) && ("galat" in h ? <p role="alert" className="text-sm text-cap">{h.galat}</p> : <p role="status" className="text-sm text-daun">{h.pesan}</p>)}
     </form>
   );
 }

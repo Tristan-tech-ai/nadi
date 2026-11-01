@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { randomUUID } from "node:crypto";
 import { Suspense } from "react";
-import { FormBatalShift, FormLembur, FormSalin, FormShift } from "@/components/app/jadwal";
+import { FormAmbil, FormBatalShift, FormBatalTawaran, FormLembur, FormSalin, FormShift, FormTawarkan } from "@/components/app/jadwal";
 import { formatTanggalKalender } from "@/lib/format";
 import { hariIni } from "@/lib/izin";
 import { createClient } from "@/lib/supabase/server";
@@ -13,14 +13,15 @@ export const metadata: Metadata = { title: "Jadwal" };
 
 // F3-06 (docs/design/jadwal-shift.md): jadwal shift per minggu. Batas PP 35/2021 dijaga simpan_shift; lembur butuh persetujuan.
 
-type Shift = { id?: string; tanggal: string; mulai: string; selesai: string; istirahat: number; lembur?: string | null };
+type Shift = { id?: string; tanggal: string; mulai: string; selesai: string; istirahat: number; lembur?: string | null; bisa_ditawarkan?: boolean; tawaran?: "terbuka" | "diambil" | null };
+type Tawaran = { untuk: { id: string; tanggal: string; mulai: string; selesai: string; dari: string; topi: string | null }[]; milik: { id: string; shift_id: string; status: "terbuka" | "diambil"; tanggal: string; mulai: string; selesai: string; diambil: string | null }[] };
 type Minggu = { mulai: string; pola_kerja: string; orang: { id: string; nama: string; menit: number; shift: Shift[] }[] };
 type Saya = { mulai: string; shift: Shift[]; lembur: { id: string; tanggal: string; menit: number }[] };
 
 const HARI = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 const geser = (t: string, n: number) => { const d = new Date(`${t}T00:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
 const jam = (menit: number) => `${Math.floor(menit / 60)} jam${menit % 60 ? ` ${menit % 60} menit` : ""}`;
-const rentang = (s: Shift) => `${s.mulai.replace(":", ".")}-${s.selesai.replace(":", ".")}`;
+const rentang = (s: { mulai: string; selesai: string }) => `${s.mulai.replace(":", ".")}-${s.selesai.replace(":", ".")}`;
 
 async function Pengelola({ minggu, kelola, hari }: { minggu: string | null; kelola: boolean; hari: string }) {
   const supabase = await createClient();
@@ -53,7 +54,7 @@ async function Pengelola({ minggu, kelola, hari }: { minggu: string | null; kelo
                     {baris.map(({ o, s }) => (
                       <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 py-1">
                         <span><span className="font-semibold">{o.nama}</span> <span className="angka">{rentang(s)}</span>{s.istirahat ? `, istirahat ${s.istirahat} menit` : ""}
-                          {s.lembur && <span className="text-tinta-2"> (lembur {s.lembur === "menunggu" ? "menunggu persetujuan" : s.lembur === "setuju" ? "disetujui" : "tidak bisa"})</span>}</span>
+                          {s.lembur && s.lembur !== "batal" && <span className="text-tinta-2"> (lembur {s.lembur === "menunggu" ? "menunggu persetujuan" : s.lembur === "setuju" ? "disetujui" : "tidak bisa"})</span>}</span>
                         {kelola && s.id && s.tanggal >= hari && <FormBatalShift shift={s.id} label={`${o.nama} ${nama} ${rentang(s)}`} />}
                       </li>
                     ))}
@@ -77,9 +78,12 @@ async function Pengelola({ minggu, kelola, hari }: { minggu: string | null; kelo
 
 async function Staf({ hari }: { hari: string }) {
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("jadwal_saya", { p_mulai: null });
+  const [{ data, error }, tw] = await Promise.all([supabase.rpc("jadwal_saya", { p_mulai: null }), supabase.rpc("tawaran_saya")]);
   if (error || !data) return <p className="mt-6 text-tinta-2">Akunmu belum tertaut ke data orang di usaha ini. Minta pemilik menautkannya.</p>;
   const d = data as Saya;
+  const tawar = (tw.data ?? { untuk: [], milik: [] }) as Tawaran;
+  const punyaku = new Set(d.shift.map((s) => s.id));
+  const kuambil = tawar.milik.filter((m) => !punyaku.has(m.shift_id));
   return (
     <>
       {d.lembur.map((l) => (
@@ -89,18 +93,43 @@ async function Staf({ hari }: { hari: string }) {
           <FormLembur lembur={l.id} label={`Jawab lembur ${formatTanggalKalender(l.tanggal)}`} />
         </div>
       ))}
+      {tawar.untuk.length > 0 && (
+        <section className="mt-6" aria-labelledby="judul-tawaran" data-testid="tawaran-untuk">
+          <h2 id="judul-tawaran" className="font-semibold">Shift yang ditawarkan ke kamu</h2>
+          {tawar.untuk.map((u) => (
+            <div key={u.id} className="mt-2 rounded-[var(--radius-kartu)] border border-garis p-4" data-testid="kartu-tawaran">
+              <p>{formatTanggalKalender(u.tanggal)}, <span className="angka">{rentang(u)}</span>{u.topi ? ` (${u.topi.toLowerCase()})` : ""}. Ditawarkan {u.dari}.</p>
+              <FormAmbil tawaran={u.id} label={`Ambil shift ${formatTanggalKalender(u.tanggal)} dari ${u.dari}`} />
+            </div>
+          ))}
+        </section>
+      )}
+      {kuambil.map((m) => (
+        <p key={m.id} className="mt-4 text-sm" data-testid="tukar-menunggu">
+          Kamu mengambil shift {formatTanggalKalender(m.tanggal)}, <span className="angka">{rentang(m)}</span>. Menunggu persetujuan pemilik.
+        </p>
+      ))}
       {d.shift.length === 0 ? <p className="mt-6 text-tinta-2" data-testid="jadwal-kosong">Belum ada jadwal untukmu dua minggu ini.</p> : (
         <ul className="mt-6 divide-y divide-garis border-y border-garis" data-testid="jadwal-saya">
           {d.shift.map((s, i) => (
-            <li key={i} className="flex justify-between gap-2 py-2">
-              <span className={s.tanggal === hari ? "bg-kunyit px-1 text-[var(--stabilo-teks)]" : ""}>{formatTanggalKalender(s.tanggal)}</span>
-              <span className="angka">{rentang(s)}</span>
+            <li key={s.id ?? i} className="flex flex-wrap items-center justify-between gap-2 py-2" data-testid="baris-jadwal-saya">
+              <span><span className={s.tanggal === hari ? "bg-kunyit px-1 text-[var(--stabilo-teks)]" : ""}>{formatTanggalKalender(s.tanggal)}</span> <span className="angka">{rentang(s)}</span></span>
+              <TawaranShift s={s} milik={tawar.milik} />
             </li>
           ))}
         </ul>
       )}
     </>
   );
+}
+
+function TawaranShift({ s, milik }: { s: Shift; milik: Tawaran["milik"] }) {
+  const m = milik.find((x) => x.shift_id === s.id);
+  const label = `${formatTanggalKalender(s.tanggal)} ${rentang(s)}`;
+  if (s.tawaran === "diambil") return <span className="text-sm text-tinta-2">Diambil {m?.diambil ?? "rekan"}, menunggu pemilik</span>;
+  if (s.tawaran === "terbuka" && m) return <span className="flex items-center gap-2 text-sm text-tinta-2">Ditawarkan <FormBatalTawaran tawaran={m.id} label={label} /></span>;
+  if (s.bisa_ditawarkan && s.id) return <FormTawarkan shift={s.id} kunci={randomUUID()} label={label} />;
+  return null;
 }
 
 async function Isi({ searchParams }: { searchParams: PageProps<"/app/jadwal">["searchParams"] }) {

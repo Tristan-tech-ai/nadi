@@ -2,7 +2,7 @@
 
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
-import { jamDesimal, rapikanPesanBatas } from "@/lib/jadwal/pesan";
+import { jamDesimal, rapikanPesanBatas, teksPeringatanTukar } from "@/lib/jadwal/pesan";
 import { createClient } from "@/lib/supabase/server";
 
 export type HasilJadwal = { pesan: string } | { galat: string; isian?: Record<string, string> } | null;
@@ -65,4 +65,36 @@ export async function jawabLembur(_: HasilJadwal, form: FormData): Promise<Hasil
   if (error) return { galat: "Jawaban belum tersimpan. Coba lagi sebentar." };
   revalidatePath("/app/jadwal");
   return { pesan: setuju ? "Tercatat: kamu setuju lembur." : "Tercatat: kamu tidak bisa lembur. Pemilik akan mengatur ulang." };
+}
+
+export type HasilAmbil = { pesan: string } | { galat: string } | { perlu: string[] } | null;
+
+/** Staf menawarkan shift-nya yang belum mulai ke rekan bertopi sama (F3-06B). */
+export async function tawarkanShift(_: HasilJadwal, form: FormData): Promise<HasilJadwal> {
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("tawarkan_shift", { p_shift: String(form.get("shift") ?? ""), p_kunci: String(form.get("kunci") ?? "") || randomUUID() });
+  if (error) return { galat: error.code === "22023" || error.code === "P0002" ? error.message : "Belum bisa ditawarkan. Coba lagi sebentar." };
+  revalidatePath("/app/jadwal");
+  return { pesan: "Ditawarkan ke rekan. Kamu tetap memegang shift ini sampai ada yang mengambil dan pemilik menyetujui." };
+}
+
+export async function batalTawaran(_: HasilJadwal, form: FormData): Promise<HasilJadwal> {
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("batal_tawaran", { p_id: String(form.get("tawaran") ?? "") });
+  if (error) return { galat: error.code === "22023" || error.code === "P0002" ? error.message : "Tawaran belum dibatalkan. Coba lagi sebentar." };
+  revalidatePath("/app/jadwal");
+  return { pesan: "Tawaran dibatalkan." };
+}
+
+/** Ambil tawaran. Bila ada peringatan, kembalikan dulu kalimatnya; kirim ulang dengan konfirmasi untuk tetap mengambil. */
+export async function ambilTawaran(_: HasilAmbil, form: FormData): Promise<HasilAmbil> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("ambil_tawaran", { p_id: String(form.get("tawaran") ?? ""), p_konfirmasi: form.get("konfirmasi") === "1" });
+  if (error) {
+    return { galat: ["54000", "23P01", "55000", "P0002", "22023"].includes(error.code ?? "") ? rapikanPesanBatas(error.message) : "Belum bisa diambil. Coba lagi sebentar." };
+  }
+  const d = data as { status: string; peringatan?: string[]; lembur_menit?: number };
+  if (d.status === "perlu_konfirmasi") return { perlu: teksPeringatanTukar(d.peringatan ?? [], d.lembur_menit ?? 0) };
+  revalidatePath("/app/jadwal");
+  return { pesan: "Diambil. Menunggu persetujuan pemilik." };
 }
