@@ -777,8 +777,10 @@
    "accept": "pada video uji: status meja benar >= 85%; tidak ada video yang dikirim ke server",
    "how": "",
    "blocked_by": "R-03,F0-05",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T18:34:50",
+   "result": "commit 5294e18+b0a7ea8+27b966b+bc9df74 (prod bc9df74 READY); resep.ts + vitest mata 9/9 (merah sengaja 47,2%); korpus fixtures/korpus/mata CC0 (docs/ASSETS.md); migrasi mata sidik 0ec5e17f (87), tes SQL 18/18; model di konfigurasi model_mata; e2e/mata.spec.ts produksi: video korpus di peramban, status meja benar 91,7% (165/180) >= 85%, mata_keadaan = layar, gambar tidak dikirim (worker di perangkat, database hanya status), axe bersih 390/1440 terang/gelap"
   },
   {
    "id": "F5-02",
