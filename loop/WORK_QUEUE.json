@@ -745,8 +745,10 @@
    "accept": "berkas ekspor cocok dengan spesifikasi kolom konverter DJP",
    "how": "",
    "blocked_by": "F4-07",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T13:51:56",
+   "result": "commit edcc0e6 (produksi 968193f READY); migrasi 031000 ruang_akuntan (e48b32fe) + 031100 undang_akuntan (951c8631), 81 migrasi; tes SQL 13/13 + 15/15; vitest bpmp + pembanding template resmi DJP BPMP v.3 (judul baris 4 B..N cocok, merah sengaja tertangkap); e2e akuntan lokal + produksi lulus (unduh BPMP dibaca ulang: judul template, Resident, 21-100-01, ID TKU); /app/akuntan multi-klien; docs/research/coretax-bpmp.md, docs/quality/ruang-akuntan.md"
   },
   {
    "id": "F4-09",
