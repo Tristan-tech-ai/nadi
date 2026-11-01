@@ -143,6 +143,12 @@ body {
   outline-offset: 2px;
 }
 
+/* Isian tanggal/jam Chromium memindahkan fokus ke bagian dalamnya sehingga :focus-visible tidak menyala; beri cincin saat :focus. */
+input:is([type="date"], [type="time"], [type="month"], [type="datetime-local"]):focus {
+  outline: 2px solid var(--tinta);
+  outline-offset: 2px;
+}
+
 /* Lompat ke isi: tersembunyi sampai difokus papan ketik. */
 .lompat-isi {
   position: absolute;

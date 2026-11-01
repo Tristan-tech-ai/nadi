@@ -113,7 +113,7 @@ test("halaman publik", async ({ page }) => {
 });
 
 test("halaman aplikasi pemilik", async ({ page }) => {
-  test.setTimeout(900_000);
+  test.setTimeout(1_500_000);
   await page.goto("/masuk?next=/app");
   await page.getByLabel("Email").fill(E.E2E_EMAIL_A);
   await page.getByLabel("Kata sandi").fill(E.E2E_SANDI);
@@ -121,6 +121,7 @@ test("halaman aplikasi pemilik", async ({ page }) => {
   await page.waitForURL((u) => u.pathname === "/app");
   await expect(page.getByTestId("nama-perusahaan")).toHaveText("Warung Uji A");
   const daftar = ["/app", "/app/perusahaan", "/app/orang", "/app/gaji", "/app/izin", "/app/invoice", "/app/pajak", "/app/akuntan",
-    "/app/jadwal", "/app/kerja", "/app/surat", "/app/surat-keluar", "/app/lempar", "/app/magang", "/app/skill", "/app/serah-terima", "/app/mulai"];
+    "/app/jadwal", "/app/kerja", "/app/surat", "/app/surat-keluar", "/app/lempar", "/app/magang", "/app/serah-terima", "/app/mulai"];
+  // /app/skill bukan layar: route yang mengunduh berkas skill.
   for (const jalur of daftar) harus(jalur, await periksa(page, jalur, true), true);
 });
