@@ -219,3 +219,6 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 1 Nov 2026 tick 215 | Q-22 SELESAI (sidik 1b2b98da dicek loop, Vercel READY fdde5b6, e2e produksi gaji 3/3); Q-32 ditambah |
 | 1 Nov 2026 tick 215 | Q-31 di-push 34bd02a (teks dasar BPJS bersumber + asersi e2e); menunggu deploy untuk e2e produksi kolam |
 | 1 Nov 2026 tick 216 | Perintah Tristan: tanpa agen, tick tebal (min 5 tugas wajib), hati-hati seperti sebelumnya; header + DECISIONS + STATE checkpoint |
+| 1 Nov 2026 tick 216 | Q-30 di-commit 22a00b6 dan di-push 7aabf37 (merah terhadap produksi lama terbukti); F4-01 migrasi nomor_sakti ditulis (belum apply); checkpoint sebelum kompaksi |
+| 1 Nov 2026 tick 216 | F4-01: tes supabase/tests/nomor_sakti.test.sql ditulis (belum dijalankan); berikut: jalankan merah, apply migrasi, hijau |
+- 1 Nov 2026 tick 216: tanpa agen. Q-30, Q-31 done (produksi). F4-01 (b6d540c), F4-09 (0cdd97d), F4-03 (9c4b5c9) di-commit dengan tes merah lalu hijau; bug nyata ditemukan tes: lpad memotong nomor >= 1000 (F4-01), catat_audit butuh kolom id (F4-09), CHECK pihak vs on delete set null dan nomor surat > 120 huruf (F4-03). Push satu kali untuk tiga tugas.
