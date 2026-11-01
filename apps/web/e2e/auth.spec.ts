@@ -147,3 +147,28 @@ test("pemilik melihat Feed (keadaan kosong), navigasi bawah, dan share target me
   expect(res.status()).toBe(303);
   expect(res.headers()["location"]).toMatch(/\/app\/lempar\?berkas=[0-9a-f-]{36}$/);
 });
+
+// Q-32: /app/perusahaan memuat banyak kartu pengaturan; tombol utama hanya satu (Nyalakan pemberitahuan) saat pemberitahuan
+// belum dinyalakan dan Aturan kerja tampil bersamaan (S22).
+test("Usahamu: satu tombol utama per layar, foto 390/1440 terang/gelap", async ({ page, context }) => {
+  // Profil sementara Chromium melaporkan izin notifikasi "denied" walau diberi izin (lihat push.spec); untuk tes tata letak ini
+  // izin dibuat "default" supaya kartu Pemberitahuan menampilkan tombol Nyalakan seperti di HP pemilik yang baru masuk.
+  await context.addInitScript(() => Object.defineProperty(Notification, "permission", { get: () => "default" }));
+  await masukSebagai(page, E.E2E_EMAIL_A);
+  await pastikanUsaha(page, "Warung Uji A");
+  await page.goto("/app/perusahaan");
+  await expect(page.getByTestId("aturan-kerja")).toBeVisible();
+  await expect(page.getByTestId("nyalakan-pemberitahuan")).toBeVisible();
+  const utama = page.getByRole("main").locator("button.bg-tinta").filter({ visible: true });
+  await expect(utama).toHaveCount(1);
+  await expect(utama).toHaveAttribute("data-testid", "nyalakan-pemberitahuan");
+  for (const [lebar, tinggi] of [[390, 844], [1440, 900]]) {
+    for (const skema of ["light", "dark"] as const) {
+      await page.setViewportSize({ width: lebar, height: tinggi });
+      await page.emulateMedia({ colorScheme: skema });
+      await page.waitForTimeout(300);
+      const nama = `usahamu-${lebar}-${skema}.png`;
+      await page.screenshot({ path: process.env.E2E_FOTO_DIR ? join(process.env.E2E_FOTO_DIR, nama) : test.info().outputPath(nama), fullPage: true });
+    }
+  }
+});

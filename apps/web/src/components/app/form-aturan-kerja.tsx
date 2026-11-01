@@ -75,7 +75,8 @@ export function FormAturanKerja({ pola, tersimpan, diaturSendiri, bisaUbah, lemb
 
       {bisaUbah ? (
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <Tombol type="submit" disabled={sibuk}>{sibuk ? "Menyimpan..." : "Simpan aturan kerja"}</Tombol>
+          {/* Tombol kedua: di /app/perusahaan tombol utama milik Nyalakan pemberitahuan (satu tombol utama per layar, S22). */}
+          <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? "Menyimpan..." : "Simpan aturan kerja"}</Tombol>
           {hasil && "pesan" in hasil && <p role="status" className="text-sm text-daun" data-testid="aturan-kerja-hasil">{hasil.pesan}</p>}
           {hasil && "galat" in hasil && <p role="alert" className="text-sm text-cap" data-testid="aturan-kerja-galat">{hasil.galat}</p>}
         </div>
