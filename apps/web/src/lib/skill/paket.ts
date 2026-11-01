@@ -20,7 +20,10 @@ export type PaketSkill = { nama: string; berkas: Record<string, string> };
 
 const BATAS_NAMA = 64;
 const NAMA_SAH = /^[a-z0-9]+(-[a-z0-9]+)*$/;
-const INDUSTRI: Record<string, string> = { fnb: "makanan dan minuman", toko: "toko" };
+const INDUSTRI: Record<string, string> = {
+  fnb: "makanan dan minuman", toko: "toko", kantor: "kantor dan jasa profesional", bengkel: "bengkel", klinik: "klinik kesehatan",
+  konstruksi: "konstruksi", logistik: "gudang dan logistik", hotel: "hotel dan penginapan", salon: "salon dan spa", laundry: "laundry",
+};
 const JENIS_IZIN: Record<string, string> = { sakit: "Sakit", izin: "Izin", cuti: "Cuti" };
 
 export function namaSkill(namaUsaha: string): string {

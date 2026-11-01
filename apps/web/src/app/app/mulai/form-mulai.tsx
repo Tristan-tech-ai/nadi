@@ -11,7 +11,7 @@ const JENIS: [string, string][] = [
   ["bengkel", "Bengkel, servis"],
   ["klinik", "Klinik, apotek"],
   ["konstruksi", "Kontraktor, proyek"],
-  ["gudang", "Gudang, distribusi"],
+  ["logistik", "Gudang, distribusi"],
   ["hotel", "Hotel, vila, penginapan"],
   ["salon", "Salon, spa, barbershop"],
   ["laundry", "Laundry"],

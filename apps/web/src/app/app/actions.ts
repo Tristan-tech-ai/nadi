@@ -6,7 +6,7 @@ import type { HasilForm } from "@/lib/auth-pesan";
 import { hasilUlangPutusan } from "@/lib/putusan";
 import { createClient } from "@/lib/supabase/server";
 
-const INDUSTRI = new Set(["fnb", "toko", "kantor", "bengkel", "klinik", "konstruksi", "gudang", "hotel", "salon", "laundry", "lainnya"]);
+const INDUSTRI = new Set(["fnb", "toko", "kantor", "bengkel", "klinik", "konstruksi", "logistik", "hotel", "salon", "laundry", "lainnya"]);
 
 /** Buat perusahaan lewat RPC (menulis klaim pid/prn ke app_metadata), lalu segarkan sesi agar JWT membawa klaim baru. */
 export async function buatPerusahaan(_: HasilForm, form: FormData): Promise<HasilForm> {
