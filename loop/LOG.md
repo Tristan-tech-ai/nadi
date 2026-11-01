@@ -231,3 +231,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 1 Nov 2026 tick 219: F3-06 bagian 2 solver jadwal (vitest 7/7, 3 skenario, merah sengaja) di-commit.
 - 1 Nov 2026 tick 219-220: F3-06 done (layar jadwal, jam beban dari jadwal, e2e produksi), F4-05 done (invoice QRIS statis, pengingat wa.me, umur piutang; tes SQL 31/31; e2e produksi), F3-06B tukar shift (tes SQL 29/29, e2e lokal) di-push beb3de0; progres wajib 59/76.
 - 1 Nov 2026 tick 221: F3-06B done (e2e produksi), F3-06C done (kebutuhan shift + Usulkan jadwal; tes SQL 15/15, vitest 7/7, e2e produksi), F4-06 pencocokan mutasi (korpus 33/36 = 91,7%, 0 salah; vitest 11/11; e2e lokal) di-push 2a238b3; wajib 61/76 + F4-06 menunggu e2e produksi.
+- 1 Nov 2026 tick 222: F4-06 done (e2e produksi), F4-07 Kompas Pajak dari naskah resmi PP 20/2026 + PP 55/2022 (migrasi kompas_pajak 1df42585, tes SQL 13/13, vitest 13/13 + merah sengaja, e2e lokal) di-push 6f10942; wajib 62/76.
