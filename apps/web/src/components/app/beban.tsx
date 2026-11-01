@@ -1,6 +1,6 @@
 import { ArrowsLeftRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { formatTanggalKalender } from "@/lib/format";
-import { kalimatTerberat, MIN_SELESAI, ringkasBeban, teksBebanSaya, type BebanMinggu, type BebanSaya } from "@/lib/kerja/adil";
+import { kalimatTerberat, kolomBeban, MIN_SELESAI, ringkasBeban, teksBebanSaya, type BebanMinggu, type BebanSaya } from "@/lib/kerja/adil";
 import { formatPoin } from "@/lib/kerja/poin";
 
 const angka = (x: number, digit = 2) => String(Math.round(x * 10 ** digit) / 10 ** digit).replace(".", ",");
@@ -15,7 +15,8 @@ export function BebanMingguIni({ data }: { data: BebanMinggu }) {
   const cukup = data.selesai_n >= MIN_SELESAI;
   const ringkas = ringkasBeban(orang);
   const terberat = cukup ? ringkas.terberat?.id ?? null : null;
-  const terbesar = Math.max(0, ...orang.map((o) => o.poin / o.jam));
+  const kolom = kolomBeban(data.jam_sama_rata, orang);
+  const grid = kolom.pakaiJam ? "lg:grid-cols-[minmax(0,2fr)_repeat(3,minmax(0,1fr))_minmax(0,2fr)]" : "lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)_minmax(0,3fr)]";
   const berbeban = orang.filter((o) => o.poin > 0 || Number(o.antre) > 0);
   const kosong = orang.filter((o) => !(o.poin > 0 || Number(o.antre) > 0));
 
@@ -34,7 +35,7 @@ export function BebanMingguIni({ data }: { data: BebanMinggu }) {
       )}
       {data.jam_sama_rata && (
         <p className="mt-2 text-sm text-tinta-2" data-testid="jam-sama-rata">
-          Jam kerja belum diatur, jadi semua orang dianggap punya jam yang sama ({data.jam_bawaan} jam seminggu).
+          Jam kerja belum diatur, jadi semua orang dianggap punya jam yang sama ({data.jam_bawaan} jam seminggu). Perbandingan memakai poin saja sampai jadwal kerja diisi.
         </p>
       )}
 
@@ -42,16 +43,16 @@ export function BebanMingguIni({ data }: { data: BebanMinggu }) {
         <p className="mt-4 text-tinta-2" data-testid="beban-kosong">Belum ada orang aktif. Tambah orang di menu Orang dulu.</p>
       ) : (
         <>
-          <div className="mt-4 hidden border-b border-garis-kuat pb-1 text-xs font-semibold text-tinta-2 lg:grid lg:grid-cols-[minmax(0,2fr)_repeat(3,minmax(0,1fr))_minmax(0,2fr)] lg:gap-3" aria-hidden>
-            <span>Orang dan topi</span><span className="text-right">Poin</span><span className="text-right">Jam jadwal</span><span className="text-right">Poin per jam</span><span>Perbandingan</span>
+          <div className={`mt-4 hidden border-b border-garis-kuat pb-1 text-xs font-semibold text-tinta-2 lg:grid ${grid} lg:gap-3`} aria-hidden>
+            <span>Orang dan topi</span><span className="text-right">Poin</span>{kolom.pakaiJam && <><span className="text-right">Jam jadwal</span><span className="text-right">Poin per jam</span></>}<span>Perbandingan</span>
           </div>
           <ul className="divide-y divide-garis border-y border-garis lg:border-t-0" data-testid="daftar-beban">
             {berbeban.map((o) => {
               const perJam = o.poin / o.jam;
-              const lebar = terbesar > 0 ? Math.max(2, Math.round((perJam / terbesar) * 100)) : 0;
+              const lebar = kolom.lebar(o);
               const berat = o.id === terberat;
               return (
-                <li key={o.id} className="grid gap-1 py-3 lg:grid-cols-[minmax(0,2fr)_repeat(3,minmax(0,1fr))_minmax(0,2fr)] lg:items-center lg:gap-3"
+                <li key={o.id} className={`grid gap-1 py-3 ${grid} lg:items-center lg:gap-3`}
                   data-testid="baris-beban" data-nama={o.nama} data-berat={berat ? "ya" : undefined}>
                   <div className="min-w-0">
                     <p className="font-semibold">
@@ -66,11 +67,11 @@ export function BebanMingguIni({ data }: { data: BebanMinggu }) {
                     )}
                   </div>
                   <p className="angka text-sm lg:text-right" data-testid="beban-poin">
-                    {formatPoin(o.poin)}<span className="lg:hidden"> · {o.jam} jam · {angka(perJam)} per jam</span>
+                    {formatPoin(o.poin)}{kolom.pakaiJam && <span className="lg:hidden"> · {o.jam} jam · {angka(perJam)} per jam</span>}
                     {Number(o.antre) > 0 && <span className="block text-xs text-tinta-2">{formatPoin(Number(o.antre))} antre</span>}
                   </p>
-                  <p className="angka hidden text-right text-sm lg:block">{o.jam} jam</p>
-                  <p className="angka hidden text-right text-sm lg:block" data-testid="beban-per-jam">{angka(perJam)}</p>
+                  {kolom.pakaiJam && <p className="angka hidden text-right text-sm lg:block">{o.jam} jam</p>}
+                  {kolom.pakaiJam && <p className="angka hidden text-right text-sm lg:block" data-testid="beban-per-jam">{angka(perJam)}</p>}
                   <div className="h-1.5 w-full rounded-full bg-garis" aria-hidden>
                     <div className="h-1.5 rounded-full bg-tinta-2" style={{ width: `${lebar}%` }} />
                   </div>

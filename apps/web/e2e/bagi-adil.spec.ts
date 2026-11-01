@@ -95,7 +95,7 @@ test("bagi adil: beban minggu ini, usulan ke yang paling ringan beserta alasan, 
     await page.waitForURL((x) => x.searchParams.get("tab") === "beban");
     const bagian = page.getByTestId("beban-minggu");
     await expect(bagian).toBeVisible();
-    await expect(page.getByTestId("jam-sama-rata")).toHaveText("Jam kerja belum diatur, jadi semua orang dianggap punya jam yang sama (40 jam seminggu).");
+    await expect(page.getByTestId("jam-sama-rata")).toHaveText("Jam kerja belum diatur, jadi semua orang dianggap punya jam yang sama (40 jam seminggu). Perbandingan memakai poin saja sampai jadwal kerja diisi.");
     expect(Number(await bagian.getAttribute("data-selesai"))).toBeGreaterThanOrEqual(5);
     await expect(page.getByTestId("beban-belum")).toHaveCount(0);
     const baris = (n: string) => page.locator(`[data-testid="baris-beban"][data-nama="${n}"]`);
@@ -108,6 +108,9 @@ test("bagi adil: beban minggu ini, usulan ke yang paling ringan beserta alasan, 
     await expect(page.getByTestId("kalimat-beban")).toHaveText(new RegExp(`^${nama.berat} memikul \\d+% kerja minggu ini(?: dengan \\d+% jam kerja)?\\.$`));
     // Q-28: selama jam kerja belum diatur, kalimat tidak menyebut porsi jam anggapan.
     if ((await page.getByTestId("jam-sama-rata").count()) > 0) await expect(page.getByTestId("kalimat-beban")).not.toContainText("jam kerja");
+    // Q-30: selama jam kerja belum diatur, baris tidak menampilkan jam dan poin per jam anggapan.
+    await expect(baris(nama.berat).getByTestId("beban-poin")).not.toContainText("jam");
+    await expect(page.getByTestId("beban-per-jam")).toHaveCount(0);
     await axeDanFoto(page, "beban-pemilik");
 
     // Tambah kerja tanpa pelaksana: usulan ke Dewi beserta alasan; memilih orang lain menyembunyikan usulan.

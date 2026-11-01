@@ -181,6 +181,26 @@ describe("data sintetis: 50 benih, 200 kerja, 8 orang, 3 topi", () => {
   });
 });
 
+describe("kolom daftar beban (Q-30)", () => {
+  const o = [{ poin: 6, jam: 40 }, { poin: 3, jam: 20 }, { poin: 1, jam: 40 }];
+  it("jam kerja belum diatur: tanpa kolom jam, batang dari poin", async () => {
+    const { kolomBeban } = await import("./adil");
+    const k = kolomBeban(true, o);
+    expect(k.pakaiJam).toBe(false);
+    expect(o.map((x) => k.lebar(x))).toEqual([100, 50, 17]);
+  });
+  it("jam dari jadwal: kolom jam tampil, batang dari poin per jam", async () => {
+    const { kolomBeban } = await import("./adil");
+    const k = kolomBeban(false, o);
+    expect(k.pakaiJam).toBe(true);
+    expect(o.map((x) => k.lebar(x))).toEqual([100, 100, 17]);
+  });
+  it("semua nol: lebar 0, tidak membagi nol", async () => {
+    const { kolomBeban } = await import("./adil");
+    expect(kolomBeban(true, [{ poin: 0, jam: 40 }]).lebar({ poin: 0, jam: 40 })).toBe(0);
+  });
+});
+
 describe("teks layar beban", () => {
   it("kalimat yang paling berat", async () => {
     const { kalimatTerberat } = await import("./adil");

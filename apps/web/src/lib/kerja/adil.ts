@@ -140,6 +140,19 @@ export function ringkasBeban(orang: readonly (OrangBeban & { nama: string })[]):
   };
 }
 
+/**
+ * Kolom daftar beban (Q-30, docs/design/beban-tanpa-jam.md): selama jam kerja belum diatur (semua orang dianggap 40 jam),
+ * kolom jam dan poin per jam tidak ditampilkan dan batang perbandingan memakai poin; bila jam dari jadwal, memakai poin per jam.
+ */
+export function kolomBeban(jamSamaRata: boolean, orang: readonly { poin: number; jam: number }[]) {
+  const nilai = (o: { poin: number; jam: number }) => (jamSamaRata ? o.poin : o.jam > 0 ? o.poin / o.jam : 0);
+  const terbesar = Math.max(0, ...orang.map(nilai));
+  return {
+    pakaiJam: !jamSamaRata,
+    lebar: (o: { poin: number; jam: number }) => (terbesar > 0 ? Math.max(2, Math.round((nilai(o) / terbesar) * 100)) : 0),
+  };
+}
+
 /** Minimal kerja selesai minggu ini sebelum beban dibandingkan (docs/design/bagi-adil.md). */
 export const MIN_SELESAI = 5;
 
