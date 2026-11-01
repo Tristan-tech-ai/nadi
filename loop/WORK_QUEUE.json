@@ -863,8 +863,10 @@
    "accept": "tidak ada angka untuk kelompok < 10 (tes)",
    "how": "",
    "blocked_by": "F3-03",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T14:41:30",
+   "result": "commit F6-02 pembanding; migrasi 033000 (2d871e6d), 83 migrasi; tes SQL pembanding 5/5: 9 usaha sejenis = tanpa angka kelompok (hanya n), ukuran tanpa data = tanpa angka, 10 usaha = kuartil (median 5,5) dan industri lain tidak ikut, staf sungguhan dan anon ditolak"
   },
   {
    "id": "F6-03",
