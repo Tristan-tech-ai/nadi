@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import { formatPersen } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
@@ -60,6 +61,7 @@ async function Isi() {
               </div>
               <FormAkunStaf orangId={o.id} sudahAda={Boolean(o.user_id)} />
               <FormGajiOrang orang={o.id} nama={o.nama} awal={((Array.isArray(o.orang_rahasia) ? o.orang_rahasia[0] : o.orang_rahasia)?.gaji as GajiOrang | undefined) ?? null} mulai={tanggalMulai(o.data)} />
+              <Link href={`/app/serah-terima?orang=${o.id}`} className="text-sm text-tinta-2 underline underline-offset-4">Catat berhenti</Link>
             </li>
           ))}
         </ul>

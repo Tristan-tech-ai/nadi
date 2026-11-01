@@ -503,8 +503,10 @@
    "accept": "laporan pertanyaan yang memprediksi kinerja, dengan peringatan ukuran sampel",
    "how": "",
    "blocked_by": "F3-03",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T09:57:37",
+   "result": "fdb194e (deploy 2126364 READY, CI success): migrasi 20261101025000 sidik f3a18bff (lamaran.orang_id, jadikan_karyawan, lingkaran_rekrut); tes SQL 15/15; vitest Spearman + ambang sampel 9/9; e2e rekrut-keputusan.spec LULUS produksi (catat karyawan dari pelamar diterima, laporan Belajar dari rekrutmen di /app/orang, axe); docs/quality/lingkaran-rekrut.md"
   },
   {
    "id": "F3-01",
@@ -641,8 +643,10 @@
    "accept": "halaman verifikasi menolak dokumen palsu; PDF rapi A4",
    "how": "",
    "blocked_by": "F4-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T09:57:37",
+   "result": "fd2b3de (deploy 2126364 READY, CI success): migrasi 20261101024000 sidik 33f2c484; tes SQL surat_keluar merah lalu 23/23; vitest kalimat 12/12; e2e surat-keluar.spec LULUS produksi: kalimat jadi isian, draf, terbit Nomor Sakti, PDF 1 halaman A4 595x842 memuat nomor/nama/alamat verifikasi, /v/kode asli, kode diubah 'tidak terdaftar', setelah batal 'sudah dibatalkan', axe 390/1440 terang/gelap; docs/quality/surat-keluar.md"
   },
   {
    "id": "F4-03",
@@ -1868,6 +1872,48 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-01T08:35:23"
+  },
+  {
+   "id": "F3-07C",
+   "fase": "F3",
+   "kind": "build",
+   "priority": 32,
+   "size": "m",
+   "wajib": false,
+   "title": "Rekam Ilmu: penjelasan suara orang yang berhenti menjadi langkah kerja (SOP)",
+   "accept": "butir ilmu paket serah terima bisa direkam lewat tautan di HP orang itu (jalur berkas serah/<berhenti>), transkrip whisper di perangkat penerima (pola F2-03), langkah SOP disarankan model ringan lewat Edge Function sebagai masukan tak tepercaya (klip asli selalu tampil); tes SQL hak (hanya orang itu merekam butir ilmunya), e2e mic palsu, foto 390/1440 + axe",
+   "how": "docs/research/serah-terima-sql.md bagian Rekam Ilmu; docs/design/serah-terima-layar.md bagian 2",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T10:04:40"
+  },
+  {
+   "id": "F3-07D",
+   "fase": "F3",
+   "kind": "build",
+   "priority": 33,
+   "size": "s",
+   "wajib": false,
+   "title": "Wawancara keluar sekali pakai untuk orang yang berhenti",
+   "accept": "tautan sekali pakai berisi 3 pertanyaan tetap (paling membantu, paling berat, satu hal diubah), jawaban hanya dibaca pemilik (RLS peran_aktif), kalimat 'Jawabanmu tidak memengaruhi hakmu', token hanya sha256 disimpan; tes SQL + e2e + foto",
+   "how": "docs/design/serah-terima-layar.md bagian Wawancara keluar",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T10:04:40"
+  },
+  {
+   "id": "F3-07E",
+   "fase": "F3",
+   "kind": "build",
+   "priority": 34,
+   "size": "m",
+   "wajib": false,
+   "title": "Hak keuangan orang berhenti sebagai usulan Feed",
+   "accept": "hak_berhenti: gaji sampai tanggal efektif (susunSlip prorata), sisa cuti x upah harian (pokok+tunjangan tetap)/25 pola 6 atau /21 pola 5 (PP 36/2021 Pasal 17, docs/research/upah-harian.md) bila jatah cuti diatur, uang pisah isian pemilik; tanpa pesangon untuk mengundurkan diri (Pasal 50); ajukan_hak_berhenti membuat usulan untuk_peran pemilik tanpa membayar; vitest + tes SQL + e2e",
+   "how": "docs/research/serah-terima-sql.md RPC hak_berhenti dan ajukan_hak_berhenti",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-01T10:04:41"
   }
  ]
 }
