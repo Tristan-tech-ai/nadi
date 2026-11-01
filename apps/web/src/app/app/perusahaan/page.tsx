@@ -70,6 +70,7 @@ export default function Perusahaan() {
         <Link href="/app/mulai" className="underline underline-offset-4">Tambah usaha lain</Link>
         <Link href="/app/surat" className="underline underline-offset-4">Agenda surat masuk</Link>
         <Link href="/app/surat-keluar" className="underline underline-offset-4">Surat keluar</Link>
+        <Link href="/app/invoice" className="underline underline-offset-4">Invoice</Link>
       </p>
       <Suspense fallback={<div className="mt-10 h-28 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <BagianPemberitahuan />
