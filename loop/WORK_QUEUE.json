@@ -613,8 +613,10 @@
    "accept": "resign di perusahaan demo menghasilkan paket serah terima lengkap; akses dicabut di tanggal efektif",
    "how": "docs/research/serah-terima.md (PP 35/2021 Pasal 36 huruf i, 40 ayat (4), 50; paket: topi + kerja berjalan, Rekam Ilmu suara, akses dicabut pg_cron di tanggal efektif, hak keuangan sebagai usulan Feed)",
    "blocked_by": "F3-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T10:08:17",
+   "result": "0eba2e9 (deploy cf45527 READY, CI success): migrasi 20261101026000 sidik bbb187dd; tes SQL serah_terima merah lalu 28/28 (paket topi/kerja/ilmu/akses, pengganti, peringatan Pasal 36, pemilik ditolak, cabut sehari setelah efektif, JWT lama 0 baris, isolasi); e2e serah-terima.spec LULUS produksi; pg_cron nadi-cabut-berhenti 03:05 UTC mencabut berhenti e2e sungguhan (orang+anggota nonaktif, banned 2999) dan login staf vza6xq-s076 ditolak user_banned; docs/quality/serah-terima.md; sisa F3-07C/D/E"
   },
   {
    "id": "F4-01",
