@@ -76,6 +76,11 @@ export async function putuskan(_: HasilPutusan, form: FormData): Promise<HasilPu
   if (data.sudah) return hasilUlangPutusan(String(data.status));
   // Tanpa revalidatePath: kartu tetap tampil dengan cap hasilnya sampai Feed dimuat ulang, supaya keputusan terlihat.
   if (!setuju) return { status: "ditolak", pesan: "Ditolak. Tidak ada yang dicatat." };
+  if (data.aksi === "dokumen.surat") {
+    // Agenda didaftarkan trigger agenda_dari_usulan di transaksi yang sama (F4-03).
+    const { data: ag } = await supabase.from("agenda_surat").select("nomor_agenda").eq("usulan_id", id).maybeSingle();
+    return { status: "diterima", pesan: ag ? `Tersimpan. Masuk agenda surat ${ag.nomor_agenda}.` : "Tersimpan. Surat bernomor sama sudah ada di agenda." };
+  }
   const buat = PESAN_AKSI[data.aksi as string];
   return { status: "diterima", pesan: buat ? buat(data.dibuat, data.dilewati) : "Tersimpan dan dicatat." };
 }
