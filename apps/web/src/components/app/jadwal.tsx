@@ -1,0 +1,76 @@
+"use client";
+
+import { useActionState } from "react";
+import { batalkanShift, jawabLembur, salinMingguLalu, tambahShift, type HasilJadwal } from "@/app/app/jadwal/actions";
+import { Tombol } from "@/components/ui/tombol";
+
+const isian = "h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-2 text-base";
+
+function Hasil({ h }: { h: HasilJadwal }) {
+  if (!h) return null;
+  return "galat" in h ? <p role="alert" className="text-sm text-cap">{h.galat}</p> : <p role="status" className="text-sm text-daun">{h.pesan}</p>;
+}
+
+/** Tambah satu shift. Kunci acak per formulir supaya kirim ulang tidak menggandakan. */
+export function FormShift({ orang, awal, kunci }: { orang: { id: string; nama: string }[]; awal: string; kunci: string }) {
+  const [h, aksi, sibuk] = useActionState<HasilJadwal, FormData>(tambahShift, null);
+  const isi = h && "galat" in h ? (h.isian ?? {}) : {};
+  return (
+    <form key={JSON.stringify(isi)} action={aksi} className="mt-4 grid grid-cols-2 gap-3 rounded-[var(--radius-kartu)] border border-garis p-4 text-sm sm:grid-cols-3" aria-label="Tambah shift">
+      <input type="hidden" name="kunci" value={isi.kunci ?? kunci} />
+      <label className="col-span-2 flex flex-col gap-1 sm:col-span-1"><span className="text-tinta-2">Orang</span>
+        <select name="orang" required defaultValue={isi.orang ?? ""} className={isian}>
+          <option value="" disabled>Pilih</option>
+          {orang.map((o) => <option key={o.id} value={o.id}>{o.nama}</option>)}
+        </select></label>
+      <label className="col-span-2 flex flex-col gap-1 sm:col-span-1"><span className="text-tinta-2">Tanggal</span>
+        <input type="date" name="tanggal" required defaultValue={isi.tanggal ?? awal} className={isian} /></label>
+      <label className="flex flex-col gap-1"><span className="text-tinta-2">Istirahat (menit)</span>
+        <input type="number" name="istirahat" min={0} max={240} step={15} defaultValue={isi.istirahat ?? 30} inputMode="numeric" className={isian} /></label>
+      <label className="flex flex-col gap-1"><span className="text-tinta-2">Mulai</span>
+        <input type="time" name="mulai" required defaultValue={isi.mulai ?? "08:00"} className={isian} /></label>
+      <label className="flex flex-col gap-1"><span className="text-tinta-2">Selesai</span>
+        <input type="time" name="selesai" required defaultValue={isi.selesai ?? "15:30"} className={isian} /></label>
+      <div className="col-span-2 flex flex-wrap items-center gap-3 sm:col-span-3">
+        <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? "Menyimpan..." : "Simpan shift"}</Tombol>
+        <Hasil h={h} />
+      </div>
+    </form>
+  );
+}
+
+export function FormSalin({ minggu }: { minggu: string }) {
+  const [h, aksi, sibuk] = useActionState<HasilJadwal, FormData>(salinMingguLalu, null);
+  return (
+    <form action={aksi} className="flex flex-wrap items-center gap-3">
+      <input type="hidden" name="minggu" value={minggu} />
+      <Tombol type="submit" ragam="utama" disabled={sibuk}>{sibuk ? "Menyalin..." : "Salin dari minggu lalu"}</Tombol>
+      <Hasil h={h} />
+    </form>
+  );
+}
+
+export function FormBatalShift({ shift, label }: { shift: string; label: string }) {
+  const [h, aksi, sibuk] = useActionState<HasilJadwal, FormData>(batalkanShift, null);
+  return (
+    <form action={aksi} className="flex items-center gap-2">
+      <input type="hidden" name="shift" value={shift} />
+      <button type="submit" disabled={sibuk} className="text-sm text-tinta-2 underline underline-offset-4" aria-label={`Batalkan ${label}`}>Batalkan</button>
+      <Hasil h={h} />
+    </form>
+  );
+}
+
+export function FormLembur({ lembur, label }: { lembur: string; label: string }) {
+  const [h, aksi, sibuk] = useActionState<HasilJadwal, FormData>(jawabLembur, null);
+  return (
+    <form action={aksi} className="mt-2 flex flex-col gap-2" aria-label={label}>
+      <input type="hidden" name="lembur" value={lembur} />
+      <div className="flex flex-wrap gap-2">
+        <Tombol type="submit" name="jawab" value="setuju" ragam="utama" ukuran="besar" disabled={sibuk}>Setuju</Tombol>
+        <Tombol type="submit" name="jawab" value="tidak" ragam="kedua" ukuran="besar" disabled={sibuk}>Tidak bisa</Tombol>
+      </div>
+      <Hasil h={h} />
+    </form>
+  );
+}

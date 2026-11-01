@@ -153,6 +153,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
     { href: "/app/kerja?tab=kpi", label: lihatSemua ? "Kinerja minggu ini" : "Kerjamu minggu ini", aktif: tabKpi },
     ...(lihatSemua ? [{ href: "/app/kerja?tab=peta", label: "Peta organisasi", aktif: tabPeta }] : []),
     ...(pengelola ? [{ href: "/app/kerja?tab=bonus", label: "Kolam bonus", aktif: tabBonus }] : []),
+    { href: "/app/jadwal", label: "Jadwal", aktif: false },
   ];
   const tab = (
     <nav aria-label="Bagian kerja" className="mt-4">
