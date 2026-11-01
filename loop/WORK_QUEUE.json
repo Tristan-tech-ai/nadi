@@ -805,8 +805,10 @@
    "accept": "maks 3 insight berdampak rupiah tiap pagi pada data demo; tidak ada pesan bila tidak penting",
    "how": "",
    "blocked_by": "F3-03",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T15:56:10",
+   "result": "commit 40e152d+50d8758 (prod d0115ab READY); migrasi sarapan_data sidik e9be827c (86), tes SQL 20/20 (merah dulu), vitest analis-malam 6/6, Edge Function analis-malam v1 + push v3; batch Message Batches nyata 2/2 berhasil, 4/4 kalimat lolos periksa rupiah; demo fnb/toko masing-masing 2 insight berdampak rupiah, usaha nyata tanpa hal penting = 0 insight; e2e sarapan produksi 2/2 axe bersih 390/1440 terang/gelap; docs/quality/sarapan-data.md"
   },
   {
    "id": "F5-04",
