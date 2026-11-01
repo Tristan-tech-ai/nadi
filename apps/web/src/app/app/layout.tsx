@@ -40,6 +40,8 @@ async function Navigasi() {
 export default function LayoutApp({ children }: LayoutProps<"/app">) {
   return (
     <div className="flex min-h-full flex-1 flex-col">
+      {/* WCAG 2.4.1: kepala dan navigasi berulang di setiap layar; tautan pertama melompati kepala langsung ke isi. */}
+      <a href="#isi" className="lompat-isi">Lompat ke isi</a>
       <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-garis bg-kertas px-4 py-3">
         <Link href="/app" aria-label="Beranda aplikasi">
           <TandaNadi ukuran={26} />
@@ -48,7 +50,7 @@ export default function LayoutApp({ children }: LayoutProps<"/app">) {
           <NamaPerusahaan />
         </Suspense>
       </header>
-      <div className="flex flex-1 flex-col">{children}</div>
+      <div id="isi" tabIndex={-1} className="flex flex-1 flex-col focus:outline-none">{children}</div>
       <Suspense fallback={<div className="h-14 border-t border-garis" aria-hidden />}>
         <Navigasi />
       </Suspense>

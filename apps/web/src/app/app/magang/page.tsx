@@ -126,7 +126,7 @@ function TabelBiaya({ l, bulan }: { l: Laporan; bulan: string }) {
   }
   const kanan = "px-2 py-2 text-right";
   return (
-    <div className="mt-3 overflow-x-auto focus-visible:outline-2 focus-visible:outline-kunyit" tabIndex={0} role="region" aria-label={`Tabel biaya per rekrutmen ${namaBulan(bulan)}, geser ke samping bila terpotong`}>
+    <div className="mt-3 overflow-x-auto focus-visible:outline-2 focus-visible:outline-tinta" tabIndex={0} role="region" aria-label={`Tabel biaya per rekrutmen ${namaBulan(bulan)}, geser ke samping bila terpotong`}>
       <table className="w-full min-w-[34rem] border-collapse text-sm" data-testid="tabel-biaya">
         <caption className="sr-only">Biaya per rekrutmen {namaBulan(bulan)}</caption>
         <thead>

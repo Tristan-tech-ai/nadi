@@ -36,7 +36,7 @@ export function FormIzin({ zona }: { zona: string }) {
           {JENIS_IZIN.map((j, i) => (
             <label
               key={j.kode}
-              className="flex min-h-12 cursor-pointer items-center justify-center rounded-[var(--radius-isian)] border border-garis-kuat text-base font-semibold transition-[background-color,color] duration-150 has-[:checked]:border-tinta has-[:checked]:bg-tinta has-[:checked]:text-kertas has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-kunyit"
+              className="flex min-h-12 cursor-pointer items-center justify-center rounded-[var(--radius-isian)] border border-garis-kuat text-base font-semibold transition-[background-color,color] duration-150 has-[:checked]:border-tinta has-[:checked]:bg-tinta has-[:checked]:text-kertas has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-tinta"
             >
               <input type="radio" name="jenis" value={j.kode} defaultChecked={i === 0} className="sr-only" />
               {j.label}

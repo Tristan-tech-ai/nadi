@@ -38,7 +38,7 @@ Tidak ada ungu atau indigo di mana pun. Palet diturunkan dari kertas, tinta, kun
 | `tinta` | #1C1B18 | #ECE7DD | teks utama, tombol utama (tombol hitam pekat, bukan biru) |
 | `tinta-2` | #5B574F | #A8A196 | teks pendukung |
 | `garis` | #DDD5C6 | #2E2B26 | garis tepi, pemisah |
-| `kunyit` | #E9A825 | #F0B53D | sorot (stabilo), fokus, "perlu dilihat" |
+| `kunyit` | #E9A825 | #F0B53D | sorot (stabilo), "perlu dilihat" (cincin fokus memakai `tinta`: kunyit di atas kertas terang hanya 1,9:1, di bawah 3:1 WCAG 1.4.11) |
 | `cap` | #B4372A | #E0654F | bahaya, penolakan, gaji ditahan |
 | `daun` | #23704A | #4FB07F | berhasil, lunas, hadir |
 | `laut` | #2D5B86 | #78A6D6 | info, tautan |

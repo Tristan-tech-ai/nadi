@@ -136,9 +136,30 @@ body {
   }
 }
 
+/* Cincin fokus tinta: kontras >= 3:1 terhadap kertas terang dan gelap (WCAG 1.4.11 + 2.4.7). Kunyit di atas kertas terang
+   hanya sekitar 1,9:1, jadi kunyit tetap untuk stabilo, bukan penanda fokus. */
 :focus-visible {
-  outline: 2px solid var(--kunyit);
+  outline: 2px solid var(--tinta);
   outline-offset: 2px;
+}
+
+/* Lompat ke isi: tersembunyi sampai difokus papan ketik. */
+.lompat-isi {
+  position: absolute;
+  left: 0.75rem;
+  top: 0.5rem;
+  z-index: 50;
+  transform: translateY(-200%);
+  border-radius: var(--radius-isian);
+  background-color: var(--tinta);
+  color: var(--kertas);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.lompat-isi:focus-visible {
+  transform: none;
+  outline-color: var(--tinta);
 }
 
 /* Gerak selalu menghormati pilihan pengguna (ANTI-SLOP S43). */

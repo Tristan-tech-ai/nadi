@@ -43,7 +43,7 @@ export function StatusLamaran() {
   if (galat) {
     return (
       <div role="alert" className="mt-8 rounded-[var(--radius-kartu)] border border-garis p-5" data-testid="status-galat">
-        <p className="font-semibold">Status lamaran tidak bisa dibuka</p>
+        <h1 className="font-semibold">Status lamaran tidak bisa dibuka</h1>
         <p className="mt-1 text-tinta-2">{galat}</p>
       </div>
     );
