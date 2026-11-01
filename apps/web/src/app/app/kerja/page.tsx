@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowsLeftRightIcon } from "@phosphor-icons/react/dist/ssr";
+import { IlustrasiPapan } from "@/components/ilustrasi";
 import { BebanMingguIni, BebanSayaIni } from "@/components/app/beban";
 import { CerminKpi, KembaliKeTabel, KerangkaKpi, KpiMingguIni, KpiTanpaOrang } from "@/components/app/kpi";
 import { PapanStaf, TambahKerja, UbahPoin, type KerjaTampil } from "@/components/app/kerja";
@@ -258,7 +259,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
       <div className="mt-4">{tambah ?? <p className="text-sm text-tinta-2">Kerja ditambah pemilik atau admin. Kamu bisa melihat papannya.</p>}</div>
 
       {daftar.length === 0 ? (
-        <p className="mt-6 text-tinta-2" data-testid="kerja-kosong">Belum ada kerja hari ini. Tambah kerja pertama, misalnya Cek stok beras.</p>
+        <div className="mt-6 flex flex-col items-start gap-3"><IlustrasiPapan className="w-28" /><p className="text-tinta-2" data-testid="kerja-kosong">Belum ada kerja hari ini. Tambah kerja pertama, misalnya Cek stok beras.</p></div>
       ) : (
         <>
           <nav aria-label="Saring kolom" className="mt-6 lg:hidden">

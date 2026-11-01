@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CameraIcon, FileArrowUpIcon, ReceiptIcon } from "@phosphor-icons/react/dist/ssr";
+import * as Ilustrasi from "@/components/ilustrasi";
 import { Cap } from "@/components/ui/cap";
 import { AksiUsulan, KartuUsulan } from "@/components/ui/kartu-usulan";
 import { LogoNadi, TandaNadi } from "@/components/ui/logo";
@@ -64,6 +65,15 @@ export default function Komponen() {
               status: "ditahan",
             }}
           />
+        </div>
+      </section>
+
+      <section className="mt-12" data-testid="ilustrasi">
+        <h2 className="text-lg font-semibold">Ilustrasi</h2>
+        <div className="mt-3 grid grid-cols-2 gap-6 sm:grid-cols-4">
+          {Object.entries(Ilustrasi).map(([nama, Gambar]) => (
+            <figure key={nama} className="flex flex-col items-start gap-1"><Gambar /><figcaption className="text-sm text-tinta-2">{nama.replace("Ilustrasi", "")}</figcaption></figure>
+          ))}
         </div>
       </section>
 

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { randomUUID } from "node:crypto";
 import { Suspense } from "react";
+import { IlustrasiKunci } from "@/components/ilustrasi";
 import { FormBatalBerhenti, FormCatatBerhenti, FormCentang, FormPengganti, FormPindahkan } from "@/components/app/serah-terima";
 import { Cap } from "@/components/ui/cap";
 import { formatTanggalKalender } from "@/lib/format";
@@ -115,7 +116,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/serah-terim
     <>
       <FormCatatBerhenti orang={orang} pilih={typeof sp.orang === "string" ? sp.orang : ""} hari={hari} kunci={randomUUID()} />
       {daftar.length === 0
-        ? <p className="mt-8 text-tinta-2" data-testid="serah-kosong">Belum ada yang berhenti. Saat ada surat pengunduran diri, catat di atas supaya kerjanya pindah dan aksesnya dicabut tepat waktu.</p>
+        ? <div className="mt-8 flex flex-col items-start gap-3"><IlustrasiKunci className="w-28" /><p className="text-tinta-2" data-testid="serah-kosong">Belum ada yang berhenti. Saat ada surat pengunduran diri, catat di atas supaya kerjanya pindah dan aksesnya dicabut tepat waktu.</p></div>
         : daftar.map((b) => <Paket key={b.id} b={b} butir={butir.filter((x) => x.berhenti_id === b.id)} orang={orang} hari={hari} />)}
     </>
   );

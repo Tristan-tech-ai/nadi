@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { IlustrasiAmplop } from "@/components/ilustrasi";
 import { FormStatusSurat, FormTautPihak, type Kandidat } from "@/components/app/agenda-surat";
 import { Cap } from "@/components/ui/cap";
 import { formatTanggal, formatTanggalKalender } from "@/lib/format";
@@ -80,9 +81,9 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/surat">["se
         <button type="submit" className="h-10 rounded-[var(--radius-isian)] border border-garis-kuat px-3 font-semibold">Cari</button>
       </form>
       {baris.length === 0 ? (
-        <p className="mt-6 text-tinta-2" data-testid="agenda-kosong">
+        <div className="mt-6 flex flex-col items-start gap-3">{!cari && !status && <IlustrasiAmplop className="w-28" />}<p className="text-tinta-2" data-testid="agenda-kosong">
           {cari || status ? "Tidak ada surat yang cocok." : <>Belum ada surat masuk. Foto surat lewat <Link href="/app/lempar" className="text-laut underline underline-offset-2">Lempar</Link>, lalu setujui usulannya di Feed. Surat langsung masuk agenda dengan nomor.</>}
-        </p>
+        </p></div>
       ) : (
         <ul className="mt-6 divide-y divide-garis border-y border-garis" data-testid="daftar-agenda">
           {baris.map((b) => (

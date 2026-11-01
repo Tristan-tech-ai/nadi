@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { IlustrasiSlip } from "@/components/ilustrasi";
 import { CadanganPesangon } from "@/components/app/cadangan-pesangon";
 import { FormBagikan, FormLembur, FormLepas, FormSetujui, FormSiapkan } from "@/components/app/aksi-gaji";
 import { Cap } from "@/components/ui/cap";
@@ -102,7 +103,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
       )}
       {!disetujui && <div className="mt-4"><FormSiapkan bulan={bulan} ada={slip.length > 0} /></div>}
       {slip.length === 0 ? (
-        <p className="mt-6 text-tinta-2" data-testid="gaji-kosong">Belum ada draf gaji bulan ini. Nadi menghitung PPh 21, BPJS, dan menahan nama yang mencurigakan sebelum kamu setujui.</p>
+        <div className="mt-6 flex flex-col items-start gap-3"><IlustrasiSlip className="w-28" /><p className="text-tinta-2" data-testid="gaji-kosong">Belum ada draf gaji bulan ini. Nadi menghitung PPh 21, BPJS, dan menahan nama yang mencurigakan sebelum kamu setujui.</p></div>
       ) : (
         <ul className="mt-6 divide-y divide-garis border-y border-garis" data-testid="daftar-slip">
           {slip.map((s) => (

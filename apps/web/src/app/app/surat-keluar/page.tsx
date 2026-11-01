@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { IlustrasiSurat } from "@/components/ilustrasi";
 import { BuatSurat, FormBatalSurat, FormTerbitkan } from "@/components/app/surat-keluar";
 import { Cap } from "@/components/ui/cap";
 import { formatTanggalKalender } from "@/lib/format";
@@ -42,7 +43,7 @@ async function Isi() {
     <>
       {kelola && <div className="mt-6"><BuatSurat orang={(org ?? []) as { id: string; nama: string }[]} /></div>}
       {daftar.length === 0 ? (
-        <p className="mt-8 text-tinta-2" data-testid="surat-kosong">Belum ada surat keluar. Tulis permintaannya di atas, misalnya surat tugas Sari ke Surabaya untuk ikut pameran mulai besok.</p>
+        <div className="mt-8 flex flex-col items-start gap-3"><IlustrasiSurat className="w-28" /><p className="text-tinta-2" data-testid="surat-kosong">Belum ada surat keluar. Tulis permintaannya di atas, misalnya surat tugas Sari ke Surabaya untuk ikut pameran mulai besok.</p></div>
       ) : (
         <ul className="mt-8 divide-y divide-garis border-y border-garis" data-testid="daftar-surat-keluar">
           {daftar.map((s) => (

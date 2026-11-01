@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { IlustrasiKalender } from "@/components/ilustrasi";
 import { FormIzin } from "@/components/app/form-izin";
 import { Cap } from "@/components/ui/cap";
 import { capStatus, rentangTanggal } from "@/lib/izin";
@@ -58,7 +59,7 @@ async function Isi() {
       <section className="mt-10" aria-labelledby="judul-daftar-izin">
         <h2 id="judul-daftar-izin" className="text-lg font-semibold">{pengelola ? "Pengajuan tim" : "Pengajuanmu"}</h2>
         {baris.length === 0 ? (
-          <p className="mt-2 text-sm text-tinta-2" data-testid="izin-kosong">Belum ada pengajuan.</p>
+          <div className="mt-2 flex items-center gap-3"><IlustrasiKalender className="w-20" /><p className="text-sm text-tinta-2" data-testid="izin-kosong">Belum ada pengajuan.</p></div>
         ) : (
           <ul className="mt-3 divide-y divide-garis border-y border-garis" data-testid="daftar-izin">
             {baris.map((p) => (

@@ -1,6 +1,7 @@
 import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { Suspense } from "react";
+import { IlustrasiNota } from "@/components/ilustrasi";
 import { HalamanFeed, TautanBerikut } from "@/components/app/halaman-feed";
 import { AksiPutusan } from "@/components/app/putusan";
 import { KartuUsulan } from "@/components/ui/kartu-usulan";
@@ -144,9 +145,12 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
       </dl>
       <h2 className="mt-8 text-lg font-semibold">Perlu keputusanmu</h2>
       {semua === 0 ? (
-        <p className="mt-3 rounded-[var(--radius-kartu)] bg-kertas-2 p-4 text-tinta-2" data-testid="feed-kosong">
-          Belum ada usulan. Lempar berkas pertamamu, misalnya foto nota hari ini, dan Nadi akan menyiapkan isinya untuk kamu setujui.
-        </p>
+        <div className="mt-3 flex flex-col items-start gap-3 rounded-[var(--radius-kartu)] bg-kertas-2 p-4 sm:flex-row sm:items-center">
+          <IlustrasiNota className="w-24 shrink-0" />
+          <p className="text-tinta-2" data-testid="feed-kosong">
+            Belum ada usulan. Lempar berkas pertamamu, misalnya foto nota hari ini, dan Nadi akan menyiapkan isinya untuk kamu setujui.
+          </p>
+        </div>
       ) : (
         <HalamanFeed>
           <Saringan t={t} total={semua} perJenis={perJenis} />

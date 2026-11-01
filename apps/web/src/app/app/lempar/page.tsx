@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PaperPlaneTiltIcon } from "@phosphor-icons/react/dist/ssr";
+import { IlustrasiLempar } from "@/components/ilustrasi";
 import { Pelempar } from "@/components/app/pelempar";
 
 export const metadata: Metadata = { title: "Lempar Saja" };
@@ -25,7 +25,7 @@ async function DenganKiriman({ searchParams }: { searchParams: PageProps<"/app/l
 export default function Lempar(props: PageProps<"/app/lempar">) {
   return (
     <main className="mx-auto w-full max-w-xl px-5 py-10">
-      <PaperPlaneTiltIcon size={32} aria-hidden />
+      <IlustrasiLempar className="w-28" />
       <h1 className="mt-4 font-judul text-3xl font-extrabold tracking-tight">Lempar Saja</h1>
       <p className="mt-2 text-tinta-2">Foto nota, slip gaji, KTP, CV, surat dokter, Excel karyawan, absen, atau mutasi bank. Nadi membacanya dan menyiapkan usulan untuk kamu setujui.</p>
       <Suspense fallback={<div className="mt-6 h-36 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
