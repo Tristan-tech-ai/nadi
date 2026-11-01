@@ -235,3 +235,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 1 Nov 2026 tick 222: F4-07 done (e2e produksi lulus), riset F4-08 BPMP Coretax dari template resmi DJP; wajib 63/76.
 - 1 Nov 2026 tick 223: F4-08 Ruang Akuntan + undang akuntan + ekspor BPMP template Coretax v.3 (migrasi 031000/031100, 81 migrasi, tes SQL 13/13 + 15/15, vitest + pembanding template resmi, e2e lokal) di-push edcc0e6.
 - 1 Nov 2026 tick 224-225: F6-01 done (8 paket industri, tes SQL 21/21), F6-02 done (pembanding k >= 10, tes SQL 5/5); wajib 66/76.
+- 1 Nov 2026 tick 226: F6-03 done (alur nyata, tes SQL 24/24, e2e prod 2/2), Q-32 done (batas usaha, auth.spec prod 7/7), F5-03 (Sarapan Data + Analis Malam batch nyata 2/2, tes SQL 20/20, vitest 6/6); 50d8758.
