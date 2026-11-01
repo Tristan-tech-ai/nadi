@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { cacheLife } from "next/cache";
 import { Suspense } from "react";
+import { AlurNyata } from "@/components/app/alur-nyata";
 import { PutusanDemo } from "@/components/landing/putusan-demo";
 import { KartuUsulan } from "@/components/ui/kartu-usulan";
 import { LogoNadi } from "@/components/ui/logo";
 import { Rupiah } from "@/components/ui/rupiah";
+import type { Alur } from "@/lib/alur/alur";
 import { formatAngka } from "@/lib/format";
 import { anonRpc } from "@/lib/mcp/http";
 
@@ -14,6 +16,7 @@ type Demo = {
   orang: { nama: string; id_staf: string; jabatan: string | null }[];
   belanja_7_hari: number;
   absen_kemarin: number;
+  alur?: { invoice: Alur; rekrut: Alur };
 };
 
 const PILIHAN = [
@@ -103,6 +106,7 @@ async function IsiDemo({ kunci }: { kunci: "fnb" | "toko" }) {
                 </li>
               ))}
             </ul>
+            {d.alur ? <AlurNyata invoice={d.alur.invoice} rekrut={d.alur.rekrut} /> : null}
           </>
         )}
     </>

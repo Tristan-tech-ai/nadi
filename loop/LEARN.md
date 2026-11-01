@@ -4,6 +4,7 @@ Hal yang dipelajari dari sumber primer, dengan URL dan tanggal akses. Tulis sebe
 
 | Tanggal | Topik | Fakta | Sumber |
 |---|---|---|---|
+| 1 Nov 2026 | Process mining (DFG) | Log kejadian minimal: id kasus (case:concept:name), aktivitas (concept:name), waktu (time:timestamp); directly-follows graph = pasangan aktivitas yang langsung berurutan dalam satu kasus dengan frekuensi, plus aktivitas awal/akhir; versi performa memberi ukuran waktu per pasangan. Nadi meniru bentuk ini di SQL (kejadian.data.kasus, jenis, terjadi_at) tanpa pustaka | https://github.com/process-intelligence-solutions/pm4py/blob/release/pm4py/discovery.py (discover_dfg, discover_performance_dfg; diakses 1 Nov 2026) |
 | 30 Okt 2026 | Supabase Free | DB 500 MB, compute Nano (RAM 0,5 GB, CPU bersama), egress 5 GB + 5 GB cached, storage 1 GB, unggahan maks 50 MB, 50.000 MAU, 500 rb invokasi Edge Function, 200 koneksi realtime, jeda setelah 1 minggu tidak aktif, tanpa backup | https://supabase.com/pricing |
 | 30 Okt 2026 | Spesifikasi MCP | Versi 2026-07-28: tanpa sesi, header Mcp-Method/Mcp-Name, Client ID Metadata Documents menggantikan Dynamic Client Registration, validasi iss RFC 9207, ekstensi MCP Apps | https://blog.modelcontextprotocol.io/posts/2026-07-28/ |
 | 30 Okt 2026 | Harga model AI | kecil mulai $0,10/$0,50; menengah $2/$10; besar $4/$20 per juta token; Batch diskon 50% | docs resmi penyedia model, halaman models overview (30 Okt 2026) |

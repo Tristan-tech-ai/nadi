@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { pindahPerusahaan } from "@/app/app/actions";
 import { AiMilikmu } from "@/components/app/ai-milikmu";
+import { AlurUsaha } from "@/components/app/alur-usaha";
 import { AturanKerja } from "@/components/app/aturan-kerja";
 import { HematAi } from "@/components/app/hemat-ai";
 import { KebijakanIzin } from "@/components/app/kebijakan-izin";
@@ -94,6 +95,9 @@ export default function Perusahaan() {
       </Suspense>
       <Suspense fallback={<div className="mt-10 h-32 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <HematAi />
+      </Suspense>
+      <Suspense fallback={<div className="mt-10 h-64 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+        <AlurUsaha />
       </Suspense>
     </main>
   );
