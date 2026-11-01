@@ -98,8 +98,10 @@
    "accept": "minimal 8 ilustrasi SVG konsisten gaya DIRECTION.md, ringan (<15 KB tiap berkas), tercatat di ASSETS.md",
    "how": "gambar sendiri dalam SVG; foto hanya bila lisensinya bebas dan tercatat",
    "blocked_by": "D-02",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T10:35:39",
+   "result": "5bab1a1 (deploy d73d285 READY, CI success): 8 ilustrasi SVG buatan sendiri apps/web/src/components/ilustrasi (Nota, Lempar, Amplop, Surat, Papan, Kalender, Slip, Kunci), tiap berkas < 15 KB, token saja tanpa gradien; vitest 17/17 dengan merah sengaja (heksadesimal disuntik); e2e ilustrasi.spec LULUS produksi (8 SVG, axe 390/1440 terang/gelap); dipasang di 7 keadaan kosong + kepala Lempar; docs/ASSETS.md; docs/quality/ilustrasi.md"
   },
   {
    "id": "F0-01",

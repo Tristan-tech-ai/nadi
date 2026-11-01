@@ -226,3 +226,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 1 Nov 2026 tick 217: F4-02 surat dari kalimat + QR + PDF A4 (fd2b3de; axe menemukan label tombol tak memuat teks terlihat) dan F2-07 lingkaran rekrut (fdb194e) di-commit dengan tes merah lalu hijau; push untuk uji produksi.
 - 1 Nov 2026 tick 217: F4-02 dan F2-07 done (produksi 2126364). F3-07 serah terima (0eba2e9) tes SQL 28/28; pg_cron mencabut akses e2e lokal 03.05 UTC dan login staf itu ditolak user_banned.
 - 1 Nov 2026 tick 217 (akhir): F3-07 done (cron mencabut sungguhan). D-03 delapan ilustrasi di-commit (vitest 17/17, merah sengaja hex, e2e axe). Wajib 56/74.
+- 1 Nov 2026 tick 218: D-03 done (e2e produksi ilustrasi.spec lulus di d73d285). Wajib 57/74.
