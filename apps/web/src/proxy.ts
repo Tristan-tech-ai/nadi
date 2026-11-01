@@ -3,7 +3,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { readPublicEnv } from "@/lib/env";
 
 // Area yang butuh masuk. Selain ini publik (landing, lamaran kandidat, verifikasi surat).
-const DILINDUNGI = ["/app", "/oauth/izinkan", "/absen", "/kios"];
+const DILINDUNGI = ["/app", "/oauth/izinkan", "/absen", "/kios", "/cetak"];
 // Pengecualian di dalam area terlindung: tablet kios memakai token tablet sendiri, bukan sesi.
 const TERBUKA = ["/kios/tablet"];
 

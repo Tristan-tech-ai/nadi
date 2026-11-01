@@ -46,6 +46,23 @@
   color-scheme: dark;
 }
 
+/* Cetak (surat, slip): selalu tinta gelap di kertas terang, apa pun tema layar. Selektor pertama menyamai kekhususan aturan gelap. */
+@media print {
+  :root:not([data-tema="terang"]), :root[data-tema="gelap"], :root {
+    --kertas: #F6F2EA;
+    --kertas-2: #EFE9DD;
+    --tinta: #1C1B18;
+    --tinta-2: #5B574F;
+    --garis: #DDD5C6;
+    --garis-kuat: #8C8476;
+    --kunyit: #E9A825;
+    --cap: #B4372A;
+    --daun: #23704A;
+    --laut: #2D5B86;
+    color-scheme: light;
+  }
+}
+
 @theme inline {
   --color-kertas: var(--kertas);
   --color-kertas-2: var(--kertas-2);

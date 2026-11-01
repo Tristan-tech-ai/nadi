@@ -69,6 +69,7 @@ export default function Perusahaan() {
       <p className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold">
         <Link href="/app/mulai" className="underline underline-offset-4">Tambah usaha lain</Link>
         <Link href="/app/surat" className="underline underline-offset-4">Agenda surat masuk</Link>
+        <Link href="/app/surat-keluar" className="underline underline-offset-4">Surat keluar</Link>
       </p>
       <Suspense fallback={<div className="mt-10 h-28 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <BagianPemberitahuan />
