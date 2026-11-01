@@ -151,4 +151,21 @@ test("keputusan rekrut: status tanpa akun, tawaran lewat wa.me, Bank Talenta ber
   // Lowongan asal tidak menawarkan pelamarnya sendiri.
   await expect(baris1.getByTestId("bank-talenta").filter({ hasText: nama1 })).toHaveCount(0);
   await axeDanFoto(page, bank, "bank-talenta");
+
+  // F2-07: pelamar diterima dicatat sebagai karyawan; lamaran tertaut ke orang baru bertanggal mulai; laporan muncul di halaman Orang.
+  await page.goto(`/app/wawancara/${la!.id}`);
+  await keputusan.getByRole("button", { name: "Tandai diterima" }).click();
+  await expect(keputusan.getByTestId("tahap-sekarang")).toHaveText("Diterima kerja");
+  const catat = page.getByTestId("catat-karyawan");
+  await expect(catat.getByLabel("Mulai kerja")).toHaveValue(/^\d{4}-\d{2}-\d{2}$/);
+  await catat.getByRole("button", { name: "Catat sebagai karyawan" }).click();
+  await expect(page.getByTestId("sudah-karyawan")).toContainText(nama1);
+  const { data: tertaut } = await sb.from("lamaran").select("orang_id").eq("id", la!.id).single();
+  expect(tertaut!.orang_id).toBeTruthy();
+  const { data: karyawan } = await sb.from("orang").select("nama, jenis, data").eq("id", tertaut!.orang_id!).single();
+  expect(karyawan).toMatchObject({ nama: nama1, jenis: ["karyawan"], data: { sumber: "lamaran", lamaran_id: la!.id } });
+  await page.goto("/app/orang");
+  const lingkaran = page.getByTestId("lingkaran-rekrut");
+  await expect(lingkaran.getByTestId("lingkaran-ringkas")).toContainText(/karyawan sudah bekerja 3 bulan, \d+ lainnya belum/);
+  await axeDanFoto(page, lingkaran, "lingkaran-rekrut");
 });

@@ -38,3 +38,18 @@ export async function ubahTahap(_: HasilKeputusan, form: FormData): Promise<Hasi
   }
   return { pesan: tersimpan };
 }
+
+/** F2-07: pelamar yang diterima dicatat sebagai karyawan (orang baru bertanggal mulai, topi lowongannya), lamaran tertaut ke orang. */
+export async function catatKaryawan(_: HasilKeputusan, form: FormData): Promise<HasilKeputusan> {
+  await wajibPerusahaan();
+  const lamaran = String(form.get("lamaran") ?? "");
+  const mulai = String(form.get("mulai") ?? "");
+  if (!ID_SAH.test(lamaran)) return { galat: "Pilihan tidak dikenal. Muat ulang halaman ini." };
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(mulai)) return { galat: "Pilih tanggal mulai kerja dari kalender." };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("jadikan_karyawan", { p_lamaran: lamaran, p_mulai: mulai });
+  if (error) return { galat: error.code === "42501" ? "Hanya pemilik atau admin yang bisa mencatat karyawan." : error.code === "22023" ? error.message : "Gagal mencatat karyawan. Coba lagi sebentar." };
+  revalidatePath(`/app/wawancara/${lamaran}`);
+  revalidatePath("/app/orang");
+  return { pesan: "Tercatat sebagai karyawan. Setelah 3 bulan bekerja, kinerjanya ikut menilai pertanyaan seleksimu." };
+}

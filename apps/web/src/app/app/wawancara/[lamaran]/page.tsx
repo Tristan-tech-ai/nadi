@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { HasilUji, type BarisUji } from "@/components/app/hasil-uji";
+import { CatatKaryawan } from "@/components/app/catat-karyawan";
 import { KeputusanLamaran } from "@/components/app/keputusan-lamaran";
 import { TranskripJawaban } from "@/components/app/transkrip-jawaban";
 import { formatDurasi } from "@/lib/wawancara/rekam";
 import { ringkasanWawancara } from "@/lib/wawancara/pertanyaan";
 import type { ModelTranskrip } from "@/lib/wawancara/transkrip";
 import { formatTanggal } from "@/lib/format";
+import { hariIni } from "@/lib/izin";
 import { pesanWa, tahapSah, tampilHp, tautanWa } from "@/lib/rekrut/keputusan";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
@@ -17,7 +19,7 @@ export const metadata: Metadata = { title: "Wawancara dan uji pelamar" };
 
 type Topi = { nama: string; keahlian: unknown; tanggung_jawab: unknown };
 type Lamaran = {
-  id: string; nama: string; dibuat_at: string; telepon: string | null; tahap: string; pesan_tahap: string | null; tahap_at: string | null;
+  id: string; nama: string; dibuat_at: string; telepon: string | null; tahap: string; pesan_tahap: string | null; tahap_at: string | null; orang_id: string | null;
   boleh_dihubungi: boolean; perusahaan: { nama: string } | null; lowongan: { judul: string; topi: Topi | null } | null;
 };
 type Jawaban = { id: string; urutan: number; pertanyaan: string; durasi_detik: number; transkrip: string | null; berkas: { jalur: string } | null };
@@ -32,7 +34,7 @@ async function Isi({ params }: { params: Promise<{ lamaran: string }> }) {
   }
   const supabase = await createClient();
   const [{ data: la }, { data: jw }, { data: konf }, { data: uji }] = await Promise.all([
-    ID_SAH.test(id) ? supabase.from("lamaran").select("id, nama, dibuat_at, telepon, tahap, pesan_tahap, tahap_at, boleh_dihubungi, perusahaan(nama), lowongan(judul, topi(nama, keahlian, tanggung_jawab))").eq("id", id).maybeSingle() : Promise.resolve({ data: null }),
+    ID_SAH.test(id) ? supabase.from("lamaran").select("id, nama, dibuat_at, telepon, tahap, pesan_tahap, tahap_at, boleh_dihubungi, orang_id, perusahaan(nama), lowongan(judul, topi(nama, keahlian, tanggung_jawab))").eq("id", id).maybeSingle() : Promise.resolve({ data: null }),
     ID_SAH.test(id) ? supabase.from("jawaban_wawancara").select("id, urutan, pertanyaan, durasi_detik, transkrip, berkas(jalur)").eq("lamaran_id", id).eq("status", "masuk").order("urutan") : Promise.resolve({ data: null }),
     supabase.from("konfigurasi").select("nilai").eq("kunci", "model_transkrip").maybeSingle(),
     ID_SAH.test(id) ? supabase.from("uji_lamaran").select("jenis, topi_kode, benih, jawaban, selesai_at").eq("lamaran_id", id) : Promise.resolve({ data: null }),
@@ -98,6 +100,9 @@ async function Isi({ params }: { params: Promise<{ lamaran: string }> }) {
         hp={lamaran.telepon ? tampilHp(lamaran.telepon) : null}
         wa={hrefWa ? { href: hrefWa, label: jenisWa === "tawaran" ? "Kirim tawaran lewat WhatsApp" : "Kirim kabar lewat WhatsApp" } : null}
       />
+      {tahap === "diterima" && (lamaran.orang_id
+        ? <p className="mt-3 text-sm text-tinta-2" data-testid="sudah-karyawan">{lamaran.nama} sudah tercatat sebagai karyawan di halaman Orang.</p>
+        : <CatatKaryawan lamaran={lamaran.id} nama={lamaran.nama} hari={hariIni(new Date(), zona)} />)}
 
       <ol className="mt-6 flex flex-col gap-4">
         {jawaban.map((j) => {

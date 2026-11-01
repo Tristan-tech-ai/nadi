@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { FormGajiOrang, type GajiOrang } from "@/components/app/aksi-gaji";
 import { KartuLowongan } from "@/components/app/lowongan";
+import { LingkaranRekrut } from "@/components/app/lingkaran-rekrut";
 import { FormAkunStaf, FormTambahOrang } from "./form-orang";
 
 export const metadata: Metadata = { title: "Orang" };
@@ -66,6 +67,9 @@ async function Isi() {
         <p className="mt-6 text-tinta-2">Belum ada orang. Tambah satu di atas, atau lempar Excel daftar karyawan nanti.</p>
       )}
       <KartuLowongan />
+      <Suspense fallback={<div className="mt-10 h-32 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+        <LingkaranRekrut />
+      </Suspense>
     </section>
   );
 }
