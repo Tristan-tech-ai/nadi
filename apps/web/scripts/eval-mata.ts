@@ -1,7 +1,7 @@
 // Ukur akurasi Mata (F5-01) pada korpus fixtures/korpus/mata: RF-DETR nano lewat transformers.js + resep zona (src/lib/mata/resep.ts).
 // Jalankan dari apps/web:
 //   python -I scripts/korpus/mata.py <dir cuplikan>
-//   TRANSFORMERS=<jalur node_modules/@huggingface/transformers/src/transformers.js> node scripts/eval-mata.ts <dir cuplikan> [dtype=q8]
+//   MODEL_MATA=<id model di public.konfigurasi kunci model_mata> TRANSFORMERS=<jalur node_modules/@huggingface/transformers/src/transformers.js> \n//     node scripts/eval-mata.ts <dir cuplikan> [dtype=q8]
 // Mencetak akurasi status meja per zona dan total, dengan dan tanpa histeresis, serta latensi rata-rata per cuplikan.
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -17,7 +17,9 @@ const jawaban = JSON.parse(readFileSync(join(AKAR, "jawaban.json"), "utf8")) as 
 
 const sumber = process.env.TRANSFORMERS ? pathToFileURL(process.env.TRANSFORMERS).href : "@huggingface/transformers";
 const { pipeline } = await import(sumber);
-const deteksi = await pipeline("object-detection", "onnx-community/rfdetr_nano-ONNX", { dtype });
+const model = process.env.MODEL_MATA;
+if (!model) throw new Error("Isi MODEL_MATA (ID model dari public.konfigurasi kunci model_mata)");
+const deteksi = await pipeline("object-detection", model, { dtype });
 
 const status = new Map<string, Status>(zona.map((z) => [z.id, statusAwal()]));
 const prediksi: StatusMeja[] = [];
@@ -44,7 +46,7 @@ for (const j of jawaban) {
   }
 }
 const persen = (x: number) => `${(x * 100).toFixed(1)}%`;
-console.log(`model rfdetr_nano ${dtype}, ${jawaban.length} cuplikan x ${zona.length} zona, rata-rata ${Math.round(ms / jawaban.length)} ms per cuplikan`);
+console.log(`model ${model} ${dtype}, ${jawaban.length} cuplikan x ${zona.length} zona, rata-rata ${Math.round(ms / jawaban.length)} ms per cuplikan`);
 for (const z of zona) console.log(`  ${z.nama}: ${persen(akurasi(perZona.get(z.id)!.p, perZona.get(z.id)!.j))}`);
 console.log(`akurasi dengan histeresis: ${persen(akurasi(prediksi, benar))}; tanpa histeresis: ${persen(akurasi(mentah, benar))}`);
 // Simpan deteksi orang per cuplikan sebagai fixture supaya vitest bisa menguji resep tanpa model (SIMPAN_DETEKSI=1).
