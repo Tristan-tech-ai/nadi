@@ -1934,8 +1934,10 @@
    "accept": "docs/design/tukar-shift.md terpenuhi: tabel tawaran_shift + RPC tawarkan_shift/ambil_tawaran/batal_tawaran berkunci klien; ambil yang melanggar batas lembur ditolak 54000, dua pengambil satu menang, shift yang sudah mulai tidak bisa ditawarkan, staf bukan tujuan tidak membaca tawaran; usulan tukar di Feed untuk pemilik, setelah disetujui shift berpindah dalam satu transaksi tercatat audit; tes SQL tiap aturan + isolasi; e2e A tawarkan, B ambil, pemilik setujui, jadwal B bertambah; foto 390/1440 terang/gelap",
    "how": "docs/design/tukar-shift.md, migrasi shift 022000 (simpan_shift sebagai cek batas), putuskan_usulan cabang baru lewat trigger seperti agenda surat",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T11:16:24"
+   "status": "done",
+   "created": "2026-11-01T11:16:24",
+   "done": "2026-11-01T11:55:06",
+   "result": "commit beb3de0 (deploy READY); migrasi 028000 tukar_shift (fb8c3b58), 77 migrasi; tes SQL tukar_shift 29/29 (ambil melanggar lembur ditolak 54000, dua pengambil satu menang, shift mulai tidak bisa ditawarkan, staf bukan tujuan tidak membaca, usulan untuk pemilik, disetujui = pindah + lembur tercatat, ditolak = tetap, isolasi); vitest pesan 3/3; e2e tukar-shift + jadwal produksi lulus 2/2; foto 390/1440 terang/gelap axe bersih; docs/quality/tukar-shift.md"
   },
   {
    "id": "F3-06C",
