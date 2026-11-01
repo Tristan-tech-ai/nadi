@@ -2,6 +2,7 @@ import Link from "next/link";
 import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 import { AlurNyata } from "@/components/app/alur-nyata";
+import { DaftarSarapan, type Sarapan } from "@/components/app/sarapan-data";
 import { PutusanDemo } from "@/components/landing/putusan-demo";
 import { KartuUsulan } from "@/components/ui/kartu-usulan";
 import { LogoNadi } from "@/components/ui/logo";
@@ -17,6 +18,7 @@ type Demo = {
   belanja_7_hari: number;
   absen_kemarin: number;
   alur?: { invoice: Alur; rekrut: Alur };
+  sarapan?: Sarapan;
 };
 
 const PILIHAN = [
@@ -91,6 +93,7 @@ async function IsiDemo({ kunci }: { kunci: "fnb" | "toko" }) {
                 <dd className="mt-1 text-xl font-semibold">{d.absen_kemarin > 0 ? <><span className="angka">{formatAngka(d.absen_kemarin)}</span> orang</> : "Belum dicatat"}</dd>
               </div>
             </dl>
+            {d.sarapan ? <DaftarSarapan sarapan={d.sarapan} /> : null}
             <h2 className="mt-8 text-lg font-semibold">Perlu keputusan pemilik</h2>
             <div className="mt-3 grid gap-3" data-testid="feed-demo">
               {d.usulan.map((u) => (

@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { IlustrasiNota } from "@/components/ilustrasi";
 import { HalamanFeed, TautanBerikut } from "@/components/app/halaman-feed";
 import { AksiPutusan } from "@/components/app/putusan";
+import { SarapanData } from "@/components/app/sarapan-data";
 import { KartuUsulan } from "@/components/ui/kartu-usulan";
 import { bacaTampilan, halaman, hitungJenis, hrefFeed, JENIS, JENIS_DIKENAL, LABEL_JENIS, PER_HALAMAN, usulanBaru, type Jenis, type JenisDikenal, type Tampilan, type Urut } from "@/lib/feed";
 import { catatanRubrik, nilaiPelamar, rubrikDariTopi, saringCv } from "@/lib/rekrut/rubrik";
@@ -143,6 +144,9 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
           <dd className="angka mt-1 text-2xl font-semibold" data-testid="jumlah-usulan">{semua}</dd>
         </div>
       </dl>
+      <Suspense fallback={null}>
+        <SarapanData />
+      </Suspense>
       <h2 className="mt-8 text-lg font-semibold">Perlu keputusanmu</h2>
       {semua === 0 ? (
         <div className="mt-3 flex flex-col items-start gap-3 rounded-[var(--radius-kartu)] bg-kertas-2 p-4 sm:flex-row sm:items-center">

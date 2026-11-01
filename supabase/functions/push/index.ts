@@ -3,7 +3,9 @@
 // Aksi: { aksi: "siapkan" } memastikan kunci ada dan mengembalikan kunci publik;
 //       { aksi: "uji" } mengirim pemberitahuan uji ke semua langganan milik pemanggil;
 //       { aksi: "usulan", perusahaan_id, jumlah, judul } dari database (pg_cron + pg_net, header x-nadi-token dari Vault)
-//       mengabari pemilik/admin usaha itu bahwa ada usulan menunggu. Fungsi ini di-deploy tanpa verify_jwt dan memeriksa sendiri.
+//       mengabari pemilik/admin usaha itu bahwa ada usulan menunggu;
+//       { aksi: "sarapan", perusahaan_id, judul, isi } dari app.kirim_sarapan mengirim Sarapan Data pagi ke pemilik/admin.
+//       Fungsi ini di-deploy tanpa verify_jwt dan memeriksa sendiri.
 import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2.118.0";
 import * as webpush from "jsr:@negrel/webpush@0.5.0";
 
@@ -85,15 +87,17 @@ Deno.serve(async (req) => {
     const db = admin();
     const { data: cocok } = await db.rpc("push_token_cocok", { p_token: token });
     if (!cocok) return json({ galat: "Token tidak sah" }, 401);
-    if (isi.aksi !== "usulan" || typeof isi.perusahaan_id !== "string") return json({ galat: "Aksi tidak dikenal" }, 400);
+    if ((isi.aksi !== "usulan" && isi.aksi !== "sarapan") || typeof isi.perusahaan_id !== "string") return json({ galat: "Aksi tidak dikenal" }, 400);
     const kunci = await siapkan(db);
     const { data: target } = await db.rpc("target_push", { p_perusahaan: isi.perusahaan_id, p_peran: ["pemilik", "admin"] });
     const jumlah = Number(isi.jumlah) || 1;
-    const pesan = JSON.stringify({
-      judul: jumlah > 1 ? `${jumlah} usulan menunggu keputusanmu` : "Usulan baru menunggu keputusanmu",
-      isi: String(isi.judul ?? "Buka Feed untuk menyetujui atau menolak."),
-      tautan: "/app",
-    });
+    const pesan = isi.aksi === "sarapan"
+      ? JSON.stringify({ judul: String(isi.judul ?? "Sarapan data"), isi: String(isi.isi ?? ""), tautan: "/app#sarapan" })
+      : JSON.stringify({
+        judul: jumlah > 1 ? `${jumlah} usulan menunggu keputusanmu` : "Usulan baru menunggu keputusanmu",
+        isi: String(isi.judul ?? "Buka Feed untuk menyetujui atau menolak."),
+        tautan: "/app",
+      });
     return json(await kirim(kunci.server, (target ?? []) as Langganan[], pesan, (id) => db.from("langganan_push").delete().eq("id", id)));
   }
 
