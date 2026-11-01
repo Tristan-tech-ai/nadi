@@ -1005,8 +1005,10 @@
    "accept": "laporan per halaman",
    "how": "skill accessibility-review",
    "blocked_by": "F1-05",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-01T16:52:29",
+   "result": "commit d67503e+a69d92e+0f18c13 (prod 0f18c13 READY); e2e/aksesibilitas.spec.ts ke produksi 2/2: 28 halaman (12 publik, 16 aplikasi) axe 0 serius 390/1440 terang/gelap, satu h1, lang id, 12 Tab fokus terlihat kontras >= 3:1, Lompat ke isi di aplikasi; merah dulu (cincin fokus 1,86:1, h1 hilang, isian tanggal tanpa cincin); docs/quality/aksesibilitas.md"
   },
   {
    "id": "DONE-01",
