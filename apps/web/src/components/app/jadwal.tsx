@@ -1,7 +1,9 @@
 "use client";
 
 import { useActionState } from "react";
-import { ambilTawaran, batalkanShift, batalTawaran, jawabLembur, salinMingguLalu, tambahShift, tawarkanShift, type HasilAmbil, type HasilJadwal } from "@/app/app/jadwal/actions";
+import { ambilTawaran, aturKebutuhan, batalkanShift, batalTawaran, hentiKebutuhan, jawabLembur, salinMingguLalu, simpanUsulan, tambahShift, tawarkanShift, usulkanJadwal, type HasilAmbil, type HasilJadwal, type HasilUsulan } from "@/app/app/jadwal/actions";
+import { formatTanggalKalender } from "@/lib/format";
+import { NAMA_HARI } from "@/lib/jadwal/kebutuhan";
 import { Tombol } from "@/components/ui/tombol";
 
 const isian = "h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-2 text-base";
@@ -117,5 +119,96 @@ export function FormAmbil({ tawaran, label }: { tawaran: string; label: string }
       )}
       {h && !("perlu" in h) && ("galat" in h ? <p role="alert" className="text-sm text-cap">{h.galat}</p> : <p role="status" className="text-sm text-daun">{h.pesan}</p>)}
     </form>
+  );
+}
+
+/** Kebutuhan orang per shift (F3-06C): topi, hari, jam, berapa orang. */
+export function FormKebutuhan({ topi }: { topi: { id: string; nama: string }[] }) {
+  const [h, aksi, sibuk] = useActionState<HasilJadwal, FormData>(aturKebutuhan, null);
+  return (
+    <form action={aksi} className="mt-3 grid grid-cols-2 gap-3 rounded-[var(--radius-kartu)] border border-garis p-4 text-sm sm:grid-cols-4" aria-label="Kebutuhan orang">
+      <label className="col-span-2 flex flex-col gap-1"><span className="text-tinta-2">Topi</span>
+        <select name="topi" required defaultValue="" className={isian}>
+          <option value="" disabled>Pilih</option>
+          {topi.map((t) => <option key={t.id} value={t.id}>{t.nama}</option>)}
+        </select></label>
+      <label className="flex flex-col gap-1"><span className="text-tinta-2">Butuh (orang)</span>
+        <input type="number" name="butuh" min={1} max={20} defaultValue={1} inputMode="numeric" className={isian} /></label>
+      <label className="flex flex-col gap-1"><span className="text-tinta-2">Istirahat (menit)</span>
+        <input type="number" name="istirahat" min={0} max={240} step={15} defaultValue={60} inputMode="numeric" className={isian} /></label>
+      <label className="flex flex-col gap-1"><span className="text-tinta-2">Mulai</span>
+        <input type="time" name="mulai" required defaultValue="07:00" className={isian} /></label>
+      <label className="flex flex-col gap-1"><span className="text-tinta-2">Selesai</span>
+        <input type="time" name="selesai" required defaultValue="15:00" className={isian} /></label>
+      <fieldset className="col-span-2 sm:col-span-4">
+        <legend className="text-tinta-2">Hari</legend>
+        <div className="mt-1 flex flex-wrap gap-x-4 gap-y-2">
+          {NAMA_HARI.map((n, i) => (
+            <label key={n} className="inline-flex items-center gap-1.5"><input type="checkbox" name="hari" value={i} defaultChecked className="h-4 w-4" />{n}</label>
+          ))}
+        </div>
+      </fieldset>
+      <div className="col-span-2 flex flex-wrap items-center gap-3 sm:col-span-4">
+        <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? "Menyimpan..." : "Simpan kebutuhan"}</Tombol>
+        <Hasil h={h} />
+      </div>
+    </form>
+  );
+}
+
+export function FormHentiKebutuhan({ kebutuhan, label }: { kebutuhan: string; label: string }) {
+  const [h, aksi, sibuk] = useActionState<HasilJadwal, FormData>(hentiKebutuhan, null);
+  return (
+    <form action={aksi} className="flex items-center gap-2">
+      <input type="hidden" name="kebutuhan" value={kebutuhan} />
+      <button type="submit" disabled={sibuk} className="text-sm text-tinta-2 underline underline-offset-4" aria-label={`Tidak dipakai lagi ${label}`}>Tidak dipakai lagi</button>
+      <Hasil h={h} />
+    </form>
+  );
+}
+
+/** Usulkan jadwal minggu ini dari kebutuhan; pemilik memeriksa lalu menyimpan. Penyusun hanya mengusulkan. */
+export function PenyusunJadwal({ minggu }: { minggu: string }) {
+  const [usul, mintaUsul, sibukUsul] = useActionState<HasilUsulan, FormData>(usulkanJadwal, null);
+  const [simpan, aksiSimpan, sibukSimpan] = useActionState<HasilUsulan, FormData>(simpanUsulan, null);
+  const u = usul && "usulan" in usul ? usul.usulan : null;
+  const s = simpan && "simpan" in simpan ? simpan.simpan : null;
+  return (
+    <div className="mt-3" data-testid="penyusun">
+      <form action={mintaUsul} className="flex flex-wrap items-center gap-3">
+        <input type="hidden" name="minggu" value={minggu} />
+        <Tombol type="submit" ragam="kedua" disabled={sibukUsul}>{sibukUsul ? "Menyusun..." : "Usulkan jadwal"}</Tombol>
+        {usul && "galat" in usul && <p role="alert" className="text-sm text-cap">{usul.galat}</p>}
+      </form>
+      {u && !s && (
+        <div className="mt-3 rounded-[var(--radius-kartu)] border border-garis p-4 text-sm" data-testid="usulan-jadwal">
+          <p className="font-semibold">Usulan: {u.baris.length} shift. Periksa dulu; belum ada yang tersimpan.</p>
+          <ul className="mt-2 divide-y divide-garis">
+            {u.baris.map((b) => (
+              <li key={b.kunci} className="flex flex-wrap justify-between gap-2 py-1" data-testid="baris-usulan">
+                <span>{NAMA_HARI[b.hari]}, {formatTanggalKalender(b.tanggal)}: <span className="font-semibold">{b.nama}</span> ({b.topi_nama.toLowerCase()})</span>
+                <span className="angka">{b.mulai.replace(":", ".")}-{b.selesai.replace(":", ".")}</span>
+              </li>
+            ))}
+          </ul>
+          {u.kurang.length > 0 && (
+            <ul className="mt-2 list-disc pl-5 text-cap" data-testid="usulan-kurang">{u.kurang.map((k) => <li key={k}>{k}</li>)}</ul>
+          )}
+          {u.baris.length > 0 && (
+            <form action={aksiSimpan} className="mt-3">
+              <input type="hidden" name="baris" value={JSON.stringify(u.baris)} />
+              <Tombol type="submit" ragam="kedua" disabled={sibukSimpan}>{sibukSimpan ? "Menyimpan..." : `Simpan ${u.baris.length} shift`}</Tombol>
+            </form>
+          )}
+        </div>
+      )}
+      {s && (
+        <div className="mt-3 text-sm" data-testid="hasil-simpan-usulan">
+          <p role="status" className="text-daun">{s.pesan}</p>
+          {s.gagal.length > 0 && <ul className="mt-1 list-disc pl-5 text-cap">{s.gagal.map((g) => <li key={g}>{g}</li>)}</ul>}
+        </div>
+      )}
+      {simpan && "galat" in simpan && <p role="alert" className="mt-2 text-sm text-cap">{simpan.galat}</p>}
+    </div>
   );
 }

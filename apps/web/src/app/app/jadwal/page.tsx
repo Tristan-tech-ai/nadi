@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { randomUUID } from "node:crypto";
 import { Suspense } from "react";
-import { FormAmbil, FormBatalShift, FormBatalTawaran, FormLembur, FormSalin, FormShift, FormTawarkan } from "@/components/app/jadwal";
+import { FormAmbil, FormBatalShift, FormBatalTawaran, FormHentiKebutuhan, FormKebutuhan, FormLembur, FormSalin, FormShift, FormTawarkan, PenyusunJadwal } from "@/components/app/jadwal";
 import { formatTanggalKalender } from "@/lib/format";
 import { hariIni } from "@/lib/izin";
 import { createClient } from "@/lib/supabase/server";
@@ -25,8 +25,14 @@ const rentang = (s: { mulai: string; selesai: string }) => `${s.mulai.replace(":
 
 async function Pengelola({ minggu, kelola, hari }: { minggu: string | null; kelola: boolean; hari: string }) {
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("jadwal_minggu", { p_mulai: minggu });
+  const [{ data, error }, topi, keb] = await Promise.all([
+    supabase.rpc("jadwal_minggu", { p_mulai: minggu }),
+    kelola ? supabase.from("topi").select("id, nama").eq("aktif", true).order("nama") : Promise.resolve({ data: [] }),
+    kelola ? supabase.from("kebutuhan_shift").select("id, hari, mulai, selesai, butuh, istirahat_menit, topi:topi_id(nama)").eq("aktif", true).order("hari").order("mulai")
+      : Promise.resolve({ data: [] }),
+  ]);
   if (error || !data) return <p role="alert" className="mt-6 text-cap">Jadwal belum bisa dimuat. Coba muat ulang.</p>;
+  const kebutuhan = (keb.data ?? []) as unknown as { id: string; hari: number; mulai: string; selesai: string; butuh: number; istirahat_menit: number; topi: { nama: string } | null }[];
   const m = data as Minggu;
   const ada = m.orang.some((o) => o.shift.length);
   return (
@@ -38,6 +44,7 @@ async function Pengelola({ minggu, kelola, hari }: { minggu: string | null; kelo
       </div>
       <p className="mt-1 text-sm text-tinta-2">{m.pola_kerja === "5_hari" ? "5 hari kerja: 8 jam sehari" : "6 hari kerja: 7 jam sehari"}, 40 jam seminggu. Selebihnya lembur, paling lama 4 jam sehari dan 18 jam seminggu.</p>
       {kelola && <div className="mt-4"><FormSalin minggu={m.mulai} /></div>}
+      {kelola && <PenyusunJadwal minggu={m.mulai} />}
       {kelola && <FormShift orang={m.orang.map((o) => ({ id: o.id, nama: o.nama }))} awal={m.mulai >= hari ? m.mulai : hari} kunci={randomUUID()} />}
       {!ada ? (
         <p className="mt-6 text-tinta-2" data-testid="jadwal-kosong">Belum ada jadwal minggu ini. Salin dari minggu lalu, atau tambah shift pertama di atas.</p>
@@ -71,6 +78,23 @@ async function Pengelola({ minggu, kelola, hari }: { minggu: string | null; kelo
             ))}</tbody>
           </table>
         </div>
+      )}
+      {kelola && (
+        <section className="mt-8" aria-labelledby="judul-kebutuhan" data-testid="kebutuhan">
+          <h2 id="judul-kebutuhan" className="text-lg font-semibold">Kebutuhan orang per shift</h2>
+          <p className="mt-1 text-sm text-tinta-2">Isi berapa orang yang dibutuhkan tiap hari. Nadi memakai ini untuk mengusulkan jadwal; kamu yang memutuskan.</p>
+          {kebutuhan.length === 0 ? <p className="mt-2 text-sm text-tinta-2" data-testid="kebutuhan-kosong">Belum ada kebutuhan. Mulai dari shift yang paling rutin.</p> : (
+            <ul className="mt-2 divide-y divide-garis border-y border-garis text-sm" data-testid="daftar-kebutuhan">
+              {kebutuhan.map((k) => (
+                <li key={k.id} className="flex flex-wrap items-center justify-between gap-2 py-1.5">
+                  <span>{HARI[k.hari]} <span className="angka">{rentang({ mulai: k.mulai.slice(0, 5), selesai: k.selesai.slice(0, 5) })}</span>: {k.butuh} {k.topi?.nama.toLowerCase()}</span>
+                  <FormHentiKebutuhan kebutuhan={k.id} label={`${HARI[k.hari]} ${k.topi?.nama ?? ""}`} />
+                </li>
+              ))}
+            </ul>
+          )}
+          <FormKebutuhan topi={(topi.data ?? []) as { id: string; nama: string }[]} />
+        </section>
       )}
     </>
   );

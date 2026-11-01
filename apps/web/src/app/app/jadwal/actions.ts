@@ -2,6 +2,7 @@
 
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
+import { kunciBaris, ringkasSimpan, usulkan, type BarisUsulan, type DataUsulan } from "@/lib/jadwal/kebutuhan";
 import { jamDesimal, rapikanPesanBatas, teksPeringatanTukar } from "@/lib/jadwal/pesan";
 import { createClient } from "@/lib/supabase/server";
 
@@ -97,4 +98,66 @@ export async function ambilTawaran(_: HasilAmbil, form: FormData): Promise<Hasil
   if (d.status === "perlu_konfirmasi") return { perlu: teksPeringatanTukar(d.peringatan ?? [], d.lembur_menit ?? 0) };
   revalidatePath("/app/jadwal");
   return { pesan: "Diambil. Menunggu persetujuan pemilik." };
+}
+
+const HARI_ISI = ["0", "1", "2", "3", "4", "5", "6"];
+
+/** Kebutuhan orang per topi per hari dan jam (F3-06C, tahap 0: isian pemilik). */
+export async function aturKebutuhan(_: HasilJadwal, form: FormData): Promise<HasilJadwal> {
+  const hari = form.getAll("hari").map(String).filter((h) => HARI_ISI.includes(h)).map(Number);
+  const mulai = String(form.get("mulai") ?? "");
+  const selesai = String(form.get("selesai") ?? "");
+  const istirahat = Number(form.get("istirahat") ?? 0);
+  const butuh = Number(form.get("butuh") ?? 0);
+  if (!form.get("topi")) return { galat: "Pilih topinya." };
+  if (hari.length === 0) return { galat: "Pilih minimal satu hari." };
+  if (!/^\d{2}:\d{2}$/.test(mulai) || !/^\d{2}:\d{2}$/.test(selesai)) return { galat: "Isi jam mulai dan jam selesai." };
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("atur_kebutuhan", { p_topi: String(form.get("topi")), p_hari: hari, p_mulai: mulai, p_selesai: selesai, p_istirahat: istirahat, p_butuh: butuh });
+  if (error) return { galat: ["22023", "P0002"].includes(error.code ?? "") ? error.message : error.code === "42501" ? "Hanya pemilik atau admin yang mengatur kebutuhan." : "Kebutuhan belum tersimpan. Coba lagi sebentar." };
+  revalidatePath("/app/jadwal");
+  return { pesan: `Tersimpan untuk ${data} hari.` };
+}
+
+export async function hentiKebutuhan(_: HasilJadwal, form: FormData): Promise<HasilJadwal> {
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("henti_kebutuhan", { p_id: String(form.get("kebutuhan") ?? "") });
+  if (error) return { galat: "Belum berhasil. Coba lagi sebentar." };
+  revalidatePath("/app/jadwal");
+  return { pesan: "Tidak dipakai lagi." };
+}
+
+export type HasilUsulan = { usulan: { baris: BarisUsulan[]; kurang: string[] } } | { simpan: { pesan: string; gagal: string[] } } | { galat: string } | null;
+
+/** Usulkan jadwal minggu itu dari kebutuhan (susunJadwal). Belum menyimpan apa pun. */
+export async function usulkanJadwal(_: HasilUsulan, form: FormData): Promise<HasilUsulan> {
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("data_usulan_jadwal", { p_mulai: String(form.get("minggu") ?? "") || null });
+  if (error || !data) return { galat: error?.code === "42501" ? "Hanya pemilik atau admin yang menyusun jadwal." : "Data jadwal belum bisa dibaca. Coba lagi sebentar." };
+  const d = data as DataUsulan;
+  if (d.kebutuhan.length === 0) return { galat: "Isi kebutuhan orang per shift dulu di bawah, lalu minta usulan lagi." };
+  return { usulan: usulkan(d) };
+}
+
+/** Simpan usulan satu per satu lewat simpan_shift; baris yang ditolak database dilaporkan dengan alasannya. */
+export async function simpanUsulan(_: HasilUsulan, form: FormData): Promise<HasilUsulan> {
+  let baris: BarisUsulan[];
+  try {
+    baris = JSON.parse(String(form.get("baris") ?? "[]"));
+  } catch {
+    return { galat: "Usulan rusak. Minta usulan lagi." };
+  }
+  if (!Array.isArray(baris) || baris.length === 0 || baris.length > 300) return { galat: "Tidak ada usulan untuk disimpan." };
+  const supabase = await createClient();
+  const hasil: { nama: string; tanggal: string; mulai: string; selesai: string; galat?: string }[] = [];
+  for (const b of baris) {
+    const { error } = await supabase.rpc("simpan_shift", {
+      p_orang: String(b.orang), p_tanggal: String(b.tanggal), p_mulai: String(b.mulai), p_selesai: String(b.selesai), p_istirahat: Number(b.istirahat),
+      p_topi: b.topi ? String(b.topi) : null, p_kunci: kunciBaris(String(b.orang), String(b.tanggal), String(b.mulai)),
+    });
+    hasil.push({ nama: String(b.nama), tanggal: String(b.tanggal), mulai: String(b.mulai), selesai: String(b.selesai),
+      galat: error ? (["54000", "23P01", "22023", "P0002"].includes(error.code ?? "") ? rapikanPesanBatas(error.code === "23P01" ? "Bertabrakan dengan shift lain orang ini." : error.message) : "Belum tersimpan.") : undefined });
+  }
+  revalidatePath("/app/jadwal");
+  return { simpan: ringkasSimpan(hasil) };
 }
