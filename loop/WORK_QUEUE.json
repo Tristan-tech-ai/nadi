@@ -2040,8 +2040,10 @@
    "accept": "iterasi penuh ITERASI.md; lempar nota sampai usulan tampil terukur e2e, keadaan memuat/galat/luring dirancang; sebelum/sesudah; produksi",
    "how": "docs/design/ITERASI.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:35:13"
+   "status": "done",
+   "created": "2026-11-03T19:35:13",
+   "done": "2026-11-03T21:58:35",
+   "result": "c120b58 + a02ce34: 3 konsep + kritik docs/design/iterasi/lempar/README.md; 4 langkah terlihat, usulan disetujui di halaman Lempar (2 ketuk + 1 pindah layar -> 1 ketuk, 0 pindah), keadaan luring (ditahan, kirim otomatis) dan galat + Coba lagi; e2e produksi lempar-hp 3/3 + lempar 2/2, axe 0 serius 390/1440 terang/gelap, foto sebelum/sesudah"
   },
   {
    "id": "H-01",
