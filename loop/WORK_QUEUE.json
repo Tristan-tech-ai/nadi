@@ -1025,8 +1025,10 @@
    "accept": "Playwright di URL produksi: semua langkah lulus, video rekaman tersimpan",
    "how": "",
    "blocked_by": "F5-03,F4-07,F3-07,F2-06",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-03T19:11:26",
+   "result": "e2e/hari-di-warung.spec.ts di produksi (deploy 3728eca): 1 passed (1,0 menit), 6 langkah (demo + panduan, Feed pagi, invoice ke pelanggan tanpa akun lalu lunas QRIS, Mata memantau rekaman, Peta usaha langsung, alur nyata + gaji); video 62 dtk tersimpan docs/quality/done-01/satu-hari-di-warung.webm; laporan docs/quality/done-01/README.md"
   },
   {
    "id": "Q-06",
