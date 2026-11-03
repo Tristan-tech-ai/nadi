@@ -1670,8 +1670,10 @@
    "accept": "bingkaiDari (ekstraksi hasil MediaPipe -> Bingkai) murni + fixture landmark JSON + tes, merah sengaja dengan pipi 234/454 tertukar; e2e lokal jalur absen berhasil mencatat absen.masuk lewat penanda NEXT_PUBLIC_NADI_UJI_WAJAH (hanya build lokal); e2e produksi membuktikan penanda tidak berlaku; chunk produksi tanpa __nadiUjiWajah",
    "how": "docs/research/absen-landmark.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T01:41:25"
+   "status": "done",
+   "created": "2026-11-01T01:41:25",
+   "done": "2026-11-04T06:43:52",
+   "result": "commit 1e0b93f: bingkaiDari + TITIK di src/lib/absen/wajah.ts, fixtures/absen/landmark.json + bangun.ts, landmark.test.ts 4/4 (merah sengaja: hidung/pipi tertukar 3 gagal; pipi 234/454 tertukar hanya tertangkap tes indeks karena yaw simetris); e2e lokal absen.spec 'staf dengan cek wajah lulus' mencatat absen.masuk (kejadian dicek lewat Supabase) dengan build NEXT_PUBLIC_NADI_UJI_WAJAH=1; e2e produksi deploy nadi-it761v1nz READY: penanda dipasang tetap ditolak 'Wajah belum terlihat' dan tidak ada skrip memuat __nadiUjiWajah; gerbang langkah uji-wajah (merah sengaja pada .next berpenanda)"
   },
   {
    "id": "Q-21",
