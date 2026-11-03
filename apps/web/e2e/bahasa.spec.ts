@@ -165,7 +165,7 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   expect(axeKerja.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
   // Tab beban dan kinerja mode Inggris.
-  for (const [tab, judul] of [["beban", "This week's workload"], ["kpi", "This week's performance"]] as const) {
+  for (const [tab, judul] of [["beban", "This week's workload"], ["kpi", "This week's performance"], ["peta", "Org map"], ["bonus", "Workload bonus pool"]] as const) {
     await p1.goto(`/app/kerja?tab=${tab}`);
     await expect(p1.getByRole("heading", { level: 2, name: judul })).toBeVisible();
     expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);

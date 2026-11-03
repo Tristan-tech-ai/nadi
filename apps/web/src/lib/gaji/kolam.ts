@@ -131,6 +131,7 @@ export function bacaPengecualian(v: string | string[] | undefined): Pengecualian
 }
 
 /** Persen untuk layar: 33,3% atau 50%. */
-export const teksPersen = (p: number) => `${Number(p).toLocaleString("id-ID", { maximumFractionDigits: 1 })}%`;
+export const teksPersen = (p: number, bahasa: "id" | "en" = "id") => `${Number(p).toLocaleString(bahasa === "en" ? "en-US" : "id-ID", { maximumFractionDigits: 1 })}%`;
 /** Poin untuk layar: 1,5 poin. */
-export const teksPoinKolam = (p: number) => `${Number(p).toLocaleString("id-ID", { maximumFractionDigits: 1 })} poin`;
+export const teksPoinKolam = (p: number, bahasa: "id" | "en" = "id") =>
+  bahasa === "en" ? `${Number(p).toLocaleString("en-US", { maximumFractionDigits: 1 })} points` : `${Number(p).toLocaleString("id-ID", { maximumFractionDigits: 1 })} poin`;
