@@ -2072,8 +2072,10 @@
    "accept": "laporan rasio aturan vs model per jenis berkas; jenis dengan token terbanyak mendapat ekstraktor otomatis; rasio tanpa model naik terukur di korpus",
    "how": "docs/research/hemat-otomatis.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:35:13"
+   "status": "done",
+   "created": "2026-11-03T19:35:13",
+   "done": "2026-11-03T22:21:40",
+   "result": "a95fec5: app.rasio_baca (migrasi 040000 sidik 4c07d2ac, tes SQL 7/7 merah dulu); laporan docs/quality/rasio-baca.md: cv 0/47 tanpa model dan 250 rb token (50%) jenis terbanyak; cv.ts pengurai bagian + tulis_aturan dimatikan untuk cv; vitest 3/3 (korpus CV 0/4 -> 4/4 tanpa model); baca-berkas v11 md5 identik repo; e2e produksi lamar CV sumber aturan 0 token"
   },
   {
    "id": "H-03",
