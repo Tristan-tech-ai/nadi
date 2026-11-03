@@ -2048,8 +2048,10 @@
    "accept": "RPC/laporan biaya per usaha per bulan (token AI dari pemakaian_ai x harga di konfigurasi, storage, jumlah panggilan fungsi bila terbaca) + tes SQL; angka nyata 30 hari tercatat di docs/quality/biaya.md",
    "how": "docs/research/hemat-otomatis.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:35:13"
+   "status": "done",
+   "created": "2026-11-03T19:35:13",
+   "done": "2026-11-03T19:55:06",
+   "result": "bc3b29b migrasi biaya_usaha (sidik cc4028dd, 89 migrasi) app.biaya_usaha/app.biaya_platform, tes SQL 14/14 (merah dulu), advisor tanpa temuan baru, harga di konfigurasi harga_ai/biaya_platform dari pricing resmi + JISDOR; docs/quality/biaya.md: Okt total $0,46 untuk 23 usaha uji, skenario usaha aktif sekitar Rp6.900/bln"
   },
   {
    "id": "H-02",
@@ -2104,8 +2106,10 @@
    "accept": "minimal 8 produk (kasir, HR/gaji, akuntansi, absen) dengan harga, satuan harga, dan URL resmi + tanggal akses di docs/bisnis/harga-pesaing.md; tanpa angka dari ingatan",
    "how": "docs/bisnis/RENCANA.md bagian 1",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:44:25"
+   "status": "done",
+   "created": "2026-11-03T19:44:25",
+   "done": "2026-11-03T19:46:44",
+   "result": "e44fbfd docs/bisnis/harga-pesaing.md: 9 produk (majoo, Moka, Pawoon, Kledo, Jurnal, Accurate, Gadjian, Talenta, Klikpajak) dari halaman harga resmi 3 Nov 2026, satuan harga, contoh hitung gabungan Rp222.400-Rp521.400/bln"
   },
   {
    "id": "B-02",
@@ -2118,8 +2122,10 @@
    "accept": "docs/bisnis/model.xlsx berumus (bukan angka mati): ARPU, COGS dari H-01, margin, CAC, churn, LTV, masa balik per paket, tiga skenario; docs/bisnis/paket.md dengan harga per paket dan alasannya; tidak ada angka tanpa sumber atau tanda asumsi",
    "how": "docs/bisnis/RENCANA.md bagian 2-3; skill xlsx",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:44:25"
+   "status": "done",
+   "created": "2026-11-03T19:44:25",
+   "done": "2026-11-03T19:56:53",
+   "result": "8e4c759 docs/bisnis/model.xlsx (3 lembar berumus, 0 galat setelah hitung ulang LibreOffice, isian biru/asumsi kuning bersumber) + docs/bisnis/paket.md: Gratis/Usaha Rp149rb/Tumbuh Rp349rb/Perusahaan, ARPU Rp236.018, margin 48,9-79,6%, LTV/CAC 3,1-25,6x"
   },
   {
    "id": "B-03",
@@ -2132,8 +2138,10 @@
    "accept": "lembar Modal di model.xlsx: biaya tetap per tingkat paket penyedia dari halaman harga resmi, bulan ke titik impas, modal maksimum, runway per skenario; ringkasan di docs/bisnis/modal.md",
    "how": "docs/bisnis/RENCANA.md bagian 4",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:44:25"
+   "status": "done",
+   "created": "2026-11-03T19:44:25",
+   "done": "2026-11-03T19:58:28",
+   "result": "3b7b485 lembar Modal di docs/bisnis/model.xlsx (36 bulan berumus, 0 galat) + docs/bisnis/modal.md: 100 usaha modal maks Rp1,4 jt impas bln 3; 1.000 usaha Rp112 jt impas bln 7; 10.000 usaha Rp1,6 M impas bln 10; Vercel Hobby non-komersial dicatat di UNTUK-TRISTAN"
   },
   {
    "id": "B-04",
@@ -2160,8 +2168,10 @@
    "accept": "docs/research/i18n.md berisi keputusan cakupan (bahasa UI, aturan per negara, penamaan internal) dengan sumber docs Next i18n yang dibaca; glosarium istilah id-en (topi, Lempar, Feed, usulan, slip, dsb.) di docs/design/GLOSARIUM.md",
    "how": "docs/research/i18n.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:44:25"
+   "status": "done",
+   "created": "2026-11-03T19:44:25",
+   "done": "2026-11-03T19:48:58",
+   "result": "1889fe9 docs/research/i18n.md bagian Keputusan cakupan (8 butir, sumber docs Next 16.4.3 internationalization) + docs/design/GLOSARIUM.md 55 istilah id/en/kode"
   },
   {
    "id": "I-02",
@@ -2258,8 +2268,10 @@
    "accept": "docs/promo/konten-30.md: 30 naskah pendek (judul, 3 adegan, ajakan) berbasis fitur nyata, kanal tujuan, aset yang dipakai; tanpa testimoni karangan",
    "how": "docs/promo/RENCANA.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:44:25"
+   "status": "done",
+   "created": "2026-11-03T19:44:25",
+   "done": "2026-11-03T19:49:32",
+   "result": "99ac6e8 docs/promo/konten-30.md: 30 naskah (masalah, momen Nadi, hasil + ajakan /demo) dari fitur yang sudah ada di produksi, kanal, aset, aturan klaim"
   }
  ]
 }
