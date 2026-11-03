@@ -59,7 +59,7 @@ test("landing lengkap: navigasi, satu hari, empat peran, harga, keamanan, FAQ, t
   test.skip(info.project.name !== "desktop", "sekali (desktop)");
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-  for (const [tautan, id] of [["Satu hari", "hari"], ["Siapa memakai", "peran"], ["Harga", "harga"], ["Keamanan", "keamanan"]]) {
+  for (const [tautan, id] of [["Satu hari", "hari"], ["Siapa memakai", "peran"]]) {
     await page.getByRole("navigation", { name: "Utama" }).getByRole("link", { name: tautan }).click();
     await expect(page.locator(`#${id}`)).toBeInViewport();
   }
@@ -76,6 +76,36 @@ test("landing lengkap: navigasi, satu hari, empat peran, harga, keamanan, FAQ, t
   const sedang = await page.locator("#faq ul").innerText();
   expect(sedang).not.toMatch(/absen|gaji|topi|izin|invoice/i);
   await expect(page.getByRole("contentinfo").getByRole("link", { name: "Panduan per peran" })).toHaveAttribute("href", "/panduan");
+});
+
+test("halaman pendukung: harga, keamanan, privasi, syarat, tentang tertaut dan bersih axe", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "sekali (desktop)");
+  await page.goto("/");
+  await page.getByRole("navigation", { name: "Utama" }).getByRole("link", { name: "Harga" }).click();
+  await expect(page).toHaveURL(/\/harga$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Harga");
+  await expect(page.getByRole("table")).toContainText("Rp174.000"); // Usaha 20 orang: 149.000 + 5 x 5.000
+  const halaman: [string, string, string][] = [
+    ["Keamanan data", "/keamanan", "Keamanan data"], ["Kebijakan privasi", "/privasi", "Kebijakan privasi"],
+    ["Syarat layanan", "/syarat", "Syarat layanan"], ["Tentang Nadi", "/tentang", "Tentang Nadi"],
+  ];
+  for (const [tautan, jalur, judul] of halaman) {
+    await page.getByRole("contentinfo").getByRole("link", { name: tautan }).click();
+    await expect(page).toHaveURL(new RegExp(`${jalur}$`));
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(judul);
+    for (const skema of ["light", "dark"] as const) {
+      for (const [w, h] of [[390, 844], [1440, 900]]) {
+        await page.setViewportSize({ width: w, height: h });
+        await page.emulateMedia({ colorScheme: skema });
+        await page.waitForTimeout(200);
+        const r = await new AxeBuilder({ page }).analyze();
+        expect(r.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), `${jalur} ${w} ${skema}`).toEqual([]);
+      }
+    }
+  }
+  await expect(page.locator("[role=note]").filter({ visible: true })).toHaveCount(0); // tentang tanpa tanda draf (halaman sebelumnya tersimpan tersembunyi)
+  await page.goto("/privasi");
+  await expect(page.getByRole("note")).toContainText("belum ditinjau ahli hukum");
 });
 
 test("coba usaha contoh dari landing: Feed demo tampil < 3 dtk, baca-saja, axe bersih", async ({ page }, info) => {

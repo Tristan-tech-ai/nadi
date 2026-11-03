@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { DemoNota } from "@/components/landing/demo-nota";
 import { BUKTI, FAQ, HARI, PERAN, SEDANG_DIBUAT } from "@/components/landing/isi";
-import { LogoNadi } from "@/components/ui/logo";
+import { KakiSitus, KepalaSitus } from "@/components/landing/kepala-kaki";
 import { Rupiah } from "@/components/ui/rupiah";
 import { formatAngka } from "@/lib/format";
 import { DISKON_TAHUNAN_BULAN, PAKET } from "@/lib/paket";
@@ -14,35 +14,13 @@ export const metadata: Metadata = {
   description: "Nota, absen, izin, gaji, tagihan, dan pembukuan usaha kecil dalam satu Feed yang kamu setujui dari HP.",
 };
 
-const NAV = [
-  { href: "#hari", label: "Satu hari" },
-  { href: "#peran", label: "Siapa memakai" },
-  { href: "#harga", label: "Harga" },
-  { href: "#keamanan", label: "Keamanan" },
-  { href: "/panduan", label: "Panduan" },
-];
 
 const judul2 = "font-judul text-3xl font-extrabold tracking-tight sm:text-4xl";
 
 export default function Beranda() {
   return (
     <>
-      <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 pt-6">
-        <Link href="/" aria-label="Beranda Nadi">
-          <LogoNadi />
-        </Link>
-        <nav aria-label="Utama" className="hidden items-center gap-6 text-sm font-semibold text-tinta-2 lg:flex">
-          {NAV.map((n) => (
-            <Link key={n.href} href={n.href} className="hover:text-tinta">{n.label}</Link>
-          ))}
-        </nav>
-        <div className="flex items-center gap-4 text-sm font-semibold">
-          <Link href="/masuk" className="underline-offset-4 hover:underline">Masuk</Link>
-          <Link href="/demo" className="inline-flex h-10 items-center rounded-[var(--radius-isian)] border border-tinta px-4 transition-[background-color] duration-150 hover:bg-kertas-2">
-            Coba usaha contoh
-          </Link>
-        </div>
-      </header>
+      <KepalaSitus />
 
       <main className="mx-auto w-full max-w-6xl px-5">
         <section className="grid items-start gap-x-16 gap-y-8 pt-10 pb-20 lg:grid-cols-[3fr_2fr] lg:pt-20" aria-labelledby="judul-utama">
@@ -180,29 +158,7 @@ export default function Beranda() {
         </section>
       </main>
 
-      <footer className="mx-auto w-full max-w-6xl border-t border-garis px-5 py-10 text-sm text-tinta-2">
-        <div className="grid gap-8 sm:grid-cols-3">
-          <div>
-            <LogoNadi />
-            <p className="mt-3 max-w-xs">Kertas kerja usaha kecil yang mengisi dirinya sendiri.</p>
-          </div>
-          <nav aria-label="Produk" className="flex flex-col gap-2">
-            <p className="font-semibold text-tinta">Produk</p>
-            <Link href="/demo" className="hover:text-tinta">Usaha contoh (makanan)</Link>
-            <Link href="/demo/toko" className="hover:text-tinta">Usaha contoh (toko)</Link>
-            <Link href="/panduan" className="hover:text-tinta">Panduan per peran</Link>
-            <Link href="#harga" className="hover:text-tinta">Harga</Link>
-          </nav>
-          <nav aria-label="Akun" className="flex flex-col gap-2">
-            <p className="font-semibold text-tinta">Akun</p>
-            <Link href="/daftar" className="hover:text-tinta">Buat akun</Link>
-            <Link href="/masuk" className="hover:text-tinta">Masuk</Link>
-            <Link href="/masuk/staf" className="hover:text-tinta">Masuk sebagai staf</Link>
-            <Link href="#keamanan" className="hover:text-tinta">Keamanan data</Link>
-          </nav>
-        </div>
-        <p className="mt-10">© 2026 Nadi</p>
-      </footer>
+      <KakiSitus />
     </>
   );
 }
