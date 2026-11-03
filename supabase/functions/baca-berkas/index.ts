@@ -8,6 +8,7 @@ import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js@2.1
 import { unzipSync } from "npm:fflate@0.8.3";
 import { extractText, getDocumentProxy } from "npm:unpdf@1.9.1";
 import { BIDANG, INSTRUKSI, SKEMA_HASIL, hasilDari, rapikan, usulanDari, usulanLamar, xlsxKeTeks, type Hasil, type Jenis } from "./inti.ts";
+import { bacaCv } from "./cv.ts";
 import { INSTRUKSI_ATURAN, SKEMA_ATURAN, aturanDari, cocok, jalankan, konsisten, perbaikiTipe, sidik, ujiAturan, type Aturan, type AturanMentah } from "./ekstraktor.ts";
 
 declare const EdgeRuntime: { waitUntil(p: Promise<unknown>): void };
@@ -196,8 +197,13 @@ Deno.serve(async (req) => {
     // Lampiran lamaran dari orang luar tidak mencoba dan tidak menulis aturan ekstraktor usaha (Q-11).
     const lamar = sumberUsulan === "lamar";
     const dariAturan = teks && !lamar ? await cobaAturan(admin, berkas.perusahaan_id, teks) : null;
+    // CV berteks: pengurai bagian tanpa model (H-02). Berlaku juga untuk lampiran lamaran karena tidak memakai aturan usaha.
+    const dariCv = !dariAturan && teks ? bacaCv(teks) : null;
     if (dariAturan) {
       hasil = dariAturan.hasil;
+      sumber = "aturan";
+    } else if (dariCv) {
+      hasil = dariCv as Hasil;
       sumber = "aturan";
     } else {
       const { data: konf } = await admin.from("konfigurasi").select("nilai").eq("kunci", "model_ai").single();
@@ -218,7 +224,8 @@ Deno.serve(async (req) => {
         return await gagal(`Nadi belum bisa membaca berkas ini (${akhir.berhenti}). Coba foto ulang lebih jelas.`);
       }
       // Berkas berteks dan jenisnya dikenal: tulis aturan sekali agar berkas kembarannya nanti tanpa token.
-      if (teks && hasil.jenis !== "lainnya" && !lamar) EdgeRuntime.waitUntil(tulisAturan(admin, tangga.berat, berkas.perusahaan_id, berkas_id, teks, hasil, Boolean(ocrCukup)));
+      // CV dikecualikan: setiap pelamar memakai tata letak sendiri, aturannya tidak pernah terpakai ulang (H-02).
+      if (teks && hasil.jenis !== "lainnya" && hasil.jenis !== "cv" && !lamar) EdgeRuntime.waitUntil(tulisAturan(admin, tangga.berat, berkas.perusahaan_id, berkas_id, teks, hasil, Boolean(ocrCukup)));
     }
 
     // Lamaran tanpa akun hanya boleh menjadi usulan pelamar, apa pun isi berkasnya (Q-11).
@@ -230,7 +237,9 @@ Deno.serve(async (req) => {
     const { data: usulan } = await admin.from("usulan").insert({
       perusahaan_id: berkas.perusahaan_id, sumber: sumberUsulan, aksi: u.aksi, judul: u.judul,
       penjelasan: sumber === "aturan"
-        ? u.penjelasan.replace(/Dibaca dari berkas, yakin \d+%\./, ocrCukup
+        ? u.penjelasan.replace(/Dibaca dari berkas, yakin \d+%\./, dariCv
+          ? "Dibaca dari bagian-bagian CV, tanpa AI. Periksa ejaan nama dan tempat kerja."
+          : ocrCukup
           ? "Dibaca dari foto dengan aturan tersimpan, tanpa AI. Angka sudah dicocokkan; periksa ejaan nama dan nomor."
           : "Dibaca dengan aturan tersimpan untuk tata letak ini, tanpa AI.")
         : u.penjelasan,
