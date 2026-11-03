@@ -251,3 +251,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 2026-11-03 20:50 WIB | tick 235 | done B-01, I-01, P-05, H-01, B-02, B-03; P-04 kalender (bahan menyusul); 89 migrasi |
 | 2026-11-03 21:10 WIB | aturan | jeda tick 600 dtk atas perintah Tristan; Tristan ber-KTP |
 | 2026-11-03 21:20 WIB | antrean | urutan dikoreksi: desain dulu, video diblok D-11; D-15 baru; 9 tugas fitur jadi wajib; wajib 79/106 |
+| 2026-11-03 21:35 WIB | riset | riset-landing.md: 8 landing pesaing dilihat di Chrome; landing Nadi basi (absen/topi masih 'Sedang dibuat', 15+ fitur tidak disebut) |
