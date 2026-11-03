@@ -130,6 +130,7 @@ test("Feed menyebut sisa usulan, membuka halaman berikut, dan menyaring per jeni
     // Tolak satu lewat tombol biasa di Feed.
     await kartuPertama.getByRole("button", { name: "Tolak" }).click();
     await expect(kartuPertama.getByTestId("hasil-putusan")).toContainText("Ditolak");
+    await expect(daftar.getByTestId("kartu-diputuskan").first()).toHaveAttribute("data-tersimpan", "ya"); // jendela Batalkan habis
     await page.reload();
     await expect(page.getByTestId("pil-dokumen")).toContainText(String(dok - 1));
   } finally {

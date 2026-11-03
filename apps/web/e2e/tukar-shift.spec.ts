@@ -106,6 +106,7 @@ test("tukar shift: tawarkan, ambil dengan peringatan lembur, pemilik setujui di 
     await expect(usul).toContainText("sudah menyetujuinya saat mengambil");
     await usul.getByRole("button", { name: "Setujui" }).click();
     await expect(usul.getByTestId("hasil-putusan")).toBeVisible();
+    await expect(usul).toHaveAttribute("data-tersimpan", "ya"); // keputusan terkirim setelah jendela Batalkan
 
     await budi.reload();
     await expect(budi.getByTestId("baris-jadwal-saya").filter({ hasText: "07.00-15.00" })).toHaveCount(1);

@@ -8,6 +8,8 @@ const PINDAH = ["topi.spec.ts", "gaji.spec.ts", "kolam.spec.ts"];
 export default defineConfig({
   testDir: "e2e",
   timeout: 30_000,
+  // D-12: keputusan Feed dikirim setelah jendela Batalkan 4 dtk, jadi pesan hasil dari server butuh lebih dari 5 dtk bawaan.
+  expect: { timeout: 10_000 },
   fullyParallel: true,
   reporter: [["list"]],
   use: { baseURL: base, trace: "retain-on-failure", locale: "id-ID", timezoneId: "Asia/Makassar" },

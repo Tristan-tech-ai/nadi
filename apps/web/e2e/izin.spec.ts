@@ -116,6 +116,7 @@ test("izin: otopilot menyetujui sesuai aturan, sisanya masuk Feed dan diputuskan
   await expect(kartu).toContainText("lebih dari batas otomatis 1 hari");
   await kartu.getByRole("button", { name: "Setujui" }).click();
   await expect(kartu.getByTestId("hasil-putusan")).toBeVisible();
+  await expect(kartu).toHaveAttribute("data-tersimpan", "ya"); // keputusan terkirim setelah jendela Batalkan
 
   await staf.reload();
   const item = staf.getByTestId("daftar-izin").getByRole("listitem").filter({ hasText: "3 hari" });

@@ -3,9 +3,8 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { IlustrasiNota } from "@/components/ilustrasi";
 import { HalamanFeed, TautanBerikut } from "@/components/app/halaman-feed";
-import { AksiPutusan } from "@/components/app/putusan";
+import { KartuFeed } from "@/components/app/kartu-feed";
 import { SarapanData } from "@/components/app/sarapan-data";
-import { KartuUsulan } from "@/components/ui/kartu-usulan";
 import { bacaTampilan, halaman, hitungJenis, hrefFeed, JENIS, JENIS_DIKENAL, LABEL_JENIS, PER_HALAMAN, usulanBaru, type Jenis, type JenisDikenal, type Tampilan, type Urut } from "@/lib/feed";
 import { catatanRubrik, nilaiPelamar, rubrikDariTopi, saringCv } from "@/lib/rekrut/rubrik";
 import { createClient } from "@/lib/supabase/server";
@@ -168,7 +167,7 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
           {usulan.length ? (
             <div className="mt-3 grid gap-3" data-testid="daftar-usulan">
               {usulan.map((u) => (
-                <KartuUsulan key={u.id} usulan={{ judul: u.judul, penjelasan: u.penjelasan ?? "", sumber: SUMBER[u.sumber] ?? u.sumber, keyakinan: u.keyakinan ?? undefined, dampakRp: u.dampak_rp ?? undefined, catatan: pelamar.get(u.id)?.catatan, tautan: pelamar.get(u.id)?.tautan, baru: u.baru }} aksi={<AksiPutusan usulanId={u.id} />} />
+                <KartuFeed key={u.id} usulanId={u.id} usulan={{ judul: u.judul, penjelasan: u.penjelasan ?? "", sumber: SUMBER[u.sumber] ?? u.sumber, keyakinan: u.keyakinan ?? undefined, dampakRp: u.dampak_rp ?? undefined, catatan: pelamar.get(u.id)?.catatan, tautan: pelamar.get(u.id)?.tautan, baru: u.baru }} />
               ))}
             </div>
           ) : (

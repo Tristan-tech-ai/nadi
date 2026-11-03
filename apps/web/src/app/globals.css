@@ -142,6 +142,17 @@ body {
 .denyut {
   animation: denyut 2s ease-in-out infinite;
 }
+/* D-12: cap stempel turun saat usulan diputuskan (satu gerak bermakna di Feed, DIRECTION §5). */
+.cap-turun {
+  display: inline-flex;
+  animation: cap-turun 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+@keyframes cap-turun {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(1.35) rotate(-6deg);
+  }
+}
 @keyframes denyut {
   50% {
     opacity: 0.35;
