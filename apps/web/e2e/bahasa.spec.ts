@@ -63,7 +63,12 @@ async function teksTanpaId(page: Page) {
     return t;
   });
 }
-const KATA_ID = /\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau|usulan|setujui|tolak|berkas|lempar|izin|cuti|sakit|hari|pengajuan|gaji|lembur|potongan|orang|bulan|jadwal|minggu|jam|menit|senin|selasa|rabu|kamis|jumat|sabtu|kebutuhan)\b/i;
+const KATA_ID = /\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau|usulan|setujui|tolak|berkas|lempar|izin|cuti|sakit|hari|pengajuan|gaji|lembur|potongan|orang|bulan|jadwal|minggu|jam|menit|senin|selasa|rabu|kamis|jumat|sabtu|kebutuhan|lowongan|pelamar|topi|staf|akun)\b/i;
+
+/** Baris teks yang memuat kata Indonesia umum; kosong berarti lulus (pesan gagal langsung menyebut barisnya). */
+function barisIndonesia(teks: string) {
+  return teks.split(/\n/).map((b) => b.trim()).filter((b) => KATA_ID.test(b));
+}
 
 async function masuk(page: Page) {
   await page.goto(`/masuk?next=${encodeURIComponent("/app")}`);
@@ -94,7 +99,7 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   // dan dikecualikan dari pemindaian; sisanya tidak boleh memuat kata Indonesia umum.
   await expect(p1.getByRole("heading", { level: 1, name: "Today" })).toBeVisible();
   await expect(p1.getByTestId("peran")).toHaveText("You are signed in as owner.");
-  expect(await teksTanpaId(p1)).not.toMatch(KATA_ID);
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
   const axe = await new AxeBuilder({ page: p1 }).analyze();
   expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
@@ -104,7 +109,7 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   await p1.getByTestId("input-berkas").setInputFiles({ name: "catatan.txt", mimeType: "text/plain", buffer: Buffer.from("halo") });
   await expect(p1.getByTestId("daftar-lempar")).toContainText("This file type cannot be read yet");
   await expect(p1.getByTestId("coba-lagi")).toHaveCount(0);
-  expect(await teksTanpaId(p1)).not.toMatch(KATA_ID);
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
   const axeLempar = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeLempar.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
@@ -112,7 +117,7 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   await p1.goto("/app/izin");
   await expect(p1.getByRole("heading", { level: 1, name: "Leave and time off" })).toBeVisible();
   await expect(p1.getByRole("heading", { level: 2, name: "Team requests" })).toBeVisible();
-  expect(await teksTanpaId(p1)).not.toMatch(KATA_ID);
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
   const axeIzin = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeIzin.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
@@ -120,7 +125,7 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   await p1.goto("/app/gaji");
   await expect(p1.getByRole("heading", { level: 1, name: "Payroll" })).toBeVisible();
   await expect(p1.getByTestId("khusus-indonesia")).toContainText("Indonesia only");
-  expect(await teksTanpaId(p1)).not.toMatch(KATA_ID);
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
   const axeGaji = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeGaji.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
@@ -128,9 +133,17 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   await p1.goto("/app/jadwal");
   await expect(p1.getByRole("heading", { level: 1, name: "Schedule" })).toBeVisible();
   await expect(p1.getByRole("link", { name: "Next week" })).toBeVisible();
-  expect(await teksTanpaId(p1)).not.toMatch(KATA_ID);
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
   const axeJadwal = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeJadwal.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
+  // Orang mode Inggris: daftar, akun staf, gaji per orang, lowongan, belajar dari rekrutmen.
+  await p1.goto("/app/orang");
+  await expect(p1.getByRole("heading", { level: 1, name: "People" })).toBeVisible();
+  await expect(p1.getByRole("heading", { level: 2, name: "Job openings" })).toBeVisible();
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
+  const axeOrang = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axeOrang.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
   // Sesi baru tanpa cookie bahasa: pilihan datang dari akun.
   const k2 = await browser.newContext();

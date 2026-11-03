@@ -88,33 +88,32 @@ export type GajiOrang = { pokok?: number; tunjangan_tetap?: number; ptkp?: strin
 const pilihan = "h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-2 text-base";
 
 /** Isian gaji per orang di halaman Orang (pengelola). */
-export function FormGajiOrang({ orang, nama, awal, mulai }: { orang: string; nama: string; awal: GajiOrang | null; mulai?: string | null }) {
+export function FormGajiOrang({ orang, nama, awal, mulai, teks: t, bahasa = "id" }: { orang: string; nama: string; awal: GajiOrang | null; mulai?: string | null; teks: Kamus["gajiOrang"]; bahasa?: "id" | "en" }) {
   const [h, aksi, sibuk] = useActionState<HasilGaji, FormData>(aturGajiOrang, null);
   return (
     <details className="w-full text-sm" data-testid="gaji-orang">
       <summary className="cursor-pointer text-tinta-2">
-        Gaji {awal?.pokok ? `Rp${new Intl.NumberFormat("id-ID").format(awal.pokok)}` : "belum diisi"}{awal?.ptkp ? `, ${awal.ptkp}` : ""}
+        {isiTeks(t.ringkas, { isi: `${awal?.pokok ? `Rp${new Intl.NumberFormat(bahasa === "en" ? "en-US" : "id-ID").format(awal.pokok)}` : t.belumDiisi}${awal?.ptkp ? `, ${awal.ptkp}` : ""}` })}
       </summary>
-      <form action={aksi} className="mt-2 grid grid-cols-2 gap-2" aria-label={`Gaji ${nama}`}>
+      <form action={aksi} className="mt-2 grid grid-cols-2 gap-2" aria-label={isiTeks(t.formAria, { nama })}>
         <input type="hidden" name="orang" value={orang} />
-        <label className="flex flex-col gap-1"><span className="text-tinta-2">Gaji pokok (Rp)</span>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.pokok}</span>
           <input name="pokok" inputMode="numeric" required defaultValue={awal?.pokok ?? ""} className={pilihan} /></label>
-        <label className="flex flex-col gap-1"><span className="text-tinta-2">Tunjangan tetap (Rp)</span>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.tunjangan}</span>
           <input name="tunjangan_tetap" inputMode="numeric" defaultValue={awal?.tunjangan_tetap ?? ""} className={pilihan} /></label>
-        <label className="flex flex-col gap-1"><span className="text-tinta-2">Status PTKP</span>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.ptkp}</span>
           <select name="ptkp" defaultValue={awal?.ptkp ?? ""} className={pilihan}>
-            <option value="">Belum tahu</option>
+            <option value="">{t.belumTahu}</option>
             {["TK/0", "TK/1", "TK/2", "TK/3", "K/0", "K/1", "K/2", "K/3"].map((p) => <option key={p} value={p}>{p}</option>)}
           </select></label>
-        <label className="flex flex-col gap-1"><span className="text-tinta-2">Risiko kerja (JKK)</span>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.risiko}</span>
           <select name="risiko_jkk" defaultValue={awal?.risiko_jkk ?? "sangat_rendah"} className={pilihan}>
-            <option value="sangat_rendah">Sangat rendah</option><option value="rendah">Rendah</option><option value="sedang">Sedang</option>
-            <option value="tinggi">Tinggi</option><option value="sangat_tinggi">Sangat tinggi</option>
+            {(["sangat_rendah", "rendah", "sedang", "tinggi", "sangat_tinggi"] as const).map((k) => <option key={k} value={k}>{t.risikoNama[k]}</option>)}
           </select></label>
-        <label className="flex flex-col gap-1"><span className="text-tinta-2">Mulai kerja</span>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.mulai}</span>
           <input type="date" name="mulai" defaultValue={mulai ?? ""} className={pilihan} /></label>
         <div className="col-span-2 flex items-center gap-3">
-          <Tombol type="submit" ragam="kedua" disabled={sibuk} aria-label={`Simpan gaji ${nama}`}>{sibuk ? "Menyimpan..." : "Simpan gaji"}</Tombol>
+          <Tombol type="submit" ragam="kedua" disabled={sibuk} aria-label={isiTeks(t.simpanAria, { nama })}>{sibuk ? t.menyimpan : t.simpan}</Tombol>
           <Hasil h={h} />
         </div>
       </form>

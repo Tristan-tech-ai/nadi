@@ -1,4 +1,6 @@
 import { laporanLingkaran, MIN_SAMPEL, type BarisLingkaran } from "@/lib/rekrut/lingkaran";
+import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
+import { bahasaAplikasi } from "@/lib/i18n/server";
 import { createClient } from "@/lib/supabase/server";
 
 // F2-07 (docs/research/lingkaran-rekrut.md): pertanyaan seleksi mana yang searah dengan kinerja bulan ke-3 sampai ke-6.
@@ -13,14 +15,14 @@ export async function LingkaranRekrut() {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("lingkaran_rekrut");
   const m = data as Mentah | null;
+  const bahasa = await bahasaAplikasi();
+  const t = ambilKamus(bahasa).lingkaran;
   return (
     <section className="mt-10 border-t border-garis pt-6" aria-labelledby="judul-lingkaran" data-testid="lingkaran-rekrut">
-      <h2 id="judul-lingkaran" className="text-lg font-semibold">Belajar dari rekrutmen</h2>
-      <p className="mt-1 text-sm text-tinta-2">
-        Nadi membandingkan nilai seleksi karyawan yang direkrut lewat Nadi (jawaban wawancara, uji kerja) dengan kinerjanya di bulan ke-3 sampai ke-6. Searah bukan berarti sebab-akibat; pakai sebagai bahan memperbaiki pertanyaan, bukan untuk menilai orang.
-      </p>
+      <h2 id="judul-lingkaran" className="text-lg font-semibold">{t.judul}</h2>
+      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
       {error || !m ? (
-        <p role="alert" className="mt-3 text-sm text-cap">Laporan belum bisa dihitung. Coba muat ulang.</p>
+        <p role="alert" className="mt-3 text-sm text-cap">{t.gagal}</p>
       ) : (() => {
         const baris: BarisLingkaran[] = m.baris.map((b) => ({
           lamaran: b.lamaran, minggu: b.minggu, poinPerMinggu: Number(b.poin_per_minggu), persenTepat: b.persen_tepat === null ? null : Number(b.persen_tepat),
@@ -31,12 +33,12 @@ export async function LingkaranRekrut() {
         return (
           <>
             <p className="mt-3 text-sm" data-testid="lingkaran-ringkas">
-              {lap.orang} karyawan sudah bekerja 3 bulan{m.belum_genap ? `, ${m.belum_genap} lainnya belum` : ""}. Angka muncul setelah ada minimal {MIN_SAMPEL} orang per pertanyaan.
+              {isiTeks(t.ringkas, { n: lap.orang, lain: m.belum_genap ? isiTeks(t.lainBelum, { n: m.belum_genap }) : "", min: MIN_SAMPEL })}
             </p>
             {lap.sinyal.length === 0 ? (
-              <p className="mt-2 text-sm text-tinta-2" data-testid="lingkaran-kosong">Belum ada karyawan dengan nilai wawancara atau uji kerja yang sudah bekerja 3 bulan. Catat pelamar yang diterima sebagai karyawan dari halaman penilai wawancara.</p>
+              <p className="mt-2 text-sm text-tinta-2" data-testid="lingkaran-kosong">{t.kosong}</p>
             ) : (
-              <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm" data-testid="lingkaran-daftar">
+              <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm" data-testid="lingkaran-daftar" lang={bahasa === "id" ? undefined : "id"}>
                 {lap.sinyal.map((s) => (
                   <li key={`${s.sinyal}-${s.ukuran}`} className="py-2">{s.kalimat}</li>
                 ))}

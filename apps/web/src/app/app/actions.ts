@@ -27,12 +27,13 @@ export async function buatPerusahaan(_: HasilForm, form: FormData): Promise<Hasi
 
 export async function tambahOrang(_: HasilForm, form: FormData): Promise<HasilForm> {
   const nama = String(form.get("nama") ?? "").trim();
-  if (nama.length < 2) return { galat: "Nama minimal 2 huruf." };
+  const t = ambilKamus(await bahasaAplikasi()).orangPesan;
+  if (nama.length < 2) return { galat: t.namaPendek };
   const supabase = await createClient();
   const { data: sesi } = await supabase.auth.getClaims();
   const pid = (sesi?.claims?.app_metadata as { pid?: string } | undefined)?.pid;
   const { error } = await supabase.from("orang").insert({ perusahaan_id: pid, nama });
-  if (error) return { galat: "Nadi gagal menambah orang. Hanya pemilik atau admin yang bisa." };
+  if (error) return { galat: t.gagalTambah };
   revalidatePath("/app/orang");
   return {};
 }
@@ -40,13 +41,14 @@ export async function tambahOrang(_: HasilForm, form: FormData): Promise<HasilFo
 export async function buatAkunStaf(_: HasilForm, form: FormData): Promise<HasilForm> {
   const orang = String(form.get("orang") ?? "");
   const pin = String(form.get("pin") ?? "");
-  if (!/^\d{6}$/.test(pin)) return { galat: "PIN harus 6 angka." };
+  const t = ambilKamus(await bahasaAplikasi()).orangPesan;
+  if (!/^\d{6}$/.test(pin)) return { galat: t.pin };
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("buat_akun_staf", { p_orang: orang, p_pin: pin });
-  if (error) return { galat: error.code === "42501" ? "Hanya pemilik atau admin yang bisa membuat akun staf." : "Nadi gagal membuat akun. Coba lagi sebentar." };
+  if (error) return { galat: error.code === "42501" ? t.hanyaPengelola : t.gagalAkun };
   const r = data as { kode: string; id_staf: string };
   revalidatePath("/app/orang");
-  return { info: `Akun siap. Staf masuk di /masuk/staf dengan kode ${r.kode}, ID ${r.id_staf}, dan PIN yang barusan kamu isi.` };
+  return { info: isiTeks(t.akunSiap, { kode: r.kode, id: r.id_staf }) };
 }
 
 export async function pindahPerusahaan(form: FormData) {
