@@ -25,3 +25,16 @@ untuk peranku, berapa harganya, aman atau tidak, bagaimana mulai) dipetakan ke b
 5. Bukti yang bisa diperiksa: angka uji internal yang nyata (tanpa logo pelanggan dan angka pengguna).
 6. Harga sebagai tabel buku kas, jujur: harga rencana, belum ditagih selama masa uji.
 7. Keamanan data, FAQ (details/summary, tanpa JS), sedang dibuat, ajakan akhir, kaki halaman lengkap.
+
+## Hasil (produksi 92bec8e, 3 Nov 2026)
+- e2e asap landing 3/3 di produksi (demo nota, landing lengkap: navigasi ke 4 bagian, 11 baris satu hari, 4 peran, 4 paket,
+  FAQ terbuka, tanpa status basi; usaha contoh). Tes isi "sedang dibuat" dibuat merah sengaja (baris absen lama dimasukkan
+  ulang: 1 gagal), lalu hijau.
+- axe 0 pelanggaran serius di 390/1440 terang/gelap (produksi/). Lighthouse HP di domain produksi nadi-swart.vercel.app:
+  performa 97, aksesibilitas 100, praktik terbaik 100, SEO 100. Alias tim nadi-tristan-tech-ais-projects.vercel.app diberi
+  X-Robots-Tag noindex oleh Vercel (SEO 60 di sana), jadi tautan publik memakai nadi-swart.vercel.app.
+- Foto halaman penuh: produksi/penuh-390-light.png (9.693 px), produksi/penuh-1440-dark.png.
+
+## Uji 5 detik versi loop
+Layar pertama HP: judul "Lempar nota ... Nadi yang merapikan" + kartu nota yang bisa disetujui. Yang diingat: "aplikasi untuk
+usaha kecil yang membaca nota dan aku tinggal setujui". Desktop menambah navigasi Satu hari / Siapa memakai / Harga / Keamanan.

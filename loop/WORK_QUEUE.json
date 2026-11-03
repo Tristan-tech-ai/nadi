@@ -1992,8 +1992,10 @@
    "accept": "iterasi penuh docs/design/ITERASI.md: riset + 3 konsep berbeda + kritik tertulis; logo SVG baru lolos uji tukar logo, terbaca di 16 px dan 512 px, terang/gelap; dipakai di aplikasi, ikon PWA, favicon; sebelum/sesudah di docs/design/iterasi/logo",
    "how": "docs/design/ITERASI.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:35:13"
+   "status": "done",
+   "created": "2026-11-03T19:35:13",
+   "done": "2026-11-03T20:32:33",
+   "result": "3e9c5da + de6e5f6: 5 konsep di 2 putaran (A cap, B stabilo, C titik, D kertas, E kertas-stabilo) dengan kritik di docs/design/iterasi/logo/README.md; dipilih D (n dari kertas nota sobek + titik denyut); logo-jalur.ts satu sumber + tes 4/4 (merah dulu: titik menempel lengkung); ikon PWA/apple/favicon dibuat ulang; produksi 3e9c5da READY, foto 390/1440 terang/gelap / dan /luring, axe 0 serius"
   },
   {
    "id": "D-11",
