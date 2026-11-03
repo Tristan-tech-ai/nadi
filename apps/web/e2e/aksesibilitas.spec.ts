@@ -107,7 +107,7 @@ test("halaman publik", async ({ page }) => {
   const inv = (await sb.from("invoice").select("kode_verifikasi").limit(1).maybeSingle()).data?.kode_verifikasi;
   const surat = (await sb.from("surat_keluar").select("kode_verifikasi").not("kode_verifikasi", "is", null).limit(1).maybeSingle()).data?.kode_verifikasi;
   const low = (await sb.from("lowongan").select("kode").eq("buka", true).limit(1).maybeSingle()).data?.kode;
-  const daftar = ["/", "/demo", "/demo/toko", "/masuk", "/daftar", "/masuk/staf", "/luring", "/lamar/status", "/slip",
+  const daftar = ["/", "/demo", "/demo/toko", "/panduan", "/masuk", "/daftar", "/masuk/staf", "/luring", "/lamar/status", "/slip",
     ...(inv ? [`/i/${inv}`] : []), ...(surat ? [`/v/${surat}`] : []), ...(low ? [`/lamar/${low}`] : [])];
   for (const jalur of daftar) harus(jalur, await periksa(page, jalur, false), false);
 });

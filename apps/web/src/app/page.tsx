@@ -121,6 +121,7 @@ export default function Beranda() {
         <nav aria-label="Tautan kaki" className="flex gap-5">
           <Link href="/masuk" className="hover:text-tinta">Masuk</Link>
           <Link href="/masuk/staf" className="hover:text-tinta">Masuk sebagai staf</Link>
+          <Link href="/panduan" className="hover:text-tinta">Panduan</Link>
         </nav>
       </footer>
     </>
