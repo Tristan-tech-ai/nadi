@@ -6,7 +6,7 @@ Aturan di sini (hanya aktif selama loop/LOOP_ON ada):
   pre   (PreToolUse ScheduleWakeup) menolak (exit 2) bila:
         a) loop/DONE_OK ada (aplikasi 100%: loop berhenti, jangan jadwalkan lagi);
         b) ada kalimat loop/wake_header.txt yang hilang dari prompt, atau header itu sendiri kehilangan frasa jangkar;
-        c) delaySeconds di luar 1200..1800 (perintah Tristan 1 Nov 2026 kedua: perlambat setelah batas pemakaian tercapai);
+        c) delaySeconds di luar 600..900 (perintah Tristan 3 Nov 2026: iterasi tiap 10 menit);
         d) tick ini tidak menjalankan loop/next_task.py;
         e) tick ini dan tick sebelumnya tidak menghasilkan artefak substantif (kode/migrasi/desain/riset/korpus, git commit,
            next_task.py done/add). Menulis STATE.md atau LOG.md saja tidak dihitung. Kecuali sertifikat antrean kosong segar;
@@ -38,7 +38,7 @@ MUSTREAD = os.path.join(L, "MUST_READ.txt")
 LOG = os.path.join(L, ".wake_guard.log")
 TAIL_BYTES = 12_000_000
 CERT_MIN, GATE_RED_MIN, STATE_MIN = 20, 60, 30
-DELAY_MIN, DELAY_MAX = 1200, 1800
+DELAY_MIN, DELAY_MAX = 600, 900
 
 SUB_PATH = re.compile(r"nadi[\\/]+(apps|packages|supabase|fixtures|scripts|docs[\\/]+(design|research|quality)|loop[\\/]+LEARN\.md|\.github)[\\/]?", re.I)
 SUB_CMD = re.compile(r"(\bgit\b[^\n|;&]*\bcommit\b|next_task\.py\s+(done|add)|apply_migration)")
@@ -47,7 +47,7 @@ WRITE_BASH = re.compile(r"(>>|\bcat\s*>|\bsed\s+-i|\bcp\s|\bmv\s|\btee\s|Out-Fil
 SUB_MCP = re.compile(r"(apply_migration|deploy_edge_function|create_project_env|create_project)$")
 MONITOR = ("hanya pemantauan", "tick tenang", "putaran tenang", "monitoring only", "quiet tick", "tidak ada yang dikerjakan")
 ANCHORS = ("KONTRAK TICK", "next_task.py", "PERINTAH TETAP", "HANYA AUTENTIKASI", "Ide adalah kerja", "GROUND TRUTH",
-           "GERBANG", "PENJAGA", "TANPA JEJAK", "ANTI-MACET", "ANTI-SLOP", "SETIAP GILIRAN BERAKHIR DENGAN ScheduleWakeup", "delaySeconds 1200", "LAPORAN")
+           "GERBANG", "PENJAGA", "TANPA JEJAK", "ANTI-MACET", "ANTI-SLOP", "SETIAP GILIRAN BERAKHIR DENGAN ScheduleWakeup", "delaySeconds 600", "LAPORAN")
 
 
 def log(msg):
@@ -207,7 +207,7 @@ def pre(inp):
         msgs.append(f"PENJAGA: prompt ScheduleWakeup kehilangan {len(miss)} dari {len(header_sentences(h))} kalimat header kanonik. Prompt pendek atau sekadar penunjuk dilarang. Tempel header ini KATA PER KATA di awal prompt, lalu tambahkan keadaan dan SATU aksi berikutnya:\n" + h)
     d = ti.get("delaySeconds")
     if not isinstance(d, (int, float)) or not (DELAY_MIN <= d <= DELAY_MAX):
-        msgs.append(f"PENJAGA: delaySeconds harus 1200..1800 (perintah Tristan 1 Nov 2026 kedua: perlambat, hemat batas pemakaian), bukan {d}.")
+        msgs.append(f"PENJAGA: delaySeconds harus 600..900 (perintah Tristan 3 Nov 2026: iterasi tiap 10 menit), bukan {d}.")
     tp = inp.get("transcript_path")
     if tp and os.path.exists(tp):
         msgs += tick_problems(events(tp), fresh(CERT, CERT_MIN))
@@ -252,7 +252,7 @@ def stop(inp):
     turn = [e[0] for e in ev[last_user + 1:]]
     msgs = []
     if "WAKE" not in turn:
-        msgs.append("PENJAGA: SETIAP GILIRAN BERAKHIR DENGAN ScheduleWakeup (delaySeconds 1200, prompt = header kanonik + keadaan + satu aksi berikutnya). Panggil sekarang sebelum teks akhir. Bila Tristan meminta berhenti, ia membuat loop/LOOP_PAUSE.")
+        msgs.append("PENJAGA: SETIAP GILIRAN BERAKHIR DENGAN ScheduleWakeup (delaySeconds 600, prompt = header kanonik + keadaan + satu aksi berikutnya). Panggil sekarang sebelum teks akhir. Bila Tristan meminta berhenti, ia membuat loop/LOOP_PAUSE.")
     t = last_text(tp).lower()
     if any(p in t for p in MONITOR) and not fresh(CERT, CERT_MIN):
         msgs.append("PENJAGA: teks akhir mengaku tidak ada kerja, padahal tidak ada sertifikat antrean kosong (python loop/next_task.py check). Kerjakan tugas READY teratas.")

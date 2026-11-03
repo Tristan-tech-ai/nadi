@@ -21,14 +21,14 @@ Kolom "dibaca" = halaman resmi dibuka langsung pada 3 Nov 2026; "ringkasan" = ba
 
 ## Untuk Tristan (siswa SMK, keputusan 3 Nov 2026)
 Fokus hanya ke lomba dan program yang **terbuka untuk umum**. Lomba khusus pelajar SMK tidak dikejar. Lomba khusus mahasiswa
-(Pertamuda, Gemastik, P2MW) tidak bisa diikuti. Banyak lomba umum mensyaratkan KTP atau usia >= 17 tahun; itu dicek per lomba.
+(Pertamuda, Gemastik, P2MW) tidak bisa diikuti. Tristan sudah punya KTP (3 Nov 2026), jadi syarat KTP/usia >= 17 tahun terpenuhi.
 
 | Program | Bisa? | Syarat penting (dibaca dari halaman resmi 3 Nov 2026) | Catatan |
 |---|---|---|---|
 | APINDO AI Innovation Challenge | ya | terbuka untuk pelajar/akademisi, pekerja, pemilik usaha/UMKM; gratis; wajib tuntas kursus AI Fluency; kirim tautan web publik + video demo MP4 <= 7 menit | **prioritas 1**; perkiraan buka Feb 2027 |
 | Dicoding AI Impact Challenge (Microsoft Elevate Training Center + Komdigi) | ya | terbuka untuk umum asal terdaftar sebagai peserta Microsoft Elevate Training Center; individu atau tim <= 3; tanpa syarat usia di halaman; kirim nama aplikasi, tautan proyek yang sudah jalan, Project Brief | **prioritas 2**; putaran 2026: daftar 1-30 Apr, hadiah Rp10 jt juara 1; https://www.dicoding.com/challenges/971 |
 | Hackathon BI-OJK (FEKDI) | mungkin | terbuka untuk individu dan korporasi, kategori Profesional dan Mahasiswa; tema layanan keuangan digital; total hadiah Rp600 jt (edisi 2025) | batas usia/status pelajar tidak tertulis di bi.go.id/id/Hackaton, cek panduan resmi saat buka (perkiraan Feb-Jul 2027) |
-| Hackathon Digital Cooperatives Expo | hanya bila >= 17 th dan ber-KTP, tim 2-3 orang | WNI >= 17 tahun; karya orisinal; **Top 10 dan pemenang wajib mengalihkan HAKI ke Kementerian Koperasi** | jangan kirim Nadi inti; hanya ide terpisah bila mau ikut |
+| Hackathon Digital Cooperatives Expo | ya (Tristan sudah ber-KTP), tim 2-3 orang | WNI >= 17 tahun; karya orisinal; **Top 10 dan pemenang wajib mengalihkan HAKI ke Kementerian Koperasi** | jangan kirim Nadi inti; hanya ide terpisah bila mau ikut |
 | Startup for Industry, Road to Startup World Cup | belum | butuh badan hukum >= 1 tahun / startup berjalan >= 1 tahun | setelah ada badan usaha |
 | Google for Startups Accelerator SEA | belum | tahap Seed-Seri B | setelah ada pendanaan |
 | Founder Institute | tunda | umum, tahap ide/pra-seed | biaya program tidak tertulis; tidak didaftarkan tanpa keputusan bayar Tristan |
