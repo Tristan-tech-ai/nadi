@@ -2008,8 +2008,10 @@
    "accept": "riset dulu: minimal 8 landing SaaS sejenis (Indonesia: majoo, Mekari Talenta, Mekari Jurnal, Gadjian, Kledo; luar: Gusto, Homebase, Deputy atau sejenis) dilihat langsung di peramban 390 dan 1440 px, dicatat bagian, urutan, bukti, ajakan, harga, FAQ, dan apa yang generik di docs/design/riset-landing.md; lalu iterasi penuh ITERASI.md dengan identitas D-10; landing lengkap: masalah, demo hidup, fitur per peran, harga dari docs/bisnis/paket.md, keamanan data, FAQ, panduan, ajakan, kaki halaman; tidak ada pola pahlawan SaaS standar atau tiga kartu fitur; uji 5 detik versi loop; Lighthouse mobile >= 90, axe 0 serius, foto 390/1440 terang/gelap; produksi",
    "how": "docs/design/ITERASI.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:35:13"
+   "status": "done",
+   "created": "2026-11-03T19:35:13",
+   "done": "2026-11-03T20:42:32",
+   "result": "92bec8e + 812edca: riset 8 landing (Chrome desktop + Playwright 390), 3 konsep + kritik docs/design/iterasi/landing/README.md, landing buku kas satu hari + 4 peran + harga (src/lib/paket.ts) + keamanan + FAQ + kaki; vitest isi/paket 7/7 (merah sengaja 1), e2e produksi asap 3/3, axe 0 serius 390/1440 terang/gelap, Lighthouse HP nadi-swart 97/100/100/100"
   },
   {
    "id": "D-12",
