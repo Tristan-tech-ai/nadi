@@ -19,17 +19,26 @@ Kolom "dibaca" = halaman resmi dibuka langsung pada 3 Nov 2026; "ringkasan" = ba
 | PRIME STeP (inkubasi dan akselerasi) | ITB | startup 6 bulan - 5 tahun dengan produk jalan, utamakan afiliasi ITB | tutup 22 Mei 2026 | Mei 2027 | inkubasi | formulir | https://dkst.itb.ac.id/id/open-registration-inkubasi-akselerasi-startup-2-0-prime-step-2026/ | ringkasan |
 | Founder Institute Indonesia | Founder Institute | pendiri tahap ide dan pra-seed | kohort "Jakarta 2027" tercantum, tanggal belum ada | 2027 | kurikulum pendiri | formulir + tes | https://fi.co/join | dibaca (tanpa tanggal) |
 
-## Yang paling cocok untuk Nadi sekarang
-1. **APINDO AI Innovation Challenge 2027**: terbuka untuk pemilik usaha dan pelajar, gratis, berkasnya cocok dengan yang sudah ada (demo web publik + video demo). Bahan: tautan /demo, video DONE-01 (docs/quality/done-01/satu-hari-di-warung.webm, diubah ke MP4) atau video promo F6-06.
-2. **Pertamuda 2027** (bila Tristan mahasiswa aktif D1-S1 dan berusia <= 25 pada Nov 2027): butuh pitch deck (B-04) dan video 1 menit (F6-06 < 60 dtk cocok).
-3. **Gemastik 2027** divisi Pengembangan Bisnis TIK atau Perangkat Lunak, bila Tristan mahasiswa.
-Program yang mensyaratkan badan hukum >= 1 tahun (Startup for Industry, Road to Startup World Cup) atau tahap Seed (Google) belum terbuka untuk Nadi sampai ada badan usaha dan pengguna nyata.
+## Untuk Tristan (siswa SMK, keputusan 3 Nov 2026)
+Fokus hanya ke lomba dan program yang **terbuka untuk umum**. Lomba khusus pelajar SMK tidak dikejar. Lomba khusus mahasiswa
+(Pertamuda, Gemastik, P2MW) tidak bisa diikuti. Banyak lomba umum mensyaratkan KTP atau usia >= 17 tahun; itu dicek per lomba.
+
+| Program | Bisa? | Syarat penting (dibaca dari halaman resmi 3 Nov 2026) | Catatan |
+|---|---|---|---|
+| APINDO AI Innovation Challenge | ya | terbuka untuk pelajar/akademisi, pekerja, pemilik usaha/UMKM; gratis; wajib tuntas kursus AI Fluency; kirim tautan web publik + video demo MP4 <= 7 menit | **prioritas 1**; perkiraan buka Feb 2027 |
+| Dicoding AI Impact Challenge (Microsoft Elevate Training Center + Komdigi) | ya | terbuka untuk umum asal terdaftar sebagai peserta Microsoft Elevate Training Center; individu atau tim <= 3; tanpa syarat usia di halaman; kirim nama aplikasi, tautan proyek yang sudah jalan, Project Brief | **prioritas 2**; putaran 2026: daftar 1-30 Apr, hadiah Rp10 jt juara 1; https://www.dicoding.com/challenges/971 |
+| Hackathon BI-OJK (FEKDI) | mungkin | terbuka untuk individu dan korporasi, kategori Profesional dan Mahasiswa; tema layanan keuangan digital; total hadiah Rp600 jt (edisi 2025) | batas usia/status pelajar tidak tertulis di bi.go.id/id/Hackaton, cek panduan resmi saat buka (perkiraan Feb-Jul 2027) |
+| Hackathon Digital Cooperatives Expo | hanya bila >= 17 th dan ber-KTP, tim 2-3 orang | WNI >= 17 tahun; karya orisinal; **Top 10 dan pemenang wajib mengalihkan HAKI ke Kementerian Koperasi** | jangan kirim Nadi inti; hanya ide terpisah bila mau ikut |
+| Startup for Industry, Road to Startup World Cup | belum | butuh badan hukum >= 1 tahun / startup berjalan >= 1 tahun | setelah ada badan usaha |
+| Google for Startups Accelerator SEA | belum | tahap Seed-Seri B | setelah ada pendanaan |
+| Founder Institute | tunda | umum, tahap ide/pra-seed | biaya program tidak tertulis; tidak didaftarkan tanpa keputusan bayar Tristan |
+| Pertamuda, Gemastik, P2MW | tidak | khusus mahasiswa | |
 
 ## Bahan pendaftaran yang disiapkan loop
 | Bahan | Dipakai di | Status |
 |---|---|---|
-| Tautan demo publik /demo | APINDO, Pertamuda (opsional), Gemastik | ada |
+| Tautan demo publik /demo | APINDO, Dicoding (tautan proyek), BI-OJK | ada |
 | Video demo MP4 <= 7 menit | APINDO | ada dalam webm (DONE-01); konversi MP4 menyusul bersama F6-06 |
-| Video 1 menit | Pertamuda | F6-06 |
-| Pitch deck PDF | Pertamuda, Startup for Industry, Gemastik bisnis | B-04 |
+| Video promo < 60 dtk | APINDO (pembuka video demo), konten | F6-06 |
+| Project Brief / pitch deck PDF | Dicoding, BI-OJK, investor | B-04 |
 | Ringkasan 1 halaman | semua | menyusul bersama B-04 |
