@@ -71,3 +71,18 @@ it("formatAngka", () => {
   expect(formatAngka(0)).toBe("0");
   expect(formatAngka(7499.6)).toBe("7.500");
 });
+
+describe("format per bahasa (I-02)", () => {
+  it("rupiah en memakai koma ribuan, id tetap EYD", () => {
+    expect(formatRupiah(1250000, { bahasa: "en" })).toBe("Rp1,250,000");
+    expect(formatRupiah(1250000)).toBe("Rp1.250.000");
+    expect(formatRupiah(1250000, { ringkas: true, bahasa: "en" })).toBe("Rp1.25M");
+    expect(formatRupiah(850000, { ringkas: true, bahasa: "en" })).toBe("Rp850K");
+  });
+  it("tanggal dan angka en", () => {
+    expect(formatTanggal(new Date("2026-10-31T03:00:00Z"), "Asia/Makassar", "en")).toBe("31 Oct 2026");
+    expect(formatTanggalKalender("2026-08-17", "en")).toBe("17 Aug 2026");
+    expect(formatTanggalKalender("2026-08-17")).toBe("17 Agu 2026");
+    expect(formatAngka(20021, "en")).toBe("20,021");
+  });
+});

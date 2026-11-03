@@ -5,6 +5,8 @@ import { Cap } from "@/components/ui/cap";
 import { Rupiah } from "@/components/ui/rupiah";
 import { Tombol } from "@/components/ui/tombol";
 import { formatAngka } from "@/lib/format";
+import type { Bahasa } from "@/lib/i18n/bahasa";
+import type { Kamus } from "@/lib/i18n/kamus";
 
 // Isi nota uji korpus (fixtures/korpus/nota/nota-01.json, sintetis): angka yang benar-benar dibaca Nadi di eval.
 const BARIS = [
@@ -18,7 +20,7 @@ const JEDA = 260; // ms antar baris tercetak
 type Putusan = "menunggu" | "diterima" | "ditolak";
 
 /** Demo hidup pahlawan: nota tercetak baris demi baris, lalu menjadi usulan yang bisa disetujui atau ditolak. */
-export function DemoNota() {
+export function DemoNota({ teks, bahasa = "id" }: { teks: Kamus["demo"]; bahasa?: Bahasa }) {
   const [putaran, setPutaran] = useState(0);
   const [putusan, setPutusan] = useState<Putusan>("menunggu");
   const cetak = (i: number) => ({ animationDelay: `${i * JEDA}ms` });
@@ -29,7 +31,7 @@ export function DemoNota() {
 
   return (
     <div key={putaran} className="relative mx-auto w-full max-w-sm">
-      <figure aria-label="Contoh nota belanja" className="rounded-t-[var(--radius-kartu)] border border-b-0 border-garis bg-kertas px-5 pt-5 pb-4 font-mono text-[13px] leading-6 text-tinta shadow-[0_1px_0_var(--garis)]">
+      <figure aria-label={teks.label} className="rounded-t-[var(--radius-kartu)] border border-b-0 border-garis bg-kertas px-5 pt-5 pb-4 font-mono text-[13px] leading-6 text-tinta shadow-[0_1px_0_var(--garis)]">
         <p className="cetak text-center font-semibold" style={cetak(0)}>UD Sumber Rejeki</p>
         <p className="cetak text-center text-tinta-2" style={cetak(1)}>No: NT-4671 · Tgl: 13/10/2026</p>
         <div className="my-2 border-t border-dashed border-garis-kuat" aria-hidden />
@@ -53,25 +55,25 @@ export function DemoNota() {
         <article className="kartu-thermal bg-kertas-2 px-4 pt-4 pb-6" aria-live="polite">
           <header className="flex items-start justify-between gap-3">
             <h2 className="text-base font-semibold leading-snug">
-              Catat belanja <Rupiah nilai={TOTAL} /> di UD Sumber Rejeki
+              {teks.judulAwal} <Rupiah nilai={TOTAL} bahasa={bahasa} /> {teks.judulAkhir}
             </h2>
-            {putusan !== "menunggu" ? <Cap jenis={putusan} /> : null}
+            {putusan !== "menunggu" ? <Cap jenis={putusan} label={putusan === "diterima" ? teks.diterima : teks.ditolak} /> : null}
           </header>
-          <p className="mt-1 text-sm text-tinta-2">3 barang, nota NT-4671. Jumlah per baris cocok dengan total.</p>
+          <p className="mt-1 text-sm text-tinta-2">{teks.ringkas}</p>
           {putusan === "menunggu" ? (
             <div className="mt-4 flex gap-2">
-              <Tombol ukuran="besar" className="flex-1" onClick={() => setPutusan("diterima")}>Setujui</Tombol>
-              <Tombol ukuran="besar" ragam="kedua" onClick={() => setPutusan("ditolak")}>Tolak</Tombol>
+              <Tombol ukuran="besar" className="flex-1" onClick={() => setPutusan("diterima")}>{teks.setujui}</Tombol>
+              <Tombol ukuran="besar" ragam="kedua" onClick={() => setPutusan("ditolak")}>{teks.tolak}</Tombol>
             </div>
           ) : (
             <p className="mt-4 flex items-center justify-between gap-3 text-sm">
-              <span>{putusan === "diterima" ? "Tercatat sebagai belanja 13 Okt 2026." : "Tidak dicatat. Nota tetap tersimpan sebagai bukti."}</span>
-              <button type="button" onClick={ulangi} className="shrink-0 font-semibold underline underline-offset-4">Ulangi</button>
+              <span>{putusan === "diterima" ? teks.tercatat : teks.tidakDicatat}</span>
+              <button type="button" onClick={ulangi} className="shrink-0 font-semibold underline underline-offset-4">{teks.ulangi}</button>
             </p>
           )}
         </article>
       </div>
-      <p className="mt-3 text-xs text-tinta-2">Contoh dengan nota uji. Di Nadi, kartu ini muncul di Feed setelah kamu memotret nota.</p>
+      <p className="mt-3 text-xs text-tinta-2">{teks.catatan}</p>
     </div>
   );
 }

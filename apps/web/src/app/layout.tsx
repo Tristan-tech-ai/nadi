@@ -8,7 +8,11 @@ const jakarta = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-jakart
 const bricolage = Bricolage_Grotesque({ subsets: ["latin"], variable: "--font-bricolage", display: "swap", weight: ["600", "800"] });
 const plexMono = IBM_Plex_Mono({ subsets: ["latin"], variable: "--font-plex-mono", display: "swap", weight: ["400", "500"] });
 
+// Dasar URL metadata (canonical, hreflang): domain produksi proyek dari env sistem Vercel saat build, lokal bila tidak ada.
+const DASAR_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3100";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(DASAR_URL),
   title: "Nadi",
   description: "Denyut usahamu, terasa dan tercatat.",
 };

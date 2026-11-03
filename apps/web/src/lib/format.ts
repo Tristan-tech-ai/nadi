@@ -1,23 +1,29 @@
 // Format angka, uang, dan waktu menurut docs/design/VOICE.md (EYD: Rp tanpa spasi, titik ribuan, koma desimal).
+import { lokalIntl, type Bahasa } from "@/lib/i18n/bahasa";
+
 const ANGKA = new Intl.NumberFormat("id-ID", { maximumFractionDigits: 2 });
+const ANGKA_EN = new Intl.NumberFormat("en-US", { maximumFractionDigits: 2 });
 const BULAN = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+const BULAN_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const bulanDari = (b: Bahasa) => (b === "en" ? BULAN_EN : BULAN);
 const ZONA: Record<string, string> = { "Asia/Jakarta": "WIB", "Asia/Pontianak": "WIB", "Asia/Makassar": "WITA", "Asia/Jayapura": "WIT" };
 
-/** Rp1.250.000 / -Rp12.500,5. `ringkas` untuk kartu kecil: Rp1,25 jt, Rp850 rb, Rp3,1 M. */
-export function formatRupiah(nilai: number, opsi: { ringkas?: boolean } = {}): string {
+/** Rp1.250.000 / -Rp12.500,5. `ringkas` untuk kartu kecil: Rp1,25 jt, Rp850 rb, Rp3,1 M. Bahasa en: Rp1,250,000, Rp1.25M. */
+export function formatRupiah(nilai: number, opsi: { ringkas?: boolean; bahasa?: Bahasa } = {}): string {
+  const b = opsi.bahasa ?? "id";
   if (!Number.isFinite(nilai)) return "Rp0";
   const tanda = nilai < 0 ? "-" : "";
   const n = Math.abs(nilai);
   if (opsi.ringkas) {
-    const satuan: [number, string][] = [[1e12, " T"], [1e9, " M"], [1e6, " jt"], [1e3, " rb"]];
+    const satuan: [number, string][] = b === "en" ? [[1e12, "T"], [1e9, "B"], [1e6, "M"], [1e3, "K"]] : [[1e12, " T"], [1e9, " M"], [1e6, " jt"], [1e3, " rb"]];
     for (const [batas, akhiran] of satuan) {
       if (n >= batas) {
         const v = n / batas;
-        return `${tanda}Rp${new Intl.NumberFormat("id-ID", { maximumFractionDigits: v < 10 ? 2 : 1 }).format(v)}${akhiran}`;
+        return `${tanda}Rp${new Intl.NumberFormat(lokalIntl(b), { maximumFractionDigits: v < 10 ? 2 : 1 }).format(v)}${akhiran}`;
       }
     }
   }
-  return `${tanda}Rp${ANGKA.format(n)}`;
+  return `${tanda}Rp${(b === "en" ? ANGKA_EN : ANGKA).format(n)}`;
 }
 
 function bagian(tanggal: Date, zona: string) {
@@ -32,10 +38,10 @@ function bagian(tanggal: Date, zona: string) {
 // Waktu (Date) selalu ditampilkan di zona usaha yang dioper pemanggil (lib/zona-usaha.ts); tidak ada zona bawaan,
 // supaya pemanggil yang lupa ditunjuk TypeScript. Tanggal kalender YYYY-MM-DD memakai formatTanggalKalender.
 
-/** 31 Okt 2026 */
-export function formatTanggal(tanggal: Date, zona: string): string {
+/** 31 Okt 2026 (en: 31 Oct 2026) */
+export function formatTanggal(tanggal: Date, zona: string, bahasa: Bahasa = "id"): string {
   const b = bagian(tanggal, zona);
-  return `${b.hari} ${BULAN[b.bulan - 1]} ${b.tahun}`;
+  return `${b.hari} ${bulanDari(bahasa)[b.bulan - 1]} ${b.tahun}`;
 }
 
 /** 14.30 WITA */
@@ -45,10 +51,10 @@ export function formatJam(tanggal: Date, zona: string, denganZona = true): strin
 }
 
 /** Tanggal kalender YYYY-MM-DD (tanggal izin, sesi, lembur, awal minggu) jadi 31 Okt 2026, tanpa zona. Teks lain dikembalikan apa adanya. */
-export function formatTanggalKalender(teks: string): string {
+export function formatTanggalKalender(teks: string, bahasa: Bahasa = "id"): string {
   const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(teks);
   const bulan = m ? Number(m[2]) : 0;
-  return m && bulan >= 1 && bulan <= 12 ? `${Number(m[3])} ${BULAN[bulan - 1]} ${m[1]}` : teks;
+  return m && bulan >= 1 && bulan <= 12 ? `${Number(m[3])} ${bulanDari(bahasa)[bulan - 1]} ${m[1]}` : teks;
 }
 
 /** Selisih jam dinding `zona` terhadap UTC (ms) pada saat `ms`. */
@@ -77,7 +83,7 @@ export function formatPersen(rasio: number): string {
   return `${Math.round(rasio * 100)}%`;
 }
 
-/** 20.021 dari 20021 (pemisah ribuan titik, EYD) */
-export function formatAngka(nilai: number): string {
-  return Math.round(nilai).toLocaleString("id-ID");
+/** 20.021 dari 20021 (pemisah ribuan titik, EYD; en: 20,021) */
+export function formatAngka(nilai: number, bahasa: Bahasa = "id"): string {
+  return Math.round(nilai).toLocaleString(lokalIntl(bahasa));
 }

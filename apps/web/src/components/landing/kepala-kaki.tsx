@@ -1,63 +1,70 @@
 import Link from "next/link";
+import { PemilihBahasa } from "@/components/landing/pemilih-bahasa";
 import { LogoNadi } from "@/components/ui/logo";
+import { awalanJalur, type Bahasa } from "@/lib/i18n/bahasa";
+import { ambilKamus } from "@/lib/i18n/kamus";
 
-// Kepala dan kaki situs publik (landing dan halaman pendukung D-15).
-const NAV = [
-  { href: "/#hari", label: "Satu hari" },
-  { href: "/#peran", label: "Siapa memakai" },
-  { href: "/harga", label: "Harga" },
-  { href: "/keamanan", label: "Keamanan" },
-  { href: "/panduan", label: "Panduan" },
-];
-
-export function KepalaSitus() {
+// Kepala dan kaki situs publik (landing dan halaman pendukung D-15), dua bahasa (I-02). Halaman pendukung versi Inggris
+// menyusul di I-03; sampai itu tautannya menuju versi Indonesia.
+export function KepalaSitus({ bahasa = "id" }: { bahasa?: Bahasa }) {
+  const k = ambilKamus(bahasa).kepala;
+  const akar = awalanJalur(bahasa) || "/";
+  const nav = [
+    { href: `${akar}#hari`, label: k.nav.hari },
+    { href: `${akar}#peran`, label: k.nav.peran },
+    { href: "/harga", label: k.nav.harga },
+    { href: "/keamanan", label: k.nav.keamanan },
+    { href: "/panduan", label: k.nav.panduan },
+  ];
   return (
-  <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 pt-6">
-    <Link href="/" aria-label="Beranda Nadi">
-      <LogoNadi />
-    </Link>
-    <nav aria-label="Utama" className="hidden items-center gap-6 text-sm font-semibold text-tinta-2 lg:flex">
-      {NAV.map((n) => (
-        <Link key={n.href} href={n.href} className="hover:text-tinta">{n.label}</Link>
-      ))}
-    </nav>
-    <div className="flex items-center gap-4 text-sm font-semibold">
-      <Link href="/masuk" className="underline-offset-4 hover:underline">Masuk</Link>
-      <Link href="/demo" className="inline-flex h-10 items-center rounded-[var(--radius-isian)] border border-tinta px-4 transition-[background-color] duration-150 hover:bg-kertas-2">
-        Coba usaha contoh
+    <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 pt-6">
+      <Link href={akar} aria-label={k.beranda}>
+        <LogoNadi />
       </Link>
-    </div>
-  </header>
+      <nav aria-label={k.navUtama} className="hidden items-center gap-6 text-sm font-semibold text-tinta-2 lg:flex">
+        {nav.map((n) => (
+          <Link key={n.label} href={n.href} className="hover:text-tinta">{n.label}</Link>
+        ))}
+      </nav>
+      <div className="flex items-center gap-4 text-sm font-semibold">
+        <PemilihBahasa bahasa={bahasa} />
+        <Link href="/masuk" className="underline-offset-4 hover:underline">{k.masuk}</Link>
+        <Link href="/demo" className="hidden h-10 items-center rounded-[var(--radius-isian)] border border-tinta px-4 transition-[background-color] duration-150 hover:bg-kertas-2 sm:inline-flex">
+          {k.cobaContoh}
+        </Link>
+      </div>
+    </header>
   );
 }
 
-export function KakiSitus() {
+export function KakiSitus({ bahasa = "id" }: { bahasa?: Bahasa }) {
+  const k = ambilKamus(bahasa).kaki;
   return (
-  <footer className="mx-auto w-full max-w-6xl border-t border-garis px-5 py-10 text-sm text-tinta-2">
-    <div className="grid gap-8 sm:grid-cols-3">
-      <div>
-        <LogoNadi />
-        <p className="mt-3 max-w-xs">Kertas kerja usaha kecil yang mengisi dirinya sendiri.</p>
+    <footer className="mx-auto w-full max-w-6xl border-t border-garis px-5 py-10 text-sm text-tinta-2">
+      <div className="grid gap-8 sm:grid-cols-3">
+        <div>
+          <LogoNadi />
+          <p className="mt-3 max-w-xs">{k.slogan}</p>
+        </div>
+        <nav aria-label={k.produk} className="flex flex-col gap-2">
+          <p className="font-semibold text-tinta">{k.produk}</p>
+          <Link href="/demo" className="hover:text-tinta">{k.contohMakanan}</Link>
+          <Link href="/demo/toko" className="hover:text-tinta">{k.contohToko}</Link>
+          <Link href="/panduan" className="hover:text-tinta">{k.panduan}</Link>
+          <Link href="/harga" className="hover:text-tinta">{k.harga}</Link>
+          <Link href="/tentang" className="hover:text-tinta">{k.tentang}</Link>
+        </nav>
+        <nav aria-label={k.akun} className="flex flex-col gap-2">
+          <p className="font-semibold text-tinta">{k.akun}</p>
+          <Link href="/daftar" className="hover:text-tinta">{k.buatAkun}</Link>
+          <Link href="/masuk" className="hover:text-tinta">{k.masuk}</Link>
+          <Link href="/masuk/staf" className="hover:text-tinta">{k.masukStaf}</Link>
+          <Link href="/keamanan" className="hover:text-tinta">{k.keamanan}</Link>
+          <Link href="/privasi" className="hover:text-tinta">{k.privasi}</Link>
+          <Link href="/syarat" className="hover:text-tinta">{k.syarat}</Link>
+        </nav>
       </div>
-      <nav aria-label="Produk" className="flex flex-col gap-2">
-        <p className="font-semibold text-tinta">Produk</p>
-        <Link href="/demo" className="hover:text-tinta">Usaha contoh (makanan)</Link>
-        <Link href="/demo/toko" className="hover:text-tinta">Usaha contoh (toko)</Link>
-        <Link href="/panduan" className="hover:text-tinta">Panduan per peran</Link>
-        <Link href="/harga" className="hover:text-tinta">Harga</Link>
-        <Link href="/tentang" className="hover:text-tinta">Tentang Nadi</Link>
-      </nav>
-      <nav aria-label="Akun" className="flex flex-col gap-2">
-        <p className="font-semibold text-tinta">Akun</p>
-        <Link href="/daftar" className="hover:text-tinta">Buat akun</Link>
-        <Link href="/masuk" className="hover:text-tinta">Masuk</Link>
-        <Link href="/masuk/staf" className="hover:text-tinta">Masuk sebagai staf</Link>
-        <Link href="/keamanan" className="hover:text-tinta">Keamanan data</Link>
-        <Link href="/privasi" className="hover:text-tinta">Kebijakan privasi</Link>
-        <Link href="/syarat" className="hover:text-tinta">Syarat layanan</Link>
-      </nav>
-    </div>
-    <p className="mt-10">© 2026 Nadi</p>
-  </footer>
+      <p className="mt-10">© 2026 Nadi</p>
+    </footer>
   );
 }

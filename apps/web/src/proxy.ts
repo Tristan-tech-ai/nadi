@@ -1,6 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { readPublicEnv } from "@/lib/env";
+import { KUKI_BAHASA } from "@/lib/i18n/bahasa";
 
 // Area yang butuh masuk. Selain ini publik (landing, lamaran kandidat, verifikasi surat).
 const DILINDUNGI = ["/app", "/oauth/izinkan", "/absen", "/kios", "/cetak"];
@@ -11,6 +12,16 @@ const TERBUKA = ["/kios/tablet"];
 export async function proxy(request: NextRequest) {
   // API MCP memakai token akses sendiri, bukan sesi cookie.
   if (request.nextUrl.pathname.startsWith("/api/mcp")) return NextResponse.next();
+  // Beranda: pengunjung yang pernah memilih English (cookie dari pemilih bahasa) langsung ke /en. Accept-Language tidak dipakai
+  // untuk mengalihkan agar mesin pencari dan tautan bersama selalu melihat halaman yang sama (docs/research/i18n.md).
+  // Hanya muatan dokumen penuh: permintaan RSC/prefetch dari router klien tidak dialihkan, kalau tidak prefetch "/" yang
+  // tersimpan saat cookie masih en membuat tombol Bahasa Indonesia kembali ke /en (temuan e2e bahasa 3 Nov 2026).
+  const dokumen = !request.headers.has("rsc") && !request.headers.has("next-router-prefetch");
+  if (dokumen && request.nextUrl.pathname === "/" && request.cookies.get(KUKI_BAHASA)?.value === "en") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/en";
+    return NextResponse.redirect(url);
+  }
   let response = NextResponse.next({ request });
   const { supabaseUrl, supabasePublishableKey } = readPublicEnv();
 

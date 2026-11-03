@@ -2,7 +2,7 @@ import "server-only";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 
-export type Sesi = { userId: string; email: string | null; perusahaanId: string | null; peran: string | null };
+export type Sesi = { userId: string; email: string | null; perusahaanId: string | null; peran: string | null; bahasa: string | null };
 
 /**
  * Pengguna masuk dari klaim JWT yang diverifikasi lokal (getClaims). Dipanggil hanya di dalam <Suspense>
@@ -14,7 +14,9 @@ export async function bacaSesi(): Promise<Sesi | null> {
   const c = data?.claims;
   if (!c?.sub) return null;
   const meta = (c.app_metadata ?? {}) as { pid?: string; prn?: string };
-  return { userId: c.sub, email: typeof c.email === "string" ? c.email : null, perusahaanId: meta.pid ?? null, peran: meta.prn ?? null };
+  // Pilihan bahasa pengguna (I-02) disimpan di user_metadata dan ikut dalam JWT setelah sesi disegarkan.
+  const um = (c.user_metadata ?? {}) as { bahasa?: string };
+  return { userId: c.sub, email: typeof c.email === "string" ? c.email : null, perusahaanId: meta.pid ?? null, peran: meta.prn ?? null, bahasa: um.bahasa ?? null };
 }
 
 export async function wajibSesi(): Promise<Sesi> {
