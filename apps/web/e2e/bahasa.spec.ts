@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
+import { createClient } from "@supabase/supabase-js";
 
 // I-02: bahasa id/en. Landing berganti bahasa lewat navigasi klien (tanpa muat ulang halaman), pilihan diingat cookie;
 // di aplikasi pilihan tersimpan di akun (user_metadata) sehingga ikut ke sesi lain.
@@ -12,7 +13,7 @@ function bacaEnv(nama: string): Record<string, string> {
     return {};
   }
 }
-const E = bacaEnv(".env.e2e.local");
+const E = { ...bacaEnv(".env.local"), ...bacaEnv(".env.e2e.local") };
 
 test.describe.configure({ mode: "serial" });
 
@@ -234,6 +235,23 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
   const axeSerah = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeSerah.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
+  // Wawancara pelamar mode Inggris (lamaran pertama yang punya jawaban suara di usaha aktif akun A).
+  const sbW = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
+  expect((await sbW.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
+  const lamaranW = (await sbW.from("jawaban_wawancara").select("lamaran_id").eq("status", "masuk").limit(1).maybeSingle()).data?.lamaran_id;
+  if (lamaranW) {
+    await p1.goto(`/app/wawancara/${lamaranW}`);
+    await expect(p1.getByRole("heading", { level: 2, name: "Summary" })).toBeVisible();
+    await expect(p1.getByTestId("khusus-indonesia")).toBeVisible();
+    expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
+    const axeW = await new AxeBuilder({ page: p1 }).analyze();
+    expect(axeW.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+  }
+
+  // Kepala aplikasi mode Inggris: tautan lompat dan logo.
+  await expect(p1.locator("a.lompat-isi")).toHaveText("Skip to content");
+  await expect(p1.getByRole("link", { name: "App home" })).toBeVisible();
 
   // Magang mode Inggris: dana rekrutmen, rencana, formulir, tabel biaya; isi rencana dan nama data pengguna.
   await p1.goto("/app/magang");

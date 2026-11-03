@@ -3,16 +3,18 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Tombol } from "@/components/ui/tombol";
+import { isiTeks } from "@/lib/i18n/isi-teks";
+import type { Kamus } from "@/lib/i18n/kamus";
 import { simpanTranskrip } from "@/app/app/wawancara/actions";
 import { transkripsi, type ModelTranskrip } from "@/lib/wawancara/transkrip";
 
 type Keadaan = { jenis: "diam" } | { jenis: "unduh"; persen: number } | { jenis: "dengar" } | { jenis: "galat"; pesan: string };
 
 /** Tombol transkrip untuk satu klip. Model ucapan berjalan di perangkat ini; hasilnya disimpan lewat server action. */
-export function TranskripJawaban({ jawabanId, urutan, url, model, ada }: { jawabanId: string; urutan: number; url: string; model: ModelTranskrip | null; ada: boolean }) {
+export function TranskripJawaban({ jawabanId, urutan, url, model, ada, teks: t }: { jawabanId: string; urutan: number; url: string; model: ModelTranskrip | null; ada: boolean; teks: Kamus["wawancara"] }) {
   const router = useRouter();
   const [k, setK] = useState<Keadaan>({ jenis: "diam" });
-  if (!model) return <p className="text-sm text-tinta-2">Transkrip belum tersedia di usaha ini. Dengarkan klipnya langsung.</p>;
+  if (!model) return <p className="text-sm text-tinta-2">{t.tanpaModel}</p>;
 
   async function mulai() {
     setK({ jenis: "dengar" });
@@ -24,7 +26,7 @@ export function TranskripJawaban({ jawabanId, urutan, url, model, ada }: { jawab
       setK({ jenis: "diam" });
       router.refresh();
     } catch {
-      setK({ jenis: "galat", pesan: "Transkrip gagal dibuat di perangkat ini. Dengarkan klipnya langsung, atau coba lagi dari laptop." });
+      setK({ jenis: "galat", pesan: t.transkripGagal });
     }
   }
 
@@ -32,13 +34,13 @@ export function TranskripJawaban({ jawabanId, urutan, url, model, ada }: { jawab
   return (
     <div className="flex flex-col gap-2">
       <Tombol ragam="kedua" onClick={mulai} disabled={sibuk} data-testid={`transkrip-${urutan}`} className="self-start">
-        {sibuk ? "Sedang mentranskrip..." : ada ? "Transkrip ulang" : "Buat transkrip"}
+        {sibuk ? t.mentranskrip : ada ? t.transkripUlang : t.buatTranskrip}
       </Tombol>
       <p className="text-sm text-tinta-2" aria-live="polite">
         {k.jenis === "unduh"
-          ? `Mengunduh model suara sekali untuk perangkat ini: ${Math.round(k.persen)}%`
+          ? isiTeks(t.mengunduh, { n: Math.round(k.persen) })
           : k.jenis === "dengar"
-            ? "Nadi sedang mendengarkan klip ini di perangkatmu. Suara tidak dikirim ke mana pun."
+            ? t.mendengar
             : k.jenis === "galat"
               ? <span role="alert" className="text-cap">{k.pesan}</span>
               : null}

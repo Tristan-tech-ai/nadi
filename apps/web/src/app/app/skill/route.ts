@@ -1,5 +1,7 @@
 import { headers } from "next/headers";
 import { POLA_KERJA, polaSah } from "@/lib/gaji/pola-kerja";
+import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
+import { bahasaAplikasi } from "@/lib/i18n/server";
 import { hariIni } from "@/lib/izin";
 import { resourceMcp } from "@/lib/mcp/http";
 import { wajibPerusahaan } from "@/lib/sesi";
@@ -9,10 +11,12 @@ import { zonaUsahaIni } from "@/lib/zona-usaha";
 
 // F6-05: unduh paket skill asisten AI (zip berformat Agent Skills) untuk usaha yang sedang dibuka. Pemilik, admin, akuntan;
 // data dibaca lewat RLS pengguna ini, tanpa nama orang, gaji, NIK, atau rekening (lihat src/lib/skill/paket.ts).
+// Isi paket tetap bahasa Indonesia (dibaca asisten AI untuk usaha Indonesia, istilahnya sama dengan data); pesan galat ikut bahasa pengguna.
 export async function GET() {
   const sesi = await wajibPerusahaan();
+  const k = ambilKamus(await bahasaAplikasi(sesi.bahasa)).skillPesan;
   if (!["pemilik", "admin", "akuntan"].includes(sesi.peran)) {
-    return new Response("Paket skill hanya untuk pemilik, admin, dan akuntan.", { status: 403, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+    return new Response(k.hanyaPeran, { status: 403, headers: { "Content-Type": "text/plain; charset=utf-8" } });
   }
   const supabase = await createClient();
   const [{ data: usaha }, { data: topi }, { data: aturan }, { data: izin }, { data: nomor }, { data: akun }, zona] = await Promise.all([
@@ -24,7 +28,7 @@ export async function GET() {
     supabase.from("akun").select("kode, nama").eq("aktif", true).order("kode"),
     zonaUsahaIni(sesi.perusahaanId),
   ]);
-  if (!usaha) return new Response("Usaha tidak ditemukan.", { status: 404, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  if (!usaha) return new Response(k.tidakAda, { status: 404, headers: { "Content-Type": "text/plain; charset=utf-8" } });
   const hari = hariIni(new Date(), zona);
   const pola = (aturan as { pola_kerja?: string } | null)?.pola_kerja;
   const paket = susunSkill({
@@ -42,7 +46,7 @@ export async function GET() {
     dibuat: hari,
   });
   const masalah = periksaSkill(paket.nama, paket.berkas["SKILL.md"]);
-  if (masalah.length) return new Response(`Paket skill tidak sah: ${masalah.join("; ")}`, { status: 500, headers: { "Content-Type": "text/plain; charset=utf-8" } });
+  if (masalah.length) return new Response(isiTeks(k.tidakSah, { masalah: masalah.join("; ") }), { status: 500, headers: { "Content-Type": "text/plain; charset=utf-8" } });
   return new Response(zipSkill(paket) as BodyInit, {
     headers: {
       "Content-Type": "application/zip",

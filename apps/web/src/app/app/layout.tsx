@@ -30,6 +30,29 @@ async function NamaPerusahaan() {
   );
 }
 
+/** Tautan lompat dan logo dalam bahasa pengguna; cadangannya (bahasa Indonesia, bentuk sama) tampil sampai bahasa terbaca. */
+function TautanKepala({ lompat, beranda, lang }: { lompat: string; beranda: string; lang?: string }) {
+  return (
+    <>
+      <a href="#isi" className="lompat-isi" lang={lang}>{lompat}</a>
+      <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-garis bg-kertas px-4 py-3">
+        <Link href="/app" aria-label={beranda} lang={lang}>
+          <TandaNadi ukuran={26} />
+        </Link>
+        <Suspense fallback={<span className="h-4 w-32 animate-pulse rounded bg-kertas-2" aria-hidden />}>
+          <NamaPerusahaan />
+        </Suspense>
+      </header>
+    </>
+  );
+}
+
+async function Kepala() {
+  const bahasa = await bahasaAplikasi();
+  const t = ambilKamus(bahasa).aplikasi;
+  return <TautanKepala lompat={t.lompat} beranda={t.beranda} lang={bahasa} />;
+}
+
 async function Navigasi() {
   const sesi = await bacaSesi();
   if (!sesi?.peran) return null;
@@ -48,15 +71,9 @@ export default function LayoutApp({ children }: LayoutProps<"/app">) {
   return (
     <div className="flex min-h-full flex-1 flex-col">
       {/* WCAG 2.4.1: kepala dan navigasi berulang di setiap layar; tautan pertama melompati kepala langsung ke isi. */}
-      <a href="#isi" className="lompat-isi">Lompat ke isi</a>
-      <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-garis bg-kertas px-4 py-3">
-        <Link href="/app" aria-label="Beranda aplikasi">
-          <TandaNadi ukuran={26} />
-        </Link>
-        <Suspense fallback={<span className="h-4 w-32 animate-pulse rounded bg-kertas-2" aria-hidden />}>
-          <NamaPerusahaan />
-        </Suspense>
-      </header>
+      <Suspense fallback={<TautanKepala lompat={ambilKamus("id").aplikasi.lompat} beranda={ambilKamus("id").aplikasi.beranda} />}>
+        <Kepala />
+      </Suspense>
       <div id="isi" tabIndex={-1} className="flex flex-1 flex-col focus:outline-none">{children}</div>
       <Suspense fallback={<div className="h-14 border-t border-garis" aria-hidden />}>
         <Navigasi />
