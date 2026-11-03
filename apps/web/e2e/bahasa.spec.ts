@@ -204,6 +204,14 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   const axeAkuntan = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeAkuntan.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
+  // Kompas Pajak mode Inggris; kutipan pasal dan kalimat hitungan bertanda lang=id, label Indonesia only.
+  await p1.goto("/app/pajak");
+  await expect(p1.getByRole("heading", { level: 1, name: "Tax Compass" })).toBeVisible();
+  await expect(p1.getByTestId("khusus-indonesia")).toBeVisible();
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
+  const axePajak = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axePajak.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
   // Magang mode Inggris: dana rekrutmen, rencana, formulir, tabel biaya; isi rencana dan nama data pengguna.
   await p1.goto("/app/magang");
   await expect(p1.getByRole("heading", { level: 1, name: "Internships" })).toBeVisible();
