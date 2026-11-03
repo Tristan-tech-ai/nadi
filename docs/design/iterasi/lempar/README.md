@@ -23,7 +23,7 @@ masing-masing dengan teks, tanda, dan langkah berikutnya.
 ## Hasil
 | | Sebelum | Sesudah |
 |---|---|---|
-| Nota dilempar sampai usulan tampil | 6,3 dtk | 3,7-4,7 dtk (lokal; produksi di bawah) |
+| Nota dilempar sampai usulan tampil (produksi) | 6,3 dtk | 6,2 dtk (tidak berubah: waktu baca ditentukan pembaca berkas, bukan layar) |
 | Sampai disetujui | 2 ketukan + 1 pindah layar | 1 ketukan, 0 pindah layar, tombol Setujui sudah di layar |
 | Luring | tidak dirancang | berkas ditahan, pesan jelas, terkirim otomatis saat online (e2e) |
 | Galat | pesan saja | pesan + Coba lagi yang berhasil (e2e) |
