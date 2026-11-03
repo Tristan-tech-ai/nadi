@@ -12,13 +12,14 @@ const INDUSTRI = new Set(["fnb", "toko", "kantor", "bengkel", "klinik", "konstru
 
 /** Buat perusahaan lewat RPC (menulis klaim pid/prn ke app_metadata), lalu segarkan sesi agar JWT membawa klaim baru. */
 export async function buatPerusahaan(_: HasilForm, form: FormData): Promise<HasilForm> {
+  const k = ambilKamus(await bahasaAplikasi()).mulaiPesan;
   const nama = String(form.get("nama") ?? "").trim();
   const industri = String(form.get("industri") ?? "");
-  if (nama.length < 2) return { galat: "Nama usaha minimal 2 huruf.", isian: { nama, industri } };
-  if (!INDUSTRI.has(industri)) return { galat: "Pilih jenis usaha yang paling dekat.", isian: { nama, industri } };
+  if (nama.length < 2) return { galat: k.namaPendek, isian: { nama, industri } };
+  if (!INDUSTRI.has(industri)) return { galat: k.pilihJenis, isian: { nama, industri } };
   const supabase = await createClient();
   const { error } = await supabase.rpc("buat_perusahaan", { p_nama: nama, p_industri: industri });
-  if (error) return { galat: error.code === "54000" ? "Akun ini sudah mencapai batas 20 usaha." : "Nadi gagal membuat usaha. Coba lagi sebentar.", isian: { nama, industri } };
+  if (error) return { galat: error.code === "54000" ? k.batas : k.gagal, isian: { nama, industri } };
   await supabase.auth.refreshSession();
   // Topi bawaan jenis usaha (paket industri); butuh klaim pid baru, jadi setelah refreshSession.
   await supabase.rpc("pasang_paket", { p_kode: industri });
