@@ -18,6 +18,13 @@ Tidak ada isi atau gambar pesaing yang disalin ke Nadi; yang dicatat hanya susun
 | deputy.com | tengah judul di latar biru tua + label "AI-POWERED" + **tab fitur di atas UI asli** (AI Agent, Scheduling, Timekeeping, Compliance, HR, Payroll) | tantangan, kenapa pindah, industri, hasil, ajakan | 8.736 px | See how it works + Start for free | "thousands of businesses" |
 | **Nadi sekarang** | kiri judul stabilo, kanan kartu nota hidup yang bisa disetujui | pekerjaan kecil (6 baris buku kas), 3 langkah, berkas kedua tanpa AI, MCP, data terpisah, ajakan | **2.840 px** | Mulai dari satu nota + Coba usaha contoh | hasil eval 5 dari 5 |
 
+## Tampilan HP 390 px (Playwright, 3 Nov 2026, viewport 390 x 844, isMobile)
+- 5 dari 8 layar pertama tertutup sebagian oleh pop-up promo, banner diskon, kotak persetujuan cookie, atau tombol WhatsApp
+  mengambang (Kledo pop-up acara, Gusto dan Homebase kotak cookie, Deputy banner + kotak cookie, majoo/Talenta/Jurnal WhatsApp).
+- Layar pertama HP hampir seluruhnya judul besar + tombol; UI produk asli hanya terlihat sebagian di Homebase. Di Nadi, kartu nota
+  demo baru muncul setelah judul, paragraf, dan dua tombol (di bawah lipatan pertama).
+- Pelajaran: di HP, satu hal yang dilihat pertama harus produknya sendiri; tanpa lapisan yang menutup isi.
+
 ## Pola yang berulang (dan generik)
 1. Judul "Aplikasi/Software X ... otomatis/terintegrasi/AI" + 3 butir centang + dua tombol (WhatsApp sales dan coba gratis).
 2. Foto stok orang tersenyum atau ilustrasi 3D di kanan (majoo, Talenta, Jurnal, Gadjian).

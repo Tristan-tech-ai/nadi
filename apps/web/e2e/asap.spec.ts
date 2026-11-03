@@ -55,11 +55,34 @@ test("landing: demo nota bisa disetujui, axe bersih di 390 dan 1440 px terang da
   }
 });
 
+test("landing lengkap: navigasi, satu hari, empat peran, harga, keamanan, FAQ, tanpa status basi", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "sekali (desktop)");
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  for (const [tautan, id] of [["Satu hari", "hari"], ["Siapa memakai", "peran"], ["Harga", "harga"], ["Keamanan", "keamanan"]]) {
+    await page.getByRole("navigation", { name: "Utama" }).getByRole("link", { name: tautan }).click();
+    await expect(page.locator(`#${id}`)).toBeInViewport();
+  }
+  await expect(page.locator("#hari li")).toHaveCount(11);
+  for (const peran of ["Pemilik", "Admin", "Staf", "Akuntan"]) await expect(page.locator("#peran h3", { hasText: peran })).toBeVisible();
+  const harga = page.locator("#harga li");
+  await expect(harga).toHaveCount(4);
+  await expect(harga.nth(1)).toContainText("Rp149.000");
+  await expect(page.locator("#harga")).toContainText("belum ada tagihan");
+  const faq = page.locator("#faq details").first();
+  await faq.locator("summary").click();
+  await expect(faq).toHaveAttribute("open", "");
+  // Fitur yang sudah jalan tidak boleh tertulis "sedang dibuat" (temuan riset landing 3 Nov 2026).
+  const sedang = await page.locator("#faq ul").innerText();
+  expect(sedang).not.toMatch(/absen|gaji|topi|izin|invoice/i);
+  await expect(page.getByRole("contentinfo").getByRole("link", { name: "Panduan per peran" })).toHaveAttribute("href", "/panduan");
+});
+
 test("coba usaha contoh dari landing: Feed demo tampil < 3 dtk, baca-saja, axe bersih", async ({ page }, info) => {
   test.skip(info.project.name !== "desktop", "sekali (desktop), lebar diatur sendiri");
   await page.goto("/");
   const mulai = Date.now();
-  await page.getByRole("link", { name: "Coba usaha contoh tanpa daftar" }).click();
+  await page.getByRole("link", { name: "Buka usaha contoh tanpa daftar" }).click();
   // Cache Components menyimpan halaman sebelumnya (tersembunyi) saat pindah rute, jadi batasi ke Feed yang terlihat.
   const feed = page.getByTestId("feed-demo").filter({ visible: true });
   await expect(feed.locator("article")).toHaveCount(4);
