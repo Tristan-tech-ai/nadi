@@ -40,7 +40,7 @@ test("lempar KTP dan nota, lalu setujui keduanya di Feed", async ({ page }) => {
     { name: "nota-01.png", mimeType: "image/png", buffer: unik("nota/nota-01.png") },
   ]);
   const daftar = page.getByTestId("daftar-lempar");
-  await expect(daftar.locator("li")).toHaveCount(2);
+  await expect(daftar.locator(":scope > li")).toHaveCount(2);
   await expect(daftar.locator('li[data-status="usulan"]')).toHaveCount(2, { timeout: 60_000 });
   await expect(daftar).toContainText("Tambah AGUS ASTUTI ke daftar orang");
   await expect(daftar).toContainText("Catat belanja Rp376.500 di UD Sumber Rejeki");
