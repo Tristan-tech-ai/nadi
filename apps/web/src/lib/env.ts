@@ -7,8 +7,9 @@ export type PublicEnv = {
 export function readPublicEnv(
   source: Record<string, string | undefined> = process.env,
 ): PublicEnv {
-  const supabaseUrl = source.NEXT_PUBLIC_SUPABASE_URL;
-  const supabasePublishableKey = source.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+  // Dirapikan: env Vercel pernah tersimpan dengan CRLF di ujung, dan URL WebSocket Realtime menolak kunci yang membawanya.
+  const supabaseUrl = source.NEXT_PUBLIC_SUPABASE_URL?.trim();
+  const supabasePublishableKey = source.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim();
   const missing = [
     !supabaseUrl && "NEXT_PUBLIC_SUPABASE_URL",
     !supabasePublishableKey && "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
