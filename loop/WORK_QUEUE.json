@@ -2188,8 +2188,10 @@
    "accept": "katalog pesan id dan en, pemilih bahasa di landing dan aplikasi (tersimpan per pengguna), format angka/mata uang/tanggal per lokal; vitest katalog: kunci id dan en identik; e2e: ganti bahasa mengubah teks landing tanpa muat ulang data; foto 390/1440",
    "how": "node_modules/next/dist/docs internationalization",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:44:25"
+   "status": "done",
+   "created": "2026-11-03T19:44:25",
+   "done": "2026-11-03T21:12:50",
+   "result": "2624b47 + 5cf1217: kamus id/en bertipe + tes bentuk identik dan tanpa kata Indonesia (8/8), bahasa.ts tes 5/5, format per bahasa (Rp1,250,000 / 31 Oct 2026), /en, pemilih landing (cookie, navigasi klien tanpa muat ulang terbukti window sama) + pemilih aplikasi (user_metadata, ikut sesi baru); e2e produksi bahasa 2/2 + asap 8/8, axe 0 serius /en 390/1440 terang/gelap, foto docs/design/iterasi/bahasa"
   },
   {
    "id": "I-03",
