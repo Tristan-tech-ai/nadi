@@ -254,6 +254,29 @@ export const kamusId = {
   cap: { diterima: "Diterima", lunas: "Lunas", ditolak: "Ditolak", ditahan: "Ditahan", menunggu: "Menunggu" },
   putusan: { hanyaPengelola: "Hanya pemilik atau admin yang bisa memutuskan.", gagal: "Nadi gagal menyimpan keputusan. Coba lagi sebentar.", ditolak: "Ditolak. Tidak ada yang dicatat.", agenda: "Tersimpan. Masuk agenda surat {nomor}.", agendaSama: "Tersimpan. Surat bernomor sama sudah ada di agenda.", orangBuat: "Tersimpan. Satu orang ditambahkan.", orangImpor: "Tersimpan. {n} orang ditambahkan.", orangImporLewat: "Tersimpan. {n} orang ditambahkan, {lewat} dilewati karena sudah ada.", pelamar: "Tersimpan sebagai pelamar.", absenImpor: "Tersimpan. {n} baris absen masuk.", mutasi: "Tersimpan. {n} transaksi rekening siap dicocokkan.", umum: "Tersimpan dan dicatat.", ulangDiterima: "Sudah disetujui sebelumnya. Tidak ada yang dicatat dua kali.", ulangDitolak: "Sudah ditolak sebelumnya. Tidak ada yang dicatat dua kali.", ulangLain: "Usulan ini sudah tidak menunggu keputusan. Muat ulang Feed untuk melihat keadaannya." },
   sarapan: { judul: "Sarapan data", ket: "Dihitung semalam dari catatan usahamu. Hanya yang berdampak rupiah.", dampak: "Dampak", dariModel: "Kalimat dirapikan AI; angkanya diperiksa sama dengan hitungan Nadi." },
+  lempar: {
+    judul: "Lempar Saja",
+    ket: "Foto nota, slip gaji, KTP, CV, surat dokter, Excel karyawan, absen, atau mutasi bank. Nadi membacanya dan menyiapkan usulan untuk kamu setujui.",
+    kirimanGagal: "{n} berkas dari menu Bagikan tidak bisa diterima (jenisnya belum dikenal atau lebih dari 10 MB).",
+    langkahLabel: "Langkah",
+    langkah: { siap: "Disiapkan", unggah: "Dikirim", baca: "Dibaca", selesai: "Siap" },
+    luring: "Sinyal hilang. Berkas ditahan di halaman ini dan dikirim otomatis begitu sinyal kembali; jangan tutup halaman ini.",
+    membaca: "Nadi sedang membaca...",
+    mengirim: "Mengirim...",
+    siapDisetujui: "Siap disetujui: {judul}",
+    usulanBaru: "usulan baru",
+    diFeed: ". Pemilik atau admin menyetujuinya di Feed.",
+    cobaLagi: "Coba lagi",
+    terunggah: "Terunggah.",
+    fotoBerkas: "Foto berkas",
+    pilihBerkas: "Pilih berkas",
+    petunjuk: "Foto, PDF, Excel, atau CSV, maksimal 10 MB per berkas. Di komputer, seret berkas ke kotak ini.",
+    inputLabel: "Pilih berkas untuk dilempar",
+    keFeed: "Lihat semua usulan di Feed",
+    kiriman: "Kiriman {n}",
+    galatFoto: "Foto ini belum bisa dibuka di browser ini. Ubah kamera ke format JPG, atau kirim lewat menu Bagikan.",
+  },
+  lemparPesan: { besar: "Berkas lebih dari 10 MB. Kirim halaman yang perlu saja, atau foto ulang.", jenis: "Jenis berkas ini belum bisa dibaca. Kirim foto, PDF, Excel, atau CSV.", gagalDaftar: "Nadi gagal mendaftarkan berkas. Coba lagi sebentar.", sama: "Berkas yang sama sudah pernah dilempar di usahamu.", sudahLempar: "Berkas ini sudah pernah dilempar.", unggahPutus: "Unggah terputus. Periksa sinyal, lalu lempar lagi.", gagalBaca: "Nadi gagal membaca berkas ini. Coba lagi sebentar.", sudahBaca: "Berkas ini sudah pernah dibaca.", sudahUsulan: "Berkas ini sudah dibaca. Usulannya ada di Feed.", sudahSelesai: "Berkas ini sudah dibaca dan sudah diputuskan.", sudahProses: "Berkas ini sedang dibaca.", tidakDikenal: "Berkas tidak dikenal." },
   demo: {
     label: "Contoh nota belanja",
     judulAwal: "Catat belanja",
@@ -275,6 +298,4 @@ export const kamusId = {
 export type Kamus = typeof kamusId;
 
 /** Isi {nama} di teks kamus. */
-export function isiTeks(teks: string, nilai: Record<string, string | number>): string {
-  return teks.replace(/\{(\w+)\}/g, (_, k: string) => String(nilai[k] ?? `{${k}}`));
-}
+export { isiTeks } from "../isi-teks";

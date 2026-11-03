@@ -4,25 +4,28 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowClockwiseIcon, CameraIcon, CheckCircleIcon, FileArrowUpIcon, WarningCircleIcon, WifiSlashIcon } from "@phosphor-icons/react/dist/ssr";
 import { KartuFeed } from "@/components/app/kartu-feed";
+import type { JenisCap } from "@/components/ui/cap";
+import type { TeksKartu } from "@/components/ui/kartu-usulan";
+import type { Bahasa } from "@/lib/i18n/bahasa";
+import type { Kamus } from "@/lib/i18n/kamus";
 import { Tombol } from "@/components/ui/tombol";
 import { bacaBerkasAksi } from "@/app/app/lempar/actions";
 import { KUALITAS_FOTO, lemparBerkas, mimeBerkas, ukuranKompres, type HasilLempar } from "@/lib/lempar";
 import { tahapLempar, type TahapLempar } from "@/lib/lempar-tahap";
 import { bacaTeksFoto, perluOcr } from "@/lib/ocr";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
+import { isiTeks } from "@/lib/i18n/isi-teks";
+import { sisip } from "@/lib/i18n/sisip";
 
 // Lempar Saja (D-13): setiap berkas berjalan lewat empat langkah yang terlihat, usulan hasilnya langsung bisa diputuskan di sini,
 // berkas yang gagal terkirim karena sinyal ditahan di halaman ini dan dikirim lagi otomatis begitu sinyal kembali.
 type Baris = { kunci: string; nama: string; tahap: TahapLempar; hasil?: HasilLempar };
 
 const TERIMA = "image/*,application/pdf,.pdf,.xlsx,.csv,text/csv";
-const LANGKAH: { tahap: TahapLempar; label: string }[] = [
-  { tahap: "siap", label: "Disiapkan" },
-  { tahap: "unggah", label: "Dikirim" },
-  { tahap: "baca", label: "Dibaca" },
-  { tahap: "selesai", label: "Siap" },
-];
-const URUT: TahapLempar[] = ["siap", "unggah", "baca", "selesai"];
+const URUT = ["siap", "unggah", "baca", "selesai"] as const;
+
+/** Teks layar Lempar dari kamus, dikirim halaman server lewat prop (kamus tidak masuk bundel klien). */
+export type TeksPelempar = { ui: Kamus["lempar"]; pesan: Kamus["lemparPesan"]; kartu: TeksKartu; cap: Partial<Record<JenisCap, string>>; sumber: string };
 
 /** Foto besar diperkecil dan diubah ke JPEG di HP sebelum diunggah: hemat kuota dan tetap terbaca. */
 async function siapkanFoto(f: File): Promise<{ isi: ArrayBuffer; nama: string; mime: string }> {
@@ -46,12 +49,12 @@ async function siapkan(f: File) {
 }
 
 /** Langkah kecil di bawah nama berkas: teks + tanda, bukan warna saja. */
-function Langkah({ tahap }: { tahap: TahapLempar }) {
+function Langkah({ tahap, t }: { tahap: TahapLempar; t: Kamus["lempar"] }) {
   if (tahap === "luring") return null;
   const ke = URUT.indexOf(tahap);
   return (
-    <ol className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-xs" aria-label="Langkah">
-      {LANGKAH.map((l, i) => {
+    <ol className="mt-1.5 flex flex-wrap gap-x-3 gap-y-1 text-xs" aria-label={t.langkahLabel}>
+      {URUT.map((tahapIni) => ({ tahap: tahapIni, label: t.langkah[tahapIni] })).map((l, i) => {
         const lewat = i < ke || tahap === "selesai";
         const kini = i === ke && tahap !== "selesai";
         return (
@@ -65,21 +68,21 @@ function Langkah({ tahap }: { tahap: TahapLempar }) {
   );
 }
 
-function Status({ b, ulangi }: { b: Baris; ulangi: (kunci: string) => void }) {
+function Status({ b, ulangi, t, isiLang }: { b: Baris; ulangi: (kunci: string) => void; t: Kamus["lempar"]; isiLang?: string }) {
   if (b.tahap === "luring")
     return (
       <span className="inline-flex items-start gap-1.5 text-tinta">
         <WifiSlashIcon size={18} weight="bold" className="mt-0.5 shrink-0" aria-hidden />
-        <span>Sinyal hilang. Berkas ditahan di halaman ini dan dikirim otomatis begitu sinyal kembali; jangan tutup halaman ini.</span>
+        <span>{t.luring}</span>
       </span>
     );
-  if (b.tahap !== "selesai") return <span className="text-tinta-2">{b.tahap === "baca" ? "Nadi sedang membaca..." : "Mengirim..."}</span>;
+  if (b.tahap !== "selesai") return <span className="text-tinta-2">{b.tahap === "baca" ? t.membaca : t.mengirim}</span>;
   const h = b.hasil!;
   if (h.status === "usulan")
     return (
       <span className="inline-flex items-start gap-1.5 text-daun">
         <CheckCircleIcon size={18} weight="fill" className="mt-0.5 shrink-0" aria-hidden />
-        <span>Siap disetujui: {h.judul ?? "usulan baru"}{h.usulan ? "" : ". Pemilik atau admin menyetujuinya di Feed."}</span>
+        <span>{sisip(t.siapDisetujui, { judul: h.judul ? <span lang={isiLang}>{h.judul}</span> : t.usulanBaru })}{h.usulan ? "" : t.diFeed}</span>
       </span>
     );
   if (h.status === "galat")
@@ -89,17 +92,19 @@ function Status({ b, ulangi }: { b: Baris; ulangi: (kunci: string) => void }) {
           <WarningCircleIcon size={18} weight="fill" className="mt-0.5 shrink-0" aria-hidden />
           <span>{h.pesan}</span>
         </span>
-        {!h.pesan.startsWith("Jenis berkas") ? (
+        {h.kode !== "jenis" ? (
           <button type="button" onClick={() => ulangi(b.kunci)} className="inline-flex items-center gap-1 font-semibold text-tinta underline underline-offset-4" data-testid="coba-lagi">
-            <ArrowClockwiseIcon size={16} aria-hidden /> Coba lagi
+            <ArrowClockwiseIcon size={16} aria-hidden /> {t.cobaLagi}
           </button>
         ) : null}
       </span>
     );
-  return <span className="text-tinta-2">{h.status === "sudah" ? h.pesan : "Terunggah."}</span>;
+  return <span className="text-tinta-2">{h.status === "sudah" ? h.pesan : t.terunggah}</span>;
 }
 
-export function Pelempar({ antre = [] }: { antre?: string[] }) {
+export function Pelempar({ antre = [], teks, bahasa = "id" }: { antre?: string[]; teks: TeksPelempar; bahasa?: Bahasa }) {
+  const t = teks.ui;
+  const isiLang = bahasa === "id" ? undefined : "id";
   const [baris, setBaris] = useState<Baris[]>([]);
   const [seret, setSeret] = useState(false);
   const kamera = useRef<HTMLInputElement>(null);
@@ -117,9 +122,9 @@ export function Pelempar({ antre = [] }: { antre?: string[] }) {
   useEffect(() => {
     if (!antre.length || antreDiproses.current) return;
     antreDiproses.current = true;
-    setBaris(antre.map((id, i) => ({ kunci: id, nama: `Kiriman ${i + 1}`, tahap: "baca" })));
+    setBaris(antre.map((id, i) => ({ kunci: id, nama: isiTeks(t.kiriman, { n: i + 1 }), tahap: "baca" })));
     antre.forEach(async (id) => ubah(id, { tahap: "selesai", hasil: await bacaBerkasAksi(id) }));
-  }, [antre, ubah]);
+  }, [antre, ubah, t.kiriman]);
 
   const proses = useCallback(async (kunci: string, f: File) => {
     ubah(kunci, { tahap: "siap", hasil: undefined });
@@ -127,16 +132,14 @@ export function Pelempar({ antre = [] }: { antre?: string[] }) {
     try {
       siap = await siapkan(f);
     } catch (e) {
-      const pesan = e instanceof Error && e.message === "jenis"
-        ? "Jenis berkas ini belum bisa dibaca. Kirim foto, PDF, Excel, atau CSV."
-        : "Foto ini belum bisa dibuka di browser ini. Ubah kamera ke format JPG, atau kirim lewat menu Bagikan.";
-      ubah(kunci, { tahap: "selesai", hasil: { status: "galat", pesan } });
+      const jenis = e instanceof Error && e.message === "jenis";
+      ubah(kunci, { tahap: "selesai", hasil: jenis ? { status: "galat", pesan: teks.pesan.jenis, kode: "jenis" } : { status: "galat", pesan: t.galatFoto } });
       return;
     }
     if (!navigator.onLine) return ubah(kunci, { tahap: "luring" });
     ubah(kunci, { tahap: "unggah" });
     const sb = createBrowserSupabase();
-    const daftarHasil = await lemparBerkas(sb, siap, { baca: false });
+    const daftarHasil = await lemparBerkas(sb, siap, { baca: false, teks: teks.pesan });
     if (daftarHasil.status === "galat" && !navigator.onLine) return ubah(kunci, { tahap: "luring" });
     if (daftarHasil.status !== "diunggah") return ubah(kunci, { tahap: "selesai", hasil: daftarHasil });
     ubah(kunci, { tahap: "baca" });
@@ -150,7 +153,7 @@ export function Pelempar({ antre = [] }: { antre?: string[] }) {
     // Usulan siap: bawa kartunya ke layar supaya tombol Setujui langsung terjangkau tanpa menggulir.
     if (hasil.status === "usulan" && hasil.usulan)
       requestAnimationFrame(() => document.querySelector(`[data-kunci="${CSS.escape(kunci)}"] [data-testid=usulan-lempar]`)?.scrollIntoView({ block: "nearest" }));
-  }, [ubah]);
+  }, [ubah, teks.pesan, t.galatFoto]);
 
   async function lempar(daftar: FileList | File[]) {
     const baru = Array.from(daftar).map((f, i) => ({ f, kunci: `${Date.now()}-${i}-${f.name}` }));
@@ -194,16 +197,16 @@ export function Pelempar({ antre = [] }: { antre?: string[] }) {
         <div className="flex flex-wrap gap-3">
           <Tombol ukuran="besar" onClick={() => kamera.current?.click()}>
             <CameraIcon size={22} aria-hidden />
-            Foto berkas
+            {t.fotoBerkas}
           </Tombol>
           <Tombol ukuran="besar" ragam="kedua" onClick={() => pilih.current?.click()}>
             <FileArrowUpIcon size={22} aria-hidden />
-            Pilih berkas
+            {t.pilihBerkas}
           </Tombol>
         </div>
-        <p className="mt-3 text-sm text-tinta-2">Foto, PDF, Excel, atau CSV, maksimal 10 MB per berkas. Di komputer, seret berkas ke kotak ini.</p>
+        <p className="mt-3 text-sm text-tinta-2">{t.petunjuk}</p>
         <input ref={kamera} type="file" accept="image/*" capture="environment" className="sr-only" tabIndex={-1} aria-hidden onChange={(e) => e.target.files?.length && lempar(e.target.files)} />
-        <input ref={pilih} type="file" accept={TERIMA} multiple className="sr-only" tabIndex={-1} aria-label="Pilih berkas untuk dilempar" data-testid="input-berkas" onChange={(e) => e.target.files?.length && lempar(e.target.files)} />
+        <input ref={pilih} type="file" accept={TERIMA} multiple className="sr-only" tabIndex={-1} aria-label={t.inputLabel} data-testid="input-berkas" onChange={(e) => e.target.files?.length && lempar(e.target.files)} />
       </div>
 
       {baris.length ? (
@@ -211,15 +214,18 @@ export function Pelempar({ antre = [] }: { antre?: string[] }) {
           {baris.map((b) => (
             <li key={b.kunci} className="border-b border-garis pb-4" data-kunci={b.kunci} data-tahap={b.tahap} data-status={b.hasil?.status}>
               <p className="truncate text-sm font-semibold">{b.nama}</p>
-              <Langkah tahap={b.tahap} />
+              <Langkah tahap={b.tahap} t={t} />
               <p className="mt-1.5 text-sm">
-                <Status b={b} ulangi={ulangi} />
+                <Status b={b} ulangi={ulangi} t={t} isiLang={isiLang} />
               </p>
               {b.hasil?.status === "usulan" && b.hasil.usulan ? (
                 <div className="mt-3" data-testid="usulan-lempar">
                   <KartuFeed
                     usulanId={b.hasil.usulan.id}
-                    usulan={{ judul: b.hasil.usulan.judul, penjelasan: b.hasil.usulan.penjelasan, sumber: "Dari Lempar Saja", keyakinan: b.hasil.usulan.keyakinan, dampakRp: b.hasil.usulan.dampakRp }}
+                    teks={teks.kartu}
+                    cap={teks.cap}
+                    bahasa={bahasa}
+                    usulan={{ judul: b.hasil.usulan.judul, penjelasan: b.hasil.usulan.penjelasan, sumber: teks.sumber, keyakinan: b.hasil.usulan.keyakinan, dampakRp: b.hasil.usulan.dampakRp }}
                   />
                 </div>
               ) : null}
@@ -230,7 +236,7 @@ export function Pelempar({ antre = [] }: { antre?: string[] }) {
 
       {adaUsulan ? (
         <Link href="/app" className="mt-4 inline-block font-semibold underline underline-offset-4" data-testid="ke-feed">
-          Lihat semua usulan di Feed
+          {t.keFeed}
         </Link>
       ) : null}
     </div>

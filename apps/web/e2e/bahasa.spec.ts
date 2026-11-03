@@ -51,6 +51,19 @@ test("landing: ganti ke English tanpa muat ulang, cookie diingat, format angka e
   await expect(page).toHaveURL(/\/$/);
 });
 
+/** Teks isi layar aplikasi tanpa bagian bertanda lang="id" (isi yang memang ditulis dalam bahasa Indonesia). */
+async function teksTanpaId(page: Page) {
+  return page.locator("#isi").evaluate((el) => {
+    const salin = el.cloneNode(true) as HTMLElement;
+    salin.querySelectorAll('[lang="id"]').forEach((x) => x.remove());
+    document.body.appendChild(salin);
+    const t = salin.innerText;
+    salin.remove();
+    return t;
+  });
+}
+const KATA_ID = /\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau|usulan|setujui|tolak|berkas|lempar)\b/i;
+
 async function masuk(page: Page) {
   await page.goto(`/masuk?next=${encodeURIComponent("/app")}`);
   await page.getByLabel("Email").fill(E.E2E_EMAIL_A);
@@ -59,8 +72,8 @@ async function masuk(page: Page) {
   await page.waitForURL((u) => u.pathname === "/app");
 }
 
-test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain", async ({ browser }, info) => {
-  test.skip(info.project.name !== "desktop" || !E.E2E_SANDI, "sekali (desktop), butuh .env.e2e.local");
+test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan Lempar berbahasa Inggris @bahasa-akun", async ({ browser }) => {
+  test.skip(!E.E2E_SANDI, "butuh .env.e2e.local");
   const k1 = await browser.newContext();
   const p1 = await k1.newPage();
   await masuk(p1);
@@ -80,17 +93,19 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain", async (
   // dan dikecualikan dari pemindaian; sisanya tidak boleh memuat kata Indonesia umum.
   await expect(p1.getByRole("heading", { level: 1, name: "Today" })).toBeVisible();
   await expect(p1.getByTestId("peran")).toHaveText("You are signed in as owner.");
-  const teksEn = await p1.locator("#isi").evaluate((el) => {
-    const salin = el.cloneNode(true) as HTMLElement;
-    salin.querySelectorAll('[lang="id"]').forEach((x) => x.remove());
-    document.body.appendChild(salin);
-    const t = salin.innerText;
-    salin.remove();
-    return t;
-  });
-  expect(teksEn).not.toMatch(/\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau|usulan|setujui|tolak)\b/i);
+  expect(await teksTanpaId(p1)).not.toMatch(KATA_ID);
   const axe = await new AxeBuilder({ page: p1 }).analyze();
   expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
+  // Lempar mode Inggris: berkas berjenis asing ditolak di perangkat dengan pesan Inggris, tanpa Coba lagi.
+  await p1.goto("/app/lempar");
+  await expect(p1.getByRole("heading", { level: 1, name: "Drop it" })).toBeVisible();
+  await p1.getByTestId("input-berkas").setInputFiles({ name: "catatan.txt", mimeType: "text/plain", buffer: Buffer.from("halo") });
+  await expect(p1.getByTestId("daftar-lempar")).toContainText("This file type cannot be read yet");
+  await expect(p1.getByTestId("coba-lagi")).toHaveCount(0);
+  expect(await teksTanpaId(p1)).not.toMatch(KATA_ID);
+  const axeLempar = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axeLempar.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
   // Sesi baru tanpa cookie bahasa: pilihan datang dari akun.
   const k2 = await browser.newContext();

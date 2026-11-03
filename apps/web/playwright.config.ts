@@ -16,12 +16,14 @@ export default defineConfig({
   // Usaha aktif melekat di akun uji A (klaim JWT). Tes yang memindah usaha (@pindah, gaji, topi, kolam) dijalankan berantai
   // setelah proyek utama selesai, satu proyek per langkah, agar tidak mengubah usaha aktif tes lain yang sedang jalan (Q-10).
   projects: [
-    { name: "hp", use: { ...devices["Pixel 7"] }, testIgnore: PINDAH, grepInvert: /@pindah/ },
-    { name: "desktop", use: DESKTOP, testIgnore: PINDAH, grepInvert: /@pindah/ },
+    { name: "hp", use: { ...devices["Pixel 7"] }, testIgnore: PINDAH, grepInvert: /@pindah|@bahasa-akun/ },
+    { name: "desktop", use: DESKTOP, testIgnore: PINDAH, grepInvert: /@pindah|@bahasa-akun/ },
     { name: "pindah-topi", use: DESKTOP, testMatch: "topi.spec.ts", dependencies: ["hp", "desktop"] },
     { name: "pindah-gaji", use: DESKTOP, testMatch: "gaji.spec.ts", dependencies: ["pindah-topi"] },
     { name: "pindah-kolam", use: DESKTOP, testMatch: "kolam.spec.ts", dependencies: ["pindah-gaji"] },
     { name: "pindah-auth", use: DESKTOP, testMatch: "auth.spec.ts", grep: /@pindah/, dependencies: ["pindah-kolam"] },
+    // Mengubah bahasa akun uji A: berjalan paling akhir agar spec lain yang membaca teks Indonesia tidak ikut berubah.
+    { name: "bahasa-akun", use: DESKTOP, testMatch: "bahasa.spec.ts", grep: /@bahasa-akun/, dependencies: ["pindah-auth"] },
   ],
   webServer: process.env.E2E_BASE_URL
     ? undefined
