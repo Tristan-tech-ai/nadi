@@ -1,6 +1,7 @@
 # Lokal-first, aplikasi desktop/HP, dan open source: kajian kelayakan
 
-Ditulis 3 Nov 2026 atas pertanyaan Tristan. Ini kajian, bukan keputusan; arah produk tidak berubah sampai Tristan memilih.
+Ditulis 3 Nov 2026 atas pertanyaan Tristan. STATUS: DIBATALKAN (keputusan Tristan 3 Nov 2026). Yang dilanjutkan: rencana memangkas biaya
+perawatan dengan otomatisasi penuh (docs/research/hemat-otomatis.md) dan grup iterasi desain (docs/design/ITERASI.md).
 Angka biaya toko aplikasi dan detail API pihak ketiga di bawah BELUM diverifikasi ke sumber resmi (tandai sebelum dipakai).
 
 ## Yang diminta
