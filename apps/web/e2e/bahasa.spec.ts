@@ -104,3 +104,16 @@ test("harga dua bahasa: /en/harga berbahasa Inggris, pemilih bolak-balik ke /har
   await page.waitForURL((u) => u.pathname === "/harga");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Harga");
 });
+
+test("keamanan dua bahasa: /en/keamanan berbahasa Inggris dan axe bersih", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "sekali (desktop)");
+  await page.goto("/en/keamanan");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Data security");
+  await expect(page.locator("main h2")).toHaveCount(6);
+  expect(await page.locator("main").innerText()).not.toMatch(/\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau)\b/i);
+  const r = await new AxeBuilder({ page }).analyze();
+  expect(r.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+  await page.getByTestId("pemilih-bahasa").click();
+  await page.waitForURL((u) => u.pathname === "/keamanan");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Keamanan data");
+});

@@ -99,6 +99,20 @@ export const kamusEn: Kamus = {
     mulaiAkun: "create an account",
     mulaiAkhir: "for your own business.",
   },
+  keamananHalaman: {
+    metaJudul: "Nadi data security",
+    metaDeskripsi: "Each business's data is separated in the database, AI does not decide about money, ID numbers are not stored in full, and the camera runs on the device.",
+    judul: "Data security",
+    pengantar: "What Nadi does with your data, written as it is. If something is not done yet, this page says so.",
+    bagian: [
+      { judul: "Each business's data is separate", isi: ["The database checks every row before it is read or changed (row level security): a row is visible only to members of the business that owns it, according to their role. This separation is tested automatically on every database change, including attempts to read another business's data.", "Staff only see their own data: their attendance, leave, and payslips. Accountants can view and export, but cannot approve payroll or suggestions."] },
+      { judul: "Where data lives and how it travels", isi: ["The database and files are stored in a data center in Singapore. Every API accepts HTTPS connections only (TLS 1.2 or 1.3).", "Secret keys (AI keys, notification keys) are kept encrypted in the database vault or as server secrets, never on a phone, in the browser, or in the code."] },
+      { judul: "AI does not decide about money", isi: ["AI reads files and prepares suggestions. New data is recorded after the owner or an admin approves. Payroll, settling invoices, and changes to people's records always go through a human button.", "Only rules the owner sets up run automatically, such as sick leave up to a certain number of days. Every automatic decision is logged with its reason and can be undone. AI output is treated as untrusted input: AI cannot hide anything from the owner or delete data."] },
+      { judul: "Personal data kept to a minimum", isi: ["ID numbers (NIK) are not stored in full: only a random fingerprint and the last 4 digits. Bank account numbers and ID numbers are compared by fingerprint to find duplicates in the Payroll Gate, without revealing the real values.", "Mata (the table camera) and interview transcripts run on the user's phone or laptop. Camera images are not uploaded; only table status and queue length are sent."] },
+      { judul: "Sign-in and links", isi: ["A staff PIN locks for 15 minutes after 5 wrong tries. The attendance QR code changes every 15 seconds and can be used only once per person for the same kind of check-in.", "Payslip and attendance tablet links carry a token in the part of the URL that is never sent to the server, expire, and can be revoked. An AI assistant you connect through MCP gets access to one business only and can be disconnected at any time."] },
+      { judul: "What is not done yet", isi: ["There has been no outside security audit and no certification yet. Weekly backups to separate storage are being built. An official address for reporting security issues is being set up."] },
+    ],
+  },
   demo: {
     label: "Sample shopping receipt",
     judulAwal: "Record purchase of",

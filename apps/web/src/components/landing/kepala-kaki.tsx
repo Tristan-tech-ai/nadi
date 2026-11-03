@@ -13,7 +13,7 @@ export function KepalaSitus({ bahasa = "id" }: { bahasa?: Bahasa }) {
     { href: `${akar}#hari`, label: k.nav.hari },
     { href: `${akar}#peran`, label: k.nav.peran },
     { href: `${awalanJalur(bahasa)}/harga`, label: k.nav.harga },
-    { href: "/keamanan", label: k.nav.keamanan },
+    { href: `${awalanJalur(bahasa)}/keamanan`, label: k.nav.keamanan },
     { href: "/panduan", label: k.nav.panduan },
   ];
   return (
@@ -59,7 +59,7 @@ export function KakiSitus({ bahasa = "id" }: { bahasa?: Bahasa }) {
           <Link href="/daftar" className="hover:text-tinta">{k.buatAkun}</Link>
           <Link href="/masuk" className="hover:text-tinta">{k.masuk}</Link>
           <Link href="/masuk/staf" className="hover:text-tinta">{k.masukStaf}</Link>
-          <Link href="/keamanan" className="hover:text-tinta">{k.keamanan}</Link>
+          <Link href={`${awalanJalur(bahasa)}/keamanan`} className="hover:text-tinta">{k.keamanan}</Link>
           <Link href="/privasi" className="hover:text-tinta">{k.privasi}</Link>
           <Link href="/syarat" className="hover:text-tinta">{k.syarat}</Link>
         </nav>

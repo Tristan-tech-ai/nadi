@@ -100,6 +100,20 @@ export const kamusId = {
     mulaiAkun: "buat akun",
     mulaiAkhir: "untuk usahamu sendiri.",
   },
+  keamananHalaman: {
+    metaJudul: "Keamanan data Nadi",
+    metaDeskripsi: "Data setiap usaha dipisah di database, AI tidak memutuskan uang, NIK tidak disimpan utuh, kamera diproses di perangkat.",
+    judul: "Keamanan data",
+    pengantar: "Yang Nadi lakukan untuk datamu, ditulis apa adanya. Bila sesuatu belum dilakukan, halaman ini menyebutnya.",
+    bagian: [
+      { judul: "Data setiap usaha terpisah", isi: ["Database memeriksa setiap baris sebelum dibaca atau diubah (row level security): baris hanya terlihat oleh anggota usaha pemiliknya, sesuai perannya. Pemisahan ini diuji otomatis pada setiap perubahan database, termasuk percobaan membaca data usaha lain.", "Staf hanya melihat data dirinya: absen, izin, dan slip gajinya sendiri. Akuntan bisa melihat dan mengekspor, tetapi tidak bisa menyetujui gaji atau usulan."] },
+      { judul: "Tempat dan jalur data", isi: ["Database dan berkas disimpan di pusat data Singapura. Semua API menerima koneksi HTTPS saja (TLS 1.2 atau 1.3).", "Kunci rahasia (kunci AI, kunci pemberitahuan) disimpan terenkripsi di brankas database atau sebagai rahasia server, tidak pernah ada di HP, browser, atau kode."] },
+      { judul: "AI tidak memutuskan uang", isi: ["AI membaca berkas dan menyusun usulan. Data baru tercatat setelah pemilik atau admin menyetujui. Gaji, pelunasan tagihan, dan perubahan data orang selalu lewat tombol manusia.", "Yang berjalan otomatis hanya aturan yang dipasang pemilik sendiri, seperti izin sakit sampai batas hari tertentu. Setiap keputusan otomatis tercatat dengan alasannya dan bisa dibatalkan. Keluaran AI diperlakukan sebagai masukan yang tidak tepercaya: AI tidak bisa menyembunyikan apa pun dari pemilik atau menghapus data."] },
+      { judul: "Data pribadi diperkecil", isi: ["NIK tidak disimpan utuh: hanya sidik acak dan 4 digit akhirnya. Nomor rekening dan NIK dibandingkan lewat sidik untuk menemukan data ganda di Gerbang Gaji, tanpa membuka nilai aslinya.", "Mata (kamera meja) dan transkrip wawancara berjalan di HP atau laptop pengguna. Gambar kamera tidak diunggah; yang dikirim hanya status meja dan panjang antrean."] },
+      { judul: "Masuk dan tautan", isi: ["PIN staf terkunci 15 menit setelah 5 kali salah. Kode absen QR berganti tiap 15 detik dan hanya bisa dipakai sekali per orang untuk jenis absen yang sama.", "Tautan slip gaji dan tablet absen membawa token di bagian URL yang tidak terkirim ke server, berlaku terbatas, dan bisa dicabut. Asisten AI yang kamu sambungkan lewat MCP hanya mendapat izin untuk satu usaha dan bisa dicabut kapan saja."] },
+      { judul: "Yang belum dilakukan", isi: ["Belum ada audit keamanan dari pihak luar dan belum ada sertifikasi. Cadangan mingguan ke penyimpanan terpisah sedang dibuat. Alamat resmi untuk melaporkan celah keamanan sedang disiapkan."] },
+    ],
+  },
   demo: {
     label: "Contoh nota belanja",
     judulAwal: "Catat belanja",

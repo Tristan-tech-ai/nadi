@@ -35,7 +35,7 @@ export function jalurBahasa(jalur: string, tujuan: Bahasa): string {
 }
 
 /** Halaman publik yang sudah punya versi Inggris (ditambah di I-03). Jalur lain diarahkan ke beranda bahasa tujuan. */
-export const JALUR_DUA_BAHASA = ["/", "/harga"];
+export const JALUR_DUA_BAHASA = ["/", "/harga", "/keamanan"];
 
 /** Tujuan pemilih bahasa dari jalur sekarang. */
 export function tujuanPemilih(jalur: string, tujuan: Bahasa): string {
