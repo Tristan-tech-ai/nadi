@@ -159,7 +159,11 @@ const koma = (x: number, digit: number) => String(Math.round(x * 10 ** digit) / 
  * Teks kolom jam dan poin per jam bila jam dari jadwal shift (beban_jadwal): jam pecahan berkoma; orang tanpa shift minggu itu
  * berjam 0, jadi poin per jamnya tidak ada ("-"), bukan hasil bagi nol.
  */
-export function teksJamBeban(o: { poin: number; jam: number }): { jam: string; perJam: string | null } {
+export function teksJamBeban(o: { poin: number; jam: number }, bahasa: "id" | "en" = "id"): { jam: string; perJam: string | null } {
+  if (bahasa === "en") {
+    const titik = (x: number, d: number) => String(Math.round(x * 10 ** d) / 10 ** d);
+    return o.jam > 0 ? { jam: `${titik(o.jam, 1)} h`, perJam: titik(o.poin / o.jam, 2) } : { jam: "no shift", perJam: null };
+  }
   return o.jam > 0 ? { jam: `${koma(o.jam, 1)} jam`, perJam: koma(o.poin / o.jam, 2) } : { jam: "tanpa shift", perJam: null };
 }
 
@@ -196,8 +200,12 @@ const angka = (x: number) => String(Math.round(x * 100) / 100).replace(".", ",")
  * "Sari memikul 31% kerja minggu ini dengan 20% jam kerja." Tanpa kata sifat (docs/design/bagi-adil.md).
  * Bila jam kerja belum diatur (semua orang dianggap sama), porsi jam hanya anggapan, jadi tidak disebut (Q-28, docs/research/beban-per-jam.md).
  */
-export function kalimatTerberat(r: RingkasBeban, jamSamaRata = false): string | null {
+export function kalimatTerberat(r: RingkasBeban, jamSamaRata = false, bahasa: "id" | "en" = "id"): string | null {
   if (!r.terberat) return null;
+  if (bahasa === "en") {
+    const awal = `${r.terberat.nama} carries ${r.terberat.porsiPoin}% of this week's work`;
+    return jamSamaRata ? `${awal}.` : `${awal} with ${r.terberat.porsiJam}% of the working hours.`;
+  }
   const awal = `${r.terberat.nama} memikul ${r.terberat.porsiPoin}% kerja minggu ini`;
   return jamSamaRata ? `${awal}.` : `${awal} dengan ${r.terberat.porsiJam}% jam kerja.`;
 }
@@ -207,7 +215,16 @@ export function kalimatTerberat(r: RingkasBeban, jamSamaRata = false): string | 
  * docs/design/rata-rata-beban.md): kelompok di bawah 3 orang menjelaskan kapan rata-rata tampil, rata-rata di bawah 0,1 ditulis
  * belum ada.
  */
-export function teksBebanSaya(b: BebanSaya): string {
+export function teksBebanSaya(b: BebanSaya, bahasa: "id" | "en" = "id"): string {
+  if (bahasa === "en") {
+    if (b.poin === null) return "Your workload this week is not recorded because your account is not linked to a staff record in this business.";
+    const kelompok = b.n_kelompok ?? b.n;
+    const titik = (x: number) => String(Math.round(x * 100) / 100);
+    const rata = b.rata_rata === null || kelompok < MIN_KELOMPOK
+      ? "The team average shows when at least 3 people use the work board this week."
+      : b.rata_rata < 0.1 ? "No team average yet." : `Team average ${titik(b.rata_rata)}.`;
+    return `This week ${titik(b.poin)} points. ${rata}`;
+  }
   if (b.poin === null) return "Bebanmu minggu ini belum tercatat karena akunmu belum terhubung ke data orang di usaha ini.";
   const kelompok = b.n_kelompok ?? b.n;
   const rata = b.rata_rata === null || kelompok < MIN_KELOMPOK

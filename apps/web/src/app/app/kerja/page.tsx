@@ -51,38 +51,38 @@ function KartuKerja({ k, pengelola, t, bahasa }: { k: KerjaTampil; pengelola: bo
 
 const pertama = (v: string | string[] | undefined) => (Array.isArray(v) ? v[0] : v);
 const ID_SAH = /^[0-9a-f-]{36}$/i;
-const galatKpi = <p role="alert" className="mt-6 text-cap" data-testid="kpi-galat">Kinerja minggu ini gagal dimuat. Muat ulang halaman ini sebentar lagi.</p>;
+const galatKpi = (b: Bahasa) => <p role="alert" className="mt-6 text-cap" data-testid="kpi-galat">{ambilKamus(b).kpi.gagal}</p>;
 
 /**
  * Tab kinerja (F3-03). Staf: cermin miliknya (public.kpi_saya). Pemilik/admin/akuntan: tabel semua orang (public.kpi_minggu);
  * ?orang=<id> membuka cermin orang itu, layar yang sama dengan yang dilihat orangnya, tanpa formulir banding.
  */
-async function BagianKpi({ semua, orang }: { semua: boolean; orang: string | null }) {
+async function BagianKpi({ semua, orang, bahasa }: { semua: boolean; orang: string | null; bahasa: Bahasa }) {
   const supabase = await createClient();
   if (!semua) {
     const [{ data, error }, { data: insentif }] = await Promise.all([
       supabase.rpc("kpi_saya", { p_mulai: null }),
       supabase.rpc("kolam_saya", { p_bulan: null }),
     ]);
-    if (error || !data) return galatKpi;
+    if (error || !data) return galatKpi(bahasa);
     const d = data as KpiSaya;
     return (
       <>
-        <InsentifSaya k={(insentif ?? null) as KolamSaya} />
-        {d.orang ? <CerminKpi k={d.orang} tim={d.rata_rata_tim} mulai={d.mulai} akhir={d.akhir} milikSendiri /> : <KpiTanpaOrang />}
+        <div lang={bahasa === "id" ? undefined : "id"}><InsentifSaya k={(insentif ?? null) as KolamSaya} /></div>
+        {d.orang ? <CerminKpi k={d.orang} tim={d.rata_rata_tim} mulai={d.mulai} akhir={d.akhir} milikSendiri bahasa={bahasa} /> : <KpiTanpaOrang bahasa={bahasa} />}
       </>
     );
   }
   const { data, error } = await supabase.rpc("kpi_minggu", { p_mulai: null });
-  if (error || !data) return galatKpi;
+  if (error || !data) return galatKpi(bahasa);
   const d = data as KpiMinggu;
-  if (!orang) return <KpiMingguIni data={d} />;
+  if (!orang) return <KpiMingguIni data={d} bahasa={bahasa} />;
   const k = d.orang.find((o) => o.id === orang);
   return (
     <>
-      <KembaliKeTabel />
-      {k ? <CerminKpi k={k} tim={d.rata_rata_tim} mulai={d.mulai} akhir={d.akhir} milikSendiri={false} />
-        : <p className="mt-4 text-tinta-2" data-testid="kpi-orang-hilang">Orang ini tidak ada di daftar orang aktif minggu ini. Pilih orang lain dari tabel.</p>}
+      <KembaliKeTabel bahasa={bahasa} />
+      {k ? <CerminKpi k={k} tim={d.rata_rata_tim} mulai={d.mulai} akhir={d.akhir} milikSendiri={false} bahasa={bahasa} />
+        : <p className="mt-4 text-tinta-2" data-testid="kpi-orang-hilang">{ambilKamus(bahasa).kpi.orangHilang}</p>}
     </>
   );
 }
@@ -166,8 +166,8 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
     ...(pengelola ? [{ href: "/app/kerja?tab=bonus", label: t.tabBonus, aktif: tabBonus }] : []),
     { href: "/app/jadwal", label: t.tabJadwal, aktif: false },
   ];
-  // Tab beban, kinerja, peta, dan bonus belum lewat kamus (I-03 berikutnya): di bahasa lain isinya ditandai lang="id".
-  const tabId = tabBeban || tabKpi || tabPeta || tabBonus;
+  // Tab peta dan bonus belum lewat kamus (I-03 berikutnya): di bahasa lain isinya ditandai lang="id".
+  const tabId = tabPeta || tabBonus;
   const catatanTab = bahasa !== "id" && tabId ? <p className="mt-3 text-sm text-tinta-2">{t.tabCatatan}</p> : null;
   const isiLangTab = bahasa !== "id" && tabId ? "id" : undefined;
   const tab = (
@@ -218,12 +218,9 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
       <>
         {kepala}
         {tab}
-        {catatanTab}
-        <div lang={isiLangTab}>
-          <Suspense fallback={<KerangkaKpi />}>
-            <BagianKpi semua={lihatSemua} orang={lihatSemua && orang && ID_SAH.test(orang) ? orang : null} />
-          </Suspense>
-        </div>
+        <Suspense fallback={<KerangkaKpi />}>
+          <BagianKpi semua={lihatSemua} orang={lihatSemua && orang && ID_SAH.test(orang) ? orang : null} bahasa={bahasa} />
+        </Suspense>
       </>
     );
   }
@@ -245,7 +242,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
       <>
         {kepala}
         {tab}
-        {saya && <div lang={bahasa === "id" ? undefined : "id"}><BebanSayaIni data={saya as BebanSaya} /></div>}
+        {saya && <BebanSayaIni data={saya as BebanSaya} bahasa={bahasa} />}
         <PapanStaf daftar={daftar} teks={t} bahasa={bahasa} />
       </>
     );
@@ -267,13 +264,10 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
       <>
         {kepala}
         {tab}
-        {catatanTab}
         <div className="mt-4">{tambah}</div>
-        <div lang={isiLangTab}>
-          {eb || !beban
-            ? <p role="alert" className="mt-6 text-cap" data-testid="beban-galat">Beban minggu ini gagal dimuat. Muat ulang halaman ini sebentar lagi.</p>
-            : <BebanMingguIni data={beban as BebanMinggu} />}
-        </div>
+        {eb || !beban
+          ? <p role="alert" className="mt-6 text-cap" data-testid="beban-galat">{t.gagalBeban}</p>
+          : <BebanMingguIni data={beban as BebanMinggu} bahasa={bahasa} />}
       </>
     );
   }

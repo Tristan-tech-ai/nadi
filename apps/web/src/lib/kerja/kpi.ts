@@ -37,17 +37,20 @@ export const MIN_BANDING = 5;
 /** Banyak judul kerja yang disebut dalam satu kalimat; sisanya "dan N lainnya" (daftar lengkap di "lihat rinciannya"). */
 export const MAKS_SEBUT = 3;
 export const BELUM_CUKUP = "belum cukup kerja untuk dibandingkan";
+const BELUM_CUKUP_EN = "not enough work to compare";
+type B = "id" | "en";
 
 const HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
 const KATA = ["Nol", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh"];
+const HARI_EN = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 /** "2,5", "6": angka Indonesia tanpa nol berlebih, paling banyak 2 desimal. */
-export const angka = (x: number) => String(Math.round(x * 100) / 100).replace(".", ",");
+export const angka = (x: number, bahasa: B = "id") => (bahasa === "en" ? String(Math.round(x * 100) / 100) : String(Math.round(x * 100) / 100).replace(".", ","));
 
 /** Nama hari dari tanggal zona usaha "2026-10-20" -> "Selasa". */
-export function namaHari(tanggal: string): string {
+export function namaHari(tanggal: string, bahasa: B = "id"): string {
   const d = new Date(`${tanggal}T00:00:00Z`);
-  return Number.isNaN(d.getTime()) ? tanggal : HARI[d.getUTCDay()];
+  return Number.isNaN(d.getTime()) ? tanggal : (bahasa === "en" ? HARI_EN : HARI)[d.getUTCDay()];
 }
 
 /** Awal kalimat: "Dua", "Sepuluh", lalu angka biasa. */
@@ -55,13 +58,21 @@ export function kataBilangan(n: number): string {
   return Number.isInteger(n) && n >= 0 && n < KATA.length ? KATA[n] : String(n);
 }
 
-function daftar(nama: string[], total: number): string {
+function daftar(nama: string[], total: number, bahasa: B = "id"): string {
   const sisa = total - nama.length;
-  return sisa > 0 ? `${nama.join(", ")}, dan ${sisa} lainnya` : nama.join(", ");
+  if (sisa <= 0) return nama.join(", ");
+  return bahasa === "en" ? `${nama.join(", ")}, and ${sisa} more` : `${nama.join(", ")}, dan ${sisa} lainnya`;
 }
 
 /** "Tepat tenggat 8 dari 10. Dua yang lewat: Cek stok beras (Selasa, lewat 40 menit), Setor kas (Jumat, lewat 1 jam)." */
-export function kalimatTepat(t: Kpi["tepat"]): string {
+export function kalimatTepat(t: Kpi["tepat"], bahasa: B = "id"): string {
+  if (bahasa === "en") {
+    if (t.dari === 0) return "No work with a due date was finished this week yet.";
+    const awal = `On time ${t.nilai} of ${t.dari}.`;
+    if (t.lewat.length === 0) return `${awal} None were late.`;
+    const sebut = t.lewat.slice(0, MAKS_SEBUT).map((l) => `${l.judul} (${namaHari(l.tanggal, bahasa)}, ${formatMenit(l.lewat_menit, bahasa)} late)`);
+    return `${awal} Late: ${daftar(sebut, t.lewat.length, bahasa)}.`;
+  }
   if (t.dari === 0) return t.kosong ?? "Belum ada kerja bertenggat yang selesai minggu ini.";
   const awal = `Tepat tenggat ${t.nilai} dari ${t.dari}.`;
   if (t.lewat.length === 0) return `${awal} Tidak ada yang lewat.`;
@@ -70,22 +81,31 @@ export function kalimatTepat(t: Kpi["tepat"]): string {
 }
 
 /** "7 poin dari 4 kerja selesai: Setor kas (3 poin), Cek stok beras (2 poin), Tutup kas (1 poin), dan 1 lainnya." */
-export function kalimatPoin(p: Kpi["poin_selesai"], rincian: readonly RincianKerja[]): string {
-  if (p.kerja === 0) return p.kosong ?? "Belum ada kerja selesai minggu ini.";
+export function kalimatPoin(p: Kpi["poin_selesai"], rincian: readonly RincianKerja[], bahasa: B = "id"): string {
+  if (p.kerja === 0) return bahasa === "en" ? "No work finished this week yet." : p.kosong ?? "Belum ada kerja selesai minggu ini.";
   const urut = [...rincian].sort((a, b) => b.poin - a.poin || a.selesai_at.localeCompare(b.selesai_at));
+  if (bahasa === "en") {
+    const sebut = urut.slice(0, MAKS_SEBUT).map((k) => `${k.judul} (${formatPoin(Number(k.poin), bahasa)})`);
+    return `${formatPoin(p.nilai, bahasa)} from ${p.kerja} finished tasks: ${daftar(sebut, p.kerja, bahasa)}.`;
+  }
   const sebut = urut.slice(0, MAKS_SEBUT).map((k) => `${k.judul} (${formatPoin(Number(k.poin))})`);
   return `${formatPoin(p.nilai)} dari ${p.kerja} kerja selesai: ${daftar(sebut, p.kerja)}.`;
 }
 
 /** Lintas topi selalu kontribusi: "1 poin dari 1 kerja lintas topi: Cuci gelas. Dihitung sebagai bantuan, tidak mengurangi angka lain." */
-export function kalimatLintas(l: Kpi["lintas"], rincian: readonly RincianKerja[]): string {
-  if (l.kerja === 0) return l.kosong ?? "Belum ada kerja lintas topi minggu ini.";
+export function kalimatLintas(l: Kpi["lintas"], rincian: readonly RincianKerja[], bahasa: B = "id"): string {
+  if (l.kerja === 0) return bahasa === "en" ? "No work across hats this week yet." : l.kosong ?? "Belum ada kerja lintas topi minggu ini.";
   const judul = rincian.filter((k) => k.lintas_topi).map((k) => k.judul);
+  if (bahasa === "en") return `${formatPoin(l.nilai, bahasa)} from ${l.kerja} tasks across hats: ${daftar(judul.slice(0, MAKS_SEBUT), l.kerja, bahasa)}. Counted as help; it does not lower the other numbers.`;
   return `${formatPoin(l.nilai)} dari ${l.kerja} kerja lintas topi: ${daftar(judul.slice(0, MAKS_SEBUT), l.kerja)}. Dihitung sebagai bantuan, tidak mengurangi angka lain.`;
 }
 
 /** "naik 6", "turun 2,5", "sama". */
-export function teksNaikTurun(selisih: number): string {
+export function teksNaikTurun(selisih: number, bahasa: B = "id"): string {
+  if (bahasa === "en") {
+    if (Math.abs(selisih) < 0.005) return "same";
+    return selisih > 0 ? `up ${angka(selisih, bahasa)}` : `down ${angka(-selisih, bahasa)}`;
+  }
   if (Math.abs(selisih) < 0.005) return "sama";
   return selisih > 0 ? `naik ${angka(selisih)}` : `turun ${angka(-selisih)}`;
 }
@@ -93,22 +113,26 @@ export function teksNaikTurun(selisih: number): string {
 export type Banding = { teks: string; arah: "naik" | "turun" | "sama" | null };
 
 /** Pembanding dengan minggu lalu; disembunyikan bila salah satu minggu punya kurang dari MIN_BANDING kerja selesai. */
-export function banding(sekarang: number, lalu: number, kerjaSekarang: number, kerjaLalu: number, satuan = ""): Banding {
-  if (kerjaSekarang < MIN_BANDING || kerjaLalu < MIN_BANDING) return { teks: BELUM_CUKUP, arah: null };
-  const teks = teksNaikTurun(sekarang - lalu);
-  const arah = teks === "sama" ? "sama" : teks.startsWith("naik") ? "naik" : "turun";
-  return { teks: teks === "sama" ? "sama dengan minggu lalu" : `${teks}${satuan} dari minggu lalu`, arah };
+export function banding(sekarang: number, lalu: number, kerjaSekarang: number, kerjaLalu: number, satuan = "", bahasa: B = "id"): Banding {
+  const en = bahasa === "en";
+  if (kerjaSekarang < MIN_BANDING || kerjaLalu < MIN_BANDING) return { teks: en ? BELUM_CUKUP_EN : BELUM_CUKUP, arah: null };
+  const selisih = sekarang - lalu;
+  const teks = teksNaikTurun(selisih, bahasa);
+  const arah = Math.abs(selisih) < 0.005 ? "sama" : selisih > 0 ? "naik" : "turun";
+  if (arah === "sama") return { teks: en ? "same as last week" : "sama dengan minggu lalu", arah };
+  return { teks: en ? `${teks}${satuan} from last week` : `${teks}${satuan} dari minggu lalu`, arah };
 }
 
 /** Persen tepat tenggat (bulat), null bila tidak ada kerja bertenggat. */
 export const persen = (tepat: number, dari: number) => (dari > 0 ? Math.round((100 * tepat) / dari) : null);
 
 /** Tepat tenggat dibandingkan dalam persen kedua minggu ("naik dari 70% ke 80%"), bukan selisih yang terbaca sebagai persen naik. */
-export function bandingTepat(sekarang: number | null, lalu: number | null, kerjaSekarang: number, kerjaLalu: number): Banding | null {
+export function bandingTepat(sekarang: number | null, lalu: number | null, kerjaSekarang: number, kerjaLalu: number, bahasa: B = "id"): Banding | null {
   if (sekarang === null) return null;
-  if (lalu === null) return { teks: BELUM_CUKUP, arah: null };
-  const b = banding(sekarang, lalu, kerjaSekarang, kerjaLalu);
-  return b.arah === "naik" || b.arah === "turun" ? { teks: `${b.arah} dari ${lalu}% ke ${sekarang}%`, arah: b.arah } : b;
+  if (lalu === null) return { teks: bahasa === "en" ? BELUM_CUKUP_EN : BELUM_CUKUP, arah: null };
+  const b = banding(sekarang, lalu, kerjaSekarang, kerjaLalu, "", bahasa);
+  if (b.arah !== "naik" && b.arah !== "turun") return b;
+  return { teks: bahasa === "en" ? `${b.arah === "naik" ? "up" : "down"} from ${lalu}% to ${sekarang}%` : `${b.arah} dari ${lalu}% ke ${sekarang}%`, arah: b.arah };
 }
 
 export type BarisUkuran = {
@@ -123,7 +147,8 @@ export type BarisUkuran = {
 };
 
 /** Empat ukuran satu orang, urut seperti layar (docs/design/kpi-cermin.md). */
-export function ukuranKpi(k: Kpi, tim: RataTim): BarisUkuran[] {
+export function ukuranKpi(k: Kpi, tim: RataTim, bahasa: B = "id"): BarisUkuran[] {
+  if (bahasa === "en") return ukuranKpiEn(k, tim);
   const lalu = k.minggu_lalu;
   const nSekarang = k.poin_selesai.kerja;
   const tepatSekarang = persen(k.tepat.nilai, k.tepat.dari);
@@ -148,8 +173,39 @@ export function ukuranKpi(k: Kpi, tim: RataTim): BarisUkuran[] {
   ];
 }
 
+/** Versi Inggris ukuranKpi. Alasan "hadir" dari database (bahasa Indonesia) diganti kalimat tetap. */
+function ukuranKpiEn(k: Kpi, tim: RataTim): BarisUkuran[] {
+  const b: B = "en";
+  const lalu = k.minggu_lalu;
+  const nSekarang = k.poin_selesai.kerja;
+  const timKosong = "The team average shows once at least 3 people have finished work this week.";
+  return [
+    {
+      kunci: "poin", label: "Work done", angka: formatPoin(k.poin_selesai.nilai, b), penjelasan: kalimatPoin(k.poin_selesai, k.rincian, b),
+      banding: banding(k.poin_selesai.nilai, lalu.poin_selesai, nSekarang, lalu.kerja, " points", b),
+      rata: tim ? `Team average ${formatPoin(tim.poin_selesai, b)}.` : timKosong, ids: k.poin_selesai.ids,
+    },
+    {
+      kunci: "tepat", label: "On time", angka: k.tepat.dari ? `${k.tepat.nilai} of ${k.tepat.dari}` : "None yet", penjelasan: kalimatTepat(k.tepat, b),
+      banding: bandingTepat(persen(k.tepat.nilai, k.tepat.dari), persen(lalu.tepat, lalu.bertenggat), nSekarang, lalu.kerja, b),
+      rata: tim?.tepat_persen != null ? `Team on time ${tim.tepat_persen}%.` : null, ids: k.tepat.ids,
+    },
+    {
+      kunci: "lintas", label: "Work across hats", angka: formatPoin(k.lintas.nilai, b), penjelasan: kalimatLintas(k.lintas, k.rincian, b),
+      banding: null, rata: tim ? `Team average ${formatPoin(tim.lintas_poin, b)}.` : null, ids: k.lintas.ids,
+    },
+    { kunci: "hadir", label: "Attendance on schedule", angka: "Not counted yet", penjelasan: "Attendance against the schedule is counted once shift schedules are in use.", banding: null, rata: null, ids: [] },
+  ];
+}
+
 /** Teks status banding di rincian. Tanpa nada menyalahkan; pemilik yang memutuskan. */
-export function teksBanding(s: StatusBanding | null): string | null {
+export function teksBanding(s: StatusBanding | null, bahasa: B = "id"): string | null {
+  if (bahasa === "en") {
+    if (s === "menunggu") return "Flagged as wrong, waiting for the owner.";
+    if (s === "diterima") return "Flag approved by the owner.";
+    if (s === "ditolak") return "Flag reviewed by the owner; the numbers stay.";
+    return null;
+  }
   if (s === "menunggu") return "Sudah ditandai keliru, menunggu pemilik.";
   if (s === "diterima") return "Tanda keliru disetujui pemilik.";
   if (s === "ditolak") return "Tanda keliru sudah ditinjau pemilik; angka tetap.";

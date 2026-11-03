@@ -62,14 +62,14 @@ describe("kalimat penjelasan dari data SQL", () => {
     expect(kalimatLintas(k.lintas, [])).toBe("Belum ada kerja lintas topi minggu ini.");
   });
   it("nama hari dan bilangan", () => {
-    expect(["2026-10-19", "2026-10-25"].map(namaHari)).toEqual(["Senin", "Minggu"]);
+    expect(["2026-10-19", "2026-10-25"].map((t) => namaHari(t))).toEqual(["Senin", "Minggu"]);
     expect([1, 2, 10, 11].map(kataBilangan)).toEqual(["Satu", "Dua", "Sepuluh", "11"]);
   });
 });
 
 describe("naik/turun dan ambang pembanding", () => {
   it("teks naik/turun", () => {
-    expect([6, -2.5, 0].map(teksNaikTurun)).toEqual(["naik 6", "turun 2,5", "sama"]);
+    expect([6, -2.5, 0].map((x) => teksNaikTurun(x))).toEqual(["naik 6", "turun 2,5", "sama"]);
   });
   it("kurang dari 5 kerja selesai di salah satu minggu: pembanding disembunyikan", () => {
     expect(banding(12, 6, 5, 4)).toEqual({ teks: BELUM_CUKUP, arah: null });
