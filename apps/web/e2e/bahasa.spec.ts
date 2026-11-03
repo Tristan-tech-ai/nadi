@@ -181,6 +181,13 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   const axeInvoice = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeInvoice.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
+  // Agenda surat mode Inggris; isi surat dan perihal adalah data pengguna.
+  await p1.goto("/app/surat");
+  await expect(p1.getByRole("heading", { level: 1, name: "Incoming letter log" })).toBeVisible();
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
+  const axeSurat = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axeSurat.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
   // Magang mode Inggris: dana rekrutmen, rencana, formulir, tabel biaya; isi rencana dan nama data pengguna.
   await p1.goto("/app/magang");
   await expect(p1.getByRole("heading", { level: 1, name: "Internships" })).toBeVisible();
