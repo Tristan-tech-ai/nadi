@@ -156,6 +156,14 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   const axeUsaha = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeUsaha.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
+  // Kerja mode Inggris (papan hari ini): status kolom, kartu, tombol Tambah kerja; judul kerja data pengguna.
+  await p1.goto("/app/kerja");
+  await expect(p1.getByRole("heading", { level: 1, name: "Today's work" })).toBeVisible();
+  await expect(p1.getByRole("button", { name: "Add work" })).toBeVisible();
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
+  const axeKerja = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axeKerja.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
   // Sesi baru tanpa cookie bahasa: pilihan datang dari akun.
   const k2 = await browser.newContext();
   const p2 = await k2.newPage();

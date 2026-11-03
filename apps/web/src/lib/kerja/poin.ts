@@ -51,33 +51,44 @@ export function bacaPoin(teks: string): number | null {
   return p >= 0.25 && p <= 99 ? p : null;
 }
 
-export function formatPoin(poin: number): string {
+type B = "id" | "en";
+
+export function formatPoin(poin: number, bahasa: B = "id"): string {
+  if (bahasa === "en") return `${poin} ${poin === 1 ? "point" : "points"}`;
   return `${String(poin).replace(".", ",")} poin`;
 }
 
 /** "kurang dari 1 menit", "42 menit", "1 jam", "1 jam 5 menit". */
-export function formatMenit(menit: number): string {
-  if (menit < 1) return "kurang dari 1 menit";
+export function formatMenit(menit: number, bahasa: B = "id"): string {
+  const [kurang, mnt, jm] = bahasa === "en" ? ["under 1 minute", "min", "h"] : ["kurang dari 1 menit", "menit", "jam"];
+  if (menit < 1) return kurang;
   const m = Math.round(menit);
-  if (m < 60) return `${m} menit`;
-  return m % 60 === 0 ? `${m / 60} jam` : `${Math.floor(m / 60)} jam ${m % 60} menit`;
+  if (m < 60) return `${m} ${mnt}`;
+  return m % 60 === 0 ? `${m / 60} ${jm}` : `${Math.floor(m / 60)} ${jm} ${m % 60} ${mnt}`;
 }
 
 /** "Selesai dalam 42 menit (perkiraan 30)". Tanpa nada menyalahkan bila lebih lama (VOICE prinsip 6). */
-export function teksSelesai(aktual: number | null, perkiraan: number | null): string {
-  if (aktual == null) return "Selesai";
-  const p = perkiraan == null ? "" : ` (perkiraan ${Math.round(perkiraan) < 60 ? Math.round(perkiraan) : formatMenit(perkiraan)})`;
-  return `Selesai dalam ${formatMenit(aktual)}${p}`;
+export function teksSelesai(aktual: number | null, perkiraan: number | null, bahasa: B = "id"): string {
+  const en = bahasa === "en";
+  if (aktual == null) return en ? "Done" : "Selesai";
+  const p = perkiraan == null ? "" : ` (${en ? "estimate" : "perkiraan"} ${Math.round(perkiraan) < 60 ? Math.round(perkiraan) : formatMenit(perkiraan, bahasa)})`;
+  return `${en ? "Done in" : "Selesai dalam"} ${formatMenit(aktual, bahasa)}${p}`;
 }
 
 /** Poin beserta sumbernya; jujur bila belum ada perkiraan. */
-export function teksPoin(e: Estimasi | null): string {
+export function teksPoin(e: Estimasi | null, bahasa: B = "id"): string {
+  if (bahasa === "en") {
+    if (!e) return "Points not estimated yet; fill in manually";
+    const sumber = e.sumber === "riwayat" ? `from ${e.n ?? "several"} similar tasks` : e.sumber === "model" ? "model estimate" : "entered manually";
+    return `${formatPoin(e.poin, bahasa)}, ${sumber}`;
+  }
   if (!e) return "Poin belum diperkirakan; isi manual";
   const sumber = e.sumber === "riwayat" ? `dari ${e.n ?? "beberapa"} kerja serupa` : e.sumber === "model" ? "perkiraan model" : "diisi manual";
   return `${formatPoin(e.poin)}, ${sumber}`;
 }
 
 const BULAN = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+const BULAN_EN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
 function bagian(d: Date, zona: string) {
   const p = Object.fromEntries(
@@ -88,14 +99,15 @@ function bagian(d: Date, zona: string) {
 }
 
 /** "Hari ini, 15.00", "Besok, 09.30", "Kemarin, 09.30", "5 Nov, 09.30", "5 Jan 2027, 09.30" di zona usaha. */
-export function formatTenggat(iso: string, sekarang: Date, zona: string): string {
+export function formatTenggat(iso: string, sekarang: Date, zona: string, bahasa: B = "id"): string {
+  const en = bahasa === "en";
   const t = bagian(new Date(iso), zona);
   const s = bagian(sekarang, zona);
   const hari = (b: { tahun: number; bulan: number; hari: number }) => Date.UTC(b.tahun, b.bulan - 1, b.hari) / 86_400_000;
   const selisih = hari(t) - hari(s);
-  const tanggal = selisih === 0 ? "Hari ini" : selisih === 1 ? "Besok" : selisih === -1 ? "Kemarin"
-    : `${t.hari} ${BULAN[t.bulan - 1]}${t.tahun === s.tahun ? "" : ` ${t.tahun}`}`;
-  return `${tanggal}, ${t.jam}`;
+  const tanggal = selisih === 0 ? (en ? "Today" : "Hari ini") : selisih === 1 ? (en ? "Tomorrow" : "Besok") : selisih === -1 ? (en ? "Yesterday" : "Kemarin")
+    : `${t.hari} ${(en ? BULAN_EN : BULAN)[t.bulan - 1]}${t.tahun === s.tahun ? "" : ` ${t.tahun}`}`;
+  return `${tanggal}, ${en ? t.jam.replace(".", ":") : t.jam}`;
 }
 
 export function ringkasStatus(daftar: KerjaPapan[]): Record<StatusKerja, number> {

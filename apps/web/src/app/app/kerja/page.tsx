@@ -13,35 +13,38 @@ import type { BebanMinggu, BebanSaya } from "@/lib/kerja/adil";
 import type { KpiMinggu, KpiSaya } from "@/lib/kerja/kpi";
 import { bacaPeta, type Peta } from "@/lib/kerja/peta";
 import { formatJam } from "@/lib/format";
-import { bacaKolom, formatTenggat, LABEL_STATUS, ringkasStatus, STATUS_KERJA, teksPoin, teksSelesai, type KerjaPapan, type StatusKerja } from "@/lib/kerja/poin";
+import type { Bahasa } from "@/lib/i18n/bahasa";
+import { ambilKamus, isiTeks, type Kamus } from "@/lib/i18n/kamus";
+import { bahasaAplikasi } from "@/lib/i18n/server";
+import { bacaKolom, formatTenggat, ringkasStatus, STATUS_KERJA, teksPoin, teksSelesai, type KerjaPapan, type StatusKerja } from "@/lib/kerja/poin";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
 
 export const metadata: Metadata = { title: "Kerja" };
 
-function KartuKerja({ k, pengelola }: { k: KerjaTampil; pengelola: boolean }) {
+function KartuKerja({ k, pengelola, t, bahasa }: { k: KerjaTampil; pengelola: boolean; t: Kamus["kerja"]; bahasa: Bahasa }) {
   return (
     <li className="py-3 lg:px-3" data-testid="kartu-kerja" data-judul={k.judul}>
-      <p className="font-semibold">{k.judul}</p>
+      <p className="font-semibold" data-pengguna>{k.judul}</p>
       <p className="mt-0.5 text-sm text-tinta-2">
-        {k.topi?.nama ?? "Tanpa topi"} · {k.pelaksana?.nama ?? "Belum ada pelaksana"}
+        {k.topi?.nama ? <span data-pengguna>{k.topi.nama}</span> : t.tanpaTopi} · {k.pelaksana?.nama ? <span data-pengguna>{k.pelaksana.nama}</span> : t.tanpaPelaksana}
       </p>
       {k.lintas_topi && (
         <p className="mt-1 inline-flex items-center gap-1 rounded-full border border-garis-kuat px-2 py-0.5 text-xs" data-testid="lintas-topi">
-          <ArrowsLeftRightIcon size={14} aria-hidden /> Lintas topi
+          <ArrowsLeftRightIcon size={14} aria-hidden /> {t.lintasTopi}
         </p>
       )}
       {k.status !== "selesai" && (
         <p className="mt-1 text-sm">
-          {k.tenggatTeks ? `Tenggat ${k.tenggatTeks}` : "Tanpa tenggat"}
-          {k.status === "jalan" && k.mulaiTeks && <span className="text-tinta-2"> · mulai {k.mulaiTeks}</span>}
+          {k.tenggatTeks ? isiTeks(t.tenggat, { t: k.tenggatTeks }) : t.tanpaTenggat}
+          {k.status === "jalan" && k.mulaiTeks && <span className="text-tinta-2">{isiTeks(t.mulai, { t: k.mulaiTeks })}</span>}
         </p>
       )}
-      {k.status === "selesai" && <p className="mt-1 text-sm font-semibold" data-testid="durasi-nyata">{teksSelesai(k.aktual_menit, k.estimasi?.menit ?? null)}</p>}
-      <p className={`mt-1 text-sm ${k.estimasi ? "" : "text-cap"}`} data-testid="poin-kerja">{teksPoin(k.estimasi)}</p>
-      {k.estimasi && <p className="mt-0.5 text-xs text-tinta-2" data-testid="alasan-poin">{k.estimasi.alasan}</p>}
-      {pengelola && <UbahPoin kerja={k.id} judul={k.judul} poin={k.estimasi?.poin ?? null} />}
+      {k.status === "selesai" && <p className="mt-1 text-sm font-semibold" data-testid="durasi-nyata">{teksSelesai(k.aktual_menit, k.estimasi?.menit ?? null, bahasa)}</p>}
+      <p className={`mt-1 text-sm ${k.estimasi ? "" : "text-cap"}`} data-testid="poin-kerja">{teksPoin(k.estimasi, bahasa)}</p>
+      {k.estimasi && <p className="mt-0.5 text-xs text-tinta-2" data-testid="alasan-poin" lang={bahasa === "id" ? undefined : "id"}>{k.estimasi.alasan}</p>}
+      {pengelola && <UbahPoin kerja={k.id} judul={k.judul} poin={k.estimasi?.poin ?? null} teks={t} bahasa={bahasa} />}
     </li>
   );
 }
@@ -138,6 +141,14 @@ async function BagianKolam({ sp, pemilik, zona }: { sp: Awaited<PageProps<"/app/
 async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["searchParams"] }) {
   const sesi = await wajibPerusahaan();
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
+  const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
+  const t = ambilKamus(bahasa).kerja;
+  const kepala = (
+    <>
+      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
+      <p className="mt-2 text-tinta-2">{t.ket}</p>
+    </>
+  );
   const sp = await searchParams;
   const kolom = bacaKolom(sp.kolom);
   const namaTab = pertama(sp.tab);
@@ -148,15 +159,19 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
   const tabPeta = lihatSemua && namaTab === "peta";
   const tabBonus = pengelola && namaTab === "bonus";
   const daftarTab = [
-    { href: "/app/kerja", label: "Papan hari ini", aktif: !tabBeban && !tabKpi && !tabPeta && !tabBonus },
-    ...(pengelola ? [{ href: "/app/kerja?tab=beban", label: "Beban minggu ini", aktif: tabBeban }] : []),
-    { href: "/app/kerja?tab=kpi", label: lihatSemua ? "Kinerja minggu ini" : "Kerjamu minggu ini", aktif: tabKpi },
-    ...(lihatSemua ? [{ href: "/app/kerja?tab=peta", label: "Peta organisasi", aktif: tabPeta }] : []),
-    ...(pengelola ? [{ href: "/app/kerja?tab=bonus", label: "Kolam bonus", aktif: tabBonus }] : []),
-    { href: "/app/jadwal", label: "Jadwal", aktif: false },
+    { href: "/app/kerja", label: t.tabPapan, aktif: !tabBeban && !tabKpi && !tabPeta && !tabBonus },
+    ...(pengelola ? [{ href: "/app/kerja?tab=beban", label: t.tabBeban, aktif: tabBeban }] : []),
+    { href: "/app/kerja?tab=kpi", label: lihatSemua ? t.tabKinerja : t.tabKerjamu, aktif: tabKpi },
+    ...(lihatSemua ? [{ href: "/app/kerja?tab=peta", label: t.tabPeta, aktif: tabPeta }] : []),
+    ...(pengelola ? [{ href: "/app/kerja?tab=bonus", label: t.tabBonus, aktif: tabBonus }] : []),
+    { href: "/app/jadwal", label: t.tabJadwal, aktif: false },
   ];
+  // Tab beban, kinerja, peta, dan bonus belum lewat kamus (I-03 berikutnya): di bahasa lain isinya ditandai lang="id".
+  const tabId = tabBeban || tabKpi || tabPeta || tabBonus;
+  const catatanTab = bahasa !== "id" && tabId ? <p className="mt-3 text-sm text-tinta-2">{t.tabCatatan}</p> : null;
+  const isiLangTab = bahasa !== "id" && tabId ? "id" : undefined;
   const tab = (
-    <nav aria-label="Bagian kerja" className="mt-4">
+    <nav aria-label={t.tabAria} className="mt-4">
       <ul className="flex flex-wrap gap-1 border-b border-garis">
         {daftarTab.map((t) => (
           <li key={t.href}>
@@ -172,20 +187,28 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
   if (tabBonus) {
     return (
       <>
+        {kepala}
         {tab}
-        <Suspense fallback={<KerangkaKolam />}>
-          <BagianKolam sp={sp} pemilik={sesi.peran === "pemilik"} zona={await zonaUsahaIni(sesi.perusahaanId)} />
-        </Suspense>
+        {catatanTab}
+        <div lang={isiLangTab}>
+          <Suspense fallback={<KerangkaKolam />}>
+            <BagianKolam sp={sp} pemilik={sesi.peran === "pemilik"} zona={await zonaUsahaIni(sesi.perusahaanId)} />
+          </Suspense>
+        </div>
       </>
     );
   }
   if (tabPeta) {
     return (
       <>
+        {kepala}
         {tab}
-        <Suspense fallback={<KerangkaPeta />}>
-          <BagianPeta bolehUsul={pengelola} />
-        </Suspense>
+        {catatanTab}
+        <div lang={isiLangTab}>
+          <Suspense fallback={<KerangkaPeta />}>
+            <BagianPeta bolehUsul={pengelola} />
+          </Suspense>
+        </div>
       </>
     );
   }
@@ -193,22 +216,26 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
     const orang = pertama(sp.orang);
     return (
       <>
+        {kepala}
         {tab}
-        <Suspense fallback={<KerangkaKpi />}>
-          <BagianKpi semua={lihatSemua} orang={lihatSemua && orang && ID_SAH.test(orang) ? orang : null} />
-        </Suspense>
+        {catatanTab}
+        <div lang={isiLangTab}>
+          <Suspense fallback={<KerangkaKpi />}>
+            <BagianKpi semua={lihatSemua} orang={lihatSemua && orang && ID_SAH.test(orang) ? orang : null} />
+          </Suspense>
+        </div>
       </>
     );
   }
   const supabase = await createClient();
   const [{ data, error }, zona] = await Promise.all([supabase.rpc("papan_kerja"), zonaUsahaIni(sesi.perusahaanId)]);
   if (error) {
-    return <p role="alert" className="mt-6 text-cap" data-testid="kerja-galat">Papan kerja gagal dimuat. Muat ulang halaman ini sebentar lagi.</p>;
+    return <>{kepala}<p role="alert" className="mt-6 text-cap" data-testid="kerja-galat">{t.gagalPapan}</p></>;
   }
   const sekarang = new Date();
   const daftar: KerjaTampil[] = ((data ?? []) as KerjaPapan[]).map((k) => ({
     ...k,
-    tenggatTeks: k.tenggat ? formatTenggat(k.tenggat, sekarang, zona) : null,
+    tenggatTeks: k.tenggat ? formatTenggat(k.tenggat, sekarang, zona, bahasa) : null,
     mulaiTeks: k.mulai_at ? formatJam(new Date(k.mulai_at), zona, false) : null,
   }));
 
@@ -216,9 +243,10 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
     const { data: saya } = await supabase.rpc("beban_saya", { p_mulai: null });
     return (
       <>
+        {kepala}
         {tab}
-        {saya && <BebanSayaIni data={saya as BebanSaya} />}
-        <PapanStaf daftar={daftar} />
+        {saya && <div lang={bahasa === "id" ? undefined : "id"}><BebanSayaIni data={saya as BebanSaya} /></div>}
+        <PapanStaf daftar={daftar} teks={t} bahasa={bahasa} />
       </>
     );
   }
@@ -230,40 +258,45 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
       supabase.from("topi").select("id, nama").eq("aktif", true).order("nama"),
       supabase.from("orang").select("id, nama").eq("status", "aktif").order("nama"),
     ]);
-    tambah = <TambahKerja topi={(topi ?? []) as { id: string; nama: string }[]} orang={(orang ?? []) as { id: string; nama: string }[]} />;
+    tambah = <TambahKerja topi={(topi ?? []) as { id: string; nama: string }[]} orang={(orang ?? []) as { id: string; nama: string }[]} teks={t} bahasa={bahasa} />;
   }
 
   if (tabBeban) {
     const { data: beban, error: eb } = await supabase.rpc("beban_minggu", { p_mulai: null });
     return (
       <>
+        {kepala}
         {tab}
+        {catatanTab}
         <div className="mt-4">{tambah}</div>
-        {eb || !beban
-          ? <p role="alert" className="mt-6 text-cap" data-testid="beban-galat">Beban minggu ini gagal dimuat. Muat ulang halaman ini sebentar lagi.</p>
-          : <BebanMingguIni data={beban as BebanMinggu} />}
+        <div lang={isiLangTab}>
+          {eb || !beban
+            ? <p role="alert" className="mt-6 text-cap" data-testid="beban-galat">Beban minggu ini gagal dimuat. Muat ulang halaman ini sebentar lagi.</p>
+            : <BebanMingguIni data={beban as BebanMinggu} />}
+        </div>
       </>
     );
   }
 
   return (
     <>
+      {kepala}
       {tab}
-      <dl className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-sm" data-testid="ringkasan-kerja" aria-label="Ringkasan kerja hari ini">
+      <dl className="mt-4 flex flex-wrap gap-x-5 gap-y-1 text-sm" data-testid="ringkasan-kerja" aria-label={t.ringkasAria}>
         {STATUS_KERJA.map((s) => (
           <div key={s} className="flex gap-1">
-            <dt className="text-tinta-2">{LABEL_STATUS[s]}</dt>
+            <dt className="text-tinta-2">{t.status[s]}</dt>
             <dd className="angka font-semibold" data-status={s}>{jumlah[s]}</dd>
           </div>
         ))}
       </dl>
-      <div className="mt-4">{tambah ?? <p className="text-sm text-tinta-2">Kerja ditambah pemilik atau admin. Kamu bisa melihat papannya.</p>}</div>
+      <div className="mt-4">{tambah ?? <p className="text-sm text-tinta-2">{t.ditambahPengelola}</p>}</div>
 
       {daftar.length === 0 ? (
-        <div className="mt-6 flex flex-col items-start gap-3"><IlustrasiPapan className="w-28" /><p className="text-tinta-2" data-testid="kerja-kosong">Belum ada kerja hari ini. Tambah kerja pertama, misalnya Cek stok beras.</p></div>
+        <div className="mt-6 flex flex-col items-start gap-3"><IlustrasiPapan className="w-28" /><p className="text-tinta-2" data-testid="kerja-kosong">{t.kosong}</p></div>
       ) : (
         <>
-          <nav aria-label="Saring kolom" className="mt-6 lg:hidden">
+          <nav aria-label={t.saringKolom} className="mt-6 lg:hidden">
             <ul className="flex flex-wrap gap-2">
               {STATUS_KERJA.map((s) => (
                 <li key={s}>
@@ -272,7 +305,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
                     aria-current={kolom === s ? "page" : undefined}
                     className={`inline-flex min-h-11 items-center rounded-full border px-3 text-sm ${kolom === s ? "border-tinta bg-tinta font-semibold text-kertas" : "border-garis-kuat text-tinta"}`}
                   >
-                    {LABEL_STATUS[s]} {jumlah[s]}
+                    {t.status[s]} {jumlah[s]}
                   </Link>
                 </li>
               ))}
@@ -284,12 +317,12 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
               return (
                 <section key={s} aria-labelledby={`kolom-${s}`} data-testid={`kolom-${s}`} className={kolom === s ? "block" : "hidden lg:block"}>
                   <h2 id={`kolom-${s}`} className="border-b border-garis py-2 text-sm font-semibold lg:px-3">
-                    {LABEL_STATUS[s]}{s === "selesai" ? " hari ini" : ""} <span className="angka text-tinta-2">({isi.length})</span>
+                    {t.status[s]}{s === "selesai" ? t.selesaiHariIni : ""} <span className="angka text-tinta-2">({isi.length})</span>
                   </h2>
                   {isi.length ? (
-                    <ul className="divide-y divide-garis">{isi.map((k) => <KartuKerja key={k.id} k={k} pengelola={pengelola} />)}</ul>
+                    <ul className="divide-y divide-garis">{isi.map((k) => <KartuKerja key={k.id} k={k} pengelola={pengelola} t={t} bahasa={bahasa} />)}</ul>
                   ) : (
-                    <p className="py-3 text-sm text-tinta-2 lg:px-3">Tidak ada.</p>
+                    <p className="py-3 text-sm text-tinta-2 lg:px-3">{t.tidakAda}</p>
                   )}
                 </section>
               );
@@ -320,8 +353,6 @@ function Kerangka() {
 export default function Kerja(props: PageProps<"/app/kerja">) {
   return (
     <main className="mx-auto w-full max-w-2xl px-5 py-10 lg:max-w-6xl">
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">Kerja hari ini</h1>
-      <p className="mt-2 text-tinta-2">Poin beban: 1 poin = 15 menit kerja wajar, diperkirakan dari kerja serupa dan dikoreksi waktu nyata.</p>
       <Suspense fallback={<Kerangka />}>
         <Isi searchParams={props.searchParams} />
       </Suspense>

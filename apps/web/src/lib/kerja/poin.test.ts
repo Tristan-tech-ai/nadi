@@ -108,3 +108,16 @@ describe("papan", () => {
     expect(bacaKolom("batal")).toBe("baru");
   });
 });
+
+describe("teks kerja bahasa Inggris", () => {
+  it("poin, menit, selesai, dan tenggat", async () => {
+    const { formatPoin, formatMenit, teksSelesai, teksPoin, formatTenggat } = await import("./poin");
+    expect(formatPoin(1.5, "en")).toBe("1.5 points");
+    expect(formatPoin(1, "en")).toBe("1 point");
+    expect(formatMenit(65, "en")).toBe("1 h 5 min");
+    expect(teksSelesai(42, 30, "en")).toBe("Done in 42 min (estimate 30)");
+    expect(teksPoin(null, "en")).toBe("Points not estimated yet; fill in manually");
+    expect(formatTenggat("2026-11-05T02:30:00Z", new Date("2026-11-04T02:00:00Z"), "Asia/Makassar", "en")).toBe("Tomorrow, 10:30");
+    expect(formatTenggat("2026-11-05T02:30:00Z", new Date("2026-11-04T02:00:00Z"), "Asia/Makassar")).toBe("Besok, 10.30");
+  });
+});
