@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import { BATAS, nilaiWajah, yawDariLandmark, type Arah, type Bingkai, type Penilaian } from "@/lib/absen/wajah";
+import { isiTeks } from "@/lib/i18n/isi-teks";
+import type { Kamus } from "@/lib/i18n/kamus";
 
 // MediaPipe Face Landmarker di perangkat (docs/research/absen.md). Gambar kamera tidak pernah dikirim ke mana pun.
 const WASM = "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm";
@@ -9,9 +11,9 @@ const MODEL = "/mediapipe/face_landmarker.task";
 const BATAS_WAKTU_MS = 15_000;
 
 /** Kamera depan + tantangan kedip dan menoleh. Memanggil `selesai` sekali: lulus, atau gagal dengan alasan. */
-export function CekWajah({ arah, selesai }: { arah: Arah; selesai: (p: Penilaian) => void }) {
+export function CekWajah({ arah, selesai, teks: t }: { arah: Arah; selesai: (p: Penilaian) => void; teks: Kamus["absen"] }) {
   const video = useRef<HTMLVideoElement>(null);
-  const [status, setStatus] = useState("Menyiapkan kamera...");
+  const [status, setStatus] = useState(t.menyiapkanKamera);
 
   useEffect(() => {
     let batal = false;
@@ -40,7 +42,7 @@ export function CekWajah({ arah, selesai }: { arah: Arah; selesai: (p: Penilaian
         const lm = await buat("GPU").catch(() => buat("CPU"));
         penanda = lm;
         if (batal) return lm.close();
-        setStatus(`Kedipkan mata sekali, lalu tolehkan kepala ke ${arah}mu.`);
+        setStatus(isiTeks(t.kedipToleh, { arah: t[arah] }));
         const bingkai: Bingkai[] = [];
         const mulai = performance.now();
         const langkah = () => {
@@ -54,14 +56,14 @@ export function CekWajah({ arah, selesai }: { arah: Arah; selesai: (p: Penilaian
             kedip: (skor("eyeBlinkLeft") + skor("eyeBlinkRight")) / 2,
             yaw: muka ? yawDariLandmark(muka[1].x, muka[234].x, muka[454].x) : 0,
           });
-          const p = nilaiWajah(bingkai, arah);
+          const p = nilaiWajah(bingkai, arah, t);
           if (p.lulus) return akhiri(p);
-          if (kini - mulai > BATAS_WAKTU_MS) return akhiri(bingkai.filter((b) => b.wajah === 1).length < BATAS.minBingkai ? p : { ...p, alasan: p.alasan || "Waktu habis. Coba lagi." });
+          if (kini - mulai > BATAS_WAKTU_MS) return akhiri(bingkai.filter((b) => b.wajah === 1).length < BATAS.minBingkai ? p : { ...p, alasan: p.alasan || t.waktuHabis });
           raf = requestAnimationFrame(langkah);
         };
         raf = requestAnimationFrame(langkah);
       } catch {
-        akhiri({ lulus: false, kedip: false, menoleh: "", alasan: "Kamera tidak bisa dibuka. Izinkan akses kamera untuk Nadi, lalu coba lagi." });
+        akhiri({ lulus: false, kedip: false, menoleh: "", alasan: t.kameraGagal });
       }
     })();
     return () => {
@@ -70,13 +72,13 @@ export function CekWajah({ arah, selesai }: { arah: Arah; selesai: (p: Penilaian
       aliran?.getTracks().forEach((t) => t.stop());
       penanda?.close();
     };
-  }, [arah, selesai]);
+  }, [arah, selesai, t]);
 
   return (
     <div className="space-y-3">
       <div className="relative mx-auto aspect-[4/3] w-full max-w-sm overflow-hidden rounded-[var(--radius-kartu)] bg-kertas-2">
         {/* Pratinjau dicerminkan agar terasa seperti cermin; analisis memakai gambar asli. */}
-        <video ref={video} muted playsInline className="h-full w-full -scale-x-100 object-cover" aria-label="Pratinjau kamera depan" />
+        <video ref={video} muted playsInline className="h-full w-full -scale-x-100 object-cover" aria-label={t.pratinjau} />
       </div>
       <p role="status" className="text-center text-sm" data-testid="status-wajah">{status}</p>
     </div>

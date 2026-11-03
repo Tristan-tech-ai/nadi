@@ -5,6 +5,7 @@ import type { KodeKios } from "@/app/kios/actions";
 import { LayarKios } from "@/components/absen/layar-kios";
 import { KUNCI_SIMPAN, tokenDariHash, tokenSah } from "@/lib/absen/kios";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
+import type { Kamus } from "@/lib/i18n/kamus";
 
 const baca = () => {
   try {
@@ -36,7 +37,7 @@ const langganan = (ubah: () => void) => {
 };
 
 /** Tablet kios tanpa akun: token dari tautan pemilik disimpan di perangkat ini; hanya bisa meminta kode absen. */
-export function KiosTablet() {
+export function KiosTablet({ teks: t }: { teks: Kamus["absen"] }) {
   // undefined saat prerender (belum tahu isi perangkat), lalu token atau null di peramban.
   const token = useSyncExternalStore<string | null | undefined>(langganan, bacaToken, () => undefined);
 
@@ -45,21 +46,21 @@ export function KiosTablet() {
     if (error) {
       if (error.code === "28000") {
         simpan(null);
-        return { galat: "Tautan tablet ini sudah dicabut atau tidak berlaku. Minta pemilik membuat tautan baru di halaman Usahamu." };
+        return { galat: t.tabletDicabut };
       }
-      return { galat: "Kode absen gagal dimuat. Periksa internet tablet ini." };
+      return { galat: t.kodeGagal };
     }
     const d = data as { tempat: string; kode: string; sisa_detik: number };
     return { tempat: d.tempat, kode: d.kode, sisa: d.sisa_detik };
-  }, [token]);
+  }, [token, t]);
 
   if (token === undefined) return <div className="mx-auto aspect-square w-full max-w-md animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />;
   if (!token) {
     return (
       <p role="alert" className="max-w-md text-center text-lg text-tinta-2" data-testid="tablet-tanpa-tautan">
-        Tablet ini belum dipasang. Pemilik atau admin membuat tautan tablet di halaman Usahamu, lalu membukanya di tablet ini.
+        {t.tabletBelum}
       </p>
     );
   }
-  return <LayarKios ambil={ambil} />;
+  return <LayarKios ambil={ambil} teks={t} />;
 }

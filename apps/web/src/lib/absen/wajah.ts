@@ -51,13 +51,23 @@ function adaMenoleh(b: Bingkai[], arah: Arah): boolean {
   return false;
 }
 
-export function nilaiWajah(bingkai: Bingkai[], arah: Arah): Penilaian {
+/** Kalimat alasan gagal (bawaan bahasa Indonesia; layar mengoper kamus absen). */
+export type TeksWajah = { duaWajah: string; wajahBelum: string; belumKedip: string; belumToleh: string; kiri: string; kanan: string };
+const TEKS_WAJAH_ID: TeksWajah = {
+  duaWajah: "Ada lebih dari satu wajah. Absen sendiri-sendiri, ya.",
+  wajahBelum: "Wajah belum terlihat jelas. Hadapkan wajah ke kamera di tempat yang terang.",
+  belumKedip: "Belum terlihat berkedip. Kedipkan mata sekali.",
+  belumToleh: "Belum terlihat menoleh ke {arah}mu. Tolehkan kepala pelan-pelan.",
+  kiri: "kiri", kanan: "kanan",
+};
+
+export function nilaiWajah(bingkai: Bingkai[], arah: Arah, t: TeksWajah = TEKS_WAJAH_ID): Penilaian {
   const gagal = (alasan: string, kedip = false): Penilaian => ({ lulus: false, kedip, menoleh: "", alasan });
-  if (bingkai.some((x) => x.wajah > 1)) return gagal("Ada lebih dari satu wajah. Absen sendiri-sendiri, ya.");
+  if (bingkai.some((x) => x.wajah > 1)) return gagal(t.duaWajah);
   const ada = bingkai.filter((x) => x.wajah === 1);
-  if (ada.length < BATAS.minBingkai) return gagal("Wajah belum terlihat jelas. Hadapkan wajah ke kamera di tempat yang terang.");
+  if (ada.length < BATAS.minBingkai) return gagal(t.wajahBelum);
   const kedip = adaKedip(ada);
-  if (!kedip) return gagal("Belum terlihat berkedip. Kedipkan mata sekali.");
-  if (!adaMenoleh(ada, arah)) return gagal(`Belum terlihat menoleh ke ${arah}mu. Tolehkan kepala pelan-pelan.`, true);
+  if (!kedip) return gagal(t.belumKedip);
+  if (!adaMenoleh(ada, arah)) return gagal(t.belumToleh.replace("{arah}", t[arah]), true);
   return { lulus: true, kedip: true, menoleh: arah, alasan: "" };
 }

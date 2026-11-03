@@ -253,6 +253,15 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   await expect(p1.locator("a.lompat-isi")).toHaveText("Skip to content");
   await expect(p1.getByRole("link", { name: "App home" })).toBeVisible();
 
+  // Absen (QR tidak lengkap) dan izin OAuth (tautan tidak lengkap) mode Inggris.
+  for (const [jalur, judul] of [["/absen", "Attendance"], ["/oauth/izinkan", "This permission link cannot be used"]] as const) {
+    await p1.goto(jalur);
+    await expect(p1.getByRole("heading", { level: 1, name: judul })).toBeVisible();
+    expect(barisIndonesia(await teksTanpaId(p1, "main"))).toEqual([]);
+    const axeLuar = await new AxeBuilder({ page: p1 }).analyze();
+    expect(axeLuar.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+  }
+
   // Magang mode Inggris: dana rekrutmen, rencana, formulir, tabel biaya; isi rencana dan nama data pengguna.
   await p1.goto("/app/magang");
   await expect(p1.getByRole("heading", { level: 1, name: "Internships" })).toBeVisible();
@@ -338,7 +347,7 @@ for (const [jalur, judul, idJudul, h2] of [["/en/tentang", "About Nadi", "Tentan
 test("sebelum masuk: masuk, daftar, staf, luring dalam bahasa Inggris dari cookie", async ({ page, context, baseURL }, info) => {
   test.skip(info.project.name !== "desktop", "sekali (desktop)");
   await context.addCookies([{ name: "nadi_bahasa", value: "en", url: baseURL ?? "http://localhost:3100" }]);
-  for (const [jalur, judul] of [["/masuk", "Sign in"], ["/daftar", "Create an account"], ["/masuk/staf", "Staff sign in"], ["/luring", "Sinyal sedang hilang"]] as const) {
+  for (const [jalur, judul] of [["/masuk", "Sign in"], ["/daftar", "Create an account"], ["/masuk/staf", "Staff sign in"], ["/kios/tablet", "Scan to clock in"], ["/luring", "Sinyal sedang hilang"]] as const) {
     await page.goto(jalur);
     await expect(page.getByRole("heading", { level: 1, name: judul })).toBeVisible();
     if (jalur !== "/luring") expect(barisIndonesia(await teksTanpaId(page, "main"))).toEqual([]);

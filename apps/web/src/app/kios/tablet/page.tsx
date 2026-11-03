@@ -1,6 +1,22 @@
 import type { Metadata } from "next";
 import { KiosTablet } from "@/components/absen/kios-tablet";
+import { Suspense } from "react";
 import { LogoNadi } from "@/components/ui/logo";
+import { ambilKamus } from "@/lib/i18n/kamus";
+import { bahasaAplikasi } from "@/lib/i18n/server";
+
+// Bahasa dari akun (kios pemilik) atau cookie tablet, jadi teks di balik Suspense.
+async function Isi() {
+  const bahasa = await bahasaAplikasi();
+  const t = ambilKamus(bahasa).absen;
+  return (
+    <div lang={bahasa} className="flex w-full flex-col items-center">
+      <h1 className="mt-6 text-center font-judul text-3xl font-extrabold tracking-tight">{t.kiosJudul}</h1>
+      <p className="mt-2 mb-8 text-center text-tinta-2">{t.kiosKet}</p>
+      <KiosTablet teks={t} />
+    </div>
+  );
+}
 
 export const metadata: Metadata = { title: "Layar absen", robots: { index: false } };
 
@@ -9,9 +25,9 @@ export default function KiosTabletHalaman() {
   return (
     <main className="mx-auto flex min-h-[100svh] w-full max-w-3xl flex-col items-center px-5 py-8">
       <LogoNadi />
-      <h1 className="mt-6 text-center font-judul text-3xl font-extrabold tracking-tight">Pindai untuk absen</h1>
-      <p className="mt-2 mb-8 text-center text-tinta-2">Buka kamera HP, arahkan ke kode ini, lalu ikuti langkah di layar HP-mu.</p>
-      <KiosTablet />
+      <Suspense fallback={<div className="mt-6 aspect-square w-full max-w-md animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+        <Isi />
+      </Suspense>
     </main>
   );
 }

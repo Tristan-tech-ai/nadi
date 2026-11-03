@@ -3,9 +3,11 @@
 import QRCode from "qrcode";
 import { useEffect, useState } from "react";
 import { ambilKodeKios, type KodeKios } from "@/app/kios/actions";
+import { sisip } from "@/lib/i18n/sisip";
+import type { Kamus } from "@/lib/i18n/kamus";
 
 /** Layar kios: QR absen yang berganti tiap 15 detik, dengan kode angka dan hitung mundur. `ambil` default lewat sesi pemilik/admin. */
-export function LayarKios({ ambil = ambilKodeKios }: { ambil?: () => Promise<KodeKios> }) {
+export function LayarKios({ ambil = ambilKodeKios, teks: t }: { ambil?: () => Promise<KodeKios>; teks: Kamus["absen"] }) {
   const [k, setK] = useState<KodeKios | null>(null);
   const [svg, setSvg] = useState("");
   const [sisa, setSisa] = useState(0);
@@ -14,7 +16,7 @@ export function LayarKios({ ambil = ambilKodeKios }: { ambil?: () => Promise<Kod
     let aktif = true;
     let jeda: ReturnType<typeof setTimeout>;
     const muat = async () => {
-      const baru = await ambil().catch((): KodeKios => ({ galat: "Kode absen gagal dimuat. Periksa internet tablet ini." }));
+      const baru = await ambil().catch((): KodeKios => ({ galat: t.kodeGagal }));
       if (!aktif) return;
       setK(baru);
       if ("kode" in baru) {
@@ -31,15 +33,15 @@ export function LayarKios({ ambil = ambilKodeKios }: { ambil?: () => Promise<Kod
       clearTimeout(jeda);
       clearInterval(detik);
     };
-  }, [ambil]);
+  }, [ambil, t.kodeGagal]);
 
   if (!k) return <div className="mx-auto aspect-square w-full max-w-md animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />;
   if ("galat" in k) return <p role="alert" className="text-lg text-tinta-2">{k.galat}</p>;
   return (
     <div className="flex flex-col items-center gap-6">
-      <div className="w-full max-w-md rounded-[var(--radius-kartu)] bg-white p-4" role="img" aria-label="Kode QR absen" data-testid="qr-kios" dangerouslySetInnerHTML={{ __html: svg }} />
+      <div className="w-full max-w-md rounded-[var(--radius-kartu)] bg-white p-4" role="img" aria-label={t.qrAria} data-testid="qr-kios" dangerouslySetInnerHTML={{ __html: svg }} />
       <p className="font-mono text-5xl font-medium tracking-[0.2em]" data-testid="kode-kios" aria-live="polite">{k.kode}</p>
-      <p className="text-tinta-2" data-testid="sisa-kios">Berganti dalam <span className="angka font-semibold text-tinta">{sisa}</span> detik</p>
+      <p className="text-tinta-2" data-testid="sisa-kios">{sisip(t.berganti, { n: <span className="angka font-semibold text-tinta">{sisa}</span> })}</p>
     </div>
   );
 }
