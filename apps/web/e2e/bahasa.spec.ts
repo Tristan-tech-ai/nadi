@@ -173,6 +173,14 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
     expect(axeTab.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
   }
 
+  // Invoice mode Inggris: umur tagihan, pengingat, cocok mutasi, formulir; halaman /i/ dan pesan WA pelanggan tetap Indonesia.
+  await p1.goto("/app/invoice");
+  await expect(p1.getByRole("heading", { level: 1, name: "Invoices" })).toBeVisible();
+  await expect(p1.getByRole("heading", { level: 2, name: "New invoice" })).toBeVisible();
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
+  const axeInvoice = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axeInvoice.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
   // Magang mode Inggris: dana rekrutmen, rencana, formulir, tabel biaya; isi rencana dan nama data pengguna.
   await p1.goto("/app/magang");
   await expect(p1.getByRole("heading", { level: 1, name: "Internships" })).toBeVisible();

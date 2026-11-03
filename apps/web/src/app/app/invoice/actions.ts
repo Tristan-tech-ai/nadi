@@ -5,15 +5,26 @@ import { revalidatePath } from "next/cache";
 import { cocokkan, uraiMutasiCsv, type InvoiceTerbuka } from "@/lib/invoice/cocok";
 import { uraiQris } from "@/lib/invoice/qris";
 import { angkaWa } from "@/lib/rekrut/keputusan";
+import { ambilKamus, isiTeks, type Kamus } from "@/lib/i18n/kamus";
+import { bahasaAplikasi } from "@/lib/i18n/server";
 import { createClient } from "@/lib/supabase/server";
 
 export type HasilInvoice = { pesan: string; kode?: string } | { galat: string; isian?: Record<string, string> } | null;
 
-const GALAT = (kode: string | undefined, pesan: string, cadangan: string) =>
-  kode === "22023" || kode === "P0002" ? pesan : kode === "42501" ? "Hanya pemilik, admin, atau akuntan yang mengurus invoice." : cadangan;
+/** Pesan invoice dalam bahasa pengguna; pesan database (bahasa Indonesia) dibungkus di bahasa lain. */
+async function teksInvoice() {
+  const bahasa = await bahasaAplikasi();
+  const t: Kamus["invoicePesan"] = ambilKamus(bahasa).invoicePesan;
+  const db = (pesan: string) => (bahasa === "id" ? pesan : isiTeks(t.galatDb, { pesan }));
+  return { t, db };
+}
+
+const GALAT = (k: Awaited<ReturnType<typeof teksInvoice>>, kode: string | undefined, pesan: string, cadangan: string) =>
+  kode === "22023" || kode === "P0002" ? k.db(pesan) : kode === "42501" ? k.t.hanyaPengelola : cadangan;
 
 /** Simpan QRIS statis (isi QR dibaca di peramban) dan rekening transfer. QR diperiksa ulang di server; isinya tidak diubah. */
 export async function aturBayar(_: HasilInvoice, form: FormData): Promise<HasilInvoice> {
+  const k = await teksInvoice();
   const qris = String(form.get("qris") ?? "").trim();
   const rekening = String(form.get("rekening") ?? "").trim().slice(0, 200);
   let nama: string | null = null;
@@ -24,12 +35,12 @@ export async function aturBayar(_: HasilInvoice, form: FormData): Promise<HasilI
     nama = h.nama.slice(0, 25);
     nmid = h.nmid;
   }
-  if (!qris && !rekening) return { galat: "Isi QRIS atau rekening transfer, salah satu cukup." };
+  if (!qris && !rekening) return { galat: k.t.isiQris };
   const supabase = await createClient();
   const { error } = await supabase.rpc("atur_bayar", { p_qris: qris || null, p_qris_nama: nama, p_qris_nmid: nmid, p_rekening: rekening || null });
-  if (error) return { galat: error.code === "42501" ? "Hanya pemilik yang mengatur tujuan bayar." : "Belum tersimpan. Coba lagi sebentar." };
+  if (error) return { galat: error.code === "42501" ? k.t.hanyaPemilik : k.t.gagalSimpan };
   revalidatePath("/app/invoice");
-  return { pesan: nama ? `Tersimpan. QRIS atas nama ${nama} tampil di setiap invoice.` : "Tersimpan." };
+  return { pesan: nama ? isiTeks(k.t.tersimpanQris, { nama }) : k.t.tersimpan };
 }
 
 /** "1,5" -> 1.5; "25.000" (harga) -> 25000. */
@@ -37,6 +48,7 @@ const angkaJumlah = (s: string) => Number(s.replace(/\s/g, "").replace(",", ".")
 const angkaHarga = (s: string) => Number(s.replace(/[^\d]/g, ""));
 
 export async function buatInvoice(_: HasilInvoice, form: FormData): Promise<HasilInvoice> {
+  const k = await teksInvoice();
   const isian: Record<string, string> = {
     pelanggan: String(form.get("pelanggan") ?? "").trim(), hp: String(form.get("hp") ?? "").trim(),
     jatuh_tempo: String(form.get("jatuh_tempo") ?? ""), catatan: String(form.get("catatan") ?? "").trim(),
@@ -50,43 +62,45 @@ export async function buatInvoice(_: HasilInvoice, form: FormData): Promise<Hasi
   const baris = uraian
     .map((u, i) => ({ uraian: u.trim(), jumlah: angkaJumlah(jumlah[i] ?? ""), harga: angkaHarga(harga[i] ?? "") }))
     .filter((b) => b.uraian || b.harga);
-  if (!isian.pelanggan) return { galat: "Tulis nama pelanggan.", isian };
-  if (baris.length === 0) return { galat: "Isi minimal satu baris barang atau jasa.", isian };
+  if (!isian.pelanggan) return { galat: k.t.tulisPelanggan, isian };
+  if (baris.length === 0) return { galat: k.t.minimalBaris, isian };
   if (baris.some((b) => !b.uraian || !Number.isFinite(b.jumlah) || b.jumlah <= 0 || !Number.isFinite(b.harga))) {
-    return { galat: "Setiap baris butuh uraian, jumlah lebih dari 0, dan harga.", isian };
+    return { galat: k.t.barisLengkap, isian };
   }
   let hp: string | null = null;
   if (isian.hp) {
     hp = angkaWa(isian.hp);
-    if (!hp) return { galat: "Nomor WhatsApp pelanggan belum benar. Contoh: 0812 3456 7890.", isian };
+    if (!hp) return { galat: k.t.waSalah, isian };
   }
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(isian.jatuh_tempo)) return { galat: "Pilih tanggal jatuh tempo.", isian };
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(isian.jatuh_tempo)) return { galat: k.t.pilihJatuhTempo, isian };
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("buat_invoice", {
     p_pelanggan: isian.pelanggan, p_hp: hp, p_baris: baris, p_jatuh_tempo: isian.jatuh_tempo, p_catatan: isian.catatan || null, p_kunci: isian.kunci,
   });
-  if (error) return { galat: GALAT(error.code, error.message, "Invoice belum terbit. Coba lagi; isianmu masih ada."), isian: { ...isian, kunci: randomUUID() } };
+  if (error) return { galat: GALAT(k, error.code, error.message, k.t.gagalTerbit), isian: { ...isian, kunci: randomUUID() } };
   revalidatePath("/app/invoice");
   const d = data as { nomor: string; kode: string };
-  return { pesan: `Terbit: ${d.nomor}. Bagikan tautannya ke pelanggan dari daftar di bawah.`, kode: d.kode };
+  return { pesan: isiTeks(k.t.terbit, { nomor: d.nomor }), kode: d.kode };
 }
 
 export async function tandaiLunas(_: HasilInvoice, form: FormData): Promise<HasilInvoice> {
+  const k = await teksInvoice();
   const supabase = await createClient();
   const { error } = await supabase.rpc("tandai_lunas", {
     p_id: String(form.get("invoice") ?? ""), p_cara: String(form.get("cara") ?? ""), p_tanggal: String(form.get("tanggal") ?? "") || null,
   });
-  if (error) return { galat: GALAT(error.code, error.message, "Belum tercatat lunas. Coba lagi sebentar.") };
+  if (error) return { galat: GALAT(k, error.code, error.message, k.t.gagalLunas) };
   revalidatePath("/app/invoice");
-  return { pesan: "Tercatat lunas. Pengingat berikutnya tidak akan muncul." };
+  return { pesan: k.t.lunas };
 }
 
 export async function batalkanInvoice(_: HasilInvoice, form: FormData): Promise<HasilInvoice> {
+  const k = await teksInvoice();
   const supabase = await createClient();
   const { error } = await supabase.rpc("batal_invoice", { p_id: String(form.get("invoice") ?? ""), p_alasan: String(form.get("alasan") ?? "") });
-  if (error) return { galat: GALAT(error.code, error.message, "Invoice belum dibatalkan. Coba lagi sebentar.") };
+  if (error) return { galat: GALAT(k, error.code, error.message, k.t.gagalBatal) };
   revalidatePath("/app/invoice");
-  return { pesan: "Invoice dibatalkan; jurnalnya sudah dibalik." };
+  return { pesan: k.t.dibatalkan };
 }
 
 /** Dipanggil saat pemilik membuka tautan wa.me pengingat: tandai terkirim (pesannya dikirim pemilik sendiri). */
@@ -102,14 +116,15 @@ export type HasilCocok = { cocok: BarisCocok[]; ragu: BarisRagu[]; kredit: numbe
 
 /** F4-06: cocokkan CSV mutasi (dibaca di peramban) dengan invoice terbit. Belum melunasi apa pun. */
 export async function cocokkanMutasi(_: HasilCocok, form: FormData): Promise<HasilCocok> {
+  const k = await teksInvoice();
   const teks = String(form.get("csv") ?? "");
-  if (!teks.trim()) return { galat: "Pilih berkas CSV mutasi dulu." };
-  if (teks.length > 2_000_000) return { galat: "Berkas terlalu besar. Unduh mutasi per bulan saja." };
+  if (!teks.trim()) return { galat: k.t.pilihCsv };
+  if (teks.length > 2_000_000) return { galat: k.t.csvBesar };
   const r = uraiMutasiCsv(teks);
-  if ("galat" in r) return { galat: r.galat };
+  if ("galat" in r) return { galat: k.db(r.galat) };
   const supabase = await createClient();
   const { data, error } = await supabase.from("invoice").select("id, nomor, pelanggan, total, tanggal, jatuh_tempo").eq("status", "terbit").limit(1000);
-  if (error) return { galat: "Daftar invoice belum bisa dibaca. Coba lagi sebentar." };
+  if (error) return { galat: k.t.gagalBaca };
   const inv = (data ?? []).map((v) => ({ ...v, total: Number(v.total) })) as InvoiceTerbuka[];
   const per = new Map(inv.map((v) => [v.id, v]));
   const h = cocokkan(r.baris, inv);
@@ -129,21 +144,22 @@ export async function cocokkanMutasi(_: HasilCocok, form: FormData): Promise<Has
 
 /** Lunasi semua yang cocok (cara transfer, tanggal mutasi) lewat tandai_lunas; yang ditolak dilaporkan. */
 export async function lunasDariMutasi(_: HasilCocok, form: FormData): Promise<HasilCocok> {
+  const k = await teksInvoice();
   let daftar: { invoice: string; nomor: string; tanggal: string }[];
   try {
     daftar = JSON.parse(String(form.get("daftar") ?? "[]"));
   } catch {
-    return { galat: "Daftar rusak. Cocokkan ulang." };
+    return { galat: k.t.rusak };
   }
-  if (!Array.isArray(daftar) || daftar.length === 0 || daftar.length > 500) return { galat: "Tidak ada yang dilunasi." };
+  if (!Array.isArray(daftar) || daftar.length === 0 || daftar.length > 500) return { galat: k.t.tidakAda };
   const supabase = await createClient();
   let n = 0;
   const gagal: string[] = [];
   for (const d of daftar) {
     const { error } = await supabase.rpc("tandai_lunas", { p_id: String(d.invoice), p_cara: "transfer", p_tanggal: String(d.tanggal) });
-    if (error) gagal.push(`${d.nomor}: ${error.code === "22023" || error.code === "P0002" ? error.message : "belum tercatat"}`);
+    if (error) gagal.push(`${d.nomor}: ${error.code === "22023" || error.code === "P0002" ? k.db(error.message) : k.t.belumTercatat}`);
     else n++;
   }
   revalidatePath("/app/invoice");
-  return { selesai: `${n} invoice tercatat lunas lewat transfer.`, gagal };
+  return { selesai: isiTeks(k.t.selesai, { n }), gagal };
 }
