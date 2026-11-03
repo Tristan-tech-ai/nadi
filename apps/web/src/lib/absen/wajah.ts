@@ -29,6 +29,26 @@ export function yawDariLandmark(hidungX: number, pipiAX: number, pipiBX: number)
   return Math.max(-1, Math.min(1, ((hidungX - kiri) / lebar - 0.5) * 2));
 }
 
+/** Bentuk hasil Face Landmarker detectForVideo yang dipakai Nadi (hanya x landmark dan skor blendshape). */
+export type HasilDeteksi = {
+  faceLandmarks: { x: number }[][];
+  faceBlendshapes: { categories: { categoryName: string; score: number }[] }[];
+};
+
+/** Indeks landmark Face Mesh: ujung hidung dan kedua tepi pipi (docs/research/absen-landmark.md). */
+export const TITIK = { hidung: 1, pipiA: 234, pipiB: 454 } as const;
+
+/** Ringkas satu hasil deteksi menjadi Bingkai: jumlah wajah, rata-rata kedip kedua mata, dan yaw dari hidung di antara pipi. */
+export function bingkaiDari(h: HasilDeteksi): Bingkai {
+  const muka = h.faceLandmarks[0];
+  const skor = (n: string) => h.faceBlendshapes[0]?.categories.find((c) => c.categoryName === n)?.score ?? 0;
+  return {
+    wajah: h.faceLandmarks.length,
+    kedip: (skor("eyeBlinkLeft") + skor("eyeBlinkRight")) / 2,
+    yaw: muka ? yawDariLandmark(muka[TITIK.hidung].x, muka[TITIK.pipiA].x, muka[TITIK.pipiB].x) : 0,
+  };
+}
+
 /** Kedip: mata terbuka, lalu tertutup, lalu terbuka lagi (urutan wajib). */
 function adaKedip(b: Bingkai[]): boolean {
   let tahap = 0;

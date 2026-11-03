@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   // Gerbang loop membangun ke folder terpisah (NEXT_DIST_DIR=.next-gate) agar tidak menimpa build lokal untuk e2e.
   ...(process.env.NEXT_DIST_DIR ? { distDir: process.env.NEXT_DIST_DIR } : {}),
   cacheComponents: true,
+  // Q-20: penanda uji cek wajah selalu terdefinisi saat build ("0" kecuali build lokal e2e menyetel 1), sehingga cabang uji di
+  // cek-wajah.tsx dihapus minifier di produksi (docs bawaan Next 05-config/01-next-config-js/env.md). Vercel tidak pernah menyetelnya.
+  env: { NEXT_PUBLIC_NADI_UJI_WAJAH: process.env.NEXT_PUBLIC_NADI_UJI_WAJAH === "1" ? "1" : "0" },
   // Header keamanan untuk service worker (docs bawaan Next 02-guides/progressive-web-apps.md).
   async headers() {
     return [

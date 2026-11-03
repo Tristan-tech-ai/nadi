@@ -31,7 +31,9 @@ if [ -f package.json ] && [ -d apps/web ]; then
   step lint pnpm -s lint
   step tipe pnpm -s typecheck
   step unit pnpm -s test
-  [ $CEPAT = 1 ] || step build env NEXT_DIST_DIR=.next-gate NEXT_PUBLIC_SUPABASE_URL=https://izyesrryiljitpusaqvf.supabase.co NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=placeholder-build pnpm -s build
+  [ $CEPAT = 1 ] || step build env NEXT_DIST_DIR=.next-gate NEXT_PUBLIC_SUPABASE_URL=https://izyesrryiljitpusaqvf.supabase.co NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=placeholder-build NEXT_PUBLIC_NADI_UJI_WAJAH= pnpm -s build
+  # Q-20: penanda uji cek wajah tidak boleh ada di JS hasil build tanpa NEXT_PUBLIC_NADI_UJI_WAJAH=1 (setara build Vercel).
+  [ $CEPAT = 1 ] || step uji-wajah bash -c '! grep -rlq __nadiUjiWajah apps/web/.next-gate/static'
 fi
 
 OK=true; for r in "${RES[@]}"; do [ "$r" = "ok" ] || OK=false; done

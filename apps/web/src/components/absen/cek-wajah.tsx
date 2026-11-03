@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BATAS, nilaiWajah, yawDariLandmark, type Arah, type Bingkai, type Penilaian } from "@/lib/absen/wajah";
+import { BATAS, bingkaiDari, nilaiWajah, type Arah, type Bingkai, type HasilDeteksi, type Penilaian } from "@/lib/absen/wajah";
 import { isiTeks } from "@/lib/i18n/isi-teks";
 import type { Kamus } from "@/lib/i18n/kamus";
 
@@ -9,6 +9,9 @@ import type { Kamus } from "@/lib/i18n/kamus";
 const WASM = "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@1.2.0/wasm";
 const MODEL = "/mediapipe/face_landmarker.task";
 const BATAS_WAKTU_MS = 15_000;
+// Q-20: hanya build lokal e2e (next.config env). Di produksi nilainya "0", sehingga cabang uji dihapus saat build.
+const UJI_WAJAH = process.env.NEXT_PUBLIC_NADI_UJI_WAJAH === "1";
+type SumberUji = Record<Arah, HasilDeteksi[]>;
 
 /** Kamera depan + tantangan kedip dan menoleh. Memanggil `selesai` sekali: lulus, atau gagal dengan alasan. */
 export function CekWajah({ arah, selesai, teks: t }: { arah: Arah; selesai: (p: Penilaian) => void; teks: Kamus["absen"] }) {
@@ -34,6 +37,13 @@ export function CekWajah({ arah, selesai, teks: t }: { arah: Arah; selesai: (p: 
         const v = video.current!;
         v.srcObject = aliran;
         await v.play();
+        const uji = UJI_WAJAH ? (window as unknown as { __nadiUjiWajah?: SumberUji }).__nadiUjiWajah?.[arah] : undefined;
+        if (uji) {
+          // e2e lokal: hasil deteksi dari fixture landmark (sama dengan tes unit), lewat bingkaiDari dan nilaiWajah yang sama.
+          setStatus(isiTeks(t.kedipToleh, { arah: t[arah] }));
+          const b = uji.map(bingkaiDari);
+          return akhiri(nilaiWajah(b, arah, t));
+        }
         const { FaceLandmarker, FilesetResolver } = await import("@mediapipe/tasks-vision");
         const berkas = await FilesetResolver.forVisionTasks(WASM);
         const buat = (delegate: "GPU" | "CPU") => FaceLandmarker.createFromOptions(berkas, {
@@ -48,14 +58,7 @@ export function CekWajah({ arah, selesai, teks: t }: { arah: Arah; selesai: (p: 
         const langkah = () => {
           if (batal) return;
           const kini = performance.now();
-          const h = lm.detectForVideo(v, kini);
-          const muka = h.faceLandmarks[0];
-          const skor = (n: string) => h.faceBlendshapes[0]?.categories.find((c) => c.categoryName === n)?.score ?? 0;
-          bingkai.push({
-            wajah: h.faceLandmarks.length,
-            kedip: (skor("eyeBlinkLeft") + skor("eyeBlinkRight")) / 2,
-            yaw: muka ? yawDariLandmark(muka[1].x, muka[234].x, muka[454].x) : 0,
-          });
+          bingkai.push(bingkaiDari(lm.detectForVideo(v, kini)));
           const p = nilaiWajah(bingkai, arah, t);
           if (p.lulus) return akhiri(p);
           if (kini - mulai > BATAS_WAKTU_MS) return akhiri(bingkai.filter((b) => b.wajah === 1).length < BATAS.minBingkai ? p : { ...p, alasan: p.alasan || t.waktuHabis });

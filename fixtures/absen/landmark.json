@@ -1,0 +1,347 @@
+{
+ "_catatan": "Q-20: urutan hasil Face Landmarker sintetis (ringkas). bangun.ts memperluasnya ke 478 titik (hanya x; titik lain 0,5) dan blendshape eyeBlinkLeft/Right. Koordinat gambar kamera tidak dicerminkan: menoleh ke kiri orang = hidung ke kanan gambar.",
+ "menoleh-kiri": [
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.8
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.8
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.66,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.66,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.66,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.66,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  }
+ ],
+ "menoleh-kanan": [
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.8
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.8
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.34,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.34,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.34,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.34,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  }
+ ],
+ "foto-statis": [
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 1,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  }
+ ],
+ "dua-wajah": [
+  {
+   "wajah": 2,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 2,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 2,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 2,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 2,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 2,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 2,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 2,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 2,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 2,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 2,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  },
+  {
+   "wajah": 2,
+   "hidung": 0.5,
+   "pipiA": 0.3,
+   "pipiB": 0.7,
+   "kedip": 0.05
+  }
+ ]
+}
