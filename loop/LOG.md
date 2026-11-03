@@ -244,3 +244,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 1 Nov 2026 tick 230: F5-01 migrasi mata (tes SQL 18/18), konfigurasi model_mata, eval-mata tanpa ID model di kode.
 - 1 Nov 2026 tick 231: F5-01 Mata done (e2e produksi 91,7%); wajib 71/76.
 - 1 Nov 2026 tick 232: F5-02 migrasi peta_usaha (Broadcast dari database), tes SQL 12/12, siaran terbukti tiba.
+- 3 Nov 2026 tick 233-234: F5-02 done (Peta Usaha langsung, prod 2/2; perbaikan env CRLF), /panduan per peran; wajib 72/76.

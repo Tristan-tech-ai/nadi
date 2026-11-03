@@ -793,8 +793,10 @@
    "accept": "denah demo menampilkan status meja/rak secara realtime (Broadcast)",
    "how": "",
    "blocked_by": "F5-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-03T19:04:17",
+   "result": "commit c850e90+0ac4a20+3728eca (prod 3728eca READY); migrasi peta_usaha sidik 150a26cb (88), tes SQL 12/12; Broadcast dari database (trigger siar_peta topik privat peta:<pid> + kebijakan realtime.messages pemilik/admin; demo topik publik peta-demo:<kunci> + simulasi cron tiap menit); e2e/peta.spec.ts produksi 2/2: denah demo berubah sendiri tanpa muat ulang, denah privat menerima catat_mata dari klien lain; axe bersih 390/1440 terang/gelap; perbaikan env CRLF (tes env 3/3, merah dulu)"
   },
   {
    "id": "F5-03",
