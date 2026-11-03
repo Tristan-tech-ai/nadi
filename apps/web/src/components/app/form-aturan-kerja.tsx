@@ -4,15 +4,19 @@ import { useActionState, useRef, useState, type FormEvent } from "react";
 import { CheckCircleIcon } from "@phosphor-icons/react";
 import { simpanAturanKerja, type HasilAturanKerja } from "@/app/app/perusahaan/actions";
 import { Tombol } from "@/components/ui/tombol";
-import { kalimatDampak, perluLembarDampak, POLA_KERJA, type PolaKerja } from "@/lib/gaji/pola-kerja";
+import { perluLembarDampak, POLA_KERJA, type PolaKerja } from "@/lib/gaji/pola-kerja";
+import { isiTeks } from "@/lib/i18n/isi-teks";
+import type { Kamus } from "@/lib/i18n/kamus";
 
-type Props = { pola: PolaKerja; tersimpan: boolean; diaturSendiri: boolean; bisaUbah: boolean; lemburLibur: number; slip: number };
+type Props = { pola: PolaKerja; tersimpan: boolean; diaturSendiri: boolean; bisaUbah: boolean; lemburLibur: number; slip: number; teks: Kamus["aturanKerja"] };
 
 /**
  * Dua pilihan besar (bukan dropdown) dan satu tombol utama. Bila pola berubah dan usaha sudah punya lembur libur atau slip,
  * lembar bawah menjelaskan dampaknya dengan jumlah nyata sebelum menyimpan (tanpa dialog bawaan browser, S52).
  */
-export function FormAturanKerja({ pola, tersimpan, diaturSendiri, bisaUbah, lemburLibur, slip }: Props) {
+export function FormAturanKerja({ pola, tersimpan, diaturSendiri, bisaUbah, lemburLibur, slip, teks: t }: Props) {
+  const judulPola = (k: PolaKerja) => (k === "5_hari" ? t.judul5 : t.judul6);
+  const ketPola = (k: PolaKerja) => (k === "5_hari" ? t.ket5 : t.ket6);
   const [pilihan, setPilihan] = useState<PolaKerja>(pola);
   const [sendiri, setSendiri] = useState(diaturSendiri);
   const lembar = useRef<HTMLDialogElement>(null);
@@ -34,10 +38,10 @@ export function FormAturanKerja({ pola, tersimpan, diaturSendiri, bisaUbah, lemb
   const hasil = h && ("galat" in h || h.pola === pilihan) ? h : null;
 
   return (
-    <form action={aksi} onSubmit={kirim} aria-label="Aturan kerja" className="mt-1">
-      <p className="text-sm text-tinta-2">Usahamu bekerja 6 hari seminggu (7 jam sehari) atau 5 hari (8 jam sehari).</p>
+    <form action={aksi} onSubmit={kirim} aria-label={t.judul} className="mt-1">
+      <p className="text-sm text-tinta-2">{t.ket}</p>
       <fieldset disabled={!bisaUbah} className="mt-4 grid gap-3">
-        <legend className="sr-only">Pola kerja usaha</legend>
+        <legend className="sr-only">{t.legend}</legend>
         {(Object.keys(POLA_KERJA) as PolaKerja[]).map((k) => {
           const dipakai = k === pola;
           const dipilih = k === pilihan;
@@ -49,26 +53,26 @@ export function FormAturanKerja({ pola, tersimpan, diaturSendiri, bisaUbah, lemb
             >
               <input type="radio" name="pola" value={k} checked={dipilih} onChange={() => setPilihan(k)} className="mt-0.5 size-5 shrink-0 accent-[var(--tinta)]" />
               <span className="grid gap-1">
-                <span className="font-semibold">{POLA_KERJA[k].judul}</span>
-                <span className="text-sm text-tinta-2">{POLA_KERJA[k].keterangan}</span>
+                <span className="font-semibold">{judulPola(k)}</span>
+                <span className="text-sm text-tinta-2">{ketPola(k)}</span>
                 {dipakai && (
                   <span className="inline-flex items-center gap-1 text-sm font-semibold text-daun" data-testid="dipakai-sekarang">
-                    <CheckCircleIcon size={18} weight="fill" aria-hidden /> dipakai sekarang
+                    <CheckCircleIcon size={18} weight="fill" aria-hidden /> {t.dipakai}
                   </span>
                 )}
                 {dipakai && !tersimpan && (
-                  <span className="text-sm text-tinta-2">Bawaan Nadi untuk warung dan toko. Ganti bila usahamu libur 2 hari seminggu.</span>
+                  <span className="text-sm text-tinta-2">{t.bawaan}</span>
                 )}
               </span>
             </label>
           );
         })}
-        <p className="text-sm text-tinta-2">Mengikuti PP 35/2021 Pasal 21 dan 22 serta PP 36/2021 Pasal 17. Total tetap 40 jam seminggu.</p>
+        <p className="text-sm text-tinta-2">{t.dasar}</p>
         <label className="flex items-start gap-3 text-sm">
           <input type="checkbox" name="diatur_sendiri" checked={sendiri} onChange={(e) => setSendiri(e.target.checked)} className="mt-0.5 size-5 shrink-0 accent-[var(--tinta)]" />
           <span className="grid gap-1">
-            <span>Jam kerja kami diatur sendiri di perjanjian kerja atau peraturan perusahaan</span>
-            {sendiri && <span className="text-tinta-2">Peringatan jadwal tetap tampil, tetapi hanya batas lembur yang menghentikan penyimpanan.</span>}
+            <span>{t.diaturSendiri}</span>
+            {sendiri && <span className="text-tinta-2">{t.diaturSendiriKet}</span>}
           </span>
         </label>
       </fieldset>
@@ -76,12 +80,12 @@ export function FormAturanKerja({ pola, tersimpan, diaturSendiri, bisaUbah, lemb
       {bisaUbah ? (
         <div className="mt-4 flex flex-wrap items-center gap-3">
           {/* Tombol kedua: di /app/perusahaan tombol utama milik Nyalakan pemberitahuan (satu tombol utama per layar, S22). */}
-          <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? "Menyimpan..." : "Simpan aturan kerja"}</Tombol>
+          <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? t.menyimpan : t.simpan}</Tombol>
           {hasil && "pesan" in hasil && <p role="status" className="text-sm text-daun" data-testid="aturan-kerja-hasil">{hasil.pesan}</p>}
           {hasil && "galat" in hasil && <p role="alert" className="text-sm text-cap" data-testid="aturan-kerja-galat">{hasil.galat}</p>}
         </div>
       ) : (
-        <p className="mt-4 text-sm text-tinta-2" data-testid="aturan-kerja-baca">Hanya pemilik yang bisa mengubah aturan kerja. Kamu melihatnya saja.</p>
+        <p className="mt-4 text-sm text-tinta-2" data-testid="aturan-kerja-baca">{t.hanyaPemilik}</p>
       )}
 
       {bisaUbah && (
@@ -91,13 +95,13 @@ export function FormAturanKerja({ pola, tersimpan, diaturSendiri, bisaUbah, lemb
           data-testid="lembar-dampak"
           className="mx-auto mb-0 mt-auto w-full max-w-none rounded-t-[var(--radius-lembar)] bg-kertas p-5 text-tinta backdrop:bg-tinta/40 sm:mb-auto sm:max-w-lg sm:rounded-[var(--radius-lembar)]"
         >
-          <h3 id="judul-dampak-pola" className="text-lg font-semibold">Ganti ke {hari} hari seminggu?</h3>
+          <h3 id="judul-dampak-pola" className="text-lg font-semibold">{isiTeks(t.gantiJudul, { hari })}</h3>
           <ul className="mt-3 grid list-disc gap-2 pl-5 text-sm">
-            {kalimatDampak(pilihan, lemburLibur).map((k) => <li key={k}>{k}</li>)}
+            {[lemburLibur > 0 ? isiTeks(t.dampakAda, { n: lemburLibur }) : t.dampakBelum, isiTeks(t.dampakMulai, { hari: POLA_KERJA[pilihan].hari }), t.dampakSlip].map((k) => <li key={k}>{k}</li>)}
           </ul>
           <div className="mt-5 flex flex-wrap gap-2">
-            <Tombol type="submit" data-konfirmasi="ya" disabled={sibuk}>{sibuk ? "Menyimpan..." : `Ganti ke ${hari} hari`}</Tombol>
-            <Tombol ragam="teks" onClick={() => lembar.current?.close()}>Batal</Tombol>
+            <Tombol type="submit" data-konfirmasi="ya" disabled={sibuk}>{sibuk ? t.menyimpan : isiTeks(t.gantiTombol, { hari })}</Tombol>
+            <Tombol ragam="teks" onClick={() => lembar.current?.close()}>{t.batal}</Tombol>
           </div>
         </dialog>
       )}

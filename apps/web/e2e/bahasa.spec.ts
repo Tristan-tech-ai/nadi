@@ -80,6 +80,8 @@ async function masuk(page: Page) {
 
 test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan Lempar berbahasa Inggris @bahasa-akun", async ({ browser }) => {
   test.skip(!E.E2E_SANDI, "butuh .env.e2e.local");
+  // Delapan layar aplikasi diperiksa berurutan (pindai teks + axe), jadi batas 30 dtk bawaan tidak cukup.
+  test.setTimeout(120_000);
   const k1 = await browser.newContext();
   const p1 = await k1.newPage();
   await masuk(p1);
@@ -144,6 +146,15 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
   const axeOrang = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeOrang.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
+  // Usahamu mode Inggris: daftar usaha, pemberitahuan, aturan kerja, aturan izin, keputusan otomatis, tablet, AI, alur.
+  await p1.goto("/app/perusahaan");
+  await expect(p1.getByRole("heading", { level: 1, name: "Your business" })).toBeVisible();
+  await expect(p1.getByRole("heading", { level: 2, name: "Work rules" })).toBeVisible();
+  await expect(p1.getByTestId("pemberitahuan")).not.toHaveAttribute("data-keadaan", "memeriksa");
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
+  const axeUsaha = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axeUsaha.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
   // Sesi baru tanpa cookie bahasa: pilihan datang dari akun.
   const k2 = await browser.newContext();

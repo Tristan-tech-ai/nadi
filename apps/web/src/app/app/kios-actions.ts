@@ -1,5 +1,7 @@
 "use server";
 
+import { ambilKamus } from "@/lib/i18n/kamus";
+import { bahasaAplikasi } from "@/lib/i18n/server";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
 import { tautanTablet } from "@/lib/absen/kios";
@@ -13,7 +15,7 @@ export async function buatTautanTablet(_: HasilTautan, form: FormData): Promise<
   const nama = String(form.get("nama") ?? "").trim().slice(0, 40) || "Tablet";
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("buat_token_kios", { p_nama: nama });
-  if (error || !data) return { galat: "Tautan tablet gagal dibuat. Hanya pemilik atau admin yang bisa membuatnya." };
+  if (error || !data) return { galat: ambilKamus(await bahasaAplikasi()).tablet.gagal };
   revalidatePath("/app/perusahaan");
   return { tautan: tautanTablet(asalTautan(await headers()), (data as { token: string }).token), nama };
 }

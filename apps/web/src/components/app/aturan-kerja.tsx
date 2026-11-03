@@ -1,5 +1,7 @@
 import { FormAturanKerja } from "@/components/app/form-aturan-kerja";
 import { polaSah, POLA_BAWAAN } from "@/lib/gaji/pola-kerja";
+import { ambilKamus } from "@/lib/i18n/kamus";
+import { bahasaAplikasi } from "@/lib/i18n/server";
 import { bacaSesi } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 
@@ -16,12 +18,14 @@ export async function AturanKerja() {
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("aturan_kerja");
   if (error?.code === "42501") return null;
+  const bahasa = await bahasaAplikasi(sesi.bahasa);
+  const t = ambilKamus(bahasa).aturanKerja;
   const a = (data ?? null) as Aturan | null;
   return (
-    <section className="mt-10 border-t border-garis pt-6" aria-labelledby="judul-aturan-kerja" data-testid="aturan-kerja">
-      <h2 id="judul-aturan-kerja" className="text-lg font-semibold">Aturan kerja</h2>
+    <section className="mt-10 border-t border-garis pt-6" aria-labelledby="judul-aturan-kerja" data-testid="aturan-kerja" lang={bahasa}>
+      <h2 id="judul-aturan-kerja" className="text-lg font-semibold">{t.judul}</h2>
       {!a ? (
-        <p role="alert" className="mt-2 text-sm text-cap">Aturan kerja belum terbaca. Muat ulang halaman sebentar lagi.</p>
+        <p role="alert" className="mt-2 text-sm text-cap">{t.gagalBaca}</p>
       ) : (
         <FormAturanKerja
           pola={polaSah(a.pola_kerja) ? a.pola_kerja : POLA_BAWAAN}
@@ -30,6 +34,7 @@ export async function AturanKerja() {
           bisaUbah={a.bisa_ubah}
           lemburLibur={Number(a.lembur_libur)}
           slip={Number(a.slip)}
+          teks={t}
         />
       )}
     </section>
