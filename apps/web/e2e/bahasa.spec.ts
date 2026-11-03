@@ -132,3 +132,19 @@ for (const [jalur, judul, idJudul] of [["/en/privasi", "Privacy policy", "Kebija
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(idJudul);
   });
 }
+
+for (const [jalur, judul, idJudul, h2] of [["/en/tentang", "About Nadi", "Tentang Nadi", 3], ["/en/panduan", "Nadi guide", "Panduan Nadi", 4]] as const) {
+  test(`${jalur} berbahasa Inggris dan axe bersih`, async ({ page }, info) => {
+    test.skip(info.project.name !== "desktop", "sekali (desktop)");
+    await page.goto(jalur);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(judul);
+    await expect(page.locator("main h2")).toHaveCount(h2);
+    expect(await page.locator("main").innerText()).not.toMatch(/\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau)\b/i);
+    await expect(page.getByRole("contentinfo").getByRole("link", { name: "Guide by role" })).toHaveAttribute("href", "/en/panduan");
+    const r = await new AxeBuilder({ page }).analyze();
+    expect(r.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+    await page.getByTestId("pemilih-bahasa").click();
+    await page.waitForURL((u) => u.pathname === jalur.replace("/en", ""));
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(idJudul);
+  });
+}

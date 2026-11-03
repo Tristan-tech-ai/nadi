@@ -4,8 +4,8 @@ import { LogoNadi } from "@/components/ui/logo";
 import { awalanJalur, type Bahasa } from "@/lib/i18n/bahasa";
 import { ambilKamus } from "@/lib/i18n/kamus";
 
-// Kepala dan kaki situs publik (landing dan halaman pendukung D-15), dua bahasa (I-02). Halaman pendukung versi Inggris
-// menyusul di I-03; sampai itu tautannya menuju versi Indonesia.
+// Kepala dan kaki situs publik (landing dan halaman pendukung D-15), dua bahasa (I-02, I-03). Tautan ke halaman
+// yang punya versi Inggris memakai awalanJalur; demo, masuk, dan daftar tetap berbahasa Indonesia.
 export function KepalaSitus({ bahasa = "id" }: { bahasa?: Bahasa }) {
   const k = ambilKamus(bahasa).kepala;
   const akar = awalanJalur(bahasa) || "/";
@@ -14,7 +14,7 @@ export function KepalaSitus({ bahasa = "id" }: { bahasa?: Bahasa }) {
     { href: `${akar}#peran`, label: k.nav.peran },
     { href: `${awalanJalur(bahasa)}/harga`, label: k.nav.harga },
     { href: `${awalanJalur(bahasa)}/keamanan`, label: k.nav.keamanan },
-    { href: "/panduan", label: k.nav.panduan },
+    { href: `${awalanJalur(bahasa)}/panduan`, label: k.nav.panduan },
   ];
   return (
     <header className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-5 pt-6">
@@ -50,9 +50,9 @@ export function KakiSitus({ bahasa = "id" }: { bahasa?: Bahasa }) {
           <p className="font-semibold text-tinta">{k.produk}</p>
           <Link href="/demo" className="hover:text-tinta">{k.contohMakanan}</Link>
           <Link href="/demo/toko" className="hover:text-tinta">{k.contohToko}</Link>
-          <Link href="/panduan" className="hover:text-tinta">{k.panduan}</Link>
+          <Link href={`${awalanJalur(bahasa)}/panduan`} className="hover:text-tinta">{k.panduan}</Link>
           <Link href={`${awalanJalur(bahasa)}/harga`} className="hover:text-tinta">{k.harga}</Link>
-          <Link href="/tentang" className="hover:text-tinta">{k.tentang}</Link>
+          <Link href={`${awalanJalur(bahasa)}/tentang`} className="hover:text-tinta">{k.tentang}</Link>
         </nav>
         <nav aria-label={k.akun} className="flex flex-col gap-2">
           <p className="font-semibold text-tinta">{k.akun}</p>

@@ -33,6 +33,7 @@ describe("tujuan pemilih bahasa", () => {
     expect(tujuanPemilih("/harga", "en")).toBe("/en/harga");
     expect(tujuanPemilih("/keamanan", "en")).toBe("/en/keamanan");
     expect(tujuanPemilih("/privasi", "en")).toBe("/en/privasi");
-    expect(tujuanPemilih("/tentang", "en")).toBe("/en");
+    expect(tujuanPemilih("/tentang", "en")).toBe("/en/tentang");
+    expect(tujuanPemilih("/demo", "en")).toBe("/en");
   });
 });

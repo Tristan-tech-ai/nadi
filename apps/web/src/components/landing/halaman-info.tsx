@@ -12,7 +12,7 @@ export function HalamanInfo({ judul, pengantar, draf, children, bahasa = "id" }:
         {pengantar && <p className="mt-4 max-w-2xl text-lg text-tinta-2">{pengantar}</p>}
         {draf && (
           <p className="mt-6 max-w-2xl border-l-4 border-cap pl-4 text-sm text-tinta" role="note">
-            <span className="font-bold">Draf.</span> {draf}
+            <span className="font-bold">{bahasa === "en" ? "Draft." : "Draf."}</span> {draf}
           </p>
         )}
         <div className="isi-info mt-10 max-w-3xl">{children}</div>
