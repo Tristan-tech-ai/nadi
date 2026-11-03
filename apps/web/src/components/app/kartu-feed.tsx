@@ -3,8 +3,9 @@
 import { startTransition, useActionState, useEffect, useRef, useState, type FormEvent } from "react";
 import { putuskan, type HasilPutusan } from "@/app/app/actions";
 import { useCatatPutusan } from "@/components/app/halaman-feed";
-import { Cap } from "@/components/ui/cap";
-import { KartuUsulan, type Usulan } from "@/components/ui/kartu-usulan";
+import { Cap, type JenisCap } from "@/components/ui/cap";
+import { KartuUsulan, TEKS_KARTU_ID, type TeksKartu, type Usulan } from "@/components/ui/kartu-usulan";
+import type { Bahasa } from "@/lib/i18n/bahasa";
 import { Tombol } from "@/components/ui/tombol";
 
 /** Lama jendela Batalkan sebelum keputusan dikirim (D-12, NN/g: aksi berulang = batalkan yang mencolok, bukan dialog). */
@@ -17,7 +18,8 @@ type Tertunda = { setuju: boolean; sampai: number; dikirim?: boolean };
  * keputusan baru dikirim setelah jendela habis. Kartu berikutnya naik ke tempat jempol yang sama dan mendapat fokus.
  * Tanpa JavaScript tetap berupa formulir biasa yang langsung mengirim.
  */
-export function KartuFeed({ usulanId, usulan }: { usulanId: string; usulan: Usulan }) {
+export function KartuFeed({ usulanId, usulan, teks = TEKS_KARTU_ID, cap, bahasa = "id" }: { usulanId: string; usulan: Usulan; teks?: TeksKartu; cap?: Partial<Record<JenisCap, string>>; bahasa?: Bahasa }) {
+  const isiLang = bahasa === "id" ? undefined : "id";
   const [hasil, aksi, sibuk] = useActionState<HasilPutusan, FormData>(putuskan, {});
   const [tertunda, setTertunda] = useState<Tertunda | null>(null);
   const [sisa, setSisa] = useState(0);
@@ -92,13 +94,13 @@ export function KartuFeed({ usulanId, usulan }: { usulanId: string; usulan: Usul
       <div ref={(el) => { kartu.current = el; }}>
         <article className="flex min-h-14 items-center gap-3 rounded-[var(--radius-kartu)] border border-garis bg-kertas px-4 py-2 text-sm" data-testid="kartu-diputuskan" data-tersimpan={hasil.status ? "ya" : "tidak"}>
           <p role="status" className="flex min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1" data-testid="hasil-putusan">
-            <span className="cap-turun"><Cap jenis={status} /></span>
-            <span className="min-w-0 truncate font-semibold">{usulan.judul}</span>
-            <span className="text-tinta-2">{hasil.pesan ?? (tertunda?.setuju ? "Disetujui." : "Ditolak.")}</span>
+            <span className="cap-turun"><Cap jenis={status} label={cap?.[status]} /></span>
+            <span className="min-w-0 truncate font-semibold" lang={isiLang}>{usulan.judul}</span>
+            <span className="text-tinta-2">{hasil.pesan ?? (tertunda?.setuju ? teks.disetujui : teks.ditolak)}</span>
           </p>
           {tertunda && !tertunda.dikirim && !hasil.status ? (
             <button type="button" onClick={batal} className="shrink-0 rounded-[var(--radius-isian)] px-3 py-2 font-semibold underline underline-offset-4" data-testid="batalkan-putusan">
-              Batalkan <span className="angka text-tinta-2">({sisa})</span>
+              {teks.batalkan} <span className="angka text-tinta-2">({sisa})</span>
             </button>
           ) : null}
         </article>
@@ -110,15 +112,18 @@ export function KartuFeed({ usulanId, usulan }: { usulanId: string; usulan: Usul
     <div ref={(el) => { kartu.current = el; }}>
       <KartuUsulan
         usulan={usulan}
+        teks={teks}
+        bahasa={bahasa}
+        isiLang={isiLang}
         aksi={
           <form action={aksi} onSubmit={onSubmit} className="flex w-full flex-col gap-2">
             <input type="hidden" name="usulan" value={usulanId} />
             <div className="flex gap-2">
               <Tombol type="submit" name="keputusan" value="setuju" ukuran="besar" className="flex-1" data-aksi="setuju" disabled={sibuk}>
-                Setujui
+                {teks.setujui}
               </Tombol>
               <Tombol type="submit" name="keputusan" value="tolak" ukuran="besar" ragam="kedua" disabled={sibuk}>
-                Tolak
+                {teks.tolak}
               </Tombol>
             </div>
             {hasil.galat ? <p role="alert" className="text-sm text-cap">{hasil.galat}</p> : null}

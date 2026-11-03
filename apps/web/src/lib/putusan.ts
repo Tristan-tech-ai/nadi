@@ -3,9 +3,16 @@
 // keputusan yang baru diklik.
 
 export type HasilUlang = { status: "diterima" | "ditolak"; pesan: string } | { galat: string };
+export type TeksUlang = { ulangDiterima: string; ulangDitolak: string; ulangLain: string };
 
-export function hasilUlangPutusan(status: string): HasilUlang {
-  if (status === "diterima") return { status: "diterima", pesan: "Sudah disetujui sebelumnya. Tidak ada yang dicatat dua kali." };
-  if (status === "ditolak") return { status: "ditolak", pesan: "Sudah ditolak sebelumnya. Tidak ada yang dicatat dua kali." };
-  return { galat: "Usulan ini sudah tidak menunggu keputusan. Muat ulang Feed untuk melihat keadaannya." };
+const TEKS_ID: TeksUlang = {
+  ulangDiterima: "Sudah disetujui sebelumnya. Tidak ada yang dicatat dua kali.",
+  ulangDitolak: "Sudah ditolak sebelumnya. Tidak ada yang dicatat dua kali.",
+  ulangLain: "Usulan ini sudah tidak menunggu keputusan. Muat ulang Feed untuk melihat keadaannya.",
+};
+
+export function hasilUlangPutusan(status: string, t: TeksUlang = TEKS_ID): HasilUlang {
+  if (status === "diterima") return { status: "diterima", pesan: t.ulangDiterima };
+  if (status === "ditolak") return { status: "ditolak", pesan: t.ulangDitolak };
+  return { galat: t.ulangLain };
 }

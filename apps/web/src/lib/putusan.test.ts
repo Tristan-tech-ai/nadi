@@ -10,4 +10,10 @@ describe("putusan: kiriman ulang (Q-16)", () => {
     expect(hasilUlangPutusan("kedaluwarsa")).toHaveProperty("galat");
     expect(hasilUlangPutusan("otomatis")).toHaveProperty("galat");
   });
+  it("teks bawaan sama dengan kamus id", async () => {
+    const { kamusId } = await import("@/lib/i18n/kamus/id");
+    expect(hasilUlangPutusan("diterima")).toEqual({ status: "diterima", pesan: kamusId.putusan.ulangDiterima });
+    expect(hasilUlangPutusan("x")).toEqual({ galat: kamusId.putusan.ulangLain });
+    expect(hasilUlangPutusan("ditolak", kamusId.putusan)).toEqual(hasilUlangPutusan("ditolak"));
+  });
 });

@@ -3,6 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { HasilForm } from "@/lib/auth-pesan";
+import { ambilKamus, isiTeks, type Kamus } from "@/lib/i18n/kamus";
+import { bahasaAplikasi } from "@/lib/i18n/server";
 import { hasilUlangPutusan } from "@/lib/putusan";
 import { createClient } from "@/lib/supabase/server";
 
@@ -59,12 +61,13 @@ export async function pindahPerusahaan(form: FormData) {
 
 export type HasilPutusan = { galat?: string; pesan?: string; status?: "diterima" | "ditolak" };
 
-const PESAN_AKSI: Record<string, (n: number, lewat: number) => string> = {
-  "orang.buat": () => "Tersimpan. Satu orang ditambahkan.",
-  "orang.impor": (n, lewat) => `Tersimpan. ${n} orang ditambahkan${lewat ? `, ${lewat} dilewati karena sudah ada` : ""}.`,
-  "rekrut.pelamar": () => "Tersimpan sebagai pelamar.",
-  "absen.impor": (n) => `Tersimpan. ${n} baris absen masuk.`,
-  "uang.mutasi": (n) => `Tersimpan. ${n} transaksi rekening siap dicocokkan.`,
+type TeksPutusan = Kamus["putusan"];
+const PESAN_AKSI: Record<string, (t: TeksPutusan, n: number, lewat: number) => string> = {
+  "orang.buat": (t) => t.orangBuat,
+  "orang.impor": (t, n, lewat) => (lewat ? isiTeks(t.orangImporLewat, { n, lewat }) : isiTeks(t.orangImpor, { n })),
+  "rekrut.pelamar": (t) => t.pelamar,
+  "absen.impor": (t, n) => isiTeks(t.absenImpor, { n }),
+  "uang.mutasi": (t, n) => isiTeks(t.mutasi, { n }),
 };
 
 /** Setujui atau tolak satu usulan Feed lewat RPC putuskan_usulan (pemeriksaan peran ada di database). */
@@ -72,17 +75,18 @@ export async function putuskan(_: HasilPutusan, form: FormData): Promise<HasilPu
   const id = String(form.get("usulan") ?? "");
   const setuju = form.get("keputusan") === "setuju";
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("putuskan_usulan", { p_usulan: id, p_setuju: setuju });
-  if (error) return { galat: error.code === "42501" ? "Hanya pemilik atau admin yang bisa memutuskan." : "Nadi gagal menyimpan keputusan. Coba lagi sebentar." };
+  const [{ data, error }, bahasa] = await Promise.all([supabase.rpc("putuskan_usulan", { p_usulan: id, p_setuju: setuju }), bahasaAplikasi()]);
+  const t = ambilKamus(bahasa).putusan;
+  if (error) return { galat: error.code === "42501" ? t.hanyaPengelola : t.gagal };
   // Kiriman ulang (Q-16): usulan sudah diputuskan; tampilkan keputusan yang tersimpan, bukan tombol yang baru diklik.
-  if (data.sudah) return hasilUlangPutusan(String(data.status));
+  if (data.sudah) return hasilUlangPutusan(String(data.status), t);
   // Tanpa revalidatePath: kartu tetap tampil dengan cap hasilnya sampai Feed dimuat ulang, supaya keputusan terlihat.
-  if (!setuju) return { status: "ditolak", pesan: "Ditolak. Tidak ada yang dicatat." };
+  if (!setuju) return { status: "ditolak", pesan: t.ditolak };
   if (data.aksi === "dokumen.surat") {
     // Agenda didaftarkan trigger agenda_dari_usulan di transaksi yang sama (F4-03).
     const { data: ag } = await supabase.from("agenda_surat").select("nomor_agenda").eq("usulan_id", id).maybeSingle();
-    return { status: "diterima", pesan: ag ? `Tersimpan. Masuk agenda surat ${ag.nomor_agenda}.` : "Tersimpan. Surat bernomor sama sudah ada di agenda." };
+    return { status: "diterima", pesan: ag ? isiTeks(t.agenda, { nomor: ag.nomor_agenda }) : t.agendaSama };
   }
   const buat = PESAN_AKSI[data.aksi as string];
-  return { status: "diterima", pesan: buat ? buat(data.dibuat, data.dilewati) : "Tersimpan dan dicatat." };
+  return { status: "diterima", pesan: buat ? buat(t, data.dibuat, data.dilewati) : t.umum };
 }

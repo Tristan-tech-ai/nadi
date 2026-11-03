@@ -4,18 +4,12 @@ import { keluar } from "@/app/auth-actions";
 import { NavBawah } from "@/components/app/nav-bawah";
 import { PemilihBahasaApp } from "@/components/app/pemilih-bahasa-app";
 import { TandaNadi } from "@/components/ui/logo";
-import { KUKI_BAHASA, pilihBahasa } from "@/lib/i18n/bahasa";
 import { ambilKamus } from "@/lib/i18n/kamus";
-import { cookies } from "next/headers";
+import { bahasaAplikasi } from "@/lib/i18n/server";
 import { createClient } from "@/lib/supabase/server";
 import { bacaSesi } from "@/lib/sesi";
 
 // Kepala aplikasi: logo statis langsung tampil, nama perusahaan dan tombol keluar menyusul di balik Suspense.
-/** Bahasa aplikasi: pilihan di akun, lalu cookie perangkat, lalu Indonesia. Dipanggil hanya di balik Suspense. */
-async function bahasaAplikasi(sesiBahasa: string | null | undefined) {
-  return pilihBahasa(sesiBahasa, (await cookies()).get(KUKI_BAHASA)?.value);
-}
-
 async function NamaPerusahaan() {
   const sesi = await bacaSesi();
   if (!sesi?.perusahaanId) return null;

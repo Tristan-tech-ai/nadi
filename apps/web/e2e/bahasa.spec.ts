@@ -76,6 +76,22 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain", async (
   await expect(p1.getByRole("button", { name: "Sign out" })).toBeVisible();
   await expect(p1.getByRole("navigation", { name: "Main navigation" })).toBeVisible();
 
+  // I-03 (b): Feed mode Inggris. Teks yang ditulis Nadi dalam bahasa Indonesia (isi usulan, insight) bertanda lang="id"
+  // dan dikecualikan dari pemindaian; sisanya tidak boleh memuat kata Indonesia umum.
+  await expect(p1.getByRole("heading", { level: 1, name: "Today" })).toBeVisible();
+  await expect(p1.getByTestId("peran")).toHaveText("You are signed in as owner.");
+  const teksEn = await p1.locator("#isi").evaluate((el) => {
+    const salin = el.cloneNode(true) as HTMLElement;
+    salin.querySelectorAll('[lang="id"]').forEach((x) => x.remove());
+    document.body.appendChild(salin);
+    const t = salin.innerText;
+    salin.remove();
+    return t;
+  });
+  expect(teksEn).not.toMatch(/\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau|usulan|setujui|tolak)\b/i);
+  const axe = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
   // Sesi baru tanpa cookie bahasa: pilihan datang dari akun.
   const k2 = await browser.newContext();
   const p2 = await k2.newPage();
