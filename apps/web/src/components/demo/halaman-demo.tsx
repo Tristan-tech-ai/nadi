@@ -3,6 +3,7 @@ import { cacheLife } from "next/cache";
 import { Suspense } from "react";
 import { AlurNyata } from "@/components/app/alur-nyata";
 import { DaftarSarapan, type Sarapan } from "@/components/app/sarapan-data";
+import { PetaUsaha } from "@/components/app/peta-usaha";
 import { PutusanDemo } from "@/components/landing/putusan-demo";
 import { KartuUsulan } from "@/components/ui/kartu-usulan";
 import { LogoNadi } from "@/components/ui/logo";
@@ -109,6 +110,7 @@ async function IsiDemo({ kunci }: { kunci: "fnb" | "toko" }) {
                 </li>
               ))}
             </ul>
+            <PetaUsaha privat={false} muatAwal={kunci} judul={kunci === "toko" ? "Peta toko langsung" : "Peta warung langsung"} />
             {d.alur ? <AlurNyata invoice={d.alur.invoice} rekrut={d.alur.rekrut} /> : null}
           </>
         )}

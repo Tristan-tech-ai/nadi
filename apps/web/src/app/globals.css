@@ -138,6 +138,16 @@ body {
 
 /* Cincin fokus tinta: kontras >= 3:1 terhadap kertas terang dan gelap (WCAG 1.4.11 + 2.4.7). Kunyit di atas kertas terang
    hanya sekitar 1,9:1, jadi kunyit tetap untuk stabilo, bukan penanda fokus. */
+/* Denyut: satu titik per layar saat data realtime mengalir (DIRECTION 5); dimatikan oleh prefers-reduced-motion di bawah. */
+.denyut {
+  animation: denyut 2s ease-in-out infinite;
+}
+@keyframes denyut {
+  50% {
+    opacity: 0.35;
+  }
+}
+
 :focus-visible {
   outline: 2px solid var(--tinta);
   outline-offset: 2px;

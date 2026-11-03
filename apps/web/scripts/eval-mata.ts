@@ -1,7 +1,8 @@
 // Ukur akurasi Mata (F5-01) pada korpus fixtures/korpus/mata: RF-DETR nano lewat transformers.js + resep zona (src/lib/mata/resep.ts).
 // Jalankan dari apps/web:
 //   python -I scripts/korpus/mata.py <dir cuplikan>
-//   MODEL_MATA=<id model di public.konfigurasi kunci model_mata> TRANSFORMERS=<jalur node_modules/@huggingface/transformers/src/transformers.js> \n//     node scripts/eval-mata.ts <dir cuplikan> [dtype=q8]
+//   MODEL_MATA=<id model di public.konfigurasi kunci model_mata>
+//   TRANSFORMERS=<jalur node_modules/@huggingface/transformers/src/transformers.js> node scripts/eval-mata.ts <dir cuplikan> [dtype=q8]
 // Mencetak akurasi status meja per zona dan total, dengan dan tanpa histeresis, serta latensi rata-rata per cuplikan.
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
