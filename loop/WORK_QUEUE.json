@@ -2104,8 +2104,10 @@
    "accept": "daftar halaman dengan jumlah panggilan fungsi dan ukuran JS; pangkas yang tidak perlu; gerbang ukuran JS per halaman",
    "how": "docs/research/hemat-otomatis.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:35:13"
+   "status": "done",
+   "created": "2026-11-03T19:35:13",
+   "done": "2026-11-03T22:52:16",
+   "result": "098c41d + 36a4852: docs/quality/audit-js.md; proxy dipersempit ke jalur bersesi + '/' dengan cookie en (halaman publik statis tanpa fungsi); beranda 231 -> 164 KB, /app/perusahaan 265 -> 197 KB (klien Supabase Peta Usaha dimuat malas); anggaran JS di e2e/asap-produksi (merah sengaja ANGGARAN_JS_KALI=0.5: 6/6 gagal; normal 21/21 lulus di produksi termasuk bahasa)"
   },
   {
    "id": "B-01",
