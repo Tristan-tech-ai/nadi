@@ -63,7 +63,7 @@ async function teksTanpaId(page: Page) {
     return t;
   });
 }
-const KATA_ID = /\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau|usulan|setujui|tolak|berkas|lempar|izin|cuti|sakit|hari|pengajuan)\b/i;
+const KATA_ID = /\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau|usulan|setujui|tolak|berkas|lempar|izin|cuti|sakit|hari|pengajuan|gaji|lembur|potongan|orang|bulan)\b/i;
 
 async function masuk(page: Page) {
   await page.goto(`/masuk?next=${encodeURIComponent("/app")}`);
@@ -115,6 +115,14 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   expect(await teksTanpaId(p1)).not.toMatch(KATA_ID);
   const axeIzin = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeIzin.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
+  // Gaji mode Inggris: label khusus Indonesia tampil; istilah PPh 21/BPJS dan cadangan pesangon bertanda lang="id".
+  await p1.goto("/app/gaji");
+  await expect(p1.getByRole("heading", { level: 1, name: "Payroll" })).toBeVisible();
+  await expect(p1.getByTestId("khusus-indonesia")).toContainText("Indonesia only");
+  expect(await teksTanpaId(p1)).not.toMatch(KATA_ID);
+  const axeGaji = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axeGaji.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
   // Sesi baru tanpa cookie bahasa: pilihan datang dari akun.
   const k2 = await browser.newContext();
