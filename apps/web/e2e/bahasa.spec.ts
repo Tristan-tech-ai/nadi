@@ -63,7 +63,7 @@ async function teksTanpaId(page: Page) {
     return t;
   });
 }
-const KATA_ID = /\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau|usulan|setujui|tolak|berkas|lempar|izin|cuti|sakit|hari|pengajuan|gaji|lembur|potongan|orang|bulan)\b/i;
+const KATA_ID = /\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau|usulan|setujui|tolak|berkas|lempar|izin|cuti|sakit|hari|pengajuan|gaji|lembur|potongan|orang|bulan|jadwal|minggu|jam|menit|senin|selasa|rabu|kamis|jumat|sabtu|kebutuhan)\b/i;
 
 async function masuk(page: Page) {
   await page.goto(`/masuk?next=${encodeURIComponent("/app")}`);
@@ -123,6 +123,14 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   expect(await teksTanpaId(p1)).not.toMatch(KATA_ID);
   const axeGaji = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeGaji.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
+  // Jadwal mode Inggris (pemilik): nama hari, total jam, kebutuhan; nama orang dan topi bertanda data-pengguna.
+  await p1.goto("/app/jadwal");
+  await expect(p1.getByRole("heading", { level: 1, name: "Schedule" })).toBeVisible();
+  await expect(p1.getByRole("link", { name: "Next week" })).toBeVisible();
+  expect(await teksTanpaId(p1)).not.toMatch(KATA_ID);
+  const axeJadwal = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axeJadwal.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
   // Sesi baru tanpa cookie bahasa: pilihan datang dari akun.
   const k2 = await browser.newContext();
