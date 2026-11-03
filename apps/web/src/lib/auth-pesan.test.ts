@@ -26,3 +26,12 @@ describe("jalurAman", () => {
   it("backslash di mana pun ditolak", () => expect(jalurAman("/app\\..\\..\\jahat")).toBe("/app"));
   it("kueri dan fragmen internal dipertahankan", () => expect(jalurAman("/oauth/izinkan?client_id=a%2Fb&state=x#z")).toBe("/oauth/izinkan?client_id=a%2Fb&state=x#z"));
 });
+
+describe("pesan auth bahasa Inggris", () => {
+  it("kode dikenal dan pesan umum", async () => {
+    const { kamusEn } = await import("@/lib/i18n/kamus/en");
+    expect(pesanGalatAuth("invalid_credentials", kamusEn.authPesan)).toMatch(/does not match/);
+    expect(pesanGalatAuth("zzz", kamusEn.authPesan)).toMatch(/entries are kept/);
+    expect(cekIsianDaftar("made", "rahasia123", kamusEn.authPesan)).toMatch(/email/);
+  });
+});

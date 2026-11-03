@@ -7,8 +7,6 @@ export const metadata: Metadata = { title: "Daftar ke Nadi" };
 
 export default function Daftar() {
   return (
-    <KerangkaAuth judul="Buat akun" sub="Gratis untuk mulai. Setelah ini kamu memberi nama usahamu, lalu langsung bisa melempar berkas pertama.">
-      <FormAuth aksi={daftar} mode="daftar" />
-    </KerangkaAuth>
+    <KerangkaAuth isi={(t) => ({ judul: t.daftarJudul, sub: t.daftarSub, badan: <FormAuth aksi={daftar} mode="daftar" teks={t} /> })} />
   );
 }

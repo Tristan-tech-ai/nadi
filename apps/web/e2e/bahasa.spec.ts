@@ -54,8 +54,8 @@ test("landing: ganti ke English tanpa muat ulang, cookie diingat, format angka e
 
 /** Teks isi layar aplikasi tanpa bagian bertanda lang="id" (isi yang memang ditulis dalam bahasa Indonesia) dan tanpa
  *  data pengguna bertanda data-pengguna (nama orang, nama usaha). */
-async function teksTanpaId(page: Page) {
-  return page.locator("#isi").evaluate((el) => {
+async function teksTanpaId(page: Page, wadah = "#isi") {
+  return page.locator(wadah).evaluate((el) => {
     const salin = el.cloneNode(true) as HTMLElement;
     salin.querySelectorAll('[lang="id"], [data-pengguna]').forEach((x) => x.remove());
     document.body.appendChild(salin);
@@ -333,3 +333,17 @@ for (const [jalur, judul, idJudul, h2] of [["/en/tentang", "About Nadi", "Tentan
     await expect(page.getByRole("heading", { level: 1 })).toHaveText(idJudul);
   });
 }
+
+// I-03: layar sebelum masuk (masuk, daftar, masuk staf) mengikuti cookie bahasa perangkat; luring dua bahasa.
+test("sebelum masuk: masuk, daftar, staf, luring dalam bahasa Inggris dari cookie", async ({ page, context, baseURL }, info) => {
+  test.skip(info.project.name !== "desktop", "sekali (desktop)");
+  await context.addCookies([{ name: "nadi_bahasa", value: "en", url: baseURL ?? "http://localhost:3100" }]);
+  for (const [jalur, judul] of [["/masuk", "Sign in"], ["/daftar", "Create an account"], ["/masuk/staf", "Staff sign in"], ["/luring", "Sinyal sedang hilang"]] as const) {
+    await page.goto(jalur);
+    await expect(page.getByRole("heading", { level: 1, name: judul })).toBeVisible();
+    if (jalur !== "/luring") expect(barisIndonesia(await teksTanpaId(page, "main"))).toEqual([]);
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+  }
+  await expect(page.getByRole("heading", { level: 2, name: "The connection is gone" })).toBeVisible();
+});

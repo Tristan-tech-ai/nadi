@@ -6,8 +6,6 @@ export const metadata: Metadata = { title: "Masuk staf" };
 
 export default function MasukStaf() {
   return (
-    <KerangkaAuth judul="Masuk staf" sub="Pakai kode usaha, ID, dan PIN dari pemilik. Tidak perlu email.">
-      <FormStaf />
-    </KerangkaAuth>
+    <KerangkaAuth isi={(t) => ({ judul: t.stafJudul, sub: t.stafSub, badan: <FormStaf teks={t} /> })} />
   );
 }
