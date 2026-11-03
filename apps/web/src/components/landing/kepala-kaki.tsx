@@ -60,8 +60,8 @@ export function KakiSitus({ bahasa = "id" }: { bahasa?: Bahasa }) {
           <Link href="/masuk" className="hover:text-tinta">{k.masuk}</Link>
           <Link href="/masuk/staf" className="hover:text-tinta">{k.masukStaf}</Link>
           <Link href={`${awalanJalur(bahasa)}/keamanan`} className="hover:text-tinta">{k.keamanan}</Link>
-          <Link href="/privasi" className="hover:text-tinta">{k.privasi}</Link>
-          <Link href="/syarat" className="hover:text-tinta">{k.syarat}</Link>
+          <Link href={`${awalanJalur(bahasa)}/privasi`} className="hover:text-tinta">{k.privasi}</Link>
+          <Link href={`${awalanJalur(bahasa)}/syarat`} className="hover:text-tinta">{k.syarat}</Link>
         </nav>
       </div>
       <p className="mt-10">© 2026 Nadi</p>

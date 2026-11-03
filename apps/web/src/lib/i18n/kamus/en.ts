@@ -113,6 +113,33 @@ export const kamusEn: Kamus = {
       { judul: "What is not done yet", isi: ["There has been no outside security audit and no certification yet. Weekly backups to separate storage are being built. An official address for reporting security issues is being set up."] },
     ],
   },
+  privasiHalaman: {
+    metaJudul: "Nadi privacy policy",
+    metaDeskripsi: "What data Nadi collects, what for, where it is stored, and your rights over your data.",
+    judul: "Privacy policy",
+    pengantar: "What data Nadi keeps, what for, and what you can do with it.",
+    draf: "Written by the Nadi team from how the app actually works and not yet reviewed by a lawyer. Reference: Indonesian Law No. 27 of 2022 on Personal Data Protection (enacted 17 October 2022); its articles have not been matched one by one.",
+    bagian: [
+      { judul: "Who holds the data", isi: ["The business owner who signs up decides which employee, customer, and supplier data goes into Nadi. Nadi processes that data on behalf of the business, only to run the features in use."], daftar: [] },
+      { judul: "Data that is stored", isi: [], daftar: ["Account: email, name, and role in each business. Staff without email use an account made from the business code and staff ID.", "Employee data entered by the business: name, phone number, hat (work role), payroll data, and the last 4 digits of the ID number with its fingerprint.", "Files that are dropped (receipt photos, PDF, Excel) and what was read from them.", "Work events: attendance, leave, schedules, invoices, and decisions, with the time and who did them.", "The face check at clock-in is stored only as passed or not; face photos are neither stored nor uploaded.", "Interview voice recordings sent by applicants and their transcripts, only for the business that posted that job."] },
+      { judul: "What for and with whom", isi: ["Data is used for the features you see in the app. Data is not sold and not used for ads. Files that need AI reading are sent to the AI model provider through the Nadi server; long numbers such as bank account numbers are masked first where possible.", "Service providers in use: a database and file storage provider (data center in Singapore), a web hosting provider, and an AI model provider. Messages to employees or customers are sent from your own phone through WhatsApp, not by Nadi."], daftar: [] },
+      { judul: "How long it is kept", isi: ["Raw event logs are kept 90 days and audit logs 180 days, after which only summaries remain. Business data (people, payslips, invoices, journals) is kept while the business uses Nadi. The sample businesses at /demo contain made-up data and can be seen by anyone."], daftar: [] },
+      { judul: "Your rights", isi: ["You can view and correct your data in the app. To ask for a copy or deletion of data, the business owner contacts Nadi; the official address is being set up. Employees who want their data corrected or deleted contact the business owner first."], daftar: [] },
+    ],
+  },
+  syaratHalaman: {
+    metaJudul: "Nadi terms of service",
+    metaDeskripsi: "The rules for using Nadi during the trial.",
+    judul: "Terms of service",
+    pengantar: "The rules for using Nadi during the trial, in plain language.",
+    draf: "Written by the Nadi team and not yet reviewed by a lawyer. An official version will replace this page before the first bill.",
+    bagian: [
+      { judul: "Trial period", isi: ["During the trial every plan is free and nothing is billed. Features may change, and you will be told in the app before billing starts. No bill is created without your approval."], daftar: [] },
+      { judul: "Your responsibilities", isi: [], daftar: ["The data you enter is correct and you are allowed to use it, including employee data.", "You check suggestions before approving. Payroll, PPh 21 income tax, BPJS, and small business tax follow the official rules cited on screen, but still check them with your accountant.", "You keep passwords and PINs safe, and remove access for people who no longer work with you.", "Nadi must not be used to evade tax, hide employees, or discriminate against applicants."] },
+      { judul: "Nadi's responsibilities", isi: [], daftar: ["Keep each business's data separate and process it only for the features you use.", "Never make money decisions on your behalf.", "Tell you about outages or leaks that involve your data."] },
+      { judul: "Limits", isi: ["Nadi is a tool. During the trial the service is provided as is and may pause for repairs. Final decisions on payroll, tax, hiring, and payments remain with the business."], daftar: [] },
+    ],
+  },
   demo: {
     label: "Sample shopping receipt",
     judulAwal: "Record purchase of",

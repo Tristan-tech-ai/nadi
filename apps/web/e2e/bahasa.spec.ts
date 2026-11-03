@@ -117,3 +117,18 @@ test("keamanan dua bahasa: /en/keamanan berbahasa Inggris dan axe bersih", async
   await page.waitForURL((u) => u.pathname === "/keamanan");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Keamanan data");
 });
+
+for (const [jalur, judul, idJudul] of [["/en/privasi", "Privacy policy", "Kebijakan privasi"], ["/en/syarat", "Terms of service", "Syarat layanan"]]) {
+  test(`${jalur} berbahasa Inggris, tanda draf ada, axe bersih`, async ({ page }, info) => {
+    test.skip(info.project.name !== "desktop", "sekali (desktop)");
+    await page.goto(jalur);
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(judul);
+    await expect(page.getByRole("note")).toContainText("not yet reviewed by a lawyer");
+    expect(await page.locator("main").innerText()).not.toMatch(/\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau)\b/i);
+    const r = await new AxeBuilder({ page }).analyze();
+    expect(r.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+    await page.getByTestId("pemilih-bahasa").click();
+    await page.waitForURL((u) => u.pathname === jalur.replace("/en", ""));
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(idJudul);
+  });
+}

@@ -114,6 +114,33 @@ export const kamusId = {
       { judul: "Yang belum dilakukan", isi: ["Belum ada audit keamanan dari pihak luar dan belum ada sertifikasi. Cadangan mingguan ke penyimpanan terpisah sedang dibuat. Alamat resmi untuk melaporkan celah keamanan sedang disiapkan."] },
     ],
   },
+  privasiHalaman: {
+    metaJudul: "Kebijakan privasi Nadi",
+    metaDeskripsi: "Data apa yang dikumpulkan Nadi, untuk apa, di mana disimpan, dan hakmu atas datamu.",
+    judul: "Kebijakan privasi",
+    pengantar: "Data apa yang Nadi simpan, untuk apa, dan apa yang bisa kamu lakukan dengannya.",
+    draf: "Ditulis tim Nadi dari cara kerja aplikasi yang sebenarnya dan belum ditinjau ahli hukum. Rujukan: Undang-Undang Nomor 27 Tahun 2022 tentang Pelindungan Data Pribadi (ditetapkan 17 Oktober 2022); pasal-pasalnya belum dicocokkan satu per satu.",
+    bagian: [
+      { judul: "Siapa yang memegang data", isi: ["Pemilik usaha yang mendaftar menentukan data karyawan, pelanggan, dan pemasok apa yang masuk ke Nadi. Nadi memproses data itu atas nama usaha tersebut, hanya untuk menjalankan fitur yang dipakai."], daftar: [] },
+      { judul: "Data yang disimpan", isi: [], daftar: ["Akun: email, nama, dan peran di setiap usaha. Staf tanpa email memakai akun dengan kode usaha dan ID staf.", "Data karyawan yang dimasukkan usaha: nama, nomor HP, topi (peran kerja), data gaji, dan 4 digit akhir NIK beserta sidiknya.", "Berkas yang dilempar (foto nota, PDF, Excel) dan hasil bacaannya.", "Kejadian kerja: absen, izin, jadwal, tagihan, dan keputusan, dengan waktu dan pelakunya.", "Hasil cek wajah saat absen hanya berupa lulus atau tidak; foto wajah tidak disimpan dan tidak diunggah.", "Rekaman suara wawancara yang dikirim pelamar dan transkripnya, hanya untuk usaha yang membuka lowongan itu."] },
+      { judul: "Untuk apa dan dengan siapa", isi: ["Data dipakai untuk fitur yang kamu lihat di aplikasi. Data tidak dijual dan tidak dipakai untuk iklan. Berkas yang perlu dibaca AI dikirim ke penyedia model AI melalui server Nadi; angka panjang seperti nomor rekening disamarkan lebih dulu bila memungkinkan.", "Penyedia layanan yang dipakai: penyedia database dan penyimpanan berkas (pusat data Singapura), penyedia hosting web, dan penyedia model AI. Pesan ke karyawan atau pelanggan dikirim dari HP-mu sendiri lewat WhatsApp, bukan oleh Nadi."], daftar: [] },
+      { judul: "Berapa lama disimpan", isi: ["Log kejadian mentah disimpan 90 hari dan log audit 180 hari, lalu hanya ringkasannya yang tetap ada. Data usaha (orang, slip gaji, tagihan, jurnal) disimpan selama usaha memakai Nadi. Usaha contoh di /demo berisi data karangan dan bisa dilihat siapa saja."], daftar: [] },
+      { judul: "Hakmu", isi: ["Kamu bisa melihat dan membetulkan datamu di aplikasi. Untuk meminta salinan atau penghapusan data, pemilik usaha menghubungi Nadi; alamat resminya sedang disiapkan. Karyawan yang ingin datanya dibetulkan atau dihapus menghubungi pemilik usahanya lebih dulu."], daftar: [] },
+    ],
+  },
+  syaratHalaman: {
+    metaJudul: "Syarat layanan Nadi",
+    metaDeskripsi: "Aturan memakai Nadi selama masa uji.",
+    judul: "Syarat layanan",
+    pengantar: "Aturan memakai Nadi selama masa uji, dalam bahasa sehari-hari.",
+    draf: "Ditulis tim Nadi dan belum ditinjau ahli hukum. Versi resmi akan menggantikan halaman ini sebelum tagihan pertama.",
+    bagian: [
+      { judul: "Masa uji", isi: ["Selama masa uji semua paket gratis dan belum ada tagihan. Fitur bisa berubah, dan kamu akan diberi tahu di aplikasi sebelum tagihan mulai berlaku. Tidak ada tagihan yang dibuat tanpa persetujuanmu."], daftar: [] },
+      { judul: "Tanggung jawabmu", isi: [], daftar: ["Data yang kamu masukkan benar dan kamu berhak memakainya, termasuk data karyawan.", "Kamu memeriksa usulan sebelum menyetujui. Hitungan gaji, PPh 21, BPJS, dan pajak UMKM mengikuti aturan resmi yang dirujuk di layar, tetapi tetap periksa bersama akuntanmu.", "Kamu menjaga kata sandi dan PIN, dan mencabut akses orang yang sudah tidak bekerja.", "Nadi tidak boleh dipakai untuk menghindari pajak, menyembunyikan karyawan, atau mendiskriminasi pelamar."] },
+      { judul: "Tanggung jawab Nadi", isi: [], daftar: ["Menjaga data setiap usaha terpisah dan hanya memprosesnya untuk fitur yang kamu pakai.", "Tidak mengambil keputusan uang atas namamu.", "Memberi tahu bila ada gangguan atau kebocoran yang menyangkut datamu."] },
+      { judul: "Batas", isi: ["Nadi adalah alat bantu. Selama masa uji layanan diberikan apa adanya, dan bisa terhenti sementara untuk perbaikan. Keputusan akhir atas gaji, pajak, rekrutmen, dan pembayaran tetap milik usaha."], daftar: [] },
+    ],
+  },
   demo: {
     label: "Contoh nota belanja",
     judulAwal: "Catat belanja",
