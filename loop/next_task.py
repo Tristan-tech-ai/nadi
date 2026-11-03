@@ -68,7 +68,43 @@ def show(t):
     print(f"CARA: {t['how']}")
 
 
+def impor_asap(d, issues):
+    """H-03: issue GitHub berlabel asap yang terbuka menjadi tugas fix wajib FIX-ASAP-<nomor> (sekali per issue)."""
+    ada = {t["id"] for t in d["tasks"]}
+    baru = []
+    for i in issues:
+        tid = f"FIX-ASAP-{i['number']}"
+        if tid in ada:
+            continue
+        d["tasks"].append(dict(id=tid, fase="H", kind="fix", priority=1, size="s", wajib=True,
+                               title=f"Perbaiki: {i['title']}"[:120],
+                               accept=f"penyebab ditemukan dan diperbaiki; uji asap produksi (workflow asap.yml) lulus lagi; issue #{i['number']} ditutup dengan tautan run yang lulus",
+                               how=(i.get("body") or "")[:600], blocked_by="", status="ready", created=now()))
+        baru.append(tid)
+    return baru
+
+
+def tarik_asap(d):
+    """Ambil issue asap terbuka lewat gh (diam bila gh tidak ada atau jaringan gagal; loop tetap jalan)."""
+    if os.environ.get("NADI_TANPA_GH") == "1":
+        return []
+    import subprocess
+    try:
+        out = subprocess.run(["gh", "issue", "list", "--label", "asap", "--state", "open", "--json", "number,title,body", "--limit", "20"],
+                             capture_output=True, text=True, timeout=25, encoding="utf-8")
+        issues = json.loads(out.stdout or "[]") if out.returncode == 0 else []
+    except Exception:
+        return []
+    baru = impor_asap(d, issues)
+    if baru:
+        save(d)
+        print("ASAP: tugas fix baru dari uji asap produksi: " + ", ".join(baru))
+    return baru
+
+
 def check(d, cert=CERT):
+    if cert == CERT:
+        tarik_asap(d)
     r = ready(d)
     n = len(r)
     print(f"READY {n}: " + ", ".join(t["id"] for t in r[:15]) + (" ..." if n > 15 else ""))
@@ -191,6 +227,10 @@ def selftest():
     case("prioritas lalu ukuran", [x["id"] for x in ready({"tasks": [t("A", pr=2, size="s"), t("B", pr=1, size="l"), t("C", pr=1, size="s")]})], ["C", "B", "A"])
     case("bukti lemah ditolak", bool(WEAK_PROOF.match("selesai")), True)
     case("progres wajib", progress({"tasks": [t("A", "done"), t("B"), t("C", "done", wajib=False), t("D", "cancelled")]})[:2], (1, 2))
+    dd = {"tasks": [t("A")]}
+    case("issue asap jadi tugas fix wajib", impor_asap(dd, [{"number": 7, "title": "Uji asap produksi gagal", "body": "x"}]), ["FIX-ASAP-7"])
+    case("issue yang sama tidak diimpor dua kali", impor_asap(dd, [{"number": 7, "title": "Uji asap produksi gagal", "body": "x"}]), [])
+    case("tugas asap didahulukan", ready(dd)[0]["id"], "FIX-ASAP-7")
     print(f"SELFTEST next_task: {ok} dari {tot}", "LULUS" if ok == tot else "GAGAL")
     return 0 if ok == tot else 1
 

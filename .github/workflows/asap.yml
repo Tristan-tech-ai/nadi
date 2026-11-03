@@ -1,0 +1,49 @@
+name: Uji asap produksi
+# H-03: setiap hari 06.00 WIB (23.00 UTC) halaman publik dan alur tanpa akun diuji ke produksi. Bila gagal, issue berlabel
+# "asap" dibuat atau diberi komentar; loop/next_task.py check mengubahnya menjadi tugas fix di antrean loop.
+on:
+  schedule:
+    - cron: "0 23 * * *"
+  workflow_dispatch:
+    inputs:
+      gagal_sengaja:
+        description: "Jalankan satu tes yang sengaja gagal (membuktikan alur issue)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  asap:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      E2E_BASE_URL: https://nadi-swart.vercel.app
+      ASAP_GAGAL_SENGAJA: ${{ inputs.gagal_sengaja && '1' || '0' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Pasang Chromium
+        working-directory: apps/web
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Uji asap
+        id: uji
+        working-directory: apps/web
+        run: pnpm exec playwright test e2e/asap-produksi.spec.ts --project=desktop --workers=2 --reporter=line 2>&1 | tee asap.log; exit ${PIPESTATUS[0]}
+      - name: Catat kegagalan sebagai issue
+        if: failure() && steps.uji.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create asap --color B4372A --description "Uji asap produksi gagal" --force
+          ringkas=$(grep -E "✘|Error:|expect\(" apps/web/asap.log | head -40)
+          isi=$(printf 'Uji asap produksi gagal pada %s.\n\nRun: %s/%s/actions/runs/%s\n\n```\n%s\n```\n' "$(date -u +%FT%TZ)" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" "$ringkas")
+          ada=$(gh issue list --label asap --state open --json number --jq '.[0].number')
+          if [ -n "$ada" ]; then gh issue comment "$ada" --body "$isi"; else gh issue create --label asap --title "Uji asap produksi gagal $(date -u +%F)" --body "$isi"; fi
