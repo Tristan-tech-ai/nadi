@@ -1,11 +1,12 @@
 import type { ReactNode } from "react";
+import type { Bahasa } from "@/lib/i18n/bahasa";
 import { KakiSitus, KepalaSitus } from "./kepala-kaki";
 
 /** Kerangka halaman pendukung publik (D-15): kepala dan kaki situs, satu judul, isi rata kiri selebar baca. */
-export function HalamanInfo({ judul, pengantar, draf, children }: { judul: string; pengantar?: string; draf?: string; children: ReactNode }) {
+export function HalamanInfo({ judul, pengantar, draf, children, bahasa = "id" }: { judul: string; pengantar?: string; draf?: string; children: ReactNode; bahasa?: Bahasa }) {
   return (
-    <>
-      <KepalaSitus />
+    <div lang={bahasa} className="contents">
+      <KepalaSitus bahasa={bahasa} />
       <main className="mx-auto w-full max-w-6xl px-5 pt-12 pb-20 lg:pt-16">
         <h1 className="font-judul text-[2rem] font-extrabold leading-tight tracking-tight sm:text-5xl">{judul}</h1>
         {pengantar && <p className="mt-4 max-w-2xl text-lg text-tinta-2">{pengantar}</p>}
@@ -16,8 +17,8 @@ export function HalamanInfo({ judul, pengantar, draf, children }: { judul: strin
         )}
         <div className="isi-info mt-10 max-w-3xl">{children}</div>
       </main>
-      <KakiSitus />
-    </>
+      <KakiSitus bahasa={bahasa} />
+    </div>
   );
 }
 

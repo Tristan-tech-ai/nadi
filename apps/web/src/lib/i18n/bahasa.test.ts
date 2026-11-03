@@ -30,6 +30,7 @@ describe("tujuan pemilih bahasa", () => {
     const { tujuanPemilih } = await import("./bahasa");
     expect(tujuanPemilih("/", "en")).toBe("/en");
     expect(tujuanPemilih("/en", "id")).toBe("/");
-    expect(tujuanPemilih("/harga", "en")).toBe("/en");
+    expect(tujuanPemilih("/harga", "en")).toBe("/en/harga");
+    expect(tujuanPemilih("/keamanan", "en")).toBe("/en");
   });
 });

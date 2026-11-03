@@ -89,3 +89,18 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain", async (
   await k1.close();
   await k2.close();
 });
+
+test("harga dua bahasa: /en/harga berbahasa Inggris, pemilih bolak-balik ke /harga, axe bersih", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "sekali (desktop)");
+  await page.goto("/en/harga");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Pricing");
+  await expect(page.locator("main")).toContainText("Rp149,000");
+  await expect(page.getByRole("table")).toContainText("20 people");
+  const teks = await page.locator("main").innerText();
+  expect(teks).not.toMatch(/\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau)\b/i);
+  const r = await new AxeBuilder({ page }).analyze();
+  expect(r.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+  await page.getByTestId("pemilih-bahasa").click();
+  await page.waitForURL((u) => u.pathname === "/harga");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Harga");
+});

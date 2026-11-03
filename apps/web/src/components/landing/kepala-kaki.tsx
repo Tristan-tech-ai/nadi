@@ -12,7 +12,7 @@ export function KepalaSitus({ bahasa = "id" }: { bahasa?: Bahasa }) {
   const nav = [
     { href: `${akar}#hari`, label: k.nav.hari },
     { href: `${akar}#peran`, label: k.nav.peran },
-    { href: "/harga", label: k.nav.harga },
+    { href: `${awalanJalur(bahasa)}/harga`, label: k.nav.harga },
     { href: "/keamanan", label: k.nav.keamanan },
     { href: "/panduan", label: k.nav.panduan },
   ];
@@ -51,7 +51,7 @@ export function KakiSitus({ bahasa = "id" }: { bahasa?: Bahasa }) {
           <Link href="/demo" className="hover:text-tinta">{k.contohMakanan}</Link>
           <Link href="/demo/toko" className="hover:text-tinta">{k.contohToko}</Link>
           <Link href="/panduan" className="hover:text-tinta">{k.panduan}</Link>
-          <Link href="/harga" className="hover:text-tinta">{k.harga}</Link>
+          <Link href={`${awalanJalur(bahasa)}/harga`} className="hover:text-tinta">{k.harga}</Link>
           <Link href="/tentang" className="hover:text-tinta">{k.tentang}</Link>
         </nav>
         <nav aria-label={k.akun} className="flex flex-col gap-2">
