@@ -49,6 +49,21 @@ test.describe("asap produksi", () => {
     expect((await request.get("/ikon/ikon-192.png")).status()).toBe(200);
   });
 
+  // H-04: anggaran JavaScript per halaman publik (KB terkompresi yang diunduh di HP, termasuk prefetch tautan di layar pertama).
+  // Ukuran 4 Nov 2026 + sekitar 15%; docs/quality/audit-js.md. ANGGARAN_JS_KALI memperkecil anggaran untuk uji merah sengaja.
+  const ANGGARAN_KB: Record<string, number> = { "/": 190, "/en": 190, "/harga": 180, "/keamanan": 180, "/panduan": 180, "/masuk": 176 };
+  for (const [jalur, kb] of Object.entries(ANGGARAN_KB)) {
+    test(`anggaran JS ${jalur} <= ${kb} KB`, async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.goto(jalur, { waitUntil: "networkidle" });
+      const byte = await page.evaluate(() => performance.getEntriesByType("resource")
+        .filter((r) => (r as PerformanceResourceTiming).initiatorType === "script" || r.name.endsWith(".js"))
+        .reduce((s, r) => s + ((r as PerformanceResourceTiming).encodedBodySize || 0), 0));
+      const batas = kb * Number(process.env.ANGGARAN_JS_KALI ?? 1);
+      expect(Math.round(byte / 1024), `JS ${jalur} (KB)`).toBeLessThanOrEqual(batas);
+    });
+  }
+
   // Gerbang yang tidak pernah bisa gagal bukan gerbang: dijalankan merah sengaja lewat input workflow gagal_sengaja.
   test("merah sengaja (hanya bila ASAP_GAGAL_SENGAJA=1)", async () => {
     test.skip(process.env.ASAP_GAGAL_SENGAJA !== "1", "jalan normal");
