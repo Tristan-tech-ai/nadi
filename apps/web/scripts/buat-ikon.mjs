@@ -1,9 +1,16 @@
+// Ikon PWA, favicon, dan ikon Apple dari tanda Nadi (src/components/ui/logo-jalur.ts). Jalankan: node scripts/buat-ikon.mjs
 import { chromium } from "@playwright/test";
-const svg = (bg, pad) => `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" fill="${bg}"/><g transform="translate(${pad} ${pad}) scale(${(32 - 2 * pad) / 32})"><path d="M6 3h20a1 1 0 0 1 1 1v22.5l-2.5 2-2.5-2-2.5 2-2.5-2-2.5 2-2.5-2-2.5 2L5 26.5V4a1 1 0 0 1 1-1Z" fill="#1C1B18"/><path d="M8 15h4.5l2-4.5 3 9 2-4.5H24" fill="none" stroke="#E9A825" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></g></svg>`;
+import { svgTanda } from "../src/components/ui/logo-jalur.ts";
+
+const KERTAS = "#F6F2EA", TINTA = "#1C1B18", KUNYIT = "#E9A825"; // slop-ok: token kertas/tinta/kunyit untuk berkas PNG
+const daftar = [
+  ["public/ikon/ikon-192.png", 192, 4], ["public/ikon/ikon-512.png", 512, 4], ["public/ikon/ikon-maskable-512.png", 512, 8],
+  ["public/ikon/apple-touch-icon.png", 180, 4], ["src/app/icon.png", 192, 4], ["src/app/apple-icon.png", 180, 4],
+];
 const b = await chromium.launch(); const p = await b.newPage();
-for (const [nama, ukuran, pad] of [["ikon-192.png",192,3],["ikon-512.png",512,3],["ikon-maskable-512.png",512,7],["apple-touch-icon.png",180,3]]) {
+for (const [jalur, ukuran, pad] of daftar) {
   await p.setViewportSize({ width: ukuran, height: ukuran });
-  await p.setContent(`<style>body{margin:0}</style><img src="data:image/svg+xml,${encodeURIComponent(svg("#F6F2EA", pad))}" width="${ukuran}" height="${ukuran}">`);
-  await p.screenshot({ path: `public/ikon/${nama}`, omitBackground: false });
+  await p.setContent(`<style>body{margin:0}</style><img src="data:image/svg+xml,${encodeURIComponent(svgTanda(TINTA, KUNYIT, KERTAS, pad))}" width="${ukuran}" height="${ukuran}">`);
+  await p.screenshot({ path: jalur });
 }
-await b.close(); console.log("ikon dibuat");
+await b.close(); console.log("ikon dibuat", daftar.length);

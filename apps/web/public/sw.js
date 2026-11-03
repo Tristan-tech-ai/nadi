@@ -1,5 +1,5 @@
 // Service worker Nadi: halaman luring untuk navigasi saat sinyal hilang. Data tidak di-cache di sini (keamanan data usaha).
-const CACHE = "nadi-luring-v2";
+const CACHE = "nadi-luring-v3";
 const LURING = "/luring";
 
 self.addEventListener("install", (e) => {
