@@ -3,6 +3,9 @@ import { Suspense } from "react";
 import { IlustrasiKalender } from "@/components/ilustrasi";
 import { FormIzin } from "@/components/app/form-izin";
 import { Cap } from "@/components/ui/cap";
+import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
+import { bahasaAplikasi } from "@/lib/i18n/server";
+import { sisip } from "@/lib/i18n/sisip";
 import { capStatus, rentangTanggal } from "@/lib/izin";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
@@ -23,10 +26,12 @@ type Pengajuan = {
   orang: { nama: string } | null;
 };
 
-const LABEL: Record<string, string> = { sakit: "Sakit", izin: "Izin", cuti: "Cuti" };
-
 async function Isi() {
   const sesi = await wajibPerusahaan();
+  const bahasa = await bahasaAplikasi(sesi.bahasa);
+  const t = ambilKamus(bahasa).izin;
+  const isiLang = bahasa === "id" ? undefined : "id";
+  const lamaHari = (n: number) => isiTeks(n === 1 ? t.hariSatu : t.hariBanyak, { n });
   const supabase = await createClient();
   const [{ data: r }, { data: daftar }, zona] = await Promise.all([
     supabase.rpc("izin_ringkas"),
@@ -41,53 +46,60 @@ async function Isi() {
   const baris = (daftar ?? []) as unknown as Pengajuan[];
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
   return (
-    <>
+    <div lang={bahasa}>
+      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
+      <p className="mt-2 text-tinta-2">{t.ket}</p>
       {ringkas?.punya_orang ? (
         <>
           {ringkas.cuti.jatah !== null && (
             <p className="mt-4 rounded-[var(--radius-kartu)] bg-kertas-2 px-4 py-3" data-testid="saldo-cuti">
-              Sisa cuti {ringkas.tahun}: <span className="angka font-semibold">{ringkas.cuti.sisa}</span> dari {ringkas.cuti.jatah} hari
+              {sisip(t.sisaCuti, { tahun: ringkas.tahun, sisa: <span className="angka font-semibold">{ringkas.cuti.sisa}</span>, jatah: ringkas.cuti.jatah })}
             </p>
           )}
-          <FormIzin zona={zona} />
+          <FormIzin zona={zona} teks={t} bahasa={bahasa} />
         </>
       ) : (
         <p className="mt-6 text-tinta-2" data-testid="izin-tanpa-orang">
-          Pengajuan izin dibuat dari akun staf. {pengelola ? "Aturan kapan izin disetujui otomatis ada di halaman Usahamu." : "Minta pemilik membuatkan akun staf untukmu."}
+          {t.tanpaOrang} {pengelola ? t.tanpaOrangPengelola : t.tanpaOrangStaf}
         </p>
       )}
       <section className="mt-10" aria-labelledby="judul-daftar-izin">
-        <h2 id="judul-daftar-izin" className="text-lg font-semibold">{pengelola ? "Pengajuan tim" : "Pengajuanmu"}</h2>
+        <h2 id="judul-daftar-izin" className="text-lg font-semibold">{pengelola ? t.pengajuanTim : t.pengajuanmu}</h2>
         {baris.length === 0 ? (
-          <div className="mt-2 flex items-center gap-3"><IlustrasiKalender className="w-20" /><p className="text-sm text-tinta-2" data-testid="izin-kosong">Belum ada pengajuan.</p></div>
+          <div className="mt-2 flex items-center gap-3"><IlustrasiKalender className="w-20" /><p className="text-sm text-tinta-2" data-testid="izin-kosong">{t.kosong}</p></div>
         ) : (
           <ul className="mt-3 divide-y divide-garis border-y border-garis" data-testid="daftar-izin">
             {baris.map((p) => (
               <li key={p.id} className="py-3">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <p className="font-semibold">
-                    {pengelola && p.orang ? `${p.orang.nama}: ` : ""}
-                    {LABEL[p.jenis] ?? p.jenis} {p.hari} hari
+                    {pengelola && p.orang ? <><span data-pengguna>{p.orang.nama}</span>: </> : ""}
+                    {t.jenis[p.jenis as keyof typeof t.jenis] ?? p.jenis} {lamaHari(p.hari)}
                   </p>
-                  <Cap {...capStatus(p.status)} />
+                  <Cap {...capStatus(p.status, t.status)} />
                 </div>
-                <p className="text-sm text-tinta-2">{rentangTanggal(p.mulai, p.selesai)}</p>
-                <p className="mt-1 text-sm">{p.alasan_putusan}</p>
+                <p className="text-sm text-tinta-2">{rentangTanggal(p.mulai, p.selesai, bahasa)}</p>
+                <p className="mt-1 text-sm" lang={isiLang}>{p.alasan_putusan}</p>
               </li>
             ))}
           </ul>
         )}
       </section>
-    </>
+    </div>
   );
 }
 
 export default function Izin() {
   return (
     <main className="mx-auto w-full max-w-md px-5 py-10">
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">Izin dan cuti</h1>
-      <p className="mt-2 text-tinta-2">Ajukan di sini. Yang sesuai aturan usaha langsung disetujui, sisanya diputuskan pemilik atau admin.</p>
-      <Suspense fallback={<div className="mt-6 h-96 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+      <Suspense
+        fallback={
+          <div aria-hidden>
+            <div className="h-9 w-48 animate-pulse rounded-[var(--radius-isian)] bg-kertas-2" />
+            <div className="mt-6 h-96 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" />
+          </div>
+        }
+      >
         <Isi />
       </Suspense>
     </main>

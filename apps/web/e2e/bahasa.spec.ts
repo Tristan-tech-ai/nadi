@@ -51,18 +51,19 @@ test("landing: ganti ke English tanpa muat ulang, cookie diingat, format angka e
   await expect(page).toHaveURL(/\/$/);
 });
 
-/** Teks isi layar aplikasi tanpa bagian bertanda lang="id" (isi yang memang ditulis dalam bahasa Indonesia). */
+/** Teks isi layar aplikasi tanpa bagian bertanda lang="id" (isi yang memang ditulis dalam bahasa Indonesia) dan tanpa
+ *  data pengguna bertanda data-pengguna (nama orang, nama usaha). */
 async function teksTanpaId(page: Page) {
   return page.locator("#isi").evaluate((el) => {
     const salin = el.cloneNode(true) as HTMLElement;
-    salin.querySelectorAll('[lang="id"]').forEach((x) => x.remove());
+    salin.querySelectorAll('[lang="id"], [data-pengguna]').forEach((x) => x.remove());
     document.body.appendChild(salin);
     const t = salin.innerText;
     salin.remove();
     return t;
   });
 }
-const KATA_ID = /\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau|usulan|setujui|tolak|berkas|lempar)\b/i;
+const KATA_ID = /\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau|usulan|setujui|tolak|berkas|lempar|izin|cuti|sakit|hari|pengajuan)\b/i;
 
 async function masuk(page: Page) {
   await page.goto(`/masuk?next=${encodeURIComponent("/app")}`);
@@ -106,6 +107,14 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   expect(await teksTanpaId(p1)).not.toMatch(KATA_ID);
   const axeLempar = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeLempar.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
+  // Izin mode Inggris (pemilik tanpa data karyawan sendiri: daftar pengajuan tim).
+  await p1.goto("/app/izin");
+  await expect(p1.getByRole("heading", { level: 1, name: "Leave and time off" })).toBeVisible();
+  await expect(p1.getByRole("heading", { level: 2, name: "Team requests" })).toBeVisible();
+  expect(await teksTanpaId(p1)).not.toMatch(KATA_ID);
+  const axeIzin = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axeIzin.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
   // Sesi baru tanpa cookie bahasa: pilihan datang dari akun.
   const k2 = await browser.newContext();

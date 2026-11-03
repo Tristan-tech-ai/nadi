@@ -1,7 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { angkaIsian, JENIS_IZIN, type JenisIzin } from "@/lib/izin";
+import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
+import { bahasaAplikasi } from "@/lib/i18n/server";
+import { angkaIsian, GALAT_IZIN_DB, JENIS_IZIN, type JenisIzin } from "@/lib/izin";
 import { createClient } from "@/lib/supabase/server";
 
 export type HasilAjukan = { status: string; otopilot: boolean; alasan: string; hari: number } | { galat: string } | null;
@@ -16,8 +18,10 @@ export async function ajukanIzin(_: HasilAjukan, form: FormData): Promise<HasilA
   const selesai = String(form.get("selesai") ?? "") || mulai;
   const alasan = String(form.get("alasan") ?? "").trim().slice(0, 500);
   const berkas = String(form.get("berkas") ?? "");
-  if (!jenisSah(jenis)) return { galat: "Pilih sakit, izin, atau cuti." };
-  if (!tanggalSah(mulai) || !tanggalSah(selesai)) return { galat: "Isi tanggal mulai dan selesai." };
+  const bahasa = await bahasaAplikasi();
+  const t = ambilKamus(bahasa).izin;
+  if (!jenisSah(jenis)) return { galat: t.pilihJenis };
+  if (!tanggalSah(mulai) || !tanggalSah(selesai)) return { galat: t.isiTanggal };
   const supabase = await createClient();
   const { data, error } = await supabase.rpc("ajukan_izin", {
     p_jenis: jenis,
@@ -27,9 +31,10 @@ export async function ajukanIzin(_: HasilAjukan, form: FormData): Promise<HasilA
     p_berkas: /^[0-9a-f-]{36}$/i.test(berkas) ? berkas : null,
   });
   if (error) {
-    // Pesan galat dari database sudah ditulis untuk pengguna (tanggal, tumpang tindih, akun staf).
-    const dikenal = ["22023", "23505", "42501", "P0002"].includes(error.code ?? "");
-    return { galat: dikenal ? error.message : "Nadi gagal menyimpan pengajuan. Coba lagi sebentar; isianmu tidak hilang." };
+    // Pesan galat dari database sudah ditulis untuk pengguna dalam bahasa Indonesia; bahasa lain memakai pesan per kode.
+    const kode = GALAT_IZIN_DB[error.code ?? ""];
+    if (!kode) return { galat: t.gagal };
+    return { galat: bahasa === "id" ? error.message : t.galatDb[kode] };
   }
   const d = data as { status: string; oleh_otopilot: boolean; alasan_putusan: string; hari: number };
   revalidatePath("/app/izin");
@@ -41,13 +46,15 @@ export type HasilKebijakan = { tersimpan: string } | { galat: string } | null;
 /** Pemilik/admin menyimpan kebijakan satu jenis izin. */
 export async function aturKebijakan(_: HasilKebijakan, form: FormData): Promise<HasilKebijakan> {
   const jenis = String(form.get("jenis") ?? "");
-  if (!jenisSah(jenis)) return { galat: "Jenis izin tidak dikenal." };
+  const k = ambilKamus(await bahasaAplikasi());
+  const t = k.kebijakanIzin;
+  if (!jenisSah(jenis)) return { galat: t.jenisTak };
   const maksHari = angkaIsian(form.get("maks_hari"), 0, 30);
   const bersamaan = angkaIsian(form.get("maks_bersamaan"), 0, 1000);
   const jatah = jenis === "cuti" ? angkaIsian(form.get("jatah"), 0, 60) : null;
-  if (maksHari === "salah" || maksHari === null) return { galat: "Batas hari otomatis diisi angka 0 sampai 30." };
-  if (bersamaan === "salah") return { galat: "Batas orang izin bersamaan diisi angka, atau kosongkan bila tanpa batas." };
-  if (jatah === "salah") return { galat: "Jatah cuti tahunan diisi angka 0 sampai 60, atau kosongkan." };
+  if (maksHari === "salah" || maksHari === null) return { galat: t.maksHari };
+  if (bersamaan === "salah") return { galat: t.maksBersamaan };
+  if (jatah === "salah") return { galat: t.maksJatah };
   const supabase = await createClient();
   const { error } = await supabase.rpc("atur_kebijakan_izin", {
     p_jenis: jenis,
@@ -57,7 +64,7 @@ export async function aturKebijakan(_: HasilKebijakan, form: FormData): Promise<
     p_maks_bersamaan: bersamaan,
     p_jatah_tahunan: jatah,
   });
-  if (error) return { galat: error.code === "42501" ? "Hanya pemilik atau admin yang bisa mengubah kebijakan." : "Kebijakan gagal disimpan. Coba lagi sebentar." };
+  if (error) return { galat: error.code === "42501" ? t.hanyaPengelola : t.gagal };
   revalidatePath("/app/perusahaan");
-  return { tersimpan: `Tersimpan. Kebijakan ${jenis} berlaku untuk pengajuan berikutnya.` };
+  return { tersimpan: isiTeks(t.tersimpan, { jenis: k.izin.jenis[jenis].toLowerCase() }) };
 }

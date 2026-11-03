@@ -37,6 +37,8 @@ describe("izin: tanggal dan isian", () => {
     expect(rentangTanggal("2026-11-03", "2026-11-05")).toBe("3 sampai 5 Nov 2026");
     expect(rentangTanggal("2026-11-30", "2026-12-02")).toBe("30 Nov sampai 2 Des 2026");
     expect(rentangTanggal("2026-12-30", "2027-01-02")).toBe("30 Des 2026 sampai 2 Jan 2027");
+    expect(rentangTanggal("2026-11-30", "2026-12-02", "en")).toBe("30 Nov to 2 Dec 2026");
+    expect(rentangTanggal("2026-05-03", "2026-05-03", "en")).toBe("3 May 2026");
   });
   it("status pengajuan menjadi cap dengan teks", () => {
     expect(capStatus("disetujui")).toEqual({ jenis: "diterima", label: "Disetujui" });
