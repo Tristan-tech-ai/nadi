@@ -212,6 +212,15 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   const axePajak = await new AxeBuilder({ page: p1 }).analyze();
   expect(axePajak.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
+  // Mata dan Peta usaha mode Inggris; nama zona adalah data pengguna.
+  for (const [jalur, judul] of [["/app/mata", "Eyes"], ["/app/peta-usaha", "Business map"]] as const) {
+    await p1.goto(jalur);
+    await expect(p1.getByRole("heading", { level: 1, name: judul })).toBeVisible();
+    expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
+    const axeMata = await new AxeBuilder({ page: p1 }).analyze();
+    expect(axeMata.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+  }
+
   // Magang mode Inggris: dana rekrutmen, rencana, formulir, tabel biaya; isi rencana dan nama data pengguna.
   await p1.goto("/app/magang");
   await expect(p1.getByRole("heading", { level: 1, name: "Internships" })).toBeVisible();

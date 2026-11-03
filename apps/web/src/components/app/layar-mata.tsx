@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { EyeIcon, VideoCameraIcon } from "@phosphor-icons/react";
 import { Tombol } from "@/components/ui/tombol";
+import { isiTeks } from "@/lib/i18n/isi-teks";
+import type { Kamus } from "@/lib/i18n/kamus";
 import { catatMata, simpanZona } from "@/app/app/mata/actions";
 import { langkahStatus, medianAntrean, orangDiZona, statusAwal, type Deteksi, type JenisZona, type Status, type Titik, type Zona } from "@/lib/mata/resep";
 
@@ -10,21 +12,18 @@ export type ModelMata = { id: string; dtype: string; ambang: number; interval_de
 type Riwayat = { detik: number | null; jam: string; zona: string; nama: string; status?: string; jumlah?: number };
 type Keadaan = { status: Status; jumlah: number; riwayatJumlah: number[] };
 
-const JENIS: { nilai: JenisZona; label: string }[] = [
-  { nilai: "meja", label: "Meja (terisi atau kosong)" },
-  { nilai: "antrean", label: "Antrean (jumlah orang)" },
-];
 const LEBAR_KIRIM = 640;
 
-function jamSekarang() {
-  return new Date().toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+function jamSekarang(bahasa: string) {
+  return new Date().toLocaleTimeString(bahasa === "en" ? "en-GB" : "id-ID", { hour: "2-digit", minute: "2-digit" });
 }
 function detikTeks(d: number) {
   return `${String(Math.floor(d / 60)).padStart(2, "0")}.${String(Math.floor(d % 60)).padStart(2, "0")}`;
 }
 
 /** Mata: pilih video atau kamera, gambar zona di atas cuplikan, lalu pantau. Gambar diproses di perangkat ini dan langsung dibuang. */
-export function LayarMata({ model, zonaAwal }: { model: ModelMata; zonaAwal: Zona[] }) {
+export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMata; zonaAwal: Zona[]; teks: Kamus["mata"]; bahasa: string }) {
+  const JENIS: { nilai: JenisZona; label: string }[] = [{ nilai: "meja", label: t.jMeja }, { nilai: "antrean", label: t.jAntrean }];
   const video = useRef<HTMLVideoElement>(null);
   const layar = useRef<HTMLCanvasElement>(null);
   const pekerja = useRef<Worker | null>(null);
@@ -99,7 +98,7 @@ export function LayarMata({ model, zonaAwal }: { model: ModelMata; zonaAwal: Zon
       setSumber("kamera");
       setPesan(null);
     } catch {
-      setPesan({ jenis: "galat", teks: "Kamera tidak bisa dibuka. Izinkan kamera di pengaturan browser, atau pilih berkas video." });
+      setPesan({ jenis: "galat", teks: t.kameraGagal });
     }
   }
 
@@ -124,7 +123,7 @@ export function LayarMata({ model, zonaAwal }: { model: ModelMata; zonaAwal: Zon
     if ("galat" in h) return setPesan({ jenis: "galat", teks: h.galat });
     setZona(h.zona);
     setTersimpan(true);
-    setPesan({ jenis: "info", teks: `Tersimpan. ${h.zona.length} zona siap dipantau.` });
+    setPesan({ jenis: "info", teks: isiTeks(t.tersimpan, { n: h.zona.length }) });
   }
 
   // Satu cuplikan: kecilkan ke 640 px, deteksi di worker, kembalikan orang.
@@ -167,7 +166,7 @@ export function LayarMata({ model, zonaAwal }: { model: ModelMata; zonaAwal: Zon
         baru[z.id] = { ...k, status: r.status };
         if (r.berubah) {
           ubah.push({ zona: z.id, status: r.status.nilai });
-          log.push({ detik, jam: jamSekarang(), zona: z.id, nama: z.nama, status: r.status.nilai });
+          log.push({ detik, jam: jamSekarang(bahasa), zona: z.id, nama: z.nama, status: r.status.nilai });
         }
       } else {
         const riwayatJumlah = [...k.riwayatJumlah, n].slice(-3);
@@ -175,7 +174,7 @@ export function LayarMata({ model, zonaAwal }: { model: ModelMata; zonaAwal: Zon
         baru[z.id] = { ...k, jumlah, riwayatJumlah };
         if (jumlah !== k.jumlah) {
           ubah.push({ zona: z.id, jumlah });
-          log.push({ detik, jam: jamSekarang(), zona: z.id, nama: z.nama, jumlah });
+          log.push({ detik, jam: jamSekarang(bahasa), zona: z.id, nama: z.nama, jumlah });
         }
       }
     }
@@ -215,7 +214,7 @@ export function LayarMata({ model, zonaAwal }: { model: ModelMata; zonaAwal: Zon
           setKemajuan({ ke: i + 1, dari: n });
           await langkah(t);
         }
-        if (!berhenti.current) setPesan({ jenis: "info", teks: "Video selesai dipantau." });
+        if (!berhenti.current) setPesan({ jenis: "info", teks: t.videoSelesai });
       } else {
         while (!berhenti.current) {
           await langkah(null);
@@ -223,7 +222,7 @@ export function LayarMata({ model, zonaAwal }: { model: ModelMata; zonaAwal: Zon
         }
       }
     } catch {
-      setPesan({ jenis: "galat", teks: "Model penglihatan gagal dimuat di perangkat ini. Periksa sambungan internet lalu coba lagi." });
+      setPesan({ jenis: "galat", teks: t.modelGagal });
     } finally {
       setPantau(false);
     }
@@ -234,61 +233,60 @@ export function LayarMata({ model, zonaAwal }: { model: ModelMata; zonaAwal: Zon
       <div>
         <div className="flex flex-wrap items-center gap-3">
           <label className="inline-flex h-10 cursor-pointer items-center gap-2 rounded-[var(--radius-isian)] border border-garis-kuat px-4 text-sm font-semibold has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-tinta">
-            <VideoCameraIcon size={18} aria-hidden /> Pilih berkas video
+            <VideoCameraIcon size={18} aria-hidden /> {t.pilihVideo}
             <input type="file" accept="video/*" className="sr-only" data-testid="pilih-video" onChange={(e) => pilihBerkas(e.target.files?.[0])} />
           </label>
-          <Tombol ragam="kedua" onClick={pakaiKamera} disabled={pantau}>Pakai kamera perangkat ini</Tombol>
+          <Tombol ragam="kedua" onClick={pakaiKamera} disabled={pantau}>{t.pakaiKamera}</Tombol>
         </div>
         <video ref={video} muted playsInline className="hidden" onLoadedData={gambar} onSeeked={gambar} onTimeUpdate={gambar} />
         {sumber ? (
           <canvas ref={layar} onClick={klikLayar} className="mt-4 w-full cursor-crosshair rounded-[var(--radius-kartu)] border border-garis" data-testid="layar-mata"
-            role="img" aria-label="Cuplikan kamera dengan zona. Klik untuk menambah titik zona." />
+            role="img" aria-label={t.layarAria} />
         ) : (
           <p className="mt-4 rounded-[var(--radius-kartu)] bg-kertas-2 p-4 text-sm text-tinta-2" data-testid="mata-kosong">
-            Pilih rekaman video dari HP atau pakai kamera tablet yang menghadap ruangan. Gambar diproses di perangkat ini dan langsung dibuang;
-            yang tersimpan hanya status meja dan antrean.
+            {t.kosong}
           </p>
         )}
         {sumber && !pantau ? (
           <fieldset className="mt-4 grid gap-3 rounded-[var(--radius-kartu)] border border-garis p-4">
-            <legend className="px-1 text-sm font-semibold">Zona baru</legend>
-            <p className="text-sm text-tinta-2">Klik sudut-sudut meja atau area antrean di gambar ({draf.length} titik). Minimal 3 titik.</p>
+            <legend className="px-1 text-sm font-semibold">{t.zonaBaru}</legend>
+            <p className="text-sm text-tinta-2">{isiTeks(t.klikSudut, { n: draf.length })}</p>
             <div className="grid gap-3 sm:grid-cols-2">
-              <label className="grid gap-1 text-sm">Nama zona
-                <input value={namaDraf} onChange={(e) => setNamaDraf(e.target.value)} maxLength={60} className="h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-3 text-base" placeholder="Misalnya: Meja 3" />
+              <label className="grid gap-1 text-sm">{t.namaZona}
+                <input value={namaDraf} onChange={(e) => setNamaDraf(e.target.value)} maxLength={60} className="h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-3 text-base" placeholder={t.namaContoh} />
               </label>
-              <label className="grid gap-1 text-sm">Jenis
+              <label className="grid gap-1 text-sm">{t.jenis}
                 <select value={jenisDraf} onChange={(e) => setJenisDraf(e.target.value as JenisZona)} className="h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-2 text-base">
                   {JENIS.map((j) => <option key={j.nilai} value={j.nilai}>{j.label}</option>)}
                 </select>
               </label>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Tombol ragam="kedua" onClick={tambahZona} disabled={draf.length < 3 || !namaDraf.trim()}>Tambah zona</Tombol>
-              <Tombol ragam="teks" onClick={() => setDraf((d) => d.slice(0, -1))} disabled={!draf.length}>Hapus titik terakhir</Tombol>
+              <Tombol ragam="kedua" onClick={tambahZona} disabled={draf.length < 3 || !namaDraf.trim()}>{t.tambahZona}</Tombol>
+              <Tombol ragam="teks" onClick={() => setDraf((d) => d.slice(0, -1))} disabled={!draf.length}>{t.hapusTitik}</Tombol>
             </div>
           </fieldset>
         ) : null}
       </div>
 
       <div>
-        <h2 className="text-lg font-semibold">Zona</h2>
+        <h2 className="text-lg font-semibold">{t.zona}</h2>
         {zona.length ? (
           <ul className="mt-2 divide-y divide-garis border-y border-garis" data-testid="daftar-zona">
             {zona.map((z, i) => {
               const k = keadaan[z.id];
-              const teks = z.jenis === "meja" ? (k ? (k.status.nilai === "terisi" ? "Terisi" : "Kosong") : "Belum dipantau") : k ? `${k.jumlah} orang` : "Belum dipantau";
+              const teks = z.jenis === "meja" ? (k ? (k.status.nilai === "terisi" ? t.terisi : t.kosongStatus) : t.belumDipantau) : k ? isiTeks(t.orang, { n: k.jumlah }) : t.belumDipantau;
               return (
                 <li key={z.id || `baru-${i}`} className="flex items-center justify-between gap-3 py-2" data-testid="zona-mata" data-nama={z.nama} data-status={z.jenis === "meja" ? k?.status.nilai ?? "" : String(k?.jumlah ?? "")}>
                   <span className="min-w-0">
-                    <span className="font-semibold">{z.nama}</span>
-                    <span className="block text-sm text-tinta-2">{z.jenis === "meja" ? "Meja" : z.jenis === "antrean" ? "Antrean" : "Rak"}</span>
+                    <span className="font-semibold" data-pengguna>{z.nama}</span>
+                    <span className="block text-sm text-tinta-2">{z.jenis === "meja" ? t.meja : z.jenis === "antrean" ? t.antrean : t.rak}</span>
                   </span>
                   <span className="flex items-center gap-3">
                     <span className="text-sm">{teks}</span>
                     {!pantau ? (
                       <button type="button" className="text-sm text-tinta-2 underline-offset-4 hover:underline" onClick={() => { setZona((x) => x.filter((_, j) => j !== i)); setTersimpan(false); }}>
-                        Hapus<span className="sr-only"> zona {z.nama}</span>
+                        {t.hapus}<span className="sr-only">{isiTeks(t.hapusZona, { nama: z.nama })}</span>
                       </button>
                     ) : null}
                   </span>
@@ -297,35 +295,35 @@ export function LayarMata({ model, zonaAwal }: { model: ModelMata; zonaAwal: Zon
             })}
           </ul>
         ) : (
-          <p className="mt-2 text-sm text-tinta-2">Belum ada zona. Pilih video atau kamera, lalu gambar zona pertama.</p>
+          <p className="mt-2 text-sm text-tinta-2">{t.tanpaZona}</p>
         )}
         <div className="mt-4 flex flex-wrap gap-3">
-          {!tersimpan ? <Tombol onClick={simpan} disabled={pantau}>Simpan zona</Tombol> : null}
+          {!tersimpan ? <Tombol onClick={simpan} disabled={pantau}>{t.simpanZona}</Tombol> : null}
           {pantau ? (
-            <Tombol ragam="kedua" onClick={() => { berhenti.current = true; }}>Berhenti</Tombol>
+            <Tombol ragam="kedua" onClick={() => { berhenti.current = true; }}>{t.berhenti}</Tombol>
           ) : (
             <Tombol onClick={mulaiPantau} disabled={!sumber || !tersimpan || !zona.length} data-testid="mulai-pantau">
-              <EyeIcon size={18} aria-hidden /> Mulai pantau
+              <EyeIcon size={18} aria-hidden /> {t.mulaiPantau}
             </Tombol>
           )}
         </div>
         <p role="status" className="mt-2 min-h-5 text-sm" data-testid="mata-status">
-          {unduh !== null ? `Menyiapkan model penglihatan di perangkat ini, ${unduh}%.` : kemajuan && pantau ? `Cuplikan ${kemajuan.ke} dari ${kemajuan.dari}.` : pesan?.jenis === "info" ? pesan.teks : ""}
+          {unduh !== null ? isiTeks(t.menyiapkan, { n: unduh }) : kemajuan && pantau ? isiTeks(t.cuplikan, { ke: kemajuan.ke, dari: kemajuan.dari }) : pesan?.jenis === "info" ? pesan.teks : ""}
         </p>
         {pesan?.jenis === "galat" ? <p role="alert" className="text-sm text-cap">{pesan.teks}</p> : null}
 
-        <h2 className="mt-6 text-lg font-semibold">Perubahan tercatat</h2>
+        <h2 className="mt-6 text-lg font-semibold">{t.perubahan}</h2>
         {riwayat.length ? (
-          <ol className="mt-2 max-h-80 divide-y divide-garis overflow-y-auto border-y border-garis text-sm" data-testid="riwayat-mata" tabIndex={0} aria-label="Perubahan status zona">
+          <ol className="mt-2 max-h-80 divide-y divide-garis overflow-y-auto border-y border-garis text-sm" data-testid="riwayat-mata" tabIndex={0} aria-label={t.perubahanAria}>
             {riwayat.map((r, i) => (
               <li key={i} className="flex justify-between gap-3 py-1.5" data-detik={r.detik ?? ""} data-zona={r.nama} data-status={r.status ?? String(r.jumlah ?? "")}>
-                <span>{r.nama}: {r.status ? (r.status === "terisi" ? "terisi" : "kosong") : `${r.jumlah} orang`}</span>
-                <span className="angka text-tinta-2">{r.detik !== null ? `video ${detikTeks(r.detik)}` : r.jam}</span>
+                <span><span data-pengguna>{r.nama}</span>: {r.status ? (r.status === "terisi" ? t.terisiKecil : t.kosongKecil) : isiTeks(t.orang, { n: r.jumlah ?? 0 })}</span>
+                <span className="angka text-tinta-2">{r.detik !== null ? isiTeks(t.video, { t: detikTeks(r.detik) }) : r.jam}</span>
               </li>
             ))}
           </ol>
         ) : (
-          <p className="mt-2 text-sm text-tinta-2">Belum ada perubahan. Nadi hanya mencatat saat meja berganti terisi atau kosong, atau jumlah antrean berubah.</p>
+          <p className="mt-2 text-sm text-tinta-2">{t.belumPerubahan}</p>
         )}
       </div>
     </div>
