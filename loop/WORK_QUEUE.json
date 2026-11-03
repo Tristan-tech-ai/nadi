@@ -2024,8 +2024,10 @@
    "accept": "iterasi penuh ITERASI.md; setujui 5 usulan dengan satu tangan < 30 dtk terukur e2e; sebelum/sesudah; produksi",
    "how": "docs/design/ITERASI.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:35:13"
+   "status": "done",
+   "created": "2026-11-03T19:35:13",
+   "done": "2026-11-03T21:45:35",
+   "result": "b228972: riset NN/g contextual swipe + Power Automate + Ramp, 3 konsep (geser, pilih banyak, cap lalu susut) di docs/design/iterasi/feed/README.md; KartuFeed: cap + susut + Batalkan 4 dtk, tombol berikutnya digeser ke tempat jempol dan difokus, kirim saat pagehide/lepas; e2e produksi feed-hp 2/2: gulir pengguna 661 px -> 0 px, y tombol 555-739 -> 664-683; regresi lokal feed-penuh, izin, tukar-shift, mcp, asap, lempar, surat lulus; foto 390/1440 terang/gelap docs/design/iterasi/feed/sesudah"
   },
   {
    "id": "D-13",
