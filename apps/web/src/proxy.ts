@@ -51,5 +51,16 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|mediapipe/|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|txt|xml|json)$).*)"],
+  // H-04: proxy hanya untuk jalur yang memakai sesi (menyegarkan JWT, menjaga area masuk) dan beranda bila pengunjung pernah
+  // memilih English. Halaman publik statis (/demo, /harga, /en, /lamar, ...) tidak lagi memanggil fungsi di setiap kunjungan.
+  matcher: [
+    "/app/:path*",
+    "/absen/:path*",
+    "/kios/:path*",
+    "/cetak/:path*",
+    "/oauth/:path*",
+    "/masuk/:path*",
+    "/auth/:path*",
+    { source: "/", has: [{ type: "cookie", key: "nadi_bahasa", value: "en" }] },
+  ],
 };

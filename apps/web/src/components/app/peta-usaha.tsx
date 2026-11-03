@@ -1,7 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { createBrowserSupabase } from "@/lib/supabase/browser";
+import { useEffect, useState } from "react";
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+// H-04: klien Supabase (sekitar 67 KB terkompresi) dimuat saat peta tampil, bukan di bundel awal halaman /demo, sehingga
+// halaman yang menautkan /demo (beranda) tidak ikut mengunduhnya lewat prefetch.
+let klienJanji: Promise<SupabaseClient> | null = null;
+const klienSupabase = () => (klienJanji ??= import("@/lib/supabase/browser").then((m) => m.createBrowserSupabase()));
 
 export type ZonaPeta = {
   id: string;
@@ -40,12 +45,11 @@ export function PetaUsaha({ awal, topik, privat, judul, muatAwal }: {
   const [hidup, setHidup] = useState(false);
   const [berubah, setBerubah] = useState<string | null>(null);
   const [galat, setGalat] = useState(false);
-  const sb = useRef(createBrowserSupabase());
 
   useEffect(() => {
     if (!muatAwal) return;
     let batal = false;
-    sb.current.rpc("peta_demo", { p_kunci: muatAwal }).then(({ data, error }) => {
+    klienSupabase().then((sb) => sb.rpc("peta_demo", { p_kunci: muatAwal })).then(({ data, error }) => {
       if (batal) return;
       if (error || !data) return setGalat(true);
       const d = data as { topik: string; zona: ZonaPeta[] };
@@ -59,10 +63,12 @@ export function PetaUsaha({ awal, topik, privat, judul, muatAwal }: {
 
   useEffect(() => {
     if (!topikAktif) return;
-    const klien = sb.current;
-    let kanal: ReturnType<typeof klien.channel> | null = null;
+    let klien: SupabaseClient | null = null;
+    let kanal: ReturnType<SupabaseClient["channel"]> | null = null;
     let batal = false;
     (async () => {
+      klien = await klienSupabase();
+      if (batal) return;
       if (privat) await klien.realtime.setAuth();
       if (batal) return;
       kanal = klien
@@ -76,7 +82,7 @@ export function PetaUsaha({ awal, topik, privat, judul, muatAwal }: {
     })();
     return () => {
       batal = true;
-      if (kanal) klien.removeChannel(kanal);
+      if (kanal && klien) klien.removeChannel(kanal);
     };
   }, [topikAktif, privat]);
 
