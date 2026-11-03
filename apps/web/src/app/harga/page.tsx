@@ -45,7 +45,7 @@ export default function Harga() {
       </ul>
 
       <Bagian judul="Contoh hitungan per bulan">
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto" tabIndex={0} role="region" aria-label="Tabel contoh hitungan, geser ke samping di layar kecil">
           <table className="w-full min-w-[32rem] text-left text-sm">
             <caption className="sr-only">Harga per bulan menurut jumlah orang</caption>
             <thead>

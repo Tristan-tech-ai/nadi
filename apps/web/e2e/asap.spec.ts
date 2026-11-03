@@ -86,7 +86,7 @@ test("halaman pendukung: harga, keamanan, privasi, syarat, tentang tertaut dan b
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Harga");
   await expect(page.getByRole("table")).toContainText("Rp174.000"); // Usaha 20 orang: 149.000 + 5 x 5.000
   const halaman: [string, string, string][] = [
-    ["Keamanan data", "/keamanan", "Keamanan data"], ["Kebijakan privasi", "/privasi", "Kebijakan privasi"],
+    ["Harga", "/harga", "Harga"], ["Keamanan data", "/keamanan", "Keamanan data"], ["Kebijakan privasi", "/privasi", "Kebijakan privasi"],
     ["Syarat layanan", "/syarat", "Syarat layanan"], ["Tentang Nadi", "/tentang", "Tentang Nadi"],
   ];
   for (const [tautan, jalur, judul] of halaman) {
