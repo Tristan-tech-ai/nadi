@@ -2214,8 +2214,10 @@
    "accept": "semua layar publik dan aplikasi lewat katalog; tes otomatis memindai teks render mode en dan gagal bila ada kata Indonesia dari daftar umum; layar pajak/gaji diberi label khusus Indonesia; axe bersih",
    "how": "I-02",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:44:25"
+   "status": "done",
+   "created": "2026-11-03T19:44:25",
+   "done": "2026-11-04T06:20:53",
+   "result": "commit 6d74bab..59824a4 (Surat keluar, Akuntan, Pajak, Mata, Peta, Mulai, Serah terima, Wawancara, kepala, skill, masuk/daftar/staf, luring dua bahasa, absen, kios, oauth; sebelumnya Feed s.d. Agenda 244-258); e2e/bahasa.spec.ts produksi https://nadi-swart.vercel.app 9/9 (bahasa-akun memindai 20+ layar mode en tanpa kata Indonesia + axe; 'sebelum masuk' cookie en); kamus.test bentuk id/en identik + en tanpa kata Indonesia; label Indonesia only di Gaji, Kompas Pajak, BPMP; dokumen penerima Indonesia (cetak, /v, /i, /slip, /lamar, demo) tetap id menurut DECISIONS"
   },
   {
    "id": "I-04",
