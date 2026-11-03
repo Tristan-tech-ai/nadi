@@ -164,6 +164,14 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   const axeKerja = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeKerja.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
+  // Magang mode Inggris: dana rekrutmen, rencana, formulir, tabel biaya; isi rencana dan nama data pengguna.
+  await p1.goto("/app/magang");
+  await expect(p1.getByRole("heading", { level: 1, name: "Internships" })).toBeVisible();
+  await expect(p1.getByRole("heading", { level: 2, name: "Cost per hire" })).toBeVisible();
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
+  const axeMagang = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axeMagang.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
   // Sesi baru tanpa cookie bahasa: pilihan datang dari akun.
   const k2 = await browser.newContext();
   const p2 = await k2.newPage();

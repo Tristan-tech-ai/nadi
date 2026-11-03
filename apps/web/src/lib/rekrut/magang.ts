@@ -33,11 +33,12 @@ export function biayaJam(menit: number, tarifPerJam: number | null | undefined):
 export const menitSah = (n: number) => Number.isInteger(n) && n >= 1 && n <= 600;
 
 /** 90 -> "1 jam 30 menit", 45 -> "45 menit", 120 -> "2 jam". */
-export function formatLamaMenit(menit: number): string {
+export function formatLamaMenit(menit: number, bahasa: "id" | "en" = "id"): string {
+  const [jm, mnt] = bahasa === "en" ? ["h", "min"] : ["jam", "menit"];
   const j = Math.floor(menit / 60);
   const m = menit % 60;
-  if (j === 0) return `${m} menit`;
-  return m ? `${j} jam ${m} menit` : `${j} jam`;
+  if (j === 0) return `${m} ${mnt}`;
+  return m ? `${j} ${jm} ${m} ${mnt}` : `${j} ${jm}`;
 }
 
 /** Baris isian mingguan dari formulir (semua teks). Baris yang seluruhnya kosong dibuang. */
