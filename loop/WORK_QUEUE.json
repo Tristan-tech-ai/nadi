@@ -2414,8 +2414,10 @@
    "accept": "PIB/PEB/SPPB yang dilempar terbaca (jenis baru di baca-berkas), usulan jurnal persediaan + PPN impor + PPh 22 impor + utang valas di Feed; eval korpus sintetis >= 90% bidang",
    "how": "setelah B-EKSIM2",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T09:09:08"
+   "status": "done",
+   "created": "2026-11-04T09:09:08",
+   "done": "2026-11-04T12:23:44",
+   "result": "7118ddb; baca-berkas v13 (index/inti/cv/ekstraktor identik repo) jenis pib/peb/sppb; eval docs/quality/eval-pabean.md 34/34 bidang = 100% (4 berkas korpus sintetis fixtures/korpus/pabean); migrasi 20261104050000_jurnal_pib (md5 1955d171 cocok) tes SQL 10/10; vitest pabean 7/7 (merah 7/7 dengan inti lama); e2e impor-pib lulus lokal dan produksi https://nadi-swart.vercel.app/app (axe 390/1440 terang/gelap, foto, jurnal 5 baris seimbang)"
   },
   {
    "id": "R-UUPK2",
