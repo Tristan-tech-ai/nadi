@@ -111,7 +111,7 @@ test("e-Bupot: potong PPh 23 tagihan pemasok, unduh XML BpuBulk yang lolos atura
   await form.getByLabel("NPWP/NIK pemasok").fill("0811034248502000");
   await form.getByRole("button", { name: "Potong PPh" }).click();
   // tersimpan: tagihan tetap terbuka (sisa Rp1.470.000), bukti potong muncul di daftar
-  await expect(page.getByTestId("bupot").getByText("Rp30.000").first()).toBeVisible();
+  await expect(page.getByTestId("bupot").locator("li", { hasText: pemasok })).toContainText("Rp30.000");
   const { data: t } = await sb.from("tagihan_beli").select("dikurangi").eq("id", tagihanId).single();
   expect(t?.dikurangi).toBe(30000);
 
