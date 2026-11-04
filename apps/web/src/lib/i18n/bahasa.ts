@@ -40,5 +40,5 @@ export const JALUR_DUA_BAHASA = ["/", "/harga", "/keamanan", "/privasi", "/syara
 /** Tujuan pemilih bahasa dari jalur sekarang. */
 export function tujuanPemilih(jalur: string, tujuan: Bahasa): string {
   const dasar = jalurBahasa(jalur, "id");
-  return JALUR_DUA_BAHASA.includes(dasar) ? jalurBahasa(dasar, tujuan) : jalurBahasa("/", tujuan);
+  return JALUR_DUA_BAHASA.includes(dasar) || /^\/fitur\/[a-z]+$/.test(dasar) ? jalurBahasa(dasar, tujuan) : jalurBahasa("/", tujuan);
 }

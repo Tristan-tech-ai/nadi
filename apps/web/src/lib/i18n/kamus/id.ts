@@ -1707,6 +1707,426 @@ export const kamusId = {
     galatDb: "{pesan}",
     gagal: "Nadi gagal menyimpan. Coba lagi sebentar; isianmu tidak hilang.",
   },
+  poster: {
+    "metaJudul": "Nadi: lempar notanya, Nadi yang merapikan",
+    "metaDeskripsi": "Foto nota, surat dokter, atau slip gaji. Nadi membacanya dan menyiapkan catatan yang tinggal kamu setujui dari HP.",
+    "nav": {
+      "fitur": "Fitur",
+      "harga": "Harga",
+      "masuk": "Masuk",
+      "coba": "Coba usaha contoh",
+      "menuFitur": "Semua fitur",
+      "tutup": "Tutup",
+      "beranda": "Beranda Nadi",
+      "utama": "Utama"
+    },
+    "judul1": "Lempar notanya.",
+    "judul2": "Nadi yang merapikan.",
+    "pendukung": "Foto nota, surat dokter, atau slip gaji. Nadi membacanya, kamu tinggal menyetujui dari HP.",
+    "mulai": "Mulai dari satu nota",
+    "contoh": "Coba usaha contoh",
+    "gulir": "Gulir untuk merapikan",
+    "kacau": {
+      "chat1": "Bu, nota kemarin mana?",
+      "chat2": "Gaji Sari berapa?"
+    },
+    "kartuHp": [
+      "Belanja Rp376.500",
+      "Izin Fitri 3 hari",
+      "Absen 32 baris",
+      "Tagih Bu Rina",
+      "Gaji Sari siap"
+    ],
+    "capDiterima": "DITERIMA",
+    "capTerkirim": "TERKIRIM",
+    "capLunas": "LUNAS",
+    "cobaJudul1": "Coba sendiri.",
+    "cobaJudul2": "Pilih berkasnya.",
+    "cobaKet": "Berkas contoh dari uji Nadi. Di aplikasi, kartu ini muncul setelah kamu memotret berkasnya.",
+    "cobaLabel": "Pilih berkas contoh",
+    "setujui": "Setujui",
+    "tolak": "Tolak",
+    "ulangi": "Ulangi",
+    "capDitolak": "DITOLAK",
+    "kartuCoba": [
+      {
+        "judul": "Catat belanja {rp} di UD Sumber Rejeki",
+        "ringkas": "3 barang, nota NT-4671. Jumlah per baris cocok dengan total.",
+        "tercatat": "Tercatat sebagai belanja 13 Okt 2026.",
+        "tidakDicatat": "Tidak dicatat. Nota tetap tersimpan sebagai bukti."
+      },
+      {
+        "judul": "Catat izin sakit Fitri Astuti 3 hari",
+        "ringkas": "Dibaca dari surat dokter, mulai 25 Okt 2026. Sesuai aturan izin sakitmu.",
+        "tercatat": "Izin sakit tercatat 25 sampai 27 Okt 2026.",
+        "tidakDicatat": "Tidak dicatat. Fitri melihat alasannya."
+      },
+      {
+        "judul": "Setujui gaji Oktober Ketut {rp}",
+        "ringkas": "Bruto Rp7.500.000, potongan Rp304.000. Angka per baris cocok.",
+        "tercatat": "Slip Oktober siap dibagikan ke Ketut.",
+        "tidakDicatat": "Ditahan. Slip belum dibagikan."
+      }
+    ],
+    "pilihan": [
+      "Nota pemasok",
+      "Surat dokter",
+      "Slip gaji"
+    ],
+    "ketukJudul": "Cara kerjanya",
+    "ketuk": [
+      "Foto.",
+      "Setujui.",
+      "Beres."
+    ],
+    "ketukKet": [
+      "Nota difoto dari HP",
+      "Cap persetujuan turun",
+      "Masuk buku kas"
+    ],
+    "bandingJudul": "Geser untuk membandingkan",
+    "tanpa": "Tanpa Nadi",
+    "dengan": "Dengan Nadi",
+    "tanpaKet": "Nota, chat, dan Excel di mana-mana",
+    "denganKet": "Semua jadi kartu yang tinggal disetujui",
+    "pintuJudul": "Satu Nadi, sembilan pekerjaan",
+    "amanJudul": "Kamu tetap yang memutuskan",
+    "aman": [
+      "Data terpisah per usaha",
+      "AI tidak memutuskan uang",
+      "NIK tidak disimpan utuh",
+      "Kamera diproses di HP",
+      "Semua keputusan tercatat",
+      "Keputusan bisa dibatalkan"
+    ],
+    "hargaJudul": "Gratis selama masa uji",
+    "hargaSorot": "Selama masa uji semua paket gratis dan belum ada tagihan.",
+    "hargaRencana": "Di bawah ini rencana harga per bulan, belum termasuk PPN.",
+    "hargaLengkap": "Lihat rincian harga",
+    "tanyaJudul": "Yang sering ditanya",
+    "akhirJudul": "Mulai dari satu nota.",
+    "akhirTombol": "Buat akun",
+    "akhirContoh": "atau coba usaha contoh dulu",
+    "sedangDibuat": "Sedang dibuat"
+  },
+  halamanFitur: {"masalah": "Masalah yang dibereskan", "tanpaNadi": "Tanpa Nadi", "langkah": "Tiga langkah", "janji": "Yang tidak dilakukan AI", "pintu": "Coba atau lanjut", "masuk": "Berkas masuk", "menunggu": "Menunggu keputusanmu", "berikutnya": "Fitur berikutnya", "ya": "Ya", "tidak": "Tidak"},
+  fitur: [
+    {
+      "slug": "lempar",
+      "warna": "kunyit",
+      "ilustrasi": "nota",
+      "nama": "Lempar Saja",
+      "sub": "Foto berkas, Nadi membaca",
+      "pintu": "Nota jadi catatan sendiri",
+      "judul": "Foto berkasnya. Nadi membaca.",
+      "pendukung": "Nota pemasok, KTP, Excel absen, atau mutasi bank. Nadi membaca isinya dan menyiapkan usulan.",
+      "masalah": [
+        "Nota numpuk di laci",
+        "Mengetik ulang tiap malam",
+        "Total beda dengan nota"
+      ],
+      "langkah": [
+        "Foto atau lempar berkasnya",
+        "Nadi membaca barang, harga, dan total",
+        "Kamu setujui, masuk buku kas"
+      ],
+      "janji": [
+        [
+          false,
+          "Tidak ada yang tercatat sebelum kamu setujui"
+        ],
+        [
+          false,
+          "NIK tidak disimpan utuh"
+        ],
+        [
+          true,
+          "Nota berikutnya dari pemasok sama dibaca tanpa AI"
+        ]
+      ],
+      "coba": "Coba lempar di usaha contoh"
+    },
+    {
+      "slug": "feed",
+      "warna": "laut",
+      "ilustrasi": "feed",
+      "nama": "Feed Keputusan",
+      "sub": "Setujui dari HP",
+      "pintu": "Setujui dengan satu jempol",
+      "judul": "Semua keputusan di satu layar.",
+      "pendukung": "Nota, izin, gaji, dan tagihan datang sebagai kartu usulan. Kamu setujui atau tolak dari HP.",
+      "masalah": [
+        "Pesan WA bertumpuk",
+        "Lupa siapa minta apa",
+        "Keputusan tanpa jejak"
+      ],
+      "langkah": [
+        "Usulan datang dengan buktinya",
+        "Setujui atau tolak dengan jempol",
+        "Semua tercatat dan bisa dibatalkan"
+      ],
+      "janji": [
+        [
+          false,
+          "AI tidak menyetujui uang sendiri"
+        ],
+        [
+          true,
+          "Usulan uang besar hanya untuk pemilik"
+        ],
+        [
+          true,
+          "Setiap keputusan otomatis punya alasan tertulis"
+        ]
+      ],
+      "coba": "Coba Feed di usaha contoh"
+    },
+    {
+      "slug": "absen",
+      "warna": "daun",
+      "ilustrasi": "absen",
+      "nama": "Absen dan izin",
+      "sub": "Tanpa titip absen",
+      "pintu": "Absen tidak bisa dititip",
+      "judul": "Absen yang tidak bisa dititip.",
+      "pendukung": "Kode QR di tablet pintu berganti tiap 15 detik, lalu HP staf memeriksa kedipan mata.",
+      "masalah": [
+        "Absen dititip teman",
+        "Izin lewat chat hilang",
+        "Rekap absen manual"
+      ],
+      "langkah": [
+        "Staf memindai kode di pintu",
+        "HP staf memeriksa kedipan",
+        "Izin sesuai aturanmu disetujui otomatis"
+      ],
+      "janji": [
+        [
+          false,
+          "Foto wajah tidak pernah diunggah"
+        ],
+        [
+          true,
+          "Pemilik bisa membatalkan izin otomatis"
+        ],
+        [
+          true,
+          "Penolakan selalu menyebut jalan banding"
+        ]
+      ],
+      "coba": "Coba absen di usaha contoh"
+    },
+    {
+      "slug": "gaji",
+      "warna": "cap",
+      "ilustrasi": "gaji",
+      "nama": "Gaji",
+      "sub": "Slip, PPh 21, BPJS",
+      "pintu": "Gaji tanpa salah hitung",
+      "judul": "Gaji beres tanpa salah hitung.",
+      "pendukung": "Absen dan lembur masuk sendiri. Nadi menghitung PPh 21 dan BPJS, kamu yang menyetujui.",
+      "masalah": [
+        "Excel gaji tiga versi",
+        "Rekening ganda lolos",
+        "Slip lewat foto"
+      ],
+      "langkah": [
+        "Absen dan lembur masuk sendiri",
+        "Nadi menghitung, kamu setujui",
+        "Slip terkirim lewat tautan"
+      ],
+      "janji": [
+        [
+          false,
+          "Nadi tidak membayar gaji sendiri"
+        ],
+        [
+          true,
+          "Gerbang Gaji menahan rekening ganda"
+        ],
+        [
+          true,
+          "Setiap angka menyebut dasarnya"
+        ]
+      ],
+      "coba": "Lihat gaji di usaha contoh"
+    },
+    {
+      "slug": "tagihan",
+      "warna": "kunyit",
+      "ilustrasi": "tagihan",
+      "nama": "Tagihan",
+      "sub": "QRIS milikmu",
+      "pintu": "Tagihan pakai QRIS-mu",
+      "judul": "Tagih pakai QRIS milikmu.",
+      "pendukung": "Tagihan bernomor dengan QRIS-mu sendiri. Uang masuk langsung ke rekeningmu.",
+      "masalah": [
+        "Lupa siapa belum bayar",
+        "Sungkan menagih",
+        "Nomor rekening salah ketik"
+      ],
+      "langkah": [
+        "Terbitkan tagihan bernomor",
+        "Pelanggan membayar lewat QRIS-mu",
+        "Cocokkan mutasi, tandai lunas"
+      ],
+      "janji": [
+        [
+          false,
+          "QRIS-mu tidak pernah diubah"
+        ],
+        [
+          false,
+          "Nadi tidak memegang uangmu"
+        ],
+        [
+          true,
+          "Pengingat kamu kirim sendiri lewat WhatsApp"
+        ]
+      ],
+      "coba": "Lihat tagihan di usaha contoh"
+    },
+    {
+      "slug": "jadwal",
+      "warna": "daun",
+      "ilustrasi": "jadwal",
+      "nama": "Jadwal shift",
+      "sub": "Sesuai batas jam kerja",
+      "pintu": "Tukar shift lewat HP",
+      "judul": "Jadwal shift sesuai aturan.",
+      "pendukung": "Isi kebutuhan orang per jam. Nadi mengusulkan jadwal yang menjaga batas jam kerja.",
+      "masalah": [
+        "Jadwal di papan tulis",
+        "Lembur lewat batas",
+        "Tukar shift tanpa kabar"
+      ],
+      "langkah": [
+        "Isi kebutuhan per jam",
+        "Nadi menyusun usulan jadwal",
+        "Staf tukar shift lewat HP"
+      ],
+      "janji": [
+        [
+          true,
+          "Batas jam kerja PP 35/2021 dijaga database"
+        ],
+        [
+          false,
+          "Jadwal tidak tersimpan diam-diam"
+        ],
+        [
+          true,
+          "Setiap tukar shift lewat persetujuanmu"
+        ]
+      ],
+      "coba": "Coba jadwal di usaha contoh"
+    },
+    {
+      "slug": "mata",
+      "warna": "tinta",
+      "ilustrasi": "mata",
+      "nama": "Mata",
+      "sub": "Meja dan antrean langsung",
+      "pintu": "Meja penuh, langsung tahu",
+      "judul": "Kamera jadi mata warung.",
+      "pendukung": "HP atau kamera membaca meja terisi, kosong, dan panjang antrean. Videonya tidak keluar dari perangkat.",
+      "masalah": [
+        "Meja kosong tak terlihat",
+        "Antrean panjang telat diketahui",
+        "Rekaman tidak pernah ditonton"
+      ],
+      "langkah": [
+        "Gambar zona meja sekali",
+        "HP membaca status meja",
+        "Peta warung bergerak langsung"
+      ],
+      "janji": [
+        [
+          false,
+          "Video tidak pernah diunggah"
+        ],
+        [
+          true,
+          "Hanya status meja yang dikirim"
+        ],
+        [
+          true,
+          "Bisa jalan di kotak kecil dengan kamera RTSP"
+        ]
+      ],
+      "coba": "Lihat peta warung di usaha contoh"
+    },
+    {
+      "slug": "rekrut",
+      "warna": "cap",
+      "ilustrasi": "rekrut",
+      "nama": "Rekrut",
+      "sub": "Lowongan, wawancara suara",
+      "pintu": "Wawancara lewat suara",
+      "judul": "Cari karyawan tanpa repot.",
+      "pendukung": "Lowongan diperiksa dari kalimat yang diskriminatif. Pelamar menjawab wawancara lewat rekaman suara.",
+      "masalah": [
+        "Lowongan berbau diskriminasi",
+        "Ratusan CV di chat",
+        "Jadwal wawancara bentrok"
+      ],
+      "langkah": [
+        "Lowongan diperiksa kalimatnya",
+        "Pelamar menjawab lewat rekaman",
+        "Kamu dengar klipnya, lalu putuskan"
+      ],
+      "janji": [
+        [
+          false,
+          "AI tidak meranking pelamar"
+        ],
+        [
+          false,
+          "Skor kepribadian tidak dipakai menolak"
+        ],
+        [
+          true,
+          "Pelamar bisa memantau statusnya"
+        ]
+      ],
+      "coba": "Lihat rekrut di usaha contoh"
+    },
+    {
+      "slug": "pajak",
+      "warna": "laut",
+      "ilustrasi": "pajak",
+      "nama": "Pajak dan akuntan",
+      "sub": "Kompas Pajak, Coretax",
+      "pintu": "Akuntan tanpa minta file",
+      "judul": "Pajak dan buku untuk akuntanmu.",
+      "pendukung": "Posisi PPh final dihitung dari jurnalmu. Akuntan membuka Ruang Akuntan tanpa minta file.",
+      "masalah": [
+        "Bingung batas PPh final",
+        "Akuntan minta file terus",
+        "Tutup buku molor"
+      ],
+      "langkah": [
+        "Kompas Pajak membaca jurnalmu",
+        "Akuntan masuk Ruang Akuntan",
+        "Ekspor BPMP untuk Coretax"
+      ],
+      "janji": [
+        [
+          true,
+          "Setiap angka pajak menyebut pasalnya"
+        ],
+        [
+          false,
+          "Akuntan tidak bisa menyetujui gaji"
+        ],
+        [
+          false,
+          "Nadi tidak menyarankan memecah usaha"
+        ]
+      ],
+      "coba": "Lihat pajak di usaha contoh"
+    }
+  ],
   demo: {
     label: "Contoh nota belanja",
     judulAwal: "Catat belanja",

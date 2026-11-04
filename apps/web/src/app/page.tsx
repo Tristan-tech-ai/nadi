@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { Beranda } from "@/components/landing/beranda";
+import { BerandaPoster } from "@/components/poster/beranda-poster";
 import { kamusId } from "@/lib/i18n/kamus/id";
 
 export const metadata: Metadata = {
-  title: kamusId.meta.judul,
-  description: kamusId.meta.deskripsi,
+  title: kamusId.poster.metaJudul,
+  description: kamusId.poster.metaDeskripsi,
   alternates: { canonical: "/", languages: { id: "/", en: "/en" } },
 };
 
 export default function HalamanBeranda() {
-  return <Beranda bahasa="id" />;
+  return <BerandaPoster bahasa="id" />;
 }

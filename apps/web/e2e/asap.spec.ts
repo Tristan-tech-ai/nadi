@@ -55,16 +55,22 @@ test("landing: demo nota bisa disetujui, axe bersih di 390 dan 1440 px terang da
   }
 });
 
-test("landing lengkap: navigasi, satu hari, empat peran, harga, keamanan, FAQ, tanpa status basi", async ({ page }, info) => {
+test("landing lengkap: menu Fitur, sembilan halaman fitur, harga, FAQ, tanpa status basi", async ({ page }, info) => {
   test.skip(info.project.name !== "desktop", "sekali (desktop)");
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
-  for (const [tautan, id] of [["Satu hari", "hari"], ["Siapa memakai", "peran"]]) {
-    await page.getByRole("navigation", { name: "Utama" }).getByRole("link", { name: tautan }).click();
-    await expect(page.locator(`#${id}`)).toBeInViewport();
-  }
-  await expect(page.locator("#hari li")).toHaveCount(11);
-  for (const peran of ["Pemilik", "Admin", "Staf", "Akuntan"]) await expect(page.locator("#peran h3", { hasText: peran })).toBeVisible();
+  // Menu Fitur (popover bawaan): 9 pintu bergambar, setiap pintu ke halaman fiturnya.
+  const nav = page.getByRole("navigation", { name: "Utama" });
+  await nav.getByRole("button", { name: "Fitur" }).click();
+  const menu = page.locator("#menu-fitur");
+  await expect(menu).toBeVisible();
+  await expect(menu.locator(".kisi-fitur a")).toHaveCount(9);
+  await menu.getByRole("link", { name: /^Gaji/ }).click();
+  await expect(page).toHaveURL(/\/fitur\/gaji$/);
+  await expect(page.getByRole("heading", { level: 1 })).toContainText("Gaji beres");
+  await expect(page.getByRole("link", { name: /Fitur berikutnya: Tagihan/ })).toHaveAttribute("href", "/fitur/tagihan");
+  await page.goto("/");
+  await expect(page.locator("#fitur .pintu a")).toHaveCount(9);
   const harga = page.locator("#harga li");
   await expect(harga).toHaveCount(4);
   await expect(harga.nth(1)).toContainText("Rp149.000");
@@ -76,6 +82,31 @@ test("landing lengkap: navigasi, satu hari, empat peran, harga, keamanan, FAQ, t
   const sedang = await page.locator("#faq ul").innerText();
   expect(sedang).not.toMatch(/absen|gaji|topi|izin|invoice/i);
   await expect(page.getByRole("contentinfo").getByRole("link", { name: "Panduan per peran" })).toHaveAttribute("href", "/panduan");
+});
+
+test("halaman fitur: sembilan jalur id dan en, axe bersih, judul paling banyak dua baris di 390 px", async ({ page }, info) => {
+  test.skip(info.project.name !== "desktop", "sekali (desktop)");
+  test.setTimeout(240_000);
+  const slug = ["lempar", "feed", "absen", "gaji", "tagihan", "jadwal", "mata", "rekrut", "pajak"];
+  for (const s of slug) {
+    for (const awal of ["", "/en"]) {
+      await page.setViewportSize({ width: 390, height: 844 });
+      const res = await page.goto(`${awal}/fitur/${s}`);
+      expect(res?.status(), `${awal}/fitur/${s}`).toBe(200);
+      const h1 = page.getByRole("heading", { level: 1 });
+      const baris = await h1.evaluate((el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)));
+      expect(baris, `${awal}/fitur/${s}`).toBeLessThanOrEqual(2);
+      if (s === "lempar" || s === "mata") {
+        for (const skema of ["light", "dark"] as const) {
+          await page.emulateMedia({ colorScheme: skema });
+          await page.waitForTimeout(300);
+          const hasil = await new AxeBuilder({ page }).analyze();
+          expect(hasil.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), `${awal}/fitur/${s} ${skema}`).toEqual([]);
+          await page.screenshot({ path: info.outputPath(`fitur-${s}${awal.replace("/", "-")}-390-${skema}.png`), fullPage: true });
+        }
+      }
+    }
+  }
 });
 
 test("halaman pendukung: harga, keamanan, privasi, syarat, tentang tertaut dan bersih axe", async ({ page }, info) => {
@@ -112,7 +143,7 @@ test("coba usaha contoh dari landing: Feed demo tampil < 3 dtk, baca-saja, axe b
   test.skip(info.project.name !== "desktop", "sekali (desktop), lebar diatur sendiri");
   await page.goto("/");
   const mulai = Date.now();
-  await page.getByRole("link", { name: "Buka usaha contoh tanpa daftar" }).click();
+  await page.getByRole("link", { name: "Coba usaha contoh", exact: true }).first().click();
   // Cache Components menyimpan halaman sebelumnya (tersembunyi) saat pindah rute, jadi batasi ke Feed yang terlihat.
   const feed = page.getByTestId("feed-demo").filter({ visible: true });
   await expect(feed.locator("article")).toHaveCount(4);

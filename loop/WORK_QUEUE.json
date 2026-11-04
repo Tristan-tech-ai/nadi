@@ -2525,8 +2525,10 @@
    "accept": "docs/research/psikologi-persuasi.md dan docs/research/audio-iklan.md dengan minimal 12 sumber primer bertanggal (makalah, standar), tiap prinsip punya penerapan konkret di landing/video/tulisan; baris LEARN.md",
    "how": "WebSearch extended + baca makalah asli",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T17:14:54"
+   "status": "done",
+   "created": "2026-11-04T17:14:54",
+   "done": "2026-11-04T17:18:06",
+   "result": "docs/research/psikologi-persuasi.md (13 bagian, 10 makalah primer) + docs/research/audio-iklan.md (lisensi, analisis, resep efek suara, -14 LUFS/-1 dBTP) + 4 baris LEARN.md, commit 1fd5e7a"
   },
   {
    "id": "Q-40",
@@ -2539,8 +2541,10 @@
    "accept": "scripts/cek-tulisan.py mode ui/web/video/deck/email untuk id dan en; selftest dengan contoh buruk yang harus GAGAL dan contoh baik LOLOS; langkah tulisan di gate.sh atas kamus id/en dan naskah docs/promo; dibuat merah sengaja sekali",
    "how": "port + aturan SaaS",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T17:14:55"
+   "status": "done",
+   "created": "2026-11-04T17:14:55",
+   "done": "2026-11-04T17:21:06",
+   "result": "scripts/cek-tulisan.py selftest 23/23, kamus 3624 teks LOLOS (merah sengaja: 'Mari kita' -> 2 temuan GAGAL), langkah tulisan di gate.sh, commit 051c744"
   },
   {
    "id": "D-24",
@@ -2553,8 +2557,10 @@
    "accept": "docs/design/DESIGN.md; token poster dan gerak di globals.css + tokens.ts dengan tes kontras AA kedua tema; cek-slop.py menolak garis tipis, mono, eyebrow di komponen landing (merah sengaja sekali)",
    "how": "docs/design/RENCANA-NOV-2026.md langkah 3",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T17:14:55"
+   "status": "done",
+   "created": "2026-11-04T17:14:55",
+   "done": "2026-11-04T17:25:19",
+   "result": "docs/design/DESIGN.md; POSTER/AKSEN di tokens.ts + globals.css, tokens.test.ts 73/73 (merah sengaja: sorot di laut 4,33 dan cap 2,87 -> laut #1A3796, cap #A63225); cek-slop P01-P04 selftest 29/29; commit a1c7b97"
   },
   {
    "id": "D-25",

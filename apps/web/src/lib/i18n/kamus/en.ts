@@ -1706,6 +1706,426 @@ export const kamusEn: Kamus = {
     galatDb: "Nadi refused this (details in Indonesian): {pesan}",
     gagal: "Nadi could not save it. Try again shortly; your entries are kept.",
   },
+  poster: {
+    "metaJudul": "Nadi: drop in the receipt, Nadi sorts it out",
+    "metaDeskripsi": "Snap a receipt, a doctor's note, or a payslip. Nadi reads it and prepares a record you approve from your phone.",
+    "nav": {
+      "fitur": "Features",
+      "harga": "Pricing",
+      "masuk": "Sign in",
+      "coba": "Try the sample business",
+      "menuFitur": "All features",
+      "tutup": "Close",
+      "beranda": "Nadi home",
+      "utama": "Main"
+    },
+    "judul1": "Drop in the receipt.",
+    "judul2": "Nadi sorts it out.",
+    "pendukung": "Snap a receipt, a doctor's note, or a payslip. Nadi reads it, and you approve from your phone.",
+    "mulai": "Start with one receipt",
+    "contoh": "Try the sample business",
+    "gulir": "Scroll to tidy up",
+    "kacau": {
+      "chat1": "Where is yesterday's receipt?",
+      "chat2": "What is Sari's pay?"
+    },
+    "kartuHp": [
+      "Purchase Rp376,500",
+      "Fitri sick 3 days",
+      "Attendance 32 rows",
+      "Bill Mrs Rina",
+      "Sari's pay ready"
+    ],
+    "capDiterima": "APPROVED",
+    "capTerkirim": "SENT",
+    "capLunas": "PAID",
+    "cobaJudul1": "Try it yourself.",
+    "cobaJudul2": "Pick a file.",
+    "cobaKet": "Sample files from Nadi's tests. In the app, this card appears after you photograph the file.",
+    "cobaLabel": "Pick a sample file",
+    "setujui": "Approve",
+    "tolak": "Reject",
+    "ulangi": "Again",
+    "capDitolak": "REJECTED",
+    "kartuCoba": [
+      {
+        "judul": "Record purchase {rp} at UD Sumber Rejeki",
+        "ringkas": "3 items, receipt NT-4671. Each line adds up to the total.",
+        "tercatat": "Recorded as a purchase on 13 Oct 2026.",
+        "tidakDicatat": "Not recorded. The receipt stays on file as proof."
+      },
+      {
+        "judul": "Record 3 days of sick leave for Fitri",
+        "ringkas": "Read from the doctor's note, starting 25 Oct 2026. It fits your sick leave rule.",
+        "tercatat": "Sick leave recorded, 25 to 27 Oct 2026.",
+        "tidakDicatat": "Not recorded. Fitri sees the reason."
+      },
+      {
+        "judul": "Approve Ketut's October pay {rp}",
+        "ringkas": "Gross Rp7,500,000, deductions Rp304,000. Every line adds up.",
+        "tercatat": "The October payslip is ready to share with Ketut.",
+        "tidakDicatat": "Held. The payslip has not been shared."
+      }
+    ],
+    "pilihan": [
+      "Supplier receipt",
+      "Doctor's note",
+      "Payslip"
+    ],
+    "ketukJudul": "How it works",
+    "ketuk": [
+      "Snap.",
+      "Approve.",
+      "Done."
+    ],
+    "ketukKet": [
+      "Photograph the receipt",
+      "The approval stamp lands",
+      "It goes into the ledger"
+    ],
+    "bandingJudul": "Drag to compare",
+    "tanpa": "Without Nadi",
+    "dengan": "With Nadi",
+    "tanpaKet": "Receipts, chats, and spreadsheets everywhere",
+    "denganKet": "Everything becomes a card to approve",
+    "pintuJudul": "One Nadi, nine jobs",
+    "amanJudul": "You still decide",
+    "aman": [
+      "Data kept apart per business",
+      "AI never decides on money",
+      "ID numbers never stored whole",
+      "Camera processed on the phone",
+      "Every decision is logged",
+      "Decisions can be undone"
+    ],
+    "hargaJudul": "Free during the trial",
+    "hargaSorot": "During the trial every plan is free and nothing is billed.",
+    "hargaRencana": "Below are the planned monthly prices, excluding VAT.",
+    "hargaLengkap": "See full pricing",
+    "tanyaJudul": "Common questions",
+    "akhirJudul": "Start with one receipt.",
+    "akhirTombol": "Create account",
+    "akhirContoh": "or try the sample business first",
+    "sedangDibuat": "In progress"
+  },
+  halamanFitur: {"masalah": "Problems it fixes", "tanpaNadi": "Without Nadi", "langkah": "Three steps", "janji": "What the AI never does", "pintu": "Try it or keep going", "masuk": "File received", "menunggu": "Waiting for you", "berikutnya": "Next feature", "ya": "Yes", "tidak": "No"},
+  fitur: [
+    {
+      "slug": "lempar",
+      "warna": "kunyit",
+      "ilustrasi": "nota",
+      "nama": "Drop",
+      "sub": "Snap a file, Nadi reads it",
+      "pintu": "Receipts record themselves",
+      "judul": "Snap the file. Nadi reads it.",
+      "pendukung": "Supplier receipts, ID cards, attendance sheets, or bank statements. Nadi reads them and prepares a suggestion.",
+      "masalah": [
+        "Receipts pile up in a drawer",
+        "Retyping every night",
+        "Totals that never match"
+      ],
+      "langkah": [
+        "Photograph or drop the file",
+        "Nadi reads items, prices, and totals",
+        "You approve, it goes into the ledger"
+      ],
+      "janji": [
+        [
+          false,
+          "Nothing is recorded before you approve"
+        ],
+        [
+          false,
+          "ID numbers are never stored whole"
+        ],
+        [
+          true,
+          "The next receipt from the same supplier is read without AI"
+        ]
+      ],
+      "coba": "Try Drop in the sample business"
+    },
+    {
+      "slug": "feed",
+      "warna": "laut",
+      "ilustrasi": "feed",
+      "nama": "Decision feed",
+      "sub": "Approve from your phone",
+      "pintu": "Approve with one thumb",
+      "judul": "Every decision on one screen.",
+      "pendukung": "Receipts, leave, payroll, and invoices arrive as suggestion cards. You approve or reject from your phone.",
+      "masalah": [
+        "Chat messages pile up",
+        "Forgetting who asked what",
+        "Decisions leave no trace"
+      ],
+      "langkah": [
+        "Suggestions arrive with their proof",
+        "Approve or reject with your thumb",
+        "Everything is logged and can be undone"
+      ],
+      "janji": [
+        [
+          false,
+          "AI never approves money on its own"
+        ],
+        [
+          true,
+          "Large money suggestions go to the owner only"
+        ],
+        [
+          true,
+          "Every automatic decision has a written reason"
+        ]
+      ],
+      "coba": "Try the feed in the sample business"
+    },
+    {
+      "slug": "absen",
+      "warna": "daun",
+      "ilustrasi": "absen",
+      "nama": "Attendance and leave",
+      "sub": "No buddy check-ins",
+      "pintu": "Check-ins nobody can fake",
+      "judul": "Check-ins nobody can fake.",
+      "pendukung": "The QR code on the door tablet changes every 15 seconds, then the staff phone checks for a blink.",
+      "masalah": [
+        "Friends clock in for each other",
+        "Leave requests lost in chat",
+        "Attendance tallied by hand"
+      ],
+      "langkah": [
+        "Staff scan the code at the door",
+        "The staff phone checks for a blink",
+        "Leave that fits your rules is approved"
+      ],
+      "janji": [
+        [
+          false,
+          "Face photos are never uploaded"
+        ],
+        [
+          true,
+          "The owner can undo automatic approvals"
+        ],
+        [
+          true,
+          "Every rejection names a way to appeal"
+        ]
+      ],
+      "coba": "Try attendance in the sample business"
+    },
+    {
+      "slug": "gaji",
+      "warna": "cap",
+      "ilustrasi": "gaji",
+      "nama": "Payroll",
+      "sub": "Payslips, income tax, BPJS",
+      "pintu": "Payroll without wrong sums",
+      "judul": "Payroll without wrong sums.",
+      "pendukung": "Attendance and overtime flow in. Nadi works out PPh 21 and BPJS, and you approve.",
+      "masalah": [
+        "Three versions of the payroll sheet",
+        "Duplicate bank accounts slip through",
+        "Payslips sent as photos"
+      ],
+      "langkah": [
+        "Attendance and overtime flow in",
+        "Nadi calculates, you approve",
+        "Payslips go out as links"
+      ],
+      "janji": [
+        [
+          false,
+          "Nadi never pays anyone on its own"
+        ],
+        [
+          true,
+          "The payroll gate holds duplicate accounts"
+        ],
+        [
+          true,
+          "Every figure names its legal basis"
+        ]
+      ],
+      "coba": "See payroll in the sample business"
+    },
+    {
+      "slug": "tagihan",
+      "warna": "kunyit",
+      "ilustrasi": "tagihan",
+      "nama": "Invoices",
+      "sub": "Your own QRIS",
+      "pintu": "Invoices with your QRIS",
+      "judul": "Bill with your own QRIS.",
+      "pendukung": "Numbered invoices carry your own QRIS. Money goes straight into your account.",
+      "masalah": [
+        "Forgetting who still owes",
+        "Awkward to chase payment",
+        "Typos in account numbers"
+      ],
+      "langkah": [
+        "Issue a numbered invoice",
+        "The customer pays with your QRIS",
+        "Match the bank statement, mark it paid"
+      ],
+      "janji": [
+        [
+          false,
+          "Your QRIS is never changed"
+        ],
+        [
+          false,
+          "Nadi never holds your money"
+        ],
+        [
+          true,
+          "You send reminders yourself on WhatsApp"
+        ]
+      ],
+      "coba": "See invoices in the sample business"
+    },
+    {
+      "slug": "jadwal",
+      "warna": "daun",
+      "ilustrasi": "jadwal",
+      "nama": "Shift schedule",
+      "sub": "Within working-hour limits",
+      "pintu": "Swap shifts from your phone",
+      "judul": "Shifts that follow the rules.",
+      "pendukung": "Enter how many people you need per hour. Nadi suggests a schedule within working-hour limits.",
+      "masalah": [
+        "Schedules on a whiteboard",
+        "Overtime past the limit",
+        "Shift swaps nobody hears about"
+      ],
+      "langkah": [
+        "Enter the need per hour",
+        "Nadi drafts a schedule",
+        "Staff swap shifts from their phones"
+      ],
+      "janji": [
+        [
+          true,
+          "The database enforces PP 35/2021 hour limits"
+        ],
+        [
+          false,
+          "No schedule is saved behind your back"
+        ],
+        [
+          true,
+          "Every swap needs your approval"
+        ]
+      ],
+      "coba": "Try scheduling in the sample business"
+    },
+    {
+      "slug": "mata",
+      "warna": "tinta",
+      "ilustrasi": "mata",
+      "nama": "Mata (camera)",
+      "sub": "Tables and queues, live",
+      "pintu": "Know when tables fill up",
+      "judul": "Your camera watches the tables.",
+      "pendukung": "A phone or camera reads which tables are taken and how long the queue is. The video never leaves the device.",
+      "masalah": [
+        "Empty tables go unnoticed",
+        "Long queues spotted too late",
+        "Recordings nobody watches"
+      ],
+      "langkah": [
+        "Draw the table zones once",
+        "The phone reads each table",
+        "The floor map updates live"
+      ],
+      "janji": [
+        [
+          false,
+          "Video is never uploaded"
+        ],
+        [
+          true,
+          "Only table status is sent"
+        ],
+        [
+          true,
+          "Runs on a small box with an RTSP camera"
+        ]
+      ],
+      "coba": "See the floor map in the sample business"
+    },
+    {
+      "slug": "rekrut",
+      "warna": "cap",
+      "ilustrasi": "rekrut",
+      "nama": "Hiring",
+      "sub": "Job posts, voice interviews",
+      "pintu": "Interviews by voice",
+      "judul": "Hire without the hassle.",
+      "pendukung": "Job posts are checked for discriminatory wording. Applicants answer interview questions by voice recording.",
+      "masalah": [
+        "Job posts with biased wording",
+        "Hundreds of CVs in chat",
+        "Interview times that clash"
+      ],
+      "langkah": [
+        "Nadi checks the job post wording",
+        "Applicants answer by recording",
+        "You listen to the clips, then decide"
+      ],
+      "janji": [
+        [
+          false,
+          "AI never ranks applicants"
+        ],
+        [
+          false,
+          "Personality scores are never grounds to reject"
+        ],
+        [
+          true,
+          "Applicants can track their status"
+        ]
+      ],
+      "coba": "See hiring in the sample business"
+    },
+    {
+      "slug": "pajak",
+      "warna": "laut",
+      "ilustrasi": "pajak",
+      "nama": "Tax and accountant",
+      "sub": "Tax compass, Coretax export",
+      "pintu": "Accountants without file requests",
+      "judul": "Tax and books for your accountant.",
+      "pendukung": "Your final income tax position comes from your ledger. Your accountant opens the Accountant Room.",
+      "masalah": [
+        "Unsure about the final tax limit",
+        "Accountants keep asking for files",
+        "Closing the books runs late"
+      ],
+      "langkah": [
+        "The tax compass reads your ledger",
+        "Your accountant joins the Accountant Room",
+        "Export the BPMP file for Coretax"
+      ],
+      "janji": [
+        [
+          true,
+          "Every tax figure cites its article"
+        ],
+        [
+          false,
+          "Accountants cannot approve payroll"
+        ],
+        [
+          false,
+          "Nadi never suggests splitting a business"
+        ]
+      ],
+      "coba": "See tax in the sample business"
+    }
+  ],
   demo: {
     label: "Sample shopping receipt",
     judulAwal: "Record purchase of",

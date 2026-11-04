@@ -16,20 +16,21 @@
   --poster-kunyit: #E9A825;
   --poster-kunyit-tinta: #1C1B18;
   --poster-tinta: #1C1B18;
-  --poster-tinta-tinta: #FBFAF6;
+  --poster-tinta-tinta: #FFFFFF;
   --poster-cap: #A63225;
-  --poster-cap-tinta: #FFFDF8;
+  --poster-cap-tinta: #FFFFFF;
   --poster-laut: #1A3796;
-  --poster-laut-tinta: #FFFDF8;
+  --poster-laut-tinta: #FFFFFF;
   --poster-daun: #23704A;
-  --poster-daun-tinta: #FFFDF8;
-  --poster-tulang: #F3F1EC;
+  --poster-daun-tinta: #FFFFFF;
+  --poster-tulang: #EEEEEA;
   --poster-tulang-tinta: #1C1B18;
-  --poster-lembar: #FFFDF8;
+  --poster-lembar: #FFFFFF;
   --poster-lembar-tinta: #1C1B18;
   --sorot: #E9A825;
   --stempel: #B4372A;
   --lunas: #23704A;
+  --sorot-kunyit: #A63225;
   color-scheme: light;
 }
 
@@ -63,6 +64,7 @@
     --sorot: #F0B53D;
     --stempel: #F08A76;
     --lunas: #6FCF9B;
+  --sorot-kunyit: #F08A76;
     color-scheme: dark;
   }
 }
@@ -94,6 +96,7 @@
   --sorot: #F0B53D;
   --stempel: #F08A76;
   --lunas: #6FCF9B;
+  --sorot-kunyit: #F08A76;
   color-scheme: dark;
 }
 

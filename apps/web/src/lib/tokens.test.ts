@@ -51,6 +51,7 @@ describe("lapangan poster (Persuade): kontras kedua tema", () => {
     for (const nama of ["tinta", "laut"] as const) {
       it(`sorot di lapangan ${nama} (${m}) >= 4,5:1`, () => expect(kontras(AKSEN.sorot[m], POSTER[nama][m][0])).toBeGreaterThanOrEqual(4.5));
     }
+    it(`sorot-kunyit di lapangan kunyit (${m}) >= 3:1 (hanya judul besar)`, () => expect(kontras(AKSEN["sorot-kunyit"][m], POSTER.kunyit[m][0])).toBeGreaterThanOrEqual(3));
     it(`sorot di lapangan cap (${m}) >= 3:1 (hanya judul besar)`, () => expect(kontras(AKSEN.sorot[m], POSTER.cap[m][0])).toBeGreaterThanOrEqual(3));
     for (const nama of ["stempel", "lunas"] as const) {
       it(`${nama} di lembar (${m}) >= 4,5:1`, () => expect(kontras(AKSEN[nama][m], POSTER.lembar[m][0])).toBeGreaterThanOrEqual(4.5));

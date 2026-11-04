@@ -43,7 +43,13 @@ async function fokusTerlihat(page: Page, jumlah = 12) {
         return 0.2126 * k(r) + 0.7152 * k(g) + 0.0722 * k(b);
       };
       const a = lum(rgb(s.outlineColor));
-      const b = lum(rgb(getComputedStyle(document.body).backgroundColor));
+      // Latar sesungguhnya di belakang elemen: leluhur terdekat yang latarnya tidak transparan (lapangan warna landing), lalu body.
+      let latar = getComputedStyle(document.body).backgroundColor;
+      for (let x: HTMLElement | null = el.parentElement; x; x = x.parentElement) {
+        const bg = getComputedStyle(x).backgroundColor;
+        if (bg && !/rgba?\(0, 0, 0, 0\)|transparent/.test(bg)) { latar = bg; break; }
+      }
+      const b = lum(rgb(latar));
       return {
         nama: `${el.tagName.toLowerCase()}${el.getAttribute("type") ? `[type=${el.getAttribute("type")}]` : ""}${el.getAttribute("name") ? `[name=${el.getAttribute("name")}]` : ""} "${(el.getAttribute("aria-label") ?? el.textContent ?? "").trim().slice(0, 30)}" (${s.outlineStyle} ${s.outlineWidth})`,
         garis: s.outlineStyle !== "none" && parseFloat(s.outlineWidth) >= 2,
