@@ -149,7 +149,7 @@ impl Pelacak {
     }
 }
 
-/// Butir untuk RPC agen_mata_catat.
+/// Butir untuk RPC vision_agent_record (dulu agen_mata_catat).
 pub fn butir(zona: &str, b: Bacaan) -> serde_json::Value {
     match b {
         Bacaan::Meja(terisi) => serde_json::json!({ "zona": zona, "status": if terisi { "terisi" } else { "kosong" } }),

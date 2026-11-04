@@ -22,7 +22,7 @@ async function IsiMata() {
   const supabase = await createClient();
   const [konf, zona] = await Promise.all([
     supabase.from("konfigurasi").select("nilai").eq("kunci", "model_mata").maybeSingle(),
-    supabase.rpc("mata_keadaan"),
+    supabase.rpc("vision_state"),
   ]);
   if (zona.error) {
     return <div lang={bahasa}>{kepala}<p className="mt-6 text-tinta-2" data-testid="mata-tanpa-izin">{t.tanpaIzin}</p></div>;

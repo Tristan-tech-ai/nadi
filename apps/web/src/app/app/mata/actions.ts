@@ -20,7 +20,7 @@ async function galatDb(e: { code?: string; message: string }): Promise<string> {
 export async function simpanZona(zona: { id?: string; nama: string; jenis: string; poligon: [number, number][] }[]): Promise<HasilZona> {
   await wajibPerusahaan();
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("simpan_zona_mata", { p_zona: zona });
+  const { data, error } = await supabase.rpc("save_vision_zones", { p_zones: zona });
   if (error) return { galat: await galatDb(error) };
   return { zona: data as ZonaTersimpan[] };
 }
@@ -30,7 +30,7 @@ export async function catatMata(butir: { zona: string; status?: "kosong" | "teri
   await wajibPerusahaan();
   if (!butir.length) return { dicatat: 0 };
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("catat_mata", { p_butir: butir.slice(0, 50) });
+  const { data, error } = await supabase.rpc("record_vision_state", { p_items: butir.slice(0, 50) });
   if (error) return { galat: await galatDb(error) };
   return { dicatat: Number(data) || 0 };
 }

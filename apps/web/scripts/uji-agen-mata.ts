@@ -18,9 +18,9 @@ const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLI
 const { error: eMasuk } = await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI });
 if (eMasuk) throw new Error("masuk gagal: " + eMasuk.message);
 const zona = JSON.parse(readFileSync(join(AKAR, "fixtures", "korpus", "mata", "zona.json"), "utf8")) as { nama: string; jenis: string; poligon: number[][] }[];
-const { error: eZona } = await sb.rpc("simpan_zona_mata", { p_zona: zona.map(({ nama, jenis, poligon }) => ({ nama, jenis, poligon })) });
+const { error: eZona } = await sb.rpc("save_vision_zones", { p_zones: zona.map(({ nama, jenis, poligon }) => ({ nama, jenis, poligon })) });
 if (eZona) throw new Error("zona: " + eZona.message);
-const { data: token, error: eTok } = await sb.rpc("buat_token_agen_mata", { p_nama: `Uji agen ${new Date().toISOString().slice(0, 16)}` });
+const { data: token, error: eTok } = await sb.rpc("create_vision_agent_token", { p_name: `Uji agen ${new Date().toISOString().slice(0, 16)}` });
 if (eTok) throw new Error("token: " + eTok.message);
 const mulai = new Date().toISOString();
 
@@ -37,7 +37,7 @@ anak.kill();
 
 const { data: kej } = await sb.from("kejadian").select("jenis, data, terjadi_at").eq("sumber", "mata_agen").gte("terjadi_at", mulai).order("terjadi_at");
 const { data: agen } = await sb.from("agen_mata").select("id, terakhir_at").is("dicabut_at", null).order("dibuat_at", { ascending: false }).limit(1).single();
-if (agen) await sb.rpc("cabut_token_agen_mata", { p_id: agen.id });
+if (agen) await sb.rpc("revoke_vision_agent_token", { p_id: agen.id });
 const n = kej?.length ?? 0;
 const terisi = (kej ?? []).filter((k) => (k.data as { status?: string }).status === "terisi").length;
 console.log(`KEJADIAN mata_agen ${n} (terisi ${terisi}); agen terakhir dipakai ${agen?.terakhir_at ?? "-"}; token dicabut`);

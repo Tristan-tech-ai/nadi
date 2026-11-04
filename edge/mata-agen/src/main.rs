@@ -1,5 +1,5 @@
 //! nadi-mata-agen: agen edge Mata untuk kotak lokal (Windows/Linux). Panduan pasang: docs/edge/PASANG.md.
-//!   nadi-mata-agen jalan       baca RTSP, nilai zona dari Nadi, kirim perubahan ke RPC agen_mata_catat
+//!   nadi-mata-agen jalan       baca RTSP, nilai zona dari Nadi, kirim perubahan ke RPC vision_agent_record (nama lama agen_mata_catat tetap jalan)
 //!   nadi-mata-agen kalibrasi   simpan satu cuplikan kamera saat ruangan kosong sebagai latar
 //!   nadi-mata-agen evaluasi <video> <latar> <zona.json> <jawaban.json>   ukur akurasi pada korpus
 //! Konfigurasi lewat env: NADI_SUPABASE_URL, NADI_KUNCI_PUBLIK (kunci publishable, bukan rahasia), NADI_TOKEN_AGEN (nma_...),
@@ -62,7 +62,7 @@ fn jalan() -> Result<(), String> {
     let detik: f64 = std::env::var("NADI_DETIK").ok().and_then(|x| x.parse().ok()).unwrap_or(2.0);
     let ambang = Ambang::default();
     loop {
-        let zona: Vec<Zona> = serde_json::from_value(rpc(&url, &kunci, "agen_mata_zona", serde_json::json!({ "p_token": token }))?)
+        let zona: Vec<Zona> = serde_json::from_value(rpc(&url, &kunci, "vision_agent_zones", serde_json::json!({ "p_token": token }))?)
             .map_err(|e| format!("zona tidak terbaca: {e}"))?;
         if zona.is_empty() {
             return Err("Belum ada zona aktif. Gambar zona dulu di Nadi (halaman Mata).".into());
@@ -80,7 +80,7 @@ fn jalan() -> Result<(), String> {
                 .filter_map(|(zz, m, p)| p.masuk(baca_zona(zz, m, &berubah, LEBAR, TINGGI, &ambang)).map(|b| butir(&zz.id, b)))
                 .collect();
             if !kirim.is_empty() {
-                match rpc(&url, &kunci, "agen_mata_catat", serde_json::json!({ "p_token": token, "p_butir": kirim })) {
+                match rpc(&url, &kunci, "vision_agent_record", serde_json::json!({ "p_token": token, "p_items": kirim })) {
                     Ok(n) => eprintln!("{} perubahan dikirim, {n} kejadian baru", kirim.len()),
                     Err(e) => eprintln!("{e}"),
                 }

@@ -23,7 +23,7 @@ async function IsiPeta() {
     </>
   );
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("mata_keadaan");
+  const { data, error } = await supabase.rpc("vision_state");
   if (error) return <div lang={bahasa}>{kepala}<p className="mt-6 text-tinta-2" data-testid="peta-tanpa-izin">{t.tanpaIzin}</p></div>;
   return <div lang={bahasa}>{kepala}<PetaUsaha awal={(data ?? []) as ZonaPeta[]} topik={`peta:${sesi.perusahaanId}`} privat judul={t.denahSekarang} teks={kamus.petaDenah} bahasa={bahasa} /></div>;
 }
