@@ -34,6 +34,7 @@ async function Isi() {
       <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
       <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
       {bahasa !== "id" && <p className="mt-2 text-sm font-semibold" data-testid="khusus-indonesia">{t.khususId}</p>}
+      <p className="mt-2 text-sm"><a href="/app/mitra" className="underline underline-offset-4" data-testid="tautan-mitra">{ambilKamus(bahasa).mitra.judul}</a></p>
     </>
   );
   const bungkus = (isi: React.ReactNode) => <div lang={bahasa}>{kepala}{isi}</div>;

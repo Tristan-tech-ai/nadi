@@ -55,6 +55,7 @@ async function Isi() {
       <p className="mt-2 text-tinta-2">
         {sisip(t.kodeUsaha, { kode: <span className="font-mono font-semibold text-tinta" data-testid="kode-usaha">{usaha?.kode}</span> })}
       </p>
+      <p className="mt-1 text-sm"><a href="/app/mitra" className="underline underline-offset-4" data-testid="tautan-mitra">{kamus.mitra.judul}</a></p>
       <FormTambahOrang teks={t} />
       {orang?.length ? (
         <ul className="mt-6 divide-y divide-garis border-y border-garis">

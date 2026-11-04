@@ -203,6 +203,13 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   const axeImpor = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeImpor.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
+  // Direktori mitra mode Inggris (F6-04); nama dan layanan mitra dari database bertanda lang=id.
+  await p1.goto("/app/mitra");
+  await expect(p1.getByRole("heading", { level: 1, name: "Psychologist and accountant partners" })).toBeVisible();
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
+  const axeMitra = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axeMitra.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
   // Surat keluar mode Inggris; isi surat adalah dokumen resmi Indonesia (lang=id).
   await p1.goto("/app/surat-keluar");
   await expect(p1.getByRole("heading", { level: 1, name: "Outgoing letters" })).toBeVisible();
