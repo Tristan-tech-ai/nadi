@@ -2917,8 +2917,10 @@
    "accept": "tes SQL; e2e absen di luar radius ditolak dengan pesan jelas; korpus log mesin",
    "how": "docs/research/mekari/rencana.md; menutup TA-17, TA-19..TA-24; isi: Waktu lanjutan: geofence absen (izin lokasi, radius per tempat), kunci periode absensi, cuti per jam dan blok, sisa cuti terbawa, libur nasional + cuti bersama bertanggal (SKB resmi), on-call, banyak shift sehari, pengajuan lembur oleh staf, timesheet per proyek, impor log mesin sidik jari lewat Lempar",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T01:17:25",
+   "result": "3208e48 e61fdd3 be4a1cc 2483ff7: migrasi 062000 md5 3648c4b4 + 062100 md5 111ad6ec, tes SQL waktu_lanjutan 22/22; baca-berkas v15 (5 berkas md5 sama dengan repo) dengan pengurai log mesin, korpus fixtures/korpus/logmesin 3 berkas, vitest logmesin 5/5; e2e absen geofence 4/4 lokal (database produksi), produksi absen 2/2 (2 butuh penanda wajah lokal) + izin + jadwal lulus; Permissions-Policy geolocation=(self) di /absen produksi; foto 390/1440 terang/gelap axe 0 serius; cuti per jam dan sisa cuti terbawa ditunda (SEBAGIAN di fitur.md)"
   },
   {
    "id": "M-13",
