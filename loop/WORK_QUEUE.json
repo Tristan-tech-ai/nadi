@@ -3187,6 +3187,20 @@
    "created": "2026-11-05T02:22:15",
    "done": "2026-11-05T02:56:06",
    "result": "198413d: migrasi 065000 potong_pph (md5 458e31de; kode_objek_pajak 198 baris dari REF BPPU v.3 DJP), tes SQL potong_pph 24/24 (tarif REF, hutang berkurang, jurnal 2-100/2-210, kalender PMK 81/2024 Pasal 94/100/171/173 dengan geser libur, rekap jurnal = total invoice, staf/isolasi); BpuBulk + Retur Faktur Masukan urutan = contoh resmi (bupot.test 7/7), korpus 10 bupot + 5 retur, skema turunan BpuBulk.xsd + InputTaxInvoiceReturn.xsd: 38/38 lolos termasuk 3 contoh resmi, gerbang efaktur; /app/pajak/faktur kalender + rekap PPN + potong PPh + unduh XML e-Bupot; e2e faktur-pajak 2/2 lokal dan produksi; axe 390/1440 0 serius; retur faktur keluaran: di Coretax dibuat pembeli (dicatat), layar retur masukan menunggu nomor faktur pemasok di tagihan"
+  },
+  {
+   "id": "M-10B",
+   "fase": "F1",
+   "kind": "build",
+   "priority": 3,
+   "size": "l",
+   "wajib": true,
+   "title": "Gaji lanjutan 2: cicilan kasbon otomatis di slip, gaji mingguan/harian dan THR harian lepas, komponen kustom per level, alokasi cabang, berkas transfer bank, A1 dan BPJS",
+   "accept": "cicilan kasbon masuk slip dan sisa berkurang saat slip disetujui (tes SQL, batas Pasal 65 tetap); THR harian lepas rata-rata 12 bulan (Permenaker 6/2016 Pasal 3 ayat 3) cocok sampai rupiah; berkas transfer massal dari panduan resmi minimal satu bank dicatat di LEARN; e2e per alur",
+   "how": "docs/research/gaji-lanjutan.md bagian Belum",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T03:09:35"
   }
  ]
 }
