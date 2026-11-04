@@ -2342,8 +2342,10 @@
    "accept": "docs/research/ekspor-impor.md dari sumber primer bertanggal (DJBC/CEISA, INSW, OSS/NIB, BTKI/HS, PMK bea masuk/keluar, PPN dan PPh 22 impor, kurs pajak KMK, SKA/e-SKA, aturan devisa hasil ekspor BI/PP terbaru): alur ekspor dan impor langkah demi langkah, dokumen per langkah, angka/tarif bertanda terverifikasi atau belum, siapa yang mengisi (eksportir, PPJK, bank), apa yang bisa diotomatiskan Nadi tanpa izin khusus dan apa yang tidak (CEISA butuh akun pengguna), daftar tugas build turunan dengan kriteria terima; keputusan cakupan dicatat di DECISIONS",
    "how": "baca teks regulasi resmi (jdih.kemenkeu.go.id, beacukai.go.id, insw.go.id, oss.go.id, bi.go.id), bukan blog; ingat aturan TANPA penghindaran pajak dan bea",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T07:22:20"
+   "status": "done",
+   "created": "2026-11-04T07:22:20",
+   "done": "2026-11-04T09:09:21",
+   "result": "commit 90b8b91: docs/research/ekspor-impor.md (alur impor/ekspor, dokumen, siapa mengisi, peraturan inti bertanda T/B dari JDIH Kemenkeu, BPK, DJP, OJK), DECISIONS cakupan (tidak mengisi CEISA, tanpa HS final, tanpa penghindaran), tugas turunan R-EKSIM2, B-EKSIM1, B-EKSIM2, B-EKSIM3 dengan kriteria terima"
   },
   {
    "id": "R-EKSIM2",
