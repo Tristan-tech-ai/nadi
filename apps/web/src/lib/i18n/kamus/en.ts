@@ -2401,6 +2401,13 @@ export const kamusEn: Kamus = {
     tanpaIdentitas: "Save your business tax identity first.", tanpaSiap: "No invoice this month has complete buyer details yet.",
     tidakLolos: "The file does not pass DJP rules yet:", hanya: "Only the owner, an admin, or the accountant handles tax invoices.", gagal: "Not saved yet. Try again in a moment.", galatDb: "{pesan}",
   },
+  thr: {
+    judul: "Religious holiday allowance (THR)", ket: "Nadi works out each employee's THR from their start date and base pay plus fixed allowances, following Permenaker 6/2016.",
+    hanyaPemilik: "Only the owner sees THR because it shows pay.", pilihAria: "Choose the holiday", hariRaya: "Holiday date", hitung: "Work out THR",
+    batas: "Pay by {t}", nama: "Name", masa: "Service", thrKol: "THR", bulan: "{n} months", total: "Total THR:",
+    ajukanAria: "Submit THR", ajukan: "Send THR to the Feed",
+  },
+  thrPesan: { diajukan: "THR for {n} employees submitted. Approve it in the Feed, then pay from cash or bank.", hanya: "Only the owner submits THR.", gagal: "Not saved yet. Try again in a moment." },
   demo: {
     label: "Sample shopping receipt",
     judulAwal: "Record purchase of",

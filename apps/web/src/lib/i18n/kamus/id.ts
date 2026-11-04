@@ -2402,6 +2402,13 @@ export const kamusId = {
     tanpaIdentitas: "Simpan identitas pajak usahamu dulu.", tanpaSiap: "Belum ada invoice dengan data pembeli lengkap bulan ini.",
     tidakLolos: "Berkas belum lolos aturan DJP:", hanya: "Hanya pemilik, admin, atau akuntan yang mengurus faktur pajak.", gagal: "Belum tersimpan. Coba lagi sebentar.", galatDb: "{pesan}",
   },
+  thr: {
+    judul: "THR Keagamaan", ket: "Nadi menghitung THR tiap karyawan dari tanggal mulai kerja dan gaji pokok + tunjangan tetap, menurut Permenaker 6/2016.",
+    hanyaPemilik: "Hanya pemilik yang melihat THR karena memuat data gaji.", pilihAria: "Pilih Hari Raya", hariRaya: "Tanggal Hari Raya", hitung: "Hitung THR",
+    batas: "Bayar paling lambat {t}", nama: "Nama", masa: "Masa kerja", thrKol: "THR", bulan: "{n} bulan", total: "Total THR:",
+    ajukanAria: "Ajukan THR", ajukan: "Ajukan THR ke Feed",
+  },
+  thrPesan: { diajukan: "THR {n} karyawan diajukan. Setujui di Feed, lalu bayar lewat kas atau bank.", hanya: "Hanya pemilik yang mengajukan THR.", gagal: "Belum tersimpan. Coba lagi sebentar." },
   demo: {
     label: "Contoh nota belanja",
     judulAwal: "Catat belanja",
