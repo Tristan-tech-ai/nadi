@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { headers } from "next/headers";
 import type { JenisHariLembur } from "@/lib/gaji/bpjs-lembur";
+import { cicilanKasbon, type KasbonAktif } from "@/lib/gaji/kasbon";
 import { ringkasKomponen, susunSlip, type DataGaji, type Komponen, type LemburHari, type PetaAturan } from "@/lib/gaji/susun";
 import { JENIS_LEMBUR } from "@/lib/gaji/lembur";
 import { ambilKamus, isiTeks, type Kamus } from "@/lib/i18n/kamus";
@@ -67,10 +68,19 @@ export async function siapkanGaji(_: HasilGaji, form: FormData): Promise<HasilGa
   const { data: kb } = await supabase.from("kolam_bagian").select("orang_id, rupiah, kolam_bonus!inner(bulan, status)").eq("kolam_bonus.bulan", awal).eq("kolam_bonus.status", "disetujui");
   const insentifDari = new Map<string, number>((kb ?? []).map((b) => [b.orang_id as string, Number(b.rupiah)]));
 
+  // M-10B: cicilan kasbon yang belum lunas (RLS kasbon: pemilik/admin); sisa baru berkurang saat periode disetujui.
+  const { data: kas } = await supabase.from("kasbon").select("orang_id, cicilan, sisa").gt("sisa", 0);
+  const kasbonDari = new Map<string, KasbonAktif[]>();
+  for (const x of kas ?? []) kasbonDari.set(x.orang_id as string, [...(kasbonDari.get(x.orang_id as string) ?? []), { cicilan: Number(x.cicilan), sisa: Number(x.sisa) }]);
+
   let ditahan = 0;
   for (const o of digaji) {
     const rw = riwayat.get(o.id);
     const { komponen, peringatan } = susunSlip(o.g, aturan, bln, rw && rw.bulan === 11 ? rw : undefined, lemburDari.get(o.id), insentifDari.get(o.id) ?? 0);
+    const cil = cicilanKasbon(komponen, kasbonDari.get(o.id) ?? []);
+    if (cil.komponen) komponen.push(cil.komponen);
+    // Peringatan slip ditulis dalam bahasa Indonesia seperti peringatan susunSlip (ditampilkan dengan lang="id").
+    if (cil.dibatasi) peringatan.push(`Cicilan kasbon dibatasi menjadi Rp${(cil.komponen?.nilai ?? 0).toLocaleString("id-ID")} dari Rp${cil.diminta.toLocaleString("id-ID")} agar potongan tidak melebihi 50% upah (PP 36/2021 Pasal 65).`);
     const { data, error } = await supabase.rpc("simpan_slip", { p_periode: per, p_orang: o.id, p_komponen: komponen, p_peringatan: peringatan });
     if (error) return { galat: error.code === "55000" ? t.db(error.message) : t.gagalSlip };
     if ((data as { ditahan: boolean }).ditahan) ditahan++;
@@ -135,10 +145,19 @@ export async function aturGajiOrang(_: HasilGaji, form: FormData): Promise<Hasil
   if (ptkp && !PTKP.includes(ptkp)) return { galat: t.ptkpTak };
   if (!RISIKO.includes(risiko)) return { galat: t.risikoTak };
   if (mulai && !/^\d{4}-\d{2}-\d{2}$/.test(mulai)) return { galat: t.tanggalMulai };
+  // M-10B: rekening untuk berkas transfer (RLS orang_rahasia: pemilik/admin) dan tanda harian lepas untuk THR.
+  const bank = String(form.get("bank") ?? "").trim().toUpperCase();
+  const rekening = String(form.get("rekening") ?? "").replace(/[\s.-]/g, "");
+  const atasNama = String(form.get("atas_nama") ?? "").trim();
+  if (rekening && (!/^\d{6,20}$/.test(rekening) || bank.length < 2 || bank.length > 40)) return { galat: t.rekeningTak };
+  if (atasNama.length > 40) return { galat: t.rekeningTak };
   const supabase = await createClient();
   const { data: lama } = await supabase.from("orang_rahasia").select("gaji").eq("orang_id", orang).maybeSingle();
-  const gaji = { ...((lama?.gaji as Record<string, unknown>) ?? {}), pokok, tunjangan_tetap: tunjangan, ptkp: ptkp || null, risiko_jkk: risiko };
-  const { error } = await supabase.from("orang_rahasia").upsert({ orang_id: orang, perusahaan_id: sesi.perusahaanId, gaji }, { onConflict: "orang_id" });
+  const gaji = { ...((lama?.gaji as Record<string, unknown>) ?? {}), pokok, tunjangan_tetap: tunjangan, ptkp: ptkp || null, risiko_jkk: risiko, harian_lepas: form.get("harian_lepas") === "on" };
+  const { error } = await supabase.from("orang_rahasia").upsert(
+    { orang_id: orang, perusahaan_id: sesi.perusahaanId, gaji, bank: rekening ? bank : null, rekening: rekening || null, atas_nama: rekening ? atasNama || null : null },
+    { onConflict: "orang_id" },
+  );
   if (error) return { galat: t.gagalGaji };
   // Tanggal mulai kerja di orang.data.mulai (dibaca juga oleh Gerbang Gaji dan cadangan pesangon); kosong = tidak diubah.
   if (mulai) {

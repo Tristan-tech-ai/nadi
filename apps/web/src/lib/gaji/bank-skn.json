@@ -1,0 +1,537 @@
+{
+ "sumber": "CIMB Niaga, Domestic Bank SKN & RTGS (https://www.cimbniaga.co.id/content/dam/cimb/tb/2025/Domestic_Bank_SKN_and_RTGS.xls), dibaca 5 Nov 2026",
+ "bank": [
+  {
+   "nama": "ALLO BANK INDONESIA",
+   "kode": "HRDAIDJ1"
+  },
+  {
+   "nama": "BANGKOK",
+   "kode": "BKKBIDJA"
+  },
+  {
+   "nama": "BANK AKITA",
+   "kode": "AKTBIDJ1"
+  },
+  {
+   "nama": "BANK ALADIN SYARIAH",
+   "kode": "NETBIDJA"
+  },
+  {
+   "nama": "BANK AMAR",
+   "kode": "LOMAIDJ1"
+  },
+  {
+   "nama": "BANK ARTHA GRAHA",
+   "kode": "ARTGIDJA"
+  },
+  {
+   "nama": "BANK BJB",
+   "kode": "PDJBIDJA"
+  },
+  {
+   "nama": "BANK BNI 46",
+   "kode": "BNINIDJA"
+  },
+  {
+   "nama": "BANK BUMI ARTA",
+   "kode": "BBAIIDJA"
+  },
+  {
+   "nama": "BANK CAPITAL",
+   "kode": "BCIAIDJA"
+  },
+  {
+   "nama": "BANK CHINATRUST",
+   "kode": "CTCBIDJA"
+  },
+  {
+   "nama": "BANK COMMONWEALTH",
+   "kode": "BICNIDJA"
+  },
+  {
+   "nama": "BANK DANAMON INDONESIA",
+   "kode": "BDINIDJA"
+  },
+  {
+   "nama": "BANK DANAMON SYARIAH",
+   "kode": "SYBDIDJ1"
+  },
+  {
+   "nama": "BANK DKI",
+   "kode": "BDKIIDJ1"
+  },
+  {
+   "nama": "BANK GANESHA",
+   "kode": "GNESIDJA"
+  },
+  {
+   "nama": "BANK HANA",
+   "kode": "HNBNIDJA"
+  },
+  {
+   "nama": "BANK HIBANK INDONESIA",
+   "kode": "HBNIIDJA"
+  },
+  {
+   "nama": "BANK HIBANK INDONESIA",
+   "kode": "MAYOIDJA"
+  },
+  {
+   "nama": "BANK INA",
+   "kode": "IAPTIDJA"
+  },
+  {
+   "nama": "BANK INDEX SELINDO",
+   "kode": "BIDXIDJA"
+  },
+  {
+   "nama": "BANK JABAR BANTEN SYARIAH",
+   "kode": "SYJBIDJ1"
+  },
+  {
+   "nama": "BANK JAGO - UNIT USAHA SYARIAH (UUS)",
+   "kode": "SYATIDJ1"
+  },
+  {
+   "nama": "BANK JASA JAKARTA",
+   "kode": "JSABIDJ1"
+  },
+  {
+   "nama": "BANK JATIM",
+   "kode": "PDJTIDJ1"
+  },
+  {
+   "nama": "BANK JTRUST",
+   "kode": "CICTIDJA"
+  },
+  {
+   "nama": "BANK KB BUKOPIN SYARIAH",
+   "kode": "SDOBIDJ1"
+  },
+  {
+   "nama": "BANK MANDIRI",
+   "kode": "BMRIIDJA"
+  },
+  {
+   "nama": "BANK MANDIRI TASPEN",
+   "kode": "SIHBIDJ1"
+  },
+  {
+   "nama": "BANK MASPION",
+   "kode": "MASDIDJ1"
+  },
+  {
+   "nama": "BANK MAYAPADA INTERNATIONAL",
+   "kode": "MAYAIDJA"
+  },
+  {
+   "nama": "BANK MEGA",
+   "kode": "MEGAIDJA"
+  },
+  {
+   "nama": "BANK MESTIKA",
+   "kode": "MEDHIDS1"
+  },
+  {
+   "nama": "BANK MIZUHO",
+   "kode": "MHCCIDJA"
+  },
+  {
+   "nama": "BANK MNC INTERNASIONAL",
+   "kode": "BUMIIDJA"
+  },
+  {
+   "nama": "BANK MUAMALAT",
+   "kode": "MUABIDJA"
+  },
+  {
+   "nama": "BANK MULTIARTA SENTOSA",
+   "kode": "BMSEIDJA"
+  },
+  {
+   "nama": "BANK NATIONALNOBU",
+   "kode": "LFIBIDJ1"
+  },
+  {
+   "nama": "BANK NEO COMMERCE",
+   "kode": "YUDBIDJ1"
+  },
+  {
+   "nama": "BANK OF AMERICA, N.A",
+   "kode": "BOFAID2X"
+  },
+  {
+   "nama": "BANK OF CHINA (HONG KONG) LIMITED",
+   "kode": "BKCHIDJA"
+  },
+  {
+   "nama": "BANK OF INDIA INDONESIA",
+   "kode": "BKIDIDJA"
+  },
+  {
+   "nama": "BANK OKE INDONESIA",
+   "kode": "LMANIDJ1"
+  },
+  {
+   "nama": "BANK PANIN",
+   "kode": "PINBIDJA"
+  },
+  {
+   "nama": "BANK PERMATA",
+   "kode": "BBBAIDJA"
+  },
+  {
+   "nama": "BANK PURBA DANARTA",
+   "kode": "PUBAIDJ1"
+  },
+  {
+   "nama": "BANK RAKYAT INDONESIA (BRI)",
+   "kode": "BRINIDJA"
+  },
+  {
+   "nama": "BANK RAYA INDONESIA",
+   "kode": "AGTBIDJA"
+  },
+  {
+   "nama": "BANK SAHABAT SAMPOERNA",
+   "kode": "BDIPIDJ1"
+  },
+  {
+   "nama": "BANK SBI INDONESIA",
+   "kode": "IDMOIDJ1"
+  },
+  {
+   "nama": "BANK SINARMAS",
+   "kode": "SBJKIDJA"
+  },
+  {
+   "nama": "BANK SINARMAS UUS",
+   "kode": "SYTBIDJ1"
+  },
+  {
+   "nama": "BANK SYARIAH INDONESIA",
+   "kode": "BSMDIDJA"
+  },
+  {
+   "nama": "BANK VICTORIA",
+   "kode": "VICTIDJ1"
+  },
+  {
+   "nama": "BANK VICTORIA SYARIAH",
+   "kode": "SWAGIDJ1"
+  },
+  {
+   "nama": "BANK WOORI",
+   "kode": "BSDRIDJA"
+  },
+  {
+   "nama": "BCA (BANK CENTRAL ASIA)",
+   "kode": "CENAIDJA"
+  },
+  {
+   "nama": "BCA SYARIAH",
+   "kode": "SYCAIDJ1"
+  },
+  {
+   "nama": "BII SYARIAH",
+   "kode": "SYBKIDJ1"
+  },
+  {
+   "nama": "BNP PARIBAS",
+   "kode": "BNPAIDJA"
+  },
+  {
+   "nama": "BPD BALI",
+   "kode": "ABALIDBS"
+  },
+  {
+   "nama": "BPD BANTEN",
+   "kode": "PDBBIDJ1"
+  },
+  {
+   "nama": "BPD BENGKULU",
+   "kode": "PDBKIDJ1"
+  },
+  {
+   "nama": "BPD DIY",
+   "kode": "PDYKIDJ1"
+  },
+  {
+   "nama": "BPD DIY UUS",
+   "kode": "SYYKIDJ1"
+  },
+  {
+   "nama": "BPD JAMBI",
+   "kode": "PDJMIDJ1"
+  },
+  {
+   "nama": "BPD JATENG",
+   "kode": "PDJGIDJ1"
+  },
+  {
+   "nama": "BPD JATENG UUS",
+   "kode": "SYJGIDJ1"
+  },
+  {
+   "nama": "BPD JATIM UUS",
+   "kode": "SYJTIDJ1"
+  },
+  {
+   "nama": "BPD KALBAR",
+   "kode": "PDKBIDJ1"
+  },
+  {
+   "nama": "BPD KALBAR UUS",
+   "kode": "SYKBIDJ1"
+  },
+  {
+   "nama": "BPD KALSEL",
+   "kode": "PDKSIDJ1"
+  },
+  {
+   "nama": "BPD KALSEL UUS",
+   "kode": "SYKSIDJ1"
+  },
+  {
+   "nama": "BPD KALTENG",
+   "kode": "PDKGIDJ1"
+  },
+  {
+   "nama": "BPD KALTIM",
+   "kode": "PDKTIDJ1"
+  },
+  {
+   "nama": "BPD KALTIM UUS",
+   "kode": "SYKTIDJ1"
+  },
+  {
+   "nama": "BPD LAMPUNG",
+   "kode": "PDLPIDJ1"
+  },
+  {
+   "nama": "BPD MALUKU",
+   "kode": "PDMLIDJ1"
+  },
+  {
+   "nama": "BPD NTB",
+   "kode": "PDNBIDJ1"
+  },
+  {
+   "nama": "BPD NTT",
+   "kode": "PDNTIDJA"
+  },
+  {
+   "nama": "BPD PAPUA",
+   "kode": "PDIJIDJ1"
+  },
+  {
+   "nama": "BPD RIAU KEPRI SYARIAH",
+   "kode": "PDRIIDJA"
+  },
+  {
+   "nama": "BPD SULAWESI TENGAH",
+   "kode": "PDWGIDJ1"
+  },
+  {
+   "nama": "BPD SULAWESI TENGGARA",
+   "kode": "PDWRIDJ1"
+  },
+  {
+   "nama": "BPD SULSEL",
+   "kode": "PDWSIDJA"
+  },
+  {
+   "nama": "BPD SULUT",
+   "kode": "PDWUIDJ1"
+  },
+  {
+   "nama": "BPD SUMBAR",
+   "kode": "PDSBIDJ1"
+  },
+  {
+   "nama": "BPD SUMSEL",
+   "kode": "BSSPIDSP"
+  },
+  {
+   "nama": "BPD SUMSEL UUS",
+   "kode": "SYSSIDJ1"
+  },
+  {
+   "nama": "BPD SUMUT",
+   "kode": "PDSUIDJ1"
+  },
+  {
+   "nama": "BPD SUMUT UUS",
+   "kode": "SYSUIDJ1"
+  },
+  {
+   "nama": "BPR Prima Master Bank",
+   "kode": "PMASIDJ1"
+  },
+  {
+   "nama": "BTN",
+   "kode": "BTANIDJA"
+  },
+  {
+   "nama": "BTN SYARIAH",
+   "kode": "SYBTIDJ1"
+  },
+  {
+   "nama": "BTPN",
+   "kode": "SUNIIDJA"
+  },
+  {
+   "nama": "BTPN SYARIAH",
+   "kode": "PUBAIDJ1"
+  },
+  {
+   "nama": "CHINA CONSTRUCTION BANK INDONESIA",
+   "kode": "MCORIDJA"
+  },
+  {
+   "nama": "CITIBANK",
+   "kode": "CITIIDJX"
+  },
+  {
+   "nama": "DBS INDONESIA",
+   "kode": "DBSBIDJA"
+  },
+  {
+   "nama": "DEUTSCHE BANK",
+   "kode": "DEUTIDJA"
+  },
+  {
+   "nama": "DKI UUS",
+   "kode": "SYDKIDJ1"
+  },
+  {
+   "nama": "IBK INDONESIA",
+   "kode": "IBKOIDJA"
+  },
+  {
+   "nama": "ICBC",
+   "kode": "ICBKIDJA"
+  },
+  {
+   "nama": "ICBC INDONESIA (BANK HALIM)",
+   "kode": "ICBKIDJA"
+  },
+  {
+   "nama": "IFI",
+   "kode": "INDIIDJA"
+  },
+  {
+   "nama": "INDONESIA EXIMBANK",
+   "kode": "LPEIIDJ1"
+  },
+  {
+   "nama": "JP MORGAN",
+   "kode": "CHASIDJX"
+  },
+  {
+   "nama": "KB BANK",
+   "kode": "BBUKIDJA"
+  },
+  {
+   "nama": "KROM",
+   "kode": "BUSTIDJ1"
+  },
+  {
+   "nama": "KUSTODIAN SENTRAL EFEK INDONESIA",
+   "kode": "KSEIIDJ1"
+  },
+  {
+   "nama": "MAYBANK INDONESIA",
+   "kode": "IBBKIDJA"
+  },
+  {
+   "nama": "MUFG",
+   "kode": "BOTKIDJX"
+  },
+  {
+   "nama": "NAGARI UUS",
+   "kode": "SYSBIDJ1"
+  },
+  {
+   "nama": "OCBC",
+   "kode": "NISPIDJA"
+  },
+  {
+   "nama": "OCBC NISP SYARIAH",
+   "kode": "SYONIDJ1"
+  },
+  {
+   "nama": "PANIN SYARIAH",
+   "kode": "ARFAIDJ1"
+  },
+  {
+   "nama": "PERMATA SYARIAH",
+   "kode": "SYBBIDJ1"
+  },
+  {
+   "nama": "PT ARTAJASA PEMBAYARAN ELEKTRONIS",
+   "kode": "ATJSIDJ2"
+  },
+  {
+   "nama": "PT.BANK ACEH SYARIAH",
+   "kode": "SYACIDJ1"
+  },
+  {
+   "nama": "PT BANK ANZ INDONESIA",
+   "kode": "ANZBIDJX"
+  },
+  {
+   "nama": "PT BANK DIGITAL BCA",
+   "kode": "BBLUIDJA"
+  },
+  {
+   "nama": "PT BANK HSBC INDONESIA",
+   "kode": "HSBCIDJA"
+  },
+  {
+   "nama": "PT BANK JAGO TBK",
+   "kode": "ATOSIDJ1"
+  },
+  {
+   "nama": "PT Bank Nano Syariah",
+   "kode": "NANOIDJ1"
+  },
+  {
+   "nama": "PT BANK SHINHAN INDONESIA",
+   "kode": "MEEKIDJ1"
+  },
+  {
+   "nama": "PT. BANK SULSELBAR UNIT USAHA SYARIAH",
+   "kode": "SYWSIDJ1"
+  },
+  {
+   "nama": "QNB KESAWAN",
+   "kode": "AWANIDJA"
+  },
+  {
+   "nama": "RESONA PERDANIA",
+   "kode": "BPIAIDJA"
+  },
+  {
+   "nama": "SEABANK INDONESIA",
+   "kode": "SSPIIDJA"
+  },
+  {
+   "nama": "STANDARD CHARTERED BANK",
+   "kode": "SCBLIDJX"
+  },
+  {
+   "nama": "SUPER BANK INDONESIA",
+   "kode": "FAMAIDJ1"
+  },
+  {
+   "nama": "SYARIAH MEGA",
+   "kode": "BUTGIDJ1"
+  },
+  {
+   "nama": "UOB INDONESIA",
+   "kode": "BBIJIDJA"
+  }
+ ]
+}

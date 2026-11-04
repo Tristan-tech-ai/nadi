@@ -12,7 +12,7 @@ import { createClient } from "@/lib/supabase/server";
 export const metadata: Metadata = { title: "THR" };
 
 type HasilThr = { batas_bayar: string; dasar: string; orang: Baris[] };
-type Baris = { id: string; nama: string; mulai: string | null; masa_bulan: number; upah: number | null; thr: number | null; catatan: string | null };
+type Baris = { id: string; nama: string; mulai: string | null; masa_bulan: number; upah: number | null; thr: number | null; catatan: string | null; harian_lepas?: boolean; bulan_rata?: number | null };
 
 // M-10: THR Keagamaan (Permenaker 6/2016) dihitung database (public.hitung_thr) untuk Hari Raya yang dipilih; hanya pemilik.
 async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji/thr">["searchParams"] }) {
@@ -47,7 +47,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji/thr">[
               {d.orang.map((o) => (
                 <tr key={o.id} className="border-b border-garis" data-orang={o.nama}>
                   <td className="py-2" data-pengguna>{o.nama}</td>
-                  <td className="angka">{o.mulai ? isiTeks(t.bulan, { n: o.masa_bulan }) : "-"}</td>
+                  <td className="angka">{o.mulai ? isiTeks(t.bulan, { n: o.masa_bulan }) : "-"}{o.harian_lepas && <span className="block text-xs text-tinta-2">{isiTeks(t.harian, { n: o.bulan_rata ?? 0 })}</span>}</td>
                   <td className="text-right">{o.thr === null ? <span className="text-tinta-2">{o.catatan}</span> : o.thr === 0 ? <span className="text-tinta-2">{o.catatan}</span> : <Rupiah nilai={o.thr} />}</td>
                 </tr>
               ))}

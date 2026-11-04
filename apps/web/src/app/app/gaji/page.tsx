@@ -154,6 +154,11 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
         </ul>
       )}
       {per && !disetujui && slip.length > 0 && <div className="mt-6"><FormSetujui periode={per.id} jumlah={slip.length} teks={f} /></div>}
+      {disetujui && slip.some((s) => !s.ditahan) && <BerkasTransfer bulan={bulan} t={kamus.transfer} />}
+      <nav className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm" aria-label={kamus.transfer.lainAria}>
+        {sesi.peran === "pemilik" && <a href="/app/gaji/thr" className="underline underline-offset-4">{kamus.thr.judul}</a>}
+        <a href="/app/gaji/kasbon" className="underline underline-offset-4">{kamus.kasbon.judul}</a>
+      </nav>
       <section className="mt-10 border-t border-garis pt-6" aria-labelledby="judul-lembur" data-testid="lembur">
         <h2 id="judul-lembur" className="text-lg font-semibold">{isiTeks(t.lemburJudul, { bulan: namaBulan(bulan, t) })}</h2>
         <p className="mt-1 text-sm text-tinta-2">{t.lemburKet}</p>
@@ -181,6 +186,27 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
         </Suspense>
       )}
     </div>
+  );
+}
+
+/** M-10B: unduh berkas payroll CIMB Niaga OCTO Biz (GET ke /app/gaji/transfer); rekening sumber tidak disimpan Nadi. */
+function BerkasTransfer({ bulan, t }: { bulan: string; t: Kamus["transfer"] }) {
+  const isian = "h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-2 text-base";
+  return (
+    <section className="mt-8 border-t border-garis pt-6" aria-labelledby="judul-transfer" data-testid="berkas-transfer">
+      <h2 id="judul-transfer" className="text-lg font-semibold">{t.judul}</h2>
+      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
+      <form method="get" action="/app/gaji/transfer" className="mt-3 grid grid-cols-2 gap-3 text-sm">
+        <input type="hidden" name="bulan" value={bulan} />
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.rekening}</span><input name="rekening" inputMode="numeric" required className={isian} /></label>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.nama}</span><input name="nama" required maxLength={35} className={isian} /></label>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.tanggal}</span><input type="date" name="tanggal" required className={isian} /></label>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.jalur}</span>
+          <select name="jalur" defaultValue="inhouse" className={isian}><option value="inhouse">{t.inhouse}</option><option value="skn">{t.skn}</option></select></label>
+        <div className="col-span-2"><button type="submit" className="h-10 rounded-[var(--radius-isian)] border-2 border-tinta px-4 font-semibold">{t.unduh}</button></div>
+      </form>
+      <p className="mt-2 text-xs text-tinta-2">{t.catatan}</p>
+    </section>
   );
 }
 

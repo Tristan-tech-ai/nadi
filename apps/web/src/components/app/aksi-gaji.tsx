@@ -84,11 +84,12 @@ export function FormBagikan({ slip, nama, teks: t }: { slip: string; nama: strin
   );
 }
 
-export type GajiOrang = { pokok?: number; tunjangan_tetap?: number; ptkp?: string | null; risiko_jkk?: string };
+export type GajiOrang = { pokok?: number; tunjangan_tetap?: number; ptkp?: string | null; risiko_jkk?: string; harian_lepas?: boolean };
+export type RekeningOrang = { bank: string | null; rekening: string | null; atas_nama: string | null };
 const pilihan = "h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-2 text-base";
 
 /** Isian gaji per orang di halaman Orang (pengelola). */
-export function FormGajiOrang({ orang, nama, awal, mulai, teks: t, bahasa = "id" }: { orang: string; nama: string; awal: GajiOrang | null; mulai?: string | null; teks: Kamus["gajiOrang"]; bahasa?: "id" | "en" }) {
+export function FormGajiOrang({ orang, nama, awal, mulai, rekening, teks: t, bahasa = "id" }: { orang: string; nama: string; awal: GajiOrang | null; mulai?: string | null; rekening?: RekeningOrang | null; teks: Kamus["gajiOrang"]; bahasa?: "id" | "en" }) {
   const [h, aksi, sibuk] = useActionState<HasilGaji, FormData>(aturGajiOrang, null);
   return (
     <details className="w-full text-sm" data-testid="gaji-orang">
@@ -112,6 +113,14 @@ export function FormGajiOrang({ orang, nama, awal, mulai, teks: t, bahasa = "id"
           </select></label>
         <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.mulai}</span>
           <input type="date" name="mulai" defaultValue={mulai ?? ""} className={pilihan} /></label>
+        <label className="flex items-center gap-2 self-end pb-2"><input type="checkbox" name="harian_lepas" defaultChecked={Boolean(awal?.harian_lepas)} className="size-5" />
+          <span>{t.harianLepas}</span></label>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.bank}</span>
+          <input name="bank" list="daftar-bank" autoComplete="off" defaultValue={rekening?.bank ?? ""} className={pilihan} /></label>
+        <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.rekening}</span>
+          <input name="rekening" inputMode="numeric" autoComplete="off" defaultValue={rekening?.rekening ?? ""} className={pilihan} /></label>
+        <label className="col-span-2 flex flex-col gap-1"><span className="text-tinta-2">{t.atasNama}</span>
+          <input name="atas_nama" maxLength={40} autoComplete="off" defaultValue={rekening?.atas_nama ?? ""} className={pilihan} /></label>
         <div className="col-span-2 flex items-center gap-3">
           <Tombol type="submit" ragam="kedua" disabled={sibuk} aria-label={isiTeks(t.simpanAria, { nama })}>{sibuk ? t.menyimpan : t.simpan}</Tombol>
           <Hasil h={h} />

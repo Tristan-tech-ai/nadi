@@ -7,7 +7,8 @@ import { bahasaAplikasi } from "@/lib/i18n/server";
 import { sisip } from "@/lib/i18n/sisip";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
-import { FormGajiOrang, type GajiOrang } from "@/components/app/aksi-gaji";
+import { FormGajiOrang, type GajiOrang, type RekeningOrang } from "@/components/app/aksi-gaji";
+import { BANK_SKN } from "@/lib/gaji/transfer";
 import { KartuLowongan } from "@/components/app/lowongan";
 import { LingkaranRekrut } from "@/components/app/lingkaran-rekrut";
 import { FormAkunStaf, FormTambahOrang } from "./form-orang";
@@ -46,7 +47,7 @@ async function Isi() {
   }
   const supabase = await createClient();
   const [{ data: orang }, { data: usaha }] = await Promise.all([
-    supabase.from("orang").select("id, nama, id_staf, user_id, data, pakai_topi(porsi, selesai, topi(nama)), orang_rahasia(gaji)").order("dibuat_at", { ascending: true }),
+    supabase.from("orang").select("id, nama, id_staf, user_id, data, pakai_topi(porsi, selesai, topi(nama)), orang_rahasia(gaji, bank, rekening, atas_nama)").order("dibuat_at", { ascending: true }),
     supabase.from("perusahaan").select("kode").eq("id", sesi.perusahaanId).maybeSingle(),
   ]);
   return (
@@ -57,6 +58,8 @@ async function Isi() {
       </p>
       <p className="mt-1 text-sm"><a href="/app/mitra" className="underline underline-offset-4" data-testid="tautan-mitra">{kamus.mitra.judul}</a></p>
       <FormTambahOrang teks={t} />
+      {/* Nama bank untuk berkas transfer gaji: CIMB Niaga (inhouse) + daftar SKN resmi CIMB Niaga (lib/gaji/bank-skn.json). */}
+      <datalist id="daftar-bank">{["CIMB NIAGA", ...BANK_SKN].map((b) => <option key={b} value={b} />)}</datalist>
       {orang?.length ? (
         <ul className="mt-6 divide-y divide-garis border-y border-garis">
           {orang.map((o) => (
@@ -67,7 +70,7 @@ async function Isi() {
                 <TopiOrang pakai={o.pakai_topi as unknown as PakaiTopi[]} t={t} />
               </div>
               <FormAkunStaf orangId={o.id} sudahAda={Boolean(o.user_id)} teks={t} />
-              <FormGajiOrang orang={o.id} nama={o.nama} awal={((Array.isArray(o.orang_rahasia) ? o.orang_rahasia[0] : o.orang_rahasia)?.gaji as GajiOrang | undefined) ?? null} mulai={tanggalMulai(o.data)} teks={kamus.gajiOrang} bahasa={bahasa} />
+              <FormGajiOrang orang={o.id} nama={o.nama} awal={((Array.isArray(o.orang_rahasia) ? o.orang_rahasia[0] : o.orang_rahasia)?.gaji as GajiOrang | undefined) ?? null} rekening={(Array.isArray(o.orang_rahasia) ? o.orang_rahasia[0] : o.orang_rahasia) as RekeningOrang | null} mulai={tanggalMulai(o.data)} teks={kamus.gajiOrang} bahasa={bahasa} />
               <Link href={`/app/serah-terima?orang=${o.id}`} className="text-sm text-tinta-2 underline underline-offset-4">{t.catatBerhenti}</Link>
             </li>
           ))}

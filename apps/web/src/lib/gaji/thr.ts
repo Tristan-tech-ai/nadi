@@ -22,3 +22,17 @@ export function hitungThr(p: { mulai: string; hariRaya: string; pokok: number; t
   batas.setUTCDate(batas.getUTCDate() - 7);
   return { masa, upah, thr, batasBayar: batas.toISOString().slice(0, 10) };
 }
+
+/**
+ * M-10B: upah sebulan untuk pekerja harian lepas (Permenaker 6/2016 Pasal 3 ayat (3)): masa kerja >= 12 bulan = rata-rata upah
+ * 12 bulan terakhir sebelum Hari Raya (jumlah dibagi 12, bulan tanpa kerja ikut terhitung); < 12 bulan = rata-rata upah tiap bulan
+ * selama masa kerja (jumlah dibagi banyak bulan yang ada upahnya). `upahBulanan` = pokok + tunjangan tetap slip yang disetujui.
+ */
+export function hitungThrHarianLepas(p: { mulai: string; hariRaya: string; upahBulanan: number[] }) {
+  const masa = masaKerjaBulan(p.mulai, p.hariRaya);
+  const jumlah = p.upahBulanan.reduce((s, x) => s + x, 0);
+  if (!p.upahBulanan.length) return { masa, upah: null, thr: null };
+  const upah = masa >= 12 ? jumlah / 12 : jumlah / p.upahBulanan.length;
+  const thr = masa < 1 ? 0 : masa >= 12 ? Math.round(upah) : Math.round((masa * upah) / 12);
+  return { masa, upah, thr };
+}

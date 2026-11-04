@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hitungThr, masaKerjaBulan } from "./thr";
+import { hitungThr, hitungThrHarianLepas, masaKerjaBulan } from "./thr";
 
 // Contoh dari rumus Permenaker 6/2016 Pasal 3 ayat (1) dan (2) huruf b; angka sama dengan tes SQL gaji_lanjutan.
 describe("THR Permenaker 6/2016 (M-10)", () => {
@@ -23,5 +23,20 @@ describe("THR Permenaker 6/2016 (M-10)", () => {
     expect(masaKerjaBulan("2026-07-20", "2027-03-19")).toBe(7);
     expect(masaKerjaBulan("2026-01-31", "2026-02-28")).toBe(0);
     expect(masaKerjaBulan("2026-01-31", "2026-03-31")).toBe(2);
+  });
+});
+
+// M-10B: angka sama dengan tes SQL gaji_lanjutan_b (Ketut dan Nyoman).
+describe("THR harian lepas Permenaker 6/2016 Pasal 3 ayat (3) (M-10B)", () => {
+  it(">= 12 bulan: rata-rata 12 bulan terakhir, bulan tanpa kerja ikut dibagi", () => {
+    const upah = [2_000_000, 2_000_000, 2_000_000, 2_000_000, 2_000_000, 2_600_000, 2_600_000, 2_600_000, 2_600_000, 2_600_000, 2_600_000];
+    expect(hitungThrHarianLepas({ mulai: "2025-01-10", hariRaya: "2027-03-20", upahBulanan: upah })).toMatchObject({ masa: 26, thr: 2_133_333 });
+  });
+  it("< 12 bulan: rata-rata per bulan selama masa kerja, lalu masa/12", () => {
+    const upah = [900_000, 1_800_000, 1_800_000, 1_800_000, 1_800_000, 2_100_000];
+    expect(hitungThrHarianLepas({ mulai: "2026-09-05", hariRaya: "2027-03-20", upahBulanan: upah })).toMatchObject({ masa: 6, upah: 1_700_000, thr: 850_000 });
+  });
+  it("tanpa slip: belum bisa dihitung", () => {
+    expect(hitungThrHarianLepas({ mulai: "2026-01-05", hariRaya: "2027-03-20", upahBulanan: [] })).toMatchObject({ thr: null });
   });
 });

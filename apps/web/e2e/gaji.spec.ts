@@ -429,3 +429,110 @@ test("cadangan pesangon: perkiraan skenario dasar, rentang, saran sisihan, berta
     if (pidAwal) await sb.rpc("pindah_perusahaan", { p_perusahaan: pidAwal });
   }
 });
+
+// M-10B: kasbon dicatat pemilik, cicilannya masuk slip saat gaji disiapkan, sisa berkurang saat disetujui, lalu berkas payroll
+// CIMB Niaga OCTO Biz (inhouse dan SKN) diunduh dan lolos pemeriksa format resmi. Usaha sendiri "Uji Kasbon E2E", bulan baru.
+test("kasbon: cicilan di slip, sisa berkurang saat disetujui, berkas transfer CIMB Niaga", async ({ page }) => {
+  test.setTimeout(180_000);
+  const { periksaPayroll } = await import("../src/lib/gaji/transfer");
+  const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
+  expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
+  const pidAwal = ((await sb.auth.getClaims()).data?.claims?.app_metadata as { pid?: string } | undefined)?.pid;
+  try {
+    const { data: ada } = await sb.from("perusahaan").select("id").eq("nama", "Uji Kasbon E2E").limit(1);
+    let pid = ada?.[0]?.id as string | undefined;
+    if (!pid) {
+      const { data, error } = await sb.rpc("buat_perusahaan", { p_nama: "Uji Kasbon E2E", p_industri: "fnb" });
+      expect(error).toBeNull();
+      pid = data as string;
+    } else {
+      expect((await sb.rpc("pindah_perusahaan", { p_perusahaan: pid })).error).toBeNull();
+    }
+    await sb.auth.refreshSession();
+    await sb.from("orang").update({ status: "nonaktif" }).eq("perusahaan_id", pid).eq("status", "aktif");
+    const { data: per } = await sb.from("periode_gaji").select("bulan").eq("perusahaan_id", pid);
+    const dipakai = new Set((per ?? []).map((p) => (p.bulan as string).slice(0, 7)));
+    let bulan = "";
+    for (let i = 2026 * 12 + 10; !bulan; i++) {
+      const b = `${Math.floor(i / 12)}-${String((i % 12) + 1).padStart(2, "0")}`;
+      if (!b.endsWith("-12") && !dipakai.has(b)) bulan = b;
+    }
+    const tanda = Date.now().toString(36).toUpperCase();
+    const nama = `Kasbon Cimb ${tanda}`;
+    const nama2 = `Kasbon Bca ${tanda}`;
+    expect((await sb.from("orang").insert({ perusahaan_id: pid, nama, data: { mulai: `${bulan}-15` } })).error).toBeNull();
+    const { data: o2 } = await sb.from("orang").insert({ perusahaan_id: pid, nama: nama2, data: { mulai: `${bulan}-15` } }).select("id").single();
+    expect((await sb.from("orang_rahasia").upsert({ orang_id: o2!.id, perusahaan_id: pid, gaji: { pokok: 3_000_000 }, bank: "BCA (BANK CENTRAL ASIA)", rekening: "0987654321", atas_nama: "KASBON BCA" }, { onConflict: "orang_id" })).error).toBeNull();
+
+    // Rekening dan gaji lewat formulir di halaman Orang.
+    await page.goto("/masuk?next=/app/orang");
+    await page.getByLabel("Email").fill(E.E2E_EMAIL_A);
+    await page.getByLabel("Kata sandi").fill(E.E2E_SANDI);
+    await page.getByRole("button", { name: "Masuk" }).click();
+    await page.waitForURL(/\/app\/orang/);
+    const baris = page.getByRole("listitem").filter({ hasText: nama });
+    await baris.getByText("Gaji belum diisi").click();
+    const form = baris.getByRole("form", { name: `Gaji ${nama}` });
+    await form.getByLabel("Gaji pokok (Rp)").fill("4000000");
+    await form.getByLabel("Bank", { exact: true }).fill("CIMB NIAGA");
+    await form.getByLabel("Nomor rekening").fill("8001-5342-3700");
+    await form.getByLabel("Atas nama rekening").fill("Kasbon Cimb");
+    await form.getByRole("button", { name: `Simpan gaji ${nama}` }).click();
+    await expect(form.getByText("Tersimpan.")).toBeVisible();
+    const { data: r1 } = await sb.from("orang_rahasia").select("rekening, rekening_akhir, orang:orang_id!inner(nama)").eq("orang.nama", nama).single();
+    expect(r1).toMatchObject({ rekening: "800153423700", rekening_akhir: "3700" });
+
+    // Kasbon Rp1.000.000, cicilan Rp300.000.
+    await page.goto("/app/gaji/kasbon");
+    const fk = page.getByRole("form", { name: "Beri kasbon" });
+    await fk.getByLabel("Karyawan").selectOption({ label: nama });
+    await fk.getByLabel("Jumlah (Rp)").fill("1000000");
+    await fk.getByLabel("Cicilan per bulan (Rp)").fill("300000");
+    await fk.getByLabel("Alasan").fill("Biaya sekolah anak");
+    await fk.getByRole("button", { name: "Catat kasbon" }).click();
+    await expect(page.getByRole("status")).toContainText("Kasbon tercatat");
+    await page.reload();
+    await expect(page.getByTestId("daftar-kasbon").locator(`li[data-orang="${nama}"]`)).toContainText("Rp1.000.000");
+    await periksaUi(page, "kasbon");
+
+    await page.goto(`/app/gaji?bulan=${bulan}`);
+    await page.getByRole("button", { name: "Siapkan gaji bulan ini" }).click();
+    await expect(page.getByText("Draf gaji siap untuk 2 orang.")).toBeVisible();
+    await page.reload();
+    const slip = page.getByTestId("daftar-slip").getByRole("listitem").filter({ hasText: nama });
+    await slip.getByText("Rincian").click();
+    await expect(slip.getByText("Potongan Cicilan kasbon")).toBeVisible();
+    await expect(slip).toContainText("-Rp300.000");
+    await page.getByRole("button", { name: "Setujui gaji bulan ini" }).click();
+    await expect(page.getByTestId("berkas-transfer")).toBeVisible();
+    await periksaUi(page, "gaji-transfer");
+
+    // Sisa kasbon berkurang setelah disetujui.
+    await page.goto("/app/gaji/kasbon");
+    const kb = page.getByTestId("daftar-kasbon").locator(`li[data-orang="${nama}"]`);
+    await expect(kb).toContainText("Rp700.000");
+    await expect(kb).toContainText("1 kali dipotong gaji");
+
+    // Berkas inhouse diunduh lewat formulir; SKN lewat permintaan langsung. Neto sama dengan slip di database.
+    const { data: s } = await sb.from("slip_gaji").select("neto, orang:orang_id!inner(nama), periode_gaji!inner(bulan)").eq("periode_gaji.bulan", `${bulan}-01`);
+    const neto = (n: string) => ((s ?? []) as unknown as { neto: number; orang: { nama: string } }[]).find((x) => x.orang.nama === n)!.neto;
+    await page.goto(`/app/gaji?bulan=${bulan}`);
+    const ft = page.getByTestId("berkas-transfer");
+    await ft.getByLabel("Rekening sumber usaha").fill("763340048300");
+    await ft.getByLabel("Nama rekening sumber").fill("Uji Kasbon");
+    await ft.getByLabel("Tanggal transfer").fill(`${bulan}-25`);
+    const [unduh] = await Promise.all([page.waitForEvent("download"), ft.getByRole("button", { name: "Unduh berkas" }).click()]);
+    expect(unduh.suggestedFilename()).toBe(`payroll-cimb-inhouse-${bulan}.csv`);
+    const csv = readFileSync(await unduh.path(), "utf8");
+    expect(periksaPayroll("inhouse", csv)).toMatchObject({ ok: true, baris: 1, total: neto(nama) });
+    expect(csv.split("\r\n")[1]).toBe(`800153423700,KASBON CIMB,IDR,${neto(nama)},Gaji ${bulan},,`);
+    const skn = await page.request.get(`/app/gaji/transfer?bulan=${bulan}&jalur=skn&rekening=763340048300&nama=Uji%20Kasbon&tanggal=${bulan}-25`);
+    expect(skn.status()).toBe(200);
+    const csv2 = await skn.text();
+    expect(periksaPayroll("skn", csv2)).toMatchObject({ ok: true, baris: 1, total: neto(nama2), peringatan: [] });
+    expect(csv2).toContain("0987654321,KASBON BCA,IDR,");
+    expect(csv2).toContain(",BCA (BANK CENTRAL ASIA),Y,Y,,1,");
+  } finally {
+    if (pidAwal) await sb.rpc("pindah_perusahaan", { p_perusahaan: pidAwal });
+  }
+});
