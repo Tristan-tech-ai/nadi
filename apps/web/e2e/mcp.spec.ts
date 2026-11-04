@@ -4,6 +4,7 @@ import { createServer, type Server } from "node:http";
 import { join } from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { strFromU8, unzipSync } from "fflate";
 
 // Alur lengkap seperti asisten AI pelanggan (MCP 2026-07-28): 401 -> metadata sumber daya -> metadata server otorisasi ->
 // halaman izin (klien CIMD, dokumen dilayani server lokal) -> kode + iss -> token (PKCE) -> server/discover -> alat -> usulan di Feed.
@@ -114,9 +115,20 @@ test("asisten AI menyambung lewat OAuth + CIMD, membaca, dan mengajukan usulan y
   const disc = await (await panggil("server/discover")).json();
   expect(disc.result).toMatchObject({ resultType: "complete", supportedVersions: expect.arrayContaining(["2026-07-28"]) });
   const daftar = await (await panggil("tools/list")).json();
-  expect(daftar.result.tools.map((x: { name: string }) => x.name)).toEqual(["siapa_saya", "daftar_orang", "daftar_usulan", "ringkasan_ai", "buat_usulan"]);
+  expect(daftar.result.tools.map((x: { name: string }) => x.name)).toEqual(["siapa_saya", "daftar_orang", "daftar_usulan", "ringkasan_ai", "buat_usulan", "usul_onboarding"]);
   const siapa = await (await panggil("tools/call", { name: "siapa_saya", arguments: {} }, "siapa_saya")).json();
   expect(siapa.result.structuredContent).toMatchObject({ peran: "pemilik", klien: "Asisten Uji" });
+
+  // W-05: sumber MCP nadi://skill (dan /en) sama persis dengan unduhan zip /skill.
+  for (const [uri, bahasa] of [["nadi://skill", "id"], ["nadi://skill/en", "en"]]) {
+    const sk = await (await panggil("resources/read", { uri }, uri)).json();
+    const unduh = await request.get(`${baseURL}/skill?bahasa=${bahasa}`);
+    expect(unduh.headers()["content-type"]).toBe("application/zip");
+    const zip = unzipSync(new Uint8Array(await unduh.body()));
+    const isi = sk.result.contents as { uri: string; text: string }[];
+    expect(isi).toHaveLength(Object.keys(zip).length);
+    for (const k of isi) expect(k.text).toBe(strFromU8(zip[`nadi/${k.uri === uri ? "SKILL.md" : k.uri.slice(uri.length + 1)}`]));
+  }
 
   // Nilai rupiah besar agar kartu ini di urutan teratas Feed walau akun uji punya banyak usulan menunggu.
   const judul = `Catat belanja gula dari asisten uji ${Date.now()}`;

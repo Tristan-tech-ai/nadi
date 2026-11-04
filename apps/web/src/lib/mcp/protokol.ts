@@ -5,6 +5,7 @@
 import { createHash } from "node:crypto";
 import { PROMPT_ONBOARDING } from "@/lib/onboarding/prompt";
 import { uraiTeksNadi } from "@/lib/onboarding/teks-nadi";
+import { kontenSkill, type BahasaSkill } from "@/lib/skill/umum";
 
 export const VERSI_MODERN = "2026-07-28";
 export const VERSI_LAMA = ["2025-11-25", "2025-06-18", "2025-03-26"] as const;
@@ -26,7 +27,8 @@ type Siapa = { peran: string; cakupan: string[]; usaha: { nama: string } };
 const INSTRUKSI =
   "Nadi: sistem kerja usaha (orang, usulan, uang, absen). Mulai dengan siapa_saya untuk melihat usaha, peran, dan izin token. " +
   "Semua perubahan dari asisten AI menjadi usulan lewat buat_usulan atau usul_onboarding (menyiapkan usaha dari dokumen pengguna) dan baru berlaku setelah disetujui pemilik atau admin di aplikasi Nadi. " +
-  "Rupiah ditulis sebagai angka utuh, tanggal YYYY-MM-DD.";
+  "Rupiah ditulis sebagai angka utuh, tanggal YYYY-MM-DD. " +
+  "Cara memakai Nadi selengkapnya (peta fitur, kosakata, onboarding, aturan aman, contoh per peran) ada di sumber nadi://skill; bahasa Inggris: nadi://skill/en.";
 const INFO = { name: "nadi", title: "Nadi", version: "0.9.1" };
 const KAPABILITAS = { tools: { listChanged: false }, resources: {}, prompts: { listChanged: false } };
 
@@ -141,13 +143,16 @@ export function daftarAlat(siapa: Pick<Siapa, "peran" | "cakupan">) {
     .map(({ name, title, description, inputSchema, annotations }) => ({ name, title, description, inputSchema, annotations }));
 }
 
-type Sumber = { uri: string; name: string; title: string; description: string; pengelola?: boolean; fungsi: string; param: Record<string, unknown> };
+type Sumber = { uri: string; name: string; title: string; description: string; pengelola?: boolean; fungsi: string; param: Record<string, unknown>; skill?: BahasaSkill };
 
 /** Resources: paket konteks ringkas (hemat token) yang bisa dipilih pengguna untuk dimasukkan ke percakapan. */
 export const SUMBER: Sumber[] = [
   { uri: "nadi://usaha", name: "usaha", title: "Usaha dan peranmu", description: "Nama usaha, peran, izin token, jumlah orang aktif, dan usulan menunggu.", fungsi: "mcp_siapa_saya", param: {} },
   { uri: "nadi://usulan/menunggu", name: "usulan-menunggu", title: "Usulan yang menunggu", description: "Usulan di Feed yang belum diputuskan.", fungsi: "mcp_daftar_usulan", param: { p_status: "menunggu", p_batas: 50 } },
   { uri: "nadi://orang", name: "orang", title: "Daftar orang", description: "Orang di usaha ini tanpa NIK dan gaji.", pengelola: true, fungsi: "mcp_daftar_orang", param: { p_cari: null, p_batas: 200 } },
+  // W-05: skill umum Nadi, isinya sama persis dengan unduhan /skill?bahasa=id|en (src/lib/skill/umum.ts).
+  { uri: "nadi://skill", name: "skill", title: "Skill Nadi", description: "Cara memakai Nadi: peta fitur, kosakata, alur onboarding, aturan aman, contoh per peran.", fungsi: "mcp_siapa_saya", param: {}, skill: "id" },
+  { uri: "nadi://skill/en", name: "skill-en", title: "Nadi skill (English)", description: "How to use Nadi: feature map, vocabulary, onboarding, safety rules, examples per role.", fungsi: "mcp_siapa_saya", param: {}, skill: "en" },
 ];
 
 type Arg = { name: string; description: string; required: boolean };
@@ -177,7 +182,7 @@ Setelah blok selesai, kirim isinya ke alat usul_onboarding (argumen teks), lalu 
 
 const pengelola = (peran: string) => ["pemilik", "admin"].includes(peran);
 export const daftarSumber = (s: Pick<Siapa, "peran">) =>
-  SUMBER.filter((x) => !x.pengelola || pengelola(s.peran)).map(({ uri, name, title, description }) => ({ uri, name, title, description, mimeType: "application/json" }));
+  SUMBER.filter((x) => !x.pengelola || pengelola(s.peran)).map(({ uri, name, title, description, skill }) => ({ uri, name, title, description, mimeType: skill ? "text/markdown" : "application/json" }));
 export const daftarPrompt = (s: Pick<Siapa, "cakupan">) =>
   PROMPT.filter((x) => s.cakupan.includes(x.cakupan)).map(({ name, title, description, arguments: args }) => ({ name, title, description, arguments: args }));
 
@@ -255,6 +260,11 @@ export async function tangani(h: Headers, body: unknown, rpc: Rpc, token: string
       case "resources/read": {
         const sb = SUMBER.find((x) => x.uri === params.uri);
         if (!sb) return { status: 200, body: galat(m.id, -32602, "Resource not found", { uri: params.uri }) };
+        if (sb.skill) {
+          // Token tetap diperiksa, tetapi isinya sama untuk semua usaha (tidak ada data usaha di skill umum).
+          await rpc("mcp_siapa_saya", { p_token: token, p_resource: resource });
+          return selesai({ contents: kontenSkill(sb.skill, resource), ...(modern ? { ttlMs: 3_600_000, cacheScope: "public" } : {}) });
+        }
         try {
           const isi = await rpc(sb.fungsi, { p_token: token, p_resource: resource, ...sb.param });
           return selesai({ contents: [{ uri: sb.uri, mimeType: "application/json", text: JSON.stringify(isi) }], ...(modern ? { ttlMs: 60_000, cacheScope: "private" } : {}) });

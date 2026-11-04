@@ -131,7 +131,7 @@ describe("resources dan prompts (2026-07-28)", () => {
     const r = await tangani(a.h, a.body, rpcPalsu("staf").rpc, "t", RES);
     const daftar = (r.body as { result: { resultType: string; resources: { uri: string }[] } }).result;
     expect(daftar.resultType).toBe("complete");
-    expect(daftar.resources.map((x) => x.uri)).toEqual(["nadi://usaha", "nadi://usulan/menunggu"]);
+    expect(daftar.resources.map((x) => x.uri)).toEqual(["nadi://usaha", "nadi://usulan/menunggu", "nadi://skill", "nadi://skill/en"]);
     const b = modern("resources/read", { uri: "nadi://usulan/menunggu" }, { "Mcp-Name": "nadi://usulan/menunggu" });
     const isi = (await tangani(b.h, b.body, rpcPalsu().rpc, "t", RES)).body as { result: { contents: { uri: string; mimeType: string; text: string }[] } };
     expect(isi.result.contents[0]).toMatchObject({ uri: "nadi://usulan/menunggu", mimeType: "application/json" });

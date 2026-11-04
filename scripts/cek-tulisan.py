@@ -204,6 +204,21 @@ def sumber_bawaan():
                 out.append((f"{os.path.relpath(p, ROOT)}:{i}", "deck", b, "judul", baris[3:].strip()))
             elif baris.startswith("- "):
                 out.append((f"{os.path.relpath(p, ROOT)}:{i}", "deck", b, "isi", baris[2:].strip()))
+    # W-05: skill umum Nadi untuk asisten AI (salinan unduhan di docs/skill/nadi dan docs/skill/nadi-en), mode ui.
+    akar_skill = os.path.join(ROOT, "docs", "skill")
+    for p in sorted(glob.glob(os.path.join(akar_skill, "*", "**", "*.md"), recursive=True)):
+        rel = os.path.relpath(p, ROOT)
+        b = "en" if os.path.relpath(p, akar_skill).split(os.sep)[0].endswith("-en") else "id"
+        kode = False
+        for i, baris in enumerate(open(p, encoding="utf-8").read().split("\n"), 1):
+            if baris.startswith("```"):
+                kode = not kode
+                continue
+            if kode or baris.strip() in ("", "---") or re.match(r"^(name|metadata|  \w+):", baris):
+                continue
+            t = re.sub(r"^(#+ |- |\d+\. |description: )", "", baris).strip().strip('"')
+            if len(t.split()) >= 2:
+                out.append((f"{rel}:{i}", "ui", b, "", t))
     return out
 
 

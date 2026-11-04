@@ -49,6 +49,10 @@ export async function AiMilikmu() {
       <p className="mt-2 text-sm text-tinta-2">
         <a href="/app/skill" download className="font-semibold text-laut underline underline-offset-4" data-testid="unduh-skill">{t.unduh}</a>. {t.unduhKet}
       </p>
+      <p className="mt-2 text-sm text-tinta-2">
+        <a href={`/skill?bahasa=${bahasa}`} download className="font-semibold text-laut underline underline-offset-4" data-testid="unduh-skill-umum">{t.unduhUmum}</a>{" "}
+        (<a href={`/skill?bahasa=${bahasa === "en" ? "id" : "en"}`} download className="text-laut underline underline-offset-4" hrefLang={bahasa === "en" ? "id" : "en"}>{t.unduhUmumEn}</a>). {t.unduhUmumKet}
+      </p>
       {daftar.length === 0 ? (
         <p className="mt-4 text-sm text-tinta-2" data-testid="ai-milikmu-kosong">{t.kosong}</p>
       ) : (
