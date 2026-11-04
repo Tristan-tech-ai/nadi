@@ -2528,7 +2528,7 @@
    "status": "done",
    "created": "2026-11-04T17:14:54",
    "done": "2026-11-04T17:18:06",
-   "result": "docs/research/psikologi-persuasi.md (13 bagian, 10 makalah primer) + docs/research/audio-iklan.md (lisensi, analisis, resep efek suara, -14 LUFS/-1 dBTP) + 4 baris LEARN.md, commit 1fd5e7a"
+   "result": "docs/research/psikologi-persuasi.md (13 bagian, 10 makalah primer) + docs/research/audio-iklan.md (lisensi, analisis, resep efek suara, -14 LUFS/-1 dBTP) + 4 baris LEARN.md, commit 238adbc"
   },
   {
    "id": "Q-40",
@@ -2544,7 +2544,7 @@
    "status": "done",
    "created": "2026-11-04T17:14:55",
    "done": "2026-11-04T17:21:06",
-   "result": "scripts/cek-tulisan.py selftest 23/23, kamus 3624 teks LOLOS (merah sengaja: 'Mari kita' -> 2 temuan GAGAL), langkah tulisan di gate.sh, commit 051c744"
+   "result": "scripts/cek-tulisan.py selftest 23/23, kamus 3624 teks LOLOS (merah sengaja: 'Mari kita' -> 2 temuan GAGAL), langkah tulisan di gate.sh, commit 5620313"
   },
   {
    "id": "D-24",
@@ -2560,7 +2560,7 @@
    "status": "done",
    "created": "2026-11-04T17:14:55",
    "done": "2026-11-04T17:25:19",
-   "result": "docs/design/DESIGN.md; POSTER/AKSEN di tokens.ts + globals.css, tokens.test.ts 73/73 (merah sengaja: sorot di laut 4,33 dan cap 2,87 -> laut #1A3796, cap #A63225); cek-slop P01-P04 selftest 29/29; commit a1c7b97"
+   "result": "docs/design/DESIGN.md; POSTER/AKSEN di tokens.ts + globals.css, tokens.test.ts 73/73 (merah sengaja: sorot di laut 4,33 dan cap 2,87 -> laut #1A3796, cap #A63225); cek-slop P01-P04 selftest 29/29; commit dc86213"
   },
   {
    "id": "D-25",
