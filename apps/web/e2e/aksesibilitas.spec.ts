@@ -127,8 +127,44 @@ test("halaman aplikasi pemilik", async ({ page }) => {
   await page.waitForURL((u) => u.pathname === "/app");
   await expect(page.getByTestId("nama-perusahaan")).toHaveText("Warung Uji A");
   const daftar = ["/app", "/app/perusahaan", "/app/orang", "/app/gaji", "/app/izin", "/app/invoice", "/app/pajak", "/app/akuntan",
-    "/app/jadwal", "/app/kerja", "/app/surat", "/app/surat-keluar", "/app/lempar", "/app/magang", "/app/serah-terima", "/app/mulai"];
+    "/app/jadwal", "/app/kerja", "/app/surat", "/app/surat-keluar", "/app/lempar", "/app/magang", "/app/serah-terima", "/app/mulai",
+    "/app/orang/kerja", "/app/pengumuman", "/app/gaji/kasbon", "/app/gaji/thr"];
   // /app/skill bukan layar: route yang mengunduh berkas skill.
   const pilih = process.env.E2E_A11Y_HALAMAN?.split(",");
   for (const jalur of daftar.filter((j) => !pilih || pilih.includes(j))) harus(jalur, await periksa(page, jalur, true), true);
+});
+
+// D-27 craft floor: warna sorot, kursor, aksen kontrol, bilah gulir, dan garis bawah tautan datang dari token, bukan bawaan peramban.
+async function permukaan(page: Page) {
+  return page.evaluate(() => {
+    const akar = getComputedStyle(document.documentElement);
+    const warna = (v: string) => { const d = document.createElement("span"); d.style.color = v; document.body.append(d); const c = getComputedStyle(d).color; d.remove(); return c; };
+    const p = [...document.querySelectorAll("p")].find((e) => !e.closest('[class*="medan-"]')) ?? document.body;
+    const sorot = getComputedStyle(p, "::selection");
+    const isian = document.createElement("input"); document.body.append(isian); const kursor = getComputedStyle(isian).caretColor; isian.remove();
+    const a = (document.querySelector("main a[href]") ?? document.querySelector("a[href]") ?? document.body) as HTMLElement;
+    return {
+      aksen: akar.accentColor, tinta: warna("var(--tinta)"), kunyit: warna("var(--kunyit)"), garisKuat: warna("var(--garis-kuat)"),
+      gulir: akar.scrollbarColor, sorot: sorot.backgroundColor, kursor, offset: getComputedStyle(a).textUnderlineOffset,
+    };
+  });
+}
+test("permukaan peramban dari token (D-27)", async ({ page }) => {
+  for (const skema of ["light", "dark"] as const) {
+    await page.emulateMedia({ colorScheme: skema });
+    await page.goto("/panduan");
+    const w = await permukaan(page);
+    expect(w.aksen, `aksen ${skema}`).toBe(w.tinta);
+    expect(w.kursor, `kursor ${skema}`).toBe(w.tinta);
+    expect(w.sorot, `sorot ${skema}`).toBe(w.kunyit);
+    expect(w.gulir, `gulir ${skema}`).toContain(w.garisKuat);
+    expect(w.offset, `garis bawah ${skema}`).not.toBe("auto");
+  }
+  await page.goto("/masuk?next=/app");
+  await page.getByLabel("Email").fill(E.E2E_EMAIL_A);
+  await page.getByLabel("Kata sandi").fill(E.E2E_SANDI);
+  await page.getByRole("button", { name: "Masuk" }).click();
+  await page.waitForURL((u) => u.pathname === "/app");
+  const w = await permukaan(page);
+  expect([w.aksen, w.kursor, w.sorot]).toEqual([w.tinta, w.tinta, w.kunyit]);
 });

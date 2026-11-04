@@ -146,6 +146,32 @@ body {
   font-feature-settings: "kern";
 }
 
+/* D-27 craft floor: permukaan yang digambar peramban ikut token (Impeccable craft-floor, Browser surfaces). Tema ikut perangkat,
+   color-scheme sudah diatur per tema di atas; di sini warna sorot, kursor, aksen kontrol, bilah gulir, dan garis bawah tautan. */
+:root {
+  accent-color: var(--tinta);
+  scrollbar-color: var(--garis-kuat) var(--kertas);
+}
+::selection {
+  background: var(--kunyit);
+  color: var(--stabilo-teks);
+}
+/* Di lapangan warna poster, sorotan kunyit bisa hilang di lapangan kunyit: pakai tinta lapangan dibalik. */
+[class*="medan-"] ::selection {
+  background: var(--m-tinta);
+  color: var(--m-latar);
+}
+input,
+textarea,
+select,
+[contenteditable] {
+  caret-color: var(--tinta);
+}
+a {
+  text-underline-offset: 0.22em;
+  text-decoration-thickness: from-font;
+}
+
 /* Angka uang selalu sejajar kolom. */
 .angka {
   font-variant-numeric: tabular-nums;

@@ -7,7 +7,9 @@ import { formatTanggalKalender } from "@/lib/format";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
+import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { zonaUsahaIni } from "@/lib/zona-usaha";
 import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Pengumuman" };
@@ -20,6 +22,7 @@ async function Isi() {
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const t = ambilKamus(bahasa).hr;
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
+  const zona = await zonaUsahaIni(sesi.perusahaanId);
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
   const [{ data: pg }, { data: baca }, ringkas, { data: pf }, { data: sp }] = await Promise.all([
@@ -45,7 +48,7 @@ async function Isi() {
             <li key={p.id} className="py-4" data-judul={p.judul}>
               <div className="flex flex-wrap items-baseline justify-between gap-2">
                 <h2 className="font-semibold" data-pengguna>{p.judul}</h2>
-                <span className="text-sm text-tinta-2">{formatTanggalKalender(p.dibuat_at.slice(0, 10), bahasa)}</span>
+                <span className="text-sm text-tinta-2">{formatTanggalKalender(hariIni(new Date(p.dibuat_at), zona), bahasa)}</span>
               </div>
               <p className="mt-1 whitespace-pre-line" data-pengguna>{p.isi}</p>
               {pengelola ? (
