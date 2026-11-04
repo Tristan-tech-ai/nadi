@@ -1940,8 +1940,10 @@
    "accept": "tautan sekali pakai berisi 3 pertanyaan tetap (paling membantu, paling berat, satu hal diubah), jawaban hanya dibaca pemilik (RLS peran_aktif), kalimat 'Jawabanmu tidak memengaruhi hakmu', token hanya sha256 disimpan; tes SQL + e2e + foto",
    "how": "docs/design/serah-terima-layar.md bagian Wawancara keluar",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T10:04:40"
+   "status": "done",
+   "created": "2026-11-01T10:04:40",
+   "done": "2026-11-04T09:32:18",
+   "result": "commit 8ad9e03: migrasi wawancara_keluar (sidik cc497660 sama repo; token nmw_ hanya sha256, RLS baca pemilik saja), tes SQL wawancara_keluar 17/17 (merah dulu: tabel belum ada), halaman /keluar (3 pertanyaan tetap, 'Jawabanmu tidak memengaruhi hakmu', sekali kirim), bagian Wawancara keluar di Serah terima (buat tautan + wa.me, jawaban hanya pemilik), kamus id/en, e2e wawancara-keluar lokal + produksi nadi-2blc0ueq4 lulus (axe 390/1440 terang/gelap, foto)"
   },
   {
    "id": "F3-07E",
