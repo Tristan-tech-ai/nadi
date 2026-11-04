@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { IlustrasiNota } from "@/components/ilustrasi";
 import { HalamanFeed, TautanBerikut } from "@/components/app/halaman-feed";
 import { KartuFeed } from "@/components/app/kartu-feed";
+import { KartuInfo } from "@/components/app/kartu-info";
 import { SarapanData } from "@/components/app/sarapan-data";
 import { bacaTampilan, halaman, hitungJenis, hrefFeed, JENIS, JENIS_DIKENAL, PER_HALAMAN, usulanBaru, type Jenis, type JenisDikenal, type Tampilan, type Urut } from "@/lib/feed";
 import type { Bahasa } from "@/lib/i18n/bahasa";
@@ -174,7 +175,10 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
           ) : null}
           {usulan.length ? (
             <div className="mt-3 grid gap-3" data-testid="daftar-usulan">
-              {usulan.map((u) => (
+              {usulan.map((u) => u.aksi.startsWith("info.") ? (
+                <KartuInfo key={u.id} usulanId={u.id} teks={kamus.kartuInfo} teksKartu={kamus.kartu} bahasa={bahasa} tautan="/app/kerja?tab=beban"
+                  usulan={{ judul: u.judul, penjelasan: u.penjelasan ?? "", sumber: k.sumber[u.sumber as keyof TeksFeed["sumber"]] ?? u.sumber, baru: u.baru }} />
+              ) : (
                 <KartuFeed key={u.id} usulanId={u.id} teks={kamus.kartu} cap={kamus.cap} bahasa={bahasa} usulan={{ judul: u.judul, penjelasan: u.penjelasan ?? "", sumber: k.sumber[u.sumber as keyof TeksFeed["sumber"]] ?? u.sumber, keyakinan: u.keyakinan ?? undefined, dampakRp: u.dampak_rp ?? undefined, catatan: pelamar.get(u.id)?.catatan, tautan: pelamar.get(u.id)?.tautan, baru: u.baru }} />
               ))}
             </div>

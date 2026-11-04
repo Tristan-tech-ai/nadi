@@ -44,7 +44,7 @@ export function KartuUsulan({ usulan, aksi, teks = TEKS_KARTU_ID, bahasa = "id",
           </div>
         ) : null}
       </header>
-      <p className="mt-1 text-sm text-tinta-2" lang={isiLang}>{usulan.penjelasan}</p>
+      <p className="mt-1 whitespace-pre-line text-sm text-tinta-2" lang={isiLang}>{usulan.penjelasan}</p>
       {usulan.catatan ? <p className="mt-2 text-sm" data-testid="catatan-usulan" lang={isiLang}>{usulan.catatan}</p> : null}
       {usulan.tautan ? (
         <Link href={usulan.tautan.href} className="mt-2 inline-block text-sm font-semibold text-laut underline underline-offset-4" data-testid="tautan-usulan">

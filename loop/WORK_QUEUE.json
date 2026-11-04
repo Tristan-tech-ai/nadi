@@ -2326,6 +2326,20 @@
    "created": "2026-11-03T22:26:26",
    "done": "2026-11-03T22:28:33",
    "result": "issue #1 ditutup; penyebab tes merah sengaja; run asap normal lulus https://github.com/Tristan-tech-ai/nadi/actions/runs/41663927108"
+  },
+  {
+   "id": "R-EKSIM",
+   "fase": "R",
+   "kind": "research",
+   "priority": 33,
+   "size": "m",
+   "wajib": true,
+   "title": "Riset ekspor-impor untuk usaha Indonesia (aturan, dokumen, pajak, devisa)",
+   "accept": "docs/research/ekspor-impor.md dari sumber primer bertanggal (DJBC/CEISA, INSW, OSS/NIB, BTKI/HS, PMK bea masuk/keluar, PPN dan PPh 22 impor, kurs pajak KMK, SKA/e-SKA, aturan devisa hasil ekspor BI/PP terbaru): alur ekspor dan impor langkah demi langkah, dokumen per langkah, angka/tarif bertanda terverifikasi atau belum, siapa yang mengisi (eksportir, PPJK, bank), apa yang bisa diotomatiskan Nadi tanpa izin khusus dan apa yang tidak (CEISA butuh akun pengguna), daftar tugas build turunan dengan kriteria terima; keputusan cakupan dicatat di DECISIONS",
+   "how": "baca teks regulasi resmi (jdih.kemenkeu.go.id, beacukai.go.id, insw.go.id, oss.go.id, bi.go.id), bukan blog; ingat aturan TANPA penghindaran pajak dan bea",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T07:22:20"
   }
  ]
 }

@@ -73,6 +73,17 @@ const PESAN_AKSI: Record<string, (t: TeksPutusan, n: number, lewat: number) => s
   "uang.mutasi": (t, n) => isiTeks(t.mutasi, { n }),
 };
 
+export type HasilTutupInfo = { ok?: boolean; galat?: string };
+
+/** F3-07B: pemilik menutup kartu info (Beban dan kabar tim) lewat RPC tandai_ditangani; tercatat siapa dan kapan. */
+export async function tutupKartuInfo(_: HasilTutupInfo, form: FormData): Promise<HasilTutupInfo> {
+  const supabase = await createClient();
+  const [{ error }, bahasa] = await Promise.all([supabase.rpc("tandai_ditangani", { p_usulan: String(form.get("usulan") ?? "") }), bahasaAplikasi()]);
+  const t = ambilKamus(bahasa).kartuInfo;
+  if (error) return { galat: error.code === "42501" ? t.hanyaPemilik : t.gagal };
+  return { ok: true };
+}
+
 /** Setujui atau tolak satu usulan Feed lewat RPC putuskan_usulan (pemeriksaan peran ada di database). */
 export async function putuskan(_: HasilPutusan, form: FormData): Promise<HasilPutusan> {
   const id = String(form.get("usulan") ?? "");
