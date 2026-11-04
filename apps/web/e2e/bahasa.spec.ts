@@ -189,6 +189,13 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   const axeSurat = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeSurat.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
+  // Invoice ekspor mode Inggris (B-EKSIM1); dokumen cetak selalu berbahasa Inggris.
+  await p1.goto("/app/ekspor");
+  await expect(p1.getByRole("heading", { level: 1, name: "Export invoices" })).toBeVisible();
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
+  const axeEkspor = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axeEkspor.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
   // Surat keluar mode Inggris; isi surat adalah dokumen resmi Indonesia (lang=id).
   await p1.goto("/app/surat-keluar");
   await expect(p1.getByRole("heading", { level: 1, name: "Outgoing letters" })).toBeVisible();

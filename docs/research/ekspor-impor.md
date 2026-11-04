@@ -46,7 +46,7 @@ Tidak:
 - Fitur apa pun yang menurunkan nilai pabean, memecah kiriman agar di bawah batas, atau menghindari DHE (dilarang penjaga: tanpa penghindaran pajak/bea).
 
 ## 4. Tugas turunan (ditambahkan ke antrean)
-- **B-EKSIM1** invoice dan packing list ekspor (Inggris, USD, kurs tercatat).
+- **B-EKSIM1** invoice dan packing list ekspor (Inggris, USD, kurs tercatat). SELESAI 4 Nov 2026: /app/ekspor, cetak /cetak/ekspor/<id>, docs/quality/invoice-ekspor.md.
 - **B-EKSIM2** kalkulator perkiraan biaya mendarat impor (bertanda perkiraan; tarif PPh 22 dan PPN dari aturan bertanggal terverifikasi).
 - **R-EKSIM2** verifikasi teks pasal: PMK 51/2025 (tarif), PP 2/2026 + 21/2026 (DHE), BTKI 2022, KMK kurs, API dalam NIB; isi aturan_bertanggal dengan status terverifikasi.
 - **B-EKSIM3** baca dokumen pabean yang dilempar (PIB/PEB/SPPB) menjadi usulan jurnal.

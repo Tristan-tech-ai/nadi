@@ -45,6 +45,7 @@ async function Isi() {
       <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
       <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
       {bahasa !== "id" ? <p className="mt-1 text-sm text-tinta-2">{t.catatanPelanggan}</p> : null}
+      <p className="mt-2 text-sm"><a href="/app/ekspor" className="underline underline-offset-4" data-testid="tautan-ekspor">{kamus.ekspor.tautanEkspor}</a></p>
     </>
   );
   if (!["pemilik", "admin", "akuntan"].includes(sesi.peran)) {

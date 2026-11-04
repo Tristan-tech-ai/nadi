@@ -101,6 +101,6 @@ export function FormBatalSurat({ surat, judul, teks: t }: { surat: string; judul
   );
 }
 
-export function TombolCetak() {
-  return <Tombol type="button" ragam="utama" onClick={() => window.print()} className="print:hidden">Cetak atau simpan PDF</Tombol>;
+export function TombolCetak({ label = "Cetak atau simpan PDF" }: { label?: string }) {
+  return <Tombol type="button" ragam="utama" onClick={() => window.print()} className="print:hidden">{label}</Tombol>;
 }
