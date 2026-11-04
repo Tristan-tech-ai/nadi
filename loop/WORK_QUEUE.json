@@ -3201,8 +3201,24 @@
    "accept": "cicilan kasbon masuk slip dan sisa berkurang saat slip disetujui (tes SQL, batas Pasal 65 tetap); THR harian lepas rata-rata 12 bulan (Permenaker 6/2016 Pasal 3 ayat 3) cocok sampai rupiah; berkas transfer massal dari panduan resmi minimal satu bank dicatat di LEARN; e2e per alur",
    "how": "docs/research/gaji-lanjutan.md bagian Belum",
    "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-05T03:09:35",
+   "done": "2026-11-05T03:39:19",
+   "result": "8a385a5; migrasi 20261105067000_gaji_lanjutan_b md5 70bc3e68 (kasbon_bayar, trigger kasbon_dari_gaji jurnal 6-100/1-150, rekening orang_rahasia + hash, hitung_thr harian lepas Pasal 3 ayat 3); tes SQL gaji_lanjutan_b 22/22; vitest kasbon 3 + transfer 5 + thr harian 3; berkas payroll CIMB Niaga OCTO Biz inhouse+SKN dari spesifikasi resmi (LEARN), contoh resmi lolos pemeriksa; e2e produksi gaji.spec kasbon lulus (cicilan Rp300.000 di slip, sisa Rp700.000 setelah disetujui, CSV inhouse+SKN lolos); axe 390/1440 terang/gelap"
+  },
+  {
+   "id": "M-11B",
+   "fase": "F1",
+   "kind": "build",
+   "priority": 3,
+   "size": "l",
+   "wajib": true,
+   "title": "HR administrasi lanjutan: custom field, form dan survei, persetujuan bertingkat + delegasi, templat dokumen dan cetak SP",
+   "accept": "tes SQL RLS (staf hanya data sendiri, jawaban survei anonim bila dipilih), rantai persetujuan atasan langsung > pemilik dengan delegasi saat cuti diuji SQL, cetak SP sebagai surat keluar bernomor ber-QR, e2e per alur, kamus id/en",
+   "how": "docs/research/hr-admin.md bagian Belum; menutup TA-03, TA-05, TA-11, TA-13",
+   "blocked_by": "",
    "status": "ready",
-   "created": "2026-11-05T03:09:35"
+   "created": "2026-11-05T12:30:00"
   }
  ]
 }

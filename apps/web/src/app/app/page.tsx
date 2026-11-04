@@ -1,6 +1,7 @@
 import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import Link from "next/link";
 import { Suspense } from "react";
+import { PengumumanBaru } from "@/components/app/pengumuman-baru";
 import { IlustrasiNota } from "@/components/ilustrasi";
 import { HalamanFeed, TautanBerikut } from "@/components/app/halaman-feed";
 import { KartuFeed } from "@/components/app/kartu-feed";
@@ -144,6 +145,9 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
     <section className="mx-auto w-full max-w-2xl px-4 py-8" lang={bahasa}>
       <h1 className="font-judul text-3xl font-extrabold tracking-tight">{k.judul}</h1>
       <p className="mt-2 text-tinta-2" data-testid="peran">{isiTeks(k.peran, { peran })}</p>
+      <Suspense fallback={null}>
+        <PengumumanBaru bahasa={bahasa} />
+      </Suspense>
       <dl className="mt-6 grid grid-cols-2 gap-3">
         <div className="rounded-[var(--radius-kartu)] bg-kertas-2 p-4">
           <dt className="text-sm text-tinta-2">{k.orangTercatat}</dt>
