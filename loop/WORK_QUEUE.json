@@ -2881,8 +2881,10 @@
    "accept": "berkas lolos validasi skema XSD/templat DJP (berkas resmi diunduh dan dicatat di LEARN); korpus 20 faktur sintetis; e2e unduh berkas",
    "how": "docs/research/mekari/rencana.md; menutup KP-01..KP-07, TA-27; isi: Pajak Coretax: faktur keluaran dari invoice dan faktur masukan dari Lempar menjadi berkas impor resmi Coretax (templat DJP dibaca dulu), e-Bupot Unifikasi (PPh 23, 4(2), 15, 22) dan 21/26 berkas impor, rekonsiliasi keluaran-masukan, rekap SPT Masa PPN, kertas kerja SPT, kalender setor/lapor + jumlah setor per masa, validasi bentuk NPWP/NITKU",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:53"
+   "status": "done",
+   "created": "2026-11-04T20:17:53",
+   "done": "2026-11-05T02:24:39",
+   "result": "983fc7d: migrasi 064000 coretax_faktur (md5 727dfb3f), tes SQL coretax_faktur 17/17; templat resmi DJP ConverterEfakturCoretax v1.6 (Sample Faktur PK v.1.4 xml + templat v.1.6.1) dibaca dan dicatat di LEARN; DJP tidak menerbitkan XSD: skema turunan docs/pajak/coretax/TaxInvoice.xsd meloloskan contoh resmi, langkah gerbang efaktur (uji diri merah) ; korpus fixtures/korpus/efaktur 20 faktur lolos XSD 21/21 dan aturan DJP (vitest efaktur 7/7, urutan elemen = contoh resmi); /app/pajak/faktur + unduh XML; e2e/faktur-pajak.spec.ts lulus lokal dan produksi (unduhan lolos aturan + XSD, PPN 66.000 dari 30 x 22.200); axe 390/1440 0 serius; sisa (e-Bupot, retur, rekap PPN, kalender) jadi M-09B"
   },
   {
    "id": "M-10",
