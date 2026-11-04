@@ -13,6 +13,23 @@
   --daun: #23704A;
   --laut: #2D5B86;
   --stabilo-teks: #1C1B18;
+  --poster-kunyit: #E9A825;
+  --poster-kunyit-tinta: #1C1B18;
+  --poster-tinta: #1C1B18;
+  --poster-tinta-tinta: #FBFAF6;
+  --poster-cap: #A63225;
+  --poster-cap-tinta: #FFFDF8;
+  --poster-laut: #1A3796;
+  --poster-laut-tinta: #FFFDF8;
+  --poster-daun: #23704A;
+  --poster-daun-tinta: #FFFDF8;
+  --poster-tulang: #F3F1EC;
+  --poster-tulang-tinta: #1C1B18;
+  --poster-lembar: #FFFDF8;
+  --poster-lembar-tinta: #1C1B18;
+  --sorot: #E9A825;
+  --stempel: #B4372A;
+  --lunas: #23704A;
   color-scheme: light;
 }
 
@@ -29,6 +46,23 @@
     --cap: #E0654F;
     --daun: #4FB07F;
     --laut: #78A6D6;
+    --poster-kunyit: #3B2D0B;
+    --poster-kunyit-tinta: #F6D27A;
+    --poster-tinta: #0B0A09;
+    --poster-tinta-tinta: #ECE7DD;
+    --poster-cap: #4C1B15;
+    --poster-cap-tinta: #F6C3B8;
+    --poster-laut: #101F55;
+    --poster-laut-tinta: #CBD6FF;
+    --poster-daun: #0F3321;
+    --poster-daun-tinta: #B7E8CA;
+    --poster-tulang: #171614;
+    --poster-tulang-tinta: #ECE7DD;
+    --poster-lembar: #262420;
+    --poster-lembar-tinta: #ECE7DD;
+    --sorot: #F0B53D;
+    --stempel: #F08A76;
+    --lunas: #6FCF9B;
     color-scheme: dark;
   }
 }
@@ -43,6 +77,23 @@
   --cap: #E0654F;
   --daun: #4FB07F;
   --laut: #78A6D6;
+  --poster-kunyit: #3B2D0B;
+  --poster-kunyit-tinta: #F6D27A;
+  --poster-tinta: #0B0A09;
+  --poster-tinta-tinta: #ECE7DD;
+  --poster-cap: #4C1B15;
+  --poster-cap-tinta: #F6C3B8;
+  --poster-laut: #101F55;
+  --poster-laut-tinta: #CBD6FF;
+  --poster-daun: #0F3321;
+  --poster-daun-tinta: #B7E8CA;
+  --poster-tulang: #171614;
+  --poster-tulang-tinta: #ECE7DD;
+  --poster-lembar: #262420;
+  --poster-lembar-tinta: #ECE7DD;
+  --sorot: #F0B53D;
+  --stempel: #F08A76;
+  --lunas: #6FCF9B;
   color-scheme: dark;
 }
 
@@ -78,6 +129,7 @@
   --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-judul: var(--font-bricolage), var(--font-jakarta), ui-sans-serif, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-papan: var(--font-big-shoulders), var(--font-jakarta), ui-sans-serif, sans-serif;
   --ease-nadi: cubic-bezier(0.2, 0.7, 0.2, 1);
   --radius-isian: 6px;
   --radius-kartu: 10px;
@@ -199,4 +251,40 @@ input:is([type="date"], [type="time"], [type="month"], [type="datetime-local"]):
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* ===== Permukaan Persuade (docs/design/DESIGN.md) ===== */
+/* Lapangan poster: latar penuh satu warna, tinta sendiri. Token aplikasi didefinisikan ulang di dalam lapangan agar komponen
+   (Tombol, Rupiah, Cap) ikut: tombol = tinta lapangan sebagai latar, warna lapangan sebagai teks. */
+.medan-kunyit, .medan-tinta, .medan-cap, .medan-laut, .medan-daun, .medan-tulang, .medan-lembar {
+  background: var(--m-latar);
+  color: var(--m-tinta);
+  --tinta: var(--m-tinta);
+  --tinta-2: var(--m-tinta);
+  --kertas: var(--m-latar);
+  --kertas-2: var(--m-latar);
+}
+.medan-kunyit { --m-latar: var(--poster-kunyit); --m-tinta: var(--poster-kunyit-tinta); }
+.medan-tinta { --m-latar: var(--poster-tinta); --m-tinta: var(--poster-tinta-tinta); }
+.medan-cap { --m-latar: var(--poster-cap); --m-tinta: var(--poster-cap-tinta); }
+.medan-laut { --m-latar: var(--poster-laut); --m-tinta: var(--poster-laut-tinta); }
+.medan-daun { --m-latar: var(--poster-daun); --m-tinta: var(--poster-daun-tinta); }
+.medan-tulang { --m-latar: var(--poster-tulang); --m-tinta: var(--poster-tulang-tinta); }
+.medan-lembar { --m-latar: var(--poster-lembar); --m-tinta: var(--poster-lembar-tinta); }
+
+/* Gerak permukaan Persuade (Taste Skill references/motion.md, studi 99 situs Awwwards Jul-Okt 2026). Aplikasi tetap memakai
+   --ease-nadi dan batas 300 ms (ANTI-SLOP S42). */
+:root {
+  --ease-keluar: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-tempuh: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-lembut: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-pergi: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+  --t-tekan: 140ms;
+  --t-sorot: 180ms;
+  --t-ui: 240ms;
+  --t-muncul: 800ms;
+  --t-buka: 1200ms;
+  --jeda-baris: 90ms;
+  --jeda-butir: 70ms;
 }

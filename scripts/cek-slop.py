@@ -29,6 +29,16 @@ ATURAN = [
 ]
 HEX = re.compile(r"#[0-9a-fA-F]{3,8}\b")
 
+# Aturan rumah permukaan Persuade (docs/design/DESIGN.md; Taste Skill house rules + Impeccable craft floor), hanya untuk berkas di
+# components/poster/ dan app/fitur/: pemisah tipis, huruf mono sebagai kostum, label kecil di atas judul, bayangan pada benda diam.
+POSTER_JALUR = ("components/poster/", "app/fitur/", "app/en/fitur/", "poster/")
+ATURAN_POSTER = [
+    ("P01", re.compile(r"(?<![\w:-])(border-[tbxylr]|border|divide-[xy])(?![\w-])"), "garis tipis pemisah; pakai ruang, langkah warna, atau skala"),
+    ("P02", re.compile(r"(?<![\w:-])font-mono(?![\w-])"), "huruf mono di permukaan Persuade"),
+    ("P03", re.compile(r'(?=[^"]*\buppercase\b)(?=[^"]*\btracking-(wide|wider|widest)\b)(?=[^"]*\btext-(xs|sm)\b)'), "label kecil kapital di atas judul (eyebrow)"),
+    ("P04", re.compile(r"(?<![\w:-])shadow(-(sm|md|lg|xl|2xl))?(?![\w-])"), "bayangan pada benda diam"),
+]
+
 
 def hapus_komentar(teks, css):
     teks = re.sub(r"/\*.*?\*/", lambda m: "\n" * m.group(0).count("\n"), teks, flags=re.S)
@@ -73,6 +83,10 @@ def periksa_teks(nama, teks):
                 temuan.append(("S01", i + 1, f"heksadesimal ungu {hx}"))
             elif os.path.basename(nama) not in TOKEN_FILES and not css:
                 temuan.append(("S05", i + 1, f"warna lepas {hx}; pakai token"))
+        if any(j in nama.replace(os.sep, "/") for j in POSTER_JALUR) and not css:
+            for kode, rx, pesan in ATURAN_POSTER:
+                if rx.search(baris):
+                    temuan.append((kode, i + 1, pesan))
         if not css:
             if EMOJI.search(baris):
                 temuan.append(("S32", i + 1, "emoji di UI"))
@@ -108,6 +122,9 @@ def selftest():
         "S40": ('<a className="transition-all">', "a.tsx"), "S41": ("transition: width 200ms;", "a.css"),
         "S42": ('<a className="duration-500">', "a.tsx"), "S52": ('alert("x")', "a.tsx"), "S61": ('<img src="a.png" />', "a.tsx"),
         "S43": (":root { --a: 1; }", "globals.css"),
+        "P01": ('<section className="border-t border-garis py-16">', "poster/a.tsx"), "P02": ('<p className="font-mono">', "poster/a.tsx"),
+        "P03": ('<p className="text-xs font-bold uppercase tracking-wide">Fitur</p>', "poster/a.tsx"),
+        "P04": ('<div className="rounded shadow-lg">', "poster/a.tsx"),
     }
     ok = tot = 0
     for kode, (teks, nama) in kasus.items():
@@ -122,6 +139,8 @@ def selftest():
         ('/* slop-ok: satu gradien hero */\n.h { background: linear-gradient(red, blue); }', "a.css"),
         (":root { --kertas: #F6F2EA; }\n@media (prefers-reduced-motion: reduce) { * { transition: none; } }", "globals.css"),
         ('<a className="transition-colors duration-150">', "a.tsx"),
+        ('<section className="border-t border-garis py-16">', "app/a.tsx"),
+        ('<section className="medan-kunyit py-24 hover:shadow-none">', "poster/a.tsx"),
     ]
     for teks, nama in bersih:
         tot += 1

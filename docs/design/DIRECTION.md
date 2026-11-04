@@ -1,5 +1,7 @@
 # Arah desain Nadi
 
+> Sejak 4 Nov 2026, landing, halaman fitur, video, dan deck mengikuti docs/design/DESIGN.md. Berkas ini tetap berlaku untuk aplikasi.
+
 Ditulis 31 Okt 2026 setelah riset (referensi di akhir). Berlaku untuk landing page dan aplikasi. Setiap layar diperiksa terhadap berkas ini, `ANTI-SLOP.md`, dan `VOICE.md`.
 
 ## 1. Gagasan inti: "kertas kerja yang hidup"
