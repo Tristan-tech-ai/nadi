@@ -2683,8 +2683,10 @@
    "accept": "skill lolos validasi Agent Skills; MCP resources/read nadi://skill = isi unduhan; versi id dan en; gerbang tulisan LOLOS",
    "how": "docs/research/rencana-luas-nadi.md W-05",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T18:52:56"
+   "status": "done",
+   "created": "2026-11-04T18:52:56",
+   "done": "2026-11-05T01:29:45",
+   "result": "4576e98 2042b27: src/lib/skill/umum.ts (skill nadi id+en: SKILL.md + references fitur/kosakata/onboarding/aman/contoh), /skill?bahasa=id|en, MCP nadi://skill dan nadi://skill/en + instructions; agentskills validate (skills-ref 0.1.1) lulus id dan en di produksi, merah sekali untuk nama folder salah; vitest umum 9/9 (MCP resources/read = isi zip), e2e mcp 2/2 lokal (resources/read = unduhan /skill), unduhan produksi https://nadi-swart.vercel.app/skill identik dengan docs/skill; cek-tulisan kini memeriksa docs/skill mode ui (merah 3 kalimat panjang, lalu LOLOS); foto /app/perusahaan 390/1440 terang/gelap axe 0 serius"
   },
   {
    "id": "W-06",

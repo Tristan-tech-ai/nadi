@@ -2363,6 +2363,19 @@ export const kamusId = {
     terkunci: "Bulan itu dikunci.", terbuka: "Kunci bulan itu dibuka.", lemburDiajukan: "Lembur diajukan. Pemilik memutuskannya di Feed.", siagaTersimpan: "Tanda siaga tersimpan.",
     hanya: "Kamu tidak punya izin untuk ini.", gagal: "Belum tersimpan. Coba lagi sebentar.", galatDb: "{pesan}",
   },
+  pintu: {
+    judul: "Pintu data",
+    ket: "Aplikasi lain, n8n, atau Make bisa mengirim penjualan, pesanan, atau mutasi rekening ke Nadi. Setiap kiriman jadi satu usulan di Feed yang kamu setujui dulu.",
+    alamat: "Alamat kiriman:", kosong: "Belum ada pintu data.", batasHari: "Batas {n} kiriman per 24 jam.", terakhir: "Terakhir dipakai {t}.", belumDipakai: "Belum pernah dipakai.",
+    cabut: "Cabut", buatAria: "Buat pintu data", nama: "Nama pintu", namaContoh: "mis. Toko online", batas: "Batas per hari", buat: "Buat pintu",
+    tokenSekali: "Salin token ini sekarang. Nadi hanya menampilkannya sekali; simpan di kredensial n8n atau Make.",
+    caraKirim: "Cara mengirim data", caraKet: "Kirim POST berisi JSON (jenis penjualan, pesanan, atau mutasi) dengan header Authorization. Tanggal YYYY-MM-DD, rupiah angka bulat.",
+    alat: "Di n8n pakai node HTTP Request dengan kredensial Header auth. Di Make pakai HTTP, Make a request, dengan Body content type application/JSON.",
+  },
+  pintuPesan: {
+    dibuat: "Pintu data dibuat.", dicabut: "Pintu data dicabut. Kiriman dengan token itu kini ditolak.", batasRusak: "Batas per hari harus angka bulat 1 sampai 1000.",
+    hanya: "Kamu tidak punya izin untuk ini.", gagal: "Belum tersimpan. Coba lagi sebentar.", galatDb: "{pesan}",
+  },
   demo: {
     label: "Contoh nota belanja",
     judulAwal: "Catat belanja",

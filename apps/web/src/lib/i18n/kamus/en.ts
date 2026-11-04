@@ -2362,6 +2362,19 @@ export const kamusEn: Kamus = {
     terkunci: "That month is locked.", terbuka: "That month is open again.", lemburDiajukan: "Overtime requested. The owner decides in the Feed.", siagaTersimpan: "On-call mark saved.",
     hanya: "You do not have permission for this.", gagal: "Not saved yet. Try again in a moment.", galatDb: "{pesan}",
   },
+  pintu: {
+    judul: "Data inbox",
+    ket: "Other apps, n8n, or Make can send sales, orders, or bank statements to Nadi. Each delivery becomes one proposal in the Feed that you approve first.",
+    alamat: "Delivery address:", kosong: "No data inbox yet.", batasHari: "Limit of {n} deliveries per 24 hours.", terakhir: "Last used {t}.", belumDipakai: "Never used yet.",
+    cabut: "Revoke", buatAria: "Create a data inbox", nama: "Inbox name", namaContoh: "e.g. Online shop", batas: "Daily limit", buat: "Create inbox",
+    tokenSekali: "Copy this token now. Nadi shows it only once; keep it in your n8n or Make credentials.",
+    caraKirim: "How to send data", caraKet: "Send a POST with JSON (type penjualan, pesanan, or mutasi) and an Authorization header. Dates are YYYY-MM-DD, rupiah as whole numbers.",
+    alat: "In n8n use the HTTP Request node with a Header auth credential. In Make use HTTP, Make a request, with Body content type application/JSON.",
+  },
+  pintuPesan: {
+    dibuat: "Data inbox created.", dicabut: "Data inbox revoked. Deliveries with that token are now refused.", batasRusak: "The daily limit must be a whole number from 1 to 1000.",
+    hanya: "You do not have permission for this.", gagal: "Not saved yet. Try again in a moment.", galatDb: "{pesan}",
+  },
   demo: {
     label: "Sample shopping receipt",
     judulAwal: "Record purchase of",
