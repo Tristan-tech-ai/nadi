@@ -1,4 +1,4 @@
-// Pitch deck Nadi (B-04). Semua angka dari docs/bisnis (B-01..B-03), docs/quality, docs/research; layar asli dari produksi.
+// Pitch deck Nadi (B-04, ditulis ulang D-22 assertion-evidence: judul = kalimat klaim <= 2 baris, isi = bukti visual, tanpa poin). Semua angka dari docs/bisnis (B-01..B-03), docs/quality, docs/research; layar asli dari produksi.
 // Jalankan: NODE_PATH=<npm root -g> node docs/bisnis/buat-deck.cjs <jalur apply_theme.js>
 const path = require("path");
 const pptxgen = require("pptxgenjs");
@@ -36,7 +36,7 @@ pres.defineSlideMaster({
   background: { color: THEME.colors.lt1 },
   margin: [0.5, 0.6, 0.6, 0.6],
   objects: [
-    { placeholder: { options: { name: "title", type: "title", x: 0.6, y: 0.45, w: 12.1, h: 0.9, fontSize: 34, bold: true, color: C.text1, valign: "top", align: "left", margin: 0 }, text: "" } },
+    { placeholder: { options: { name: "title", type: "title", x: 0.6, y: 0.4, w: 12.1, h: 1.0, fontSize: 30, bold: true, color: C.text1, valign: "top", align: "left", margin: 0 }, text: "" } },
     { text: { text: "nadi", options: { x: 0.6, y: 6.95, w: 2, h: 0.35, fontSize: 12, bold: true, color: C.text2, margin: 0 } } },
   ],
   slideNumber: { x: 12.2, y: 6.95, w: 0.5, h: 0.35, fontSize: 12, color: C.text2, align: "right" },
@@ -65,39 +65,26 @@ s.addText("Sistem kerja untuk usaha kecil Indonesia: nota, absen, izin, gaji, ta
 gambar(s, path.join(POTONG, "kartu.png"), 8.4, 2.3, 4.3, 1052, 568, "Kartu usulan Nadi");
 s.addNotes("Nadi dibangun dan berjalan di produksi: nadi-swart.vercel.app. Semua layar di deck ini tangkapan layar asli dengan data sintetis.");
 
-// 2. Masalah
+// 2. Masalah: bagan harga resmi (docs/bisnis/harga-pesaing.md, 3 Nov 2026) sebagai bukti.
 pres.addSection({ title: "Masalah dan solusi" });
-s = isi("Banyak aplikasi, tetap mengetik ulang", "Masalah dan solusi");
-teks(s, [
-  { text: "Pemilik warung memegang nota pemasok, absen, izin sakit di chat, slip gaji, dan tagihan pelanggan sekaligus.", options: { breakLine: true } },
-  { text: "Aplikasi yang ada dijual per bagian: kasir per outlet, gaji per karyawan, akuntansi per paket.", options: { breakLine: true } },
-  { text: "Semuanya masih butuh orang yang memindahkan angka dari kertas ke layar." },
-], { x: 0.6, y: 1.6, w: 5.8, h: 3.2, fontSize: 18 });
-kartu(s, 7.0, 1.6, 5.7, 4.6, "Harga pesaing");
-angka(s, 7.4, 1.9, 5.0, "Rp222.400/bln", "gaji Gadjian Standar + akuntansi Kledo Pro untuk 10 orang, harga resmi 3 Nov 2026", "Angka gabungan");
-teks(s, [
-  { text: "majoo Starter Rp249.000 per outlet per bulan, tiap modul tambahan Rp499.000", options: { bullet: true, breakLine: true } },
-  { text: "Moka POS mulai Rp299.000 per outlet per bulan", options: { bullet: true, breakLine: true } },
-  { text: "Mekari Jurnal Essentials Rp299.250 per bulan", options: { bullet: true } },
-], { x: 7.4, y: 3.8, w: 5.0, h: 2.2, fontSize: 14 });
-s.addText("Sumber: halaman harga resmi tiap produk, diakses 3 Nov 2026 (docs/bisnis/harga-pesaing.md).", { isTextBox: true, x: 0.6, y: 6.4, w: 12, h: 0.35, fontSize: 11, color: C.text2, margin: 0 });
+s = isi("Usaha 10 orang membayar Rp222.400 sebulan dan tetap mengetik ulang", "Masalah dan solusi");
+s.addChart(pres.charts.BAR, [{ name: "Harga per bulan", labels: ["Nadi Usaha", "Gadjian + Kledo, 10 orang", "majoo Starter, per outlet", "Moka POS, per outlet", "Mekari Jurnal Essentials"], values: [149000, 222400, 249000, 299000, 299250] }], {
+  x: 0.6, y: 1.75, w: 7.6, h: 4.6, barDir: "bar", chartColors: ["E9A825"], showValue: true, dataLabelPosition: "outEnd", dataLabelFormatCode: "\"Rp\"#,##0",
+  showTitle: true, title: "Harga resmi per bulan, 3 Nov 2026", titleFontSize: 14, titleColor: "1C1B18", titleFontFace: "+mj-lt", dataLabelFontFace: "+mn-lt", catAxisLabelFontFace: "+mn-lt", valAxisLabelFontFace: "+mn-lt",
+  catAxisLabelColor: "5B574F", valAxisLabelColor: "5B574F", valAxisHidden: true, valGridLine: { style: "none" }, catGridLine: { style: "none" }, showLegend: false, dataLabelColor: "1C1B18", objectName: "Grafik harga pesaing",
+});
+kartu(s, 8.6, 1.75, 4.1, 4.6, "Ketik ulang");
+teks(s, "Nota pemasok, absen, izin sakit di chat, slip gaji, dan tagihan pelanggan tetap dipindahkan dari kertas ke layar oleh pemilik sendiri, karena tiap aplikasi hanya memegang satu bagian.", { x: 8.9, y: 2.05, w: 3.5, h: 4.0, fontSize: 16 });
 
 // 3. Solusi
-s = isi("Foto saja, Nadi yang menyiapkan", "Masalah dan solusi");
+s = isi("Satu foto nota menjadi usulan jurnal yang tinggal disetujui pemilik", "Masalah dan solusi");
 gambar(s, path.join(POTONG, "nota.png"), 0.6, 1.55, 3.9, 1052, 866, "Nota uji yang dibaca Nadi");
 gambar(s, path.join(POTONG, "kartu.png"), 4.8, 2.1, 3.9, 1052, 568, "Usulan dari nota");
-teks(s, [
-  { text: "Lempar Saja", options: { bold: true, color: C.text1, breakLine: true } },
-  { text: "Foto nota, slip, KTP, CV, surat dokter, Excel, atau mutasi bank.", options: { breakLine: true } },
-  { text: "Feed keputusan", options: { bold: true, color: C.text1, breakLine: true } },
-  { text: "Setiap usulan menyebut bukti dan keyakinannya. Pemilik menyetujui atau menolak dari HP.", options: { breakLine: true } },
-  { text: "Tercatat dan bisa dibatalkan", options: { bold: true, color: C.text1, breakLine: true } },
-  { text: "Keputusan otomatis selalu punya alasan tertulis dan jalan membatalkan." },
-], { x: 9.1, y: 1.6, w: 3.6, h: 5.0, fontSize: 15 });
+teks(s, "Usulan menyebut bukti dan keyakinannya. Keputusan otomatis selalu punya alasan tertulis dan bisa dibatalkan.", { x: 9.1, y: 1.6, w: 3.6, h: 3.0, fontSize: 16 });
 
 // 4. Produk sudah berjalan
 pres.addSection({ title: "Produk" });
-s = isi("Sudah berjalan di produksi, bukan rancangan", "Produk");
+s = isi("Gaji, absen, tagihan, kamera, dan rekrut sudah berjalan di produksi", "Produk");
 const modul = [
   ["Gaji", "PPh 21 TER, BPJS, lembur PP 35/2021, slip lewat tautan"],
   ["Absen dan izin", "QR berganti 15 detik, cek wajah di perangkat, izin otopilot"],
@@ -115,20 +102,16 @@ gambar(s, path.join(LAYAR, "sarapan.png"), 7.9, 1.6, 4.8, 1264, 598, "Sarapan da
 gambar(s, path.join(LAYAR, "feed-kartu.png"), 7.9, 4.2, 4.8, 1264, 356, "Kartu Feed");
 
 // 5. Hemat AI
-s = isi("AI dipakai seperlunya, jadi biaya per usaha kecil", "Produk");
+s = isi("Biaya AI dan server Rp6.896 per usaha sebulan berkat aturan pasti", "Produk");
 angka(s, 0.6, 1.7, 3.8, "Rp6.896", "biaya AI dan server per usaha berbayar per bulan (model biaya H-01)", "Biaya per usaha");
 angka(s, 4.7, 1.7, 3.8, "0 token", "untuk tata letak berkas yang sudah dikenal: aturan baca ditulis sekali lalu dipakai ulang", "Ekstraktor");
 angka(s, 8.8, 1.7, 3.9, "94,4%", "keadaan meja benar oleh agen kamera lokal 2 MB, tanpa model (korpus uji)", "Agen Mata");
 kartu(s, 0.6, 4.0, 12.1, 2.4, "Tangga kecerdasan");
-teks(s, [
-  { text: "Tangga kecerdasan", options: { bold: true, color: C.text1, breakLine: true } },
-  { text: "Aturan pasti dulu (pajak, BPJS, lembur dari teks resmi bertanggal), lalu ekstraktor terkompilasi, baru model kecil, dan model besar hanya bila keyakinan rendah.", options: { breakLine: true } },
-  { text: "Keluaran model diperlakukan sebagai masukan tak tepercaya: model tidak pernah menyetujui uang atau menghapus data." },
-], { x: 0.9, y: 4.25, w: 11.5, h: 2.0, fontSize: 15 });
+teks(s, "Tangga kecerdasan: aturan pasti dari teks resmi dulu, lalu ekstraktor terkompilasi, baru model kecil, dan model besar hanya bila keyakinan rendah. Model tidak pernah menyetujui uang atau menghapus data.", { x: 0.9, y: 4.3, w: 11.5, h: 1.9, fontSize: 16 });
 
 // 6. Paket
 pres.addSection({ title: "Bisnis" });
-s = isi("Harga per usaha, naik pelan per orang", "Bisnis");
+s = isi("Paket Usaha Rp149.000 lebih murah dari gabungan gaji dan buku pesaing", "Bisnis");
 const kepala = { bold: true, color: C.text1, fill: { color: C.background2 } };
 s.addTable([
   [{ text: "Paket", options: kepala }, { text: "Harga dasar/bln", options: kepala }, { text: "Orang termasuk", options: kepala }, { text: "Isi utama", options: kepala }],
@@ -140,7 +123,7 @@ s.addTable([
 teks(s, "Usaha Rp149.000 berada di bawah gabungan gaji + akuntansi untuk 10 orang (Rp222.400). Selama masa uji semua paket gratis dan belum ada tagihan.", { x: 0.6, y: 5.3, w: 12.1, h: 0.9, fontSize: 15 });
 
 // 7. Ekonomi unit
-s = isi("Ekonomi unit pada tiga skenario", "Bisnis");
+s = isi("Biaya akuisisi kembali 3 sampai 26 kali pada asumsi sekarang", "Bisnis");
 s.addChart(pres.charts.BAR, [{ name: "LTV/CAC", labels: ["Hemat", "Wajar", "Agresif"], values: [25.6, 9.7, 3.1] }], {
   x: 0.6, y: 1.5, w: 6.4, h: 4.8, barDir: "col", chartColors: ["E9A825"], showValue: true, dataLabelPosition: "outEnd", dataLabelFormatCode: "0.0\"x\"",
   showTitle: true, title: "LTV dibanding CAC", titleFontSize: 14, titleColor: "1C1B18", titleFontFace: "+mj-lt", dataLabelFontFace: "+mn-lt", catAxisLabelFontFace: "+mn-lt", valAxisLabelFontFace: "+mn-lt",
@@ -156,7 +139,7 @@ s.addTable([
 teks(s, "ARPU berbayar Rp236.018. CAC dan churn masih asumsi karena belum ada pelanggan berbayar; angka ini yang paling dulu harus diganti data nyata.", { x: 7.3, y: 4.6, w: 5.4, h: 1.6, fontSize: 14 });
 
 // 8. Modal
-s = isi("Modal ditentukan tim dan CAC, bukan server", "Bisnis");
+s = isi("Rp2,1 juta cukup untuk 100 usaha pertama; 10.000 usaha butuh Rp2,4 miliar", "Bisnis");
 s.addTable([
   [{ text: "", options: kepala }, { text: "Hemat (100 usaha)", options: kepala }, { text: "Wajar (1.000)", options: kepala }, { text: "Agresif (10.000)", options: kepala }],
   ["Bulan sampai target", "18", "24", "30"],
@@ -169,21 +152,18 @@ teks(s, "Simulasi 36 bulan, docs/bisnis/model.xlsx. Biaya tetap dari halaman har
 
 // 9. Bukti
 pres.addSection({ title: "Bukti dan langkah" });
-s = isi("Bukti yang ada sekarang: uji, bukan pengguna", "Bukti dan langkah");
+s = isi("Uji internal sudah terukur; data pengguna berbayar belum ada", "Bukti dan langkah");
 const bukti = [
   ["100%", "tata letak nota uji terbaca tanpa model (5 dari 5)"],
   ["91,7%", "mutasi bank cocok otomatis ke invoice, 0 salah lunas (korpus)"],
   ["98,8%", "meja terbaca dari 2 contoh per kelas (eksperimen V-JEPA 2, korpus sintetis)"],
 ];
 bukti.forEach(([a, b], i) => angka(s, 0.6 + i * 4.1, 1.7, 3.8, a, b, `Bukti ${i + 1}`));
-teks(s, [
-  { text: "Yang belum ada", options: { bold: true, color: C.text1, breakLine: true } },
-  { text: "Pengguna berbayar, data retensi, dan konversi Gratis ke berbayar. Langkah berikutnya adalah 100 usaha pertama di jalur Hemat untuk menghasilkan angka itu." },
-], { x: 0.6, y: 4.3, w: 7.0, h: 2.0, fontSize: 15 });
+teks(s, "Belum ada pengguna berbayar, data retensi, atau konversi Gratis ke berbayar. 100 usaha pertama di jalur Hemat akan menghasilkan angka itu.", { x: 0.6, y: 4.3, w: 7.0, h: 2.0, fontSize: 16 });
 gambar(s, path.join(LAYAR, "peta.png"), 8.8, 3.5, 2.6, 1264, 1412, "Peta warung langsung");
 
 // 10. Langkah
-s = isi("Rencana: data nyata dulu, dana kemudian", "Bukti dan langkah");
+s = isi("Langkah berikutnya mengukur 100 usaha nyata sebelum mencari dana", "Bukti dan langkah");
 const langkah = [
   ["1", "Jalur Hemat", "100 usaha lewat paket Gratis, mitra akuntan, dan lomba; modal sekitar Rp1,4 jt sebelum impas"],
   ["2", "Ukur", "churn, konversi, dan CAC nyata menggantikan asumsi model"],
