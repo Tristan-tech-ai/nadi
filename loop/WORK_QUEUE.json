@@ -3183,8 +3183,10 @@
    "accept": "pemotongan PPh 23/4(2) tercatat di pembayaran pemasok; berkas BpuBulk sama urutan contoh resmi bppu.xml dan lolos skema turunan yang meloloskan contoh resmi; retur Faktur Keluaran sesuai templat resmi; rekap PPN keluaran per masa cocok dengan jurnal; kalender tanggal setor/lapor dari teks peraturan resmi; tes SQL + e2e unduh",
    "how": "docs/research/coretax-efaktur.md bagian Belum; templat DJP di pajak.go.id/en/node/112031 (bppu.zip, BPPU Excel to XML v.3, Retur templat)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T02:22:15"
+   "status": "done",
+   "created": "2026-11-05T02:22:15",
+   "done": "2026-11-05T02:56:06",
+   "result": "198413d: migrasi 065000 potong_pph (md5 458e31de; kode_objek_pajak 198 baris dari REF BPPU v.3 DJP), tes SQL potong_pph 24/24 (tarif REF, hutang berkurang, jurnal 2-100/2-210, kalender PMK 81/2024 Pasal 94/100/171/173 dengan geser libur, rekap jurnal = total invoice, staf/isolasi); BpuBulk + Retur Faktur Masukan urutan = contoh resmi (bupot.test 7/7), korpus 10 bupot + 5 retur, skema turunan BpuBulk.xsd + InputTaxInvoiceReturn.xsd: 38/38 lolos termasuk 3 contoh resmi, gerbang efaktur; /app/pajak/faktur kalender + rekap PPN + potong PPh + unduh XML e-Bupot; e2e faktur-pajak 2/2 lokal dan produksi; axe 390/1440 0 serius; retur faktur keluaran: di Coretax dibuat pembeli (dicatat), layar retur masukan menunggu nomor faktur pemasok di tagihan"
   }
  ]
 }
