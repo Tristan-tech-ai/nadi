@@ -2499,8 +2499,10 @@
    "accept": "docs/bisnis/pitch-deck.pptx: setiap judul slide kalimat klaim <= 2 baris, tiap slide punya bukti visual (layar/angka/bagan), tanpa slide poin-poin; validate.py lulus; render PDF diperiksa",
    "how": "docs/design/BELAJAR-NOV-2026.md bagian 5 Deck",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T16:41:00"
+   "status": "done",
+   "created": "2026-11-04T16:41:00",
+   "done": "2026-11-05T06:17:32",
+   "result": "182ce54; docs/bisnis/pitch-deck.pptx 11 slide dari docs/bisnis/buat-deck.cjs: 9 judul isi kalimat klaim 9-12 kata (<= 2 baris 30 pt, diperiksa di render), tiap slide bukti visual (bagan harga pesaing, layar asli, angka, tabel, grafik LTV/CAC), tanpa poin (skrip menolak 'bullet'); validate.py All validations PASSED; pitch-deck.pdf dirender LibreOffice dan diperiksa per slide"
   },
   {
    "id": "D-19",
@@ -2841,8 +2843,10 @@
    "accept": "contoh penyusutan cocok tangan; tes SQL jurnal",
    "how": "docs/research/mekari/rencana.md; menutup JU-17, TA-14; isi: Aset tetap: daftar, kelompok (fiskal dan komersial, aturan dibaca dulu), penyusutan garis lurus/saldo menurun bulanan otomatis, jual/lepas dengan laba rugi, aset dipinjam karyawan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:53"
+   "status": "done",
+   "created": "2026-11-04T20:17:53",
+   "done": "2026-11-05T06:13:42",
+   "result": "014e339; migrasi 20261105072000_aset_tetap md5 13a9c523 (aset_tetap, penyusutan_aset, aset_pinjam, app.susut_bulan Pasal 11 UU PPh UU 7/2021, catat_aset, jalankan_penyusutan menyusul bulan, lepas_aset laba 4-910/rugi 6-990, pinjamkan_aset, cron nadi-penyusutan); tes SQL aset_tetap 21/21; vitest susut 4/4 contoh tangan (K1 12 jt SM: 500.000/250.000/125.000/62.500/812.500); /app/aset; e2e produksi aset lulus (catat, susut, pinjam, kembali, jual), axe 390/1440 terang/gelap"
   },
   {
    "id": "M-07",
@@ -3017,8 +3021,10 @@
    "accept": "tes SQL batas dan saldo; korpus struk; e2e staf klaim sampai masuk slip",
    "how": "docs/research/mekari/rencana.md; menutup EX-01..EX-04, EX-06, TA-30; isi: Pengeluaran karyawan: klaim dari foto struk (staf melempar), kategori + batas per orang/bulan + saldo, perjalanan dinas (pengajuan, uang muka, laporan, penyelesaian selisih), pemeriksa kebijakan (aturan pasti dulu, model hanya untuk kategori ragu), persetujuan bertingkat, dibayar lewat slip atau tandai dibayar + jurnal",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T05:49:17",
+   "result": "7d780ce + e2e fix; migrasi 20261105070000_klaim md5 b25a009b (kategori_klaim batas/akun/struk, klaim, perjalanan_dinas, rantai atasan untuk klaim/dinas, jurnal beban/2-160, penggantian di slip dikecualikan dari Pasal 65 dan bruto PPh, klaim_dari_gaji, bayar kas/bank, uang muka 1-160, selesaikan_dinas -> kasbon); tes SQL klaim 27/27; korpus fixtures/korpus/struk 32 struk sintetis: total/tanggal/kategori 32/32; vitest gaji 88 + struk 4; /app/klaim; e2e produksi staf e-struk -> batas ditolak -> disetujui Feed -> slip penggantian Rp15.000 -> Dibayar lulus, axe 390/1440; lanjutan M-18B"
   },
   {
    "id": "M-19",
@@ -3115,8 +3121,10 @@
    "accept": "tes SQL tanggal per jenis; e2e",
    "how": "docs/research/mekari/rencana.md nilai tambah; isi: Kalender kepatuhan. Satu daftar tenggat dari aturan bertanggal: setor dan lapor pajak per masa, BPJS, THR, kontrak habis, SP berakhir, izin usaha (NIB, PIRT, halal) yang diisi pemilik. Pengingat masuk ke Feed dan push",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T06:02:03",
+   "result": "8fb7115; migrasi 20261105071000_kalender_kepatuhan md5 35b6900a + 071100_kepatuhan_ppn md5 fe6c1127 (app.tenggat_kepatuhan pajak PMK 81/2024, BPJS TK PP 44/2015 Pasal 21, BPJS Kes Perpres 82/2018 Pasal 39, THR H-7 Idulfitri, kontrak PKWT, SP, izin_usaha; cron nadi-pengingat-kepatuhan kartu info.kepatuhan ke Feed pemilik, push lewat nadi-push-usulan); tes SQL kalender_kepatuhan 20/20 (pergeseran Minggu, cuti bersama, Sabtu; PPN hanya PKP; sekali per tenggat; peran; isolasi); /app/kepatuhan; e2e produksi kepatuhan lulus, axe 390/1440 terang/gelap"
   },
   {
    "id": "M-26",
