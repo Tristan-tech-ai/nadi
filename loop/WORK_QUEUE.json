@@ -2591,8 +2591,10 @@
    "accept": "6 halaman x 2 bahasa memakai KepalaPoster/KakiPoster dan lapangan poster; inspect.mjs 0 FAIL di /harga dan /panduan; axe 0 serius terang/gelap; e2e halaman pendukung dan bahasa lulus di produksi; keterbacaan dulu: kolom 60-70 karakter, teks 17 px tinta penuh, tabel tetap tabel",
    "how": "DESIGN.md mode Read: struktur untuk dibaca, lapangan warna untuk judul",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T18:44:19"
+   "status": "done",
+   "created": "2026-11-04T18:44:19",
+   "done": "2026-11-05T00:06:11",
+   "result": "161dd61: HalamanInfo pakai KepalaPoster/KakiPoster + lapangan judul per halaman, lembar baca 17 px tinta penuh, kolom 66ch, tanpa garis rambut, tabel tetap tabel (6 halaman x id/en); inspect.mjs 0 FAIL /harga, /panduan, /en/harga, /en/panduan; axe kontras 0 di 7 halaman terang/gelap; e2e aksesibilitas+asap lokal 11/11; e2e asap+bahasa produksi nadi-swart 17/17"
   },
   {
    "id": "D-27",
@@ -2665,8 +2667,10 @@
    "accept": "alat MCP onboarding baru (usulan saja) + tes; skema cetak biru dengan 10 kasus uji; e2e cetak biru contoh jadi >= 10 usulan; prompt diuji di chat AI gratis dengan data sintetis, dicatat docs/quality/onboarding-ai.md; halaman petunjuk per aplikasi menyebut paket yang dibutuhkan dari sumber resmi",
    "how": "docs/research/rencana-luas-nadi.md W-04",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T18:52:56"
+   "status": "done",
+   "created": "2026-11-04T18:52:56",
+   "done": "2026-11-04T23:27:50",
+   "result": "8dbb24d + 110e6ba; migrasi 060000/060100 (md5 9fa861eb, 45e7670b cocok); alat MCP usul_onboarding + prompt siapkan_usaha (protokol.test 3 kasus), tes SQL onboarding_ai 18/18 (usulan saja, daftar putih, NIK/gaji ditolak, MCP token); skema Teks Nadi 11 kasus (5 baik, 5 buruk, 1 jawaban model asli); e2e/siapkan.spec.ts produksi: contoh jadi 12 usulan di Feed; uji nyata Qwen2.5-1.5B-Instruct gratis lokal dicatat docs/quality/onboarding-ai.md (chat AI gratis berakun belum: butuh login Tristan); /app/siapkan menyebut paket per aplikasi dari sumber resmi (ChatGPT ditandai belum terverifikasi); axe 0 serius 390/1440 terang/gelap"
   },
   {
    "id": "W-05",
@@ -2797,8 +2801,10 @@
    "accept": "tes SQL hutang = saldo akun 2-100; usulan dari nota yang cocok PO menyebut selisihnya; e2e PO sampai lunas",
    "how": "docs/research/mekari/rencana.md; menutup JU-06, JU-07, JU-08, EX-05; isi: Siklus pembelian dan hutang: permintaan, PO, penerimaan barang (masuk stok), tagihan pemasok dari Lempar (cocokkan ke PO dan penerimaan, three-way match), jatuh tempo, pembayaran sebagian, retur/nota debit, daftar pemasok + saldo, pemetaan akun biaya per kategori",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:53"
+   "status": "done",
+   "created": "2026-11-04T20:17:53",
+   "done": "2026-11-04T22:39:59",
+   "result": "41da419 + migrasi 20261104058000_siklus_beli (md5 0e3aed18 cocok); tes SQL siklus_beli 23/23 (hutang = saldo 2-100, nota menyebut PO + selisih Rp1.000), regresi putuskan_usulan 15/15; e2e/beli.spec.ts produksi nadi-swart lulus (PO > terima > tagihan 33.000 selisih 1.000 > bayar 10.000 > retur 2.400 > lunas), axe 0 serius 390/1440 terang/gelap; advisor hanya WARN definer yang diterima (anon tanpa execute)"
   },
   {
    "id": "M-05",
@@ -2811,8 +2817,10 @@
    "accept": "korpus mutasi 3 bank sintetis: cocok >= 90% dengan 0 salah; tes SQL; e2e rekonsiliasi",
    "how": "docs/research/mekari/rencana.md; menutup JU-14, JU-15, JU-16, JU-30, LA-09; isi: Kas dan bank: akun kas/bank, transfer antarakun, terima/kirim uang manual, rekonsiliasi semua transaksi dengan aturan buatan pengguna (perluasan cocok mutasi), e-statement PDF/CSV lewat Lempar, alamat lempar email untuk mutasi (cek biaya layanan email masuk dulu), pilihan sambung payment gateway milik pemilik (riset dulu)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:53"
+   "status": "done",
+   "created": "2026-11-04T20:17:53",
+   "done": "2026-11-04T23:00:10",
+   "result": "239b369 + migrasi 20261104059000_kas_bank (md5 514fbce7 cocok); tes SQL kas_bank 25/25 (transfer, catat, impor tanpa ganda, rekonsiliasi invoice/tagihan/jurnal/akun/abaikan, batal, e-statement Lempar, neraca seimbang, isolasi); korpus fixtures/korpus/rekon 3 format bank: 21/22 cocok per format, 0 salah (vitest, gerbang dibuat merah sekali); e2e/kas.spec.ts produksi nadi-swart lulus; axe 0 serius 390/1440 terang/gelap; email lempar dan payment gateway dicatat belum diriset di fitur.md"
   },
   {
    "id": "M-06",
