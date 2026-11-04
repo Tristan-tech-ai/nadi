@@ -66,3 +66,46 @@ export async function batalkanBerhenti(_: HasilSerah, form: FormData): Promise<H
   revalidatePath("/app/serah-terima");
   return { pesan: k.dibatalkan };
 }
+
+// F3-07C: transkrip dan langkah kerja butir ilmu (pemilik/admin; hak diperiksa simpan_ilmu, konteks_ilmu, simpan_langkah_model).
+export type HasilIlmu = { ok?: boolean; langkah?: string[]; galat?: string };
+
+async function teksIlmu() {
+  const bahasa = await bahasaAplikasi();
+  const t = ambilKamus(bahasa).ilmuPemilik;
+  return { ...t, db: (pesan: string) => (bahasa === "id" ? pesan : isiTeks(t.galatDb, { pesan })) };
+}
+
+export async function simpanTranskripIlmu(butir: string, transkrip: string): Promise<HasilIlmu> {
+  const k = await teksIlmu();
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("simpan_ilmu", { p_butir: butir, p_transkrip: transkrip.slice(0, 20000), p_langkah: null, p_sumber: "pemilik" });
+  if (error) return { galat: error.code === "42501" || error.code === "22023" ? k.db(error.message) : k.gagal };
+  revalidatePath("/app/serah-terima");
+  return { ok: true };
+}
+
+export async function susunLangkahIlmu(butir: string): Promise<HasilIlmu> {
+  const k = await teksIlmu();
+  const supabase = await createClient();
+  const { data, error } = await supabase.functions.invoke<{ langkah?: string[]; galat?: string }>("langkah-ilmu", { body: { butir_id: butir }, timeout: 45_000 });
+  if (error || !data?.langkah) {
+    // Pesan database (batas 3 kali sehari, transkrip belum ada) dibaca dari badan galat Edge Function.
+    const badan = error && "context" in error ? await (error.context as Response).json().catch(() => null) : null;
+    const pesan = (badan as { galat?: string; kode?: string } | null);
+    return { galat: pesan?.kode === "54000" || pesan?.kode === "55000" ? k.db(String(pesan.galat)) : k.modelGagal };
+  }
+  revalidatePath("/app/serah-terima");
+  return { ok: true, langkah: data.langkah };
+}
+
+export async function simpanLangkahIlmu(_: HasilIlmu, form: FormData): Promise<HasilIlmu> {
+  const k = await teksIlmu();
+  const butir = String(form.get("butir") ?? "");
+  const langkah = String(form.get("langkah") ?? "").split("\n").map((l) => l.trim()).filter(Boolean);
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("simpan_ilmu", { p_butir: butir, p_transkrip: null, p_langkah: langkah.length ? langkah : null, p_sumber: "pemilik" });
+  if (error) return { galat: error.code === "42501" || error.code === "22023" ? k.db(error.message) : k.gagal };
+  revalidatePath("/app/serah-terima");
+  return { ok: true, langkah };
+}

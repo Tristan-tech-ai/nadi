@@ -19,7 +19,7 @@ test.use({ launchOptions: { args: ["--use-fake-ui-for-media-stream", "--use-fake
 
 test("Rekam Ilmu: staf yang berhenti merekam penjelasan, pemilik melihat statusnya", async ({ page, browser }, info) => {
   test.skip(info.project.name !== "desktop" || !E.E2E_SANDI, "sekali (desktop), butuh .env.e2e.local");
-  test.setTimeout(150_000);
+  test.setTimeout(240_000);
   // Data sintetis lewat pemilik akun A: orang + topi tunggal (butir ilmu), akun staf, paket berhenti.
   const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
   expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
@@ -74,4 +74,35 @@ test("Rekam Ilmu: staf yang berhenti merekam penjelasan, pemilik melihat statusn
   await page.waitForURL((x) => x.pathname === "/app/serah-terima");
   const paket = page.getByTestId("paket-serah").filter({ hasText: nama });
   await expect(paket.getByTestId("status-rekam").first()).toContainText(/direkam \d+:\d{2}/);
+
+  // Pemilik: klip tampil; transkrip diisi lewat RPC (transkrip di perangkat sudah diuji di wawancara.spec), lalu Susun langkah
+  // memanggil Edge Function langkah-ilmu dengan model ringan sungguhan, dan langkah bisa diedit pemilik.
+  const panel = paket.getByTestId("ilmu-pemilik").first();
+  await expect(panel.locator("audio")).toHaveCount(1);
+  await expect(panel.getByTestId("transkrip-ilmu")).toBeVisible();
+  const { data: bi } = await sb.from("serah_butir").select("id").eq("jenis", "ilmu").eq("berhenti_id",
+    (await sb.from("berhenti").select("id").eq("orang_id", orang!.id).single()).data!.id).limit(1).single();
+  expect((await sb.rpc("simpan_ilmu", { p_butir: bi!.id, p_transkrip: "Pertama nyalakan mesin espresso. Lalu tunggu lampu hijau sekitar sepuluh menit. Setelah itu giling kopi dua puluh gram dan seduh dua puluh lima detik.", p_langkah: null, p_sumber: "pemilik" })).error).toBeNull();
+  await page.reload();
+  await panel.getByTestId("susun-langkah").click();
+  await expect(panel.getByTestId("langkah-ilmu").locator("li").first()).toBeVisible({ timeout: 60_000 });
+  await expect(panel).toContainText("Langkah dirapikan Nadi dari rekaman; dengar klip aslinya bila ragu.");
+  for (const [w, h] of [[390, 844], [1440, 900]]) {
+    for (const skema of ["light", "dark"] as const) {
+      await page.setViewportSize({ width: w, height: h });
+      await page.emulateMedia({ colorScheme: skema });
+      await panel.evaluate((el) => el.scrollIntoView({ block: "center" }));
+      await page.waitForTimeout(400);
+      const axe = await new AxeBuilder({ page }).analyze();
+      expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), `pemilik ${w} ${skema}`).toEqual([]);
+      await panel.screenshot({ path: test.info().outputPath(`ilmu-pemilik-${w}-${skema}.png`) });
+    }
+  }
+  await panel.getByText("Ubah langkah").click();
+  await panel.getByTestId("edit-langkah").fill(["Nyalakan mesin espresso.", "Tunggu lampu hijau."].join("\n"));
+  await panel.getByRole("button", { name: "Simpan langkah" }).click();
+  await expect(panel.getByRole("status")).toContainText("Tersimpan.");
+  const { data: akhir } = await sb.from("serah_butir").select("langkah, langkah_sumber").eq("id", bi!.id).single();
+  expect(akhir?.langkah).toEqual(["Nyalakan mesin espresso.", "Tunggu lampu hijau."]);
+  expect(akhir?.langkah_sumber).toBe("pemilik");
 });
