@@ -36,13 +36,13 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | TA-14 | Aset perusahaan yang dipinjam karyawan | Company/Assets; API Asset | Serah terima butir barang | SEBAGIAN: daftar aset + pinjam/kembali | M-06 |
 | TA-15 | File perusahaan, aktivitas pengguna, antrean proses, notifikasi | Company/Files; Company/User Activity; Company/Queue Activity; Company/Notification | Lempar (arsip berkas), audit_log, push | SEBAGIAN: layar log aktivitas | M-21 |
 | TA-16 | Insights: headcount, absensi, payroll, karyawan berisiko, kinerja, lembur, dasbor kustom, report builder | Insights/*; Company/Report Builder; Dashboard/*; Time/Time Reports | KPI, beban tim, sinyal beban, alur nyata, Sarapan Data | SEBAGIAN: dasbor HR baku + pembuat laporan | M-23 |
-| TA-17 | Absensi mobile: selfie, GPS/geofence, liveness AI, kunci absensi | Time/Attendance; Mobile App/Time Management | QR TOTP 15 detik + cek wajah kedip/menoleh di perangkat | SEBAGIAN: geofence lokasi, kunci periode absensi | M-12 |
+| TA-17 | Absensi mobile: selfie, GPS/geofence, liveness AI, kunci absensi | Time/Attendance; Mobile App/Time Management | QR TOTP 15 detik + cek wajah di perangkat; geofence radius per tempat dengan pesan jarak; kunci absensi per bulan (M-12) | ADA | M-12 |
 | TA-18 | Live tracking karyawan lapangan (rute, kunjungan, penyimpangan) | Time/Live Tracking; API Live Attendance | tidak ada | BELUM (dengan izin orangnya, UU PDP) | M-15 |
-| TA-19 | Shift, scheduler, multiple shift, on-call, tukar shift | Time/Scheduler; Time/Multiple Shift; Time/On-call; Time/Calendar; Settings/Time | jadwal shift, tukar shift, usulan jadwal, batas PP 35/2021 | SEBAGIAN: on-call, banyak shift sehari | M-12 |
-| TA-20 | Lembur: pengajuan karyawan, aturan, perhitungan | Time/Overtime; API Overtime | catat_lembur pemilik/admin + upah lembur di slip | SEBAGIAN: pengajuan lembur oleh staf lewat Feed | M-12 |
-| TA-21 | Cuti: jatah, saldo, carry forward, cuti per jam, block leave | Time/Time Off; API Time Off | izin otopilot, jatah cuti, bukti | SEBAGIAN: cuti per jam, block leave, sisa cuti terbawa | M-12 |
-| TA-22 | Kalender kerja dan libur nasional | Time/Calendar | Minggu libur dan pola 5/6 hari | BELUM: libur nasional dan cuti bersama bertanggal dari SKB resmi | M-12 |
-| TA-23 | Tablet absen (Talenta Portal), mesin sidik jari, absen tanpa sentuh | Mobile App/Talenta Portal; API Fingerprint | kios tablet token nmk_ | SEBAGIAN: impor log mesin sidik jari lewat Lempar (CSV/XLS). Sambungan langsung ke mesin: MITRA | M-12 |
+| TA-19 | Shift, scheduler, multiple shift, on-call, tukar shift | Time/Scheduler; Time/Multiple Shift; Time/On-call; Time/Calendar; Settings/Time | jadwal shift, tukar shift, usulan jadwal, batas PP 35/2021; shift siaga (on-call) (M-12) | SEBAGIAN: banyak shift sehari belum diuji khusus | M-12 |
+| TA-20 | Lembur: pengajuan karyawan, aturan, perhitungan | Time/Overtime; API Overtime | catat_lembur pemilik/admin + upah lembur di slip; staf mengajukan lembur sendiri lewat Feed (M-12) | ADA | M-12 |
+| TA-21 | Cuti: jatah, saldo, carry forward, cuti per jam, block leave | Time/Time Off; API Time Off | izin otopilot, jatah cuti, bukti | SEBAGIAN: cuti per jam, block leave, sisa cuti terbawa belum | M-12 |
+| TA-22 | Kalender kerja dan libur nasional | Time/Calendar | libur nasional dan cuti bersama 2026 bertanggal dari SKB 3 menteri (setneg.go.id), tampil di Jadwal (M-12) | SEBAGIAN: belum mengurangi hari kerja di hitungan izin dan gaji | M-12 |
+| TA-23 | Tablet absen (Talenta Portal), mesin sidik jari, absen tanpa sentuh | Mobile App/Talenta Portal; API Fingerprint | kios tablet token nmk_; log mesin sidik jari/wajah (CSV/Excel) lewat Lempar dibaca tanpa AI menjadi rekap absen (M-12) | SEBAGIAN: sambungan langsung ke mesin tetap MITRA | M-12 |
 | TA-24 | Proyek, tugas, timesheet | Productivity/Projects and Tasks; API Task and Timesheet | papan kerja poin, estimasi kerja AI, beban | SEBAGIAN: proyek + jam per proyek | M-12 |
 | TA-25 | Payroll: komponen, struktur gaji, run payroll, PPh 21 TER, BPJS, THR, prorata, mingguan, kunci dan publikasi slip, riwayat | Payroll/Payroll Processing; Payroll/Payroll Components; Payroll/Salary Structure; Settings/Payroll | slip bulanan, PPh 21 TER/Pasal 17, BPJS, lembur, Gerbang Gaji, tahan slip, tautan slip | SEBAGIAN: THR, prorata, payroll mingguan/harian, komponen kustom, struktur gaji | M-10 |
 | TA-26 | Simulasi pajak, compensation planning (kenaikan gaji) | Payroll/Tax Simulation; Payroll/Compensation Planning | Kompas Pajak (PPh final UMKM) | BELUM | M-10 |
@@ -191,8 +191,8 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 
 | Status | Jumlah |
 |---|---|
-| ADA | 21 |
-| SEBAGIAN | 54 |
+| ADA | 23 |
+| SEBAGIAN | 52 |
 | BELUM | 39 |
 | MITRA | 18 |
 | LUAR | 2 |
