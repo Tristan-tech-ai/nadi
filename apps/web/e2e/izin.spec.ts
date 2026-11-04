@@ -94,7 +94,7 @@ test("izin: otopilot menyetujui sesuai aturan, sisanya masuk Feed dan diputuskan
   await expect(staf.getByTestId("lama-izin")).toContainText("1 hari");
   await staf.getByLabel("Alasan (boleh kosong)").fill("Demam");
   await staf.getByLabel(/Bukti/).setInputFiles({ name: "surat-dokter.png", mimeType: "image/png", buffer: Buffer.from(`surat uji ${nama}`) });
-  await staf.getByRole("button", { name: "Ajukan" }).click();
+  await staf.getByRole("button", { name: "Ajukan", exact: true }).click();
   await expect(staf.getByTestId("hasil-izin")).toContainText("Disetujui otomatis: sakit 1 hari dengan bukti, sesuai kebijakan sakit.");
 
   // Sakit 3 hari: lebih dari batas, masuk Feed.
@@ -102,7 +102,7 @@ test("izin: otopilot menyetujui sesuai aturan, sisanya masuk Feed dan diputuskan
   await staf.getByLabel("Sampai").fill(tanggal(12));
   await expect(staf.getByTestId("lama-izin")).toContainText("3 hari");
   await staf.getByLabel(/Bukti/).setInputFiles({ name: "surat-dokter-2.png", mimeType: "image/png", buffer: Buffer.from(`surat uji 2 ${nama}`) });
-  await staf.getByRole("button", { name: "Ajukan" }).click();
+  await staf.getByRole("button", { name: "Ajukan", exact: true }).click();
   await expect(staf.getByTestId("hasil-izin")).toContainText("3 hari, lebih dari batas otomatis 1 hari");
   await staf.reload();
   await expect(staf.getByTestId("daftar-izin").getByRole("listitem")).toHaveCount(2);
