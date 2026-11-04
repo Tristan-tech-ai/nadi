@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TaxInvoiceBulk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TaxInvoice.xsd">
+	<TIN>1091031210912281</TIN>
+	<ListOfTaxInvoice>
+		<TaxInvoice>
+			<TaxInvoiceDate>2026-11-20</TaxInvoiceDate>
+			<TaxInvoiceOpt>Normal</TaxInvoiceOpt>
+			<TrxCode>01</TrxCode>
+			<AddInfo/>
+			<CustomDoc/>
+			<CustomDocMonthYear/>
+			<RefDesc>020/INV/XI/2026</RefDesc>
+			<FacilityStamp/>
+			<SellerIDTKU>1091031210912281000000</SellerIDTKU>
+			<BuyerTin>0000000000000000</BuyerTin>
+			<BuyerDocument>Other ID</BuyerDocument>
+			<BuyerCountry>IDN</BuyerCountry>
+			<BuyerDocumentNumber>KOP-77/2024</BuyerDocumentNumber>
+			<BuyerName>Koperasi Sido &amp; Rukun</BuyerName>
+			<BuyerAdress>Jl. Gatot Subroto 1 &lt;Blok A&gt;</BuyerAdress>
+			<BuyerEmail/>
+			<BuyerIDTKU>000000</BuyerIDTKU>
+			<ListOfGoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Kopi bubuk 250 g</Name>
+					<Unit>UM.0021</Unit>
+					<Price>33351.79</Price>
+					<Qty>14</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>466925.06</TaxBase>
+					<OtherTaxBase>466925.06</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>56031.01</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Nasi kotak ayam bakar</Name>
+					<Unit>UM.0021</Unit>
+					<Price>19661.61</Price>
+					<Qty>17</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>334247.37</TaxBase>
+					<OtherTaxBase>334247.37</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>40109.68</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+			</ListOfGoodService>
+		</TaxInvoice>
+	</ListOfTaxInvoice>
+</TaxInvoiceBulk>

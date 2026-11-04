@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TaxInvoiceBulk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TaxInvoice.xsd">
+	<TIN>1091031210912281</TIN>
+	<ListOfTaxInvoice>
+		<TaxInvoice>
+			<TaxInvoiceDate>2026-11-10</TaxInvoiceDate>
+			<TaxInvoiceOpt>Normal</TaxInvoiceOpt>
+			<TrxCode>01</TrxCode>
+			<AddInfo/>
+			<CustomDoc/>
+			<CustomDocMonthYear/>
+			<RefDesc>010/INV/XI/2026</RefDesc>
+			<FacilityStamp/>
+			<SellerIDTKU>1091031210912281000000</SellerIDTKU>
+			<BuyerTin>0000000000000000</BuyerTin>
+			<BuyerDocument>National ID</BuyerDocument>
+			<BuyerCountry>IDN</BuyerCountry>
+			<BuyerDocumentNumber>5171014507800003</BuyerDocumentNumber>
+			<BuyerName>Bu Rina</BuyerName>
+			<BuyerAdress>Jl. Teuku Umar 8, Denpasar</BuyerAdress>
+			<BuyerEmail/>
+			<BuyerIDTKU>000000</BuyerIDTKU>
+			<ListOfGoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Kopi bubuk 250 g</Name>
+					<Unit>UM.0021</Unit>
+					<Price>37340</Price>
+					<Qty>4</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>149360</TaxBase>
+					<OtherTaxBase>149360</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>17923.2</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+			</ListOfGoodService>
+		</TaxInvoice>
+	</ListOfTaxInvoice>
+</TaxInvoiceBulk>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TaxInvoiceBulk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TaxInvoice.xsd">
+	<TIN>1091031210912281</TIN>
+	<ListOfTaxInvoice>
+		<TaxInvoice>
+			<TaxInvoiceDate>2026-11-12</TaxInvoiceDate>
+			<TaxInvoiceOpt>Normal</TaxInvoiceOpt>
+			<TrxCode>04</TrxCode>
+			<AddInfo/>
+			<CustomDoc/>
+			<CustomDocMonthYear/>
+			<RefDesc>012/INV/XI/2026</RefDesc>
+			<FacilityStamp/>
+			<SellerIDTKU>1091031210912281000000</SellerIDTKU>
+			<BuyerTin>0000000000000000</BuyerTin>
+			<BuyerDocument>Other ID</BuyerDocument>
+			<BuyerCountry>IDN</BuyerCountry>
+			<BuyerDocumentNumber>KOP-77/2024</BuyerDocumentNumber>
+			<BuyerName>Koperasi Sido &amp; Rukun</BuyerName>
+			<BuyerAdress>Jl. Gatot Subroto 1 &lt;Blok A&gt;</BuyerAdress>
+			<BuyerEmail/>
+			<BuyerIDTKU>000000</BuyerIDTKU>
+			<ListOfGoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Es teh manis</Name>
+					<Unit>UM.0021</Unit>
+					<Price>2721.62</Price>
+					<Qty>18</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>48989.16</TaxBase>
+					<OtherTaxBase>44906.73</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>5388.81</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Jasa katering</Name>
+					<Unit>UM.0026</Unit>
+					<Price>1126145.05</Price>
+					<Qty>21</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>23649046.05</TaxBase>
+					<OtherTaxBase>21678292.21</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>2601395.07</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Tepung terigu</Name>
+					<Unit>UM.0003</Unit>
+					<Price>12181.08</Price>
+					<Qty>24</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>292345.92</TaxBase>
+					<OtherTaxBase>267983.76</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>32158.05</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+			</ListOfGoodService>
+		</TaxInvoice>
+	</ListOfTaxInvoice>
+</TaxInvoiceBulk>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TaxInvoiceBulk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TaxInvoice.xsd">
+	<TIN>1091031210912281</TIN>
+	<ListOfTaxInvoice>
+		<TaxInvoice>
+			<TaxInvoiceDate>2026-11-11</TaxInvoiceDate>
+			<TaxInvoiceOpt>Normal</TaxInvoiceOpt>
+			<TrxCode>04</TrxCode>
+			<AddInfo/>
+			<CustomDoc/>
+			<CustomDocMonthYear/>
+			<RefDesc>011/INV/XI/2026</RefDesc>
+			<FacilityStamp/>
+			<SellerIDTKU>1091031210912281000000</SellerIDTKU>
+			<BuyerTin>0000000000000000</BuyerTin>
+			<BuyerDocument>Passport</BuyerDocument>
+			<BuyerCountry>IDN</BuyerCountry>
+			<BuyerDocumentNumber>TK1234567</BuyerDocumentNumber>
+			<BuyerName>Mr. Tanaka Hiro</BuyerName>
+			<BuyerAdress>Hotel Sanur Indah, Denpasar</BuyerAdress>
+			<BuyerEmail/>
+			<BuyerIDTKU>000000</BuyerIDTKU>
+			<ListOfGoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Nasi kotak ayam bakar</Name>
+					<Unit>UM.0021</Unit>
+					<Price>19832.43</Price>
+					<Qty>11</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>218156.73</TaxBase>
+					<OtherTaxBase>199977</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>23997.24</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Es teh manis</Name>
+					<Unit>UM.0021</Unit>
+					<Price>2715.32</Price>
+					<Qty>14</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>38014.48</TaxBase>
+					<OtherTaxBase>34846.61</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>4181.59</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+			</ListOfGoodService>
+		</TaxInvoice>
+	</ListOfTaxInvoice>
+</TaxInvoiceBulk>

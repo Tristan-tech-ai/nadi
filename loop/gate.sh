@@ -31,6 +31,8 @@ step tulisan-uji python -I scripts/cek-tulisan.py --selftest
 step tulisan python -I scripts/cek-tulisan.py
 step mekari-uji python -I docs/research/mekari/alat/cek_cakupan.py --selftest
 step mekari python -I docs/research/mekari/alat/cek_cakupan.py
+step efaktur-uji python -I scripts/pajak/validasi-xsd.py --selftest
+step efaktur python -I scripts/pajak/validasi-xsd.py
 if [ -f package.json ] && [ -d apps/web ]; then
   step lint pnpm -s lint
   step tipe pnpm -s typecheck

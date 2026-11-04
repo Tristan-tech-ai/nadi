@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TaxInvoiceBulk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TaxInvoice.xsd">
+	<TIN>1091031210912281</TIN>
+	<ListOfTaxInvoice>
+		<TaxInvoice>
+			<TaxInvoiceDate>2026-11-08</TaxInvoiceDate>
+			<TaxInvoiceOpt>Normal</TaxInvoiceOpt>
+			<TrxCode>04</TrxCode>
+			<AddInfo/>
+			<CustomDoc/>
+			<CustomDocMonthYear/>
+			<RefDesc>008/INV/XI/2026</RefDesc>
+			<FacilityStamp/>
+			<SellerIDTKU>1091031210912281000000</SellerIDTKU>
+			<BuyerTin>0000000000000000</BuyerTin>
+			<BuyerDocument>Other ID</BuyerDocument>
+			<BuyerCountry>IDN</BuyerCountry>
+			<BuyerDocumentNumber>KOP-77/2024</BuyerDocumentNumber>
+			<BuyerName>Koperasi Sido &amp; Rukun</BuyerName>
+			<BuyerAdress>Jl. Gatot Subroto 1 &lt;Blok A&gt;</BuyerAdress>
+			<BuyerEmail/>
+			<BuyerIDTKU>000000</BuyerIDTKU>
+			<ListOfGoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Jasa katering</Name>
+					<Unit>UM.0026</Unit>
+					<Price>1126145.05</Price>
+					<Qty>20</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>22522901</TaxBase>
+					<OtherTaxBase>20645992.58</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>2477519.11</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Tepung terigu</Name>
+					<Unit>UM.0003</Unit>
+					<Price>12181.08</Price>
+					<Qty>23</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>280164.84</TaxBase>
+					<OtherTaxBase>256817.77</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>30818.13</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+			</ListOfGoodService>
+		</TaxInvoice>
+	</ListOfTaxInvoice>
+</TaxInvoiceBulk>

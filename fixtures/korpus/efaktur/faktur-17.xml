@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TaxInvoiceBulk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TaxInvoice.xsd">
+	<TIN>1091031210912281</TIN>
+	<ListOfTaxInvoice>
+		<TaxInvoice>
+			<TaxInvoiceDate>2026-11-17</TaxInvoiceDate>
+			<TaxInvoiceOpt>Normal</TaxInvoiceOpt>
+			<TrxCode>04</TrxCode>
+			<AddInfo/>
+			<CustomDoc/>
+			<CustomDocMonthYear/>
+			<RefDesc>017/INV/XI/2026</RefDesc>
+			<FacilityStamp/>
+			<SellerIDTKU>1091031210912281000000</SellerIDTKU>
+			<BuyerTin>0811034248502000</BuyerTin>
+			<BuyerDocument>TIN</BuyerDocument>
+			<BuyerCountry>IDN</BuyerCountry>
+			<BuyerDocumentNumber/>
+			<BuyerName>CV Maju Jaya</BuyerName>
+			<BuyerAdress>Jl. Sudirman 5, Denpasar</BuyerAdress>
+			<BuyerEmail>keu@majujaya.test</BuyerEmail>
+			<BuyerIDTKU>0811034248502000000000</BuyerIDTKU>
+			<ListOfGoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Es teh manis</Name>
+					<Unit>UM.0021</Unit>
+					<Price>2702.7</Price>
+					<Qty>23</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>62162.1</TaxBase>
+					<OtherTaxBase>56981.93</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>6837.83</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Jasa katering</Name>
+					<Unit>UM.0026</Unit>
+					<Price>1126126.13</Price>
+					<Qty>26</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>29279279.38</TaxBase>
+					<OtherTaxBase>26839339.43</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>3220720.73</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+			</ListOfGoodService>
+		</TaxInvoice>
+	</ListOfTaxInvoice>
+</TaxInvoiceBulk>

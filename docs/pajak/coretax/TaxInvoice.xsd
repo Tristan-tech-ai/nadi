@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SKEMA TURUNAN, BUKAN TERBITAN DJP. DJP tidak menerbitkan XSD untuk impor Faktur Pajak Keluaran Coretax; contoh resminya hanya
+  merujuk "TaxInvoice.xsd". Skema ini ditulis Nadi (M-09, 5 Nov 2026) dari:
+  - urutan elemen contoh resmi "Sample Faktur PK Template v.1.4.xml" (ConverterEfakturCoretax v1.6, pajak.go.id/en/node/112031);
+  - lembar "Keterangan" dan "REF-General" templat Excel "Sample Faktur PK Template v.1.6.1.xlsx" (kolom wajib, kode transaksi,
+    jenis ID pembeli, satuan ukur, maks 2 desimal, NITKU 22 angka).
+  Contoh resmi DJP harus lolos skema ini (scripts/pajak/validasi-xsd.py memeriksanya); aturan antarbidang (DPP, PPN) ada di
+  apps/web/src/lib/pajak/efaktur.ts periksaFaktur.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:simpleType name="Npwp"><xs:restriction base="xs:string"><xs:pattern value="[0-9]{16}"/></xs:restriction></xs:simpleType>
+  <xs:simpleType name="Nitku"><xs:restriction base="xs:string"><xs:pattern value="[0-9]{22}|000000"/></xs:restriction></xs:simpleType>
+  <xs:simpleType name="Angka2"><xs:restriction base="xs:decimal"><xs:minInclusive value="0"/><xs:fractionDigits value="2"/></xs:restriction></xs:simpleType>
+  <xs:simpleType name="TeksBoleh"><xs:restriction base="xs:string"><xs:maxLength value="1000"/></xs:restriction></xs:simpleType>
+  <xs:simpleType name="KodeTransaksi"><xs:restriction base="xs:string"><xs:pattern value="0[1-9]|10"/></xs:restriction></xs:simpleType>
+  <xs:simpleType name="JenisId"><xs:restriction base="xs:string">
+    <xs:enumeration value="TIN"/><xs:enumeration value="National ID"/><xs:enumeration value="Passport"/><xs:enumeration value="Other ID"/>
+  </xs:restriction></xs:simpleType>
+  <xs:simpleType name="Satuan"><xs:restriction base="xs:string"><xs:pattern value="UM\.00(0[1-9]|[12][0-9]|3[0-9])"/></xs:restriction></xs:simpleType>
+  <xs:simpleType name="BarangJasa"><xs:restriction base="xs:string"><xs:enumeration value="A"/><xs:enumeration value="B"/></xs:restriction></xs:simpleType>
+  <xs:simpleType name="Negara"><xs:restriction base="xs:string"><xs:pattern value="[A-Z]{3}"/></xs:restriction></xs:simpleType>
+  <xs:simpleType name="Tarif"><xs:restriction base="xs:decimal"><xs:minInclusive value="0"/><xs:maxInclusive value="100"/></xs:restriction></xs:simpleType>
+
+  <xs:element name="TaxInvoiceBulk">
+    <xs:complexType><xs:sequence>
+      <xs:element name="TIN" type="Npwp"/>
+      <xs:element name="ListOfTaxInvoice"><xs:complexType><xs:sequence>
+        <xs:element name="TaxInvoice" maxOccurs="unbounded"><xs:complexType><xs:sequence>
+          <xs:element name="TaxInvoiceDate" type="xs:date"/>
+          <xs:element name="TaxInvoiceOpt"><xs:simpleType><xs:restriction base="xs:string"><xs:enumeration value="Normal"/></xs:restriction></xs:simpleType></xs:element>
+          <xs:element name="TrxCode" type="KodeTransaksi"/>
+          <xs:element name="AddInfo" type="TeksBoleh"/>
+          <xs:element name="CustomDoc" type="TeksBoleh"/>
+          <xs:element name="CustomDocMonthYear"><xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="([0-9]{6})?"/></xs:restriction></xs:simpleType></xs:element>
+          <xs:element name="RefDesc" type="TeksBoleh"/>
+          <xs:element name="FacilityStamp" type="TeksBoleh"/>
+          <xs:element name="SellerIDTKU"><xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="[0-9]{22}"/></xs:restriction></xs:simpleType></xs:element>
+          <xs:element name="BuyerTin" type="Npwp"/>
+          <xs:element name="BuyerDocument" type="JenisId"/>
+          <xs:element name="BuyerCountry" type="Negara"/>
+          <xs:element name="BuyerDocumentNumber" type="TeksBoleh"/>
+          <xs:element name="BuyerName" type="TeksBoleh"/>
+          <xs:element name="BuyerAdress" type="TeksBoleh"/>
+          <xs:element name="BuyerEmail" type="TeksBoleh"/>
+          <xs:element name="BuyerIDTKU" type="Nitku"/>
+          <xs:element name="ListOfGoodService"><xs:complexType><xs:sequence>
+            <xs:element name="GoodService" maxOccurs="unbounded"><xs:complexType><xs:sequence>
+              <xs:element name="Opt" type="BarangJasa"/>
+              <xs:element name="Code"><xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="[0-9]{6}"/></xs:restriction></xs:simpleType></xs:element>
+              <xs:element name="Name"><xs:simpleType><xs:restriction base="xs:string"><xs:minLength value="1"/><xs:maxLength value="500"/></xs:restriction></xs:simpleType></xs:element>
+              <xs:element name="Unit" type="Satuan"/>
+              <xs:element name="Price" type="Angka2"/>
+              <xs:element name="Qty" type="Angka2"/>
+              <xs:element name="TotalDiscount" type="Angka2"/>
+              <xs:element name="TaxBase" type="Angka2"/>
+              <xs:element name="OtherTaxBase" type="Angka2"/>
+              <xs:element name="VATRate" type="Tarif"/>
+              <xs:element name="VAT" type="Angka2"/>
+              <xs:element name="STLGRate" type="Tarif"/>
+              <xs:element name="STLG" type="Angka2"/>
+            </xs:sequence></xs:complexType></xs:element>
+          </xs:sequence></xs:complexType></xs:element>
+        </xs:sequence></xs:complexType></xs:element>
+      </xs:sequence></xs:complexType></xs:element>
+    </xs:sequence></xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<TaxInvoiceBulk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="TaxInvoice.xsd">
+	<TIN>1091031210912281</TIN>
+	<ListOfTaxInvoice>
+		<TaxInvoice>
+			<TaxInvoiceDate>2026-11-18</TaxInvoiceDate>
+			<TaxInvoiceOpt>Normal</TaxInvoiceOpt>
+			<TrxCode>04</TrxCode>
+			<AddInfo/>
+			<CustomDoc/>
+			<CustomDocMonthYear/>
+			<RefDesc>018/INV/XI/2026</RefDesc>
+			<FacilityStamp/>
+			<SellerIDTKU>1091031210912281000000</SellerIDTKU>
+			<BuyerTin>0000000000000000</BuyerTin>
+			<BuyerDocument>National ID</BuyerDocument>
+			<BuyerCountry>IDN</BuyerCountry>
+			<BuyerDocumentNumber>5171014507800003</BuyerDocumentNumber>
+			<BuyerName>Bu Rina</BuyerName>
+			<BuyerAdress>Jl. Teuku Umar 8, Denpasar</BuyerAdress>
+			<BuyerEmail/>
+			<BuyerIDTKU>000000</BuyerIDTKU>
+			<ListOfGoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Jasa katering</Name>
+					<Unit>UM.0026</Unit>
+					<Price>1126132.43</Price>
+					<Qty>30</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>33783972.9</TaxBase>
+					<OtherTaxBase>30968641.83</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>3716237.02</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Tepung terigu</Name>
+					<Unit>UM.0003</Unit>
+					<Price>12168.47</Price>
+					<Qty>3</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>36505.41</TaxBase>
+					<OtherTaxBase>33463.29</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>4015.59</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+				<GoodService>
+					<Opt>A</Opt>
+					<Code>000000</Code>
+					<Name>Kopi bubuk 250 g</Name>
+					<Unit>UM.0021</Unit>
+					<Price>33639.64</Price>
+					<Qty>6</Qty>
+					<TotalDiscount>0</TotalDiscount>
+					<TaxBase>201837.84</TaxBase>
+					<OtherTaxBase>185018.02</OtherTaxBase>
+					<VATRate>12</VATRate>
+					<VAT>22202.16</VAT>
+					<STLGRate>0</STLGRate>
+					<STLG>0</STLG>
+				</GoodService>
+			</ListOfGoodService>
+		</TaxInvoice>
+	</ListOfTaxInvoice>
+</TaxInvoiceBulk>

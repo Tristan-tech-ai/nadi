@@ -2483,8 +2483,10 @@
    "accept": "docs/promo/nadi-promo.mp4 baru <= 60 dtk: tiap adegan komposisi berbeda, UI terbaca (teks >= 20 px pada 1080p), minimal 3 blueprint (overwhelm-surround, cursor-ui-demo, camera-journey/kinetic-type-beats); hyperframes check 0 galat; lembar kontak diperiksa; teaser dan potongan fitur diturunkan dari sistem yang sama; musik CC BY dipilih lewat analisis tempo/ketukan/bagian/kenyaringan; efek suara diolah (lapisan, EQ, pitch, kompresi, gema); campuran -14 LUFS +-1 dan true peak <= -1 dBTP diukur ebur128; kredit di ASSETS.md dan kartu akhir",
    "how": "docs/design/BELAJAR-NOV-2026.md bagian 3 dan 5 Video",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T16:41:00"
+   "status": "done",
+   "created": "2026-11-04T16:41:00",
+   "done": "2026-11-05T02:09:32",
+   "result": "11a1f73: docs/promo/nadi-promo.mp4 52,0 dtk 1920x1080, 7 adegan dengan lapangan warna dan susunan berbeda, antarmuka HTML (teks desain >= 26 px, >= 20 px setelah skala), 4 blueprint (overwhelm-surround, cursor-ui-demo Lempar + Feed, camera-journey invoice + QRIS, kinetic-type-beats Sarapan Data); hyperframes 0.9.8 check 0 galat; lembar kontak docs/promo/kontak-promo.png + kontak-tegak.png diperiksa (4 cacat ditemukan dan diperbaiki: teks kecil, slip terpotong, angka total salah urai, panggung tegak tertimpa); teaser-15.mp4 + fitur/{lempar,feed,mata,sarapan}.mp4 dari buat.py yang sama; musik Funk in my Pocket (OptiKill, CC BY 3.0) dipilih dari 5 kandidat Openverse/Jamendo lewat librosa (tempo, CV ketukan, bagian, dinamika) + ebur128, docs/promo/audio/analisis-funk-in-my-pocket.md; efek suara buatan sendiri dengan lapisan, EQ, pitch, kompresi, gema (docs/promo/audio/campur.py); semua keluaran -14 +-0,2 LUFS, true peak -1,3 sampai -3,9 dBTP (ebur128 peak=true); kredit di ASSETS.md dan kartu akhir"
   },
   {
    "id": "D-22",
@@ -3167,6 +3169,20 @@
    "created": "2026-11-04T21:04:58",
    "done": "2026-11-05T00:26:21",
    "result": "8478980 + 8d64c74; migrasi 20261104061000_stok_lanjutan (md5 14b93db8 cocok), tes SQL stok_lanjutan 10/10 (lokasi, laporan per gudang, produk.impor dedup, stok.opname cocok kode/nama, isolasi); baca-berkas v14 jenis produk/opname (md5 4 berkas terdeploy = repo), korpus 3 berkas sintetis (Excel produk, Excel opname, foto lembar hitung) eval 3/3 docs/quality/eval-stok.md; layar varian + harga grosir dipakai invoice + lokasi rak + laporan stok per gudang; e2e stok-lanjut + barang produksi nadi-swart lulus; axe 0 serius 390/1440 terang/gelap"
+  },
+  {
+   "id": "M-09B",
+   "fase": "F7",
+   "kind": "build",
+   "priority": 3,
+   "size": "l",
+   "wajib": true,
+   "title": "Coretax lanjutan: e-Bupot Unifikasi dari pemotongan pembelian, retur faktur keluaran, rekap SPT Masa PPN, kalender setor/lapor",
+   "accept": "pemotongan PPh 23/4(2) tercatat di pembayaran pemasok; berkas BpuBulk sama urutan contoh resmi bppu.xml dan lolos skema turunan yang meloloskan contoh resmi; retur Faktur Keluaran sesuai templat resmi; rekap PPN keluaran per masa cocok dengan jurnal; kalender tanggal setor/lapor dari teks peraturan resmi; tes SQL + e2e unduh",
+   "how": "docs/research/coretax-efaktur.md bagian Belum; templat DJP di pajak.go.id/en/node/112031 (bppu.zip, BPPU Excel to XML v.3, Retur templat)",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T02:22:15"
   }
  ]
 }
