@@ -30,7 +30,7 @@ test("satu hari di warung", async ({ page, browser }, info) => {
 
   await test.step("pengunjung membuka usaha contoh dan panduan", async () => {
     await page.goto("/");
-    await page.getByRole("link", { name: "Coba usaha contoh tanpa daftar" }).first().click();
+    await page.getByRole("link", { name: "Coba usaha contoh" }).first().click();
     await expect(page.getByTestId("feed-demo")).toBeVisible();
     await expect(page.getByTestId("peta-usaha").getByTestId("peta-hidup")).toHaveAttribute("data-hidup", "ya", { timeout: 20_000 });
     await page.goto("/panduan");
