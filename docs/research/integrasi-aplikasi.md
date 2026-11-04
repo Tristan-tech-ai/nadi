@@ -48,3 +48,21 @@ Nadi belum punya sambungan API langsung ke aplikasi luar mana pun. Jalur masuk d
 - **W-09 Konektor marketplace** (setelah W-07 stok). OAuth toko TikTok Shop dan Shopee, tarik pesanan harian menjadi usulan penjualan. Butuh akun mitra (UNTUK-TRISTAN).
 
 Status B harus diverifikasi ke dokumentasi resmi sebelum kode ditulis (aturan GROUND TRUTH).
+
+## 5. "Login lewat Nadi" (pertanyaan Tristan 4 Nov 2026)
+
+Ada dua bentuk login lewat Nadi, dan hanya satu yang dipakai.
+
+1. **Izin OAuth (dipakai).**
+   - Pengguna menekan "Sambungkan Shopee" atau "Sambungkan TikTok Shop" di Nadi.
+   - Pengguna masuk di halaman resmi platform itu, bukan di Nadi, lalu menyetujui izin yang diminta (misalnya baca pesanan).
+   - Platform memberi Nadi token per toko. Token itu terbatas cakupannya, bisa dicabut dari Nadi atau dari platform, dan kata sandi pengguna tidak pernah melewati Nadi.
+   - Ini cara resmi yang dirancang platform untuk kebutuhan ini, dan menjadi dasar W-09. Syaratnya Nadi terdaftar sebagai aplikasi mitra.
+2. **Menyimpan kata sandi atau sesi login pengguna, lalu Nadi membuka akunnya otomatis (tidak dipakai).**
+   - Nadi akan memegang kata sandi dan sesi akun toko orang lain. Satu kebocoran membuka toko semua pengguna.
+   - Ketentuan layanan marketplace umumnya melarang akses otomatis dan berbagi kredensial. Pasal persisnya belum dibaca per platform, dan tetap dicek sebelum keputusan final.
+   - Risikonya akun toko pengguna dibekukan.
+   - Cara ini mentok di kode OTP, verifikasi dua langkah, dan captcha. Melewati semua itu tidak boleh dilakukan.
+   - Data akun adalah data pribadi pengguna, sehingga memicu kewajiban pengelola data menurut UU PDP 27/2022.
+
+Untuk aplikasi tanpa OAuth (kasir lokal), jalur yang dipakai: ekspor terjadwal lewat email ke alamat lempar, pintu masuk data (W-08), atau kerja sama resmi dengan penyedianya.
