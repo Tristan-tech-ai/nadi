@@ -1,7 +1,9 @@
 "use server";
 
 import { randomUUID } from "node:crypto";
+import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { asalTautan } from "@/lib/mcp/http";
 import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { createClient } from "@/lib/supabase/server";
@@ -108,4 +110,15 @@ export async function simpanLangkahIlmu(_: HasilIlmu, form: FormData): Promise<H
   if (error) return { galat: error.code === "42501" || error.code === "22023" ? k.db(error.message) : k.gagal };
   revalidatePath("/app/serah-terima");
   return { ok: true, langkah };
+}
+
+// F3-07D: pemilik membuat tautan wawancara keluar sekali pakai (token di fragmen URL, hanya sha256 di database).
+export type HasilKeluar = { tautan?: string; galat?: string };
+export async function buatTautanKeluar(_: HasilKeluar, form: FormData): Promise<HasilKeluar> {
+  const t = ambilKamus(await bahasaAplikasi()).wkPemilik;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("buat_tautan_keluar", { p_berhenti: String(form.get("berhenti") ?? "") });
+  if (error) return { galat: error.code === "42501" ? t.hanyaPemilik : error.code === "23505" ? t.sudahDijawab : t.gagal };
+  revalidatePath("/app/serah-terima");
+  return { tautan: `${asalTautan(await headers())}/keluar#${data as string}` };
 }

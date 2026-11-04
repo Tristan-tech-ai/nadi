@@ -4,9 +4,10 @@ import { Suspense } from "react";
 import { IlustrasiKunci } from "@/components/ilustrasi";
 import { FormBatalBerhenti, FormCatatBerhenti, FormCentang, FormPengganti, FormPindahkan } from "@/components/app/serah-terima";
 import { IlmuPemilik, type IlmuTampil } from "@/components/app/ilmu-pemilik";
+import { TautanKeluar } from "@/components/app/wawancara-keluar";
 import type { ModelTranskrip } from "@/lib/wawancara/transkrip";
 import { Cap } from "@/components/ui/cap";
-import { formatTanggalKalender } from "@/lib/format";
+import { formatTanggal, formatTanggalKalender } from "@/lib/format";
 import { ambilKamus, isiTeks, type Kamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { sisip } from "@/lib/i18n/sisip";
@@ -20,13 +21,14 @@ export const metadata: Metadata = { title: "Serah terima" };
 
 // F3-07 (docs/design/serah-terima-layar.md): paket serah terima orang yang berhenti; akses dicabut otomatis setelah tanggal efektif.
 
-type Berhenti = { id: string; orang_id: string; tanggal_surat: string; tanggal_efektif: string; alasan: string; peringatan: string[]; status: "disiapkan" | "selesai" | "batal"; orang: { nama: string } | null };
+type Keluar = { berhenti_id: string; jawaban: { membantu: string | null; berat: string | null; ubah: string | null } | null; dijawab_at: string | null };
+type Berhenti = { id: string; orang_id: string; tanggal_surat: string; tanggal_efektif: string; alasan: string; peringatan: string[]; status: "disiapkan" | "selesai" | "batal"; orang: { nama: string; telepon: string | null } | null };
 type Butir = { id: string; berhenti_id: string; jenis: "kerja" | "topi" | "ilmu" | "akses_otomatis" | "akses_manual"; judul: string; status: string; pengganti_id: string | null; durasi_detik: number | null;
   transkrip: string | null; langkah: string[] | null; langkah_sumber: "model" | "pemilik" | null; berkas: { jalur: string } | null };
 
 const selisihHari = (a: string, b: string) => Math.round((Date.parse(`${b}T00:00:00Z`) - Date.parse(`${a}T00:00:00Z`)) / 86_400_000);
 
-function Paket({ b, butir, orang, hari, t, bahasa, url, model, tIlmu }: { b: Berhenti; butir: Butir[]; orang: { id: string; nama: string }[]; hari: string; t: Kamus["serahTerima"]; bahasa: "id" | "en"; url: Map<string, string>; model: ModelTranskrip | null; tIlmu: Kamus["ilmuPemilik"] }) {
+function Paket({ b, butir, orang, hari, t, bahasa, url, model, tIlmu, keluar, tKeluar, pemilik, zona }: { b: Berhenti; butir: Butir[]; orang: { id: string; nama: string }[]; hari: string; t: Kamus["serahTerima"]; bahasa: "id" | "en"; url: Map<string, string>; model: ModelTranskrip | null; tIlmu: Kamus["ilmuPemilik"]; keluar: Keluar | undefined; tKeluar: Kamus["wkPemilik"]; pemilik: boolean; zona: string }) {
   const ALASAN: Record<string, string> = { mundur: t.aMundur, kontrak_selesai: t.aKontrak, lainnya: t.aLain };
   const isiLang = bahasa === "id" ? undefined : "id";
   // Judul butir ditulis Nadi/pengguna dalam bahasa Indonesia; nama orang adalah data pengguna.
@@ -100,6 +102,27 @@ function Paket({ b, butir, orang, hari, t, bahasa, url, model, tIlmu }: { b: Ber
           </li>
         ))}
       </ul>
+      {pemilik && (
+        <section data-testid="wawancara-keluar">
+          <h3 className="mt-6 font-semibold">{tKeluar.judul}</h3>
+          <p className="mt-1 text-sm text-tinta-2">{sisip(tKeluar.ket, { nama })}</p>
+          {keluar?.dijawab_at && keluar.jawaban ? (
+            <div className="mt-2 text-sm" data-testid="jawaban-keluar">
+              <p className="text-tinta-2">{isiTeks(tKeluar.dijawab, { tanggal: formatTanggal(new Date(keluar.dijawab_at), zona, bahasa) })}</p>
+              <dl className="mt-2 grid gap-2">
+              {(["membantu", "berat", "ubah"] as const).map((k) => keluar.jawaban?.[k] ? (
+                <div key={k}><dt className="font-semibold">{tKeluar[k]}</dt><dd className="whitespace-pre-line" lang={bahasa === "id" ? undefined : "id"} data-pengguna>{keluar.jawaban[k]}</dd></div>
+              ) : null)}
+              </dl>
+            </div>
+          ) : (
+            <>
+              <p className="mt-1 text-sm text-tinta-2">{tKeluar.belum}</p>
+              {aktif && <TautanKeluar berhenti={b.id} nama={namaPlain} hp={b.orang?.telepon ?? null} ada={!!keluar} teks={tKeluar} bahasa={bahasa} />}
+            </>
+          )}
+        </section>
+      )}
       <p className="mt-6 text-sm text-tinta-2">{t.hakKeuangan}</p>
       {aktif && <FormBatalBerhenti berhenti={b.id} teks={t} />}
     </article>
@@ -122,7 +145,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/serah-terim
   const sp = await searchParams;
   const supabase = await createClient();
   const [{ data: bh }, { data: org }, zona] = await Promise.all([
-    supabase.from("berhenti").select("id, orang_id, tanggal_surat, tanggal_efektif, alasan, peringatan, status, orang:orang_id(nama)").neq("status", "batal").order("dibuat_at", { ascending: false }).limit(10),
+    supabase.from("berhenti").select("id, orang_id, tanggal_surat, tanggal_efektif, alasan, peringatan, status, orang:orang_id(nama, telepon)").neq("status", "batal").order("dibuat_at", { ascending: false }).limit(10),
     supabase.from("orang").select("id, nama").eq("status", "aktif").order("nama").limit(500),
     zonaUsahaIni(sesi.perusahaanId),
   ]);
@@ -140,6 +163,12 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/serah-terim
   const url = new Map<string, string>((tautan ?? []).flatMap((x) => (x.path && x.signedUrl ? [[x.path, x.signedUrl] as [string, string]] : [])));
   const model = (konf?.nilai ?? null) as ModelTranskrip | null;
   const tIlmu = ambilKamus(bahasa).ilmuPemilik;
+  const tKeluar = ambilKamus(bahasa).wkPemilik;
+  // Jawaban wawancara keluar hanya terbaca pemilik (RLS wawancara_keluar_baca); admin mendapat daftar kosong.
+  const { data: wk } = daftar.length
+    ? await supabase.from("wawancara_keluar").select("berhenti_id, jawaban, dijawab_at").in("berhenti_id", daftar.map((x) => x.id))
+    : { data: [] };
+  const keluar = new Map(((wk ?? []) as Keluar[]).map((x) => [x.berhenti_id, x]));
   const orang = (org ?? []) as { id: string; nama: string }[];
   const hari = hariIni(new Date(), zona);
   return (
@@ -148,7 +177,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/serah-terim
       <FormCatatBerhenti orang={orang} pilih={typeof sp.orang === "string" ? sp.orang : ""} hari={hari} kunci={randomUUID()} teks={t} />
       {daftar.length === 0
         ? <div className="mt-8 flex flex-col items-start gap-3"><IlustrasiKunci className="w-28" /><p className="text-tinta-2" data-testid="serah-kosong">{t.kosong}</p></div>
-        : daftar.map((b) => <Paket key={b.id} b={b} butir={butir.filter((x) => x.berhenti_id === b.id)} orang={orang} hari={hari} t={t} bahasa={bahasa} url={url} model={model} tIlmu={tIlmu} />)}
+        : daftar.map((b) => <Paket key={b.id} b={b} butir={butir.filter((x) => x.berhenti_id === b.id)} orang={orang} hari={hari} t={t} bahasa={bahasa} url={url} model={model} tIlmu={tIlmu} keluar={keluar.get(b.id)} tKeluar={tKeluar} pemilik={sesi.peran === "pemilik"} zona={zona} />)}
     </div>
   );
 }
