@@ -39,7 +39,7 @@ async function Isi() {
       <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
       <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
       <p className="mt-2 rounded-[var(--radius-isian)] border border-garis-kuat p-3 text-sm" data-testid="tanpa-peb">{t.peb}</p>
-      <p className="mt-2 text-sm"><a href="/app/invoice" className="underline underline-offset-4">{kamus.invoice.judul}</a></p>
+      <p className="mt-2 flex flex-wrap gap-4 text-sm"><a href="/app/invoice" className="underline underline-offset-4">{kamus.invoice.judul}</a><a href="/app/impor" className="underline underline-offset-4" data-testid="tautan-impor">{kamus.impor.judul}</a></p>
     </>
   );
   if (!["pemilik", "admin", "akuntan"].includes(sesi.peran)) {

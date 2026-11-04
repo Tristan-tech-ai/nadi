@@ -196,6 +196,13 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
   const axeEkspor = await new AxeBuilder({ page: p1 }).analyze();
   expect(axeEkspor.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
 
+  // Perkiraan biaya impor mode Inggris (B-EKSIM2); sumber tarif dari database bertanda lang=id.
+  await p1.goto("/app/impor");
+  await expect(p1.getByRole("heading", { level: 1, name: "Import cost estimate" })).toBeVisible();
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
+  const axeImpor = await new AxeBuilder({ page: p1 }).analyze();
+  expect(axeImpor.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+
   // Surat keluar mode Inggris; isi surat adalah dokumen resmi Indonesia (lang=id).
   await p1.goto("/app/surat-keluar");
   await expect(p1.getByRole("heading", { level: 1, name: "Outgoing letters" })).toBeVisible();
