@@ -1,0 +1,93 @@
+{
+ "jenis": "produk",
+ "berkas": "produk-01.xlsx",
+ "bidang": {
+  "baris": [
+   {
+    "kode": "GL-01",
+    "nama": "Gula Pasir 1 kg",
+    "satuan": "pcs",
+    "harga_jual": 16500,
+    "stok": 40
+   },
+   {
+    "kode": "MG-02",
+    "nama": "Minyak Goreng 2 L",
+    "satuan": "pcs",
+    "harga_jual": 38000,
+    "stok": 24
+   },
+   {
+    "kode": "TR-01",
+    "nama": "Tepung Terigu 1 kg",
+    "satuan": "pcs",
+    "harga_jual": 13000,
+    "stok": 30
+   },
+   {
+    "kode": "BR-05",
+    "nama": "Beras Pulen 5 kg",
+    "satuan": "karung",
+    "harga_jual": 74000,
+    "stok": 12
+   },
+   {
+    "kode": "KP-20",
+    "nama": "Kopi Bubuk 200 g",
+    "satuan": "bks",
+    "harga_jual": 18500,
+    "stok": 36
+   },
+   {
+    "kode": "TH-25",
+    "nama": "Teh Celup isi 25",
+    "satuan": "kotak",
+    "harga_jual": 9000,
+    "stok": 48
+   },
+   {
+    "kode": "SB-01",
+    "nama": "Sabun Cuci Piring 800 ml",
+    "satuan": "pcs",
+    "harga_jual": 14500,
+    "stok": 20
+   },
+   {
+    "kode": "TL-30",
+    "nama": "Telur Ayam 1 tray",
+    "satuan": "tray",
+    "harga_jual": 56000,
+    "stok": 8
+   },
+   {
+    "kode": "MI-01",
+    "nama": "Mi Instan Goreng",
+    "satuan": "dus",
+    "harga_jual": 115000,
+    "stok": 6
+   },
+   {
+    "kode": "AQ-15",
+    "nama": "Air Mineral 1,5 L",
+    "satuan": "pcs",
+    "harga_jual": 6500,
+    "stok": 60
+   },
+   {
+    "kode": "KC-01",
+    "nama": "Kecap Manis 520 ml",
+    "satuan": "pcs",
+    "harga_jual": 23000,
+    "stok": 18
+   },
+   {
+    "kode": "SS-01",
+    "nama": "Susu Kental Manis",
+    "satuan": "kaleng",
+    "harga_jual": 12500,
+    "stok": 30
+   }
+  ]
+ },
+ "catatan": "daftar barang toko kelontong"
+}

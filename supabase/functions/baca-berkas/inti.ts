@@ -1,7 +1,7 @@
 // Inti pembaca berkas Lempar Saja tanpa dependensi luar: skema keluaran, xlsx ke teks, usulan per jenis, penilai eval.
 // Dipakai Edge Function (Deno), tes unit (vitest), dan skrip eval korpus (Node).
 
-export const JENIS = ["nota", "invoice", "slip_gaji", "ktp", "cv", "surat_sakit", "absen", "mutasi", "surat", "excel_karyawan", "pib", "peb", "sppb", "lainnya"] as const;
+export const JENIS = ["nota", "invoice", "slip_gaji", "ktp", "cv", "surat_sakit", "absen", "mutasi", "surat", "excel_karyawan", "pib", "peb", "sppb", "produk", "opname", "lainnya"] as const;
 export type Jenis = (typeof JENIS)[number];
 
 type Skema = Record<string, unknown>;
@@ -53,6 +53,9 @@ export const BIDANG: Record<Jenis, Skema> = {
     baris: daftar(barisPabean), bea_keluar: angka(RP),
   }),
   sppb: objek({ nomor: teks("nomor SPPB"), tanggal: teks(TANGGAL), nomor_pib: teks("nomor pendaftaran PIB yang disetujui"), tanggal_pib: teks(TANGGAL), importir: teks() }),
+  // M-02B: daftar produk dan hasil hitung stok (opname) dari Excel, CSV, atau foto lembar hitung.
+  produk: objek({ baris: daftar(objek({ kode: teks("kode/SKU barang, kosong bila tidak ada"), nama: teks(), satuan: teks("mis. pcs, kg, bks"), harga_jual: angka(RP), stok: angka("jumlah stok bila tertulis, 0 bila tidak ada") })) }),
+  opname: objek({ gudang: teks("nama gudang/toko bila tertulis"), tanggal: teks(TANGGAL), baris: daftar(objek({ kode: teks("kode/SKU, kosong bila tidak ada"), nama: teks(), jumlah: angka("hasil hitung fisik") })) }),
   lainnya: objek({ judul: teks(), isi: teks("ringkasan isi penting") }),
 };
 
@@ -115,12 +118,12 @@ export function hasilDari(mentah: { jenis: Jenis; keyakinan: number; ringkasan: 
 
 export const INSTRUKSI = `Kamu membaca berkas kerja usaha kecil di Indonesia (foto nota, PDF, isi Excel/CSV) dan mengisinya ke skema.
 Aturan:
-- Pilih jenis yang paling cocok: nota (nota/struk belanja dari pemasok), invoice (tagihan resmi bernomor dengan jatuh tempo), slip_gaji, ktp, cv (daftar riwayat hidup pelamar), surat_sakit (surat keterangan dokter), absen (rekap jam masuk/pulang), mutasi (mutasi rekening bank), surat (surat resmi bernomor: SK, surat tugas, dll.), excel_karyawan (daftar karyawan), pib (Pemberitahuan Impor Barang BC 2.0), peb (Pemberitahuan Ekspor Barang BC 3.0), sppb (Surat Persetujuan Pengeluaran Barang dari Bea Cukai), lainnya.
+- Pilih jenis yang paling cocok: nota (nota/struk belanja dari pemasok), invoice (tagihan resmi bernomor dengan jatuh tempo), slip_gaji, ktp, cv (daftar riwayat hidup pelamar), surat_sakit (surat keterangan dokter), absen (rekap jam masuk/pulang), mutasi (mutasi rekening bank), surat (surat resmi bernomor: SK, surat tugas, dll.), excel_karyawan (daftar karyawan), pib (Pemberitahuan Impor Barang BC 2.0), peb (Pemberitahuan Ekspor Barang BC 3.0), sppb (Surat Persetujuan Pengeluaran Barang dari Bea Cukai), produk (daftar barang dagangan dengan harga jual), opname (lembar hasil hitung fisik stok per barang), lainnya.
 - Salin teks persis seperti tertulis (nama, nomor). Jangan menebak isi yang tidak ada: pakai string kosong atau 0.
 - Uang ditulis sebagai angka rupiah utuh tanpa titik/koma ribuan (Rp1.250.000 menjadi 1250000).
 - Nilai valuta asing dan kurs (FOB, CIF, NDPBM, nilai tukar) ditulis angka dengan titik desimal tanpa pemisah ribuan (USD 8,821.05 menjadi 8821.05; Rp16.287,50 per USD menjadi 16287.5).
 - Tanggal ditulis YYYY-MM-DD; tanggal Indonesia dibaca hari/bulan/tahun (07/10/2026 adalah 7 Oktober 2026).
-- Untuk tabel (absen, mutasi, excel_karyawan) masukkan semua baris data, tanpa baris judul. Kolom bisa bernama lain atau berurutan acak (mis. "Gapok" berarti gaji pokok, "WA" berarti telepon, "Posisi" berarti jabatan).
+- Untuk tabel (absen, mutasi, excel_karyawan, produk, opname) masukkan semua baris data, tanpa baris judul. Kolom bisa bernama lain atau berurutan acak (mis. "Gapok" berarti gaji pokok, "WA" berarti telepon, "Posisi" berarti jabatan).
 - keyakinan jujur: rendah bila berkas buram, terpotong, atau jenisnya meragukan.
 - bidang_json berisi objek JSON dengan bentuk persis sesuai jenis:
 ${JENIS.map((j) => `  ${j}: ${ringkasSkema(BIDANG[j])}`).join("\n")}`;
@@ -233,6 +236,10 @@ export function usulanDari(h: Hasil): Usulan {
       return { aksi: "dokumen.surat", judul: `Arsipkan ${b.jenis || "surat"} ${b.nomor}`.trim(), penjelasan: `Untuk ${b.pihak || "-"}. ${yakin}`, dampak_rp: null };
     case "excel_karyawan":
       return { aksi: "orang.impor", judul: `Tambah ${panjang(b.baris)} orang dari Excel`, penjelasan: yakin, dampak_rp: null };
+    case "produk":
+      return { aksi: "produk.impor", judul: `Tambah ${panjang(b.baris)} produk dari daftar`, penjelasan: `Produk yang kode atau namanya sudah ada dilewati; jumlah stok dicatat lewat hitung stok (opname). ${yakin}`, dampak_rp: null };
+    case "opname":
+      return { aksi: "stok.opname", judul: `Catat hitungan stok ${panjang(b.baris)} barang${b.gudang ? ` di ${b.gudang}` : ""}`, penjelasan: `Barang dicocokkan lewat kode atau nama; selisih dengan catatan menjadi penyesuaian stok gudang utama. Barang yang tidak dikenal dilewati. ${yakin}`, dampak_rp: null };
     case "pib": {
       const j = jurnalPib(b);
       return {
@@ -309,8 +316,14 @@ export function nilai(jenisBenar: string, benar: Record<string, any>, h: Hasil):
       cek("nama", sama(b.nama, benar.nama)); cek("mulai", sama(b.mulai, benar.mulai)); cek("lama_hari", angkaSama(b.lama_hari, benar.lama_hari)); break;
     case "absen":
     case "excel_karyawan":
+    case "produk":
+    case "opname":
     case "mutasi": {
       cek("jumlah baris", panjang(b.baris) === panjang(benar.baris));
+      if (jenisBenar === "opname" || jenisBenar === "produk") {
+        const kunci = jenisBenar === "opname" ? "jumlah" : "harga_jual";
+        cek(`semua ${kunci}`, (benar.baris as Record<string, unknown>[]).every((x, i) => angkaSama((b.baris ?? [])[i]?.[kunci], x[kunci])));
+      }
       const k = jenisBenar === "mutasi" ? "jumlah" : "nama";
       const ab = (b.baris ?? [])[0]?.[k];
       cek(`baris pertama ${k}`, k === "jumlah" ? angkaSama(ab, benar.baris[0][k]) : sama(ab, benar.baris[0][k]));

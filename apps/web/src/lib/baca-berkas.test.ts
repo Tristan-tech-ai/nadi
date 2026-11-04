@@ -91,3 +91,20 @@ describe("usulanDari dan nilai", () => {
     }
   });
 });
+
+describe("M-02B produk dan opname", () => {
+  const korpus = (j: string) => JSON.parse(readFileSync(join(__dirname, "..", "..", "..", "..", "fixtures", "korpus", j), "utf8")) as { jenis: string; bidang: Record<string, unknown> };
+  it("usulan produk.impor dan stok.opname dari jawaban korpus", () => {
+    const p = korpus("produk/produk-01.json");
+    expect(usulanDari({ jenis: "produk", keyakinan: 0.9, ringkasan: "", bidang: p.bidang })).toMatchObject({ aksi: "produk.impor", judul: "Tambah 12 produk dari daftar" });
+    const o = korpus("opname/opname-02.json");
+    expect(usulanDari({ jenis: "opname", keyakinan: 0.9, ringkasan: "", bidang: o.bidang })).toMatchObject({ aksi: "stok.opname", judul: "Catat hitungan stok 6 barang di Gudang Belakang" });
+  });
+  it("nilai opname memeriksa semua jumlah, bukan hanya baris pertama", () => {
+    const o = korpus("opname/opname-01.json");
+    const baris = (o.bidang.baris as { jumlah: number }[]).map((b) => ({ ...b }));
+    expect(nilai("opname", o.bidang, { jenis: "opname", keyakinan: 1, ringkasan: "", bidang: { ...o.bidang, baris } }).benar).toBe(true);
+    baris[5].jumlah += 1;
+    expect(nilai("opname", o.bidang, { jenis: "opname", keyakinan: 1, ringkasan: "", bidang: { ...o.bidang, baris } }).salah).toContain("semua jumlah");
+  });
+});

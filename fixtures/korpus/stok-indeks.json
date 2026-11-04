@@ -1,0 +1,21 @@
+{
+ "dibuat": "deterministik, M-02B",
+ "jumlah": 3,
+ "berkas": [
+  {
+   "jenis": "produk",
+   "berkas": "produk/produk-01.xlsx",
+   "jawaban": "produk/produk-01.json"
+  },
+  {
+   "jenis": "opname",
+   "berkas": "opname/opname-01.xlsx",
+   "jawaban": "opname/opname-01.json"
+  },
+  {
+   "jenis": "opname",
+   "berkas": "opname/opname-02.png",
+   "jawaban": "opname/opname-02.json"
+  }
+ ]
+}

@@ -1,0 +1,51 @@
+{
+ "jenis": "opname",
+ "berkas": "opname-01.xlsx",
+ "bidang": {
+  "gudang": "Toko Berkah",
+  "tanggal": "2026-11-03",
+  "baris": [
+   {
+    "kode": "",
+    "nama": "Gula Pasir 1 kg",
+    "jumlah": 37
+   },
+   {
+    "kode": "",
+    "nama": "Minyak Goreng 2 L",
+    "jumlah": 24
+   },
+   {
+    "kode": "",
+    "nama": "Tepung Terigu 1 kg",
+    "jumlah": 28
+   },
+   {
+    "kode": "",
+    "nama": "Beras Pulen 5 kg",
+    "jumlah": 11
+   },
+   {
+    "kode": "",
+    "nama": "Kopi Bubuk 200 g",
+    "jumlah": 33
+   },
+   {
+    "kode": "",
+    "nama": "Teh Celup isi 25",
+    "jumlah": 50
+   },
+   {
+    "kode": "",
+    "nama": "Sabun Cuci Piring 800 ml",
+    "jumlah": 19
+   },
+   {
+    "kode": "",
+    "nama": "Telur Ayam 1 tray",
+    "jumlah": 7
+   }
+  ]
+ },
+ "catatan": "tanpa kode, judul di baris pertama"
+}

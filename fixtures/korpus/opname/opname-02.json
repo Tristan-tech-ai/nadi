@@ -1,0 +1,41 @@
+{
+ "jenis": "opname",
+ "berkas": "opname-02.png",
+ "bidang": {
+  "gudang": "Gudang Belakang",
+  "tanggal": "2026-11-04",
+  "baris": [
+   {
+    "kode": "KP-20",
+    "nama": "Kopi Bubuk 200 g",
+    "jumlah": 31
+   },
+   {
+    "kode": "TH-25",
+    "nama": "Teh Celup isi 25",
+    "jumlah": 47
+   },
+   {
+    "kode": "SB-01",
+    "nama": "Sabun Cuci Piring 800 ml",
+    "jumlah": 18
+   },
+   {
+    "kode": "TL-30",
+    "nama": "Telur Ayam 1 tray",
+    "jumlah": 8
+   },
+   {
+    "kode": "MI-01",
+    "nama": "Mi Instan Goreng",
+    "jumlah": 5
+   },
+   {
+    "kode": "AQ-15",
+    "nama": "Air Mineral 1,5 L",
+    "jumlah": 55
+   }
+  ]
+ },
+ "catatan": "foto lembar hitung, angka tulisan tangan"
+}
