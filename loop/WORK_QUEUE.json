@@ -825,9 +825,11 @@
    "accept": "biner Windows/Linux membaca RTSP uji dan mengirim kejadian; dokumentasi pasang",
    "how": "",
    "blocked_by": "F5-01",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-30T20:05:52",
-   "started": "2026-11-04T13:08:03"
+   "started": "2026-11-04T13:08:03",
+   "done": "2026-11-04T13:29:42",
+   "result": "c2929d8; edge/mata-agen (Rust, ffmpeg RTSP), migrasi 052000_agen_mata md5 a89bf9fb, tes SQL 15/15, cargo test 5/5, evaluasi korpus 167/177=94,4% Windows dan Linux, uji ujung Windows 8 kejadian mata_agen (4 terisi) + Linux WSL 3 kejadian di Warung Uji A produksi, docs/edge/PASANG.md, docs/quality/agen-mata.md"
   },
   {
    "id": "F5-05",
