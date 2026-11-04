@@ -63,8 +63,8 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 
 | ID | Kemampuan Mekari | Bagian | Nadi sekarang | Status | Tugas |
 |---|---|---|---|---|---|
-| JU-01 | Dasbor, sekilas bisnis, ringkasan eksekutif bulanan lewat email | Beranda/*; Laporan/Sekilas Bisnis | Sarapan Data (push pagi), Feed | SEBAGIAN: dasbor angka keuangan | M-01 |
-| JU-02 | Bagan akun, saldo awal, jurnal umum, tutup buku, kunci periode | Daftar Akun/*; Daftar Lainnya/Daftar Penutupan Buku & Kunci Periode | ledger, 17 akun bawaan, posting/balik jurnal, kunci/buka periode | SEBAGIAN: saldo awal, tutup buku tahunan, ekspor akun | M-01 |
+| JU-01 | Dasbor, sekilas bisnis, ringkasan eksekutif bulanan lewat email | Beranda/*; Laporan/Sekilas Bisnis | Sarapan Data (push pagi), kartu Uang usaha di Feed (kas, tagihan, utang, laba bulan ini), /app/buku (M-01) | ADA | M-01 |
+| JU-02 | Bagan akun, saldo awal, jurnal umum, tutup buku, kunci periode | Daftar Akun/*; Daftar Lainnya/Daftar Penutupan Buku & Kunci Periode | ledger, 17 akun bawaan, posting/balik jurnal, kunci/buka periode, saldo awal + penyeimbang, tutup buku tahunan ke laba ditahan, neraca saldo CSV (M-01) | ADA | M-01 |
 | JU-03 | Penjualan: penawaran, pemesanan, pengiriman (surat jalan), penagihan, uang muka, retur, draft dan approval, impor templat | Penjualan/*; Pemenuhan/Penjualan; Daftar Lainnya/Cara Pembayaran, Syarat Pembayaran | invoice bernomor, QRIS statis, pengingat 4 tahap, lunas/batal, /i/<kode> | SEBAGIAN: penawaran, pesanan, surat jalan, retur/nota kredit, uang muka | M-03 |
 | JU-04 | Multiple withholding (potong PPh di invoice), tukar invoice/faktur | Penjualan/Multiple Withholding; Penjualan/Tukar Invoice; Pembelian/Tukar Faktur; Daftar Lainnya/Pajak | tidak ada | BELUM | M-03, M-09 |
 | JU-05 | e-Meterai pada invoice | Penjualan/Stamp eMeterai | tidak ada | MITRA (Peruri lewat distributor resmi) | M-17 |
@@ -80,7 +80,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | JU-15 | Rekonsiliasi bank: manual, aturan, otomatis, batal | Kas & Bank/Rekonsiliasi Bank, Aturan Rekonsiliasi, Rekonsiliasi Bank Otomatis, Mengembalikan Rekonsiliasi | cocok mutasi CSV ke invoice (3 aturan, 0 salah di korpus) | SEBAGIAN: semua transaksi (bukan hanya invoice), aturan buatan pengguna | M-05 |
 | JU-16 | Cashlink feeds (mutasi bank otomatis) | Kas & Bank/Cashlink Feeds | unggah CSV mutasi | MITRA (API bank SNAP / agregator); pengganti: Lempar PDF/CSV mutasi, email mutasi ke alamat lempar | M-05 |
 | JU-17 | Aset tetap: daftar, saldo awal, penyusutan, aset tertunda, dijual/dilepas | Aset/* | tidak ada | BELUM | M-06 |
-| JU-18 | Laporan 40+: neraca, laba rugi, arus kas, buku besar, neraca saldo, umur piutang/hutang, penjualan/pembelian per pihak/produk, persediaan, aset, pajak, kurs, bank | Laporan/* | jurnal ada, laporan baku belum tampil | BELUM | M-01 |
+| JU-18 | Laporan 40+: neraca, laba rugi, arus kas, buku besar, neraca saldo, umur piutang/hutang, penjualan/pembelian per pihak/produk, persediaan, aset, pajak, kurs, bank | Laporan/* | /app/buku: neraca, laba rugi, arus kas tidak langsung, neraca saldo, buku besar, umur tagihan; CSV + cetak PDF (M-01) | SEBAGIAN: laporan per pelanggan/produk/pajak/kurs menyusul M-02, M-03, M-08, M-09 | M-01 |
 | JU-19 | Multi mata uang, kurs, revaluasi, laba rugi kurs | Daftar Lainnya/Daftar Mata Uang; Laporan/Pertukaran Kurs | invoice ekspor USD + kurs per invoice | SEBAGIAN: revaluasi + selisih kurs pelunasan | M-08 |
 | JU-20 | Anggaran dan laba rugi anggaran | halaman /produk/jurnal/rencana-anggaran; API Budget | tidak ada | BELUM | M-08 |
 | JU-21 | Tag/dimensi (cabang, proyek), aturan tagging, laba rugi dimensional | Daftar Lainnya/Tag; Pengaturan/Aturan Tagging | tidak ada | BELUM | M-08 |
@@ -191,9 +191,9 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 
 | Status | Jumlah |
 |---|---|
-| ADA | 15 |
-| SEBAGIAN | 54 |
-| BELUM | 45 |
+| ADA | 17 |
+| SEBAGIAN | 53 |
+| BELUM | 44 |
 | MITRA | 18 |
 | LUAR | 2 |
 

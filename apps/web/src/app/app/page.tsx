@@ -5,6 +5,7 @@ import { IlustrasiNota } from "@/components/ilustrasi";
 import { HalamanFeed, TautanBerikut } from "@/components/app/halaman-feed";
 import { KartuFeed } from "@/components/app/kartu-feed";
 import { KartuInfo } from "@/components/app/kartu-info";
+import { RingkasanUang } from "@/components/app/ringkasan-uang";
 import { SarapanData } from "@/components/app/sarapan-data";
 import { bacaTampilan, halaman, hitungJenis, hrefFeed, JENIS, JENIS_DIKENAL, PER_HALAMAN, usulanBaru, type Jenis, type JenisDikenal, type Tampilan, type Urut } from "@/lib/feed";
 import type { Bahasa } from "@/lib/i18n/bahasa";
@@ -153,6 +154,11 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
           <dd className="angka mt-1 text-2xl font-semibold" data-testid="jumlah-usulan">{semua}</dd>
         </div>
       </dl>
+      {["pemilik", "admin", "akuntan"].includes(sesi.peran ?? "") ? (
+        <Suspense fallback={null}>
+          <RingkasanUang bahasa={bahasa} />
+        </Suspense>
+      ) : null}
       <Suspense fallback={null}>
         <SarapanData bahasa={bahasa} />
       </Suspense>

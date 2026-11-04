@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Kamus } from "@/lib/i18n/kamus";
-import { CalculatorIcon, CalendarCheckIcon, ClipboardTextIcon, GraduationCapIcon, HouseSimpleIcon, MicrophoneIcon, MoneyIcon, PaperPlaneTiltIcon, StorefrontIcon, UsersThreeIcon } from "@phosphor-icons/react";
+import { BookOpenTextIcon, CalculatorIcon, CalendarCheckIcon, ClipboardTextIcon, GraduationCapIcon, HouseSimpleIcon, MicrophoneIcon, MoneyIcon, PaperPlaneTiltIcon, StorefrontIcon, UsersThreeIcon } from "@phosphor-icons/react";
 
 const SEMUA = [
   { href: "/app", kunci: "feed", Ikon: HouseSimpleIcon, peran: ["pemilik", "admin", "akuntan", "staf"] },
@@ -15,6 +15,7 @@ const SEMUA = [
   { href: "/app/ilmu", kunci: "ilmu", Ikon: MicrophoneIcon, peran: ["staf"] },
   { href: "/app/orang", kunci: "orang", Ikon: UsersThreeIcon, peran: ["pemilik", "admin"] },
   { href: "/app/akuntan", kunci: "akuntan", Ikon: CalculatorIcon, peran: ["akuntan"] },
+  { href: "/app/buku", kunci: "buku", Ikon: BookOpenTextIcon, peran: ["akuntan"] },
   { href: "/app/perusahaan", kunci: "usaha", Ikon: StorefrontIcon, peran: ["pemilik", "admin", "akuntan"] },
 ] as const;
 
