@@ -825,8 +825,9 @@
    "accept": "biner Windows/Linux membaca RTSP uji dan mengirim kejadian; dokumentasi pasang",
    "how": "",
    "blocked_by": "F5-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "running",
+   "created": "2026-10-30T20:05:52",
+   "started": "2026-11-04T13:08:03"
   },
   {
    "id": "F5-05",
