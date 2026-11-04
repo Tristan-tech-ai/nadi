@@ -13,6 +13,7 @@ Perintah (dari folder nadi/):
   python loop/next_task.py done ID BUKTI    BUKTI wajib menyebut commit/berkas/URL/angka, bukan "selesai"
   python loop/next_task.py add ID fase kind priority size wajib(0|1) "judul" "kriteria terima" "cara"
   python loop/next_task.py block ID "alasan"  /  unblock ID  /  cancel ID "alasan"
+  python loop/next_task.py tunda ID YYYY-MM-DD   tugas baru siap pada tanggal itu (cek berkala)
   python loop/next_task.py check        gerbang klaim "tidak ada yang bisa dikerjakan": READY n; exit 0 bila n >= 3,
                                         exit 3 (REFILL) bila 1..2; bila 0 menulis loop/.queue_empty (sertifikat 20 menit)
   python loop/next_task.py progress     persentase tugas wajib yang selesai (dipakai done_check.py)
@@ -46,6 +47,9 @@ def save(d, path=Q):
 
 
 def blocked(t, d):
+    # tidak_sebelum (YYYY-MM-DD): tugas berkala (mis. cek ulang teks hukum tiap 7 hari) baru siap pada tanggal itu
+    if t.get("tidak_sebelum") and t["tidak_sebelum"] > datetime.date.today().isoformat():
+        return True
     if t.get("blocked_by"):
         ids = {u["id"]: u for u in d["tasks"]}
         deps = [x.strip() for x in str(t["blocked_by"]).split(",") if x.strip()]
@@ -146,7 +150,7 @@ def main(a):
         for t in sorted(d["tasks"], key=lambda t: (t["status"] != "running", t["status"] != "ready", t["priority"], t["id"])):
             if f and t["fase"] != f:
                 continue
-            flag = " [terblokir: " + str(t.get("blocked_by")) + "]" if blocked(t, d) and t["status"] not in ("done", "cancelled") else ""
+            flag = " [terblokir: " + str(t.get("blocked_by") or "tidak sebelum " + str(t.get("tidak_sebelum"))) + "]" if blocked(t, d) and t["status"] not in ("done", "cancelled") else ""
             print(f"{t['id']:7s} {t['status']:9s} p{t['priority']:<3} {t['fase']:3s} {t['kind']:8s} {'W' if t.get('wajib') else ' '} {t['title'][:80]}{flag}" + (f"  -> {t['result'][:60]}" if t.get("result") else ""))
     elif c == "start":
         for t in d["tasks"]:
@@ -185,6 +189,15 @@ def main(a):
             if t["id"] == a[1]:
                 t.update(blocked_by=a[2], status="blocked")
         save(d)
+    elif c == "tunda":
+        if len(a) < 3 or not re.match(r"^\d{4}-\d{2}-\d{2}$", a[2]):
+            print("format: tunda ID YYYY-MM-DD")
+            return 4
+        for t in d["tasks"]:
+            if t["id"] == a[1]:
+                t.update(tidak_sebelum=a[2])
+        save(d)
+        print("ditunda", a[1], "sampai", a[2])
     elif c == "unblock":
         for t in d["tasks"]:
             if t["id"] == a[1]:
@@ -231,6 +244,11 @@ def selftest():
     case("issue asap jadi tugas fix wajib", impor_asap(dd, [{"number": 7, "title": "Uji asap produksi gagal", "body": "x"}]), ["FIX-ASAP-7"])
     case("issue yang sama tidak diimpor dua kali", impor_asap(dd, [{"number": 7, "title": "Uji asap produksi gagal", "body": "x"}]), [])
     case("tugas asap didahulukan", ready(dd)[0]["id"], "FIX-ASAP-7")
+    tunda = t("T")
+    tunda["tidak_sebelum"] = "2999-01-01"
+    case("tunda: belum waktunya tidak siap", [x["id"] for x in ready({"tasks": [tunda, t("A")]})], ["A"])
+    tunda["tidak_sebelum"] = "2000-01-01"
+    case("tunda: sudah lewat siap lagi", [x["id"] for x in ready({"tasks": [tunda]})], ["T"])
     print(f"SELFTEST next_task: {ok} dari {tot}", "LULUS" if ok == tot else "GAGAL")
     return 0 if ok == tot else 1
 

@@ -1864,8 +1864,10 @@
    "accept": "nomor UU dan teks resmi ditemukan di JDIH (peraturan.go.id atau peraturan.bpk.go.id) atau dicatat 'belum terbit' dengan tanggal cek; bila terbit: tanggal berlaku, pasal waktu kerja, lembur, upah, PKWT, PHK, pesangon dikutip; tabel perbedaan terhadap aturan_bertanggal dan fitur F1-05/F3-07/F4-09/Q-22; aturan baru dimasukkan sebagai baris bertanggal mulai berlaku (terverifikasi=true hanya dari teks resmi); dicek ulang paling lambat tiap 7 hari selama belum terbit",
    "how": "docs/research/uu-pelindungan-ketenagakerjaan.md; dpr.go.id berita 6 Okt 2026",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T05:06:39"
+   "status": "done",
+   "created": "2026-11-01T05:06:39",
+   "done": "2026-11-04T11:11:13",
+   "result": "cek 4 Nov 2026: belum terbit (peraturan.bpk.go.id Search dan jdih.kemnaker.go.id tanpa UU 2026 Pelindungan Ketenagakerjaan; Menaker 22 Okt: masih di Setneg); docs/research/uu-pelindungan-ketenagakerjaan.md bagian Cek kedua; aturan_bertanggal tidak diubah; cek ulang R-UUPK2 tidak sebelum 8 Nov 2026; next_task selftest 15/15 (fitur tunda)"
   },
   {
    "id": "Q-31",
@@ -2410,6 +2412,21 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-04T09:09:08"
+  },
+  {
+   "id": "R-UUPK2",
+   "fase": "R",
+   "kind": "research",
+   "priority": 36,
+   "size": "s",
+   "wajib": false,
+   "title": "Cek ulang teks resmi UU Pelindungan Ketenagakerjaan (setelah batas 30 hari 5 Nov 2026)",
+   "accept": "cek peraturan.bpk.go.id, jdih.setneg.go.id, jdih.kemnaker.go.id; bila terbit: nomor, tanggal diundangkan dan berlaku, kutipan pasal waktu kerja, lembur, upah, PKWT, PHK, pesangon, tabel perbedaan terhadap aturan_bertanggal dan F1-05/F3-07/F4-09/Q-22, baris aturan bertanggal berlaku_dari = tanggal berlaku (terverifikasi hanya dari teks resmi) + tes SQL; bila belum: catat tanggal cek dan tunda 7 hari lagi",
+   "how": "docs/research/uu-pelindungan-ketenagakerjaan.md; python -I loop/next_task.py tunda R-UUPK2 YYYY-MM-DD",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T11:11:14",
+   "tidak_sebelum": "2026-11-08"
   }
  ]
 }
