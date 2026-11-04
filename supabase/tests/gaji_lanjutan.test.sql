@@ -7,10 +7,10 @@ language sql as $$ insert into _t values (n, coalesce(c, false), i) $$;
 grant execute on function pg_temp.cek(text, boolean, text) to public;
 
 do $$
-declare ua uuid := gen_random_uuid(); ub uuid := gen_random_uuid(); pa uuid; pb uuid; ka text; kb text; kad text; o1 uuid; o2 uuid; o3 uuid; o4 uuid;
+declare ua uuid := gen_random_uuid(); ub uuid := gen_random_uuid(); uc uuid := gen_random_uuid(); pa uuid; pb uuid; ka text; kb text; kad text; o1 uuid; o2 uuid; o3 uuid; o4 uuid;
   h jsonb; r jsonb; per uuid; g text;
 begin
-  insert into auth.users (id, email) values (ua, 'ga@uji.local'), (ub, 'gb@uji.local');
+  insert into auth.users (id, email) values (ua, 'ga@uji.local'), (ub, 'gb@uji.local'), (uc, 'gc@uji.local');
   execute 'set local role authenticated';
   perform set_config('request.jwt.claims', json_build_object('sub', ua, 'role', 'authenticated')::text, true);
   pa := public.buat_perusahaan('Warung Gaji A', 'fnb');
@@ -19,7 +19,8 @@ begin
   execute 'reset role';
   ka := json_build_object('sub', ua, 'role', 'authenticated', 'app_metadata', json_build_object('pid', pa, 'prn', 'pemilik'))::text;
   kb := json_build_object('sub', ub, 'role', 'authenticated', 'app_metadata', json_build_object('pid', pb, 'prn', 'pemilik'))::text;
-  kad := json_build_object('sub', ua, 'role', 'authenticated', 'app_metadata', json_build_object('pid', pa, 'prn', 'admin'))::text;
+  insert into public.anggota (perusahaan_id, user_id, peran) values (pa, uc, 'admin');
+  kad := json_build_object('sub', uc, 'role', 'authenticated', 'app_metadata', json_build_object('pid', pa, 'prn', 'admin'))::text;
   insert into public.orang (perusahaan_id, nama, jenis, data) values (pa, 'Sari Lama', array['karyawan'], '{"mulai": "2024-01-15"}') returning id into o1;
   insert into public.orang (perusahaan_id, nama, jenis, data) values (pa, 'Komang Baru', array['karyawan'], '{"mulai": "2026-07-20"}') returning id into o2;
   insert into public.orang (perusahaan_id, nama, jenis, data) values (pa, 'Wayan Minggu Lalu', array['karyawan'], '{"mulai": "2027-03-01"}') returning id into o3;
