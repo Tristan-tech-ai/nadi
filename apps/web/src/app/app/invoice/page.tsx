@@ -61,7 +61,7 @@ async function Isi() {
     supabase.from("perusahaan").select("nama").eq("id", sesi.perusahaanId).single(),
     zonaUsahaIni(sesi.perusahaanId),
     headers(),
-    supabase.from("produk").select("id, nama, harga_jual, jenis").eq("aktif", true).order("nama").limit(500),
+    supabase.from("produk").select("id, nama, harga_jual, jenis, harga_tingkat").eq("aktif", true).order("nama").limit(500),
   ]);
   if (ring.error || inv.error) return <div lang={bahasa}>{kepala}<p role="alert" className="mt-6 text-cap">{t.gagalMuat}</p></div>;
   const r = ring.data as Ringkasan;

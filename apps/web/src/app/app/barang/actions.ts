@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { angkaIsian } from "@/lib/buku/laporan";
 import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
+import { uraiAtribut, uraiTingkat } from "@/lib/stok/harga";
 import { createClient } from "@/lib/supabase/server";
 
 export type HasilBarang = { pesan: string } | { galat: string } | null;
@@ -32,6 +33,17 @@ export async function simpanProduk(_: HasilBarang, form: FormData): Promise<Hasi
     satuan: String(form.get("satuan") ?? "").trim() || "pcs", harga_jual: harga, barcode: String(form.get("barcode") ?? "").trim() || null,
     boleh_minus: form.get("boleh_minus") === "on",
   };
+  // M-02B: varian (induk + atribut) dan harga grosir bertingkat.
+  const tingkat = uraiTingkat(String(form.get("tingkat") ?? ""));
+  if (tingkat === null) return { galat: k.tingkatRusak };
+  if (tingkat.length) p.harga_tingkat = tingkat;
+  const induk = String(form.get("induk") ?? "");
+  if (/^[0-9a-f-]{36}$/.test(induk)) {
+    const atribut = uraiAtribut(String(form.get("atribut") ?? ""));
+    if (!atribut || !Object.keys(atribut).length) return { galat: k.atributRusak };
+    p.induk = induk;
+    p.atribut = atribut;
+  }
   if (satuanBesar) {
     if (!faktor || faktor <= 0) return { galat: k.faktorRusak };
     p.satuan_lain = [{ satuan: satuanBesar, faktor, harga: null }];
@@ -96,4 +108,15 @@ export async function opnameStok(_: HasilBarang, form: FormData): Promise<HasilB
   if (error) return galat(k, error);
   revalidatePath("/app/barang");
   return { pesan: (data as { berubah: number }).berubah ? k.opnameTercatat : k.opnameSama };
+}
+
+/** Lokasi rak/bin satu produk di satu gudang (M-02B). Kosong = hapus lokasi. */
+export async function aturLokasi(_: HasilBarang, form: FormData): Promise<HasilBarang> {
+  const k = await teksBarang();
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("atur_lokasi_stok", { p_produk: String(form.get("produk") ?? ""), p_gudang: String(form.get("gudang") ?? ""),
+    p_lokasi: String(form.get("lokasi") ?? "").trim() || null });
+  if (error) return galat(k, error);
+  revalidatePath("/app/barang");
+  return { pesan: k.lokasiTersimpan };
 }

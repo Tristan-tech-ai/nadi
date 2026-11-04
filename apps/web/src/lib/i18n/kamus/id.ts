@@ -2198,6 +2198,7 @@ export const kamusId = {
     galatDb: "{pesan}",
   },
   barang: {
+    tingkatLabel: "Harga grosir (opsional)", tingkatContoh: "10:14.000, 50:13.500", indukLabel: "Varian dari (opsional)", tanpaInduk: "Bukan varian", atributLabel: "Ciri varian", atributContoh: "ukuran: 5 kg, warna: merah", varianDari: "Varian dari {nama}", grosir: "Grosir:", grosirMulai: "mulai {min}", lokasiLabel: "Lokasi rak", simpanLokasi: "Simpan lokasi", laporanJudul: "Stok per gudang",
     judul: "Barang dan stok",
     ket: "Produk, stok per gudang, dan nilainya. Stok berkurang sendiri saat invoice berisi produk terbit.",
     nilaiPersediaan: "Nilai persediaan sekarang",
@@ -2219,6 +2220,7 @@ export const kamusId = {
     opname: "Stok opname", opnameKet: "Tulis jumlah hasil hitung. Selisihnya dicatat sebagai selisih persediaan.", fisik: "Jumlah hasil hitung", catatOpname: "Catat hasil hitung",
   },
   barangPesan: {
+    tingkatRusak: "Harga grosir tulis jumlah:harga dipisah koma, misalnya 10:14.000, 50:13.500.", atributRusak: "Varian butuh ciri, misalnya ukuran: 5 kg.", lokasiTersimpan: "Lokasi tersimpan.",
     produkTersimpan: "{nama} tersimpan.", gudangTersimpan: "Gudang tersimpan.", masukTercatat: "Stok masuk tercatat dan jurnal persediaan dibuat.",
     pindahTercatat: "Pindah gudang tercatat.", opnameTercatat: "Hasil hitung tercatat. Selisihnya masuk jurnal.", opnameSama: "Jumlah sama dengan catatan. Tidak ada yang berubah.",
     hargaRusak: "Tulis rupiah bulat, misalnya 15.000.", jumlahRusak: "Tulis jumlah lebih dari 0, misalnya 12 atau 2,5.", faktorRusak: "Isi satuan besar harus angka lebih dari 0, misalnya 24.",

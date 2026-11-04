@@ -10,6 +10,7 @@ import { totalBaris } from "@/lib/invoice/tagihan";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { isiTeks } from "@/lib/i18n/isi-teks";
 import type { Kamus } from "@/lib/i18n/kamus";
+import { hargaUntuk, type Tingkat } from "@/lib/stok/harga";
 
 type TF = Kamus["invoiceForm"];
 
@@ -75,18 +76,28 @@ export function FormBayar({ awal, teks: t }: { awal: { qris: string | null; qris
 }
 
 type Baris = { uraian: string; jumlah: string; harga: string; produk: string };
-export type ProdukPilihan = { id: string; nama: string; harga_jual: number; jenis: string };
+export type ProdukPilihan = { id: string; nama: string; harga_jual: number; jenis: string; harga_tingkat?: Tingkat[] };
 const kosong = (): Baris => ({ uraian: "", jumlah: "1", harga: "", produk: "" });
 const angka = (b: Baris) => ({ uraian: b.uraian, jumlah: Number(b.jumlah.replace(",", ".")) || 0, harga: Number(b.harga.replace(/[^\d]/g, "")) || 0 });
 
 function IsiInvoice({ awal, besok, hariIni, kunci, sibuk, t, bahasa, produk }: { awal: Record<string, string>; besok: string; hariIni: string; kunci: string; sibuk: boolean; t: TF; bahasa: Bahasa; produk: ProdukPilihan[] }) {
   const n = Number(awal.n ?? 0);
   const [baris, setBaris] = useState<Baris[]>(n > 0 ? Array.from({ length: n }, (_, i) => ({ uraian: awal[`uraian.${i}`] ?? "", jumlah: awal[`jumlah.${i}`] ?? "1", harga: awal[`harga.${i}`] ?? "", produk: awal[`produk.${i}`] ?? "" })) : [kosong()]);
-  const ubah = (i: number, k: keyof Baris, v: string) => setBaris((s) => s.map((b, j) => (j === i ? { ...b, [k]: v } : b)));
+  // Harga bertingkat (M-02B): jumlah baris berproduk menentukan harga satuan dari produk.harga_tingkat; tetap bisa diubah tangan.
+  const hargaProduk = (id: string, jumlah: string) => {
+    const p = produk.find((x) => x.id === id);
+    return p ? String(hargaUntuk(p.harga_jual, p.harga_tingkat, Number(jumlah.replace(",", ".")) || 0)) : null;
+  };
+  const ubah = (i: number, k: keyof Baris, v: string) => setBaris((s) => s.map((b, j) => {
+    if (j !== i) return b;
+    const baru = { ...b, [k]: v };
+    const h = k === "jumlah" && b.produk ? hargaProduk(b.produk, v) : null;
+    return h === null ? baru : { ...baru, harga: h };
+  }));
   // Memilih produk mengisi uraian dan harga jualnya; stok berkurang di server saat invoice terbit (M-02).
   const pilihProduk = (i: number, id: string) => {
     const p = produk.find((x) => x.id === id);
-    setBaris((s) => s.map((b, j) => (j === i ? { ...b, produk: id, ...(p ? { uraian: p.nama, harga: String(p.harga_jual) } : {}) } : b)));
+    setBaris((s) => s.map((b, j) => (j === i ? { ...b, produk: id, ...(p ? { uraian: p.nama, harga: hargaProduk(id, b.jumlah) ?? String(p.harga_jual) } : {}) } : b)));
   };
   const total = totalBaris(baris.map(angka));
   return (

@@ -2197,6 +2197,7 @@ export const kamusEn: Kamus = {
     galatDb: "Nadi refused this (details in Indonesian): {pesan}",
   },
   barang: {
+    tingkatLabel: "Bulk prices (optional)", tingkatContoh: "10:14,000, 50:13,500", indukLabel: "Variant of (optional)", tanpaInduk: "Not a variant", atributLabel: "Variant traits", atributContoh: "size: 5 kg, color: red", varianDari: "Variant of {nama}", grosir: "Bulk:", grosirMulai: "from {min}", lokasiLabel: "Shelf location", simpanLokasi: "Save location", laporanJudul: "Stock per warehouse",
     judul: "Products and stock",
     ket: "Products, stock per warehouse, and its value. Stock goes down by itself when an invoice with products is issued.",
     nilaiPersediaan: "Current inventory value",
@@ -2218,6 +2219,7 @@ export const kamusEn: Kamus = {
     opname: "Stock count", opnameKet: "Enter the counted quantity. The difference is recorded as an inventory adjustment.", fisik: "Counted quantity", catatOpname: "Record count",
   },
   barangPesan: {
+    tingkatRusak: "Write bulk prices as quantity:price separated by commas, for example 10:14000, 50:13500.", atributRusak: "A variant needs traits, for example size: 5 kg.", lokasiTersimpan: "Location saved.",
     produkTersimpan: "{nama} saved.", gudangTersimpan: "Warehouse saved.", masukTercatat: "Stock in recorded and the inventory journal created.",
     pindahTercatat: "Move recorded.", opnameTercatat: "Count recorded. The difference went to the journal.", opnameSama: "The count matches the records. Nothing changed.",
     hargaRusak: "Write whole rupiah, for example 15,000.", jumlahRusak: "Write a quantity above 0, for example 12 or 2.5.", faktorRusak: "Units per larger unit must be a number above 0, for example 24.",

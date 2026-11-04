@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { opnameStok, pindahStok, simpanGudang, simpanProduk, stokMasuk, type HasilBarang } from "@/app/app/barang/actions";
+import { aturLokasi, opnameStok, pindahStok, simpanGudang, simpanProduk, stokMasuk, type HasilBarang } from "@/app/app/barang/actions";
 import { Tombol } from "@/components/ui/tombol";
 import type { Kamus } from "@/lib/i18n/kamus";
 
@@ -37,7 +37,7 @@ function PilihGudang({ nama, label, gudang }: { nama: string; label: string; gud
   );
 }
 
-export function FormProduk({ teks: t }: { teks: Teks }) {
+export function FormProduk({ teks: t, induk = [] }: { teks: Teks; induk?: Pilihan[] }) {
   const [h, aksi, sibuk] = useActionState<HasilBarang, FormData>(simpanProduk, null);
   return (
     <form action={aksi} className={kotak} aria-label={t.tambahProduk} key={h && "pesan" in h ? h.pesan : "f"}>
@@ -51,6 +51,13 @@ export function FormProduk({ teks: t }: { teks: Teks }) {
       <Teks label={t.barcode}><input name="barcode" maxLength={64} inputMode="numeric" className={`${isian} font-mono`} /></Teks>
       <Teks label={t.satuanBesar}><input name="satuan_besar" maxLength={20} placeholder="dus" className={isian} /></Teks>
       <Teks label={t.faktor}><input name="faktor" inputMode="decimal" placeholder="24" className={`${isian} angka text-right`} /></Teks>
+      <Teks label={t.tingkatLabel}><input name="tingkat" maxLength={200} placeholder={t.tingkatContoh} className={isian} /></Teks>
+      {induk.length > 0 && (
+        <Teks label={t.indukLabel}>
+          <select name="induk" className={isian} defaultValue=""><option value="">{t.tanpaInduk}</option>{induk.map((p) => <option key={p.id} value={p.id} data-pengguna>{p.nama}</option>)}</select>
+        </Teks>
+      )}
+      {induk.length > 0 && <Teks label={t.atributLabel}><input name="atribut" maxLength={200} placeholder={t.atributContoh} className={isian} /></Teks>}
       <label className="flex items-center gap-2 sm:col-span-2"><input type="checkbox" name="boleh_minus" className="h-5 w-5" /><span>{t.bolehMinus}</span></label>
       <div className="sm:col-span-2"><Tombol type="submit" ragam="utama" disabled={sibuk}>{t.simpanProduk}</Tombol></div>
       <Hasil h={h} />
@@ -119,6 +126,19 @@ export function FormOpname({ produk, gudang, kunci, teks: t }: { produk: Pilihan
       <Teks label={t.fisik}><input name="fisik" required inputMode="decimal" className={`${isian} angka text-right`} /></Teks>
       <div className="flex items-end"><Tombol type="submit" ragam="kedua" disabled={sibuk}>{t.catatOpname}</Tombol></div>
       <Hasil h={h} />
+    </form>
+  );
+}
+
+/** Lokasi rak/bin produk terpilih di satu gudang (M-02B). */
+export function FormLokasi({ produk, gudang, namaGudang, lokasi, teks: t }: { produk: string; gudang: string; namaGudang: string; lokasi: string; teks: Teks }) {
+  const [h, aksi, sibuk] = useActionState<HasilBarang, FormData>(aturLokasi, null);
+  return (
+    <form action={aksi} className="flex flex-wrap items-end gap-2 text-sm" aria-label={`${t.lokasiLabel} ${namaGudang}`}>
+      <input type="hidden" name="produk" value={produk} /><input type="hidden" name="gudang" value={gudang} />
+      <Teks label={`${t.lokasiLabel} (${namaGudang})`}><input name="lokasi" defaultValue={lokasi} maxLength={40} placeholder="Rak A-3" className={isian} /></Teks>
+      <Tombol type="submit" ragam="kedua" disabled={sibuk}>{t.simpanLokasi}</Tombol>
+      {h && ("galat" in h ? <p role="alert" className="w-full text-cap">{h.galat}</p> : <p role="status" className="w-full text-daun">{h.pesan}</p>)}
     </form>
   );
 }
