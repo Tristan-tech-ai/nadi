@@ -2727,8 +2727,10 @@
    "accept": "endpoint POST per usaha dengan token nmi_ (hash, bisa dicabut, batas harian), JSON/CSV penjualan/pesanan/mutasi menjadi usulan; tes SQL isolasi + token dicabut ditolak; e2e kirim contoh jadi usulan; panduan contoh n8n dan Make",
    "how": "docs/research/integrasi-aplikasi.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T19:07:20"
+   "status": "done",
+   "created": "2026-11-04T19:07:20",
+   "done": "2026-11-05T01:45:14",
+   "result": "e5b5feb: migrasi 063000 pintu_data (md5 dd1bf753) + 063100 tanggal ketat (md5 7b477161), tes SQL pintu_data 28/28 (isolasi usaha, staf ditolak, token salah/dicabut 28000, batas 24 jam 54000, kunci idempoten, disetujui = jurnal penjualan, 2 SO, mutasi rekening); POST https://nadi-swart.vercel.app/api/pintu JSON/CSV; e2e/pintu.spec.ts lulus lokal dan produksi (201, ulang 200, CSV pesanan 201, tanggal salah 422, cabut lalu 401); vitest urai 5/5; panduan docs/panduan/pintu-data.md n8n + Make (label dari docs resmi); foto /app/perusahaan 390/1440 terang/gelap axe 0 serius"
   },
   {
    "id": "W-09",
