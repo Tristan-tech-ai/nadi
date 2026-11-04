@@ -1384,8 +1384,10 @@
    "accept": "pg_cron mingguan memanggil Edge Function yang mengekspor tabel usaha (JSON per tabel, tanpa kolom rahasia mentah) ke bucket cadangan pribadi; satu cadangan nyata tersimpan dan bisa dipulihkan ke skema uji (tes pemulihan tercatat); cadangan lebih dari 8 minggu dirotasi",
    "how": "Edge Function memakai kunci bawaan runtime seperti fungsi push; tanpa service-role di repo atau Vercel",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-31T11:49:38"
+   "status": "done",
+   "created": "2026-10-31T11:49:38",
+   "done": "2026-11-04T07:04:59",
+   "result": "commit b71d9cb: migrasi cadangan + cadangan_pulih (sidik 6f4ddacf, 60e1420d, sama dengan repo), tes SQL cadangan 14/14 (merah dulu), Edge Function cadangan v1 (401 tanpa/token palsu), cadangan nyata 2026-11-04 lewat pg_net: 47 tabel 4.810 baris 2,67 MB di bucket privat cadangan; uji pulih 47/47 cocok 0 gagal tercatat app.cadangan_log; rotasi folderRotasi vitest 4/4 (merah sengaja); cron nadi-cadangan '30 18 * * 0'; docs/quality/cadangan.md"
   },
   {
    "id": "F1-05B",
