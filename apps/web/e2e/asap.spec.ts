@@ -32,7 +32,18 @@ test("landing: demo nota bisa disetujui, axe bersih di 390 dan 1440 px terang da
   await page.goto("/");
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Nadi yang merapikan");
   await expect(page.getByRole("link", { name: "Mulai dari satu nota" })).toHaveAttribute("href", "/daftar");
-  const demo = page.locator("article", { hasText: "Catat belanja" });
+  // Kartu di HP pengait juga <article> (komponen aplikasi asli), jadi demo dibatasi ke meja Coba sendiri.
+  const demo = page.locator(".meja-coba article", { hasText: "Catat belanja" });
+  // W-01: jangkauan, bukan satu nota: >= 8 jenis berkas di pengait, >= 6 jenis usaha di pita, 5 berkas Coba sendiri.
+  const jenis = await page.locator(".pengait-meja [data-jenis]").evaluateAll((el) => [...new Set(el.map((e) => e.getAttribute("data-jenis")))]);
+  expect(jenis.length, jenis.join(",")).toBeGreaterThanOrEqual(8);
+  const usaha = await page.locator("[data-testid=pita-usaha] [data-usaha]").evaluateAll((el) => [...new Set(el.map((e) => e.getAttribute("data-usaha")))]);
+  expect(usaha.length).toBeGreaterThanOrEqual(6);
+  await expect(page.locator(".pilih-berkas button")).toHaveCount(5);
+  await expect(page.locator(".pengait .layar-app article")).toHaveCount(3);
+  await page.locator(".pilih-berkas button", { hasText: "Mutasi bank" }).click();
+  await expect(page.locator(".meja-coba article")).toContainText("Rp1.240.000");
+  await page.locator(".pilih-berkas button", { hasText: "Nota pemasok" }).click();
   // ANTI-SLOP S12: judul tampilan paling banyak 3 baris di 390 px.
   await page.setViewportSize({ width: 390, height: 844 });
   const h1 = page.getByRole("heading", { level: 1 });
@@ -42,7 +53,7 @@ test("landing: demo nota bisa disetujui, axe bersih di 390 dan 1440 px terang da
   await demo.getByRole("button", { name: "Setujui" }).click();
   await expect(demo).toContainText("Tercatat sebagai belanja 13 Okt 2026.");
   await demo.getByRole("button", { name: "Ulangi" }).click();
-  await expect(page.locator("article", { hasText: "Catat belanja" }).getByRole("button", { name: "Tolak" })).toBeVisible();
+  await expect(page.locator(".meja-coba article", { hasText: "Catat belanja" }).getByRole("button", { name: "Tolak" })).toBeVisible();
   for (const [lebar, tinggi] of [[390, 844], [1440, 900]]) {
     for (const skema of ["light", "dark"] as const) {
       await page.setViewportSize({ width: lebar, height: tinggi });
@@ -96,6 +107,10 @@ test("halaman fitur: sembilan jalur id dan en, axe bersih, judul paling banyak d
       const h1 = page.getByRole("heading", { level: 1 });
       const baris = await h1.evaluate((el) => Math.round(el.getBoundingClientRect().height / parseFloat(getComputedStyle(el).lineHeight)));
       expect(baris, `${awal}/fitur/${s}`).toBeLessThanOrEqual(2);
+      // W-01: baris "Dipakai untuk" berisi 4 sampai 6 kasus.
+      const kasus = await page.getByTestId("dipakai").locator("li").count();
+      expect(kasus, `${awal}/fitur/${s} dipakai`).toBeGreaterThanOrEqual(4);
+      expect(kasus, `${awal}/fitur/${s} dipakai`).toBeLessThanOrEqual(6);
       if (s === "lempar" || s === "mata") {
         for (const skema of ["light", "dark"] as const) {
           await page.emulateMedia({ colorScheme: skema });

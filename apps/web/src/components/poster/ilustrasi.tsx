@@ -95,6 +95,44 @@ export function SlipGaji({ className, style }: Svg) {
   );
 }
 
+/** KTP contoh korpus ktp-01 (sintetis, kode provinsi 99 yang tidak ada, bertanda CONTOH). */
+export function Ktp({ className, style }: Svg) {
+  return (
+    <Lembar className={className} style={style} lebar={170} tinggi={108}>
+      <rect x="3" y="3" width="164" height="22" rx="6" fill="var(--poster-laut)" />
+      <g fill="var(--poster-lembar-tinta)" fontFamily="var(--font-jakarta), sans-serif">
+        <text x="85" y="18" textAnchor="middle" fontSize="10" fontWeight="800" fill="var(--poster-laut-tinta)">KTP CONTOH</text>
+        <text x="12" y="44" fontSize="8">NIK 9921 01•• •••• 1840</text>
+        <text x="12" y="62" fontSize="10" fontWeight="800">AGUS ASTUTI</text>
+        <text x="12" y="78" fontSize="8">26-05-1983</text>
+      </g>
+      <rect x="122" y="34" width="34" height="44" rx="3" fill="var(--poster-tulang)" stroke="var(--poster-lembar-tinta)" strokeWidth="1.5" />
+      <circle cx="139" cy="50" r="7" fill="none" stroke="var(--poster-lembar-tinta)" strokeWidth="1.5" />
+      <path d="M128 74c3-8 19-8 22 0" fill="none" stroke="var(--poster-lembar-tinta)" strokeWidth="1.5" />
+    </Lembar>
+  );
+}
+
+/** Mutasi rekening korpus mutasi-01: tiga baris Oktober 2026, satu transfer masuk Kafe Senja. */
+export function Mutasi({ className, style }: Svg) {
+  const baris: [string, string, string][] = [["07/10", "PLN", "-2.503.000"], ["09/10", "KAFE SENJA", "+1.240.000"], ["09/10", "UD SUMBER", "-559.500"]];
+  return (
+    <Lembar className={className} style={style} lebar={160} tinggi={112}>
+      <g fill="var(--poster-lembar-tinta)" fontFamily="var(--font-jakarta), sans-serif">
+        <text x="12" y="22" fontSize="10" fontWeight="800">mutasi_okt.csv</text>
+        {baris.map(([t, k, n], i) => (
+          <g key={k}>
+            {i === 1 ? <rect x="8" y={34 + i * 22} width="144" height="18" fill="var(--sorot)" /> : null}
+            <text x="12" y={47 + i * 22} fontSize="8">{t}</text>
+            <text x="40" y={47 + i * 22} fontSize="8" fontWeight="700">{k}</text>
+            <text x="148" y={47 + i * 22} textAnchor="end" fontSize="8" fontWeight="700">{n}</text>
+          </g>
+        ))}
+      </g>
+    </Lembar>
+  );
+}
+
 /** Cap stempel berbingkai: teks kapital pendek (DITERIMA, LUNAS). */
 export function Cap({ teks, warna = "var(--lunas)", className, style }: Svg & { teks: string; warna?: string }) {
   const w = Math.max(70, teks.length * 9 + 24);

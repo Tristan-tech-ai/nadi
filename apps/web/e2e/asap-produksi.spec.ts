@@ -35,7 +35,7 @@ test.describe("asap produksi", () => {
 
   test("alur inti tanpa akun: nota demo disetujui, Feed usaha contoh tampil", async ({ page }) => {
     await page.goto("/");
-    const demo = page.locator("article", { hasText: "Catat belanja" });
+    const demo = page.locator(".meja-coba article", { hasText: "Catat belanja" });
     await demo.getByRole("button", { name: "Setujui" }).click();
     await expect(demo).toContainText("Tercatat sebagai belanja");
     await page.goto("/demo");

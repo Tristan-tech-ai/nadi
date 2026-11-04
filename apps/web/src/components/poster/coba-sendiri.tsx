@@ -6,8 +6,8 @@ import { Rupiah } from "@/components/ui/rupiah";
 import { formatAngka } from "@/lib/format";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 
-// Hal hidup di landing (docs/research/psikologi-persuasi.md bagian 9, efek IKEA: aksi pendek yang selalu berhasil). Tiga berkas
-// korpus sintetis yang benar-benar dibaca Nadi di eval: nota-01, sakit-01, slip-01. Pengunjung memilih berkas, kertasnya tercetak,
+// Hal hidup di landing (docs/research/psikologi-persuasi.md bagian 9, efek IKEA: aksi pendek yang selalu berhasil). Lima berkas
+// korpus sintetis yang benar-benar dibaca Nadi di eval: nota-01, sakit-01, slip-01, absen-01, mutasi-01. Pengunjung memilih berkas, kertasnya tercetak,
 // lalu kartu usulan bisa disetujui atau ditolak. Tidak ada yang disimpan.
 export type TeksCoba = {
   pilihan: string[];
@@ -21,10 +21,14 @@ export type TeksCoba = {
 };
 
 type Baris = [string, number | string];
-const BERKAS: { kepala: string; sub: string; baris: Baris[]; total?: [string, number] }[] = [
-  { kepala: "UD Sumber Rejeki", sub: "NT-4671 · 13/10/2026", baris: [["Teh celup 25 (9 x 9.500)", 85500], ["Tepung terigu 1 kg (6 x 13.500)", 81000], ["Bawang merah 1 kg (5 x 42.000)", 210000]], total: ["TOTAL", 376500] },
+const BERKAS: { kepala: string; sub: string; baris: Baris[]; total?: [string, number]; rp?: number }[] = [
+  { kepala: "UD Sumber Rejeki", sub: "NT-4671 · 13/10/2026", baris: [["Teh celup 25 (9 x 9.500)", 85500], ["Tepung terigu 1 kg (6 x 13.500)", 81000], ["Bawang merah 1 kg (5 x 42.000)", 210000]], total: ["TOTAL", 376500], rp: 376500 },
   { kepala: "Surat keterangan sakit", sub: "Klinik Sehat Bersama", baris: [["Nama", "Fitri Astuti"], ["Istirahat", "3 hari"], ["Mulai", "25 Okt 2026"]] },
-  { kepala: "Slip gaji Oktober 2026", sub: "Ketut Rahmawati", baris: [["Gaji pokok", 6400000], ["Tunjangan", 1100000], ["Potongan (BPJS, PPh 21)", 304000]], total: ["Diterima", 7196000] },
+  { kepala: "Slip gaji Oktober 2026", sub: "Ketut Rahmawati", baris: [["Gaji pokok", 6400000], ["Tunjangan", 1100000], ["Potongan (BPJS, PPh 21)", 304000]], total: ["Diterima", 7196000], rp: 7196000 },
+  // absen-01.xlsx: 5 orang x 10 hari; baris Siti Wijaya.
+  { kepala: "absen_okt.xlsx", sub: "5 orang, 1 sampai 10 Okt 2026", baris: [["Siti Wijaya 01/10", "07.15-18.25"], ["Siti Wijaya 02/10", "08.16-16.43"], ["Siti Wijaya 06/10", "Sakit"]], total: ["Baris", 50] },
+  // mutasi-01.csv: transfer masuk yang menyebut nomor invoice.
+  { kepala: "mutasi_okt.csv", sub: "Rekening usaha, Oktober 2026", baris: [["07/10 PEMBAYARAN LISTRIK PLN", -2503000], ["09/10 TRSF CR KAFE SENJA INV/2026/X/0017", 1240000], ["09/10 TRSF DB UD SUMBER REJEKI", -559500]], rp: 1240000 },
 ];
 
 export function CobaSendiri({ teks, bahasa }: { teks: TeksCoba; bahasa: Bahasa }) {
@@ -66,7 +70,7 @@ export function CobaSendiri({ teks, bahasa }: { teks: TeksCoba; bahasa: Bahasa }
         <article className="kartu-coba cetak-baris" style={tunda(8)} aria-live="polite">
           <h3>
             {kartu.judul.includes("{rp}") ? (
-              <>{kartu.judul.split("{rp}")[0]}<Rupiah nilai={pilih === 0 ? 376500 : 7196000} bahasa={bahasa} />{kartu.judul.split("{rp}")[1]}</>
+              <>{kartu.judul.split("{rp}")[0]}<Rupiah nilai={b.rp ?? 0} bahasa={bahasa} />{kartu.judul.split("{rp}")[1]}</>
             ) : kartu.judul}
           </h3>
           {putusan !== "menunggu" ? (

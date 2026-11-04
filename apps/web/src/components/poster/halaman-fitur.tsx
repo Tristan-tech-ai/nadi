@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Usulan } from "@/components/ui/kartu-usulan";
 import { KakiPoster, KepalaPoster } from "@/components/poster/kepala-kaki";
 import { Cap } from "@/components/poster/ilustrasi";
 import { VisualFitur } from "@/components/poster/visual-fitur";
@@ -19,7 +20,7 @@ export function HalamanFitur({ slug, bahasa }: { slug: string; bahasa: Bahasa })
   const lanjut = k.fitur[(i + 1) % k.fitur.length];
   const awal = awalanJalur(bahasa);
   const medan = MEDAN[f.warna] ?? "medan-tinta";
-  const teksVisual = { diterima: p.capDiterima, lunas: p.capLunas, kartu: p.kartuHp };
+  const teksVisual = { diterima: p.capDiterima, lunas: p.capLunas, kartu: p.kartuHp, feed: p.feedMini as Usulan[], teksKartu: k.kartu, bahasa };
   const teksHalaman = k.halamanFitur;
 
   return (
@@ -32,6 +33,10 @@ export function HalamanFitur({ slug, bahasa }: { slug: string; bahasa: Bahasa })
           <div className="pahlawan-fitur-bawah">
             <div className="masuk" style={{ display: "grid", gap: 22, alignContent: "end" }}>
               <p className="teks-pendukung">{f.pendukung}</p>
+              <div className="dipakai" data-testid="dipakai">
+                <p className="dipakai-label">{teksHalaman.dipakai}</p>
+                <ul className="dipakai-daftar">{f.dipakai.map((d) => <li key={d}>{d}</li>)}</ul>
+              </div>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "14px 24px", alignItems: "center" }}>
                 <Link href="/demo" className="tombol-poster">{f.coba}</Link>
                 <Link href="/daftar" className="tautan-poster">{p.akhirTombol}</Link>

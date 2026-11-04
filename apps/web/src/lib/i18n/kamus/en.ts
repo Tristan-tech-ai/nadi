@@ -1722,7 +1722,7 @@ export const kamusEn: Kamus = {
     },
     "judul1": "Drop in the receipt.",
     "judul2": "Nadi sorts it out.",
-    "pendukung": "Snap a receipt, a doctor's note, or a payslip. Nadi reads it, and you approve from your phone.",
+    "pendukung": "Receipts, attendance Excel, ID cards, bank statements, or letters. Nadi reads them, you just approve from your phone.",
     "mulai": "Start with one receipt",
     "contoh": "Try the sample business",
     "gulir": "Scroll to tidy up",
@@ -1730,6 +1730,9 @@ export const kamusEn: Kamus = {
       "chat1": "Where is yesterday's receipt?",
       "chat2": "What is Sari's pay?"
     },
+    "untuk": "Nadi for",
+    "usaha": ["food stalls", "wholesalers", "workshops", "clinics", "salons", "offices", "contractors", "warehouses", "hotels", "laundries"],
+    "feedMini": [{"judul": "Record purchase from UD Sumber Rejeki", "penjelasan": "3 items from receipt NT-4671.", "sumber": "Receipt photo", "keyakinan": 0.98, "dampakRp": 376500, "status": "diterima"}, {"judul": "Sick leave for Fitri Astuti, 3 days", "penjelasan": "Read from the doctor's note.", "sumber": "Doctor's note", "keyakinan": 0.95, "status": "diterima"}, {"judul": "Kafe Senja invoice paid", "penjelasan": "Matches the 9 Oct bank entry.", "sumber": "Bank statement", "keyakinan": 0.99, "dampakRp": 1240000, "status": "lunas"}],
     "kartuHp": [
       "Purchase Rp376,500",
       "Fitri sick 3 days",
@@ -1766,12 +1769,26 @@ export const kamusEn: Kamus = {
         "ringkas": "Gross Rp7,500,000, deductions Rp304,000. Every line adds up.",
         "tercatat": "The October payslip is ready to share with Ketut.",
         "tidakDicatat": "Held. The payslip has not been shared."
+      },
+      {
+        "judul": "Record attendance for 5 people over 10 days",
+        "ringkas": "50 rows from the attendance Excel. Siti Wijaya: present 7, leave 2, sick 1.",
+        "tercatat": "October attendance recorded for 5 people.",
+        "tidakDicatat": "Not recorded. The Excel file stays saved."
+      },
+      {
+        "judul": "Mark {rp} from Kafe Senja as paid",
+        "ringkas": "The 9 Oct 2026 transfer mentions INV/2026/X/0017. The amount matches the invoice.",
+        "tercatat": "Invoice INV/2026/X/0017 paid by transfer.",
+        "tidakDicatat": "Not matched. The bank entry stays saved."
       }
     ],
     "pilihan": [
       "Supplier receipt",
       "Doctor's note",
-      "Payslip"
+      "Payslip",
+      "Attendance Excel",
+      "Bank statement"
     ],
     "ketukJudul": "How it works",
     "ketuk": [
@@ -1809,7 +1826,7 @@ export const kamusEn: Kamus = {
     "akhirContoh": "or try the sample business first",
     "sedangDibuat": "In progress"
   },
-  halamanFitur: {"masalah": "Problems it fixes", "tanpaNadi": "Without Nadi", "langkah": "Three steps", "janji": "What the AI never does", "pintu": "Try it or keep going", "masuk": "File received", "menunggu": "Waiting for you", "berikutnya": "Next feature", "ya": "Yes", "tidak": "No"},
+  halamanFitur: {"dipakai": "Used for", "masalah": "Problems it fixes", "tanpaNadi": "Without Nadi", "langkah": "Three steps", "janji": "What the AI never does", "pintu": "Try it or keep going", "masuk": "File received", "menunggu": "Waiting for you", "berikutnya": "Next feature", "ya": "Yes", "tidak": "No"},
   fitur: [
     {
       "slug": "lempar",
@@ -1844,7 +1861,8 @@ export const kamusEn: Kamus = {
           "The next receipt from the same supplier is read without AI"
         ]
       ],
-      "coba": "Try Drop in the sample business"
+      "coba": "Try Drop in the sample business",
+      "dipakai": ["Supplier receipts", "Attendance Excel", "Employee ID cards", "Bank statements", "Applicant CVs", "Import documents (PIB)"]
     },
     {
       "slug": "feed",
@@ -1879,7 +1897,8 @@ export const kamusEn: Kamus = {
           "Every automatic decision has a written reason"
         ]
       ],
-      "coba": "Try the feed in the sample business"
+      "coba": "Try the feed in the sample business",
+      "dipakai": ["Purchases from receipts", "Sick leave", "Monthly payroll", "New applicants", "Shift swaps"]
     },
     {
       "slug": "absen",
@@ -1914,7 +1933,8 @@ export const kamusEn: Kamus = {
           "Every rejection names a way to appeal"
         ]
       ],
-      "coba": "Try attendance in the sample business"
+      "coba": "Try attendance in the sample business",
+      "dipakai": ["QR attendance on phones", "Tablet at the door", "Face check without uploading photos", "Automatic leave"]
     },
     {
       "slug": "gaji",
@@ -1949,7 +1969,8 @@ export const kamusEn: Kamus = {
           "Every figure names its legal basis"
         ]
       ],
-      "coba": "See payroll in the sample business"
+      "coba": "See payroll in the sample business",
+      "dipakai": ["PPh 21 TER", "BPJS contributions", "Overtime", "Payslips by link", "Severance reserve"]
     },
     {
       "slug": "tagihan",
@@ -1984,7 +2005,8 @@ export const kamusEn: Kamus = {
           "You send reminders yourself on WhatsApp"
         ]
       ],
-      "coba": "See invoices in the sample business"
+      "coba": "See invoices in the sample business",
+      "dipakai": ["Numbered invoices", "Your own QRIS", "4-step reminders", "Bank statement matching", "USD export invoices"]
     },
     {
       "slug": "jadwal",
@@ -2019,7 +2041,8 @@ export const kamusEn: Kamus = {
           "Every swap needs your approval"
         ]
       ],
-      "coba": "Try scheduling in the sample business"
+      "coba": "Try scheduling in the sample business",
+      "dipakai": ["Weekly shifts", "Shift swaps", "Overtime limits", "Schedule suggestions from demand"]
     },
     {
       "slug": "mata",
@@ -2054,7 +2077,8 @@ export const kamusEn: Kamus = {
           "Runs on a small box with an RTSP camera"
         ]
       ],
-      "coba": "See the floor map in the sample business"
+      "coba": "See the floor map in the sample business",
+      "dipakai": ["Free and busy tables", "Queue length", "Empty shelves", "CCTV cameras through an agent"]
     },
     {
       "slug": "rekrut",
@@ -2089,7 +2113,8 @@ export const kamusEn: Kamus = {
           "Applicants can track their status"
         ]
       ],
-      "coba": "See hiring in the sample business"
+      "coba": "See hiring in the sample business",
+      "dipakai": ["Job posts with a link", "CV reading", "Voice interviews", "Work tests", "Job post bias guard"]
     },
     {
       "slug": "pajak",
@@ -2124,7 +2149,8 @@ export const kamusEn: Kamus = {
           "Nadi never suggests splitting a business"
         ]
       ],
-      "coba": "See tax in the sample business"
+      "coba": "See tax in the sample business",
+      "dipakai": ["Final MSME income tax", "Business form simulation", "Coretax BPMP files", "Accountant Room"]
     }
   ],
   buku: {

@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Cap, ChatWa, ExcelAbsen, Kuitansi, Nota, Ponsel, SuratDokter } from "@/components/poster/ilustrasi";
+import { ChatWa, ExcelAbsen, Kuitansi, Nota, Ponsel, SuratDokter } from "@/components/poster/ilustrasi";
+import { LayarFeed } from "@/components/poster/layar-feed";
+import type { TeksKartu, Usulan } from "@/components/ui/kartu-usulan";
+import type { Bahasa } from "@/lib/i18n/bahasa";
 
 // Penggeser sebelum/sesudah (kerangka layar 3). Pengunjung sendiri yang menggeser: kiri meja kasir penuh kertas, kanan HP dengan
 // kartu bercap. Input range penuh di atas gambar, jadi bisa dengan jari, tetikus, dan papan ketik (panah kiri/kanan).
-export type TeksBanding = { label: string; tanpa: string; dengan: string; tanpaKet: string; denganKet: string; kartu: string[]; diterima: string; chat: string };
+export type TeksBanding = { label: string; tanpa: string; dengan: string; tanpaKet: string; denganKet: string; kartu: string[]; diterima: string; chat: string; feed: Usulan[]; teksKartu: TeksKartu; bahasa: Bahasa };
 
 export function Banding({ teks }: { teks: TeksBanding }) {
   const [g, setG] = useState(52);
@@ -31,9 +34,7 @@ export function Banding({ teks }: { teks: TeksBanding }) {
         </div>
         <div className="hp-rapi" aria-hidden="true" data-ui>
           <Ponsel>
-            {teks.kartu.slice(0, 4).map((k) => (
-              <div key={k} className="kartu-ponsel" style={{ animation: "none" }}>{k}<Cap teks={teks.diterima} className="cap-ponsel" style={{ animation: "none" }} /></div>
-            ))}
+            <LayarFeed kartu={teks.feed} teks={teks.teksKartu} bahasa={teks.bahasa} />
           </Ponsel>
         </div>
       </div>

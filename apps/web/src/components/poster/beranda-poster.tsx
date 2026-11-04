@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { Banding } from "@/components/poster/banding";
 import { CobaSendiri } from "@/components/poster/coba-sendiri";
-import { Cap, ChatWa, ExcelAbsen, Kuitansi, Nota, Ponsel, SuratDokter } from "@/components/poster/ilustrasi";
+import { ChatWa, ExcelAbsen, Ktp, Kuitansi, Mutasi, Nota, Ponsel, SlipGaji, SuratDokter } from "@/components/poster/ilustrasi";
+import { LayarFeed } from "@/components/poster/layar-feed";
+import type { Usulan } from "@/components/ui/kartu-usulan";
+import { GantiUsaha } from "@/components/poster/ganti-usaha";
 import { KakiPoster, KepalaPoster } from "@/components/poster/kepala-kaki";
 import { VisualFitur } from "@/components/poster/visual-fitur";
 import { Rupiah } from "@/components/ui/rupiah";
@@ -18,7 +21,8 @@ export function BerandaPoster({ bahasa }: { bahasa: Bahasa }) {
   const k = ambilKamus(bahasa);
   const p = k.poster;
   const awal = awalanJalur(bahasa);
-  const teksVisual = { diterima: p.capDiterima, lunas: p.capLunas, kartu: p.kartuHp };
+  const feed = p.feedMini as Usulan[];
+  const teksVisual = { diterima: p.capDiterima, lunas: p.capLunas, kartu: p.kartuHp, feed, teksKartu: k.kartu, bahasa };
 
   return (
     <div lang={bahasa} className="poster medan-tinta">
@@ -36,6 +40,11 @@ export function BerandaPoster({ bahasa }: { bahasa: Bahasa }) {
           <div className="bingkai pengait-bawah">
             <div style={{ display: "grid", gap: 22, alignContent: "end" }}>
               <p className="teks-pendukung">{p.pendukung}</p>
+              {/* Jenis usaha berganti (blueprint fixed-anchor-cycle): "Nadi untuk" diam, kata kedua bergulir. Tanpa gerak = daftar biasa. */}
+              <p className="pita-usaha" data-testid="pita-usaha">
+                <span>{p.untuk}</span>{" "}
+                <GantiUsaha usaha={p.usaha} />
+              </p>
               <div style={{ display: "flex", flexWrap: "wrap", gap: "14px 24px", alignItems: "center" }}>
                 <Link href="/daftar" className="tombol-poster">{p.mulai}</Link>
                 <Link href="/demo" className="tautan-poster">{p.contoh}</Link>
@@ -43,20 +52,17 @@ export function BerandaPoster({ bahasa }: { bahasa: Bahasa }) {
               <p className="petunjuk-gulir" aria-hidden="true">{p.gulir}</p>
             </div>
             <div className="pengait-meja" aria-hidden="true" data-ui>
-              <div className="kertas-kacau kk-1"><Nota /></div>
-              <div className="kertas-kacau lebar kk-2"><Kuitansi /></div>
-              <div className="kertas-kacau lebar kk-3"><ChatWa teks={p.kacau.chat1} /></div>
-              <div className="kertas-kacau lebar kk-4"><ExcelAbsen /></div>
-              <div className="kertas-kacau kk-5"><SuratDokter /></div>
-              <div className="kertas-kacau lebar kk-6"><ChatWa teks={p.kacau.chat2} /></div>
+              <div className="kertas-kacau kk-1" data-jenis="nota"><Nota /></div>
+              <div className="kertas-kacau lebar kk-2" data-jenis="kuitansi"><Kuitansi /></div>
+              <div className="kertas-kacau lebar kk-3" data-jenis="chat"><ChatWa teks={p.kacau.chat1} /></div>
+              <div className="kertas-kacau lebar kk-4" data-jenis="excel"><ExcelAbsen /></div>
+              <div className="kertas-kacau kk-5" data-jenis="surat"><SuratDokter /></div>
+              <div className="kertas-kacau lebar kk-6" data-jenis="slip"><SlipGaji /></div>
+              <div className="kertas-kacau lebar kk-7" data-jenis="ktp"><Ktp /></div>
+              <div className="kertas-kacau lebar kk-8" data-jenis="mutasi"><Mutasi /></div>
               <div className="ponsel-tengah">
                 <Ponsel>
-                  {p.kartuHp.map((t, i) => (
-                    <div key={t} className="kartu-ponsel">
-                      <span>{t}</span>
-                      {i < 4 ? <Cap teks={i === 3 ? p.capTerkirim : p.capDiterima} className="cap-ponsel" warna={i === 3 ? "var(--poster-laut)" : "var(--lunas)"} /> : null}
-                    </div>
-                  ))}
+                  <LayarFeed kartu={feed} teks={k.kartu} bahasa={bahasa} />
                 </Ponsel>
               </div>
             </div>
@@ -113,7 +119,7 @@ export function BerandaPoster({ bahasa }: { bahasa: Bahasa }) {
 
       {/* 4. Sebelum dan sesudah, digeser pengunjung. */}
       <section aria-label={p.bandingJudul}>
-        <Banding teks={{ label: p.bandingJudul, tanpa: p.tanpa, dengan: p.dengan, tanpaKet: p.tanpaKet, denganKet: p.denganKet, kartu: p.kartuHp, diterima: p.capDiterima, chat: p.kacau.chat1 }} />
+        <Banding teks={{ label: p.bandingJudul, tanpa: p.tanpa, dengan: p.dengan, tanpaKet: p.tanpaKet, denganKet: p.denganKet, kartu: p.kartuHp, diterima: p.capDiterima, chat: p.kacau.chat1, feed, teksKartu: k.kartu, bahasa }} />
       </section>
 
       {/* 5. Sembilan pintu fitur. */}

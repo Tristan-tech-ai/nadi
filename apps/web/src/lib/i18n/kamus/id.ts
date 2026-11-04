@@ -1723,7 +1723,7 @@ export const kamusId = {
     },
     "judul1": "Lempar notanya.",
     "judul2": "Nadi yang merapikan.",
-    "pendukung": "Foto nota, surat dokter, atau slip gaji. Nadi membacanya, kamu tinggal menyetujui dari HP.",
+    "pendukung": "Nota, Excel absen, KTP, mutasi bank, atau surat. Nadi membacanya, kamu tinggal menyetujui dari HP.",
     "mulai": "Mulai dari satu nota",
     "contoh": "Coba usaha contoh",
     "gulir": "Gulir untuk merapikan",
@@ -1731,6 +1731,9 @@ export const kamusId = {
       "chat1": "Bu, nota kemarin mana?",
       "chat2": "Gaji Sari berapa?"
     },
+    "untuk": "Nadi untuk",
+    "usaha": ["warung", "toko grosir", "bengkel", "klinik", "salon", "kantor", "kontraktor", "gudang", "hotel", "laundry"],
+    "feedMini": [{"judul": "Catat belanja UD Sumber Rejeki", "penjelasan": "3 barang dari nota NT-4671.", "sumber": "Foto nota", "keyakinan": 0.98, "dampakRp": 376500, "status": "diterima"}, {"judul": "Izin sakit Fitri Astuti 3 hari", "penjelasan": "Dibaca dari surat dokter.", "sumber": "Surat dokter", "keyakinan": 0.95, "status": "diterima"}, {"judul": "Tagihan Kafe Senja lunas", "penjelasan": "Cocok dengan mutasi 9 Okt.", "sumber": "Mutasi bank", "keyakinan": 0.99, "dampakRp": 1240000, "status": "lunas"}],
     "kartuHp": [
       "Belanja Rp376.500",
       "Izin Fitri 3 hari",
@@ -1767,12 +1770,26 @@ export const kamusId = {
         "ringkas": "Bruto Rp7.500.000, potongan Rp304.000. Angka per baris cocok.",
         "tercatat": "Slip Oktober siap dibagikan ke Ketut.",
         "tidakDicatat": "Ditahan. Slip belum dibagikan."
+      },
+      {
+        "judul": "Catat absen 5 orang selama 10 hari",
+        "ringkas": "50 baris dari Excel absen. Siti Wijaya: hadir 7, izin 2, sakit 1.",
+        "tercatat": "Absen Oktober tercatat untuk 5 orang.",
+        "tidakDicatat": "Tidak dicatat. Excel tetap tersimpan."
+      },
+      {
+        "judul": "Tandai lunas {rp} dari Kafe Senja",
+        "ringkas": "Transfer 9 Okt 2026 menyebut INV/2026/X/0017. Nominal sama dengan tagihan.",
+        "tercatat": "Invoice INV/2026/X/0017 lunas lewat transfer.",
+        "tidakDicatat": "Tidak dicocokkan. Mutasi tetap tersimpan."
       }
     ],
     "pilihan": [
       "Nota pemasok",
       "Surat dokter",
-      "Slip gaji"
+      "Slip gaji",
+      "Excel absen",
+      "Mutasi bank"
     ],
     "ketukJudul": "Cara kerjanya",
     "ketuk": [
@@ -1810,7 +1827,7 @@ export const kamusId = {
     "akhirContoh": "atau coba usaha contoh dulu",
     "sedangDibuat": "Sedang dibuat"
   },
-  halamanFitur: {"masalah": "Masalah yang dibereskan", "tanpaNadi": "Tanpa Nadi", "langkah": "Tiga langkah", "janji": "Yang tidak dilakukan AI", "pintu": "Coba atau lanjut", "masuk": "Berkas masuk", "menunggu": "Menunggu keputusanmu", "berikutnya": "Fitur berikutnya", "ya": "Ya", "tidak": "Tidak"},
+  halamanFitur: {"dipakai": "Dipakai untuk", "masalah": "Masalah yang dibereskan", "tanpaNadi": "Tanpa Nadi", "langkah": "Tiga langkah", "janji": "Yang tidak dilakukan AI", "pintu": "Coba atau lanjut", "masuk": "Berkas masuk", "menunggu": "Menunggu keputusanmu", "berikutnya": "Fitur berikutnya", "ya": "Ya", "tidak": "Tidak"},
   fitur: [
     {
       "slug": "lempar",
@@ -1845,7 +1862,8 @@ export const kamusId = {
           "Nota berikutnya dari pemasok sama dibaca tanpa AI"
         ]
       ],
-      "coba": "Coba lempar di usaha contoh"
+      "coba": "Coba lempar di usaha contoh",
+      "dipakai": ["Nota pemasok", "Excel absen", "KTP karyawan", "Mutasi bank", "CV pelamar", "Dokumen impor (PIB)"]
     },
     {
       "slug": "feed",
@@ -1880,7 +1898,8 @@ export const kamusId = {
           "Setiap keputusan otomatis punya alasan tertulis"
         ]
       ],
-      "coba": "Coba Feed di usaha contoh"
+      "coba": "Coba Feed di usaha contoh",
+      "dipakai": ["Belanja dari nota", "Izin sakit", "Gaji bulanan", "Pelamar baru", "Tukar shift"]
     },
     {
       "slug": "absen",
@@ -1915,7 +1934,8 @@ export const kamusId = {
           "Penolakan selalu menyebut jalan banding"
         ]
       ],
-      "coba": "Coba absen di usaha contoh"
+      "coba": "Coba absen di usaha contoh",
+      "dipakai": ["Absen QR di HP", "Tablet di pintu", "Cek wajah tanpa unggah foto", "Izin dan cuti otomatis"]
     },
     {
       "slug": "gaji",
@@ -1950,7 +1970,8 @@ export const kamusId = {
           "Setiap angka menyebut dasarnya"
         ]
       ],
-      "coba": "Lihat gaji di usaha contoh"
+      "coba": "Lihat gaji di usaha contoh",
+      "dipakai": ["PPh 21 TER", "Iuran BPJS", "Lembur", "Slip lewat tautan", "Cadangan pesangon"]
     },
     {
       "slug": "tagihan",
@@ -1985,7 +2006,8 @@ export const kamusId = {
           "Pengingat kamu kirim sendiri lewat WhatsApp"
         ]
       ],
-      "coba": "Lihat tagihan di usaha contoh"
+      "coba": "Lihat tagihan di usaha contoh",
+      "dipakai": ["Invoice bernomor", "QRIS milik usaha", "Pengingat 4 tahap", "Cocok mutasi bank", "Invoice ekspor USD"]
     },
     {
       "slug": "jadwal",
@@ -2020,7 +2042,8 @@ export const kamusId = {
           "Setiap tukar shift lewat persetujuanmu"
         ]
       ],
-      "coba": "Coba jadwal di usaha contoh"
+      "coba": "Coba jadwal di usaha contoh",
+      "dipakai": ["Shift mingguan", "Tukar shift", "Batas lembur", "Usulan jadwal dari kebutuhan"]
     },
     {
       "slug": "mata",
@@ -2055,7 +2078,8 @@ export const kamusId = {
           "Bisa jalan di kotak kecil dengan kamera RTSP"
         ]
       ],
-      "coba": "Lihat peta warung di usaha contoh"
+      "coba": "Lihat peta warung di usaha contoh",
+      "dipakai": ["Meja kosong dan terisi", "Panjang antrean", "Rak kosong", "Kamera CCTV lewat agen"]
     },
     {
       "slug": "rekrut",
@@ -2090,7 +2114,8 @@ export const kamusId = {
           "Pelamar bisa memantau statusnya"
         ]
       ],
-      "coba": "Lihat rekrut di usaha contoh"
+      "coba": "Lihat rekrut di usaha contoh",
+      "dipakai": ["Lowongan dengan tautan", "Baca CV", "Wawancara suara", "Uji kerja", "Penjaga bias lowongan"]
     },
     {
       "slug": "pajak",
@@ -2125,7 +2150,8 @@ export const kamusId = {
           "Nadi tidak menyarankan memecah usaha"
         ]
       ],
-      "coba": "Lihat pajak di usaha contoh"
+      "coba": "Lihat pajak di usaha contoh",
+      "dipakai": ["PPh final UMKM", "Simulasi bentuk usaha", "Berkas BPMP Coretax", "Ruang Akuntan"]
     }
   ],
   buku: {

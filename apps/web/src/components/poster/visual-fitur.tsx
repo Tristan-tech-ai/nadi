@@ -1,11 +1,14 @@
 // Gambar bergerak per fitur (pintu di landing dan pahlawan halaman fitur). Gerak lewat kelas di poster.css; diam saat gerak
 // dikurangi. Semua dekoratif: nama fitur ada di teks tautan atau judul.
 import type { ReactNode } from "react";
+import { LayarFeed } from "@/components/poster/layar-feed";
+import type { TeksKartu, Usulan } from "@/components/ui/kartu-usulan";
+import type { Bahasa } from "@/lib/i18n/bahasa";
 import { Cap, Denah, KodeContoh, Nota, Ponsel } from "@/components/poster/ilustrasi";
 
 export type JenisVisual = "nota" | "feed" | "absen" | "gaji" | "tagihan" | "jadwal" | "mata" | "rekrut" | "pajak";
 
-type Teks = { diterima: string; lunas: string; kartu: string[] };
+type Teks = { diterima: string; lunas: string; kartu: string[]; feed?: Usulan[]; teksKartu?: TeksKartu; bahasa?: Bahasa };
 
 export function VisualFitur({ jenis, teks, besar = false }: { jenis: string; teks: Teks; besar?: boolean }) {
   const ukur = besar ? "min(78%, 420px)" : "52%";
@@ -21,7 +24,7 @@ export function VisualFitur({ jenis, teks, besar = false }: { jenis: string; tek
       return (
         <div aria-hidden="true" style={{ position: "absolute", left: "50%", top: besar ? "50%" : "58%", translate: "-50% -50%", scale: besar ? "1.25" : "0.86" }}>
           <Ponsel>
-            {teks.kartu.slice(0, 3).map((k, i) => (
+            {teks.feed ? <LayarFeed kartu={teks.feed} teks={teks.teksKartu} bahasa={teks.bahasa} jumlah={2} /> : teks.kartu.slice(0, 3).map((k, i) => (
               <div key={k} className="kartu-ponsel">{k}{i < 2 ? <Cap teks={teks.diterima} className="cap-ponsel" /> : null}</div>
             ))}
           </Ponsel>

@@ -81,7 +81,7 @@
 .pengait-isi { padding-top: clamp(8px, 2vh, 28px); }
 .pengait-bawah { display: grid; gap: 22px; padding-block: clamp(16px, 3vh, 36px) clamp(20px, 4vh, 48px); align-items: end; }
 @media (min-width: 900px) { .pengait-bawah { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); } }
-.pengait-meja { position: relative; min-height: 340px; }
+.pengait-meja { position: relative; min-height: 340px; align-self: end; }
 .pengait-meja > * { position: absolute; }
 .poster-ponsel { width: clamp(150px, 17vw, 236px); aspect-ratio: 9 / 18.5; border-radius: 28px; background: var(--poster-tinta); padding: 9px; }
 .poster-ponsel-layar { width: 100%; height: 100%; border-radius: 20px; background: var(--poster-lembar); color: var(--poster-lembar-tinta); overflow: hidden; padding: 14px 10px; display: grid; gap: 8px; align-content: start; }
@@ -98,12 +98,18 @@
 .kk-4 { right: 2%; top: 56%; rotate: -7deg; --dx: -200%; --dy: -40%; }
 .kk-5 { left: 24%; top: 74%; rotate: -4deg; --dx: 90%; --dy: -140%; }
 .kk-6 { right: 22%; top: 80%; rotate: 6deg; --dx: -80%; --dy: -170%; }
-@media (min-width: 900px) { .pengait-meja { min-height: 0; height: clamp(320px, calc(100svh - 420px), 470px); } .pengait .poster-ponsel { width: auto; height: 100%; } }
+.kk-7 { left: 30%; top: -4%; rotate: 5deg; --dx: 40%; --dy: 160%; }
+.kk-8 { left: 0%; top: 84%; rotate: -8deg; --dx: 230%; --dy: -180%; }
+@media (min-width: 900px) { .pengait-meja { min-height: 0; height: clamp(320px, calc(100svh - 420px), 470px); } .pengait .poster-ponsel { width: auto; height: clamp(320px, calc(100svh - 420px), 470px); } }
 @media (max-width: 899px) { .pengait-bawah > :first-child { order: 2; } }
 
 @media (prefers-reduced-motion: no-preference) {
   .kertas-kacau { animation: melayang 5s ease-in-out infinite alternate; }
   .kk-2 { animation-delay: -1.2s; } .kk-3 { animation-delay: -2.1s; } .kk-4 { animation-delay: -3s; } .kk-5 { animation-delay: -3.7s; } .kk-6 { animation-delay: -4.4s; }
+  .kk-7 { animation-delay: -0.6s; } .kk-8 { animation-delay: -2.6s; }
+  .pengait .layar-app-isi > :nth-child(n+2) { animation: kartu-masuk 700ms var(--ease-expo) both; }
+  .pengait .layar-app-isi > :nth-child(2) { animation-delay: 2.1s; } .pengait .layar-app-isi > :nth-child(3) { animation-delay: 2.4s; }
+  .ganti-usaha-kata { animation: kata-naik 420ms var(--ease-keluar) both; }
   .pengait .kertas-kacau > svg { animation: sedot 1s var(--ease-tempuh) 1.4s both; }
   .pengait .kartu-ponsel:nth-child(n+3) { animation: kartu-masuk 700ms var(--ease-expo) both; }
   .pengait .kartu-ponsel:nth-child(3) { animation-delay: 2.1s; } .pengait .kartu-ponsel:nth-child(4) { animation-delay: 2.3s; } .pengait .kartu-ponsel:nth-child(5) { animation-delay: 2.5s; }
@@ -289,3 +295,28 @@
 .sedang-dibuat ul { display: grid; gap: 4px; max-width: 60ch; }
 .kaki-poster .nama-raksasa { font-family: var(--font-papan); font-weight: 800; font-size: clamp(110px, 26vw, 380px); line-height: 0.72; letter-spacing: -0.02em; overflow: hidden; height: 0.6em; margin-top: 16px; }
 .kaki-poster a:hover { text-decoration: underline; text-underline-offset: 4px; }
+
+/* W-01: pita jenis usaha (fixed-anchor-cycle). Kata pertama diam, satu jenis usaha tampil dan berganti dengan naik singkat
+   (transform saja, teks tidak memudar). Ukuran di bawah 36 px: ini kalimat pendukung, bukan judul kedua. */
+.pita-usaha { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.35em; font-family: var(--font-papan); font-weight: 800; text-transform: uppercase;
+  font-size: clamp(22px, 2.4vw, 32px); line-height: 1.15; }
+.ganti-usaha { display: inline-block; overflow: hidden; background: var(--m-tinta); color: var(--m-latar); padding: 0.05em 0.25em; border-radius: 4px; }
+.ganti-usaha-kata { display: inline-block; white-space: nowrap; }
+@keyframes kata-naik { from { transform: translateY(0.6em); } }
+
+/* W-01: isi HP = Feed Keputusan dengan komponen aplikasi asli. Token aplikasi dikembalikan ke warna lembar agar kartu tampil
+   seperti di aplikasi, lalu diperkecil setengah supaya kartu berukuran asli muat di layar HP gambar. */
+.layar-app { --kertas: var(--poster-lembar); --kertas-2: var(--poster-tulang); --tinta: var(--poster-lembar-tinta); --tinta-2: var(--poster-lembar-tinta);
+  --garis: var(--poster-lembar-tinta); --garis-kuat: var(--poster-lembar-tinta);
+  --s: 0.42; position: absolute; top: 14px; left: 10px; width: calc((100% - 20px) / var(--s)); transform: scale(var(--s)); transform-origin: top left;
+  color: var(--poster-lembar-tinta); text-align: left; }
+.poster-ponsel-layar:has(> .layar-app) { position: relative; } /* isi layar tidak ikut menentukan ukuran HP gambar */
+@media (min-width: 900px) { .layar-app { --s: 0.5; } }
+.layar-app-judul { font-family: var(--font-papan); font-weight: 800; font-size: 30px; text-transform: uppercase; margin-bottom: 10px; }
+.layar-app-isi { display: grid; gap: 12px; }
+
+/* W-01: baris "Dipakai untuk" di halaman fitur. */
+.dipakai { display: grid; gap: 8px; }
+.dipakai-label { font-weight: 800; }
+.dipakai-daftar { display: flex; flex-wrap: wrap; gap: 8px; }
+.dipakai-daftar li { border: 2px solid currentColor; border-radius: 4px; padding: 4px 10px; font-weight: 700; font-size: 16px; }
