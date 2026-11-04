@@ -2619,8 +2619,10 @@
    "accept": "landing menampilkan >= 8 jenis berkas dan >= 6 jenis usaha; Coba sendiri 5 berkas berbeda jenis; setiap halaman fitur punya baris Dipakai untuk 4-6 kasus dari kode; gerbang tulisan + inspect.mjs 0 FAIL; e2e produksi lulus; HP di pengait, penggeser, dan pintu Feed memakai komponen aplikasi asli (KartuUsulan, Cap, Rupiah) dengan data sintetis",
    "how": "docs/research/rencana-luas-nadi.md W-01",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T18:52:56"
+   "status": "done",
+   "created": "2026-11-04T18:52:56",
+   "done": "2026-11-04T21:47:12",
+   "result": "92edd58: pengait 8 jenis berkas (nota, kuitansi, chat, Excel absen, surat dokter, slip, KTP, mutasi), pita 10 jenis usaha, Coba sendiri 5 berkas korpus (+absen-01, mutasi-01), HP di pengait/penggeser/pintu Feed memakai KartuUsulan+Cap+Rupiah asli, Dipakai untuk 4-6 kasus di 9 halaman fitur; inspect.mjs 0 FAIL (/, /en, /fitur/feed, /fitur/lempar); cek-tulisan LOLOS; e2e asap+bahasa+aksesibilitas 19/19 lokal, asap+asap-produksi lulus di produksi"
   },
   {
    "id": "W-02",
@@ -2647,8 +2649,10 @@
    "accept": "kolom perusahaan baru + tes SQL; formulir mulai id/en; skala menentukan fitur yang disarankan; e2e usaha luar Indonesia: gaji/pajak terkunci dengan alasan",
    "how": "docs/research/rencana-luas-nadi.md W-03",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T18:52:56"
+   "status": "done",
+   "created": "2026-11-04T18:52:56",
+   "done": "2026-11-04T21:47:12",
+   "result": "328be11: migrasi 20261104056000_konteks_usaha (md5 f6838085 cocok), tes SQL konteks_usaha 10/10; formulir Mulai id/en (skala, cabang, kota, negara, zona WIB/WITA/WIT), MYR + Asia/Kuala_Lumpur otomatis, Kompas Pajak dan Gaji terkunci dengan alasan di luar Indonesia; e2e konteks-usaha lulus lokal dan produksi, bahasa-akun lulus. Skala belum dipakai menyalakan fitur (dicatat untuk W-04/W-06)"
   },
   {
    "id": "W-04",
@@ -2745,8 +2749,10 @@
    "accept": "RPC laporan dengan tes SQL (neraca seimbang, laba rugi = perubahan ekuitas, periode terkunci), angka cocok dengan korpus transaksi sintetis yang dihitung tangan; e2e layar + ekspor",
    "how": "docs/research/mekari/rencana.md; menutup JU-01, JU-02, JU-18, LA-02; isi: Laporan keuangan baku dari ledger: neraca, laba rugi, arus kas (metode tidak langsung), buku besar, neraca saldo, umur piutang; saldo awal (isian + impor Excel), tutup buku tahunan, ekspor Excel/PDF; dasbor uang di /app (kas, piutang, laba bulan ini)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:53"
+   "status": "done",
+   "created": "2026-11-04T20:17:53",
+   "done": "2026-11-04T21:07:59",
+   "result": "0650cfd: migrasi 20261104054000_laporan_keuangan (md5 31c1e6da cocok), tes SQL laporan_keuangan 22/22 (neraca 8.700.000 seimbang, laba 1.100.000, arus kas cocok 4.500.000, tutup buku + kunci 12 bulan); /app/buku 6 laporan + CSV + cetak, kartu Uang usaha di Feed; e2e buku lulus lokal dan produksi nadi-swart; axe 390/1440 terang/gelap 0 serius. Impor saldo awal dari Excel dipindah ke M-24"
   },
   {
    "id": "M-02",
@@ -2759,8 +2765,10 @@
    "accept": "tes SQL kartu stok (masuk/keluar/transfer/opname, tidak minus kecuali diizinkan, HPP rata-rata cocok contoh tangan), jurnal persediaan seimbang, e2e buat produk sampai stok berkurang setelah invoice",
    "how": "docs/research/mekari/rencana.md; menutup JU-09, JU-10, JU-11, JU-13, JU-32; isi: Produk dan stok: produk/jasa, kategori, satuan + konversi, varian, bundle, barcode, harga bertingkat; gudang banyak, transfer, penyesuaian, stok opname dari foto/Excel lewat Lempar; nilai rata-rata tertimbang; HPP otomatis ke jurnal; batch/seri dan landed cost dari PIB",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:53"
+   "status": "done",
+   "created": "2026-11-04T20:17:53",
+   "done": "2026-11-04T21:08:00",
+   "result": "ccc60f0: migrasi 20261104055000_stok (md5 1e30107c), tes SQL stok 20/20 (rata-rata 1.300, transfer, opname, invoice HPP, dus=10 pcs, stok kurang ditolak, paket, batal kembali, 1-300 = nilai stok 20.700), regresi invoice 31/31; /app/barang + pilih produk di invoice; e2e barang + invoice lulus lokal, barang lulus produksi; sisa varian/harga bertingkat UI/rak/impor Excel = M-02B"
   },
   {
    "id": "M-03",
