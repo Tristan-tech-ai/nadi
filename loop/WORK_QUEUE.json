@@ -2467,8 +2467,10 @@
    "accept": "inspect.mjs Taste Skill pada produksi 0 FAIL di 1440/768/390; >= 4 gambar nyata atau potongan UI asli; judul <= 2 baris; axe 0 serius; Lighthouse mobile performa >= 90; e2e landing/asap/bahasa lulus di produksi; foto sebelum/sesudah di docs/design/iterasi/landing-2",
    "how": "docs/design/BELAJAR-NOV-2026.md bagian 4-5: inventaris, argumen, draw.mjs, bangun, inspect, kritik 3 putaran",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T16:41:00"
+   "status": "done",
+   "created": "2026-11-04T16:41:00",
+   "done": "2026-11-04T18:44:01",
+   "result": "commit b761323+3e66260, produksi https://nadi-swart.vercel.app: inspect.mjs 0 FAIL (sebelum 11), Lighthouse mobile performa 100 aksesibilitas 100, e2e produksi asap+asap-produksi+aksesibilitas 30 lulus, foto docs/design/iterasi/landing-2"
   },
   {
    "id": "D-21",
@@ -2573,8 +2575,38 @@
    "accept": "9 halaman id + en dengan templat lima bagian; menu Fitur bergambar (lembar penuh di HP); e2e navigasi; inspect.mjs 0 FAIL dan axe 0 serius per halaman; gerbang tulisan LOLOS",
    "how": "docs/design/RENCANA-NOV-2026.md langkah 5",
    "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-04T17:14:55",
+   "done": "2026-11-04T18:44:01",
+   "result": "9 halaman /fitur/* + /en/fitur/* (prerender), menu Fitur popover 9 pintu bergambar + lembar HP; e2e asap 'halaman fitur' 18 jalur status 200 judul <= 2 baris axe 0 serius terang/gelap; inspect /en/fitur/lempar dan /fitur/pajak 0 FAIL; gerbang tulisan LOLOS; commit b761323"
+  },
+  {
+   "id": "D-26",
+   "fase": "F6",
+   "kind": "build",
+   "priority": 3,
+   "size": "m",
+   "wajib": true,
+   "title": "Halaman pendukung (harga, keamanan, panduan, tentang, privasi, syarat, id+en) pindah ke sistem poster",
+   "accept": "6 halaman x 2 bahasa memakai KepalaPoster/KakiPoster dan lapangan poster; inspect.mjs 0 FAIL di /harga dan /panduan; axe 0 serius terang/gelap; e2e halaman pendukung dan bahasa lulus di produksi",
+   "how": "DESIGN.md mode Read: struktur untuk dibaca, lapangan warna untuk judul",
+   "blocked_by": "",
    "status": "ready",
-   "created": "2026-11-04T17:14:55"
+   "created": "2026-11-04T18:44:19"
+  },
+  {
+   "id": "D-27",
+   "fase": "F6",
+   "kind": "build",
+   "priority": 4,
+   "size": "s",
+   "wajib": true,
+   "title": "Craft floor aplikasi: seleksi, caret, cincin fokus, garis bawah tautan dari token",
+   "accept": "globals.css ::selection, caret-color, :focus-visible, text-underline-offset dari token di aplikasi; e2e aksesibilitas 'fokus terlihat' lulus untuk /app dan halaman publik; foto 390/1440 terang/gelap",
+   "how": "Impeccable craft-floor.md bagian Browser surfaces",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T18:44:19"
   }
  ]
 }
