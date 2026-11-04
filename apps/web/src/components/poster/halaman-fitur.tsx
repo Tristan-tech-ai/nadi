@@ -24,6 +24,7 @@ export function HalamanFitur({ slug, bahasa }: { slug: string; bahasa: Bahasa })
 
   return (
     <div lang={bahasa} className="poster medan-tinta">
+      <main id="isi">
       <section className={medan} aria-labelledby="judul-fitur">
         <KepalaPoster bahasa={bahasa} />
         <div className="bingkai pahlawan-fitur">
@@ -102,6 +103,7 @@ export function HalamanFitur({ slug, bahasa }: { slug: string; bahasa: Bahasa })
         </div>
       </section>
 
+      </main>
       <KakiPoster bahasa={bahasa} />
     </div>
   );

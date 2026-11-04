@@ -22,6 +22,7 @@ export function BerandaPoster({ bahasa }: { bahasa: Bahasa }) {
 
   return (
     <div lang={bahasa} className="poster medan-tinta">
+      <main id="isi">
       {/* 1. Pengait: kertas usaha yang kacau tersedot ke HP dan keluar sebagai kartu bercap (digerakkan gulir). */}
       <section className="pengait medan-kunyit" aria-labelledby="judul-utama">
         <div className="pengait-panggung">
@@ -191,6 +192,7 @@ export function BerandaPoster({ bahasa }: { bahasa: Bahasa }) {
         </div>
       </section>
 
+      </main>
       <KakiPoster bahasa={bahasa} />
     </div>
   );
