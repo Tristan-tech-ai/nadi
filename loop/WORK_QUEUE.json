@@ -1752,8 +1752,10 @@
    "accept": "fungsi sinyal per orang per minggu (beban > 1,5x rata-rata tim 3 minggu berturut-turut dengan n>=3, lintas topi >=2x dan >=3 kerja, izin sakit >=3 hari dan >=2x rata-rata 12 minggu) dihitung di zona usaha; kartu info untuk pemilik saja (untuk_peran {pemilik}, app.peran_aktif), idempoten per orang per minggu, teks angka tanpa kata berisiko/keluar dan tanpa alasan/bukti sakit; tes SQL (2 minggu tidak, tim 2 orang tidak, 0->1 lintas tidak, riwayat <12 minggu tanpa sinyal sakit, staf/admin 42501, JWT lama ditolak) + e2e + foto 390/1440 terang/gelap",
    "how": "docs/research/sinyal-risiko-beban.md, docs/design/sinyal-beban-layar.md; setelah Q-24 (zona) dan F3-06 bila jam jadwal diperlukan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T03:18:12"
+   "status": "done",
+   "created": "2026-11-01T03:18:12",
+   "done": "2026-11-04T07:42:27",
+   "result": "commit f27be06: migrasi sinyal_beban (sidik 61b4411c sama repo), tes SQL sinyal_beban 26/26 (merah dulu), KartuInfo di Feed (Lihat bebannya, Sudah ditangani lewat tandai_ditangani), kamus kartuInfo id/en, e2e beban-tim lokal + produksi nadi-fqvgvi62l READY lulus (axe 390/1440 terang/gelap, foto), bahasa-akun lulus, cron nadi-kartu-beban; docs/quality/sinyal-beban.md"
   },
   {
    "id": "Q-25",
