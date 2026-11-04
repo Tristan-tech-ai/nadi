@@ -2705,6 +2705,34 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-04T19:02:41"
+  },
+  {
+   "id": "W-08",
+   "fase": "F6",
+   "kind": "build",
+   "priority": 3,
+   "size": "m",
+   "wajib": true,
+   "title": "Pintu masuk data (webhook) per usaha untuk aplikasi lain dan pipeline n8n/Make/Zapier",
+   "accept": "endpoint POST per usaha dengan token nmi_ (hash, bisa dicabut, batas harian), JSON/CSV penjualan/pesanan/mutasi menjadi usulan; tes SQL isolasi + token dicabut ditolak; e2e kirim contoh jadi usulan; panduan contoh n8n dan Make",
+   "how": "docs/research/integrasi-aplikasi.md",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T19:07:20"
+  },
+  {
+   "id": "W-09",
+   "fase": "F6",
+   "kind": "build",
+   "priority": 6,
+   "size": "l",
+   "wajib": true,
+   "title": "Konektor marketplace TikTok Shop dan Shopee: pesanan harian jadi usulan penjualan",
+   "accept": "baca dokumentasi resmi dulu (LEARN.md); OAuth toko; tarik pesanan sandbox jadi usulan; tes; akun mitra dicatat di UNTUK-TRISTAN bila belum ada",
+   "how": "docs/research/integrasi-aplikasi.md",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T19:07:20"
   }
  ]
 }
