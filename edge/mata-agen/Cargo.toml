@@ -12,7 +12,6 @@ ureq = { version = "3.5.1", features = ["json"] }
 serde = { version = "1.0.229", features = ["derive"] }
 serde_json = "1.0.154"
 
+# Tanpa strip/LTO: biner Windows mingw yang di-strip ditandai Windows Defender sebagai "potentially unwanted software" (4 Nov 2026).
 [profile.release]
-opt-level = "s"
-lto = true
-strip = true
+opt-level = 3
