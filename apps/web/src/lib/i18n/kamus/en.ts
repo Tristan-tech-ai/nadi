@@ -2351,7 +2351,7 @@ export const kamusEn: Kamus = {
     geofenceAria: "Check-in location", titik: "Location point (latitude, longitude)", radius: "Radius (meters)", simpanGeofence: "Save location",
     kunciKet: "A locked month's check-ins, leave, and overtime cannot be changed. Lock it once that month's payroll is done.",
     belumTerkunci: "No month is locked yet.", daftarTerkunci: "Locked: {daftar}.", kunciAria: "Attendance lock",
-    bulan: "Month", tindakan: "Action", kunci: "Lock", buka: "Unlock", alasanBuka: "Reason for unlocking (required to unlock)", simpanKunci: "Save",
+    bulan: "Month", tindakan: "Action", kunci: "Lock", buka: "Reopen", alasanBuka: "Reason for reopening (required to reopen)", simpanKunci: "Save",
     lemburJudul: "Request overtime", lemburKet: "Overtime you request goes to the owner's Feed. Once approved it is recorded and paid on the payslip.",
     lemburAria: "Request overtime", tanggal: "Date", jenisHari: "Day type", jam: "Hours", alasan: "Reason", ajukanLembur: "Request overtime",
     jenisNama: { hari_kerja: "Working day", libur_pola_6_hari: "Day off (6-day week)", libur_pola_6_hari_jatuh_hari_kerja_terpendek: "Day off on the shortest working day", libur_pola_5_hari: "Day off (5-day week)" },
@@ -2359,7 +2359,7 @@ export const kamusEn: Kamus = {
   },
   waktuPesan: {
     titikRusak: "Write the point like -8.6705, 115.2126 and a whole-number radius.", geofenceAktif: "Check-in location saved. Radius {radius} m.", geofenceMati: "Check-in location limit turned off.",
-    terkunci: "That month is locked.", terbuka: "That month is unlocked.", lemburDiajukan: "Overtime requested. The owner decides in the Feed.", siagaTersimpan: "On-call mark saved.",
+    terkunci: "That month is locked.", terbuka: "That month is open again.", lemburDiajukan: "Overtime requested. The owner decides in the Feed.", siagaTersimpan: "On-call mark saved.",
     hanya: "You do not have permission for this.", gagal: "Not saved yet. Try again in a moment.", galatDb: "{pesan}",
   },
   demo: {

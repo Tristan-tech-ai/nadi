@@ -3157,8 +3157,10 @@
    "accept": "Lempar Excel daftar produk jadi usulan produk.impor dan Excel/foto hitungan jadi usulan opname (ekstraktor, korpus 3 berkas sintetis), layar varian (induk + atribut) dan harga bertingkat dipakai invoice, kolom rak/bin per stok; tes SQL + e2e",
    "how": "docs/research/mekari/rencana.md M-02; fitur.md JU-09..JU-11",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T21:04:58"
+   "status": "done",
+   "created": "2026-11-04T21:04:58",
+   "done": "2026-11-05T00:26:21",
+   "result": "8478980 + 8d64c74; migrasi 20261104061000_stok_lanjutan (md5 14b93db8 cocok), tes SQL stok_lanjutan 10/10 (lokasi, laporan per gudang, produk.impor dedup, stok.opname cocok kode/nama, isolasi); baca-berkas v14 jenis produk/opname (md5 4 berkas terdeploy = repo), korpus 3 berkas sintetis (Excel produk, Excel opname, foto lembar hitung) eval 3/3 docs/quality/eval-stok.md; layar varian + harga grosir dipakai invoice + lokasi rak + laporan stok per gudang; e2e stok-lanjut + barang produksi nadi-swart lulus; axe 0 serius 390/1440 terang/gelap"
   }
  ]
 }
