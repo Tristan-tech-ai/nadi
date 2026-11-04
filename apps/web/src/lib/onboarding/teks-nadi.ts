@@ -47,7 +47,7 @@ function uraiIzin(teks: string): Izin[] | null {
   const hasil = new Map<Izin["jenis"], Izin>();
   let terakhir: Izin["jenis"] | null = null;
   for (const k of teks.split(/[,;]/).map((s) => s.trim().toLowerCase()).filter(Boolean)) {
-    const jenis = (/\b(sakit|izin|cuti)\b/.exec(k)?.[1] as Izin["jenis"] | undefined) ?? terakhir;
+    const jenis: Izin["jenis"] | null = (/\b(sakit|izin|cuti)\b/.exec(k)?.[1] as Izin["jenis"] | undefined) ?? terakhir;
     if (!jenis) return null;
     terakhir = jenis;
     const z = hasil.get(jenis) ?? { jenis, otomatis: false, maks_hari: 0, butuh_bukti: false, jatah_tahunan: null };
@@ -75,7 +75,8 @@ export function uraiTeksNadi(masukan: string, hari: string): HasilUrai {
   const t = masukan.replace(/^﻿/, "").trim();
   if (!t) return { butir: [], baris: [], galat: "kosong" };
   if (t.startsWith("{")) return uraiJsonNadi(t, hari);
-  const garis = t.split(/\r?\n/);
+  // Model chat sering menebalkan atau memberi kode pada baris (Markdown): tandanya dibuang sebelum dibaca.
+  const garis = t.split(/\r?\n/).map((g) => g.replace(/\*\*|__|`/g, ""));
   const baris: BarisPratinjau[] = [];
   const butir: Butir[] = [];
   const mulai = garis.findIndex((g) => g.trim().toUpperCase() === KEPALA);
@@ -98,7 +99,7 @@ export function uraiTeksNadi(masukan: string, hari: string): HasilUrai {
       const tgl = /mulai\s+(\S+)/i.exec(sisa)?.[1];
       if (tgl && !tanggalSah(tgl, hari)) { catat(no, teks, "tanggal"); continue; }
       if (++orang > MAKS_ORANG) { catat(no, teks, "terlalu_banyak"); continue; }
-      butir.push(butirOrang({ nama: n, topi: topi.split(/[,/]/).map((s) => s.trim().toLowerCase()).filter((s) => s && s.length <= 40).slice(0, 5), mulai: tgl }));
+      butir.push(butirOrang({ nama: n, topi: topi.split(/,|\/|&|\+|\s+(?:dan|merangkap|sekaligus)\s+/i).map((s) => s.trim().toLowerCase()).filter((s) => s && s.length <= 40).slice(0, 5), mulai: tgl }));
       catat(no, teks);
       continue;
     }

@@ -2,6 +2,9 @@
 // Modern (2026-07-28): versi dan identitas klien di `_meta` setiap permintaan, header dicerminkan dan wajib cocok.
 // Lama (2025-xx): jabat tangan `initialize`; dilayani tanpa sesi (tidak mencetak Mcp-Session-Id).
 // Murni: akses database lewat `rpc` yang disuntikkan, jadi bisa diuji tanpa jaringan.
+import { createHash } from "node:crypto";
+import { PROMPT_ONBOARDING } from "@/lib/onboarding/prompt";
+import { uraiTeksNadi } from "@/lib/onboarding/teks-nadi";
 
 export const VERSI_MODERN = "2026-07-28";
 export const VERSI_LAMA = ["2025-11-25", "2025-06-18", "2025-03-26"] as const;
@@ -22,7 +25,7 @@ type Siapa = { peran: string; cakupan: string[]; usaha: { nama: string } };
 
 const INSTRUKSI =
   "Nadi: sistem kerja usaha (orang, usulan, uang, absen). Mulai dengan siapa_saya untuk melihat usaha, peran, dan izin token. " +
-  "Semua perubahan dari asisten AI menjadi usulan lewat buat_usulan dan baru berlaku setelah disetujui pemilik atau admin di aplikasi Nadi. " +
+  "Semua perubahan dari asisten AI menjadi usulan lewat buat_usulan atau usul_onboarding (menyiapkan usaha dari dokumen pengguna) dan baru berlaku setelah disetujui pemilik atau admin di aplikasi Nadi. " +
   "Rupiah ditulis sebagai angka utuh, tanggal YYYY-MM-DD.";
 const INFO = { name: "nadi", title: "Nadi", version: "0.9.1" };
 const KAPABILITAS = { tools: { listChanged: false }, resources: {}, prompts: { listChanged: false } };
@@ -38,7 +41,21 @@ type Alat = {
   fungsi: string;
   param: (a: Record<string, unknown>) => Record<string, unknown>;
   bungkus?: string;
+  /** Tambahan untuk hasil alat (mis. baris cetak biru yang ditolak) dihitung dari argumen. */
+  tambahan?: (a: Record<string, unknown>) => Record<string, unknown>;
 };
+
+// Tanggal "hari ini" paling timur di Indonesia, supaya tanggal mulai hari ini di WIT tidak dianggap masa depan.
+const hariIniTimur = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jayapura" }).format(new Date());
+const ALASAN_TOLAK: Record<string, string> = { nik: "berisi NIK atau nomor panjang", uang: "berisi angka uang atau gaji", perintah: "berisi perintah, bukan data",
+  nama: "nama tidak sah", tanggal: "tanggal bukan YYYY-MM-DD atau di masa depan", tak_dikenal: "baris tidak dikenal", negara: "negara belum didukung",
+  fitur: "fitur tidak dikenal", izin: "aturan izin tidak dipahami atau di luar batas", terlalu_banyak: "lebih dari 60 orang", kosong: "teks kosong",
+  json: "JSON rusak", tanpa_kepala: "baris pertama harus NADI ONBOARDING 1" };
+function cetakBiru(a: Record<string, unknown>) {
+  const h = uraiTeksNadi(String(a.teks ?? ""), hariIniTimur());
+  const ditolak = h.baris.filter((b) => !b.dikenali).map((b) => ({ baris: b.no, teks: b.teks.slice(0, 120), alasan: ALASAN_TOLAK[b.alasan ?? ""] ?? b.alasan }));
+  return { h, ditolak };
+}
 
 const objek = (properties: Record<string, unknown>, required: string[] = []) => ({
   type: "object", properties, ...(required.length ? { required } : {}), additionalProperties: false,
@@ -93,6 +110,29 @@ export const ALAT: Alat[] = [
     annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
     param: (a) => ({ p_aksi: a.aksi, p_judul: a.judul, p_penjelasan: a.penjelasan ?? null, p_bidang: a.bidang ?? {}, p_dampak_rp: a.dampak_rp ?? null }),
   },
+  {
+    name: "usul_onboarding", title: "Siapkan usaha dari dokumen", cakupan: "nadi.usul", fungsi: "mcp_usul_onboarding",
+    description:
+      "Siapkan usaha di Nadi dari dokumen pengguna (daftar karyawan, struktur, aturan kerja) dengan mengirim Teks Nadi: baris pertama NADI ONBOARDING 1, " +
+      "lalu USAHA, JENIS, KOTA | NEGARA | ORANG | CABANG, ORANG: (satu orang per baris: - nama | peran kerja | mulai YYYY-MM-DD), FITUR, ATURAN IZIN. " +
+      "JSON setara juga diterima. Setiap baris menjadi usulan di Feed yang harus disetujui pemilik atau admin. Jangan menulis gaji, nominal uang, rekening, atau NIK: baris seperti itu ditolak. " +
+      "Hasil menyebut jumlah usulan dan baris yang ditolak beserta alasannya.",
+    inputSchema: objek({
+      teks: { type: "string", minLength: 18, maxLength: 20000, description: "Teks Nadi (atau JSON dengan nadi_onboarding: 1)" },
+      kunci: { type: "string", minLength: 8, maxLength: 100, description: "Opsional. Kunci yang sama tidak menggandakan usulan; bawaan dihitung dari teks." },
+    }, ["teks"]),
+    annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    param: (a) => {
+      const { h, ditolak } = cetakBiru(a);
+      if (h.galat || !h.butir.length) {
+        const sebab = h.galat ? (ALASAN_TOLAK[h.galat] ?? h.galat) : ditolak.map((d) => `baris ${d.baris}: ${d.alasan}`).join("; ");
+        throw new RpcGalat(`Tidak ada baris yang bisa dijadikan usulan. ${sebab}`.slice(0, 480), "22023");
+      }
+      const kunci = typeof a.kunci === "string" && a.kunci.length >= 8 ? a.kunci : createHash("sha256").update(String(a.teks)).digest("hex").slice(0, 40);
+      return { p_butir: h.butir, p_kunci: kunci };
+    },
+    tambahan: (a) => ({ ditolak: cetakBiru(a).ditolak }),
+  },
 ];
 
 /** Daftar alat untuk pemanggil ini: alat pengelola disembunyikan dari staf, alat tulis dari token tanpa nadi.usul. Urutan tetap. */
@@ -125,6 +165,13 @@ export const PROMPT: Prompt[] = [
     arguments: [{ name: "catatan", description: "Catatan bebas, mis. hasil obrolan dengan karyawan atau pemasok", required: true }],
     description: "Ubah catatan bebas menjadi usulan Nadi yang menunggu persetujuan.",
     teks: (a) => `Ubah catatan berikut menjadi usulan Nadi lewat alat buat_usulan. Satu usulan per hal yang perlu dicatat, aksi dipilih dari orang.buat, uang.keluar, izin.sakit, atau catatan. Judul diawali kata kerja, rupiah sebagai angka utuh, tanggal YYYY-MM-DD, tanpa NIK. Sebutkan usulan apa saja yang kamu buat.\n\nCatatan:\n${a.catatan}`,
+  },
+  {
+    name: "siapkan_usaha", title: "Siapkan usaha dari dokumen", cakupan: "nadi.usul", arguments: [],
+    description: "Baca dokumen usahamu (daftar karyawan, aturan kerja) lalu siapkan Nadi lewat usulan yang kamu setujui.",
+    teks: () => `${PROMPT_ONBOARDING}
+
+Setelah blok selesai, kirim isinya ke alat usul_onboarding (argumen teks), lalu sebutkan berapa usulan dibuat dan baris mana yang ditolak beserta alasannya. Ingatkan saya membuka Feed Nadi untuk menyetujui.`,
   },
 ];
 
@@ -235,7 +282,8 @@ export async function tangani(h: Headers, body: unknown, rpc: Rpc, token: string
         const a = (params.arguments && typeof params.arguments === "object" ? params.arguments : {}) as Record<string, unknown>;
         try {
           const keluar = await rpc(alat.fungsi, { p_token: token, p_resource: resource, ...alat.param(a) });
-          const terstruktur = alat.bungkus ? { [alat.bungkus]: keluar } : keluar;
+          const dasar = alat.bungkus ? { [alat.bungkus]: keluar } : keluar;
+          const terstruktur = alat.tambahan && dasar && typeof dasar === "object" ? { ...(dasar as Record<string, unknown>), ...alat.tambahan(a) } : dasar;
           return selesai({ content: [{ type: "text", text: JSON.stringify(terstruktur) }], structuredContent: terstruktur, isError: false });
         } catch (e) {
           if (!(e instanceof RpcGalat)) throw e;

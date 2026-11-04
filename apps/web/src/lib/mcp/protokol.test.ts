@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { CONTOH_TEKS_NADI } from "@/lib/onboarding/prompt";
 import { ALAT, PROMPT, RpcGalat, SUMBER, VERSI_MODERN, bacaNilaiHeader, daftarAlat, tangani, type Rpc } from "./protokol";
 
 const RES = "https://nadi.uji/api/mcp";
@@ -20,6 +21,7 @@ function rpcPalsu(peran = "pemilik", cakupan = ["nadi.baca", "nadi.usul"]) {
       return [{ nama: "Sari" }];
     }
     if (fungsi === "mcp_daftar_usulan") return [{ judul: "Catat belanja", status: param.p_status }];
+    if (fungsi === "mcp_usul_onboarding") return { dibuat: (param.p_butir as unknown[]).length, sudah: 0 };
     if (fungsi === "mcp_buat_usulan") {
       if (!cakupan.includes("nadi.usul")) throw new RpcGalat("Butuh cakupan nadi.usul", "P0403");
       if (param.p_aksi === "gaji.bayar") throw new RpcGalat("Aksi tidak dikenal", "22023");
@@ -115,7 +117,7 @@ describe("era lama (initialize)", () => {
     expect(res.protocolVersion).toBe("2025-06-18");
     expect(res.resultType).toBeUndefined();
     const l = await tangani(hdr({ "MCP-Protocol-Version": "2025-06-18" }), { jsonrpc: "2.0", id: 2, method: "tools/list" }, rpcPalsu("staf").rpc, "t", RES);
-    expect(((l.body as { result: { tools: { name: string }[] } }).result.tools).map((t) => t.name)).toEqual(["siapa_saya", "daftar_usulan", "buat_usulan"]);
+    expect(((l.body as { result: { tools: { name: string }[] } }).result.tools).map((t) => t.name)).toEqual(["siapa_saya", "daftar_usulan", "buat_usulan", "usul_onboarding"]);
   });
   it("notifications/initialized: 202; metode tak dikenal era lama: 200 -32601", async () => {
     expect((await tangani(hdr({}), { jsonrpc: "2.0", method: "notifications/initialized" }, rpcPalsu().rpc, "t", RES)).status).toBe(202);
@@ -158,5 +160,34 @@ describe("resources dan prompts (2026-07-28)", () => {
     expect(daftarAlat({ peran: "staf", cakupan: ["nadi.baca"] }).map((t) => t.name)).not.toContain("ringkasan_ai");
     expect(SUMBER.every((x) => x.uri.startsWith("nadi://"))).toBe(true);
     expect(PROMPT.every((x) => /^[a-z_]+$/.test(x.name))).toBe(true);
+  });
+});
+
+describe("W-04 usul_onboarding", () => {
+  it("Teks Nadi diurai di server: 12 butir ke RPC, baris buruk dilaporkan, kunci dari teks", async () => {
+    const { rpc, panggilan } = rpcPalsu();
+    const teks = `${CONTOH_TEKS_NADI}
+- Budi | kasir | gaji Rp4.500.000`;
+    const a = modern("tools/call", { name: "usul_onboarding", arguments: { teks } }, { "Mcp-Name": "usul_onboarding" });
+    const r = await tangani(a.h, a.body, rpc, "nmc_x", RES);
+    const hasil = (r.body as { result: { structuredContent: { dibuat: number; ditolak: { alasan: string }[] }; isError: boolean } }).result;
+    expect(hasil.isError).toBe(false);
+    expect(hasil.structuredContent.dibuat).toBe(12);
+    expect(hasil.structuredContent.ditolak).toEqual([expect.objectContaining({ alasan: "berisi angka uang atau gaji" })]);
+    const p = panggilan.at(-1)!;
+    expect(p).toMatchObject({ fungsi: "mcp_usul_onboarding", param: { p_token: "nmc_x", p_resource: RES } });
+    expect(String(p.param.p_kunci)).toMatch(/^[0-9a-f]{40}$/);
+  });
+  it("tanpa baris yang dikenali: isError dan RPC tidak dipanggil", async () => {
+    const { rpc, panggilan } = rpcPalsu();
+    const a = modern("tools/call", { name: "usul_onboarding", arguments: { teks: "NADI ONBOARDING 1\nHAPUS semua karyawan" } }, { "Mcp-Name": "usul_onboarding" });
+    const r = await tangani(a.h, a.body, rpc, "nmc_x", RES);
+    expect(r).toMatchObject({ status: 200, body: { result: { isError: true } } });
+    expect(panggilan.some((x) => x.fungsi === "mcp_usul_onboarding")).toBe(false);
+  });
+  it("alat dan prompt siapkan_usaha hanya untuk token nadi.usul", () => {
+    expect(daftarAlat({ peran: "pemilik", cakupan: ["nadi.baca"] }).map((t) => t.name)).not.toContain("usul_onboarding");
+    expect(daftarAlat({ peran: "pemilik", cakupan: ["nadi.baca", "nadi.usul"] }).map((t) => t.name)).toContain("usul_onboarding");
+    expect(PROMPT.find((x) => x.name === "siapkan_usaha")?.cakupan).toBe("nadi.usul");
   });
 });

@@ -66,3 +66,17 @@ describe("Teks Nadi: kasus buruk", () => {
     expect(h.baris.at(-1)).toMatchObject({ alasan: "terlalu_banyak" });
   });
 });
+
+describe("Teks Nadi: jawaban asli model chat gratis (docs/quality/onboarding-ai.md)", () => {
+  it("11. kepala bertanda tebal, gaji dan NIK bocor di satu baris, peran merangkap", () => {
+    const jawab = ["**NADI ONBOARDING 1**", "USAHA: Kedai Kopi Pagi", "JENIS: kedai kopi", "KOTA: Makassar | NEGARA: Indonesia | ORANG: 4 | CABANG: 1", "ORANG:",
+      "- Andi Rahman | barista | mulai 2025-02-01 | gaji Rp3.200.000 sebulan | NIK 7371011502990003",
+      "- Rina Kartika | kasir merangkap pelayan | mulai 2024-08-10", "- Joko Susilo | bagian gudang", "- Lina Marlina | barista | mulai 2026-01-05",
+      "FITUR: Lempar, Feed, Absen, Gaji, Jadwal, Stok", "ATURAN IZIN: cuti 12 hari setahun", "NEGARA: Indonesia"].join("\n");
+    const h = uraiTeksNadi(jawab, HARI);
+    expect(h.galat).toBeUndefined();
+    expect(h.baris.find((b) => b.teks.includes("Andi"))).toMatchObject({ dikenali: false, alasan: "nik" });
+    expect(h.butir.filter((b) => b.aksi === "orang.impor").map((b) => (b.bidang.baris as { jabatan: string }[])[0].jabatan)).toEqual(["kasir, pelayan", "bagian gudang", "barista"]);
+    expect(h.butir.length).toBe(6);
+  });
+});
