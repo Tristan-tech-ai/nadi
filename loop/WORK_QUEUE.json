@@ -1924,8 +1924,10 @@
    "accept": "butir ilmu paket serah terima bisa direkam lewat tautan di HP orang itu (jalur berkas serah/<berhenti>), transkrip whisper di perangkat penerima (pola F2-03), langkah SOP disarankan model ringan lewat Edge Function sebagai masukan tak tepercaya (klip asli selalu tampil); tes SQL hak (hanya orang itu merekam butir ilmunya), e2e mic palsu, foto 390/1440 + axe",
    "how": "docs/research/serah-terima-sql.md bagian Rekam Ilmu; docs/design/serah-terima-layar.md bagian 2",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T10:04:40"
+   "status": "done",
+   "created": "2026-11-01T10:04:40",
+   "done": "2026-11-04T09:05:50",
+   "result": "commit 773fc1f (+ 516c3be, f062416, 0a2e87f): Rekam Ilmu: /app/ilmu rekam staf, klip/transkrip/susun langkah/edit di Serah terima, Edge Function langkah-ilmu, 3 migrasi sidik sama; tes SQL rekam_ilmu 19/19 + langkah_ilmu 9/9, vitest 5/5, e2e rekam-ilmu lokal + produksi nadi-mkh65qtcd lulus (mic palsu, model nyata, axe 390/1440); docs/quality/rekam-ilmu.md"
   },
   {
    "id": "F3-07D",
