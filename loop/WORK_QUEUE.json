@@ -2781,8 +2781,10 @@
    "accept": "dokumen saling terkait (penawaran > pesanan > surat jalan > invoice) dengan jurnal yang benar per tahap; tes SQL; e2e alur lengkap; cetak A4",
    "how": "docs/research/mekari/rencana.md; menutup JU-03, JU-04, JU-08, JU-23; isi: Siklus penjualan: penawaran, pesanan, surat jalan, invoice (yang ada), uang muka, retur/nota kredit, pro forma, progress invoice, invoice gabungan, pemotongan PPh oleh pembeli, templat invoice berlogo, syarat dan cara bayar; daftar kontak pelanggan dengan saldo",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:53"
+   "status": "done",
+   "created": "2026-11-04T20:17:53",
+   "done": "2026-11-04T22:07:31",
+   "result": "c906ba5 + b68f1ba: migrasi 20261104057000_siklus_jual (md5 4b29d5a4 cocok), tes SQL siklus_jual 26/26 (penawaran>pesanan>uang muka 20.000>surat jalan>invoice, retur 2.500 HPP balik 1.000, lunas dipotong PPh 23 750, piutang/uang muka kembali 0, termin 40/60), regresi invoice inti 8/8; /app/jual + cetak A4 /cetak/jual/[id] (pro forma), retur dan potongan PPh di /app/invoice, saldo per pelanggan; e2e jual + invoice + barang lulus lokal, jual lulus produksi (percobaan pertama setelah deploy gagal sekali, dua ulangan lulus)"
   },
   {
    "id": "M-04",

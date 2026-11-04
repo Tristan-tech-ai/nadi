@@ -300,3 +300,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 4 Nov 2026 tick 282: D-19, D-23, Q-40, D-24, D-20, D-25 selesai; landing poster + 9 halaman fitur di produksi (inspect 0 FAIL, Lighthouse 100/100); wajib 117/121.
 - 4 Nov 2026 tick 283: rencana luas (W-01..W-09), riset integrasi aplikasi dan enkripsi; loop berhenti menunggu Tristan.
 - 4 Nov 2026 tick 284: R-MEKARI selesai (docs/research/mekari/, 2.159 artikel, 1.315 endpoint, 134 kemampuan, rencana M-01..M-27); loop dilanjutkan; wajib 118/158.
+- 4 Nov 2026 tick 285: M-01, M-02, W-01, W-03, M-03 selesai (5 wajib, semua diuji produksi); BOBOT ITERASI ditegakkan wake_guard; wajib 123/159.
