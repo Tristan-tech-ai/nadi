@@ -16,3 +16,13 @@ Ditulis 1 Nov 2026. Supabase Free tidak punya cadangan otomatis (loop/LEARN.md, 
 
 ## Kriteria terima (antrean)
 pg_cron mingguan memanggil Edge Function yang mengekspor tabel usaha (JSON per tabel, tanpa kolom rahasia mentah) ke bucket cadangan pribadi; satu cadangan nyata tersimpan dan bisa dipulihkan ke skema uji (tes pemulihan tercatat); cadangan lebih dari 8 minggu dirotasi.
+
+## Pembaruan 4 Nov 2026 (sebelum kode; menggantikan butir 2, 3, 5 di atas bila bertentangan)
+Dibaca ulang: docs Supabase Storage Buckets (https://supabase.com/docs/guides/storage/buckets/fundamentals, diakses 4 Nov 2026: bucket privat bawaan, semua operasi lewat RLS) dan isi tabel public sebenarnya (57 tabel dasar).
+- **Jalur**: satu folder per minggu `AAAA-BB-HH/<tabel>.json` untuk semua usaha + `manifest.json` (tabel, baris, byte). Pemulihan satu usaha cukup menyaring `perusahaan_id`.
+- **Tabel**: otomatis semua tabel dasar public yang punya `perusahaan_id`, ditambah `perusahaan`. Tidak ikut: kredensial (`mcp_token`, `oauth_kode`, `oauth_klien`, `langganan_push`), log dan turunan (`kejadian`, `audit_log`, `ringkasan_harian`, `pemakaian_ai`), konfigurasi platform tanpa `perusahaan_id` (sumbernya migrasi).
+- **Kolom dibuang**: `token_status`, `token_hash`, `kode_hash`. NIK/rekening tidak pernah disimpan mentah (hash + 4 digit), jadi `orang_rahasia` ikut; rahasia TOTP (`app.rahasia_tempat`), Vault, dan skema `auth` tidak pernah ikut.
+- **Ekspor di SQL**: `public.cadangan_daftar()` dan `public.cadangan_tabel(p_tabel)` SECURITY DEFINER, hanya `service_role`.
+- **Rotasi**: folder lebih tua dari 56 hari dihapus, tetapi 8 folder terbaru selalu disimpan, dan rotasi hanya setelah cadangan minggu itu lengkap.
+- **Uji pulih**: aksi `uji_pulih` mengunduh folder terbaru, `public.cadangan_uji_pulih(p_tabel, p_isi)` membuat tabel sementara (`on commit drop`) dari `jsonb_populate_recordset(null::public.<tabel>, isi)` dan memeriksa jumlah baris + id unik; hasil di `app.cadangan_log` (jenis `pulih`). Data public tidak diubah.
+- **Batas jujur**: cadangan ada di proyek Supabase yang sama (melindungi dari salah hapus dan migrasi rusak, bukan dari hilangnya proyek); berkas bucket `berkas` tidak disalin.
