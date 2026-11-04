@@ -29,6 +29,8 @@ step slop-uji python -I scripts/cek-slop.py --selftest
 step slop python -I scripts/cek-slop.py
 step tulisan-uji python -I scripts/cek-tulisan.py --selftest
 step tulisan python -I scripts/cek-tulisan.py
+step mekari-uji python -I docs/research/mekari/alat/cek_cakupan.py --selftest
+step mekari python -I docs/research/mekari/alat/cek_cakupan.py
 if [ -f package.json ] && [ -d apps/web ]; then
   step lint pnpm -s lint
   step tipe pnpm -s typecheck

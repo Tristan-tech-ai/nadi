@@ -1,0 +1,51 @@
+{
+ "expense": {
+  "kategori": 15,
+  "bagian": 31,
+  "artikel": 102,
+  "artikel_berjalur": 88,
+  "elemen_layar": 406
+ },
+ "jurnal": {
+  "kategori": 24,
+  "bagian": 176,
+  "artikel": 488,
+  "artikel_berjalur": 414,
+  "elemen_layar": 1249
+ },
+ "klikpajak": {
+  "kategori": 14,
+  "bagian": 55,
+  "artikel": 222,
+  "artikel_berjalur": 197,
+  "elemen_layar": 56
+ },
+ "mekari": {
+  "kategori": 9,
+  "bagian": 74,
+  "artikel": 132,
+  "artikel_berjalur": 105,
+  "elemen_layar": 254
+ },
+ "qontak": {
+  "kategori": 18,
+  "bagian": 64,
+  "artikel": 422,
+  "artikel_berjalur": 344,
+  "elemen_layar": 1165
+ },
+ "sign": {
+  "kategori": 15,
+  "bagian": 43,
+  "artikel": 96,
+  "artikel_berjalur": 80,
+  "elemen_layar": 298
+ },
+ "talenta": {
+  "kategori": 23,
+  "bagian": 131,
+  "artikel": 697,
+  "artikel_berjalur": 596,
+  "elemen_layar": 3466
+ }
+}
