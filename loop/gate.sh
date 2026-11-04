@@ -27,6 +27,8 @@ step penjaga python -I loop/hooks/wake_guard.py selftest
 step macet python -I loop/hooks/macet_guard.py selftest
 step slop-uji python -I scripts/cek-slop.py --selftest
 step slop python -I scripts/cek-slop.py
+step tulisan-uji python -I scripts/cek-tulisan.py --selftest
+step tulisan python -I scripts/cek-tulisan.py
 if [ -f package.json ] && [ -d apps/web ]; then
   step lint pnpm -s lint
   step tipe pnpm -s typecheck
