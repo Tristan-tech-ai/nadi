@@ -3,6 +3,7 @@
 import { randomUUID } from "node:crypto";
 import { headers } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { formatRupiah } from "@/lib/format";
 import { asalTautan } from "@/lib/mcp/http";
 import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
@@ -121,4 +122,34 @@ export async function buatTautanKeluar(_: HasilKeluar, form: FormData): Promise<
   if (error) return { galat: error.code === "42501" ? t.hanyaPemilik : error.code === "23505" ? t.sudahDijawab : t.gagal };
   revalidatePath("/app/serah-terima");
   return { tautan: `${asalTautan(await headers())}/keluar#${data as string}` };
+}
+
+/** F3-07E: ajukan hak keuangan (gaji terakhir, sisa cuti, uang pisah) sebagai usulan Feed untuk pemilik. Nadi tidak membayar. */
+export async function ajukanHak(_: HasilSerah, form: FormData): Promise<HasilSerah> {
+  const bahasa = await bahasaAplikasi();
+  const t = ambilKamus(bahasa).hakPesan;
+  const isian = Object.fromEntries(["berhenti", "gaji_akhir", "cuti", "uang_pisah", "cuti_hari", "upah_harian", "dasar_gaji"].map((k) => [k, String(form.get(k) ?? "").trim()]));
+  const rupiah = (s: string) => (s === "" ? null : /^[\d.\s]+$/.test(s) ? Number(s.replace(/[.\s]/g, "")) : Number.NaN);
+  const gaji = rupiah(isian.gaji_akhir);
+  const cuti = rupiah(isian.cuti);
+  const pisah = rupiah(isian.uang_pisah);
+  if ([gaji, cuti, pisah].some((x) => x !== null && !Number.isSafeInteger(x))) return { galat: t.angka, isian };
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("ajukan_hak_berhenti", {
+    p_berhenti: isian.berhenti,
+    p_rincian: {
+      gaji_akhir: gaji ?? 0, cuti, uang_pisah: pisah, dasar_gaji: isian.dasar_gaji || null,
+      cuti_hari: cuti !== null && isian.cuti_hari ? Number(isian.cuti_hari) : null,
+      upah_harian: cuti !== null && isian.upah_harian ? Number(isian.upah_harian) : null,
+    },
+  });
+  if (error) {
+    const galat = error.code === "42501" ? t.hanyaPemilik : ["22023", "P0002", "23505"].includes(error.code ?? "") ? (bahasa === "id" ? error.message : isiTeks(t.galatDb, { pesan: error.message })) : t.gagal;
+    return { galat, isian };
+  }
+  const r = data as { total: number; baru: boolean };
+  revalidatePath("/app/serah-terima");
+  revalidatePath("/app");
+  const total = formatRupiah(Number(r.total), { bahasa });
+  return { pesan: isiTeks(r.baru ? t.terkirim : t.diperbarui, { total }) };
 }

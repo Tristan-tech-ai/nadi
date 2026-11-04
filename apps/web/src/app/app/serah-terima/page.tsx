@@ -5,9 +5,12 @@ import { IlustrasiKunci } from "@/components/ilustrasi";
 import { FormBatalBerhenti, FormCatatBerhenti, FormCentang, FormPengganti, FormPindahkan } from "@/components/app/serah-terima";
 import { IlmuPemilik, type IlmuTampil } from "@/components/app/ilmu-pemilik";
 import { TautanKeluar } from "@/components/app/wawancara-keluar";
+import { FormHakBerhenti } from "@/components/app/hak-berhenti";
+import type { DataGaji, PetaAturan } from "@/lib/gaji/susun";
+import { hitungHak, type HasilHak, type Pola } from "@/lib/serah/hak";
 import type { ModelTranskrip } from "@/lib/wawancara/transkrip";
 import { Cap } from "@/components/ui/cap";
-import { formatTanggal, formatTanggalKalender } from "@/lib/format";
+import { formatRupiah, formatTanggal, formatTanggalKalender } from "@/lib/format";
 import { ambilKamus, isiTeks, type Kamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { sisip } from "@/lib/i18n/sisip";
@@ -26,9 +29,51 @@ type Berhenti = { id: string; orang_id: string; tanggal_surat: string; tanggal_e
 type Butir = { id: string; berhenti_id: string; jenis: "kerja" | "topi" | "ilmu" | "akses_otomatis" | "akses_manual"; judul: string; status: string; pengganti_id: string | null; durasi_detik: number | null;
   transkrip: string | null; langkah: string[] | null; langkah_sumber: "model" | "pemilik" | null; berkas: { jalur: string } | null };
 
+type BahanHak = {
+  alasan: string; tanggal_efektif: string; gaji: DataGaji | null; pola: Pola; pembagi: { pola_6_hari: number; pola_5_hari: number } | null;
+  jatah_cuti: number | null; cuti_terpakai: number; uang_pisah: number | null; usulan: { id: string; status: string; total: number } | null;
+};
+type Hak = { bahan: BahanHak; hasil: HasilHak };
+
+/** F3-07E: hak keuangan, hanya untuk pemilik. Angka saran (bisa diubah) lalu satu usulan Feed; Nadi tidak membayar. */
+function BagianHak({ id, hak, t, bahasa }: { id: string; hak: Hak; t: Kamus["hakBerhenti"]; bahasa: "id" | "en" }) {
+  const { bahan: b, hasil: h } = hak;
+  const rp = (n: number) => formatRupiah(n, { bahasa });
+  const tgl = formatTanggalKalender(b.tanggal_efektif, bahasa);
+  const u = b.usulan;
+  return (
+    <section data-testid="hak-berhenti">
+      <h3 className="mt-6 font-semibold">{t.judul}</h3>
+      <ul className="mt-1 grid gap-1 text-sm text-tinta-2" data-testid="rincian-hak">
+        {h.gajiAkhir && h.pembagi
+          ? <li>{isiTeks(t.gajiAkhir, { tanggal: tgl, hari: h.hariKerja, pembagi: h.pembagi, pola: b.pola === "5_hari" ? 5 : 6, bruto: rp(h.gajiAkhir.bruto), potongan: rp(h.gajiAkhir.potongan), neto: rp(h.gajiAkhir.neto) })} {t.libur}</li>
+          : <li>{t.tanpaGaji}</li>}
+        {h.cuti === null ? <li>{t.jatahBelum}</li> : h.cuti.nilai !== null && h.upahHarian !== null
+          ? <li data-testid="sisa-cuti">{isiTeks(t.sisaCuti, { sisa: h.cuti.sisa, jatah: h.cuti.jatah, terpakai: h.cuti.terpakai, upah: rp(h.upahHarian), nilai: rp(h.cuti.nilai) })}</li>
+          : null}
+        {h.pembagi ? <li>{isiTeks(t.rumus, { pembagi: h.pembagi })}</li> : null}
+        <li data-testid="pesangon">{h.pesangon === "tidak_berlaku" ? t.pesangonTidak : t.pesangonBelum}</li>
+      </ul>
+      {u && (
+        <p className="mt-2 text-sm" data-testid="status-hak" data-status={u.status}>
+          {u.status === "menunggu" ? <>{isiTeks(t.menunggu, { total: rp(Number(u.total)) })} <a href="/app" className="font-semibold underline underline-offset-4">{t.bukaFeed}</a></>
+            : u.status === "ditolak" ? t.ditolak : isiTeks(t.disetujui, { total: rp(Number(u.total)) })}
+        </p>
+      )}
+      {(!u || u.status === "menunggu" || u.status === "ditolak") && (
+        <FormHakBerhenti berhenti={id} teks={t} saran={{
+          gaji: h.gajiAkhir?.neto ?? null,
+          dasarGaji: h.gajiAkhir && h.pembagi ? `${h.hariKerja} hari kerja dari ${h.pembagi}, dibayar setelah potongan slip ${formatRupiah(h.gajiAkhir.potongan)}` : "",
+          cuti: h.cuti?.nilai ?? null, cutiHari: h.cuti?.sisa ?? null, upahHarian: h.upahHarian, uangPisah: b.uang_pisah,
+        }} />
+      )}
+    </section>
+  );
+}
+
 const selisihHari = (a: string, b: string) => Math.round((Date.parse(`${b}T00:00:00Z`) - Date.parse(`${a}T00:00:00Z`)) / 86_400_000);
 
-function Paket({ b, butir, orang, hari, t, bahasa, url, model, tIlmu, keluar, tKeluar, pemilik, zona }: { b: Berhenti; butir: Butir[]; orang: { id: string; nama: string }[]; hari: string; t: Kamus["serahTerima"]; bahasa: "id" | "en"; url: Map<string, string>; model: ModelTranskrip | null; tIlmu: Kamus["ilmuPemilik"]; keluar: Keluar | undefined; tKeluar: Kamus["wkPemilik"]; pemilik: boolean; zona: string }) {
+function Paket({ b, butir, orang, hari, t, bahasa, url, model, tIlmu, keluar, tKeluar, pemilik, zona, hak, tHak }: { hak: Hak | undefined; tHak: Kamus["hakBerhenti"]; b: Berhenti; butir: Butir[]; orang: { id: string; nama: string }[]; hari: string; t: Kamus["serahTerima"]; bahasa: "id" | "en"; url: Map<string, string>; model: ModelTranskrip | null; tIlmu: Kamus["ilmuPemilik"]; keluar: Keluar | undefined; tKeluar: Kamus["wkPemilik"]; pemilik: boolean; zona: string }) {
   const ALASAN: Record<string, string> = { mundur: t.aMundur, kontrak_selesai: t.aKontrak, lainnya: t.aLain };
   const isiLang = bahasa === "id" ? undefined : "id";
   // Judul butir ditulis Nadi/pengguna dalam bahasa Indonesia; nama orang adalah data pengguna.
@@ -123,7 +168,7 @@ function Paket({ b, butir, orang, hari, t, bahasa, url, model, tIlmu, keluar, tK
           )}
         </section>
       )}
-      <p className="mt-6 text-sm text-tinta-2">{t.hakKeuangan}</p>
+      {pemilik && hak ? <BagianHak id={b.id} hak={hak} t={tHak} bahasa={bahasa} /> : <p className="mt-6 text-sm text-tinta-2">{tHak.hanyaPemilik}</p>}
       {aktif && <FormBatalBerhenti berhenti={b.id} teks={t} />}
     </article>
   );
@@ -171,13 +216,32 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/serah-terim
   const keluar = new Map(((wk ?? []) as Keluar[]).map((x) => [x.berhenti_id, x]));
   const orang = (org ?? []) as { id: string; nama: string }[];
   const hari = hariIni(new Date(), zona);
+  const tHak = ambilKamus(bahasa).hakBerhenti;
+  // F3-07E: bahan hak dari database (hanya pemilik), hitungan prorata lewat susunSlip dengan aturan bertanggal.
+  const hak = new Map<string, Hak>();
+  if (sesi.peran === "pemilik" && daftar.length) {
+    const akhir = daftar.map((x) => x.tanggal_efektif).sort().at(-1)!;
+    const [{ data: atr }, ...bahan] = await Promise.all([
+      supabase.from("aturan_bertanggal").select("kunci, nilai, terverifikasi, berlaku_dari").lte("berlaku_dari", akhir).order("berlaku_dari", { ascending: false }),
+      ...daftar.map((x) => supabase.rpc("hak_berhenti", { p_berhenti: x.id })),
+    ]);
+    const aturan: PetaAturan = {};
+    for (const a of atr ?? []) if (!aturan[a.kunci]) aturan[a.kunci] = { nilai: a.nilai, terverifikasi: a.terverifikasi };
+    bahan.forEach((r, i) => {
+      if (r.error || !r.data) return;
+      const d = r.data as BahanHak;
+      const gaji = d.gaji ? { ...d.gaji, pokok: Number(d.gaji.pokok), tunjangan_tetap: Number(d.gaji.tunjangan_tetap ?? 0) } : null;
+      const hasil = hitungHak({ gaji, pola: d.pola, pembagi: d.pembagi, tanggalEfektif: d.tanggal_efektif, jatahCuti: d.jatah_cuti, cutiTerpakai: Number(d.cuti_terpakai), alasan: d.alasan }, aturan);
+      hak.set(daftar[i].id, { bahan: d, hasil });
+    });
+  }
   return (
     <div lang={bahasa}>
       {kepala}
       <FormCatatBerhenti orang={orang} pilih={typeof sp.orang === "string" ? sp.orang : ""} hari={hari} kunci={randomUUID()} teks={t} />
       {daftar.length === 0
         ? <div className="mt-8 flex flex-col items-start gap-3"><IlustrasiKunci className="w-28" /><p className="text-tinta-2" data-testid="serah-kosong">{t.kosong}</p></div>
-        : daftar.map((b) => <Paket key={b.id} b={b} butir={butir.filter((x) => x.berhenti_id === b.id)} orang={orang} hari={hari} t={t} bahasa={bahasa} url={url} model={model} tIlmu={tIlmu} keluar={keluar.get(b.id)} tKeluar={tKeluar} pemilik={sesi.peran === "pemilik"} zona={zona} />)}
+        : daftar.map((b) => <Paket key={b.id} b={b} butir={butir.filter((x) => x.berhenti_id === b.id)} orang={orang} hari={hari} t={t} bahasa={bahasa} url={url} model={model} tIlmu={tIlmu} keluar={keluar.get(b.id)} tKeluar={tKeluar} pemilik={sesi.peran === "pemilik"} zona={zona} hak={hak.get(b.id)} tHak={tHak} />)}
     </div>
   );
 }
