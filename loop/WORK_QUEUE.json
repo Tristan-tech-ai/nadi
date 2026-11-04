@@ -2455,6 +2455,64 @@
    "status": "ready",
    "created": "2026-11-04T11:11:14",
    "tidak_sebelum": "2026-11-08"
+  },
+  {
+   "id": "D-20",
+   "fase": "F6",
+   "kind": "build",
+   "priority": 1,
+   "size": "l",
+   "wajib": true,
+   "title": "Landing didesain ulang dengan skill Taste Skill + Impeccable (dunia kertas kerja jenuh, bukan krem)",
+   "accept": "inspect.mjs Taste Skill pada produksi 0 FAIL di 1440/768/390; >= 4 gambar nyata atau potongan UI asli; judul <= 2 baris; axe 0 serius; Lighthouse mobile performa >= 90; e2e landing/asap/bahasa lulus di produksi; foto sebelum/sesudah di docs/design/iterasi/landing-2",
+   "how": "docs/design/BELAJAR-NOV-2026.md bagian 4-5: inventaris, argumen, draw.mjs, bangun, inspect, kritik 3 putaran",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T16:41:00"
+  },
+  {
+   "id": "D-21",
+   "fase": "F6",
+   "kind": "build",
+   "priority": 2,
+   "size": "l",
+   "wajib": true,
+   "title": "Video promo dibuat ulang bergerak: UI HTML asli, kursor, kamera, blueprint HyperFrames",
+   "accept": "docs/promo/nadi-promo.mp4 baru <= 60 dtk: tiap adegan komposisi berbeda, UI terbaca (teks >= 20 px pada 1080p), minimal 3 blueprint (overwhelm-surround, cursor-ui-demo, camera-journey/kinetic-type-beats); hyperframes check 0 galat; lembar kontak diperiksa; teaser dan potongan fitur diturunkan dari sistem yang sama",
+   "how": "docs/design/BELAJAR-NOV-2026.md bagian 3 dan 5 Video",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T16:41:00"
+  },
+  {
+   "id": "D-22",
+   "fase": "F6",
+   "kind": "build",
+   "priority": 3,
+   "size": "m",
+   "wajib": true,
+   "title": "Pitch deck ditulis ulang assertion-evidence",
+   "accept": "docs/bisnis/pitch-deck.pptx: setiap judul slide kalimat klaim <= 2 baris, tiap slide punya bukti visual (layar/angka/bagan), tanpa slide poin-poin; validate.py lulus; render PDF diperiksa",
+   "how": "docs/design/BELAJAR-NOV-2026.md bagian 5 Deck",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T16:41:00"
+  },
+  {
+   "id": "D-19",
+   "fase": "F6",
+   "kind": "research",
+   "priority": 0,
+   "size": "s",
+   "wajib": true,
+   "title": "Belajar skill desain dan menulis terbaru, pasang di lingkungan",
+   "accept": "docs/design/BELAJAR-NOV-2026.md berisi sumber, diagnosis terukur landing (inspect 11 FAIL) dan video, aturan baru; LEARN.md diisi; skill terpasang di folder skill pengguna",
+   "how": "riset",
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-04T16:41:00",
+   "done": "2026-11-04T16:41:00",
+   "result": "docs/design/BELAJAR-NOV-2026.md + 7 baris LEARN.md; inspect.mjs produksi 11 FAIL 8 WARN; skill impeccable, design-taste-frontend, emil-design-eng, animate, ogilvy, stop-slop, copywriting, video-produksi terpasang di folder skill pengguna"
   }
  ]
 }
