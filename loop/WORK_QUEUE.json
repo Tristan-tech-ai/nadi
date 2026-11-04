@@ -2360,8 +2360,10 @@
    "accept": "teks pasal PMK 51/2025 (tarif PPh 22 impor), PP 2/2026 + PP 21/2026 (besaran dan jangka DHE SDA), BTKI 2022 (PMK 26/2022, struktur tarif bea masuk), KMK kurs pajak mingguan (sumber dan cara ambil), API dalam NIB dibaca dari PDF resmi (OCR bila hasil pindai, tesseract ind); hasil di docs/research/ekspor-impor.md bertanda T; baris aturan_bertanggal pph22.impor dan ppn.impor terisi terverifikasi=true dengan sumber; tes SQL aturan",
    "how": "OCR lokal tesseract untuk PDF pindai dari peraturan.bpk.go.id / jdih.kemenkeu.go.id",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T09:09:08"
+   "status": "done",
+   "created": "2026-11-04T09:09:08",
+   "done": "2026-11-04T09:52:33",
+   "result": "commit 0ac3f13: OCR PDF resmi BPK (PMK 51/2025 Pasal 3 tarif PPh 22 impor; PP 2/2026 Pasal 6, 7, 11A; PP 21/2026 Pasal 18A), BTKI PMK 26/2022 + perubahan, kurs pajak KMK mingguan fiskal.kemenkeu.go.id, API dalam NIB PP 5/2021 Pasal 176 ayat (5); docs/research/ekspor-impor.md bertanda T; migrasi aturan_ekspor_impor (sidik ac55af56 sama repo) pph22.impor, ppn.impor, dhe.sda terverifikasi=true bersumber; tes SQL aturan_ekspor_impor merah dulu lalu lulus"
   },
   {
    "id": "B-EKSIM1",
