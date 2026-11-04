@@ -135,6 +135,34 @@ Kriteria terima:
 - **Uji nyata:** prompt diuji sekali di chat AI gratis dengan dokumen sintetis, hasilnya dicatat di docs/quality/onboarding-ai.md;
 - **Halaman petunjuk:** tiap aplikasi menyebut paket yang dibutuhkan sesuai sumber resminya.
 
+#### Keputusan Tristan 4 Nov 2026 untuk W-04
+
+- **Semua jalur AI hanya tombol pilihan.** Formulir onboarding biasa tetap ada dan tetap jalan utama. Pengguna bebas mengisinya sendiri, memakai AI, atau mencampur keduanya.
+- **Format "Teks Nadi".** Jalur chat AI (tanpa MCP) menghasilkan teks yang dipahami Nadi. AI memberikannya sebagai blok di chat atau sebagai berkas `.txt` untuk diunduh. Pengguna menempelkan blok itu, atau melempar berkasnya, ke Nadi.
+- **Ramah dibaca orang.** Mirip SQL dalam ketepatannya, tetapi berbentuk daftar berlabel yang bisa dibaca dan disunting pemilik sebelum ditempel. Contoh:
+
+```
+NADI ONBOARDING 1
+USAHA: Warung Bu Sari
+JENIS: warung makan
+KOTA: Denpasar | NEGARA: Indonesia | ORANG: 6 | CABANG: 1
+ORANG:
+- Sari Dewi | kasir, pelayan | mulai 2024-03-01
+- Komang Ayu | koki | mulai 2025-01-15
+FITUR: Lempar, Feed, Absen, Gaji, Tagihan
+ATURAN IZIN: sakit otomatis 1 hari, wajib surat dokter
+```
+
+- **Pemeriksaan sebelum masuk.**
+  - Nadi mengurai teks itu dengan aturan tanpa model.
+  - Setiap baris ditampilkan sebagai pratinjau: dikenali atau tidak dikenali, beserta alasannya.
+  - Baris yang dikenali menjadi usulan di Feed.
+  - Format JSON juga diterima untuk AI yang lebih suka JSON.
+- **Kriteria tambahan.**
+  - Pengurai Teks Nadi punya tes: 10 contoh baik, 10 buruk, termasuk NIK utuh, gaji tanpa sumber, dan baris rusak.
+  - Pratinjau menunjukkan baris yang ditolak dengan alasannya.
+  - Formulir onboarding manual tetap lulus e2e lama.
+
 ### W-05 Skill Nadi untuk AI pengguna (dampak 70)
 
 Isi:
