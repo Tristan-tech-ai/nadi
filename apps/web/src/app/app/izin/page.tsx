@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { randomUUID } from "node:crypto";
+import { FormLembur } from "@/components/app/waktu";
+import { hariIni } from "@/lib/izin";
 import { Suspense } from "react";
 import { IlustrasiKalender } from "@/components/ilustrasi";
 import { FormIzin } from "@/components/app/form-izin";
@@ -45,6 +48,7 @@ async function Isi() {
   const ringkas = r as Ringkas | null;
   const baris = (daftar ?? []) as unknown as Pengajuan[];
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
+  const tw = ambilKamus(bahasa).waktu;
   return (
     <div lang={bahasa}>
       <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
@@ -57,6 +61,11 @@ async function Isi() {
             </p>
           )}
           <FormIzin zona={zona} teks={t} bahasa={bahasa} />
+          <section className="mt-8" aria-labelledby="judul-lembur">
+            <h2 id="judul-lembur" className="text-lg font-semibold">{tw.lemburJudul}</h2>
+            <p className="mt-1 text-sm text-tinta-2">{tw.lemburKet}</p>
+            <FormLembur hari={hariIni(new Date(), zona)} kunci={randomUUID()} teks={tw} />
+          </section>
         </>
       ) : (
         <p className="mt-6 text-tinta-2" data-testid="izin-tanpa-orang">

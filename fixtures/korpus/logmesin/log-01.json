@@ -1,0 +1,114 @@
+{
+ "jenis": "absen",
+ "berkas": "log-01.csv",
+ "bidang": {
+  "baris": [
+   {
+    "nama": "Ketut Arta",
+    "tanggal": "2026-11-02",
+    "masuk": "07.58",
+    "pulang": "17.20",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Ayu",
+    "tanggal": "2026-11-02",
+    "masuk": "07.55",
+    "pulang": "17.15",
+    "keterangan": ""
+   },
+   {
+    "nama": "Made Putra",
+    "tanggal": "2026-11-02",
+    "masuk": "07.51",
+    "pulang": "17.00",
+    "keterangan": ""
+   },
+   {
+    "nama": "Sari Dewi",
+    "tanggal": "2026-11-02",
+    "masuk": "07.47",
+    "pulang": "17.02",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Sari",
+    "tanggal": "2026-11-02",
+    "masuk": "07.51",
+    "pulang": "16.55",
+    "keterangan": ""
+   },
+   {
+    "nama": "Ketut Arta",
+    "tanggal": "2026-11-03",
+    "masuk": "07.47",
+    "pulang": "",
+    "keterangan": "tempel sekali"
+   },
+   {
+    "nama": "Komang Ayu",
+    "tanggal": "2026-11-03",
+    "masuk": "07.47",
+    "pulang": "17.11",
+    "keterangan": ""
+   },
+   {
+    "nama": "Made Putra",
+    "tanggal": "2026-11-03",
+    "masuk": "07.59",
+    "pulang": "16.55",
+    "keterangan": ""
+   },
+   {
+    "nama": "Sari Dewi",
+    "tanggal": "2026-11-03",
+    "masuk": "07.47",
+    "pulang": "17.24",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Sari",
+    "tanggal": "2026-11-03",
+    "masuk": "07.54",
+    "pulang": "17.07",
+    "keterangan": ""
+   },
+   {
+    "nama": "Ketut Arta",
+    "tanggal": "2026-11-04",
+    "masuk": "07.49",
+    "pulang": "17.17",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Ayu",
+    "tanggal": "2026-11-04",
+    "masuk": "08.02",
+    "pulang": "17.28",
+    "keterangan": ""
+   },
+   {
+    "nama": "Made Putra",
+    "tanggal": "2026-11-04",
+    "masuk": "07.48",
+    "pulang": "17.02",
+    "keterangan": ""
+   },
+   {
+    "nama": "Sari Dewi",
+    "tanggal": "2026-11-04",
+    "masuk": "07.54",
+    "pulang": "17.16",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Sari",
+    "tanggal": "2026-11-04",
+    "masuk": "07.56",
+    "pulang": "17.18",
+    "keterangan": ""
+   }
+  ]
+ },
+ "catatan": "AC-No., Name, Time, State"
+}

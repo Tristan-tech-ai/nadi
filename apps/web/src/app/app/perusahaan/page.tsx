@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AturWaktu } from "@/components/app/atur-waktu";
 import { Suspense } from "react";
 import Link from "next/link";
 import { pindahPerusahaan } from "@/app/app/actions";
@@ -130,6 +131,9 @@ export default function Perusahaan() {
       </Suspense>
       <Suspense fallback={<div className="mt-10 h-28 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <TabletAbsen />
+      </Suspense>
+      <Suspense fallback={<div className="mt-10 h-40 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+        <AturWaktu />
       </Suspense>
       <Suspense fallback={<div className="mt-10 h-28 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <AiMilikmu />

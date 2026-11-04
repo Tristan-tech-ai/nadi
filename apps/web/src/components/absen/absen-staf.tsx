@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState, useTransition } from "react";
+import { useCallback, useRef, useState, useTransition } from "react";
 import { catatAbsen, type HasilAbsen } from "@/app/absen/actions";
 import { Cap } from "@/components/ui/cap";
 import { Tombol } from "@/components/ui/tombol";
@@ -9,6 +9,19 @@ import type { Kamus } from "@/lib/i18n/kamus";
 import { CekWajah } from "./cek-wajah";
 
 type Jenis = "absen.masuk" | "absen.pulang";
+export type Lokasi = { lat: number; lng: number; akurasi: number };
+
+/** Lokasi HP untuk geofence (M-12). Gagal, ditolak, atau lebih dari 10 detik = tanpa lokasi; database yang memutuskan perlu atau tidak. */
+function mintaLokasi(): Promise<Lokasi | null> {
+  return new Promise((selesai) => {
+    if (typeof navigator === "undefined" || !navigator.geolocation) return selesai(null);
+    navigator.geolocation.getCurrentPosition(
+      (p) => selesai({ lat: p.coords.latitude, lng: p.coords.longitude, akurasi: p.coords.accuracy }),
+      () => selesai(null),
+      { enableHighAccuracy: true, timeout: 10_000, maximumAge: 30_000 },
+    );
+  });
+}
 
 /** Alur staf setelah memindai QR: pilih masuk/pulang, cek wajah di perangkat, lalu catat. */
 export function AbsenStaf({ tempat, kode, teks: t }: { tempat: string; kode: string; teks: Kamus["absen"] }) {
@@ -16,10 +29,13 @@ export function AbsenStaf({ tempat, kode, teks: t }: { tempat: string; kode: str
   const [arah, setArah] = useState<Arah>("kiri");
   const [hasil, setHasil] = useState<HasilAbsen | null>(null);
   const [sibuk, mulai] = useTransition();
+  const lokasi = useRef<Promise<Lokasi | null> | null>(null);
 
   const pilih = (j: Jenis) => {
     setHasil(null);
     setArah(tantanganAcak());
+    // Lokasi diminta bersamaan dengan cek wajah supaya tidak menambah waktu tunggu.
+    lokasi.current = mintaLokasi();
     setJenis(j);
   };
   const selesai = useCallback((p: Penilaian) => {
@@ -30,7 +46,8 @@ export function AbsenStaf({ tempat, kode, teks: t }: { tempat: string; kode: str
       return;
     }
     mulai(async () => {
-      setHasil(await catatAbsen(tempat, kode, jenis, { lulus: true, kedip: p.kedip, menoleh: p.menoleh }));
+      const l = await (lokasi.current ?? Promise.resolve(null));
+      setHasil(await catatAbsen(tempat, kode, jenis, { lulus: true, kedip: p.kedip, menoleh: p.menoleh, ...(l ? { lokasi: l } : {}) }));
       setJenis(null);
     });
   }, [jenis, tempat, kode]);

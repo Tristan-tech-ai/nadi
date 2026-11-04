@@ -1,0 +1,21 @@
+{
+ "dibuat": "deterministik, M-12",
+ "jumlah": 3,
+ "berkas": [
+  {
+   "jenis": "absen",
+   "berkas": "logmesin/log-01.csv",
+   "jawaban": "logmesin/log-01.json"
+  },
+  {
+   "jenis": "absen",
+   "berkas": "logmesin/log-02.csv",
+   "jawaban": "logmesin/log-02.json"
+  },
+  {
+   "jenis": "absen",
+   "berkas": "logmesin/log-03.xlsx",
+   "jawaban": "logmesin/log-03.json"
+  }
+ ]
+}

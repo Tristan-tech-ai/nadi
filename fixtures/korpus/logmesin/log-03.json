@@ -1,0 +1,114 @@
+{
+ "jenis": "absen",
+ "berkas": "log-03.xlsx",
+ "bidang": {
+  "baris": [
+   {
+    "nama": "Ketut Arta",
+    "tanggal": "2026-11-02",
+    "masuk": "08.07",
+    "pulang": "17.08",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Ayu",
+    "tanggal": "2026-11-02",
+    "masuk": "07.46",
+    "pulang": "17.25",
+    "keterangan": ""
+   },
+   {
+    "nama": "Made Putra",
+    "tanggal": "2026-11-02",
+    "masuk": "07.49",
+    "pulang": "17.15",
+    "keterangan": ""
+   },
+   {
+    "nama": "Sari Dewi",
+    "tanggal": "2026-11-02",
+    "masuk": "08.04",
+    "pulang": "17.07",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Sari",
+    "tanggal": "2026-11-02",
+    "masuk": "08.03",
+    "pulang": "17.15",
+    "keterangan": ""
+   },
+   {
+    "nama": "Ketut Arta",
+    "tanggal": "2026-11-03",
+    "masuk": "08.05",
+    "pulang": "",
+    "keterangan": "tempel sekali"
+   },
+   {
+    "nama": "Komang Ayu",
+    "tanggal": "2026-11-03",
+    "masuk": "07.54",
+    "pulang": "17.23",
+    "keterangan": ""
+   },
+   {
+    "nama": "Made Putra",
+    "tanggal": "2026-11-03",
+    "masuk": "08.08",
+    "pulang": "16.55",
+    "keterangan": ""
+   },
+   {
+    "nama": "Sari Dewi",
+    "tanggal": "2026-11-03",
+    "masuk": "07.53",
+    "pulang": "17.03",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Sari",
+    "tanggal": "2026-11-03",
+    "masuk": "07.51",
+    "pulang": "16.57",
+    "keterangan": ""
+   },
+   {
+    "nama": "Ketut Arta",
+    "tanggal": "2026-11-04",
+    "masuk": "07.52",
+    "pulang": "17.26",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Ayu",
+    "tanggal": "2026-11-04",
+    "masuk": "07.50",
+    "pulang": "17.21",
+    "keterangan": ""
+   },
+   {
+    "nama": "Made Putra",
+    "tanggal": "2026-11-04",
+    "masuk": "07.50",
+    "pulang": "17.17",
+    "keterangan": ""
+   },
+   {
+    "nama": "Sari Dewi",
+    "tanggal": "2026-11-04",
+    "masuk": "08.04",
+    "pulang": "17.13",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Sari",
+    "tanggal": "2026-11-04",
+    "masuk": "07.57",
+    "pulang": "17.23",
+    "keterangan": ""
+   }
+  ]
+ },
+ "catatan": "Excel, waktu dengan detik, status Masuk/Keluar"
+}

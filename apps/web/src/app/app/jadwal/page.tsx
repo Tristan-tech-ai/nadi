@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { TombolSiaga } from "@/components/app/waktu";
 import Link from "next/link";
 import { randomUUID } from "node:crypto";
 import { Suspense } from "react";
@@ -28,6 +29,7 @@ const jam = (menit: number, t: Kamus["jadwal"]) => `${isiTeks(t.jamSaja, { j: Ma
 const rentang = (s: { mulai: string; selesai: string }) => `${s.mulai.replace(":", ".")}-${s.selesai.replace(":", ".")}`;
 
 async function Pengelola({ minggu, kelola, hari, k: { t, f, bahasa } }: { minggu: string | null; kelola: boolean; hari: string; k: K }) {
+  const tw = ambilKamus(bahasa).waktu;
   const tgl = (x: string) => formatTanggalKalender(x, bahasa);
   const supabase = await createClient();
   const [{ data, error }, topi, keb] = await Promise.all([
@@ -40,6 +42,14 @@ async function Pengelola({ minggu, kelola, hari, k: { t, f, bahasa } }: { minggu
   const kebutuhan = (keb.data ?? []) as unknown as { id: string; hari: number; mulai: string; selesai: string; butuh: number; istirahat_menit: number; topi: { nama: string } | null }[];
   const m = data as Minggu;
   const ada = m.orang.some((o) => o.shift.length);
+  // M-12: libur nasional dan cuti bersama minggu ini (SKB) dan tanda siaga per shift.
+  const idShift = m.orang.flatMap((o) => o.shift.map((s) => s.id)).filter(Boolean) as string[];
+  const [libur, siaga] = await Promise.all([
+    supabase.from("libur_nasional").select("tanggal, jenis, nama").gte("tanggal", m.mulai).lte("tanggal", geser(m.mulai, 6)),
+    idShift.length ? supabase.from("shift").select("id, siaga").in("id", idShift) : Promise.resolve({ data: [] }),
+  ]);
+  const liburPer = new Map(((libur.data ?? []) as { tanggal: string; jenis: string; nama: string }[]).map((x) => [x.tanggal, x]));
+  const siagaPer = new Set(((siaga.data ?? []) as { id: string; siaga: boolean }[]).filter((x) => x.siaga).map((x) => x.id));
   return (
     <>
       <div className="mt-4 flex flex-wrap items-center justify-between gap-2 text-sm">
@@ -61,12 +71,15 @@ async function Pengelola({ minggu, kelola, hari, k: { t, f, bahasa } }: { minggu
             return (
               <section key={tanggal} className="border-t border-garis py-3" aria-label={`${nama} ${tgl(tanggal)}`}>
                 <h2 className={`font-semibold ${tanggal === hari ? "inline-block bg-kunyit px-1 text-[var(--stabilo-teks)]" : ""}`}>{nama}, {tgl(tanggal)}</h2>
+                {liburPer.get(tanggal) && <p className="text-sm text-cap" data-testid="libur-nasional" lang="id">{liburPer.get(tanggal)!.jenis === "libur" ? tw.liburNasional : tw.cutiBersama}: {liburPer.get(tanggal)!.nama}</p>}
                 {baris.length === 0 ? <p className="text-sm text-tinta-2">{t.tidakAda}</p> : (
                   <ul className="mt-1 text-sm">
                     {baris.map(({ o, s }) => (
                       <li key={s.id} className="flex flex-wrap items-center justify-between gap-2 py-1">
                         <span><span className="font-semibold" data-pengguna>{o.nama}</span> <span className="angka">{rentang(s)}</span>{s.istirahat ? isiTeks(t.istirahat, { n: s.istirahat }) : ""}
                           {s.lembur && s.lembur !== "batal" && <span className="text-tinta-2">{isiTeks(t.lembur, { status: s.lembur === "menunggu" ? t.lemburStatus.menunggu : s.lembur === "setuju" ? t.lemburStatus.setuju : t.lemburStatus.tidak })}</span>}</span>
+                        {s.id && siagaPer.has(s.id) && <span className="text-tinta-2" data-testid="siaga">{tw.siaga}</span>}
+                        {kelola && s.id && s.tanggal >= hari && <TombolSiaga shift={s.id} siaga={siagaPer.has(s.id)} label={`${o.nama} ${nama} ${rentang(s)}`} teks={tw} />}
                         {kelola && s.id && s.tanggal >= hari && <FormBatalShift shift={s.id} label={`${o.nama} ${nama} ${rentang(s)}`} teks={f} />}
                       </li>
                     ))}

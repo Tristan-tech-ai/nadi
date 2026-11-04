@@ -1,0 +1,114 @@
+{
+ "jenis": "absen",
+ "berkas": "log-02.csv",
+ "bidang": {
+  "baris": [
+   {
+    "nama": "Ketut Arta",
+    "tanggal": "2026-11-02",
+    "masuk": "07.47",
+    "pulang": "17.29",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Ayu",
+    "tanggal": "2026-11-02",
+    "masuk": "08.04",
+    "pulang": "16.58",
+    "keterangan": ""
+   },
+   {
+    "nama": "Made Putra",
+    "tanggal": "2026-11-02",
+    "masuk": "08.00",
+    "pulang": "17.13",
+    "keterangan": ""
+   },
+   {
+    "nama": "Sari Dewi",
+    "tanggal": "2026-11-02",
+    "masuk": "07.48",
+    "pulang": "17.29",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Sari",
+    "tanggal": "2026-11-02",
+    "masuk": "07.51",
+    "pulang": "17.20",
+    "keterangan": ""
+   },
+   {
+    "nama": "Ketut Arta",
+    "tanggal": "2026-11-03",
+    "masuk": "07.50",
+    "pulang": "",
+    "keterangan": "tempel sekali"
+   },
+   {
+    "nama": "Komang Ayu",
+    "tanggal": "2026-11-03",
+    "masuk": "07.55",
+    "pulang": "17.23",
+    "keterangan": ""
+   },
+   {
+    "nama": "Made Putra",
+    "tanggal": "2026-11-03",
+    "masuk": "07.46",
+    "pulang": "17.15",
+    "keterangan": ""
+   },
+   {
+    "nama": "Sari Dewi",
+    "tanggal": "2026-11-03",
+    "masuk": "08.03",
+    "pulang": "17.14",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Sari",
+    "tanggal": "2026-11-03",
+    "masuk": "07.51",
+    "pulang": "17.07",
+    "keterangan": ""
+   },
+   {
+    "nama": "Ketut Arta",
+    "tanggal": "2026-11-04",
+    "masuk": "07.49",
+    "pulang": "17.26",
+    "keterangan": ""
+   },
+   {
+    "nama": "Komang Ayu",
+    "tanggal": "2026-11-04",
+    "masuk": "07.45",
+    "pulang": "17.20",
+    "keterangan": ""
+   },
+   {
+    "nama": "Made Putra",
+    "tanggal": "2026-11-04",
+    "masuk": "07.51",
+    "pulang": "16.56",
+    "keterangan": ""
+   },
+   {
+    "nama": "Sari Dewi",
+    "tanggal": "2026-11-04",
+    "masuk": "07.52",
+    "pulang": "17.04",
+    "keterangan": ""
+   },
+   {
+    "nama": "Wayan Sari",
+    "tanggal": "2026-11-04",
+    "masuk": "08.06",
+    "pulang": "16.57",
+    "keterangan": ""
+   }
+  ]
+ },
+ "catatan": "titik koma, tanggal-jam terpisah, tanpa status"
+}

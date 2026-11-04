@@ -19,6 +19,8 @@ const PRODUKSI = !!process.env.E2E_BASE_URL;
 // Q-20: penanda uji cek wajah: hasil deteksi dari fixture landmark per arah tantangan. Hanya dibaca build lokal (NEXT_PUBLIC_NADI_UJI_WAJAH=1).
 const PENANDA = { kiri: hasilFixture("menoleh-kiri"), kanan: hasilFixture("menoleh-kanan") };
 
+// Tes di berkas ini memakai tempat absen yang sama dan tes geofence mengubahnya sementara: jalankan berurutan (bukan paralel).
+test.describe.configure({ mode: "default" });
 test.use({ permissions: ["camera"], launchOptions: { args: ["--use-fake-ui-for-media-stream", "--use-fake-device-for-media-stream"] } });
 test.beforeEach(({ page }, info) => {
   void page;
@@ -136,4 +138,53 @@ test("absen: staf dengan cek wajah lulus mencatat absen.masuk sampai database", 
   const { data: kej } = await sb.from("kejadian").select("jenis, data").eq("orang_id", orang!.id).gte("terjadi_at", sebelum);
   expect((kej ?? []).map((x) => x.jenis)).toEqual(["absen.masuk"]);
   await ctx.close();
+});
+
+// M-12: geofence. Tempat utama Warung Uji A diberi titik dan radius 100 m selama tes ini saja (dikembalikan tanpa geofence di
+// akhir, karena tes lain memakai tempat yang sama). HP 1 km dari titik ditolak dengan jarak dan radiusnya; HP 30 m diterima.
+test("absen: geofence menolak HP di luar radius dengan pesan jelas, menerima di dalam radius", async ({ page, browser }) => {
+  test.skip(PRODUKSI, "penanda uji hanya ada di build lokal");
+  test.setTimeout(150_000);
+  await masuk(page, "/app/orang");
+  const kode = (await page.getByTestId("kode-usaha").textContent())!.trim();
+  const nama = `Staf Geofence ${Date.now()}`;
+  await page.getByLabel("Nama orang").fill(nama);
+  await page.getByRole("button", { name: "Tambah" }).click();
+  const baris = page.getByRole("listitem").filter({ hasText: nama });
+  await baris.getByPlaceholder("PIN 6 angka").fill("135790");
+  await baris.getByRole("button", { name: "Buat akun staf" }).click();
+  await expect(baris.getByTestId("info-akun")).toContainText(`kode ${kode}`);
+  const id = (await baris.getByTestId("info-akun").textContent())!.match(/ID (S\d{3})/)![1];
+  const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
+  expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
+  const { data: tempat } = await sb.rpc("tempat_absen_utama");
+  expect((await sb.rpc("atur_geofence", { p_tempat: tempat, p_lat: -8.6705, p_lng: 115.2126, p_radius: 100 })).error).toBeNull();
+  try {
+    const coba = async (lat: number) => {
+      const ctx = await browser.newContext({ permissions: ["camera", "geolocation"], geolocation: { latitude: lat, longitude: 115.2126, accuracy: 10 } });
+      await ctx.addInitScript((p) => { (window as unknown as { __nadiUjiWajah: unknown }).__nadiUjiWajah = p; }, PENANDA);
+      const staf = await ctx.newPage();
+      await staf.goto("/masuk/staf");
+      await staf.getByLabel("Kode usaha").fill(kode);
+      await staf.getByLabel("ID kamu").fill(id);
+      await staf.getByLabel("PIN").fill("135790");
+      await staf.getByRole("button", { name: "Masuk" }).click();
+      await staf.waitForURL((u) => u.pathname === "/app");
+      const { data: k } = await sb.rpc("kode_absen", { p_tempat: tempat });
+      await staf.goto(`/absen?t=${tempat}&k=${(k as { kode: string }).kode}`);
+      await staf.getByRole("button", { name: "Absen masuk" }).click();
+      return { ctx, staf };
+    };
+    const jauh = await coba(-8.6615);
+    await expect(jauh.staf.getByTestId("galat-absen")).toContainText(/Kamu sekitar 10\d\d m dari .+\. Absen hanya bisa dalam 100 m/, { timeout: 30_000 });
+    await jauh.ctx.close();
+    const dekat = await coba(-8.6702);
+    await expect(dekat.staf.getByTestId("hasil-absen")).toContainText("Absen masuk tercatat", { timeout: 30_000 });
+    await dekat.ctx.close();
+    const { data: orang } = await sb.from("orang").select("id").eq("nama", nama).maybeSingle();
+    const { data: kej } = await sb.from("kejadian").select("data").eq("orang_id", orang!.id).eq("jenis", "absen.masuk");
+    expect(Number((kej ?? [])[0]?.data?.jarak_m)).toBeLessThan(60);
+  } finally {
+    await sb.rpc("atur_geofence", { p_tempat: tempat, p_lat: null, p_lng: null, p_radius: null });
+  }
 });
