@@ -1956,8 +1956,10 @@
    "accept": "hak_berhenti: gaji sampai tanggal efektif (susunSlip prorata), sisa cuti x upah harian (pokok+tunjangan tetap)/25 pola 6 atau /21 pola 5 (PP 36/2021 Pasal 17, docs/research/upah-harian.md) bila jatah cuti diatur, uang pisah isian pemilik; tanpa pesangon untuk mengundurkan diri (Pasal 50); ajukan_hak_berhenti membuat usulan untuk_peran pemilik tanpa membayar; vitest + tes SQL + e2e",
    "how": "docs/research/serah-terima-sql.md RPC hak_berhenti dan ajukan_hak_berhenti",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T10:04:41"
+   "status": "done",
+   "created": "2026-11-01T10:04:41",
+   "done": "2026-11-04T10:56:54",
+   "result": "9e82db1; migrasi 20261104048000_hak_berhenti (md5 24f874e9) + 048100_hak_berhenti_tanggal (md5 b2f70bfc) cocok; tes SQL hak_berhenti 22/22; vitest serah/hak 7/7; e2e hak-berhenti lulus lokal dan produksi https://nadi-swart.vercel.app/app/serah-terima (axe 390/1440 terang/gelap, foto), bahasa-akun + wawancara-keluar regresi lulus; docs/quality/hak-berhenti.md"
   },
   {
    "id": "F3-06B",
