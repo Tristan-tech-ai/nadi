@@ -842,9 +842,11 @@
    "accept": "laporan jujur: berhasil atau tidak, dengan angka",
    "how": "",
    "blocked_by": "F5-01",
-   "status": "running",
+   "status": "done",
    "created": "2026-10-30T20:05:52",
-   "started": "2026-11-04T13:42:09"
+   "started": "2026-11-04T13:42:09",
+   "done": "2026-11-04T13:57:28",
+   "result": "d7fb4cb; docs/research/v-jepa2.md; resep k=2 98,8%, k=20 100%, zona baru 100%; kejutan AUROC 0,16-0,34 (gagal) vs beda piksel 0,97-1,0; 0,6 dtk/zona CPU, model 1,3 GB; tidak dipasang (DECISIONS)"
   },
   {
    "id": "F6-01",
@@ -937,8 +939,10 @@
    "accept": "video < 60 dtk; panduan per peran",
    "how": "skill hyperframes",
    "blocked_by": "D-11",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-04T14:47:22",
+   "result": "34d6a4e; docs/promo/nadi-promo.mp4 1920x1080 46,0 dtk dari layar produksi nadi-swart (desain D-10/D-11), komposisi docs/promo/film/buat.py, hyperframes check ok=true, bingkai render diperiksa; panduan per peran /panduan (produksi); docs/quality/promo.md"
   },
   {
    "id": "Q-01",
@@ -1047,8 +1051,10 @@
    "accept": "versi next di apps/web sama dengan patch yang diumumkan di nextjs.org/blog setelah 3 Nov; gerbang lulus; deploy READY",
    "how": "baca advisori resmi, pnpm up next eslint-config-next, jalankan gate",
    "blocked_by": "tunggu rilis keamanan Next.js 3 Nov 2026",
-   "status": "blocked",
-   "created": "2026-10-30T20:17:29"
+   "status": "done",
+   "created": "2026-10-30T20:17:29",
+   "done": "2026-11-04T14:47:23",
+   "result": "11aff83; next 16.4.5 + eslint-config-next 16.4.5 (nextjs.org/blog/november-2026-security-release, 3 Nov 2026); gerbang LULUS; deploy nadi-jaq9e359f READY; e2e asap produksi + peta lulus (21 passed)"
   },
   {
    "id": "F0-02B",
@@ -2190,8 +2196,10 @@
    "accept": "deck (pptx) 10-12 slide memakai angka B-01..B-03 dan demo nyata; daftar minimal 10 akselerator/investor tahap awal aktif di Indonesia, masing-masing URL resmi + syarat + tanggal akses; langkah yang butuh Tristan di UNTUK-TRISTAN",
    "how": "docs/bisnis/RENCANA.md bagian 5; skill pptx",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:44:25"
+   "status": "done",
+   "created": "2026-11-03T19:44:25",
+   "done": "2026-11-04T14:47:22",
+   "result": "bf57015; docs/bisnis/pitch-deck.pptx (11 slide, validate.py PASSED, angka B-01..B-03, layar asli) + pitch-deck.pdf; docs/bisnis/investor.md 10 program/investor dari situs resmi 4 Nov 2026 (URL + syarat); langkah Tristan di UNTUK-TRISTAN"
   },
   {
    "id": "I-01",
@@ -2252,8 +2260,10 @@
    "accept": "aturan penamaan baru di loop/README.md; satu modul percontohan (mis. Mata) diganti nama dengan alias kompatibel (view/RPC lama tetap jalan), tes SQL + vitest + e2e lulus sebelum dan sesudah; rencana per modul tercatat",
    "how": "docs/research/i18n.md lapisan 3",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:44:25"
+   "status": "done",
+   "created": "2026-11-03T19:44:25",
+   "done": "2026-11-04T14:47:23",
+   "result": "9dcbc70; migrasi 20261104053000_vision_nama_inggris md5 11093a2c; tes vision_nama 11/11 (merah 0/2 dulu); mata 18/18 dan agen_mata 15/15 sebelum dan sesudah; e2e produksi mata.spec 91,7% lewat record_vision_state/vision_state, peta.spec lulus lewat alias; agen Linux 7 kejadian lewat vision_agent_record; aturan di loop/README.md, rencana per modul di docs/research/i18n.md"
   },
   {
    "id": "P-01",
@@ -2266,8 +2276,10 @@
    "accept": "MP4 1080x1920 15 dtk di docs/promo/teaser-15.mp4 dari layar asli, ajakan ke /demo, lolos anti-slop, aset tercatat di docs/ASSETS.md",
    "how": "skill hyperframes; docs/promo/RENCANA.md",
    "blocked_by": "D-11",
-   "status": "ready",
-   "created": "2026-11-03T19:44:25"
+   "status": "done",
+   "created": "2026-11-03T19:44:25",
+   "done": "2026-11-04T14:47:22",
+   "result": "34d6a4e; docs/promo/teaser-15.mp4 1080x1920 15,0 dtk, layar asli (nota uji + usulan dicap), ajakan nadi-swart.vercel.app/demo, tanpa ungu/gradien/emoji, aset di docs/ASSETS.md (font OFL, GSAP no-charge, layar sendiri)"
   },
   {
    "id": "P-02",
@@ -2280,8 +2292,10 @@
    "accept": "4 klip (Lempar, Feed, Mata, Sarapan) 1080x1920 di docs/promo/fitur/, masing-masing satu momen nyata dan teks layar Indonesia",
    "how": "skill hyperframes",
    "blocked_by": "D-11",
-   "status": "ready",
-   "created": "2026-11-03T19:44:25"
+   "status": "done",
+   "created": "2026-11-03T19:44:25",
+   "done": "2026-11-04T14:47:22",
+   "result": "34d6a4e; docs/promo/fitur/{lempar,feed,mata,sarapan}.mp4 1080x1920 22,0 dtk masing-masing, satu momen nyata per fitur dari layar produksi, teks Indonesia"
   },
   {
    "id": "P-04",
@@ -2294,8 +2308,10 @@
    "accept": "minimal 8 lomba/hackathon/akselerator/program pemerintah atau kampus 2026-2027 yang terbuka untuk tim seperti Nadi, masing-masing dari situs resmi penyelenggara (nama, syarat, tenggat, hadiah, berkas, URL, tanggal akses) di docs/promo/lomba.md; bahan pendaftaran siap untuk 2 lomba terdekat; pendaftaran oleh Tristan dicatat di UNTUK-TRISTAN",
    "how": "docs/promo/RENCANA.md",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-03T19:44:25"
+   "status": "done",
+   "created": "2026-11-03T19:44:25",
+   "done": "2026-11-04T14:47:22",
+   "result": "27047b7; docs/promo/lomba.md (10 program dari situs resmi, 3 Nov) + bahan siap untuk APINDO (demo-apindo.mp4 108 dtk + tautan /demo) dan Dicoding (pitch-deck.pdf sebagai Project Brief, ringkasan.md); pendaftaran oleh Tristan di UNTUK-TRISTAN"
   },
   {
    "id": "P-05",
