@@ -901,8 +901,10 @@
    "accept": "pengguna bisa mengirim permintaan; tidak ada transaksi uang",
    "how": "",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "done",
+   "created": "2026-10-30T20:05:52",
+   "done": "2026-11-04T12:46:21",
+   "result": "a458f30; migrasi 20261104051000_mitra (md5 4934bc29 cocok), tes SQL mitra 16/16 (tanpa kolom uang); /app/mitra direktori contoh + label izin (UU 23/2022 Pasal 15/17, UU 5/2011 Pasal 5, PMK 175/2022), permintaan + batal; e2e mitra + bahasa-akun lulus lokal dan produksi https://nadi-swart.vercel.app/app/mitra (axe 390/1440 terang/gelap, foto); docs/research/mitra.md, docs/quality/mitra.md"
   },
   {
    "id": "F6-05",
