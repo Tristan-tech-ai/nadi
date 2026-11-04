@@ -2588,7 +2588,7 @@
    "size": "m",
    "wajib": true,
    "title": "Halaman pendukung (harga, keamanan, panduan, tentang, privasi, syarat, id+en) pindah ke sistem poster",
-   "accept": "6 halaman x 2 bahasa memakai KepalaPoster/KakiPoster dan lapangan poster; inspect.mjs 0 FAIL di /harga dan /panduan; axe 0 serius terang/gelap; e2e halaman pendukung dan bahasa lulus di produksi",
+   "accept": "6 halaman x 2 bahasa memakai KepalaPoster/KakiPoster dan lapangan poster; inspect.mjs 0 FAIL di /harga dan /panduan; axe 0 serius terang/gelap; e2e halaman pendukung dan bahasa lulus di produksi; keterbacaan dulu: kolom 60-70 karakter, teks 17 px tinta penuh, tabel tetap tabel",
    "how": "DESIGN.md mode Read: struktur untuk dibaca, lapangan warna untuk judul",
    "blocked_by": "",
    "status": "ready",
@@ -2616,7 +2616,7 @@
    "size": "m",
    "wajib": true,
    "title": "Landing dan halaman fitur menampilkan jangkauan (8+ jenis berkas, 6+ jenis usaha), bukan satu contoh nota",
-   "accept": "landing menampilkan >= 8 jenis berkas dan >= 6 jenis usaha; Coba sendiri 5 berkas berbeda jenis; setiap halaman fitur punya baris Dipakai untuk 4-6 kasus dari kode; gerbang tulisan + inspect.mjs 0 FAIL; e2e produksi lulus",
+   "accept": "landing menampilkan >= 8 jenis berkas dan >= 6 jenis usaha; Coba sendiri 5 berkas berbeda jenis; setiap halaman fitur punya baris Dipakai untuk 4-6 kasus dari kode; gerbang tulisan + inspect.mjs 0 FAIL; e2e produksi lulus; HP di pengait, penggeser, dan pintu Feed memakai komponen aplikasi asli (KartuUsulan, Cap, Rupiah) dengan data sintetis",
    "how": "docs/research/rencana-luas-nadi.md W-01",
    "blocked_by": "",
    "status": "ready",
@@ -2691,6 +2691,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-04T18:52:56"
+  },
+  {
+   "id": "W-07",
+   "fase": "F6",
+   "kind": "research",
+   "priority": 5,
+   "size": "m",
+   "wajib": true,
+   "title": "Peta kebutuhan per jenis usaha: 10 jenis, satu hari kerja, modul terpakai dan yang kosong",
+   "accept": "docs/research/kebutuhan-usaha.md: 10 jenis usaha x satu hari kerja dengan sumber (wawancara sintetis tidak dihitung bukti; pakai data resmi BPS/KemenKopUKM dan dokumentasi pesaing), tabel modul ada/kosong, urutan modul baru dengan alasan; tiap modul baru menjadi tugas dengan kriteria terima",
+   "how": "docs/research/rencana-luas-nadi.md 4c",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T19:02:41"
   }
  ]
 }

@@ -194,6 +194,35 @@ Kriteria terima:
 - tes SQL;
 - e2e.
 
+## 4b. Keputusan Tristan 4 Nov 2026: halaman lain dan UI di HP
+
+- **Halaman pendukung (D-26).** Harga, keamanan, privasi, syarat, tentang, dan panduan dibuat konsisten dengan landing: kepala Fitur/Harga/Masuk, kaki yang sama, dan lapangan warna untuk judul. Isinya tetap tata letak baca (mode Read): kolom 60 sampai 70 karakter, teks 17 px tinta penuh, tabel tetap tabel. Keterbacaan menang dari estetika.
+- **Aplikasi.** Aplikasi tetap tenang seperti sekarang. Yang diseragamkan hanya detail craft floor (D-27): seleksi teks, caret, cincin fokus, dan garis bawah tautan. Warna poster tidak dibawa ke layar kerja.
+- **Landing.** HP di pengait, penggeser, dan pintu Feed menampilkan antarmuka Nadi sungguhan: komponen KartuUsulan, Cap, dan Rupiah dari aplikasi, dengan data sintetis. Bentuk kartu sederhana yang sekarang tidak dipakai lagi. Masuk ke kriteria W-01.
+
+## 4c. Yang masih kurang agar Nadi bisa dipakai hampir semua usaha
+
+Sudah ada:
+- inti yang berlaku umum: Lempar 14 jenis berkas, Feed keputusan, absen dan izin, gaji Indonesia, tagihan QRIS, jadwal shift, surat, buku besar, Kompas Pajak, rekrut, Mata zona meja/antrean/rak;
+- 10 paket peran.
+
+Belum ada:
+
+| Kebutuhan | Usaha yang membutuhkan | Status di kode |
+|---|---|---|
+| Stok dan persediaan per barang (masuk dari nota, keluar dari penjualan, sisa, batas pesan ulang) | toko, grosir, warung, apotek, bengkel (suku cadang), pabrik | tidak ada tabel stok/barang |
+| Pesanan pelanggan dan penjualan harian (dari Excel kasir/marketplace yang dilempar) | toko online, katering, grosir | invoice ada; pesanan dan rekap penjualan belum |
+| Janji temu dan jadwal layanan pelanggan | klinik, salon, bengkel, kursus | belum ada |
+| Proyek, tahapan, dan jam kerja per proyek | konstruksi, agensi, konsultan, kantor jasa | belum ada (kerja/topi ada, proyek belum) |
+| Sewa berulang (kamar, unit, alat) dan tagihan bulanan otomatis | kos, vila, rental | tagihan satuan ada, berulang belum |
+| Produksi sederhana (resep/bahan per produk, biaya per unit) | katering, roti, pabrik tahu, konveksi | belum ada |
+| Aset dan peralatan (perawatan, penyusutan sederhana) | bengkel, klinik, logistik | belum ada |
+| Aturan negara lain (gaji, pajak, cuti) | usaha di luar Indonesia | hanya paket Indonesia; dikunci sampai ada teks resmi |
+| Mata v2 (karyawan, lama kunjungan, jalur, peta panas) | grosir, minimarket, restoran, gudang | W-02 |
+| Onboarding lewat AI dan konteks skala/negara | semua | W-03, W-04, W-05 |
+
+Urutan setelah W-01 sampai W-06: W-07 riset peta kebutuhan per jenis usaha. Isinya 10 jenis usaha, satu hari kerja masing-masing, lalu modul mana yang dipakai dan mana yang kosong. Riset ini menentukan urutan modul baru, dengan stok dan persediaan sebagai calon pertama. Setiap modul baru tetap mengikuti pola Nadi: masuk lewat Lempar, menjadi usulan, disetujui pemilik.
+
 ## 5. Yang tidak berubah
 
 - Pemilik memutuskan semua hal yang menyangkut uang, orang, dan data pribadi.
