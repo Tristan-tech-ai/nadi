@@ -12,7 +12,9 @@ Aturan di sini (hanya aktif selama loop/LOOP_ON ada):
            next_task.py done/add). Menulis STATE.md atau LOG.md saja tidak dihitung. Kecuali sertifikat antrean kosong segar;
         f) HEAD repo belum lulus loop/gate.sh, atau ada kode belum di-commit, kecuali loop/.gate_merah berisi alasan (< 60 menit);
         g) ada commit yang belum di-push;
-        h) loop/STATE.md tidak diperbarui dalam 30 menit terakhir.
+        h) loop/STATE.md tidak diperbarui dalam 30 menit terakhir;
+        i) BOBOT ITERASI (Tristan 4 Nov 2026, keras): sejak ScheduleWakeup sebelumnya kurang dari 5 tugas WAJIB
+           berstatus done di loop/WORK_QUEUE.json, padahal masih ada tugas wajib READY yang tidak terblokir.
   stop  (Stop) menolak sekali bila giliran berakhir tanpa ScheduleWakeup, atau teks akhir mengaku "hanya pemantauan" tanpa sertifikat.
   start (SessionStart) mencetak header kanonik dan daftar wajib baca ke konteks.
 Jalan keluar: buat loop/LOOP_PAUSE (hanya Tristan) untuk mematikan semua aturan. Uji diri: python wake_guard.py selftest"""
@@ -39,6 +41,8 @@ LOG = os.path.join(L, ".wake_guard.log")
 TAIL_BYTES = 12_000_000
 CERT_MIN, GATE_RED_MIN, STATE_MIN = 20, 60, 30
 DELAY_MIN, DELAY_MAX = 600, 900
+QUEUE = os.path.join(L, "WORK_QUEUE.json")
+MIN_WAJIB = 5
 
 SUB_PATH = re.compile(r"nadi[\\/]+(apps|packages|supabase|fixtures|scripts|docs[\\/]+(design|research|quality)|loop[\\/]+LEARN\.md|\.github)[\\/]?", re.I)
 SUB_CMD = re.compile(r"(\bgit\b[^\n|;&]*\bcommit\b|next_task\.py\s+(done|add)|apply_migration)")
@@ -47,7 +51,7 @@ WRITE_BASH = re.compile(r"(>>|\bcat\s*>|\bsed\s+-i|\bcp\s|\bmv\s|\btee\s|Out-Fil
 SUB_MCP = re.compile(r"(apply_migration|deploy_edge_function|create_project_env|create_project)$")
 MONITOR = ("hanya pemantauan", "tick tenang", "putaran tenang", "monitoring only", "quiet tick", "tidak ada yang dikerjakan")
 ANCHORS = ("KONTRAK TICK", "next_task.py", "PERINTAH TETAP", "HANYA AUTENTIKASI", "Ide adalah kerja", "GROUND TRUTH",
-           "GERBANG", "PENJAGA", "TANPA JEJAK", "ANTI-MACET", "ANTI-SLOP", "SETIAP GILIRAN BERAKHIR DENGAN ScheduleWakeup", "delaySeconds 600", "LAPORAN")
+           "GERBANG", "PENJAGA", "TANPA JEJAK", "ANTI-MACET", "ANTI-SLOP", "SETIAP GILIRAN BERAKHIR DENGAN ScheduleWakeup", "delaySeconds 600", "LAPORAN", "BOBOT ITERASI")
 
 
 def log(msg):
@@ -112,7 +116,7 @@ def events(path):
                 n, inp = b.get("name", ""), b.get("input") or {}
                 if n == "ScheduleWakeup":
                     pending[b.get("id")] = len(ev)
-                    ev.append(("WAKE",))
+                    ev.append(("WAKE", d.get("timestamp")))
                 elif n in ("Write", "Edit", "NotebookEdit"):
                     ev.append(("WRITE",))
                     if SUB_PATH.search(str(inp.get("file_path", ""))):
@@ -152,6 +156,57 @@ def tick_problems(ev, cert_ok):
     if len(sp) >= 2 and "SUB" not in recent and not cert_ok:
         msgs.append("PENJAGA: tick ini dan tick sebelumnya tidak menghasilkan artefak substantif (kode di apps/packages/supabase, migrasi, docs/design|research|quality, korpus, git commit, next_task.py done/add). Memperbarui STATE.md atau LOG.md tidak dihitung. Ambil tugas READY teratas dan selesaikan.")
     return msgs
+
+
+def lokal(ts):
+    """stempel waktu transkrip (UTC, ...Z) -> ISO waktu lokal tanpa zona, sebanding dengan next_task.now()"""
+    try:
+        return datetime.datetime.fromisoformat(ts.replace("Z", "+00:00")).astimezone().replace(tzinfo=None).isoformat(timespec="seconds")
+    except Exception:
+        return None
+
+
+def mulai_tick(ev):
+    """waktu lokal ScheduleWakeup terakhir yang diterima (batas awal tick ini), None bila tidak ada"""
+    ev = list(ev)
+    if ev and ev[-1][0] == "WAKE":
+        ev = ev[:-1]
+    for e in reversed(ev):
+        if e[0] == "WAKE" and len(e) > 1 and e[1]:
+            return lokal(e[1])
+    return None
+
+
+def siap_wajib(d, hari=None):
+    hari = hari or datetime.date.today().isoformat()
+    ids = {u["id"]: u for u in d["tasks"]}
+    hasil = []
+    for t in d["tasks"]:
+        if t.get("status") != "ready" or not t.get("wajib"):
+            continue
+        if t.get("tidak_sebelum") and t["tidak_sebelum"] > hari:
+            continue
+        if t.get("blocked_by"):
+            deps = [x.strip() for x in str(t["blocked_by"]).split(",") if x.strip()]
+            if not (deps and all(x in ids for x in deps) and all(ids[x]["status"] == "done" for x in deps)):
+                continue
+        hasil.append(t["id"])
+    return hasil
+
+
+def bobot_problems(mulai, d, hari=None):
+    """BOBOT ITERASI: minimal MIN_WAJIB tugas wajib done sejak mulai, kecuali tidak ada lagi tugas wajib siap"""
+    if not mulai:
+        return []
+    selesai = [t["id"] for t in d["tasks"] if t.get("wajib") and t.get("status") == "done" and str(t.get("done", "")) >= mulai]
+    siap = siap_wajib(d, hari)
+    if len(selesai) >= MIN_WAJIB or not siap:
+        return []
+    return [f"BOBOT ITERASI (perintah keras Tristan 4 Nov 2026): tick ini baru menyelesaikan {len(selesai)} tugas WAJIB "
+            f"({', '.join(selesai) or 'belum ada'}) sejak {mulai}; minimal {MIN_WAJIB}. Masih ada {len(siap)} tugas wajib siap "
+            f"({', '.join(siap[:6])}). Jangan berhenti setengah: lanjutkan dalam giliran yang sama (boleh 30-60 menit atau lebih, "
+            "kompaksi tidak apa), selesaikan tugas berikutnya sampai `next_task.py done`. Bila tugas benar-benar terblokir, "
+            "catat dengan `next_task.py block ID alasan` dan kerjakan yang lain."]
 
 
 def git(*args):
@@ -211,6 +266,11 @@ def pre(inp):
     tp = inp.get("transcript_path")
     if tp and os.path.exists(tp):
         msgs += tick_problems(events(tp), fresh(CERT, CERT_MIN))
+    try:
+        if tp and os.path.exists(tp):
+            msgs += bobot_problems(mulai_tick(events(tp)), json.load(open(QUEUE, encoding="utf-8")))
+    except Exception as e:
+        log(f"bobot galat: {e!r}")
     msgs += repo_problems()
     if msgs:
         log("pre DITOLAK: " + " | ".join(m[:80] for m in msgs))
@@ -298,6 +358,16 @@ def selftest():
     case("git commit dihitung", bool(SUB_CMD.search('cd nadi && git commit -m "x"')), True)
     case("git status tidak dihitung", bool(SUB_CMD.search("git status")), False)
     case("migrasi MCP dihitung", bool(SUB_MCP.search("mcp__x_Supabase__apply_migration")), True)
+    Q = {"tasks": [dict(id=f"A{i}", wajib=True, status="done", done="2026-11-04T21:0%d:00" % i) for i in range(3)]
+         + [dict(id="B", wajib=True, status="ready"), dict(id="C", wajib=False, status="done", done="2026-11-04T21:30:00"),
+            dict(id="D", wajib=True, status="done", done="2026-11-04T19:00:00")]}
+    case("bobot: 3 wajib done + ada siap ditolak", len(bobot_problems("2026-11-04T20:30:00", Q, "2026-11-04")), 1)
+    Q5 = {"tasks": Q["tasks"] + [dict(id=f"E{i}", wajib=True, status="done", done="2026-11-04T22:00:00") for i in range(2)]}
+    case("bobot: 5 wajib done lolos", bobot_problems("2026-11-04T20:30:00", Q5, "2026-11-04"), [])
+    case("bobot: tugas tidak wajib dan done sebelum tick tidak dihitung", len(bobot_problems("2026-11-04T20:30:00", {"tasks": Q["tasks"][3:]}, "2026-11-04")), 1)
+    Qb = {"tasks": Q["tasks"][:3] + [dict(id="B", wajib=True, status="ready", blocked_by="kartu belum ada")]}
+    case("bobot: semua sisa terblokir lolos", bobot_problems("2026-11-04T20:30:00", Qb, "2026-11-04"), [])
+    case("bobot: batas tick dari wakeup sebelumnya", mulai_tick([("WAKE", "2026-11-04T13:00:00Z"), ("NEXT",), ("WAKE", "2026-11-04T14:00:00Z")]) == lokal("2026-11-04T13:00:00Z"), True)
     print(f"SELFTEST wake_guard: {ok} dari {tot}", "LULUS" if ok == tot else "GAGAL")
     return 0 if ok == tot else 1
 
