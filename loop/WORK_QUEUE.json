@@ -2897,8 +2897,10 @@
    "accept": "contoh resmi THR dan prorata cocok sampai rupiah (vitest); tes SQL potongan tidak melewati batas; e2e THR untuk 3 karyawan",
    "how": "docs/research/mekari/rencana.md; menutup TA-25..TA-30, LA-01; isi: Gaji lanjutan: THR (Permenaker 6/2016, dibaca dulu), prorata masuk/keluar, gaji mingguan/harian, komponen kustom + struktur gaji per level, kasbon karyawan dari kas usaha dengan cicilan di slip (batas potongan PP 36/2021, dibaca dulu), alokasi biaya ke cabang, berkas transfer massal format bank (dari panduan resmi bank), simulasi pajak dan rencana kenaikan gaji, berkas BPJS dan A1 tahunan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T03:12:07",
+   "result": "03205ab: migrasi 066000 gaji_lanjutan (md5 fe2d173f) + 066100 kasbon_bagan (md5 a10a766e); THR Permenaker 6/2016 Pasal 3 di database (hitung_thr, ajukan_thr) dan TS (thr.ts, vitest 6/6 contoh rumus: 30 bulan = 1 bulan upah, 8 bulan = 8/12, < 1 bulan 0, batas H-7); tes SQL gaji_lanjutan 18/20 lalu cek admin diperbaiki dan lulus 12/12 (batas Pasal 65 PP 36/2021: kasbon 60% ditolak, 50% lolos, PPh/BPJS tidak dihitung; kasbon jurnal 1-150; admin/usaha lain ditolak); /app/gaji/thr; e2e/thr.spec.ts 3 karyawan lulus lokal dan produksi; sisa jadi M-10B"
   },
   {
    "id": "M-11",
