@@ -1110,7 +1110,7 @@ export const kamusEn: Kamus = {
   },
   mulai: {
     judul: "What business do you run?",
-    ket: "Just two fields. Nadi can read the rest from the files you drop later.",
+    ket: "A few short fields. Nadi can read the rest from the files you drop later.",
     nama: "Business name",
     namaContoh: "Bu Made's Diner",
     namaBantu: "Shown on receipts, invoices, and payslips. You can change it later.",
@@ -1127,6 +1127,10 @@ export const kamusEn: Kamus = {
     salon: "Salon, spa, barbershop",
     laundry: "Laundry",
     lainnya: "Other",
+    skala: "How many people work here?", skalaNama: { "1": "Just me", "2-5": "2 to 5", "6-15": "6 to 15", "16-50": "16 to 50", "50+": "More than 50" },
+    cabang: "Number of locations or branches", kota: "City", kotaContoh: "Denpasar", negara: "Country", zona: "Time zone",
+    zonaNama: { "Asia/Jakarta": "WIB (Jakarta, Sumatra, Java)", "Asia/Pontianak": "WIB (West Kalimantan)", "Asia/Makassar": "WITA (Bali, Sulawesi, NTB, NTT)", "Asia/Jayapura": "WIT (Maluku, Papua)" },
+    negaraLain: "Currency and time zone follow the country. Payroll, tax, and BPJS use Indonesian rules, so they stay locked for now.",
     menyiapkan: "Setting up...",
     siapkan: "Set up my business",
   },
@@ -2217,6 +2221,11 @@ export const kamusEn: Kamus = {
     pindahTercatat: "Move recorded.", opnameTercatat: "Count recorded. The difference went to the journal.", opnameSama: "The count matches the records. Nothing changed.",
     hargaRusak: "Write whole rupiah, for example 15,000.", jumlahRusak: "Write a quantity above 0, for example 12 or 2.5.", faktorRusak: "Units per larger unit must be a number above 0, for example 24.",
     hanya: "Only the owner or an admin can change products and stock.", gagal: "Not saved yet. Try again in a moment.", galatDb: "Nadi refused this (details in Indonesian): {pesan}",
+  },
+  aturanIndonesia: {
+    judul: "Indonesian rules",
+    ket: "This section calculates with Indonesian rules (income tax, BPJS, Coretax). Your business is registered in {negara}, so it stays locked until Nadi has a rule package for your country.",
+    tetapJalan: "Drop, Feed, invoices, schedules, stock, financial reports, and Mata still work.",
   },
   demo: {
     label: "Sample shopping receipt",

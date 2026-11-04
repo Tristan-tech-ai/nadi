@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { KunciAturan, negaraUsaha } from "@/components/app/aturan-indonesia";
 import { Suspense } from "react";
 import { FormProfilPajak, SimulatorPajak } from "@/components/app/pajak";
 import { Rupiah } from "@/components/ui/rupiah";
@@ -38,6 +39,8 @@ async function Isi() {
     </>
   );
   const bungkus = (isi: React.ReactNode) => <div lang={bahasa}>{kepala}{isi}</div>;
+  const negara = await negaraUsaha(sesi.perusahaanId, bahasa);
+  if (negara.kode !== "ID") return bungkus(<KunciAturan negara={negara.nama} bahasa={bahasa} />);
   if (!["pemilik", "admin", "akuntan"].includes(sesi.peran)) return bungkus(<p className="mt-6 text-tinta-2">{t.hanyaPeran}</p>);
   const supabase = await createClient();
   const tahun = new Date().getFullYear();

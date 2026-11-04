@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { KunciAturan, negaraUsaha } from "@/components/app/aturan-indonesia";
 import { Suspense } from "react";
 import { IlustrasiSlip } from "@/components/ilustrasi";
 import { CadanganPesangon } from "@/components/app/cadangan-pesangon";
@@ -68,6 +69,10 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
   const f = kamus.gajiForm;
   const isiLang = bahasa === "id" ? undefined : "id";
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
+  const negara = await negaraUsaha(sesi.perusahaanId, bahasa);
+  if (negara.kode !== "ID") {
+    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><KunciAturan negara={negara.nama} bahasa={bahasa} /></div>;
+  }
   const sp = await searchParams;
   const bulan = typeof sp.bulan === "string" && /^\d{4}-(0[1-9]|1[0-2])$/.test(sp.bulan) ? sp.bulan : hariIni(new Date(), await zonaUsahaIni(sesi.perusahaanId)).slice(0, 7);
   const supabase = await createClient();

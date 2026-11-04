@@ -1111,7 +1111,7 @@ export const kamusId = {
   },
   mulai: {
     judul: "Usaha apa yang kamu jalankan?",
-    ket: "Dua isian saja. Sisanya bisa Nadi baca dari berkas yang kamu lempar nanti.",
+    ket: "Beberapa isian singkat. Sisanya bisa Nadi baca dari berkas yang kamu lempar nanti.",
     nama: "Nama usaha",
     namaContoh: "Warung Bu Made",
     namaBantu: "Tampil di nota, invoice, dan slip gaji. Bisa diubah nanti.",
@@ -1128,6 +1128,10 @@ export const kamusId = {
     salon: "Salon, spa, barbershop",
     laundry: "Laundry",
     lainnya: "Lainnya",
+    skala: "Berapa orang yang bekerja?", skalaNama: { "1": "Saya sendiri", "2-5": "2 sampai 5", "6-15": "6 sampai 15", "16-50": "16 sampai 50", "50+": "Lebih dari 50" },
+    cabang: "Jumlah tempat usaha atau cabang", kota: "Kota", kotaContoh: "Denpasar", negara: "Negara", zona: "Zona waktu",
+    zonaNama: { "Asia/Jakarta": "WIB (Jakarta, Sumatra, Jawa)", "Asia/Pontianak": "WIB (Kalimantan Barat)", "Asia/Makassar": "WITA (Bali, Sulawesi, NTB, NTT)", "Asia/Jayapura": "WIT (Maluku, Papua)" },
+    negaraLain: "Mata uang dan zona waktu mengikuti negara. Gaji, pajak, dan BPJS memakai aturan Indonesia, jadi dikunci dulu.",
     menyiapkan: "Menyiapkan...",
     siapkan: "Siapkan usahaku",
   },
@@ -2218,6 +2222,11 @@ export const kamusId = {
     pindahTercatat: "Pindah gudang tercatat.", opnameTercatat: "Hasil hitung tercatat. Selisihnya masuk jurnal.", opnameSama: "Jumlah sama dengan catatan. Tidak ada yang berubah.",
     hargaRusak: "Tulis rupiah bulat, misalnya 15.000.", jumlahRusak: "Tulis jumlah lebih dari 0, misalnya 12 atau 2,5.", faktorRusak: "Isi satuan besar harus angka lebih dari 0, misalnya 24.",
     hanya: "Hanya pemilik atau admin yang mengubah produk dan stok.", gagal: "Belum tersimpan. Coba lagi sebentar.", galatDb: "{pesan}",
+  },
+  aturanIndonesia: {
+    judul: "Aturan Indonesia",
+    ket: "Bagian ini menghitung dengan aturan Indonesia (PPh, BPJS, Coretax). Usahamu tercatat di {negara}, jadi bagian ini dikunci sampai Nadi punya paket aturan negaramu.",
+    tetapJalan: "Lempar, Feed, invoice, jadwal, stok, laporan keuangan, dan Mata tetap bisa dipakai.",
   },
   demo: {
     label: "Contoh nota belanja",

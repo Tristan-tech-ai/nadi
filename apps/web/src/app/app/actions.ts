@@ -15,14 +15,22 @@ export async function buatPerusahaan(_: HasilForm, form: FormData): Promise<Hasi
   const k = ambilKamus(await bahasaAplikasi()).mulaiPesan;
   const nama = String(form.get("nama") ?? "").trim();
   const industri = String(form.get("industri") ?? "");
-  if (nama.length < 2) return { galat: k.namaPendek, isian: { nama, industri } };
-  if (!INDUSTRI.has(industri)) return { galat: k.pilihJenis, isian: { nama, industri } };
+  const konteks = {
+    skala: String(form.get("skala") ?? "") || null, cabang: Number(form.get("cabang") ?? 1) || 1,
+    kota: String(form.get("kota") ?? "").trim(), negara: String(form.get("negara") ?? "ID") || "ID", zona: String(form.get("zona") ?? "") || null,
+  };
+  const isianKembali = { nama, industri, skala: konteks.skala ?? "", cabang: String(konteks.cabang), kota: konteks.kota, negara: konteks.negara, zona: konteks.zona ?? "" };
+  if (nama.length < 2) return { galat: k.namaPendek, isian: isianKembali };
+  if (!INDUSTRI.has(industri)) return { galat: k.pilihJenis, isian: isianKembali };
   const supabase = await createClient();
   const { error } = await supabase.rpc("buat_perusahaan", { p_nama: nama, p_industri: industri });
-  if (error) return { galat: error.code === "54000" ? k.batas : k.gagal, isian: { nama, industri } };
+  if (error) return { galat: error.code === "54000" ? k.batas : k.gagal, isian: isianKembali };
   await supabase.auth.refreshSession();
   // Topi bawaan jenis usaha (paket industri); butuh klaim pid baru, jadi setelah refreshSession.
   await supabase.rpc("pasang_paket", { p_kode: industri });
+  // W-03: skala, cabang, kota, negara; mata uang dan zona waktu bawaan dari negara (zona bisa dipilih untuk Indonesia).
+  await supabase.rpc("atur_konteks_usaha", { p_skala: konteks.skala, p_cabang: konteks.cabang, p_kota: konteks.kota || null, p_negara: konteks.negara,
+    p_zona: konteks.negara === "ID" ? konteks.zona : null });
   redirect("/app");
 }
 
