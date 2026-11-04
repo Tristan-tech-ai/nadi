@@ -9,6 +9,7 @@ import { unzipSync } from "npm:fflate@0.8.3";
 import { extractText, getDocumentProxy } from "npm:unpdf@1.9.1";
 import { BIDANG, INSTRUKSI, SKEMA_HASIL, hasilDari, rapikan, usulanDari, usulanLamar, xlsxKeTeks, type Hasil, type Jenis } from "./inti.ts";
 import { bacaCv } from "./cv.ts";
+import { bacaLogMesin } from "./logmesin.ts";
 import { INSTRUKSI_ATURAN, SKEMA_ATURAN, aturanDari, cocok, jalankan, konsisten, perbaikiTipe, sidik, ujiAturan, type Aturan, type AturanMentah } from "./ekstraktor.ts";
 
 declare const EdgeRuntime: { waitUntil(p: Promise<unknown>): void };
@@ -199,11 +200,16 @@ Deno.serve(async (req) => {
     const dariAturan = teks && !lamar ? await cobaAturan(admin, berkas.perusahaan_id, teks) : null;
     // CV berteks: pengurai bagian tanpa model (H-02). Berlaku juga untuk lampiran lamaran karena tidak memakai aturan usaha.
     const dariCv = !dariAturan && teks ? bacaCv(teks) : null;
+    // Log mesin absen sidik jari/wajah: tempelan dikelompokkan per orang per hari tanpa model (M-12).
+    const dariLog = !dariAturan && !dariCv && teks && !lamar ? bacaLogMesin(teks) : null;
     if (dariAturan) {
       hasil = dariAturan.hasil;
       sumber = "aturan";
     } else if (dariCv) {
       hasil = dariCv as Hasil;
+      sumber = "aturan";
+    } else if (dariLog) {
+      hasil = dariLog as Hasil;
       sumber = "aturan";
     } else {
       const { data: konf } = await admin.from("konfigurasi").select("nilai").eq("kunci", "model_ai").single();
@@ -237,7 +243,9 @@ Deno.serve(async (req) => {
     const { data: usulan } = await admin.from("usulan").insert({
       perusahaan_id: berkas.perusahaan_id, sumber: sumberUsulan, aksi: u.aksi, judul: u.judul,
       penjelasan: sumber === "aturan"
-        ? u.penjelasan.replace(/Dibaca dari berkas, yakin \d+%\./, dariCv
+        ? u.penjelasan.replace(/Dibaca dari berkas, yakin \d+%\./, dariLog
+          ? "Dibaca dari log mesin absen, tanpa AI. Masuk = tempelan pertama, pulang = tempelan terakhir; periksa nama yang belum dikenal."
+          : dariCv
           ? "Dibaca dari bagian-bagian CV, tanpa AI. Periksa ejaan nama dan tempat kerja."
           : ocrCukup
           ? "Dibaca dari foto dengan aturan tersimpan, tanpa AI. Angka sudah dicocokkan; periksa ejaan nama dan nomor."
