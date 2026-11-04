@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { randomUUID } from "node:crypto";
 import { Suspense } from "react";
+import { FormRetur } from "@/components/app/jual";
 import { CocokMutasi, FormBatalInvoice, FormBayar, FormInvoice, FormLunas, TombolPengingat, type ProdukPilihan } from "@/components/app/invoice";
 import { Cap } from "@/components/ui/cap";
 import { Rupiah } from "@/components/ui/rupiah";
@@ -54,7 +55,7 @@ async function Isi() {
   const supabase = await createClient();
   const [ring, inv, bayar, usaha, zona, h, produk] = await Promise.all([
     supabase.rpc("ringkasan_invoice"),
-    supabase.from("invoice").select("id, nomor, pelanggan, pelanggan_hp, total, tanggal, jatuh_tempo, status, kode_verifikasi, lunas_tanggal, lunas_cara, alasan_batal")
+    supabase.from("invoice").select("id, nomor, pelanggan, pelanggan_hp, total, tanggal, jatuh_tempo, status, kode_verifikasi, lunas_tanggal, lunas_cara, alasan_batal, baris")
       .order("dibuat_at", { ascending: false }).limit(50),
     supabase.from("bayar_usaha").select("qris, qris_nama, rekening").maybeSingle(),
     supabase.from("perusahaan").select("nama").eq("id", sesi.perusahaanId).single(),
@@ -165,6 +166,7 @@ async function Isi() {
                   </div>
                   {i.status === "terbit" && <FormLunas invoice={i.id} hariIni={hari} label={i.nomor} teks={f} />}
                   {i.status === "terbit" && <FormBatalInvoice invoice={i.id} label={i.nomor} teks={f} />}
+                  {i.status !== "batal" && <FormRetur invoice={i.id} baris={(i as unknown as { baris: { uraian: string; jumlah: number }[] }).baris ?? []} kunci={randomUUID()} teks={ambilKamus(bahasa).jual} />}
                 </li>
               );
             })}

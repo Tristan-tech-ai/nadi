@@ -87,9 +87,12 @@ export async function buatInvoice(_: HasilInvoice, form: FormData): Promise<Hasi
 export async function tandaiLunas(_: HasilInvoice, form: FormData): Promise<HasilInvoice> {
   const k = await teksInvoice();
   const supabase = await createClient();
-  const { error } = await supabase.rpc("tandai_lunas", {
-    p_id: String(form.get("invoice") ?? ""), p_cara: String(form.get("cara") ?? ""), p_tanggal: String(form.get("tanggal") ?? "") || null,
-  });
+  const potong = angkaHarga(String(form.get("potong") ?? "") || "0");
+  if (!Number.isFinite(potong) || potong < 0) return { galat: k.t.potongRusak };
+  const { error } = potong > 0
+    ? await supabase.rpc("lunas_dipotong", { p_id: String(form.get("invoice") ?? ""), p_cara: String(form.get("cara") ?? ""), p_tanggal: String(form.get("tanggal") ?? "") || null,
+        p_potong: potong, p_jenis: String(form.get("jenis_pph") ?? "pph23") })
+    : await supabase.rpc("tandai_lunas", { p_id: String(form.get("invoice") ?? ""), p_cara: String(form.get("cara") ?? ""), p_tanggal: String(form.get("tanggal") ?? "") || null });
   if (error) return { galat: GALAT(k, error.code, error.message, k.t.gagalLunas) };
   revalidatePath("/app/invoice");
   return { pesan: k.t.lunas };

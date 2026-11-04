@@ -83,7 +83,7 @@ test("produk, stok masuk, invoice berproduk mengurangi stok, batal mengembalikan
   await page.goto("/app/invoice");
   const inv = page.getByTestId("baris-daftar-invoice").filter({ hasText: pelanggan });
   await inv.getByText("Batalkan invoice").click();
-  await inv.getByLabel("Alasan").fill("Uji stok selesai");
+  await inv.getByLabel("Alasan", { exact: true }).fill("Uji stok selesai");
   await inv.getByRole("button", { name: "Batalkan" }).click();
   // Teks "Batalkan invoice" sudah ada sebelum batal, jadi tunggu akibatnya: stok kembali 10.
   await expect.poll(async () => {

@@ -65,8 +65,8 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 |---|---|---|---|---|---|
 | JU-01 | Dasbor, sekilas bisnis, ringkasan eksekutif bulanan lewat email | Beranda/*; Laporan/Sekilas Bisnis | Sarapan Data (push pagi), kartu Uang usaha di Feed (kas, tagihan, utang, laba bulan ini), /app/buku (M-01) | ADA | M-01 |
 | JU-02 | Bagan akun, saldo awal, jurnal umum, tutup buku, kunci periode | Daftar Akun/*; Daftar Lainnya/Daftar Penutupan Buku & Kunci Periode | ledger, 17 akun bawaan, posting/balik jurnal, kunci/buka periode, saldo awal + penyeimbang, tutup buku tahunan ke laba ditahan, neraca saldo CSV (M-01) | ADA | M-01 |
-| JU-03 | Penjualan: penawaran, pemesanan, pengiriman (surat jalan), penagihan, uang muka, retur, draft dan approval, impor templat | Penjualan/*; Pemenuhan/Penjualan; Daftar Lainnya/Cara Pembayaran, Syarat Pembayaran | invoice bernomor, QRIS statis, pengingat 4 tahap, lunas/batal, /i/<kode> | SEBAGIAN: penawaran, pesanan, surat jalan, retur/nota kredit, uang muka | M-03 |
-| JU-04 | Multiple withholding (potong PPh di invoice), tukar invoice/faktur | Penjualan/Multiple Withholding; Penjualan/Tukar Invoice; Pembelian/Tukar Faktur; Daftar Lainnya/Pajak | tidak ada | BELUM | M-03, M-09 |
+| JU-03 | Penjualan: penawaran, pemesanan, pengiriman (surat jalan), penagihan, uang muka, retur, draft dan approval, impor templat | Penjualan/*; Pemenuhan/Penjualan; Daftar Lainnya/Cara Pembayaran, Syarat Pembayaran | invoice bernomor, QRIS statis, pengingat 4 tahap; /app/jual: penawaran > pesanan > surat jalan > invoice, uang muka, retur/nota kredit dengan stok kembali (M-03) | SEBAGIAN: draf dan approval penjualan, impor templat | M-03 |
+| JU-04 | Multiple withholding (potong PPh di invoice), tukar invoice/faktur | Penjualan/Multiple Withholding; Penjualan/Tukar Invoice; Pembelian/Tukar Faktur; Daftar Lainnya/Pajak | lunas dipotong PPh oleh pembeli ke 1-430, jenis PPh 23/4(2)/22 (M-03) | SEBAGIAN: tukar invoice/faktur | M-03, M-09 |
 | JU-05 | e-Meterai pada invoice | Penjualan/Stamp eMeterai | tidak ada | MITRA (Peruri lewat distributor resmi) | M-17 |
 | JU-06 | Pembelian: permintaan, penawaran, pesanan, penerimaan, tagihan pemasok, pembayaran, approval | Pembelian/*; Pemenuhan/Pembelian | nota pemasok lewat Lempar jadi usulan belanja + jurnal, PIB impor | SEBAGIAN: PR, PO, penerimaan barang, hutang jatuh tempo, pembayaran | M-04 |
 | JU-07 | Biaya dengan approval draft | Biaya/* | Lempar nota, Feed | ADA (dasar); pemetaan akun per kategori belum | M-04 |
@@ -192,8 +192,8 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 | Status | Jumlah |
 |---|---|
 | ADA | 17 |
-| SEBAGIAN | 56 |
-| BELUM | 41 |
+| SEBAGIAN | 57 |
+| BELUM | 40 |
 | MITRA | 18 |
 | LUAR | 2 |
 

@@ -136,7 +136,7 @@ test("invoice: QRIS statis, terbit, pengingat hari ini, halaman tagihan, lunas, 
   await expect(page.getByRole("form", { name: "Invoice baru" }).getByRole("status")).toContainText("Terbit:");
   const b2 = page.getByTestId("baris-daftar-invoice").filter({ hasText: `${pelanggan} batal` });
   await b2.getByText("Batalkan invoice").click();
-  await b2.getByLabel("Alasan").fill("Pesanan dibatalkan pelanggan");
+  await b2.getByLabel("Alasan", { exact: true }).fill("Pesanan dibatalkan pelanggan");
   await b2.getByRole("button", { name: "Batalkan" }).click();
   await expect(page.getByTestId("baris-daftar-invoice").filter({ hasText: `${pelanggan} batal` })).toContainText("Dibatalkan: Pesanan dibatalkan pelanggan");
 });

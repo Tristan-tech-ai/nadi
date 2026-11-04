@@ -156,6 +156,11 @@ export function FormLunas({ invoice, hariIni, label, teks: t }: { invoice: strin
         </select></label>
       <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.tanggalBayar}</span>
         <input type="date" name="tanggal" defaultValue={hariIni} max={hariIni} className={isian} /></label>
+      {/* M-03: pembeli memotong PPh dari pembayaran; jumlahnya dari bukti potong, tanpa tarif bawaan. */}
+      <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.potongPph}</span>
+        <input name="potong" inputMode="numeric" placeholder="0" className={`${isian} angka w-28 text-right`} /></label>
+      <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.jenisPph}</span>
+        <select name="jenis_pph" defaultValue="pph23" className={isian}><option value="pph23">PPh 23</option><option value="pph4_2">PPh 4(2)</option><option value="pph22">PPh 22</option><option value="lain">{t.pphLain}</option></select></label>
       <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? t.mencatat : t.tandaiLunas}</Tombol>
       <Hasil h={h} />
     </form>
