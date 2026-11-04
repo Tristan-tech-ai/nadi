@@ -9,6 +9,7 @@ import { ambilKamus, isiTeks, type Kamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { sisip } from "@/lib/i18n/sisip";
 import { hariIni } from "@/lib/izin";
+import { formatDurasi } from "@/lib/wawancara/rekam";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
@@ -18,7 +19,7 @@ export const metadata: Metadata = { title: "Serah terima" };
 // F3-07 (docs/design/serah-terima-layar.md): paket serah terima orang yang berhenti; akses dicabut otomatis setelah tanggal efektif.
 
 type Berhenti = { id: string; orang_id: string; tanggal_surat: string; tanggal_efektif: string; alasan: string; peringatan: string[]; status: "disiapkan" | "selesai" | "batal"; orang: { nama: string } | null };
-type Butir = { id: string; berhenti_id: string; jenis: "kerja" | "topi" | "ilmu" | "akses_otomatis" | "akses_manual"; judul: string; status: string; pengganti_id: string | null };
+type Butir = { id: string; berhenti_id: string; jenis: "kerja" | "topi" | "ilmu" | "akses_otomatis" | "akses_manual"; judul: string; status: string; pengganti_id: string | null; durasi_detik: number | null };
 
 const selisihHari = (a: string, b: string) => Math.round((Date.parse(`${b}T00:00:00Z`) - Date.parse(`${a}T00:00:00Z`)) / 86_400_000);
 
@@ -73,13 +74,13 @@ function Paket({ b, butir, orang, hari, t, bahasa }: { b: Berhenti; butir: Butir
         <ul className="mt-2 divide-y divide-garis border-y border-garis text-sm">
           {per("ilmu").map((x) => (
             <li key={x.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
-              <p><J x={x} />{x.status === "selesai" ? t.sudahDijelaskan : ""}</p>
+              <p><J x={x} />{x.status === "selesai" ? t.sudahDijelaskan : ""}<span className="text-tinta-2" data-testid="status-rekam">{x.durasi_detik ? isiTeks(t.direkam, { durasi: formatDurasi(x.durasi_detik) }) : t.belumDirekam}</span></p>
               {aktif && <FormCentang butir={x.id} judul={x.judul} selesai={x.status === "selesai"} teks={t} />}
             </li>
           ))}
         </ul>
       )}
-      <p className="mt-1 text-xs text-tinta-2">{sisip(t.mintaJelaskan, { nama })}</p>
+      <p className="mt-1 text-xs text-tinta-2">{sisip(t.mintaJelaskan, { nama })} {sisip(t.mintaRekam, { nama })}</p>
 
       <h3 className="mt-6 font-semibold">{t.akses}</h3>
       <p className="mt-1 text-sm text-tinta-2">{isiTeks(t.aksesOtomatis, { tanggal: tgl(b.tanggal_efektif) })}</p>
@@ -123,7 +124,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/serah-terim
   ]);
   const daftar = (bh ?? []) as unknown as Berhenti[];
   const { data: bt } = daftar.length
-    ? await supabase.from("serah_butir").select("id, berhenti_id, jenis, judul, status, pengganti_id").in("berhenti_id", daftar.map((b) => b.id)).order("dibuat_at")
+    ? await supabase.from("serah_butir").select("id, berhenti_id, jenis, judul, status, pengganti_id, durasi_detik").in("berhenti_id", daftar.map((b) => b.id)).order("dibuat_at")
     : { data: [] };
   const butir = (bt ?? []) as Butir[];
   const orang = (org ?? []) as { id: string; nama: string }[];

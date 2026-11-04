@@ -262,6 +262,11 @@ test("aplikasi: pilihan bahasa tersimpan di akun dan ikut ke sesi lain, Feed dan
     expect(axeLuar.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
   }
 
+  // Rekam ilmu mode Inggris (pemilik melihat keterangan bahwa halaman ini untuk karyawan yang berhenti).
+  await p1.goto("/app/ilmu");
+  await expect(p1.getByRole("heading", { level: 1, name: "Record your know-how" })).toBeVisible();
+  expect(barisIndonesia(await teksTanpaId(p1))).toEqual([]);
+
   // Magang mode Inggris: dana rekrutmen, rencana, formulir, tabel biaya; isi rencana dan nama data pengguna.
   await p1.goto("/app/magang");
   await expect(p1.getByRole("heading", { level: 1, name: "Internships" })).toBeVisible();

@@ -3,6 +3,8 @@
 
 export const KANDIDAT_MIME = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus", "audio/ogg"] as const;
 export const DURASI_MAKS_DETIK = 90;
+/** Penjelasan Rekam Ilmu (F3-07C) paling lama 5 menit, sama dengan batas rekam_ilmu_daftar di database. */
+export const DURASI_ILMU_DETIK = 300;
 /** Bitrate Opus suara wawancara (F2-03B, docs/quality/kapasitas.md): ±360 KB per 90 detik. WER korpus whisper-small 32 kbps 0,4286
  *  sama dengan WAV asli (0,43); 24 kbps 0,448 tetapi di Chromium kata kunci salah dengar di e2e, jadi tidak dipakai. */
 export const BITRATE_SUARA = 32_000;

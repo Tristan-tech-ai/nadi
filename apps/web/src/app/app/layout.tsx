@@ -58,13 +58,19 @@ async function Navigasi() {
   if (!sesi?.peran) return null;
   // Staf: tautan Magang hanya bila dia mentor atau peserta (RLS rencana_magang hanya memperlihatkan rencananya sendiri).
   let magang = false;
+  let ilmu = false;
   if (sesi.peran === "staf") {
     const supabase = await createClient();
-    const { count } = await supabase.from("rencana_magang").select("id", { count: "exact", head: true });
+    // F3-07C: tautan Rekam ilmu hanya untuk staf yang sedang berhenti dan punya butir ilmu (RLS serah_butir_baca_ilmu_sendiri).
+    const [{ count }, { count: nIlmu }] = await Promise.all([
+      supabase.from("rencana_magang").select("id", { count: "exact", head: true }),
+      supabase.from("serah_butir").select("id", { count: "exact", head: true }).eq("jenis", "ilmu"),
+    ]);
     magang = (count ?? 0) > 0;
+    ilmu = (nIlmu ?? 0) > 0;
   }
   const bahasa = await bahasaAplikasi(sesi.bahasa);
-  return <NavBawah peran={sesi.peran} magang={magang} teks={ambilKamus(bahasa).aplikasi} lang={bahasa} />;
+  return <NavBawah peran={sesi.peran} magang={magang} ilmu={ilmu} teks={ambilKamus(bahasa).aplikasi} lang={bahasa} />;
 }
 
 export default function LayoutApp({ children }: LayoutProps<"/app">) {

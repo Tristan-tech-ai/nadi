@@ -25,6 +25,8 @@ const nextConfig: NextConfig = {
       },
       // F2-03: hanya halaman lamar yang boleh memakai mikrofon (rekaman wawancara suara). Header yang sama di aturan
       // berikutnya menimpa aturan umum di atas (docs bawaan Next 05-config/01-next-config-js/headers.md).
+      // F3-07C: orang yang berhenti merekam penjelasan Rekam Ilmu di /app/ilmu.
+      { source: "/app/ilmu", headers: [{ key: "Permissions-Policy", value: "camera=(self), microphone=(self), geolocation=(), payment=()" }] },
       { source: "/lamar/:kode", headers: [{ key: "Permissions-Policy", value: "camera=(self), microphone=(self), geolocation=(), payment=()" }] },
       { source: "/sw.js", headers: [{ key: "Content-Type", value: "application/javascript; charset=utf-8" }, { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }, { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self'" }] },
     ];
