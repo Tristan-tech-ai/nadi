@@ -2396,8 +2396,10 @@
    "accept": "nilai CIF x kurs + bea masuk (tarif isian pengguna) + PPN impor 12% x 11/12 + PPh 22 impor (tarif dari aturan bertanggal terverifikasi R-EKSIM2), API vs non-API, hasil bertanda perkiraan bukan billing, angka dan sumber pasal tampil; vitest contoh hitung + e2e + kamus id/en",
    "how": "setelah R-EKSIM2",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T09:09:08"
+   "status": "done",
+   "created": "2026-11-04T09:09:08",
+   "done": "2026-11-04T11:21:23",
+   "result": "f1569d4; src/lib/impor/biaya.ts vitest 4/4 (CIF Rp176.719.375, BM Rp8.835.969, PPN Rp20.411.088, PPh22 2,5% Rp4.638.884); /app/impor dengan aturan pph22.impor + ppn.impor terverifikasi; e2e impor + bahasa-akun lulus lokal dan produksi https://nadi-swart.vercel.app/app/impor (axe 390/1440 terang/gelap, foto); docs/quality/biaya-impor.md"
   },
   {
    "id": "B-EKSIM3",
