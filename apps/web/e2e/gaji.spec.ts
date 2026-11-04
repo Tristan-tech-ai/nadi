@@ -634,7 +634,8 @@ test("klaim: e-struk, batas kategori, disetujui di Feed, dibayar lewat slip", as
     await expect(slip.getByText("Penggantian biaya (klaim)")).toBeVisible();
     await expect(slip).toContainText("Rp15.000");
     await page.getByRole("button", { name: "Setujui gaji bulan ini" }).click();
-    await expect(page.getByTestId("berkas-transfer")).toBeVisible();
+    // Slip boleh ditahan Gerbang Gaji (orang baru); penggantian tetap lunas saat periode disetujui.
+    await expect(page.getByRole("button", { name: "Setujui gaji bulan ini" })).toHaveCount(0);
 
     await s.reload();
     await expect(s.getByTestId("daftar-klaim").locator('li[data-keterangan="Parkir antar barang ke pelanggan"]')).toContainText("Dibayar");
