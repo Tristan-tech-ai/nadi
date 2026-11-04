@@ -1912,8 +1912,10 @@
    "accept": "isian per orang 'Iuran dana pensiun dari usaha yang sudah dibayar' (pemilik saja, bukan BPJS JP) mengurangi kekurangan cadangan orang itu dengan tes vitest + SQL; karyawan kontrak (orang.data.kontrak_selesai) dihitung menurut pasal PP 35/2021 tentang uang kompensasi PKWT yang dibaca dulu dari PDF resmi dan dicatat di LEARN; foto 390/1440 terang/gelap + axe",
    "how": "docs/research/pesangon-f4-09.md bagian Pasal 58; kartu components/app/cadangan-pesangon.tsx; RPC cadangan_pesangon",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-01T08:35:23"
+   "status": "done",
+   "created": "2026-11-01T08:35:23",
+   "done": "2026-11-04T11:47:13",
+   "result": "bfa2356; migrasi 20261104049000_pesangon_kontrak_pensiun (md5 4d0099f7 cocok), tes SQL pesangon_kontrak_pensiun 15/15 + regresi cadangan_pesangon 22/22, vitest pesangon 30/30, e2e pesangon-kontrak lulus lokal dan produksi https://nadi-swart.vercel.app/app/gaji (axe 390/1440 terang/gelap, foto); PP 35/2021 Pasal 15-17 dibaca dari PDF resmi (LEARN); docs/quality/pesangon-kontrak.md"
   },
   {
    "id": "F3-07C",

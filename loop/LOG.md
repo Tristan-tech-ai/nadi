@@ -292,3 +292,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 4 Nov 2026 tick 272: B-EKSIM1 done (0f45f4a): invoice + packing list ekspor USD, kurs tercatat, jurnal 1-210/4-110, cetak Inggris; SQL 26/26, e2e lokal+produksi; wajib 98/111.
 - 4 Nov 2026 tick 273: F3-07E done (9e82db1): hak keuangan orang berhenti sebagai usulan Feed pemilik; SQL 22/22, vitest 7/7, e2e lokal+produksi; wajib 99/111.
 - 4 Nov 2026 tick 274: R-UUPK done (belum terbit, cek ulang 8 Nov, fitur tunda di antrean) + B-EKSIM2 done (f1569d4, /app/impor, vitest 4/4, e2e produksi); wajib 101/111.
+- 4 Nov 2026 tick 275: F4-09B done (bfa2356): kompensasi PKWT + iuran dana pensiun di cadangan pesangon; SQL 15/15 + 22/22, vitest 30/30, e2e produksi; wajib 102/111.
