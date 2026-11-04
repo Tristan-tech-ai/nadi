@@ -120,7 +120,8 @@ export function susunSlip(g: DataGaji, aturan: PetaAturan, bulan: number, riwaya
 /** Bruto PPh dan iuran pegawai dari komponen slip tersimpan (untuk riwayat masa Desember). */
 export function ringkasKomponen(k: Komponen[]) {
   return {
-    brutoPph: k.filter((x) => x.jenis === "pendapatan" || MASUK_BRUTO_PPH.includes(x.kode)).reduce((s, x) => s + x.nilai, 0),
+    // Penggantian biaya (klaim berstruk, M-18) bukan upah: tidak ikut bruto PPh 21 tahunan.
+    brutoPph: k.filter((x) => (x.jenis === "pendapatan" && x.kode !== "penggantian") || MASUK_BRUTO_PPH.includes(x.kode)).reduce((s, x) => s + x.nilai, 0),
     pph: k.filter((x) => x.kode === "pph21").reduce((s, x) => s + x.nilai, 0),
     iuranPegawai: k.filter((x) => IURAN_PEGAWAI.includes(x.kode)).reduce((s, x) => s + x.nilai, 0),
   };

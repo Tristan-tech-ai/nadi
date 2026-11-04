@@ -17,4 +17,8 @@ describe("cicilan kasbon di slip (M-10B, PP 36/2021 Pasal 63 dan 65)", () => {
     expect(cicilanKasbon([k("pokok", "pendapatan", 2_000_000), k("denda", "potongan", 1_000_000)], [{ cicilan: 100_000, sisa: 100_000 }])).toMatchObject({ komponen: null, dibatasi: true });
     expect(cicilanKasbon([k("pokok", "pendapatan", 2_000_000)], [])).toMatchObject({ komponen: null, dibatasi: false });
   });
+  it("penggantian biaya tidak menaikkan dasar 50%", () => {
+    const slip = [k("pokok", "pendapatan", 1_000_000), k("penggantian", "pendapatan", 2_000_000)];
+    expect(cicilanKasbon(slip, [{ cicilan: 900_000, sisa: 900_000 }])).toMatchObject({ dibatasi: true, komponen: { nilai: 500_000 } });
+  });
 });

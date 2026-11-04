@@ -1,0 +1,162 @@
+{
+ "struk-01.txt": {
+  "total": 64800,
+  "tanggal": "2026-10-04",
+  "kategori": "bensin"
+ },
+ "struk-02.txt": {
+  "total": 3000,
+  "tanggal": "2026-01-10",
+  "kategori": "parkir"
+ },
+ "struk-03.txt": {
+  "total": 24000,
+  "tanggal": "2026-02-16",
+  "kategori": "tol"
+ },
+ "struk-04.txt": {
+  "total": 62000,
+  "tanggal": "2026-05-18",
+  "kategori": "transport"
+ },
+ "struk-05.txt": {
+  "total": 159500,
+  "tanggal": "2026-02-28",
+  "kategori": "makan"
+ },
+ "struk-06.txt": {
+  "total": 1050000,
+  "tanggal": "2026-04-17",
+  "kategori": "hotel"
+ },
+ "struk-07.txt": {
+  "total": 120000,
+  "tanggal": "2026-05-25",
+  "kategori": "atk"
+ },
+ "struk-08.txt": {
+  "total": 50000,
+  "tanggal": "2026-01-05",
+  "kategori": "pulsa"
+ },
+ "struk-09.txt": {
+  "total": 174300,
+  "tanggal": "2026-09-26",
+  "kategori": "bensin"
+ },
+ "struk-10.txt": {
+  "total": 2000,
+  "tanggal": "2026-02-03",
+  "kategori": "parkir"
+ },
+ "struk-11.txt": {
+  "total": 11500,
+  "tanggal": "2026-02-19",
+  "kategori": "tol"
+ },
+ "struk-12.txt": {
+  "total": 20000,
+  "tanggal": "2026-02-05",
+  "kategori": "transport"
+ },
+ "struk-13.txt": {
+  "total": 83600,
+  "tanggal": "2026-11-08",
+  "kategori": "makan"
+ },
+ "struk-14.txt": {
+  "total": 600000,
+  "tanggal": "2026-03-19",
+  "kategori": "hotel"
+ },
+ "struk-15.txt": {
+  "total": 76500,
+  "tanggal": "2026-03-28",
+  "kategori": "atk"
+ },
+ "struk-16.txt": {
+  "total": 100000,
+  "tanggal": "2026-08-26",
+  "kategori": "pulsa"
+ },
+ "struk-17.txt": {
+  "total": 177500,
+  "tanggal": "2026-07-09",
+  "kategori": "bensin"
+ },
+ "struk-18.txt": {
+  "total": 2000,
+  "tanggal": "2026-07-17",
+  "kategori": "parkir"
+ },
+ "struk-19.txt": {
+  "total": 24000,
+  "tanggal": "2026-09-18",
+  "kategori": "tol"
+ },
+ "struk-20.txt": {
+  "total": 59500,
+  "tanggal": "2026-09-10",
+  "kategori": "transport"
+ },
+ "struk-21.txt": {
+  "total": 50600,
+  "tanggal": "2026-04-06",
+  "kategori": "makan"
+ },
+ "struk-22.txt": {
+  "total": 1350000,
+  "tanggal": "2026-04-27",
+  "kategori": "hotel"
+ },
+ "struk-23.txt": {
+  "total": 76500,
+  "tanggal": "2026-06-12",
+  "kategori": "atk"
+ },
+ "struk-24.txt": {
+  "total": 50000,
+  "tanggal": "2026-06-16",
+  "kategori": "pulsa"
+ },
+ "struk-25.txt": {
+  "total": 275100,
+  "tanggal": "2026-07-27",
+  "kategori": "bensin"
+ },
+ "struk-26.txt": {
+  "total": 10000,
+  "tanggal": "2026-07-20",
+  "kategori": "parkir"
+ },
+ "struk-27.txt": {
+  "total": 11500,
+  "tanggal": "2026-06-05",
+  "kategori": "tol"
+ },
+ "struk-28.txt": {
+  "total": 74000,
+  "tanggal": "2026-07-05",
+  "kategori": "transport"
+ },
+ "struk-29.txt": {
+  "total": 77000,
+  "tanggal": "2026-04-05",
+  "kategori": "makan"
+ },
+ "struk-30.txt": {
+  "total": 1350000,
+  "tanggal": "2026-02-06",
+  "kategori": "hotel"
+ },
+ "struk-31.txt": {
+  "total": 27500,
+  "tanggal": "2026-04-11",
+  "kategori": "atk"
+ },
+ "struk-32.txt": {
+  "total": 100000,
+  "tanggal": "2026-03-15",
+  "kategori": "pulsa"
+ }
+}

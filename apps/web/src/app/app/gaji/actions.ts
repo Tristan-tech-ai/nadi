@@ -73,6 +73,11 @@ export async function siapkanGaji(_: HasilGaji, form: FormData): Promise<HasilGa
   const kasbonDari = new Map<string, KasbonAktif[]>();
   for (const x of kas ?? []) kasbonDari.set(x.orang_id as string, [...(kasbonDari.get(x.orang_id as string) ?? []), { cicilan: Number(x.cicilan), sisa: Number(x.sisa) }]);
 
+  // M-18: klaim yang disetujui dan belum dibayar ikut dibayar lewat slip sebagai penggantian biaya (bukan upah).
+  const { data: kl } = await supabase.from("klaim").select("orang_id, jumlah, terbayar").eq("status", "disetujui");
+  const gantiDari = new Map<string, number>();
+  for (const x of kl ?? []) gantiDari.set(x.orang_id as string, (gantiDari.get(x.orang_id as string) ?? 0) + Number(x.jumlah) - Number(x.terbayar));
+
   let ditahan = 0;
   for (const o of digaji) {
     const rw = riwayat.get(o.id);
@@ -80,6 +85,8 @@ export async function siapkanGaji(_: HasilGaji, form: FormData): Promise<HasilGa
     const cil = cicilanKasbon(komponen, kasbonDari.get(o.id) ?? []);
     if (cil.komponen) komponen.push(cil.komponen);
     // Peringatan slip ditulis dalam bahasa Indonesia seperti peringatan susunSlip (ditampilkan dengan lang="id").
+    const ganti = gantiDari.get(o.id) ?? 0;
+    if (ganti > 0) komponen.push({ kode: "penggantian", label: "Penggantian biaya (klaim)", jenis: "pendapatan", nilai: ganti, sumber: "klaim disetujui" });
     if (cil.dibatasi) peringatan.push(`Cicilan kasbon dibatasi menjadi Rp${(cil.komponen?.nilai ?? 0).toLocaleString("id-ID")} dari Rp${cil.diminta.toLocaleString("id-ID")} agar potongan tidak melebihi 50% upah (PP 36/2021 Pasal 65).`);
     const { data, error } = await supabase.rpc("simpan_slip", { p_periode: per, p_orang: o.id, p_komponen: komponen, p_peringatan: peringatan });
     if (error) return { galat: error.code === "55000" ? t.db(error.message) : t.gagalSlip };

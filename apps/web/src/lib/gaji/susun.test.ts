@@ -115,3 +115,13 @@ describe("insentif beban kerja di slip (F3-05)", () => {
     expect(nilai(susunSlip({ pokok: 3_000_000 }, ATURAN, 10, undefined, [], 12.5).komponen, "insentif_beban")).toBeUndefined();
   });
 });
+
+describe("penggantian biaya (M-18)", () => {
+  it("tidak masuk bruto PPh 21", () => {
+    const k = [
+      { kode: "pokok", label: "Gaji pokok", jenis: "pendapatan" as const, nilai: 4_000_000, sumber: "uji" },
+      { kode: "penggantian", label: "Penggantian biaya", jenis: "pendapatan" as const, nilai: 350_000, sumber: "uji" },
+    ];
+    expect(ringkasKomponen(k).brutoPph).toBe(4_000_000);
+  });
+});

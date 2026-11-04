@@ -1,0 +1,7 @@
+Bukti pembelian
+Paket data 15 GB 30 hari
+Nomor 0812-xxxx-6110
+Tanggal 26 Agu 2026
+Harga Rp100.000
+Jumlah dibayar Rp100.000
+Status: Berhasil

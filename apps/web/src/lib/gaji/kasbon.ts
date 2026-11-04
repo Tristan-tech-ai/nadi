@@ -13,7 +13,7 @@ export type KasbonAktif = { cicilan: number; sisa: number };
 export function cicilanKasbon(komponen: Komponen[], kasbon: KasbonAktif[]): { komponen: Komponen | null; dibatasi: boolean; diminta: number } {
   const diminta = kasbon.reduce((s, k) => s + Math.max(0, Math.min(k.cicilan, k.sisa)), 0);
   if (diminta <= 0) return { komponen: null, dibatasi: false, diminta: 0 };
-  const pendapatan = komponen.filter((k) => k.jenis === "pendapatan").reduce((s, k) => s + k.nilai, 0);
+  const pendapatan = komponen.filter((k) => k.jenis === "pendapatan" && k.kode !== "penggantian").reduce((s, k) => s + k.nilai, 0);
   const lain = komponen.filter((k) => k.jenis === "potongan" && (KODE_PASAL63 as readonly string[]).includes(k.kode)).reduce((s, k) => s + k.nilai, 0);
   const ruang = Math.max(0, Math.floor(pendapatan * 0.5) - lain);
   const nilai = Math.min(diminta, ruang);

@@ -536,3 +536,110 @@ test("kasbon: cicilan di slip, sisa berkurang saat disetujui, berkas transfer CI
     if (pidAwal) await sb.rpc("pindah_perusahaan", { p_perusahaan: pidAwal });
   }
 });
+
+// M-18: staf menempel teks e-struk parkir (jumlah, tanggal, kategori terisi), klaim di atas batas ditolak, pemilik menyetujui di
+// Feed, klaim ikut slip gaji sebagai penggantian biaya, setelah gaji disetujui klaim berstatus Dibayar. Usaha "Uji Klaim E2E".
+test("klaim: e-struk, batas kategori, disetujui di Feed, dibayar lewat slip", async ({ page, browser }) => {
+  test.setTimeout(240_000);
+  const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
+  expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
+  const pidAwal = ((await sb.auth.getClaims()).data?.claims?.app_metadata as { pid?: string } | undefined)?.pid;
+  try {
+    const { data: ada } = await sb.from("perusahaan").select("id").eq("nama", "Uji Klaim E2E").limit(1);
+    let pid = ada?.[0]?.id as string | undefined;
+    if (!pid) {
+      const { data, error } = await sb.rpc("buat_perusahaan", { p_nama: "Uji Klaim E2E", p_industri: "fnb" });
+      expect(error).toBeNull();
+      pid = data as string;
+    } else {
+      expect((await sb.rpc("pindah_perusahaan", { p_perusahaan: pid })).error).toBeNull();
+    }
+    await sb.auth.refreshSession();
+    await sb.from("orang").update({ status: "nonaktif" }).eq("perusahaan_id", pid).eq("status", "aktif");
+    const { data: per } = await sb.from("periode_gaji").select("bulan").eq("perusahaan_id", pid);
+    const dipakai = new Set((per ?? []).map((p) => (p.bulan as string).slice(0, 7)));
+    let bulan = "";
+    for (let i = 2026 * 12 + 10; !bulan; i++) {
+      const b = `${Math.floor(i / 12)}-${String((i % 12) + 1).padStart(2, "0")}`;
+      if (!b.endsWith("-12") && !dipakai.has(b)) bulan = b;
+    }
+    const tanda = Date.now().toString(36).toUpperCase();
+    const nama = `Sales Klaim ${tanda}`;
+    const kategori = `Parkir ${tanda}`;
+
+    await page.goto("/masuk?next=/app/orang");
+    await page.getByLabel("Email").fill(E.E2E_EMAIL_A);
+    await page.getByLabel("Kata sandi").fill(E.E2E_SANDI);
+    await page.getByRole("button", { name: "Masuk" }).click();
+    await page.waitForURL(/\/app\/orang/);
+    const kode = (await page.getByTestId("kode-usaha").textContent())!.trim();
+    await page.getByLabel("Nama orang").fill(nama);
+    await page.getByRole("button", { name: "Tambah" }).click();
+    const baris = page.getByRole("listitem").filter({ hasText: nama });
+    await baris.getByPlaceholder("PIN 6 angka").fill("778899");
+    await baris.getByRole("button", { name: "Buat akun staf" }).click();
+    const id = (await baris.getByTestId("info-akun").textContent())!.match(/ID (S\d{3})/)![1];
+    await baris.getByText("Gaji belum diisi").click();
+    const fg = baris.getByRole("form", { name: `Gaji ${nama}` });
+    await fg.getByLabel("Gaji pokok (Rp)").fill("3000000");
+    await fg.getByRole("button", { name: `Simpan gaji ${nama}` }).click();
+    await expect(fg.getByText("Tersimpan.")).toBeVisible();
+
+    await page.goto("/app/klaim");
+    const fk = page.getByRole("form", { name: "Tambah kategori klaim" });
+    await fk.getByLabel("Nama kategori").fill(kategori);
+    await fk.getByLabel(/^Batas per orang/).fill("100000");
+    await fk.getByLabel("Wajib foto struk").uncheck();
+    await fk.getByRole("button", { name: "Tambah kategori" }).click();
+    await expect(page.getByTestId("daftar-kategori")).toContainText(kategori);
+    await periksaUi(page, "klaim-pemilik");
+
+    const s = await (await browser.newContext()).newPage();
+    await s.goto("/masuk/staf");
+    await s.getByLabel("Kode usaha").fill(kode);
+    await s.getByLabel("ID kamu").fill(id);
+    await s.getByLabel("PIN").fill("778899");
+    await s.getByRole("button", { name: "Masuk" }).click();
+    await expect(s.getByTestId("peran")).toContainText("staf");
+    await s.goto("/app/klaim");
+    const hari = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Makassar" }).format(new Date());
+    const [th, bl, hr] = hari.split("-");
+    const fm = s.getByRole("form", { name: "Ajukan klaim" });
+    await fm.getByLabel(/^Tempel teks e-struk/).fill(`PARKIR MAL SENTRAL\nMasuk : ${hr}/${bl}/${th} 09:12\nKeluar : ${hr}/${bl}/${th} 12:40\nTotal Bayar Rp 15.000\nTerima kasih`);
+    await expect(fm.getByLabel("Jumlah (Rp)")).toHaveValue("15000");
+    await expect(fm.getByLabel("Tanggal struk")).toHaveValue(hari);
+    await fm.getByLabel("Kategori").selectOption({ label: kategori });
+    await fm.getByLabel("Untuk apa").fill("Parkir antar barang ke pelanggan");
+    await fm.getByRole("button", { name: "Ajukan klaim" }).click();
+    await expect(s.getByTestId("daftar-klaim").locator('li[data-keterangan="Parkir antar barang ke pelanggan"]')).toContainText("Menunggu");
+    await expect(s.getByTestId("sisa-batas")).toContainText("Rp85.000");
+    await fm.getByLabel("Kategori").selectOption({ label: kategori });
+    await fm.getByLabel("Jumlah (Rp)").fill("90000");
+    await fm.getByLabel("Untuk apa").fill("Parkir menginap");
+    await fm.getByRole("button", { name: "Ajukan klaim" }).click();
+    await expect(s.getByRole("alert").filter({ hasText: "Melebihi batas" })).toContainText("Rp85.000");
+    await periksaUi(s, "klaim-staf");
+
+    await page.goto("/app");
+    const kartu = page.locator("article").filter({ hasText: `Ganti biaya ${kategori} ${nama}` }).last();
+    await kartu.getByRole("button", { name: "Setujui" }).click();
+    await expect(kartu).toHaveAttribute("data-tersimpan", "ya");
+
+    await page.goto(`/app/gaji?bulan=${bulan}`);
+    await page.getByRole("button", { name: "Siapkan gaji bulan ini" }).click();
+    await expect(page.getByText("Draf gaji siap untuk 1 orang.")).toBeVisible();
+    await page.reload();
+    const slip = page.getByTestId("daftar-slip").getByRole("listitem").filter({ hasText: nama });
+    await slip.getByText("Rincian").click();
+    await expect(slip.getByText("Penggantian biaya (klaim)")).toBeVisible();
+    await expect(slip).toContainText("Rp15.000");
+    await page.getByRole("button", { name: "Setujui gaji bulan ini" }).click();
+    await expect(page.getByTestId("berkas-transfer")).toBeVisible();
+
+    await s.reload();
+    await expect(s.getByTestId("daftar-klaim").locator('li[data-keterangan="Parkir antar barang ke pelanggan"]')).toContainText("Dibayar");
+    await s.context().close();
+  } finally {
+    if (pidAwal) await sb.rpc("pindah_perusahaan", { p_perusahaan: pidAwal });
+  }
+});

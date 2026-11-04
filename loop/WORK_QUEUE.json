@@ -3221,8 +3221,24 @@
    "accept": "tes SQL RLS (staf hanya data sendiri, jawaban survei anonim bila dipilih), rantai persetujuan atasan langsung > pemilik dengan delegasi saat cuti diuji SQL, cetak SP sebagai surat keluar bernomor ber-QR, e2e per alur, kamus id/en",
    "how": "docs/research/hr-admin.md bagian Belum; menutup TA-03, TA-05, TA-11, TA-13",
    "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-05T12:30:00",
+   "done": "2026-11-05T05:29:28",
+   "result": "46f8b5c + d5c28b0 (picu deploy); migrasi 20261105069000_hr_admin_b md5 f5cc44cb (bidang_kustom/nilai_kustom, survei anonim survei_isi terpisah + hasil ditahan < 3, langkah_persetujuan + delegasi + trigger rantai_usulan menunggu_atasan, terbitkan_sp, templat_dokumen/buat_dokumen, surat_keluar SP/DOK); tes SQL hr_admin_b 40/40 (rantai atasan > pemilik, delegasi saat cuti, tanpa delegasi langsung ke pemilik, staf hanya data sendiri, isolasi); /app/survei, langkah atasan di Feed, data tambahan/delegasi/templat/terbitkan SP di /app/orang/kerja; e2e produksi hr-lanjut lulus + regresi izin dan hr lulus; axe 390/1440 terang/gelap tanpa gulir samping"
+  },
+  {
+   "id": "M-18B",
+   "fase": "F1",
+   "kind": "build",
+   "priority": 4,
+   "size": "m",
+   "wajib": true,
+   "title": "Klaim lanjutan: baca foto struk lewat baca-berkas (jenis struk), uang harian per kota, pemeriksa kewajaran",
+   "accept": "baca-berkas jenis struk mengembalikan total/tanggal/pemasok tanpa membuat usulan nota, eval korpus foto struk sintetis >= 90% total benar, uang harian per kota di kategori diuji SQL, e2e staf foto struk sampai klaim terisi",
+   "how": "docs/research/klaim.md bagian Belum; pola eval di docs/quality",
+   "blocked_by": "",
    "status": "ready",
-   "created": "2026-11-05T12:30:00"
+   "created": "2026-11-05T16:00:00"
   }
  ]
 }

@@ -49,7 +49,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | TA-27 | Compliance: eBupot 21/26 ke DJP, laporan BPJS, SPT 21 | Payroll/Compliance; Payroll/Reports | ekspor BPMP (templat Excel Coretax) di Ruang Akuntan | SEBAGIAN: berkas BPJS, bukti potong A1. Kirim langsung ke DJP: MITRA | M-09, M-10 |
 | TA-28 | Payroll disbursement dan berkas e-banking | Payroll/Payroll Processing; API Payroll Payment Schedule | tautan slip + wa.me; berkas payroll CIMB Niaga OCTO Biz (CSV inhouse dan SKN dari spesifikasi resmi bank, diperiksa sebelum diunduh) dari rekening karyawan di halaman Orang | SEBAGIAN: format bank lain (BCA, Mandiri, BRI) karena panduan kolomnya tidak publik. Transfer otomatis: MITRA | M-10 |
 | TA-29 | Alokasi biaya payroll ke cost center/cabang | Payroll/Payroll Allocation; API Cost Center | jurnal gaji tunggal | BELUM | M-10 |
-| TA-30 | Reimbursement, cash advance, pinjaman karyawan | Finance/*; Mobile App/Reimbursement; Settings/Finance; API Loans, Reimbursement | kasbon (uang muka upah) dari kas usaha sendiri, jurnal piutang karyawan 1-150, cicilan dibatasi 50% upah (PP 36/2021 Pasal 63 dan 65); cicilan otomatis di slip, sisa berkurang saat gaji disetujui (jurnal 6-100/1-150), /app/gaji/kasbon | SEBAGIAN: reimbursement dan pinjaman lain belum | M-18, M-10 |
+| TA-30 | Reimbursement, cash advance, pinjaman karyawan | Finance/*; Mobile App/Reimbursement; Settings/Finance; API Loans, Reimbursement | kasbon (uang muka upah) dari kas usaha sendiri, jurnal piutang karyawan 1-150, cicilan dibatasi 50% upah (PP 36/2021 Pasal 63 dan 65); cicilan otomatis di slip, sisa berkurang saat gaji disetujui (jurnal 6-100/1-150), /app/gaji/kasbon; reimbursement /app/klaim dibayar lewat slip (penggantian, bukan upah) atau kas (M-18) | SEBAGIAN: pinjaman berbunga atau pihak ketiga tidak dibuat (Nadi tidak meminjamkan uang) | M-18, M-10 |
 | TA-31 | Rekrutmen ATS: lowongan, kandidat, talent pool, asesmen, MBTI, CV parsing, AI scoring, kalender, laporan, job portal | Recruitment/*; For Employee/Recruitment | lowongan, /lamar, baca CV tanpa model, rubrik, wawancara suara + transkrip, uji kerja, IPIP, Bank Talenta, status pelamar, lingkaran rekrut, penjaga bias | SEBAGIAN: kalender wawancara, laporan rekrutmen. Pasang ke job portal: MITRA | M-14 |
 | TA-32 | Kinerja: goals KPI/OKR, review (diri, atasan, rekan), kalibrasi, talents/9-box, kompetensi, suksesi, IDP | Performance Management/* | KPI dari papan kerja, kolam bonus | SEBAGIAN: siklus review dan goal | M-13 |
 | TA-33 | LMS: materi, tes, progres, sertifikat | LMS/* | Rekam ilmu (SOP rekaman + langkah) | SEBAGIAN: kursus, kuis, sertifikat | M-13 |
@@ -155,12 +155,12 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 
 | ID | Kemampuan Mekari | Bagian | Nadi sekarang | Status | Tugas |
 |---|---|---|---|---|---|
-| EX-01 | Klaim karyawan dengan OCR struk, kategori, saldo per kategori | Expense Claims/*; Expense Mobile/Mobile Home | Lempar nota (pemilik) | BELUM untuk karyawan | M-18 |
-| EX-02 | Kebijakan pengeluaran (batas per kategori, per tujuan) | Expense Policies/* | tidak ada | BELUM | M-18 |
-| EX-03 | AI Checker kebijakan dan kewajaran klaim | Approval Process/AI Checker | Gerbang Gaji (pola), keyakinan baca | BELUM | M-18 |
-| EX-04 | Perjalanan dinas: pengajuan, uang muka, laporan, kebijakan tujuan | Business Trip/*; Expense Mobile/Mobile Trip | tidak ada | BELUM | M-18 |
+| EX-01 | Klaim karyawan dengan OCR struk, kategori, saldo per kategori | Expense Claims/*; Expense Mobile/Mobile Home | klaim karyawan /app/klaim: kategori, sisa batas per bulan, foto struk diunggah, teks e-struk diurai tanpa model (korpus 32 struk sintetis) mengisi jumlah, tanggal, kategori (M-18) | SEBAGIAN: baca foto struk dengan model belum | M-18 |
+| EX-02 | Kebijakan pengeluaran (batas per kategori, per tujuan) | Expense Policies/* | batas per orang per kategori per bulan, struk wajib per kategori, tanggal paling lama 60 hari, klaim perjalanan hanya di tanggal perjalanan; ditegakkan database (M-18) | SEBAGIAN: batas per tujuan atau uang harian per kota belum | M-18 |
+| EX-03 | AI Checker kebijakan dan kewajaran klaim | Approval Process/AI Checker | pemeriksa aturan pasti di database (batas, struk, tanggal, perjalanan); tebakan kategori dari kata kunci struk (M-18) | SEBAGIAN: pemeriksa kewajaran berbasis model untuk kategori ragu belum | M-18 |
+| EX-04 | Perjalanan dinas: pengajuan, uang muka, laporan, kebijakan tujuan | Business Trip/*; Expense Mobile/Mobile Trip | perjalanan dinas: pengajuan lewat atasan lalu pemilik, uang muka 1-160, klaim terkait perjalanan, penyelesaian selisih (kurang dibayar lewat slip, lebih menjadi kasbon) (M-18) | SEBAGIAN: kebijakan tujuan dan uang harian belum | M-18 |
 | EX-05 | Pembelian: purchasing, vendor, vendor portal, pajak | Purchase Management/*; Expense Mobile/Mobile Purchase | Lempar nota pemasok, /app/beli (PR, PO, penerimaan, tagihan, retur) | SEBAGIAN: portal pemasok dan pajak pembelian (PPN masukan per tagihan) belum | M-04 |
-| EX-06 | Workflow persetujuan klaim/trip/pembelian/vendor | Workflow Setup/*; Approval Process/Approvals | Feed | SEBAGIAN | M-18 |
+| EX-06 | Workflow persetujuan klaim/trip/pembelian/vendor | Workflow Setup/*; Approval Process/Approvals | Feed; klaim dan perjalanan dinas lewat rantai atasan | SEBAGIAN: klaim dan perjalanan lewat atasan langsung lalu pemilik (M-11B, M-18); persetujuan pembelian dan vendor belum | M-18 |
 | EX-07 | Kartu korporat virtual/fisik, kartu debit bisnis | Corporate Cards/* | tidak ada | MITRA (bank penerbit/PJP) | - |
 | EX-08 | Pengiriman uang internasional, kalkulator kurs | halaman /produk/expense/international-remittance, kalkulator-mata-uang | kurs isian di invoice ekspor | MITRA untuk remitansi; kalkulator kurs dari kurs publik BELUM | M-08 |
 | EX-09 | Akun, multi company, custom fields, scheduler, pengguna | Account Management/*; User Management/*; Getting Started/* | multi usaha | SEBAGIAN | M-21 |
@@ -192,8 +192,8 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 | Status | Jumlah |
 |---|---|
 | ADA | 27 |
-| SEBAGIAN | 57 |
-| BELUM | 31 |
+| SEBAGIAN | 61 |
+| BELUM | 27 |
 | MITRA | 17 |
 | LUAR | 2 |
 

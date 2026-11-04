@@ -97,7 +97,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
   );
 
   if (!pengelola) {
-    return <div lang={bahasa}>{kepala}{slip.length ? (
+    return <div lang={bahasa}>{kepala}<p className="mt-2 text-sm"><a href="/app/klaim" className="underline underline-offset-4" data-testid="tautan-klaim">{kamus.klaim.judul}</a></p>{slip.length ? (
       <ul className="mt-6 divide-y divide-garis border-y border-garis" data-testid="slip-saya">
         {slip.map((s) => (
           <li key={s.id} className="py-3">
@@ -158,6 +158,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
       <nav className="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm" aria-label={kamus.transfer.lainAria}>
         {sesi.peran === "pemilik" && <a href="/app/gaji/thr" className="underline underline-offset-4">{kamus.thr.judul}</a>}
         <a href="/app/gaji/kasbon" className="underline underline-offset-4">{kamus.kasbon.judul}</a>
+        <a href="/app/klaim" className="underline underline-offset-4">{kamus.klaim.judul}</a>
       </nav>
       <section className="mt-10 border-t border-garis pt-6" aria-labelledby="judul-lembur" data-testid="lembur">
         <h2 id="judul-lembur" className="text-lg font-semibold">{isiTeks(t.lemburJudul, { bulan: namaBulan(bulan, t) })}</h2>
