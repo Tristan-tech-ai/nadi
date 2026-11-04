@@ -108,7 +108,7 @@ async function Isi() {
         {sesi.peran === "pemilik" ? <FormProfilPajak awal={p.profil} teks={t} /> : <p className="mt-2 text-sm text-tinta-2">{t.profilPemilik}</p>}
       </section>
 
-      <p className="mt-8 text-sm"><a href="/app/pajak/faktur" className="font-semibold text-laut underline underline-offset-4" data-testid="tautan-faktur">{ambilKamus(bahasa).faktur.judul}</a></p>
+      <p className="mt-8 text-sm"><a href="/app/pajak/faktur" className="font-semibold text-laut underline underline-offset-4" data-testid="tautan-faktur">{ambilKamus(bahasa).faktur.judul}</a> <a href="/app/kepatuhan" className="ml-4 font-semibold text-laut underline underline-offset-4" data-testid="tautan-kepatuhan">{ambilKamus(bahasa).kepatuhan.judul}</a></p>
 
       <section className="mt-8" aria-labelledby="judul-simulasi">
         <h2 id="judul-simulasi" className="text-lg font-semibold">{t.simJudul}</h2>

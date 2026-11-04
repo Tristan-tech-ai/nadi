@@ -1430,6 +1430,7 @@ export const kamusId = {
     gagal: "Nadi gagal membuat izin. Coba lagi sebentar.",
   },
   kartuInfo: {
+    lihatKalender: "Lihat kalender",
     lihatBeban: "Lihat bebannya",
     sudahDitangani: "Sudah ditangani",
     menyimpan: "Menyimpan...",
@@ -2497,6 +2498,15 @@ export const kamusId = {
     batasPerBulan: "batas Rp{n} per bulan", tanpaBatas: "tanpa batas", akunLabel: "akun",
   },
   klaimPesan: { hanya: "Hanya pemilik atau admin yang bisa melakukan ini.", gagal: "Belum tersimpan. Coba lagi sebentar.", diajukan: "Klaim diajukan. Atasan langsung atau pemilik akan memutuskan.", dinasDiajukan: "Perjalanan diajukan.", kategoriTersimpan: "Kategori tersimpan.", dibayar: "Dibayar Rp{n}.", uangMukaDibayar: "Uang muka dibayar dan tercatat.", dinasSelesai: "Selesai: Rp{potong} dipotong dari uang muka, Rp{kasbon} jadi kasbon, Rp{sisa} klaim masih dibayar lewat slip." },
+  kepatuhan: {
+    judul: "Kalender kepatuhan", ket: "Tenggat 90 hari ke depan: pajak, BPJS, THR, kontrak, surat peringatan, dan izin usaha. Pengingat masuk ke Feed pemilik 7 hari sebelumnya.",
+    hanyaPengelola: "Hanya pemilik, admin, atau akuntan yang membuka kalender kepatuhan.", kosong: "Belum ada tenggat dalam 90 hari ke depan.",
+    catatan: "Tanggal yang jatuh pada Sabtu, Minggu, atau libur nasional sudah digeser ke hari kerja berikutnya sesuai aturannya. THR mengikuti Idulfitri; untuk hari raya lain, atur sendiri.",
+    izinJudul: "Izin usaha", izinKet: "Catat izin yang punya masa berlaku, misalnya PIRT atau sertifikat halal, agar diingatkan sebelum habis.", izinAria: "Catat izin usaha",
+    jenis: "Jenis", jenisNama: { nib: "NIB", pirt: "PIRT", halal: "Sertifikat halal", bpom: "Izin edar BPOM", lainnya: "Lainnya" }, nama: "Nama", namaContoh: "misalnya PIRT kue kering",
+    nomor: "Nomor (boleh kosong)", berlakuSampai: "Berlaku sampai (boleh kosong)", pengingat: "Ingatkan sebelum habis (hari)", simpan: "Simpan izin", tanpaMasa: "tanpa masa berlaku",
+  },
+  kepatuhanPesan: { tersimpan: "Izin tersimpan dan masuk kalender.", hanya: "Hanya pemilik atau admin yang mencatat izin usaha.", gagal: "Belum tersimpan. Coba lagi sebentar.", jenisTak: "Jenis izin tidak dikenal." },
   demo: {
     label: "Contoh nota belanja",
     judulAwal: "Catat belanja",

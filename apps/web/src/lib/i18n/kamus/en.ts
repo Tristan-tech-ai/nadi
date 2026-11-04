@@ -1429,6 +1429,7 @@ export const kamusEn: Kamus = {
     gagal: "Nadi could not create the permission. Try again in a moment.",
   },
   kartuInfo: {
+    lihatKalender: "See the calendar",
     lihatBeban: "See the workload",
     sudahDitangani: "Already handled",
     menyimpan: "Saving...",
@@ -2496,6 +2497,15 @@ export const kamusEn: Kamus = {
     batasPerBulan: "limit Rp{n} per month", tanpaBatas: "no limit", akunLabel: "account",
   },
   klaimPesan: { hanya: "Only the owner or an admin can do this.", gagal: "Not saved yet. Try again in a moment.", diajukan: "Claim submitted. Your direct manager or the owner will decide.", dinasDiajukan: "Trip requested.", kategoriTersimpan: "Category saved.", dibayar: "Paid Rp{n}.", uangMukaDibayar: "Advance paid and recorded.", dinasSelesai: "Closed: Rp{potong} taken from the advance, Rp{kasbon} became a pay advance, Rp{sisa} of claims will be paid through payroll." },
+  kepatuhan: {
+    judul: "Compliance calendar", ket: "Deadlines for the next 90 days: tax, BPJS, holiday allowance, contracts, warning letters, and business permits. Reminders reach the owner's Feed 7 days ahead.",
+    hanyaPengelola: "Only the owner, an admin, or an accountant opens the compliance calendar.", kosong: "No deadlines in the next 90 days.",
+    catatan: "Dates on a Saturday, Sunday, or public holiday are already moved to the next working day as the rules say. The holiday allowance follows Eid al-Fitr; set other holidays yourself.",
+    izinJudul: "Business permits", izinKet: "Record permits with an expiry date, such as PIRT or halal certificates, to be reminded before they lapse.", izinAria: "Record a business permit",
+    jenis: "Type", jenisNama: { nib: "NIB", pirt: "PIRT", halal: "Halal certificate", bpom: "BPOM distribution permit", lainnya: "Other" }, nama: "Name", namaContoh: "for example PIRT cookies",
+    nomor: "Number (optional)", berlakuSampai: "Valid until (optional)", pengingat: "Remind before expiry (days)", simpan: "Save permit", tanpaMasa: "no expiry",
+  },
+  kepatuhanPesan: { tersimpan: "Permit saved and added to the calendar.", hanya: "Only the owner or an admin records business permits.", gagal: "Not saved yet. Try again in a moment.", jenisTak: "Unknown permit type." },
   demo: {
     label: "Sample shopping receipt",
     judulAwal: "Record purchase of",

@@ -10,8 +10,8 @@ import type { Kamus } from "@/lib/i18n/kamus";
 
 /** Kartu info di Feed (F3-07B, docs/design/sinyal-beban-layar.md): bukan keputusan, jadi tanpa Setujui/Tolak. Satu tombol utama
  *  "Lihat bebannya" ke tab beban, dan "Sudah ditangani" yang menutup kartu (hanya pemilik, dicatat di database). */
-export function KartuInfo({ usulanId, usulan, teks, teksKartu, bahasa = "id", tautan }: {
-  usulanId: string; usulan: Usulan; teks: Kamus["kartuInfo"]; teksKartu: TeksKartu; bahasa?: Bahasa; tautan: string;
+export function KartuInfo({ usulanId, usulan, teks, teksKartu, bahasa = "id", tautan, label }: {
+  usulanId: string; usulan: Usulan; teks: Kamus["kartuInfo"]; teksKartu: TeksKartu; bahasa?: Bahasa; tautan: string; label?: string;
 }) {
   const [h, aksi, sibuk] = useActionState<HasilTutupInfo, FormData>(tutupKartuInfo, {});
   const isiLang = bahasa === "id" ? undefined : "id";
@@ -29,7 +29,7 @@ export function KartuInfo({ usulanId, usulan, teks, teksKartu, bahasa = "id", ta
             <input type="hidden" name="usulan" value={usulanId} />
             <div className="flex flex-wrap items-center gap-3">
               <Link href={tautan} className="inline-flex min-h-12 flex-1 items-center justify-center rounded-[var(--radius-isian)] bg-tinta px-4 font-semibold text-kertas">
-                {teks.lihatBeban}
+                {label ?? teks.lihatBeban}
               </Link>
               <Tombol type="submit" ragam="teks" disabled={sibuk}>{sibuk ? teks.menyimpan : teks.sudahDitangani}</Tombol>
             </div>
