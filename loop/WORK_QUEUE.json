@@ -2344,6 +2344,62 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-04T07:22:20"
+  },
+  {
+   "id": "R-EKSIM2",
+   "fase": "R",
+   "kind": "research",
+   "priority": 34,
+   "size": "s",
+   "wajib": true,
+   "title": "Verifikasi teks pasal ekspor-impor ke aturan bertanggal",
+   "accept": "teks pasal PMK 51/2025 (tarif PPh 22 impor), PP 2/2026 + PP 21/2026 (besaran dan jangka DHE SDA), BTKI 2022 (PMK 26/2022, struktur tarif bea masuk), KMK kurs pajak mingguan (sumber dan cara ambil), API dalam NIB dibaca dari PDF resmi (OCR bila hasil pindai, tesseract ind); hasil di docs/research/ekspor-impor.md bertanda T; baris aturan_bertanggal pph22.impor dan ppn.impor terisi terverifikasi=true dengan sumber; tes SQL aturan",
+   "how": "OCR lokal tesseract untuk PDF pindai dari peraturan.bpk.go.id / jdih.kemenkeu.go.id",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T09:09:08"
+  },
+  {
+   "id": "B-EKSIM1",
+   "fase": "F4",
+   "kind": "build",
+   "priority": 35,
+   "size": "m",
+   "wajib": true,
+   "title": "Invoice dan packing list ekspor (Inggris, USD, kurs tercatat)",
+   "accept": "invoice ekspor bervaluta USD dengan kurs dan sumber kurs tersimpan per invoice, packing list (berat, jumlah koli), dokumen cetak berbahasa Inggris, jurnal piutang valas; tes SQL + e2e + foto 390/1440 + axe; tanpa mengisi PEB",
+   "how": "pola invoice F4 yang ada, cetak A4",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T09:09:08"
+  },
+  {
+   "id": "B-EKSIM2",
+   "fase": "F4",
+   "kind": "build",
+   "priority": 36,
+   "size": "m",
+   "wajib": true,
+   "title": "Kalkulator perkiraan biaya mendarat impor",
+   "accept": "nilai CIF x kurs + bea masuk (tarif isian pengguna) + PPN impor 12% x 11/12 + PPh 22 impor (tarif dari aturan bertanggal terverifikasi R-EKSIM2), API vs non-API, hasil bertanda perkiraan bukan billing, angka dan sumber pasal tampil; vitest contoh hitung + e2e + kamus id/en",
+   "how": "setelah R-EKSIM2",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T09:09:08"
+  },
+  {
+   "id": "B-EKSIM3",
+   "fase": "F4",
+   "kind": "build",
+   "priority": 37,
+   "size": "m",
+   "wajib": false,
+   "title": "Baca dokumen pabean yang dilempar menjadi usulan jurnal",
+   "accept": "PIB/PEB/SPPB yang dilempar terbaca (jenis baru di baca-berkas), usulan jurnal persediaan + PPN impor + PPh 22 impor + utang valas di Feed; eval korpus sintetis >= 90% bidang",
+   "how": "setelah B-EKSIM2",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T09:09:08"
   }
  ]
 }
