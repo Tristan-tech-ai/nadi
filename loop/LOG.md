@@ -303,3 +303,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 4 Nov 2026 tick 285: M-01, M-02, W-01, W-03, M-03 selesai (5 wajib, semua diuji produksi); BOBOT ITERASI ditegakkan wake_guard; wajib 123/159.
 - 5 Nov 2026 tick 286: M-04, M-05, W-04, D-26, M-02B selesai (5 wajib, semua diuji produksi); wajib 128/159.
 | 287 | 5 Nov 2026 | M-12, W-05, W-08, D-21, M-09 done; wajib 133/160; klaim salah ditemukan: e2e mcp tidak pernah dijalankan ulang setelah W-04 (daftar alat basi), tes e2e izin rusak oleh tombol Ajukan lembur baru, Postgres menerima 4/11/2026 sebagai tanggal |
+- 5 Nov 2026 tick 288: M-09B, M-10, M-10B, M-11, D-27 selesai (5 wajib, semua diuji produksi); wajib 138/162; klaim salah: harapan THR harian di tes SQL salah hitung (25,6 jt, bukan 25 jt), label select pembungkus membuat e2e dan pembaca layar salah nama, tanggal pengumuman tampil UTC.

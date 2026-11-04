@@ -2609,8 +2609,10 @@
    "accept": "globals.css ::selection, caret-color, :focus-visible, text-underline-offset dari token di aplikasi; e2e aksesibilitas 'fokus terlihat' lulus untuk /app dan halaman publik; foto 390/1440 terang/gelap",
    "how": "Impeccable craft-floor.md bagian Browser surfaces",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T18:44:19"
+   "status": "done",
+   "created": "2026-11-04T18:44:19",
+   "done": "2026-11-05T04:27:27",
+   "result": "ded17fe; globals.css ::selection kunyit (dibalik di lapangan poster), caret-color + accent-color tinta, scrollbar-color garis-kuat, text-underline-offset 0.22em dari token; e2e produksi aksesibilitas 'permukaan peramban dari token (D-27)' lulus terang+gelap di /panduan dan /app, 'fokus terlihat' halaman publik (lokal semua halaman) + aplikasi (lokal 7 halaman, produksi /app /app/pengumuman /app/orang/kerja) lulus; foto 390/1440 terang/gelap axe 0 tanpa gulir samping"
   },
   {
    "id": "W-01",
@@ -2913,8 +2915,10 @@
    "accept": "tes SQL RLS (staf hanya data sendiri), e2e per alur, kamus id/en",
    "how": "docs/research/mekari/rencana.md; menutup TA-01..TA-13, TA-05; isi: HR administrasi: profil lengkap + custom field, riwayat jabatan/gaji, job level, cost center, atasan langsung (bagan), onboarding/offboarding daftar periksa, transfer/promosi beralur, surat peringatan SP1-SP3 dengan masa berlaku, templat dokumen bebas (kontrak PKWT, offering) lewat surat keluar, pengumuman + tanda baca, form dan survei, persetujuan bertingkat + delegasi",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T04:12:31",
+   "result": "6d232f0; migrasi 20261105068000_hr_admin md5 491bbade + 068100_hr_admin_audit md5 3b684180 (profil_kerja, riwayat_kerja, surat_peringatan beri_sp berurutan PP 35/2021 Pasal 36 huruf k + Penjelasan Pasal 52, pengumuman + tanda baca + ringkas, daftar_periksa); tes SQL hr_admin 33/33 (staf hanya data sendiri, isolasi usaha); /app/orang/kerja + /app/pengumuman + tautan Feed, kamus id/en; e2e produksi hr.spec lulus (jabatan, promosi, SP1->SP2, daftar periksa, pengumuman dibaca staf 1 dari N), axe 390/1440 terang/gelap tanpa gulir samping; lanjutan M-11B"
   },
   {
    "id": "M-12",
