@@ -289,3 +289,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 2026-11-04 22.10 WIB | tick 269 | F3-07C + R-EKSIM selesai; tugas ekspor-impor turunan ditambah; wajib 95/111 |
 | 2026-11-04 22.50 WIB | tick 270 | F3-07D SELESAI: wawancara keluar sekali pakai, tes SQL 17/17, e2e produksi lulus; wajib 96/111 |
 | 2026-11-04 23.20 WIB | tick 271 | R-EKSIM2 SELESAI: teks pasal ekspor-impor terverifikasi lewat OCR, aturan bertanggal; wajib 97/111 |
+- 4 Nov 2026 tick 272: B-EKSIM1 done (0f45f4a): invoice + packing list ekspor USD, kurs tercatat, jurnal 1-210/4-110, cetak Inggris; SQL 26/26, e2e lokal+produksi; wajib 98/111.

@@ -2376,8 +2376,10 @@
    "accept": "invoice ekspor bervaluta USD dengan kurs dan sumber kurs tersimpan per invoice, packing list (berat, jumlah koli), dokumen cetak berbahasa Inggris, jurnal piutang valas; tes SQL + e2e + foto 390/1440 + axe; tanpa mengisi PEB",
    "how": "pola invoice F4 yang ada, cetak A4",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T09:09:08"
+   "status": "done",
+   "created": "2026-11-04T09:09:08",
+   "done": "2026-11-04T10:28:31",
+   "result": "0f45f4a; migrasi 20261104047000_invoice_ekspor (md5 98896149 cocok), tes SQL invoice_ekspor 26/26, vitest ekspor/hitung 5/5, e2e invoice-ekspor + bahasa-akun lulus lokal dan produksi https://nadi-swart.vercel.app/app/ekspor (axe 390/1440 terang/gelap, foto), cetak /cetak/ekspor/<id> Commercial invoice + Packing list bahasa Inggris; docs/quality/invoice-ekspor.md"
   },
   {
    "id": "B-EKSIM2",
