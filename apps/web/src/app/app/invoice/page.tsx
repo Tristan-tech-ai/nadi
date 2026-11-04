@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { randomUUID } from "node:crypto";
 import { Suspense } from "react";
-import { CocokMutasi, FormBatalInvoice, FormBayar, FormInvoice, FormLunas, TombolPengingat } from "@/components/app/invoice";
+import { CocokMutasi, FormBatalInvoice, FormBayar, FormInvoice, FormLunas, TombolPengingat, type ProdukPilihan } from "@/components/app/invoice";
 import { Cap } from "@/components/ui/cap";
 import { Rupiah } from "@/components/ui/rupiah";
 import { formatTanggalKalender } from "@/lib/format";
@@ -52,7 +52,7 @@ async function Isi() {
     return <div lang={bahasa}>{kepala}<p className="mt-6 text-tinta-2">{t.hanyaPeran}</p></div>;
   }
   const supabase = await createClient();
-  const [ring, inv, bayar, usaha, zona, h] = await Promise.all([
+  const [ring, inv, bayar, usaha, zona, h, produk] = await Promise.all([
     supabase.rpc("ringkasan_invoice"),
     supabase.from("invoice").select("id, nomor, pelanggan, pelanggan_hp, total, tanggal, jatuh_tempo, status, kode_verifikasi, lunas_tanggal, lunas_cara, alasan_batal")
       .order("dibuat_at", { ascending: false }).limit(50),
@@ -60,6 +60,7 @@ async function Isi() {
     supabase.from("perusahaan").select("nama").eq("id", sesi.perusahaanId).single(),
     zonaUsahaIni(sesi.perusahaanId),
     headers(),
+    supabase.from("produk").select("id, nama, harga_jual, jenis").eq("aktif", true).order("nama").limit(500),
   ]);
   if (ring.error || inv.error) return <div lang={bahasa}>{kepala}<p role="alert" className="mt-6 text-cap">{t.gagalMuat}</p></div>;
   const r = ring.data as Ringkasan;
@@ -135,7 +136,7 @@ async function Isi() {
 
       <section className="mt-8" aria-labelledby="judul-baru">
         <h2 id="judul-baru" className="text-lg font-semibold">{t.baruJudul}</h2>
-        <FormInvoice kunci={randomUUID()} jatuhTempo={geser(hari, 14)} hariIni={hari} teks={f} bahasa={bahasa} />
+        <FormInvoice kunci={randomUUID()} jatuhTempo={geser(hari, 14)} hariIni={hari} teks={f} bahasa={bahasa} produk={(produk.data ?? []) as ProdukPilihan[]} />
       </section>
 
       <section className="mt-8" aria-labelledby="judul-daftar">

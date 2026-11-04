@@ -20,7 +20,7 @@ async function teksInvoice() {
 }
 
 const GALAT = (k: Awaited<ReturnType<typeof teksInvoice>>, kode: string | undefined, pesan: string, cadangan: string) =>
-  kode === "22023" || kode === "P0002" ? k.db(pesan) : kode === "42501" ? k.t.hanyaPengelola : cadangan;
+  kode === "22023" || kode === "P0002" || kode === "23514" ? k.db(pesan) : kode === "42501" ? k.t.hanyaPengelola : cadangan;
 
 /** Simpan QRIS statis (isi QR dibaca di peramban) dan rekening transfer. QR diperiksa ulang di server; isinya tidak diubah. */
 export async function aturBayar(_: HasilInvoice, form: FormData): Promise<HasilInvoice> {
@@ -57,10 +57,11 @@ export async function buatInvoice(_: HasilInvoice, form: FormData): Promise<Hasi
   const uraian = form.getAll("uraian").map(String);
   const jumlah = form.getAll("jumlah").map(String);
   const harga = form.getAll("harga").map(String);
-  uraian.forEach((u, i) => { isian[`uraian.${i}`] = u; isian[`jumlah.${i}`] = jumlah[i] ?? ""; isian[`harga.${i}`] = harga[i] ?? ""; });
+  const produk = form.getAll("produk").map(String);
+  uraian.forEach((u, i) => { isian[`uraian.${i}`] = u; isian[`jumlah.${i}`] = jumlah[i] ?? ""; isian[`harga.${i}`] = harga[i] ?? ""; isian[`produk.${i}`] = produk[i] ?? ""; });
   isian.n = String(uraian.length);
   const baris = uraian
-    .map((u, i) => ({ uraian: u.trim(), jumlah: angkaJumlah(jumlah[i] ?? ""), harga: angkaHarga(harga[i] ?? "") }))
+    .map((u, i) => ({ uraian: u.trim(), jumlah: angkaJumlah(jumlah[i] ?? ""), harga: angkaHarga(harga[i] ?? ""), ...(/^[0-9a-f-]{36}$/.test(produk[i] ?? "") ? { produk: produk[i] } : {}) }))
     .filter((b) => b.uraian || b.harga);
   if (!isian.pelanggan) return { galat: k.t.tulisPelanggan, isian };
   if (baris.length === 0) return { galat: k.t.minimalBaris, isian };

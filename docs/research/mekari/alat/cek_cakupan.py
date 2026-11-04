@@ -87,8 +87,12 @@ def periksa(hitung=False):
             total += 1
             if not tercakup(kat, bag, per_awalan[aw]):
                 kurang.append(f"{prod}: {kat} / {bag}")
+    c = collections.Counter(f[2] for f in fitur)
+    teks = open(os.path.join(AKAR, "fitur.md"), encoding="utf-8").read()
+    ringkas = {m.group(1): int(m.group(2)) for m in re.finditer(r"^\| (ADA|SEBAGIAN|BELUM|MITRA|LUAR) \| (\d+) \|$", teks, re.M)}
+    if ringkas != dict(c):
+        salah.append(("RINGKASAN", f"tabel ringkasan {ringkas} != hitungan {dict(c)}", "perbarui"))
     if hitung:
-        c = collections.Counter(f[2] for f in fitur)
         print("baris fitur:", len(fitur), dict(c))
     for f in salah:
         print("STATUS TIDAK SAH:", f)

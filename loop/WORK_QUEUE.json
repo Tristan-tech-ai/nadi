@@ -3127,6 +3127,20 @@
    "created": "2026-11-04T20:18:07",
    "done": "2026-11-04T20:19:10",
    "result": "f460e8a: docs/research/mekari/ (7 pusat bantuan 2.159 artikel, 6.894 elemen layar, API 1.315 endpoint, fitur.md 134 kemampuan: ADA 15 SEBAGIAN 54 BELUM 45 MITRA 18 LUAR 2, pihak-ketiga.md 20 butir, rencana.md M-01..M-27); gerbang mekari LULUS 545/545 bagian (merah dulu 523/545)"
+  },
+  {
+   "id": "M-02B",
+   "fase": "F7",
+   "kind": "build",
+   "priority": 3,
+   "size": "m",
+   "wajib": true,
+   "title": "Stok lanjutan: impor produk dan opname dari Excel/foto lewat Lempar, layar varian dan harga bertingkat, lokasi rak/bin, laporan stok per gudang",
+   "accept": "Lempar Excel daftar produk jadi usulan produk.impor dan Excel/foto hitungan jadi usulan opname (ekstraktor, korpus 3 berkas sintetis), layar varian (induk + atribut) dan harga bertingkat dipakai invoice, kolom rak/bin per stok; tes SQL + e2e",
+   "how": "docs/research/mekari/rencana.md M-02; fitur.md JU-09..JU-11",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-04T21:04:58"
   }
  ]
 }

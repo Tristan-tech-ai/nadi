@@ -71,9 +71,9 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | JU-06 | Pembelian: permintaan, penawaran, pesanan, penerimaan, tagihan pemasok, pembayaran, approval | Pembelian/*; Pemenuhan/Pembelian | nota pemasok lewat Lempar jadi usulan belanja + jurnal, PIB impor | SEBAGIAN: PR, PO, penerimaan barang, hutang jatuh tempo, pembayaran | M-04 |
 | JU-07 | Biaya dengan approval draft | Biaya/* | Lempar nota, Feed | ADA (dasar); pemetaan akun per kategori belum | M-04 |
 | JU-08 | Kontak: pelanggan, supplier, karyawan, pihak lain, grup, kredit/debit memo | Kontak/* | graf usaha (pihak), nama pelanggan di invoice | SEBAGIAN: daftar kontak + saldo per kontak, memo | M-03, M-04 |
-| JU-09 | Produk dan jasa: kategori, satuan, varian, bundle, konversi, aturan harga, barcode, batch/seri | Produk/*; Daftar Lainnya/Atribut Varian Produk, Satuan Produk, Produk | tidak ada | BELUM | M-02 |
-| JU-10 | Persediaan: penyesuaian, stok opname, nilai (rata-rata), hitung ulang, tipe penyimpanan | Produk/Penyesuaian Stok; Daftar Lainnya/Penghitungan Ulang Nilai Persediaan, Tipe Penyimpanan Persediaan | akun persediaan di jurnal PIB | BELUM | M-02 |
-| JU-11 | Gudang, multi gudang, transfer gudang, lokasi rak/bin | Produk/Gudang, Multi Gudang, Transfer Gudang | tidak ada | BELUM | M-02 |
+| JU-09 | Produk dan jasa: kategori, satuan, varian, bundle, konversi, aturan harga, barcode, batch/seri | Produk/*; Daftar Lainnya/Atribut Varian Produk, Satuan Produk, Produk | /app/barang: produk barang/jasa/paket, satuan besar + faktor, barcode, kode; varian (induk + atribut) dan harga bertingkat ada di database (M-02) | SEBAGIAN: layar varian dan harga bertingkat, impor produk dari Excel (M-02B) | M-02, M-02B |
+| JU-10 | Persediaan: penyesuaian, stok opname, nilai (rata-rata), hitung ulang, tipe penyimpanan | Produk/Penyesuaian Stok; Daftar Lainnya/Penghitungan Ulang Nilai Persediaan, Tipe Penyimpanan Persediaan | rata-rata tertimbang bergerak, opname per produk dengan jurnal selisih 5-200, kartu stok berjalan (M-02) | SEBAGIAN: opname banyak produk dari foto/Excel lewat Lempar (M-02B) | M-02, M-02B |
+| JU-11 | Gudang, multi gudang, transfer gudang, lokasi rak/bin | Produk/Gudang, Multi Gudang, Transfer Gudang | gudang banyak, gudang utama untuk invoice, pindah gudang dengan nilai rata-rata (M-02) | SEBAGIAN: lokasi rak/bin (M-02B) | M-02, M-02B |
 | JU-12 | Produksi: BoM bertingkat, perintah kerja, biaya standar, assembly/disassembly, pemetaan akun | Produksi/* | tidak ada | BELUM | M-07 |
 | JU-13 | Pemenuhan pesanan: ambil barang, segregasi stok, surat jalan, terima barang | Pemenuhan/* | tidak ada | BELUM | M-02, M-03 |
 | JU-14 | Kas dan bank: akun, transfer, terima/kirim uang, pemetaan kas | Kas & Bank/* | akun 1-100/1-110 di ledger | SEBAGIAN: layar kas/bank + transaksi manual | M-05 |
@@ -192,8 +192,8 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 | Status | Jumlah |
 |---|---|
 | ADA | 17 |
-| SEBAGIAN | 53 |
-| BELUM | 44 |
+| SEBAGIAN | 56 |
+| BELUM | 41 |
 | MITRA | 18 |
 | LUAR | 2 |
 

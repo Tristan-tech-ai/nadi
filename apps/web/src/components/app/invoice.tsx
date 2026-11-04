@@ -74,14 +74,20 @@ export function FormBayar({ awal, teks: t }: { awal: { qris: string | null; qris
   );
 }
 
-type Baris = { uraian: string; jumlah: string; harga: string };
-const kosong = (): Baris => ({ uraian: "", jumlah: "1", harga: "" });
+type Baris = { uraian: string; jumlah: string; harga: string; produk: string };
+export type ProdukPilihan = { id: string; nama: string; harga_jual: number; jenis: string };
+const kosong = (): Baris => ({ uraian: "", jumlah: "1", harga: "", produk: "" });
 const angka = (b: Baris) => ({ uraian: b.uraian, jumlah: Number(b.jumlah.replace(",", ".")) || 0, harga: Number(b.harga.replace(/[^\d]/g, "")) || 0 });
 
-function IsiInvoice({ awal, besok, hariIni, kunci, sibuk, t, bahasa }: { awal: Record<string, string>; besok: string; hariIni: string; kunci: string; sibuk: boolean; t: TF; bahasa: Bahasa }) {
+function IsiInvoice({ awal, besok, hariIni, kunci, sibuk, t, bahasa, produk }: { awal: Record<string, string>; besok: string; hariIni: string; kunci: string; sibuk: boolean; t: TF; bahasa: Bahasa; produk: ProdukPilihan[] }) {
   const n = Number(awal.n ?? 0);
-  const [baris, setBaris] = useState<Baris[]>(n > 0 ? Array.from({ length: n }, (_, i) => ({ uraian: awal[`uraian.${i}`] ?? "", jumlah: awal[`jumlah.${i}`] ?? "1", harga: awal[`harga.${i}`] ?? "" })) : [kosong()]);
+  const [baris, setBaris] = useState<Baris[]>(n > 0 ? Array.from({ length: n }, (_, i) => ({ uraian: awal[`uraian.${i}`] ?? "", jumlah: awal[`jumlah.${i}`] ?? "1", harga: awal[`harga.${i}`] ?? "", produk: awal[`produk.${i}`] ?? "" })) : [kosong()]);
   const ubah = (i: number, k: keyof Baris, v: string) => setBaris((s) => s.map((b, j) => (j === i ? { ...b, [k]: v } : b)));
+  // Memilih produk mengisi uraian dan harga jualnya; stok berkurang di server saat invoice terbit (M-02).
+  const pilihProduk = (i: number, id: string) => {
+    const p = produk.find((x) => x.id === id);
+    setBaris((s) => s.map((b, j) => (j === i ? { ...b, produk: id, ...(p ? { uraian: p.nama, harga: String(p.harga_jual) } : {}) } : b)));
+  };
   const total = totalBaris(baris.map(angka));
   return (
     <>
@@ -95,6 +101,13 @@ function IsiInvoice({ awal, besok, hariIni, kunci, sibuk, t, bahasa }: { awal: R
         <ul className="mt-1 grid gap-2">
           {baris.map((b, i) => (
             <li key={i} className="grid grid-cols-[5rem_minmax(0,1fr)_auto] items-end gap-2 border-b border-garis pb-2 sm:grid-cols-[minmax(0,1fr)_4.5rem_7rem_auto] sm:border-0 sm:pb-0" data-testid="baris-invoice">
+              {produk.length > 0 ? (
+                <label className="col-span-3 flex flex-col gap-1 sm:col-span-4"><span className="text-xs text-tinta-2">{isiTeks(t.produkAria, { n: i + 1 })}</span>
+                  <select name="produk" value={b.produk} onChange={(e) => pilihProduk(i, e.target.value)} className={`${isian} w-full min-w-0`}>
+                    <option value="">{t.tanpaProduk}</option>
+                    {produk.map((p) => <option key={p.id} value={p.id} data-pengguna>{p.nama}</option>)}
+                  </select></label>
+              ) : <input type="hidden" name="produk" value="" />}
               <label className="col-span-3 flex flex-col gap-1 sm:col-span-1"><span className="text-xs text-tinta-2 sm:sr-only">{t.uraian}</span>
                 <input name="uraian" value={b.uraian} onChange={(e) => ubah(i, "uraian", e.target.value)} maxLength={120} placeholder={t.uraianContoh} aria-label={isiTeks(t.uraianAria, { n: i + 1 })} className={`${isian} w-full min-w-0`} /></label>
               <label className="flex flex-col gap-1"><span className="text-xs text-tinta-2 sm:sr-only">{t.jumlah}</span>
@@ -121,12 +134,12 @@ function IsiInvoice({ awal, besok, hariIni, kunci, sibuk, t, bahasa }: { awal: R
 }
 
 /** Invoice baru: langsung terbit bernomor. Isian dikembalikan saat galat; formulir kosong lagi setelah berhasil. */
-export function FormInvoice({ kunci, jatuhTempo, hariIni, teks: t, bahasa = "id" }: { kunci: string; jatuhTempo: string; hariIni: string; teks: TF; bahasa?: Bahasa }) {
+export function FormInvoice({ kunci, jatuhTempo, hariIni, teks: t, bahasa = "id", produk = [] }: { kunci: string; jatuhTempo: string; hariIni: string; teks: TF; bahasa?: Bahasa; produk?: ProdukPilihan[] }) {
   const [h, aksi, sibuk] = useActionState<HasilInvoice, FormData>(buatInvoice, null);
   const awal = h && "galat" in h ? (h.isian ?? {}) : {};
   return (
     <form action={aksi} className="mt-3 grid grid-cols-1 gap-3 rounded-[var(--radius-kartu)] border border-garis p-4 text-sm sm:grid-cols-2" aria-label={t.baruAria}>
-      <IsiInvoice key={JSON.stringify(h)} awal={awal} besok={jatuhTempo} hariIni={hariIni} kunci={kunci} sibuk={sibuk} t={t} bahasa={bahasa} />
+      <IsiInvoice key={JSON.stringify(h)} awal={awal} besok={jatuhTempo} hariIni={hariIni} kunci={kunci} sibuk={sibuk} t={t} bahasa={bahasa} produk={produk} />
       <div className="sm:col-span-2"><Hasil h={h} /></div>
     </form>
   );
