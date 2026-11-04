@@ -842,8 +842,9 @@
    "accept": "laporan jujur: berhasil atau tidak, dengan angka",
    "how": "",
    "blocked_by": "F5-01",
-   "status": "ready",
-   "created": "2026-10-30T20:05:52"
+   "status": "running",
+   "created": "2026-10-30T20:05:52",
+   "started": "2026-11-04T13:42:09"
   },
   {
    "id": "F6-01",
