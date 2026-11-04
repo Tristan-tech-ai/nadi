@@ -1,0 +1,45 @@
+{
+ "jenis": "pib",
+ "berkas": "pib-02.pdf",
+ "bidang": {
+  "nomor_pengajuan": "000020-0A1B2C-20261028-000098",
+  "nomor_daftar": "271828",
+  "tanggal_daftar": "2026-10-28",
+  "pemasok": "Lotus Packaging Co., Ltd",
+  "negara_pemasok": "China",
+  "importir": "CV Kopi Uji Nusantara",
+  "valuta": "USD",
+  "ndpbm": 16310.25,
+  "fob": 4250.4,
+  "freight": 610,
+  "asuransi": 21.25,
+  "nilai_cif": 4881.65,
+  "nilai_pabean_rp": 79620932,
+  "baris": [
+   {
+    "hs": "4819.20.00",
+    "uraian": "Kotak lipat karton kemasan kopi",
+    "jumlah": 20000,
+    "satuan": "PCE"
+   },
+   {
+    "hs": "3923.21.99",
+    "uraian": "Kantong plastik berkatup",
+    "jumlah": 15000,
+    "satuan": "PCE"
+   },
+   {
+    "hs": "4821.10.90",
+    "uraian": "Label kertas tercetak",
+    "jumlah": 30000,
+    "satuan": "PCE"
+   }
+  ],
+  "bm": 7962093,
+  "cukai": 0,
+  "ppn": 9634133,
+  "ppnbm": 0,
+  "pph": 6568727,
+  "total": 24164953
+ }
+}

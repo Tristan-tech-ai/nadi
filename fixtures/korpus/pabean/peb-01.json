@@ -1,0 +1,30 @@
+{
+ "jenis": "peb",
+ "berkas": "peb-01.pdf",
+ "bidang": {
+  "nomor_pengajuan": "000030-0A1B2C-20261102-000031",
+  "nomor_daftar": "161803",
+  "tanggal_daftar": "2026-11-02",
+  "eksportir": "CV Kopi Uji Nusantara",
+  "pembeli": "Harbour Roasters Pty Ltd",
+  "negara_tujuan": "AU Australia",
+  "valuta": "USD",
+  "nilai_fob": 8821.05,
+  "nilai_tukar": 16287.5,
+  "bea_keluar": 0,
+  "baris": [
+   {
+    "hs": "0901.11.10",
+    "uraian": "Kopi arabika biji mentah grade 1",
+    "jumlah": 1200,
+    "satuan": "KGM"
+   },
+   {
+    "hs": "0901.21.20",
+    "uraian": "Kopi sangrai contoh",
+    "jumlah": 3,
+    "satuan": "BG"
+   }
+  ]
+ }
+}

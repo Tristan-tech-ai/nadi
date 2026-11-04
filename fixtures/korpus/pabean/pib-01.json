@@ -1,0 +1,39 @@
+{
+ "jenis": "pib",
+ "berkas": "pib-01.pdf",
+ "bidang": {
+  "nomor_pengajuan": "000020-0A1B2C-20261104-000123",
+  "nomor_daftar": "314159",
+  "tanggal_daftar": "2026-11-04",
+  "pemasok": "Harbour Supply Pty Ltd",
+  "negara_pemasok": "Australia",
+  "importir": "CV Kopi Uji Nusantara",
+  "valuta": "USD",
+  "ndpbm": 16287.5,
+  "fob": 10000,
+  "freight": 800,
+  "asuransi": 50,
+  "nilai_cif": 10850,
+  "nilai_pabean_rp": 176719375,
+  "baris": [
+   {
+    "hs": "8438.80.11",
+    "uraian": "Mesin sangrai kopi kapasitas 5 kg",
+    "jumlah": 1,
+    "satuan": "UNIT"
+   },
+   {
+    "hs": "8419.89.20",
+    "uraian": "Pendingin biji kopi",
+    "jumlah": 2,
+    "satuan": "UNIT"
+   }
+  ],
+  "bm": 8835969,
+  "cukai": 0,
+  "ppn": 20411088,
+  "ppnbm": 0,
+  "pph": 4638884,
+  "total": 33885941
+ }
+}

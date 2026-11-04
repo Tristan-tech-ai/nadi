@@ -49,4 +49,20 @@ Tidak:
 - **B-EKSIM1** invoice dan packing list ekspor (Inggris, USD, kurs tercatat). SELESAI 4 Nov 2026: /app/ekspor, cetak /cetak/ekspor/<id>, docs/quality/invoice-ekspor.md.
 - **B-EKSIM2** kalkulator perkiraan biaya mendarat impor (bertanda perkiraan; tarif PPh 22 dan PPN dari aturan bertanggal terverifikasi).  SELESAI 4 Nov 2026: /app/impor, docs/quality/biaya-impor.md.
 - **R-EKSIM2** verifikasi teks pasal: PMK 51/2025 (tarif), PP 2/2026 + 21/2026 (DHE), BTKI 2022, KMK kurs, API dalam NIB; isi aturan_bertanggal dengan status terverifikasi.
-- **B-EKSIM3** baca dokumen pabean yang dilempar (PIB/PEB/SPPB) menjadi usulan jurnal.
+- **B-EKSIM3** baca dokumen pabean yang dilempar (PIB/PEB/SPPB) menjadi usulan jurnal. SELESAI 4 Nov 2026: jenis pib/peb/sppb di baca-berkas v13, trigger app.jurnal_pib, eval docs/quality/eval-pabean.md.
+
+## 5. Elemen dokumen pabean (B-EKSIM3, dibaca 4 Nov 2026)
+- **PIB BC 2.0:** Lampiran PER-44/BC/2011 (perubahan kedua P-22/BC/2008), salinan formulir di https://www.pajak.go.id/sites/default/files/d7//PIB%20PER-44%20BC%202011.pdf.
+  - Kepala: Kantor Pabean, Nomor Pengajuan, No. & Tgl. Pendaftaran (diisi Bea Cukai), Pemasok (nama, alamat, negara), Importir (NPWP, nama, alamat, status, API/APIT).
+  - Pengiriman dan nilai: 15 Invoice, 17 BL/AWB, 21 Valuta, 22 NDPBM, 23 FOB, 24 Freight, 25 Asuransi, 26 Nilai CIF (valuta dan Rp).
+  - Barang: 32 Pos Tarif/HS dan uraian, 33 Negara Asal, 34 Tarif, 35 Jumlah & jenis satuan.
+  - Pungutan: 37-42 BM, Cukai, PPN, PPnBM, PPh, Total (Dibayar / Ditanggung Pemerintah / Ditangguhkan / Dibebaskan).
+  - Status B untuk format terbaru CEISA 4.0 (PMK 190/PMK.04/2022): elemen inti sama, tata letak bisa berbeda.
+- **PEB BC 3.0:** Lampiran PER-07/BC/2020 (perubahan PER-21/BC/2018), https://jdih.kemenkeu.go.id/download/41866afa-abd9-4942-b86a-a60456bfc508/PER-07_BC_2020.pdf.
+  - Identitas: nomor pengajuan, nomor & tanggal pendaftaran, eksportir, 14-16 pembeli, 26 negara tujuan ekspor.
+  - Penyerahan dan nilai: 32 cara penyerahan, 34 jenis valuta, 35 nilai ekspor, 45 HS/uraian, 51 nilai FOB, 52 nilai tukar, 53 bea keluar, 54 PPh 22 ekspor.
+  - Menurut berita DDTC, aturan ini kini diganti PER-22/BC/2024 (B, teksnya belum dibaca).
+- **SPPB:** bidang identitas umum saja (nomor, tanggal, nomor & tanggal PIB, importir). Formulir resminya belum dibaca (B).
+- **Jurnal impor:** debit persediaan (CIF + BM + cukai + PPnBM), PPN masukan impor, PPh 22 impor dibayar di muka; kredit utang pemasok valas (CIF rupiah) dan bank (pungutan).
+  - Ini pilihan pembukuan Nadi. PPN masukan dan PPh 22 sebagai kredit pajak mengikuti PMK 131/2024 dan PMK 51/2025 (tidak final).
+  - Tanggal jurnal = tanggal pendaftaran PIB, kecuali masa depan atau bulan terkunci (lalu hari ini).

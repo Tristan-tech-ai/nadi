@@ -1,7 +1,7 @@
 // Inti pembaca berkas Lempar Saja tanpa dependensi luar: skema keluaran, xlsx ke teks, usulan per jenis, penilai eval.
 // Dipakai Edge Function (Deno), tes unit (vitest), dan skrip eval korpus (Node).
 
-export const JENIS = ["nota", "invoice", "slip_gaji", "ktp", "cv", "surat_sakit", "absen", "mutasi", "surat", "excel_karyawan", "lainnya"] as const;
+export const JENIS = ["nota", "invoice", "slip_gaji", "ktp", "cv", "surat_sakit", "absen", "mutasi", "surat", "excel_karyawan", "pib", "peb", "sppb", "lainnya"] as const;
 export type Jenis = (typeof JENIS)[number];
 
 type Skema = Record<string, unknown>;
@@ -17,6 +17,12 @@ const daftar = (isi: Skema): Skema => ({ type: "array", items: isi });
 const TANGGAL = "YYYY-MM-DD, kosong bila tidak ada";
 const RP = "rupiah utuh tanpa pemisah, 0 bila tidak ada";
 const barisBarang = objek({ nama: teks(), qty: angka(), harga: angka(RP), jumlah: angka(RP) });
+const VALUTA = "dalam valuta dokumen, boleh desimal dengan titik, 0 bila tidak ada";
+// B-EKSIM3: bidang dokumen pabean mengikuti elemen formulir resmi: PIB BC 2.0 (Lampiran PER-44/BC/2011: nomor pengajuan,
+// nomor & tanggal pendaftaran, pemasok, importir, 21 valuta, 22 NDPBM, 23 FOB, 24 freight, 25 asuransi, 26 nilai CIF, 32 pos
+// tarif/HS, 37-41 pungutan BM, cukai, PPN, PPnBM, PPh) dan PEB BC 3.0 (Lampiran PER-07/BC/2020: nomor pendaftaran, eksportir,
+// 14-16 pembeli, 26 negara tujuan, 34 jenis valuta, 35 nilai ekspor, 51 nilai FOB, 52 nilai tukar, 53 bea keluar).
+const barisPabean = objek({ hs: teks("pos tarif/HS persis seperti tertulis"), uraian: teks(), jumlah: angka(), satuan: teks() });
 
 export const BIDANG: Record<Jenis, Skema> = {
   nota: objek({ pemasok: teks("nama toko/pemasok yang menerbitkan nota"), nomor: teks(), tanggal: teks(TANGGAL), baris: daftar(barisBarang), total: angka(RP) }),
@@ -34,6 +40,19 @@ export const BIDANG: Record<Jenis, Skema> = {
   mutasi: objek({ baris: daftar(objek({ tanggal: teks(TANGGAL), keterangan: teks(), cabang: teks(), jumlah: angka(RP), arah: { type: "string", enum: ["DB", "CR"] }, saldo: angka(RP) })) }),
   surat: objek({ nomor: teks("nomor surat persis seperti tertulis"), jenis: teks("jenis surat, mis. Surat Keputusan Mutasi"), tanggal: teks(TANGGAL), pihak: teks("nama orang yang dituju/diatur surat") }),
   excel_karyawan: objek({ baris: daftar(objek({ id: teks("kode/ID karyawan"), nama: teks(), jabatan: teks(), telepon: teks(), mulai: teks(TANGGAL), gaji_pokok: angka(RP) })) }),
+  pib: objek({
+    nomor_pengajuan: teks(), nomor_daftar: teks("nomor pendaftaran"), tanggal_daftar: teks(TANGGAL), pemasok: teks("nama pemasok luar negeri"),
+    negara_pemasok: teks(), importir: teks(), valuta: teks("kode valuta, mis. USD"), ndpbm: angka("NDPBM: kurs rupiah per 1 valuta, boleh desimal"),
+    fob: angka(VALUTA), freight: angka(VALUTA), asuransi: angka(VALUTA), nilai_cif: angka(VALUTA), nilai_pabean_rp: angka(RP + "; nilai CIF dalam rupiah"),
+    baris: daftar(barisPabean), bm: angka(RP), cukai: angka(RP), ppn: angka(RP), ppnbm: angka(RP), pph: angka(RP + "; PPh Pasal 22 impor"),
+    total: angka(RP + "; total pungutan dibayar"),
+  }),
+  peb: objek({
+    nomor_pengajuan: teks(), nomor_daftar: teks("nomor pendaftaran"), tanggal_daftar: teks(TANGGAL), eksportir: teks(), pembeli: teks(),
+    negara_tujuan: teks(), valuta: teks("kode valuta, mis. USD"), nilai_fob: angka(VALUTA), nilai_tukar: angka("rupiah per 1 valuta, boleh desimal"),
+    baris: daftar(barisPabean), bea_keluar: angka(RP),
+  }),
+  sppb: objek({ nomor: teks("nomor SPPB"), tanggal: teks(TANGGAL), nomor_pib: teks("nomor pendaftaran PIB yang disetujui"), tanggal_pib: teks(TANGGAL), importir: teks() }),
   lainnya: objek({ judul: teks(), isi: teks("ringkasan isi penting") }),
 };
 
@@ -96,9 +115,10 @@ export function hasilDari(mentah: { jenis: Jenis; keyakinan: number; ringkasan: 
 
 export const INSTRUKSI = `Kamu membaca berkas kerja usaha kecil di Indonesia (foto nota, PDF, isi Excel/CSV) dan mengisinya ke skema.
 Aturan:
-- Pilih jenis yang paling cocok: nota (nota/struk belanja dari pemasok), invoice (tagihan resmi bernomor dengan jatuh tempo), slip_gaji, ktp, cv (daftar riwayat hidup pelamar), surat_sakit (surat keterangan dokter), absen (rekap jam masuk/pulang), mutasi (mutasi rekening bank), surat (surat resmi bernomor: SK, surat tugas, dll.), excel_karyawan (daftar karyawan), lainnya.
+- Pilih jenis yang paling cocok: nota (nota/struk belanja dari pemasok), invoice (tagihan resmi bernomor dengan jatuh tempo), slip_gaji, ktp, cv (daftar riwayat hidup pelamar), surat_sakit (surat keterangan dokter), absen (rekap jam masuk/pulang), mutasi (mutasi rekening bank), surat (surat resmi bernomor: SK, surat tugas, dll.), excel_karyawan (daftar karyawan), pib (Pemberitahuan Impor Barang BC 2.0), peb (Pemberitahuan Ekspor Barang BC 3.0), sppb (Surat Persetujuan Pengeluaran Barang dari Bea Cukai), lainnya.
 - Salin teks persis seperti tertulis (nama, nomor). Jangan menebak isi yang tidak ada: pakai string kosong atau 0.
 - Uang ditulis sebagai angka rupiah utuh tanpa titik/koma ribuan (Rp1.250.000 menjadi 1250000).
+- Nilai valuta asing dan kurs (FOB, CIF, NDPBM, nilai tukar) ditulis angka dengan titik desimal tanpa pemisah ribuan (USD 8,821.05 menjadi 8821.05; Rp16.287,50 per USD menjadi 16287.5).
 - Tanggal ditulis YYYY-MM-DD; tanggal Indonesia dibaca hari/bulan/tahun (07/10/2026 adalah 7 Oktober 2026).
 - Untuk tabel (absen, mutasi, excel_karyawan) masukkan semua baris data, tanpa baris judul. Kolom bisa bernama lain atau berurutan acak (mis. "Gapok" berarti gaji pokok, "WA" berarti telepon, "Posisi" berarti jabatan).
 - keyakinan jujur: rendah bila berkas buram, terpotong, atau jenisnya meragukan.
@@ -183,6 +203,8 @@ export function xlsxKeTeks(isi: Record<string, Uint8Array>, batasBaris = 2000): 
 
 const rp = (n: unknown) => "Rp" + Math.round(Number(n) || 0).toLocaleString("id-ID");
 const panjang = (x: unknown) => (Array.isArray(x) ? x.length : 0);
+const valuta = (n: unknown) => (Number(n) || 0).toLocaleString("id-ID", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const kurs = (n: unknown) => "Rp" + (Number(n) || 0).toLocaleString("id-ID", { maximumFractionDigits: 4 });
 
 export type Usulan = { aksi: string; judul: string; penjelasan: string; dampak_rp: number | null };
 
@@ -211,9 +233,34 @@ export function usulanDari(h: Hasil): Usulan {
       return { aksi: "dokumen.surat", judul: `Arsipkan ${b.jenis || "surat"} ${b.nomor}`.trim(), penjelasan: `Untuk ${b.pihak || "-"}. ${yakin}`, dampak_rp: null };
     case "excel_karyawan":
       return { aksi: "orang.impor", judul: `Tambah ${panjang(b.baris)} orang dari Excel`, penjelasan: yakin, dampak_rp: null };
+    case "pib": {
+      const j = jurnalPib(b);
+      return {
+        aksi: "uang.impor",
+        judul: `Catat impor PIB ${b.nomor_daftar || b.nomor_pengajuan || ""} dari ${b.pemasok || "pemasok"}: ${rp(j.cif + j.pungutan)}`.replace(/\s+/g, " "),
+        penjelasan: `Persediaan ${rp(j.persediaan)}, PPN impor ${rp(j.ppn)} (pajak masukan), PPh 22 impor ${rp(j.pph)} (kredit pajak), utang ke pemasok ${b.valuta || ""} ${valuta(b.nilai_cif)} = ${rp(j.cif)} (NDPBM ${kurs(b.ndpbm)}), pungutan dibayar ${rp(j.pungutan)}. Disetujui = jurnal ini dicatat; ongkos kirim yang dibayar ke pihak lain sesuaikan sendiri. ${yakin}`,
+        dampak_rp: j.cif + j.pungutan || null,
+      };
+    }
+    case "peb":
+      return { aksi: "dokumen.peb", judul: `Arsipkan PEB ${b.nomor_daftar || b.nomor_pengajuan || ""} ke ${b.pembeli || "pembeli"} (${b.negara_tujuan || "-"})`.replace(/\s+/g, " "), penjelasan: `Nilai FOB ${b.valuta || ""} ${valuta(b.nilai_fob)}. Penjualan ekspornya dicatat lewat invoice ekspor. ${yakin}`, dampak_rp: null };
+    case "sppb":
+      return { aksi: "dokumen.sppb", judul: `Arsipkan SPPB ${b.nomor || ""}`.trim(), penjelasan: `Barang PIB ${b.nomor_pib || "-"} boleh dikeluarkan dari kawasan pabean sejak ${b.tanggal || "-"}. ${yakin}`, dampak_rp: null };
     default:
       return { aksi: "berkas.tinjau", judul: `Tinjau berkas: ${b.judul || "tanpa judul"}`, penjelasan: `Nadi belum mengenali jenis berkas ini. ${yakin}`, dampak_rp: null };
   }
+}
+
+/**
+ * Jurnal impor dari PIB (sama dengan trigger app.jurnal_pib di database): persediaan = CIF rupiah + bea masuk + cukai + PPnBM,
+ * PPN impor = pajak masukan, PPh 22 impor = kredit pajak; kredit utang pemasok valas sebesar CIF rupiah dan bank sebesar pungutan.
+ * CIF rupiah dari nilai pabean; bila kosong, nilai CIF x NDPBM.
+ */
+export function jurnalPib(b: Record<string, any>) { // eslint-disable-line @typescript-eslint/no-explicit-any
+  const n = (x: unknown) => Math.max(0, Math.round(Number(x) || 0));
+  const cif = n(b.nilai_pabean_rp) || n((Number(b.nilai_cif) || 0) * (Number(b.ndpbm) || 0));
+  const bm = n(b.bm), cukai = n(b.cukai), ppn = n(b.ppn), ppnbm = n(b.ppnbm), pph = n(b.pph);
+  return { cif, bm, cukai, ppn, ppnbm, pph, persediaan: cif + bm + cukai + ppnbm, pungutan: bm + cukai + ppn + ppnbm + pph };
 }
 
 /**
@@ -241,11 +288,12 @@ const sama = (a: unknown, b: unknown) => String(a ?? "").trim().toLowerCase().re
 const angkaSama = (a: unknown, b: unknown) => Math.abs(Number(a) - Number(b)) < 0.5;
 
 /** Bidang kunci per jenis yang harus benar agar satu berkas dihitung benar. */
-export function nilai(jenisBenar: string, benar: Record<string, any>, h: Hasil): { benar: boolean; salah: string[] } { // eslint-disable-line @typescript-eslint/no-explicit-any
+export function nilai(jenisBenar: string, benar: Record<string, any>, h: Hasil): { benar: boolean; salah: string[]; diperiksa: number } { // eslint-disable-line @typescript-eslint/no-explicit-any
   const salah: string[] = [];
-  if (h.jenis !== jenisBenar) return { benar: false, salah: [`jenis ${h.jenis} != ${jenisBenar}`] };
+  let diperiksa = 0;
+  if (h.jenis !== jenisBenar) return { benar: false, salah: [`jenis ${h.jenis} != ${jenisBenar}`], diperiksa: 0 };
   const b = h.bidang as Record<string, any>; // eslint-disable-line @typescript-eslint/no-explicit-any
-  const cek = (nama: string, ok: boolean) => !ok && salah.push(nama);
+  const cek = (nama: string, ok: boolean) => { diperiksa++; if (!ok) salah.push(nama); };
   switch (jenisBenar) {
     case "nota":
       cek("total", angkaSama(b.total, benar.total)); cek("tanggal", sama(b.tanggal, benar.tanggal)); cek("nomor", sama(b.nomor, benar.nomor)); cek("jumlah baris", panjang(b.baris) === panjang(benar.baris)); break;
@@ -270,6 +318,20 @@ export function nilai(jenisBenar: string, benar: Record<string, any>, h: Hasil):
     }
     case "surat":
       cek("nomor", sama(b.nomor, benar.nomor)); cek("pihak", sama(b.pihak, benar.pihak)); break;
+    case "pib":
+      for (const k of ["nomor_daftar", "tanggal_daftar", "pemasok", "valuta"]) cek(k, sama(b[k], benar[k]));
+      for (const k of ["ndpbm", "nilai_cif", "nilai_pabean_rp", "bm", "ppn", "pph"]) cek(k, angkaSama(b[k], benar[k]));
+      cek("jumlah baris", panjang(b.baris) === panjang(benar.baris));
+      cek("HS baris pertama", sama((b.baris ?? [])[0]?.hs, benar.baris?.[0]?.hs));
+      break;
+    case "peb":
+      for (const k of ["nomor_daftar", "tanggal_daftar", "pembeli", "negara_tujuan", "valuta"]) cek(k, sama(b[k], benar[k]));
+      cek("nilai_fob", angkaSama(b.nilai_fob, benar.nilai_fob));
+      cek("jumlah baris", panjang(b.baris) === panjang(benar.baris));
+      break;
+    case "sppb":
+      for (const k of ["nomor", "tanggal", "nomor_pib"]) cek(k, sama(b[k], benar[k]));
+      break;
   }
-  return { benar: salah.length === 0, salah };
+  return { benar: salah.length === 0, salah, diperiksa };
 }

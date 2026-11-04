@@ -1,0 +1,25 @@
+{
+ "dibuat": "B-EKSIM3, deterministik",
+ "berkas": [
+  {
+   "jenis": "pib",
+   "berkas": "pabean/pib-01.pdf",
+   "jawaban": "pabean/pib-01.json"
+  },
+  {
+   "jenis": "pib",
+   "berkas": "pabean/pib-02.pdf",
+   "jawaban": "pabean/pib-02.json"
+  },
+  {
+   "jenis": "peb",
+   "berkas": "pabean/peb-01.pdf",
+   "jawaban": "pabean/peb-01.json"
+  },
+  {
+   "jenis": "sppb",
+   "berkas": "pabean/sppb-01.pdf",
+   "jawaban": "pabean/sppb-01.json"
+  }
+ ]
+}
