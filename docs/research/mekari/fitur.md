@@ -33,7 +33,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | TA-11 | Templat dokumen karyawan (kontrak, offering, keterangan) diisi otomatis | Productivity/Document Templates; Company/Files | surat keluar (SK mutasi, surat tugas, keterangan kerja) + QR verifikasi; templat dokumen bebas dengan penanda nama/jabatan/status menjadi draf surat keluar bernomor ber-QR (M-11B) | ADA | M-11, M-17 |
 | TA-12 | Pengumuman + tanda sudah dibaca (acknowledgement) | Company/Announcement; Dashboard/Announcement | pengumuman untuk semua atau per peran, tanda sudah dibaca, jumlah yang sudah membaca untuk pengelola, tautan di Feed (M-11) | ADA | M-11 |
 | TA-13 | Form dan survei karyawan | Productivity/Forms and Surveys; API Form | survei skala/pilihan/teks, anonim tanpa akun dengan ringkasan setelah 3 jawaban, wawancara keluar (M-11B) | SEBAGIAN: formulir pengajuan bebas belum | M-11 |
-| TA-14 | Aset perusahaan yang dipinjam karyawan | Company/Assets; API Asset | Serah terima butir barang | SEBAGIAN: daftar aset + pinjam/kembali | M-06 |
+| TA-14 | Aset perusahaan yang dipinjam karyawan | Company/Assets; API Asset | Serah terima butir barang; daftar aset, pinjamkan ke karyawan dan kembalikan dengan riwayat, staf melihat aset yang ia pinjam (M-06) | ADA | M-06 |
 | TA-15 | File perusahaan, aktivitas pengguna, antrean proses, notifikasi | Company/Files; Company/User Activity; Company/Queue Activity; Company/Notification | Lempar (arsip berkas), audit_log, push | SEBAGIAN: layar log aktivitas | M-21 |
 | TA-16 | Insights: headcount, absensi, payroll, karyawan berisiko, kinerja, lembur, dasbor kustom, report builder | Insights/*; Company/Report Builder; Dashboard/*; Time/Time Reports | KPI, beban tim, sinyal beban, alur nyata, Sarapan Data | SEBAGIAN: dasbor HR baku + pembuat laporan | M-23 |
 | TA-17 | Absensi mobile: selfie, GPS/geofence, liveness AI, kunci absensi | Time/Attendance; Mobile App/Time Management | QR TOTP 15 detik + cek wajah di perangkat; geofence radius per tempat dengan pesan jarak; kunci absensi per bulan (M-12) | ADA | M-12 |
@@ -79,7 +79,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | JU-14 | Kas dan bank: akun, transfer, terima/kirim uang, pemetaan kas | Kas & Bank/* | /app/kas: rekening kas/bank/dompet (akun 1-10x/1-11x), saldo, pindah dana, uang masuk/keluar ke akun pilihan | ADA | M-05 |
 | JU-15 | Rekonsiliasi bank: manual, aturan, otomatis, batal | Kas & Bank/Rekonsiliasi Bank, Aturan Rekonsiliasi, Rekonsiliasi Bank Otomatis, Mengembalikan Rekonsiliasi | /app/kas: mutasi CSV atau e-statement Lempar dicocokkan ke invoice, tagihan pemasok, jurnal yang sudah tercatat, atau aturan kata kunci pengguna; cocokkan semua usulan; batal = jurnal dibalik; korpus 3 format bank 21/22 per format, 0 salah | ADA | M-05 |
 | JU-16 | Cashlink feeds (mutasi bank otomatis) | Kas & Bank/Cashlink Feeds | unggah CSV mutasi di /app/kas; e-statement PDF/CSV lewat Lempar masuk ke rekening Bank saat disetujui | MITRA (API bank SNAP / agregator); pengganti sudah jalan: CSV dan Lempar; alamat email lempar belum dibangun (butuh layanan email masuk, biayanya belum diriset) | M-05 |
-| JU-17 | Aset tetap: daftar, saldo awal, penyusutan, aset tertunda, dijual/dilepas | Aset/* | tidak ada | BELUM | M-06 |
+| JU-17 | Aset tetap: daftar, saldo awal, penyusutan, aset tertunda, dijual/dilepas | Aset/* | /app/aset: daftar, kelompok Pasal 11 UU PPh, penyusutan garis lurus/saldo menurun bulanan otomatis dengan jurnal 6-500/1-590, menyusul bulan yang belum, jual/lepas dengan laba 4-910 atau rugi 6-990 (M-06) | SEBAGIAN: aset tertunda (dalam pengerjaan) dan penyusutan komersial terpisah dari fiskal belum | M-06 |
 | JU-18 | Laporan 40+: neraca, laba rugi, arus kas, buku besar, neraca saldo, umur piutang/hutang, penjualan/pembelian per pihak/produk, persediaan, aset, pajak, kurs, bank | Laporan/* | /app/buku: neraca, laba rugi, arus kas tidak langsung, neraca saldo, buku besar, umur tagihan; CSV + cetak PDF (M-01) | SEBAGIAN: laporan per pelanggan/produk/pajak/kurs menyusul M-02, M-03, M-08, M-09 | M-01 |
 | JU-19 | Multi mata uang, kurs, revaluasi, laba rugi kurs | Daftar Lainnya/Daftar Mata Uang; Laporan/Pertukaran Kurs | invoice ekspor USD + kurs per invoice | SEBAGIAN: revaluasi + selisih kurs pelunasan | M-08 |
 | JU-20 | Anggaran dan laba rugi anggaran | halaman /produk/jurnal/rencana-anggaran; API Budget | tidak ada | BELUM | M-08 |
@@ -191,9 +191,9 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 
 | Status | Jumlah |
 |---|---|
-| ADA | 27 |
+| ADA | 28 |
 | SEBAGIAN | 61 |
-| BELUM | 27 |
+| BELUM | 26 |
 | MITRA | 17 |
 | LUAR | 2 |
 

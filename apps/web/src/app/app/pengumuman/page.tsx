@@ -75,6 +75,7 @@ async function Isi() {
       {!pengelola && (
         <section className="mt-8 border-t border-garis pt-6" aria-labelledby="judul-kerjaku" data-testid="kerjaku">
           <h2 id="judul-kerjaku" className="text-lg font-semibold">{t.kerjakuJudul}</h2>
+          <p className="mt-1 text-sm"><a href="/app/aset" className="underline underline-offset-4">{ambilKamus(bahasa).aset.judulStaf}</a></p>
           {profil?.jabatan ? (
             <p className="mt-2">{profil.jabatan}{profil.level ? ` (${profil.level})` : ""}{profil.departemen ? `, ${profil.departemen}` : ""}{profil.status_kerja ? `, ${t.statusNama[profil.status_kerja as keyof typeof t.statusNama] ?? profil.status_kerja}` : ""}{profil.kontrak_sampai ? `, ${isiTeks(t.kontrakHingga, { t: formatTanggalKalender(profil.kontrak_sampai, bahasa) })}` : ""}</p>
           ) : (
