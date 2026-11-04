@@ -9,7 +9,7 @@ const TAUTAN = "font-semibold text-tinta underline underline-offset-4";
 export function HalamanTentang({ bahasa }: { bahasa: Bahasa }) {
   const k = ambilKamus(bahasa).tentangHalaman;
   return (
-    <HalamanInfo bahasa={bahasa} judul={k.judul} pengantar={k.pengantar}>
+    <HalamanInfo bahasa={bahasa} warna="cap" judul={k.judul} pengantar={k.pengantar}>
       <Bagian judul={k.kenapaJudul}>
         {k.kenapa.map((p) => <p key={p}>{p}</p>)}
       </Bagian>

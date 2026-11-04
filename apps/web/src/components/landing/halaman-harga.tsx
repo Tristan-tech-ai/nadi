@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Bagian, HalamanInfo } from "@/components/landing/halaman-info";
+import { Bagian, GambarBaca, HalamanInfo } from "@/components/landing/halaman-info";
 import { Rupiah } from "@/components/ui/rupiah";
 import { formatAngka } from "@/lib/format";
 import type { Bahasa } from "@/lib/i18n/bahasa";
@@ -7,6 +7,8 @@ import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { DISKON_TAHUNAN_BULAN, PAKET, hargaBulanan } from "@/lib/paket";
 
 const CONTOH_ORANG = [5, 10, 20, 40];
+// Yang mulai terasa di tiap paket, digambar dengan potongan antarmuka yang sama dengan landing.
+const GAMBAR_PAKET = { gratis: "nota", usaha: "feed", tumbuh: "gaji", perusahaan: "mata" } as const;
 const tautan = "font-semibold text-tinta underline underline-offset-4";
 
 /** Halaman harga dua bahasa (D-15, I-03): /harga dan /en/harga. */
@@ -15,20 +17,20 @@ export function HalamanHarga({ bahasa }: { bahasa: Bahasa }) {
   const k = kamus.harga;
   const b = kamus.beranda;
   return (
-    <HalamanInfo bahasa={bahasa} judul={k.judul} pengantar={k.pengantar}>
+    <HalamanInfo bahasa={bahasa} warna="kunyit" judul={k.judul} pengantar={k.pengantar}>
       <p className="max-w-2xl text-tinta-2">
         <span className="stabilo">{b.hargaSorot}</span> {b.hargaRencana} {isiTeks(b.hargaTahunan, { n: DISKON_TAHUNAN_BULAN })}
       </p>
 
-      <ul className="mt-10 border-y border-garis">
+      <ul className="mt-4">
         {PAKET.map((p) => {
           const t = kamus.paket[p.kode];
           const [awal, akhir] = b.laluPerOrang.split("{harga}");
           return (
-            <li key={p.kode} className="grid gap-x-8 gap-y-2 border-b border-garis py-6 last:border-b-0 md:grid-cols-[9rem_13rem_1fr]">
-              <h2 className="text-lg font-bold">{t.nama}</h2>
+            <li key={p.kode} className="bagian-baca masuk baca-dua"><div className="grid gap-x-10 gap-y-3 md:grid-cols-[17rem_1fr]">
               <div>
-                <p className="text-2xl font-semibold">
+                <h2 className="papan papan-sedang">{t.nama}</h2>
+                <p className="mt-2 text-2xl font-semibold">
                   {p.mulaiDari && <span className="mr-1 text-sm font-normal text-tinta-2">{b.mulaiHarga}</span>}
                   <Rupiah nilai={p.harga} bahasa={bahasa} />
                 </p>
@@ -41,6 +43,8 @@ export function HalamanHarga({ bahasa }: { bahasa: Bahasa }) {
                 {t.isi.map((i) => <li key={i}>{i}</li>)}
                 {p.berkasPerBulan !== null && <li>{isiTeks(k.berkasDibaca, { n: formatAngka(p.berkasPerBulan, bahasa) })}</li>}
               </ul>
+            </div>
+            <GambarBaca jenis={GAMBAR_PAKET[p.kode]} bahasa={bahasa} />
             </li>
           );
         })}
@@ -73,6 +77,7 @@ export function HalamanHarga({ bahasa }: { bahasa: Bahasa }) {
             </tbody>
           </table>
         </div>
+        <p>{k.contohKeterangan}</p>
       </Bagian>
 
       <Bagian judul={k.orangJudul}><p>{k.orangIsi}</p></Bagian>

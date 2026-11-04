@@ -11,7 +11,7 @@ export type IsiHalamanBagian = {
 /** Halaman publik berupa bagian berjudul (privasi, syarat), dua bahasa (I-03). Teks dari kamus. */
 export function HalamanBagian({ bahasa, isi }: { bahasa: Bahasa; isi: IsiHalamanBagian }) {
   return (
-    <HalamanInfo bahasa={bahasa} judul={isi.judul} pengantar={isi.pengantar} draf={isi.draf}>
+    <HalamanInfo bahasa={bahasa} warna="tulang" judul={isi.judul} pengantar={isi.pengantar} draf={isi.draf}>
       {isi.bagian.map((b) => (
         <Bagian key={b.judul} judul={b.judul}>
           {b.isi.map((p) => <p key={p}>{p}</p>)}

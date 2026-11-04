@@ -6,7 +6,7 @@ import { ambilKamus } from "@/lib/i18n/kamus";
 export function HalamanKeamanan({ bahasa }: { bahasa: Bahasa }) {
   const k = ambilKamus(bahasa).keamananHalaman;
   return (
-    <HalamanInfo bahasa={bahasa} judul={k.judul} pengantar={k.pengantar}>
+    <HalamanInfo bahasa={bahasa} warna="laut" judul={k.judul} pengantar={k.pengantar}>
       {k.bagian.map((b) => (
         <Bagian key={b.judul} judul={b.judul}>
           {b.isi.map((p) => <p key={p}>{p}</p>)}

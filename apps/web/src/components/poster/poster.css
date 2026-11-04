@@ -320,3 +320,23 @@
 .dipakai-label { font-weight: 800; }
 .dipakai-daftar { display: flex; flex-wrap: wrap; gap: 8px; }
 .dipakai-daftar li { border: 2px solid currentColor; border-radius: 4px; padding: 4px 10px; font-weight: 700; font-size: 16px; }
+
+/* Halaman pendukung (D-26, DESIGN.md mode Read): lapangan warna hanya untuk judul, lembar untuk dibaca.
+   Teks 17 px tinta penuh lapangan, baris paling lebar 66 karakter, tabel dan daftar tetap seperti dokumen. */
+.kepala-baca { display: grid; gap: 20px; padding-block: clamp(28px, 6vw, 72px) clamp(36px, 7vw, 88px); }
+.pengantar-baca { font-size: 20px; line-height: 1.5; font-weight: 600; max-width: 52ch; text-wrap: pretty; }
+.isi-baca { padding-block: 44px 88px; font-size: 17px; line-height: 1.65; }
+.isi-baca p, .bagian-baca li, .isi-baca ol li { max-width: 66ch; }
+.isi-baca .text-tinta-2, .isi-baca .text-tinta { color: var(--m-tinta); }
+.isi-baca .border-garis, .isi-baca .border-garis-kuat { border-color: color-mix(in srgb, var(--m-tinta) 28%, transparent); }
+.isi-baca a { text-decoration-thickness: 2px; }
+.bagian-baca { padding-block: 36px; }
+.bagian-baca + .bagian-baca { padding-top: 52px; }
+.baca-dua { display: grid; gap: 28px; }
+.gambar-baca { display: grid; place-items: center; min-height: 260px; padding: 28px; border-radius: 10px; background: var(--poster-tulang); color: var(--poster-tulang-tinta); }
+@media (min-width: 1100px) { .gambar-baca { justify-items: end; padding-inline: 0 0; background: none; } }
+@media (min-width: 1100px) { .baca-dua { grid-template-columns: minmax(0, 66ch) minmax(320px, 1fr); align-items: center; gap: 56px; } }
+.catatan-draf { border-left: 4px solid var(--poster-cap); padding-left: 16px; margin-bottom: 36px; }
+.isi-baca table { font-size: 16px; }
+.langkah-dua { display: grid; gap: 18px 56px; margin-top: 24px; }
+@media (min-width: 1100px) { .langkah-dua { grid-template-columns: 1fr 1fr; } }
