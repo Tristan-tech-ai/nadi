@@ -68,9 +68,9 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | JU-03 | Penjualan: penawaran, pemesanan, pengiriman (surat jalan), penagihan, uang muka, retur, draft dan approval, impor templat | Penjualan/*; Pemenuhan/Penjualan; Daftar Lainnya/Cara Pembayaran, Syarat Pembayaran | invoice bernomor, QRIS statis, pengingat 4 tahap; /app/jual: penawaran > pesanan > surat jalan > invoice, uang muka, retur/nota kredit dengan stok kembali (M-03) | SEBAGIAN: draf dan approval penjualan, impor templat | M-03 |
 | JU-04 | Multiple withholding (potong PPh di invoice), tukar invoice/faktur | Penjualan/Multiple Withholding; Penjualan/Tukar Invoice; Pembelian/Tukar Faktur; Daftar Lainnya/Pajak | lunas dipotong PPh oleh pembeli ke 1-430, jenis PPh 23/4(2)/22 (M-03) | SEBAGIAN: tukar invoice/faktur | M-03, M-09 |
 | JU-05 | e-Meterai pada invoice | Penjualan/Stamp eMeterai | tidak ada | MITRA (Peruri lewat distributor resmi) | M-17 |
-| JU-06 | Pembelian: permintaan, penawaran, pesanan, penerimaan, tagihan pemasok, pembayaran, approval | Pembelian/*; Pemenuhan/Pembelian | nota pemasok lewat Lempar jadi usulan belanja + jurnal, PIB impor | SEBAGIAN: PR, PO, penerimaan barang, hutang jatuh tempo, pembayaran | M-04 |
+| JU-06 | Pembelian: permintaan, penawaran, pesanan, penerimaan, tagihan pemasok, pembayaran, approval | Pembelian/*; Pemenuhan/Pembelian | /app/beli: permintaan (PR), pesanan (PO), penerimaan barang masuk stok, tagihan pemasok dicocokkan ke PO (selisih), jatuh tempo, bayar sebagian, retur/nota debit, saldo per pemasok; nota Lempar menyebut PO yang cocok dan jadi hutang saat disetujui; PIB impor | SEBAGIAN: penawaran harga dari pemasok dan approval berjenjang PO belum | M-04 |
 | JU-07 | Biaya dengan approval draft | Biaya/* | Lempar nota, Feed | ADA (dasar); pemetaan akun per kategori belum | M-04 |
-| JU-08 | Kontak: pelanggan, supplier, karyawan, pihak lain, grup, kredit/debit memo | Kontak/* | graf usaha (pihak), nama pelanggan di invoice | SEBAGIAN: daftar kontak + saldo per kontak, memo | M-03, M-04 |
+| JU-08 | Kontak: pelanggan, supplier, karyawan, pihak lain, grup, kredit/debit memo | Kontak/* | graf usaha (pihak), saldo per pelanggan (/app/jual) dan per pemasok (/app/beli), nota kredit dan nota debit | SEBAGIAN: buku kontak terpusat (alamat, NPWP, grup) belum | M-03, M-04 |
 | JU-09 | Produk dan jasa: kategori, satuan, varian, bundle, konversi, aturan harga, barcode, batch/seri | Produk/*; Daftar Lainnya/Atribut Varian Produk, Satuan Produk, Produk | /app/barang: produk barang/jasa/paket, satuan besar + faktor, barcode, kode; varian (induk + atribut) dan harga bertingkat ada di database (M-02) | SEBAGIAN: layar varian dan harga bertingkat, impor produk dari Excel (M-02B) | M-02, M-02B |
 | JU-10 | Persediaan: penyesuaian, stok opname, nilai (rata-rata), hitung ulang, tipe penyimpanan | Produk/Penyesuaian Stok; Daftar Lainnya/Penghitungan Ulang Nilai Persediaan, Tipe Penyimpanan Persediaan | rata-rata tertimbang bergerak, opname per produk dengan jurnal selisih 5-200, kartu stok berjalan (M-02) | SEBAGIAN: opname banyak produk dari foto/Excel lewat Lempar (M-02B) | M-02, M-02B |
 | JU-11 | Gudang, multi gudang, transfer gudang, lokasi rak/bin | Produk/Gudang, Multi Gudang, Transfer Gudang | gudang banyak, gudang utama untuk invoice, pindah gudang dengan nilai rata-rata (M-02) | SEBAGIAN: lokasi rak/bin (M-02B) | M-02, M-02B |
@@ -159,7 +159,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | EX-02 | Kebijakan pengeluaran (batas per kategori, per tujuan) | Expense Policies/* | tidak ada | BELUM | M-18 |
 | EX-03 | AI Checker kebijakan dan kewajaran klaim | Approval Process/AI Checker | Gerbang Gaji (pola), keyakinan baca | BELUM | M-18 |
 | EX-04 | Perjalanan dinas: pengajuan, uang muka, laporan, kebijakan tujuan | Business Trip/*; Expense Mobile/Mobile Trip | tidak ada | BELUM | M-18 |
-| EX-05 | Pembelian: purchasing, vendor, vendor portal, pajak | Purchase Management/*; Expense Mobile/Mobile Purchase | Lempar nota pemasok | BELUM | M-04 |
+| EX-05 | Pembelian: purchasing, vendor, vendor portal, pajak | Purchase Management/*; Expense Mobile/Mobile Purchase | Lempar nota pemasok, /app/beli (PR, PO, penerimaan, tagihan, retur) | SEBAGIAN: portal pemasok dan pajak pembelian (PPN masukan per tagihan) belum | M-04 |
 | EX-06 | Workflow persetujuan klaim/trip/pembelian/vendor | Workflow Setup/*; Approval Process/Approvals | Feed | SEBAGIAN | M-18 |
 | EX-07 | Kartu korporat virtual/fisik, kartu debit bisnis | Corporate Cards/* | tidak ada | MITRA (bank penerbit/PJP) | - |
 | EX-08 | Pengiriman uang internasional, kalkulator kurs | halaman /produk/expense/international-remittance, kalkulator-mata-uang | kurs isian di invoice ekspor | MITRA untuk remitansi; kalkulator kurs dari kurs publik BELUM | M-08 |
@@ -192,8 +192,8 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 | Status | Jumlah |
 |---|---|
 | ADA | 17 |
-| SEBAGIAN | 57 |
-| BELUM | 40 |
+| SEBAGIAN | 58 |
+| BELUM | 39 |
 | MITRA | 18 |
 | LUAR | 2 |
 

@@ -66,8 +66,10 @@ begin
   -- Q-24: tanggal di nota dan jam absen dibaca di zona usaha (bawaan Asia/Jakarta, +07), bukan WITA tetap.
   r := public.putuskan_usulan(u_nota, true);
   perform pg_temp.cek('nota menjadi kejadian uang.keluar bernilai total', exists (select 1 from public.kejadian where perusahaan_id = pa and jenis = 'uang.keluar' and nilai = 376500 and terjadi_at = '2026-10-13 00:00+07'));
+  perform pg_temp.cek('M-04: nota disetujui juga menjadi tagihan pemasok 376.500', exists (select 1 from public.tagihan_beli where usulan_id = u_nota and total = 376500));
   r := public.putuskan_usulan(u_tolak, false);
   perform pg_temp.cek('menolak tidak membuat kejadian', r ->> 'status' = 'ditolak' and not exists (select 1 from public.kejadian where nilai = 1000));
+  perform pg_temp.cek('M-04: menolak tidak membuat tagihan', not exists (select 1 from public.tagihan_beli where usulan_id = u_tolak));
   r := public.putuskan_usulan(u_absen, true);
   perform pg_temp.cek('absen: 2 kejadian, nama dikenal ditautkan, tanggal rusak tidak menggagalkan', (r ->> 'dibuat')::int = 2
     and exists (select 1 from public.kejadian where jenis = 'absen.harian' and orang_id = o1 and terjadi_at = '2026-10-01 07:15+07'));
