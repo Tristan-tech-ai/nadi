@@ -1,5 +1,6 @@
 // Tangkap layar asli Nadi dari produksi untuk film promo (F6-06), skala 2x agar tajam saat diperbesar di video.
-// Jalankan dari apps/web: node scripts/promo-layar.mjs [url produksi]. Keluaran: docs/promo/film/assets/layar/*.png.
+// Jalankan dari apps/web: node scripts/promo-layar.mjs [url produksi]. Keluaran: docs/promo/film/assets/layar/*.png;
+// HP=1 memotret ukuran HP 390x844 skala 3 ke docs/promo/film/assets/layar-hp/ (untuk video vertikal).
 // Akun uji A dibaca dari .env.e2e.local (tidak dicetak). Data yang tampil sintetis.
 import { mkdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -8,13 +9,14 @@ import { createClient } from "@supabase/supabase-js";
 
 const baca = (n) => { try { return Object.fromEntries(readFileSync(join(import.meta.dirname, "..", n), "utf8").split("\n").filter((l) => l.includes("=")).map((l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1).trim()])); } catch { return {}; } };
 const E = { ...baca(".env.local"), ...baca(".env.e2e.local") };
-const BASE = process.argv[2] ?? "https://nadi-tristan-tech-ais-projects.vercel.app";
-const KELUAR = join(import.meta.dirname, "..", "..", "..", "docs", "promo", "film", "assets", "layar");
+const BASE = process.argv[2] ?? "https://nadi-swart.vercel.app";
+const HP = process.env.HP === "1";
+const KELUAR = join(import.meta.dirname, "..", "..", "..", "docs", "promo", "film", "assets", HP ? "layar-hp" : "layar");
 const KORPUS = join(import.meta.dirname, "..", "..", "..", "fixtures", "korpus", "mata");
 mkdirSync(KELUAR, { recursive: true });
 
 const b = await chromium.launch();
-const ctx = await b.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2, locale: "id-ID", timezoneId: "Asia/Makassar", colorScheme: "light" });
+const ctx = await b.newContext({ ...(HP ? { viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true } : { viewport: { width: 1440, height: 900 }, deviceScaleFactor: 2 }), locale: "id-ID", timezoneId: "Asia/Makassar", colorScheme: "light" });
 const p = await ctx.newPage();
 const simpan = async (nama, loc) => { await loc.scrollIntoViewIfNeeded(); await p.waitForTimeout(500); await loc.screenshot({ path: join(KELUAR, `${nama}.png`) }); console.log("ok", nama); };
 

@@ -1,61 +1,79 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=1920, height=1080" />
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
-    <style>
-      /* Placeholders: replace all three with the film's own palette and display face. */
-      :root {
-        --ground: #000;
-        --ink: #ffffff;
-        --font-display: sans-serif;
-      }
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-      html,
-      body {
-        margin: 0;
-        width: 1920px;
-        height: 1080px;
-        overflow: hidden;
-        background: var(--ground);
-      }
-      #root {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: var(--font-display);
-      }
-      #title {
-        color: var(--ink);
-        font-size: 72px;
-        font-weight: 600;
-        letter-spacing: -0.03em;
-      }
-    </style>
-  </head>
-  <body>
-    <div
-      id="root"
-      data-composition-id="main"
-      data-start="0"
-      data-duration="10"
-      data-width="1920"
-      data-height="1080"
-    >
-      <h1 id="title" class="clip" data-start="0" data-duration="10" data-track-index="0">Title</h1>
-    </div>
-    <script>
-      const tl = gsap.timeline({ paused: true });
-      // Example: tl.fromTo("#title", { opacity: 0, filter: "blur(8px)" }, { opacity: 1, filter: "blur(0px)", duration: 0.18, ease: "power4.out" }, 0);
-      window.__timelines["main"] = tl;
-      tl.seek(0);
-    </script>
-  </body>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1920, height=1080" />
+<title>Nadi promo</title>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<style>
+@font-face { font-family: Jakarta; src: url(assets/fonts/jakarta.woff2) format("woff2"); font-weight: 200 800; }
+@font-face { font-family: Bricolage; src: url(assets/fonts/bricolage.woff2) format("woff2"); font-weight: 200 800; }
+@font-face { font-family: PlexMono; src: url(assets/fonts/plexmono.woff2) format("woff2"); font-weight: 500; }
+:root { --kertas: #F6F2EA; --kertas-2: #EFE9DD; --tinta: #1C1B18; --tinta-2: #5B574F; --garis: #DDD5C6; --kunyit: #E9A825; --cap: #B4372A; --daun: #23704A; }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { margin: 0; overflow: hidden; background: var(--kertas); }
+#root { position: relative; overflow: hidden; font-family: Jakarta, sans-serif; color: var(--tinta); }
+.latar { position: absolute; inset: 0; background: var(--kertas); }
+.clip { position: absolute; inset: 0; }
+.isi { position: absolute; }
+.judul { font-family: Bricolage, sans-serif; font-weight: 800; letter-spacing: -0.025em; line-height: 1.04; }
+.sorot { background: var(--kunyit); padding: 0 0.12em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.teks { font-weight: 500; line-height: 1.32; color: var(--tinta-2); }
+.kartu { position: absolute; border-radius: 10px; overflow: hidden; background: var(--kertas); border: 2px solid var(--garis); box-shadow: 0 2px 0 var(--garis); }
+.kartu img { display: block; width: 100%; height: auto; }
+.tutup { position: absolute; left: 0; top: 0; width: 100%; height: 100%; background: var(--kertas); }
+.cap { position: absolute; border: 6px solid var(--cap); color: var(--cap); font-weight: 800; letter-spacing: 0.08em; border-radius: 10px; padding: 0.1em 0.4em; transform: rotate(-7deg); background: rgba(246,242,234,0.9); }
+.cap-daun { border-color: var(--daun); color: var(--daun); }
+.kertas-lepas { position: absolute; background: #FBF8F2; border: 2px solid var(--garis); border-radius: 6px; padding: 22px 26px; font-family: PlexMono, monospace; font-weight: 500; color: var(--tinta); line-height: 1.5; box-shadow: 0 3px 0 var(--garis); }
+.kertas-lepas b { display: block; font-family: Jakarta, sans-serif; font-weight: 800; margin-bottom: 8px; }
+.logo { display: block; }
+.alamat { font-family: PlexMono, monospace; font-weight: 500; color: var(--tinta); border-bottom: 6px solid var(--kunyit); display: inline-block; }
+
+html, body { width: 1920px; height: 1080px; }
+#root { width: 1920px; height: 1080px; }
+</style>
+</head>
+<body>
+<div id="root" data-composition-id="promo" data-start="0" data-width="1920" data-height="1080" data-duration="46" data-fps="30">
+<div class="latar"></div>
+<section id="adegan1" class="clip" data-start="0" data-duration="6" data-track-index="1"><div id="b1-k0" class="kertas-lepas" style="left:980px; top:120px; width:400px; font-size:28px; transform: rotate(-7deg)"><b>NOTA</b>UD Sumber Rejeki<br>Tepung 6 x 13.500<br>TOTAL 376.500</div><div id="b1-k1" class="kertas-lepas" style="left:1440px; top:170px; width:400px; font-size:28px; transform: rotate(6deg)"><b>ABSEN</b>Sen  Komang  07.58<br>Sel  Komang  --.--<br>Rab  Wayan   08.12</div><div id="b1-k2" class="kertas-lepas" style="left:1060px; top:560px; width:400px; font-size:28px; transform: rotate(5deg)"><b>SLIP GAJI</b>Oktober 2026<br>Pokok 2.900.000<br>Lembur ?</div><div id="b1-k3" class="kertas-lepas" style="left:1480px; top:610px; width:400px; font-size:28px; transform: rotate(-5deg)"><b>TAGIHAN</b>Bu Rina, arisan RT 03<br>30 nasi kotak<br>Rp750.000 belum</div><div id="b1-t" class="isi" style="left:120px; top:330px; width:780px"><div class="judul" style="font-size:96px">Nota, absen, gaji, tagihan.</div><div class="teks" style="font-size:40px; margin-top:28px">Usaha kecil masih berjalan di kertas dan chat. Merapikannya makan malammu.</div></div></section>
+<section id="adegan2" class="clip" data-start="6" data-duration="7" data-track-index="1"><div id="l2-c" class="kartu" style="left:1060px; top:70px; width:700px; "><img id="l2-g" src="assets/potong/nota.png" alt="" /><div id="l2-tutup" class="tutup"></div></div><div id="l2-c2" class="kartu" style="left:1060px; top:660px; width:700px"><img src="assets/potong/kartu.png" alt="" /></div><div id="l2-t" class="isi" style="left:120px; top:330px; width:820px"><div class="judul" style="font-size:80px">Lempar fotonya.</div><div class="teks" style="font-size:38px; margin-top:26px">Nadi membaca nota, slip, Excel, atau surat dokter, lalu menyiapkan usulan.</div></div></section>
+<section id="adegan3" class="clip" data-start="13" data-duration="7" data-track-index="1"><div id="l3-c" class="kartu" style="left:740px; top:390px; width:1080px; "><img id="l3-g" src="assets/layar/feed-kartu.png" alt="" /></div><div id="l3-cap" class="cap cap-daun" style="left:1300px; top:330px; font-size:64px">DISETUJUI</div><div id="l3-t" class="isi" style="left:120px; top:300px; width:580px"><div class="judul" style="font-size:80px">Kamu tinggal memutuskan.</div><div class="teks" style="font-size:38px; margin-top:26px">Setujui atau tolak dari HP. Setiap keputusan tercatat dan bisa dibatalkan.</div></div></section>
+<section id="adegan4" class="clip" data-start="20" data-duration="8" data-track-index="1"><div id="l4-c" class="kartu" style="left:1200px; top:50px; width:600px; height:980px;"><img id="l4-g" src="assets/layar/tagihan.png" alt="" /></div><div id="l4-t" class="isi" style="left:120px; top:330px; width:900px"><div class="judul" style="font-size:80px">Tagihan pakai QRIS milikmu.</div><div class="teks" style="font-size:38px; margin-top:26px">Pelanggan memindai QRIS milikmu sendiri. Pengingat jatuh tempo siap dikirim lewat WhatsApp.</div></div></section>
+<section id="adegan5" class="clip" data-start="28" data-duration="9" data-track-index="1"><div id="l5-c" class="kartu" style="left:1060px; top:90px; width:800px; "><img id="l5-g" src="assets/layar/peta.png" alt="" /></div><div id="l5-t" class="isi" style="left:120px; top:330px; width:840px"><div class="judul" style="font-size:80px">Kamera jadi mata.</div><div class="teks" style="font-size:38px; margin-top:26px">Meja terisi dan antrean terbaca langsung di peta warung. Videonya tidak dikirim ke mana pun.</div></div></section>
+<section id="adegan6" class="clip" data-start="37" data-duration="5" data-track-index="1"><div id="l6-c" class="kartu" style="left:840px; top:250px; width:1000px; "><img id="l6-g" src="assets/layar/sarapan.png" alt="" /></div><div id="l6-t" class="isi" style="left:120px; top:330px; width:640px"><div class="judul" style="font-size:80px">Sarapan data.</div><div class="teks" style="font-size:38px; margin-top:26px">Tiap pagi, hanya yang berdampak rupiah.</div></div></section>
+<section id="adegan7" class="clip" data-start="42" data-duration="4" data-track-index="1"><div id="a7-t" class="isi" style="left:160px; top:250px; width:1600px"><div style="display:flex; align-items:center; gap:28px"><svg class="logo" viewBox="0 0 64 64" width="120" height="120" aria-hidden="true"><path d="M10 54V22c0-8 6-13 14-13h8c8 0 14 5 14 13v32l-4-3-4 3-4-3-4 3V24c0-3-2-5-5-5h-2c-3 0-5 2-5 5v30l-4-3z" fill="#1C1B18"/><circle cx="52" cy="10" r="5.5" fill="#E9A825"/></svg><span class="judul" style="font-size:120px">nadi</span></div><div class="judul" style="font-size:88px; margin-top:60px">Coba usaha contohnya. <span class="sorot">Tanpa daftar.</span></div><div class="alamat" style="font-size:56px; margin-top:56px">nadi-swart.vercel.app/demo</div></div></section>
+</div>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl.to("#adegan1 .isi, #adegan1 .kartu, #adegan1 .kertas-lepas", {opacity: 0, duration: 0.3, ease: "power2.in"}, 5.68);
+tl.fromTo("#b1-k0", {opacity: 0, y: -120, rotation: 14}, {opacity: 1, y: 0, rotation: -7, duration: 0.55, ease: "power2.out"}, 0.15);
+tl.fromTo("#b1-k1", {opacity: 0, y: -120, rotation: -14}, {opacity: 1, y: 0, rotation: 6, duration: 0.55, ease: "power2.out"}, 0.37);
+tl.fromTo("#b1-k2", {opacity: 0, y: -120, rotation: 14}, {opacity: 1, y: 0, rotation: 5, duration: 0.55, ease: "power2.out"}, 0.59);
+tl.fromTo("#b1-k3", {opacity: 0, y: -120, rotation: -14}, {opacity: 1, y: 0, rotation: -5, duration: 0.55, ease: "power2.out"}, 0.81);
+tl.fromTo("#b1-t", {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 0.5, ease: "power3.out"}, 0.9);
+tl.to("#adegan2 .isi, #adegan2 .kartu, #adegan2 .kertas-lepas", {opacity: 0, duration: 0.3, ease: "power2.in"}, 12.68);
+tl.fromTo("#l2-t", {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 0.5, ease: "power3.out"}, 6.1);
+tl.fromTo("#l2-c", {opacity: 0, y: 60}, {opacity: 1, y: 0, duration: 0.6, ease: "power3.out"}, 6.3);
+tl.fromTo("#l2-tutup", {yPercent: 0}, {yPercent: 100, duration: 1.8, ease: "steps(9)"}, 6.9);
+tl.fromTo("#l2-c2", {opacity: 0, y: 80}, {opacity: 1, y: 0, duration: 0.6, ease: "power3.out"}, 9.6);
+tl.to("#adegan3 .isi, #adegan3 .kartu, #adegan3 .kertas-lepas", {opacity: 0, duration: 0.3, ease: "power2.in"}, 19.68);
+tl.fromTo("#l3-t", {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 0.5, ease: "power3.out"}, 13.1);
+tl.fromTo("#l3-c", {opacity: 0, y: 60}, {opacity: 1, y: 0, duration: 0.6, ease: "power3.out"}, 13.3);
+tl.fromTo("#l3-cap", {opacity: 0, scale: 1.8}, {opacity: 1, scale: 1, duration: 0.28, ease: "power4.in"}, 18.0);
+tl.fromTo("#l3-c, #l3-c2", {scale: 1}, {scale: 0.985, duration: 0.08, yoyo: true, repeat: 1}, 18.28);
+tl.to("#adegan4 .isi, #adegan4 .kartu, #adegan4 .kertas-lepas", {opacity: 0, duration: 0.3, ease: "power2.in"}, 27.68);
+tl.fromTo("#l4-t", {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 0.5, ease: "power3.out"}, 20.1);
+tl.fromTo("#l4-c", {opacity: 0, y: 60}, {opacity: 1, y: 0, duration: 0.6, ease: "power3.out"}, 20.3);
+tl.to("#adegan5 .isi, #adegan5 .kartu, #adegan5 .kertas-lepas", {opacity: 0, duration: 0.3, ease: "power2.in"}, 36.68);
+tl.fromTo("#l5-t", {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 0.5, ease: "power3.out"}, 28.1);
+tl.fromTo("#l5-c", {opacity: 0, y: 60}, {opacity: 1, y: 0, duration: 0.6, ease: "power3.out"}, 28.3);
+tl.to("#adegan6 .isi, #adegan6 .kartu, #adegan6 .kertas-lepas", {opacity: 0, duration: 0.3, ease: "power2.in"}, 41.68);
+tl.fromTo("#l6-t", {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 0.5, ease: "power3.out"}, 37.1);
+tl.fromTo("#l6-c", {opacity: 0, y: 60}, {opacity: 1, y: 0, duration: 0.6, ease: "power3.out"}, 37.3);
+tl.fromTo("#a7-t", {opacity: 0, y: 40}, {opacity: 1, y: 0, duration: 0.6, ease: "power3.out"}, 42.2);
+window.__timelines["promo"] = tl;
+</script>
+</body>
 </html>
