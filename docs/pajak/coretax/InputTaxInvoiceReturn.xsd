@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SKEMA TURUNAN, BUKAN TERBITAN DJP (M-09B, 5 Nov 2026). Ditulis dari contoh resmi "Sample Retur Faktur PM Template v.1.1.xml" dan
+  lembar Keterangan templat "Sample Retur Faktur PM Template v.1.1.xlsx" (ConverterEfakturCoretax v1.6, pajak.go.id): NPWP 16 angka,
+  nomor faktur 17 angka, tanggal retur DD-MM-YYYY seperti contoh XML, angka maks 2 desimal, satuan UM.00NN, flag DPP lain true/false.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:simpleType name="Npwp"><xs:restriction base="xs:string"><xs:pattern value="[0-9]{16}"/></xs:restriction></xs:simpleType>
+  <xs:simpleType name="Angka2"><xs:restriction base="xs:decimal"><xs:minInclusive value="0"/><xs:fractionDigits value="2"/></xs:restriction></xs:simpleType>
+  <xs:element name="InputTaxInvoiceReturn">
+    <xs:complexType><xs:sequence>
+      <xs:element name="TIN" type="Npwp"/>
+      <xs:element name="InputReturnDataList"><xs:complexType><xs:sequence>
+        <xs:element name="InputReturnData" maxOccurs="unbounded"><xs:complexType><xs:sequence>
+          <xs:element name="TransactionDocumentData"><xs:complexType><xs:sequence>
+            <xs:element name="InvoiceNumber"><xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="[0-9]{17}"/></xs:restriction></xs:simpleType></xs:element>
+            <xs:element name="SellerTIN" type="Npwp"/>
+            <xs:element name="ReturnDate"><xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-[0-9]{4}"/></xs:restriction></xs:simpleType></xs:element>
+            <xs:element name="ReturnTaxBase" type="Angka2"/>
+            <xs:element name="ReturnOtherTaxBase" type="Angka2"/>
+            <xs:element name="ReturnVAT" type="Angka2"/>
+            <xs:element name="ReturnSTLG" type="Angka2"/>
+          </xs:sequence></xs:complexType></xs:element>
+          <xs:element name="TransactionDetailsData"><xs:complexType><xs:sequence>
+            <xs:element name="Rows" maxOccurs="unbounded"><xs:complexType><xs:sequence>
+              <xs:element name="Type"><xs:simpleType><xs:restriction base="xs:string"><xs:enumeration value="A"/><xs:enumeration value="B"/></xs:restriction></xs:simpleType></xs:element>
+              <xs:element name="Name"><xs:simpleType><xs:restriction base="xs:string"><xs:minLength value="1"/><xs:maxLength value="500"/></xs:restriction></xs:simpleType></xs:element>
+              <xs:element name="Code"><xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="[0-9]{6}"/></xs:restriction></xs:simpleType></xs:element>
+              <xs:element name="Quantity" type="Angka2"/>
+              <xs:element name="Unit"><xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="UM\.00(0[1-9]|[12][0-9]|3[0-9])"/></xs:restriction></xs:simpleType></xs:element>
+              <xs:element name="UnitPrice" type="Angka2"/>
+              <xs:element name="STLGRate" type="Angka2"/>
+              <xs:element name="ReturnQuantity" type="Angka2"/>
+              <xs:element name="ReturnDiscount" type="Angka2"/>
+              <xs:element name="ReturnTaxBase" type="Angka2"/>
+              <xs:element name="ReturnOtherTaxBase" type="Angka2"/>
+              <xs:element name="ReturnOtherTaxBaseCheck" type="xs:boolean"/>
+              <xs:element name="ReturnVAT" type="Angka2"/>
+              <xs:element name="ReturnSTLG" type="Angka2"/>
+            </xs:sequence></xs:complexType></xs:element>
+            <xs:element name="FooterRow"><xs:complexType><xs:sequence>
+              <xs:element name="ReturnTaxBaseTotal" type="Angka2"/>
+              <xs:element name="ReturnOtherTaxBaseTotal" type="Angka2"/>
+              <xs:element name="ReturnVATTotal" type="Angka2"/>
+              <xs:element name="ReturnSTLGTotal" type="Angka2"/>
+            </xs:sequence></xs:complexType></xs:element>
+          </xs:sequence></xs:complexType></xs:element>
+        </xs:sequence></xs:complexType></xs:element>
+      </xs:sequence></xs:complexType></xs:element>
+    </xs:sequence></xs:complexType>
+  </xs:element>
+</xs:schema>

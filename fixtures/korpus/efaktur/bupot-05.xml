@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<BpuBulk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<TIN>1091031210912281</TIN>
+	<ListOfBpu>
+		<Bpu>
+			<TaxPeriodMonth>11</TaxPeriodMonth>
+			<TaxPeriodYear>2026</TaxPeriodYear>
+			<CounterpartTin>0811034248520040</CounterpartTin>
+			<IDPlaceOfBusinessActivityOfIncomeRecipient>0811034248520040000000</IDPlaceOfBusinessActivityOfIncomeRecipient>
+			<TaxCertificate>N/A</TaxCertificate>
+			<TaxObjectCode>28-409-22</TaxObjectCode>
+			<TaxBase>4000000</TaxBase>
+			<Rate>1.75</Rate>
+			<Document>CommercialInvoice</Document>
+			<DocumentNumber>INV &amp; 4/0</DocumentNumber>
+			<DocumentDate>2026-11-01</DocumentDate>
+			<IDPlaceOfBusinessActivity>1091031210912281000000</IDPlaceOfBusinessActivity>
+			<GovTreasurerOpt>N/A</GovTreasurerOpt>
+			<SP2DNumber xsi:nil="true"/>
+			<WithholdingDate>2026-11-10</WithholdingDate>
+		</Bpu>
+	</ListOfBpu>
+</BpuBulk>

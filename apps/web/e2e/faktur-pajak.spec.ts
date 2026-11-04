@@ -4,6 +4,7 @@ import { join } from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
+import { periksaBupot } from "../src/lib/pajak/bupot";
 import { periksaFaktur } from "../src/lib/pajak/efaktur";
 
 // M-09: pemilik (akun A) menyimpan identitas pajak, melengkapi data pembeli untuk invoice baru, mengunduh XML Faktur Keluaran
@@ -81,4 +82,51 @@ test("faktur pajak: identitas, data pembeli, unduh XML Coretax yang lolos aturan
   } finally {
     await sb.rpc("batal_invoice", { p_id: invId, p_alasan: "Invoice uji faktur pajak" });
   }
+});
+
+test("e-Bupot: potong PPh 23 tagihan pemasok, unduh XML BpuBulk yang lolos aturan dan skema; kalender PMK 81/2024 tampil", async ({ page }) => {
+  test.setTimeout(120_000);
+  const tanda = Date.now().toString(36).toUpperCase();
+  const pemasok = `CV Katering Uji ${tanda}`;
+  const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
+  expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
+  const hari = new Date(Date.now() + 8 * 3_600_000).toISOString().slice(0, 10);
+  const tg = await sb.rpc("buat_tagihan_beli", { p_pemasok: pemasok, p_nomor: `KT-${tanda}`, p_tanggal: hari, p_jatuh_tempo: hari, p_total: 1_500_000, p_dokumen: null, p_akun: null, p_kunci: crypto.randomUUID() });
+  expect(tg.error).toBeNull();
+  const tagihanId = (tg.data as { id: string }).id;
+
+  await page.goto(`/masuk?next=${encodeURIComponent("/app/pajak/faktur")}`);
+  await page.getByLabel("Email").fill(E.E2E_EMAIL_A);
+  await page.getByLabel("Kata sandi").fill(E.E2E_SANDI);
+  await page.getByRole("button", { name: "Masuk" }).click();
+  await page.waitForURL((u) => u.pathname === "/app/pajak/faktur");
+
+  const kal = page.getByTestId("kalender-pajak");
+  await expect(kal).toContainText("Setor PPh dipotong");
+  await expect(kal).toContainText("PMK 81/2024 Pasal 94 ayat (2)");
+  await expect(page.getByTestId("rekap-ppn")).toBeVisible();
+
+  const form = page.getByRole("form", { name: `Potong PPh untuk ${pemasok}` });
+  await form.getByLabel("Kode objek pajak").fill("24-104-39");
+  await form.getByLabel("NPWP/NIK pemasok").fill("0811034248502000");
+  await form.getByRole("button", { name: "Potong PPh" }).click();
+  // tersimpan: tagihan tetap terbuka (sisa Rp1.470.000), bukti potong muncul di daftar
+  await expect(page.getByTestId("bupot").getByText("Rp30.000").first()).toBeVisible();
+  const { data: t } = await sb.from("tagihan_beli").select("dikurangi").eq("id", tagihanId).single();
+  expect(t?.dikurangi).toBe(30000);
+
+  const [unduh] = await Promise.all([page.waitForEvent("download"), page.getByTestId("unduh-bupot").click()]);
+  expect(unduh.suggestedFilename()).toMatch(/^bupot-unifikasi-\d{4}-\d{2}\.xml$/);
+  const xml = readFileSync((await unduh.path())!, "utf8");
+  expect(xml).toContain("<TaxObjectCode>24-104-39</TaxObjectCode>");
+  expect(xml).toContain("<CounterpartTin>0811034248502000</CounterpartTin>");
+  expect(periksaBupot(xml)).toEqual([]);
+  const dir = join(__dirname, "..", "test-results", "faktur");
+  mkdirSync(dir, { recursive: true });
+  const f = join(dir, "bupot.xml");
+  writeFileSync(f, xml);
+  const v = spawnSync("python", ["-I", join(__dirname, "..", "..", "..", "scripts", "pajak", "validasi-xsd.py"), f], { encoding: "utf8" });
+  expect(v.status, v.stdout).toBe(0);
+  // bayar sisa supaya tagihan uji tidak menggantung
+  expect((await sb.rpc("bayar_tagihan_beli", { p_tagihan: tagihanId, p_jumlah: 1_470_000, p_cara: "transfer", p_tanggal: null, p_kunci: crypto.randomUUID() })).error).toBeNull();
 });

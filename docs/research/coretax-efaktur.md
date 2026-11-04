@@ -24,7 +24,20 @@ Dibaca 5 Nov 2026 dari halaman resmi DJP "Template XML dan Converter Excel ke XM
 - Referensi berisi nomor invoice Nadi.
 - Invoice batal tidak ikut. Invoice tanpa data pembeli dipisah dan ditampilkan untuk dilengkapi.
 
-## Belum (tugas lanjutan)
-- e-Bupot Unifikasi dari pemotongan atas pembayaran pemasok. Nadi belum mencatat pemotongan di pembelian.
-- Retur faktur keluaran.
-- Rekap SPT Masa PPN dan kalender setor/lapor.
+## M-09B: e-Bupot Unifikasi, retur, rekap, kalender (5 Nov 2026)
+- Kode objek pajak dan tarif: 198 baris lembar REF templat resmi "BPPU Excel to XML v.3.xlsx" (https://pajak.go.id/sites/default/files/2025-09/BPPU%20Excel%20to%20XML%20v.3.xlsx), disimpan di tabel kode_objek_pajak. Tidak ada tarif yang ditulis dari ingatan.
+- Berkas BpuBulk mengikuti urutan contoh resmi bppu.xml (https://pajak.go.id/sites/default/files/2024-12/bppu.zip). Fasilitas N/A, GovTreasurerOpt N/A, dan SP2DNumber nil dipakai karena usaha bukan instansi pemerintah (lembar BPPU).
+- Retur: di Coretax retur faktur keluaran dibuat oleh pembeli lewat Retur Faktur Masukan; paket resmi hanya memuat templat "Retur Faktur PM". Nadi menyediakan penyusun XML Retur Faktur Masukan untuk retur ke pemasok (lib dan tes). Layarnya belum, karena tagihan pemasok belum menyimpan nomor faktur pajak pemasok.
+- Flag DPP Lain Retur mengikuti faktur asal (templat: "sama dengan data di Faktur yang akan diretur"), true untuk kode 04.
+- Jatuh tempo dari teks PMK 81/2024 (https://peraturan.bpk.go.id/Download/366884/2024pmkeuangan081.pdf, dibaca 5 Nov 2026):
+  - Pasal 94 ayat (2): setor PPh 4(2), 15, 21, 22, 23, 25, 26 paling lambat tanggal 15 bulan berikutnya.
+  - Pasal 94 ayat (3) huruf e: setor PPN paling lambat akhir bulan berikutnya, sebelum SPT Masa PPN disampaikan.
+  - Pasal 171 ayat (1): lapor SPT Masa PPh paling lama 20 hari setelah Masa Pajak berakhir.
+  - Pasal 171 ayat (13): lapor SPT Masa PPN paling lambat akhir bulan berikutnya.
+  - Pasal 100 dan 173: batas yang jatuh pada Sabtu, Minggu, libur nasional, hari pemilu, atau cuti bersama nasional digeser ke hari kerja berikutnya. Nadi memakai tabel libur_nasional (SKB 2026). Libur pemilu belum ada di tabel.
+- Rekap PPN keluaran per masa: DPP dan PPN dihitung dari baris invoice dengan rumus faktur. Jumlahnya dibandingkan dengan kredit 4-100 jurnal terbit invoice. Toleransi pembulatan 1 rupiah per baris.
+
+## Belum
+- Kreditkan faktur masukan dan rekonsiliasi keluaran-masukan.
+- Layar retur ke pemasok, karena butuh nomor faktur pajak pemasok di tagihan.
+- Bukti potong A1 tahunan dan pembetulan.

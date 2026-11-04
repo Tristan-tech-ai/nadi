@@ -37,3 +37,19 @@ export async function simpanPembeli(_: HasilFaktur, form: FormData): Promise<Has
   revalidatePath("/app/pajak/faktur");
   return { pesan: isiTeks(k.pembeliTersimpan, { nama: String(form.get("nama") ?? "") }) };
 }
+
+export async function potongPph(_: HasilFaktur, form: FormData): Promise<HasilFaktur> {
+  const k = await teks();
+  const dpp = Number(String(form.get("dpp") ?? "").replace(/\D/g, ""));
+  if (!Number.isInteger(dpp) || dpp <= 0) return { galat: k.dppRusak };
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("potong_pph_tagihan", {
+    p_tagihan: String(form.get("tagihan") ?? ""), p_kode: String(form.get("kode") ?? "").trim(), p_dpp: dpp,
+    p_npwp: String(form.get("npwp") ?? ""), p_nitku: String(form.get("nitku") ?? ""), p_dokumen: String(form.get("dokumen") ?? "CommercialInvoice"),
+    p_nomor: String(form.get("nomor") ?? ""), p_tgl_dokumen: String(form.get("tanggal") ?? "") || null, p_tgl_potong: null,
+    p_kunci: String(form.get("kunci") ?? ""),
+  });
+  if (error) return galat(k, error);
+  revalidatePath("/app/pajak/faktur");
+  return { pesan: isiTeks(k.dipotong, { pph: new Intl.NumberFormat("id-ID").format((data as { pph: number }).pph) }) };
+}

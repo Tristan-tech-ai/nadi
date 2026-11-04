@@ -102,10 +102,10 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | ID | Kemampuan Mekari | Bagian | Nadi sekarang | Status | Tugas |
 |---|---|---|---|---|---|
 | KP-01 | e-Faktur keluaran (Coretax): buat, impor massal, retur, batal, PDF | E-Faktur/Pajak Keluaran, NSFP, Dokumen lain; E-Faktur Coretax/* | /app/pajak/faktur: berkas impor XML Faktur Pajak Keluaran Coretax dari invoice (susunan contoh resmi DJP, rumus templat v.1.6.1, lolos skema turunan + aturan DJP) | SEBAGIAN: retur, batal, dan PDF faktur belum; mengirim langsung ke DJP: MITRA | M-09 |
-| KP-02 | e-Faktur masukan: kreditkan, rekonsiliasi keluaran-masukan, rekapitulasi, lapor SPT Masa PPN | E-Faktur/Pajak Masukan, Rekonsiliasi, Rekapitulasi, Lapor SPT Masa PPN; E-Faktur Coretax/Faktur Masukan | tidak ada | BELUM: baca faktur masukan lewat Lempar + rekonsiliasi + rekap PPN | M-09 |
-| KP-03 | e-Bupot Unifikasi, 21/26, non resident: buat, impor, kirim massal, arsip, pembetulan | E-Bupot/*; E-Bupot Coretax/* | BPMP PPh 21 (Excel Coretax) | SEBAGIAN: unifikasi (PPh 23/4(2)/15/22) dan A1 tahunan | M-09 |
-| KP-04 | e-Billing: buat ID billing, bayar massal, impor ID billing | Bayar Pajak/* | tidak ada | MITRA (kode billing lewat Coretax/PJAP; bayar lewat bank/PJP); pengganti: hitung jumlah setor + pengingat + panduan buat billing di Coretax | M-09 |
-| KP-05 | Lapor SPT Masa 21/26, Unifikasi, Badan, SPT Tahunan 1771 | Lapor Pajak/* | Kompas Pajak PPh final UMKM | SEBAGIAN: kertas kerja SPT (angka siap salin) + kalender lapor | M-09 |
+| KP-02 | e-Faktur masukan: kreditkan, rekonsiliasi keluaran-masukan, rekapitulasi, lapor SPT Masa PPN | E-Faktur/Pajak Masukan, Rekonsiliasi, Rekapitulasi, Lapor SPT Masa PPN; E-Faktur Coretax/Faktur Masukan | rekap PPN keluaran per masa dicocokkan dengan jurnal penjualan; berkas XML Retur Faktur Masukan (templat resmi, lib) | SEBAGIAN: kreditkan faktur masukan dan rekonsiliasi keluaran-masukan belum; lapor SPT Masa PPN: MITRA | M-09 |
+| KP-03 | e-Bupot Unifikasi, 21/26, non resident: buat, impor, kirim massal, arsip, pembetulan | E-Bupot/*; E-Bupot Coretax/* | BPMP PPh 21 (Excel Coretax); potong PPh Unifikasi atas tagihan pemasok (198 kode objek pajak DJP) + berkas XML BpuBulk e-Bupot Unifikasi | SEBAGIAN: unifikasi (PPh 23/4(2)/15/22) dan A1 tahunan | M-09 |
+| KP-04 | e-Billing: buat ID billing, bayar massal, impor ID billing | Bayar Pajak/* | jumlah setor PPh dipotong dan PPN keluaran per masa + jatuh tempo PMK 81/2024 (geser hari libur) | MITRA (kode billing lewat Coretax/PJAP; bayar lewat bank/PJP); pengganti: hitung jumlah setor + pengingat + panduan buat billing di Coretax | M-09 |
+| KP-05 | Lapor SPT Masa 21/26, Unifikasi, Badan, SPT Tahunan 1771 | Lapor Pajak/* | Kompas Pajak PPh final UMKM; kalender setor/lapor PMK 81/2024 Pasal 94, 100, 171, 173 | SEBAGIAN: kertas kerja SPT (angka siap salin) + kalender lapor | M-09 |
 | KP-06 | Pengecekan dan pemadanan NPWP | Memulai Klikpajak/Pengecekan NPWP | cek bentuk NPWP 16 angka, NIK 16 angka, NITKU 22 angka diawali NPWP (identitas_pajak, pembeli_pajak) | SEBAGIAN: pemadanan ke data DJP tetap MITRA | M-09 |
 | KP-07 | Pengaturan akun, perusahaan, penandatangan, multi NPWP, dasbor, Company ID | Pengaturan/*; Dasbor/* | identitas pajak penjual (NPWP, NITKU, harga termasuk PPN, kode transaksi) di /app/pajak/faktur | SEBAGIAN | M-09 |
 | KP-08 | Integrasi Jurnal ke pajak | Integrasi/* | satu database | ADA (by design) | - |
@@ -192,8 +192,8 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 | Status | Jumlah |
 |---|---|
 | ADA | 23 |
-| SEBAGIAN | 55 |
-| BELUM | 37 |
+| SEBAGIAN | 56 |
+| BELUM | 36 |
 | MITRA | 17 |
 | LUAR | 2 |
 

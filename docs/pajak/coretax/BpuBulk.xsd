@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SKEMA TURUNAN, BUKAN TERBITAN DJP (M-09B, 5 Nov 2026). Ditulis dari contoh resmi bppu.xml (pajak.go.id/sites/default/files/2024-12/
+  bppu.zip) dan lembar BPPU templat "BPPU Excel to XML v.3.xlsx": urutan elemen, NPWP/NIK 16 angka, ID TKU 22 angka, kode objek
+  pajak NN-NNN-NN, tanggal YYYY-MM-DD, SP2DNumber boleh nil. Contoh resmi wajib lolos (scripts/pajak/validasi-xsd.py).
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+  <xs:simpleType name="Npwp"><xs:restriction base="xs:string"><xs:pattern value="[0-9]{16}"/></xs:restriction></xs:simpleType>
+  <xs:simpleType name="Nitku"><xs:restriction base="xs:string"><xs:pattern value="[0-9]{22}"/></xs:restriction></xs:simpleType>
+  <xs:simpleType name="Angka2"><xs:restriction base="xs:decimal"><xs:minInclusive value="0"/><xs:fractionDigits value="2"/></xs:restriction></xs:simpleType>
+  <xs:simpleType name="Teks"><xs:restriction base="xs:string"><xs:minLength value="1"/><xs:maxLength value="200"/></xs:restriction></xs:simpleType>
+  <xs:element name="BpuBulk">
+    <xs:complexType><xs:sequence>
+      <xs:element name="TIN" type="Npwp"/>
+      <xs:element name="ListOfBpu"><xs:complexType><xs:sequence>
+        <xs:element name="Bpu" maxOccurs="unbounded"><xs:complexType><xs:sequence>
+          <xs:element name="TaxPeriodMonth"><xs:simpleType><xs:restriction base="xs:integer"><xs:minInclusive value="1"/><xs:maxInclusive value="12"/></xs:restriction></xs:simpleType></xs:element>
+          <xs:element name="TaxPeriodYear"><xs:simpleType><xs:restriction base="xs:integer"><xs:minInclusive value="2024"/><xs:maxInclusive value="2100"/></xs:restriction></xs:simpleType></xs:element>
+          <xs:element name="CounterpartTin" type="Npwp"/>
+          <xs:element name="IDPlaceOfBusinessActivityOfIncomeRecipient" type="Nitku"/>
+          <xs:element name="TaxCertificate"><xs:simpleType><xs:restriction base="xs:string">
+            <xs:enumeration value="N/A"/><xs:enumeration value="TaxExAr22"/><xs:enumeration value="TaxExAr23"/><xs:enumeration value="TaxExIntDep"/>
+            <xs:enumeration value="TaxExIntPhtb"/><xs:enumeration value="DTP"/><xs:enumeration value="PP23"/><xs:enumeration value="ETC"/>
+          </xs:restriction></xs:simpleType></xs:element>
+          <xs:element name="TaxObjectCode"><xs:simpleType><xs:restriction base="xs:string"><xs:pattern value="[0-9]{2}-[0-9]{3}-[0-9]{2}"/></xs:restriction></xs:simpleType></xs:element>
+          <xs:element name="TaxBase" type="Angka2"/>
+          <xs:element name="Rate" type="Angka2"/>
+          <xs:element name="Document"><xs:simpleType><xs:restriction base="xs:string">
+            <xs:enumeration value="Announcement"/><xs:enumeration value="CommercialInvoice"/><xs:enumeration value="Contract"/><xs:enumeration value="CurrentAccount"/>
+            <xs:enumeration value="Decree"/><xs:enumeration value="DeedOfEngagement"/><xs:enumeration value="DeedOfGeneral"/><xs:enumeration value="Other"/>
+            <xs:enumeration value="OtherFacilityDoc"/><xs:enumeration value="PaymentProof"/><xs:enumeration value="StatementLetter"/><xs:enumeration value="TaxInvoice"/>
+            <xs:enumeration value="TaxRegulationDoc"/><xs:enumeration value="TradeConfirmation"/>
+          </xs:restriction></xs:simpleType></xs:element>
+          <xs:element name="DocumentNumber" type="Teks"/>
+          <xs:element name="DocumentDate" type="xs:date"/>
+          <xs:element name="IDPlaceOfBusinessActivity" type="Nitku"/>
+          <xs:element name="GovTreasurerOpt"><xs:simpleType><xs:restriction base="xs:string"><xs:enumeration value="N/A"/><xs:enumeration value="Imprest"/><xs:enumeration value="Direct"/></xs:restriction></xs:simpleType></xs:element>
+          <xs:element name="SP2DNumber" type="xs:string" nillable="true"/>
+          <xs:element name="WithholdingDate" type="xs:date"/>
+        </xs:sequence></xs:complexType></xs:element>
+      </xs:sequence></xs:complexType></xs:element>
+    </xs:sequence></xs:complexType>
+  </xs:element>
+</xs:schema>

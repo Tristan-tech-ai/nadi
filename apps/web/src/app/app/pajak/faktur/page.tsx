@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { FormIdentitas, FormPembeli } from "@/components/app/faktur-pajak";
+import { randomUUID } from "node:crypto";
+import { FormIdentitas, FormPembeli, FormPotong } from "@/components/app/faktur-pajak";
 import { Rupiah } from "@/components/ui/rupiah";
 import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
+import { formatTanggalKalender } from "@/lib/format";
 import { hariIni } from "@/lib/izin";
 import { hitungBaris, siapFaktur, type Identitas, type InvoicePajak, type Pembeli } from "@/lib/pajak/efaktur";
 import { wajibPerusahaan } from "@/lib/sesi";
@@ -27,7 +29,18 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/pajak/faktu
     return { nilai: d.toISOString().slice(0, 7), label: new Intl.DateTimeFormat(bahasa === "en" ? "en-GB" : "id-ID", { month: "long", year: "numeric", timeZone: "UTC" }).format(d) };
   });
   const supabase = await createClient();
-  const { data } = await supabase.rpc("data_faktur_keluaran", { p_bulan: `${bulan}-01` });
+  const [{ data }, { data: kal }, { data: rekap }, { data: bp }, { data: tagihan }, { data: kode }] = await Promise.all([
+    supabase.rpc("data_faktur_keluaran", { p_bulan: `${bulan}-01` }),
+    supabase.rpc("kalender_pajak", { p_bulan: `${bulan}-01` }),
+    supabase.rpc("rekap_jurnal_penjualan", { p_bulan: `${bulan}-01` }),
+    supabase.rpc("data_bupot", { p_bulan: `${bulan}-01` }),
+    supabase.from("tagihan_beli").select("id, pemasok, nomor_pemasok, tanggal, total, terbayar, dikurangi").eq("status", "terbuka").order("tanggal", { ascending: false }).order("id", { ascending: false }).limit(10),
+    supabase.from("kode_objek_pajak").select("kode, nama, tarif").order("kode"),
+  ]);
+  const kalender = kal as { pph_potong: number; jatuh_tempo: { jenis: string; tanggal: string; asli: string; dasar: string }[] } | null;
+  const jurnal = rekap as { invoice: number; total_invoice: number; kredit_penjualan: number } | null;
+  const potong = ((bp as { potong?: { pemasok: string; kode: string; dpp: number; pph: number; tanggal_potong: string }[] } | null)?.potong ?? []);
+  const tagihanBuka = (tagihan ?? []) as { id: string; pemasok: string; nomor_pemasok: string | null; tanggal: string; total: number; terbayar: number; dikurangi: number }[];
   const d = (data ?? { identitas: null, faktur: [] }) as { identitas: Identitas | null; faktur: InvoicePajak[] };
   const { siap, kurang } = siapFaktur(d.faktur);
   // terbaru dulu, paling banyak 20 formulir sekali tampil
@@ -35,6 +48,13 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/pajak/faktu
   const pelangganKurang = semuaKurang.slice(0, 20);
   const pembeliAda = new Map<string, Pembeli>(siap.map((f) => [f.pelanggan, f.pembeli]));
   const ppn = d.identitas ? siap.reduce((s, f) => s + f.baris.reduce((a, b) => a + hitungBaris(b, d.identitas!).ppn, 0), 0) : 0;
+  // Rekap PPN keluaran semua invoice bulan ini (tanpa memandang data pembeli) terhadap kredit 4-100 jurnal terbitnya.
+  const rekapFaktur = d.identitas ? d.faktur.reduce((s, f) => {
+    for (const b of f.baris) { const h = hitungBaris(b, d.identitas!); s.dpp += h.dpp; s.ppn += h.ppn; }
+    return s;
+  }, { dpp: 0, ppn: 0 }) : null;
+  const selisih = rekapFaktur && jurnal ? Math.round(rekapFaktur.dpp + rekapFaktur.ppn - jurnal.kredit_penjualan) : 0;
+  const tol = d.faktur.reduce((n, f) => n + f.baris.length, 0);
   return (
     <div lang={bahasa}>
       <h1 className="text-2xl font-semibold">{t.judul}</h1>
@@ -50,6 +70,29 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/pajak/faktu
         <p className="mt-1 text-sm text-tinta-2">{t.identitasKet}</p>
         <FormIdentitas awal={d.identitas ? { npwp: d.identitas.npwp, nitku: d.identitas.nitku, termasuk: d.identitas.harga_termasuk_ppn, kode: d.identitas.kode_transaksi } : null} teks={t} />
       </section>
+      {kalender && (
+        <section className="mt-8" aria-labelledby="judul-kalender" data-testid="kalender-pajak">
+          <h2 id="judul-kalender" className="text-lg font-semibold">{t.kalenderJudul}</h2>
+          <ul className="mt-2 divide-y divide-garis border-y border-garis text-sm">
+            {kalender.jatuh_tempo.map((j) => (
+              <li key={j.jenis} className="flex flex-wrap justify-between gap-2 py-2">
+                <span><span className="font-semibold">{t.jatuhNama[j.jenis as keyof typeof t.jatuhNama]}</span>{" "}
+                  {j.jenis === "setor_pph" ? <>(<Rupiah nilai={kalender.pph_potong} />)</> : j.jenis === "setor_ppn" && rekapFaktur ? <>(<Rupiah nilai={Math.round(rekapFaktur.ppn)} />)</> : null}</span>
+                <span className="angka" data-tanggal={j.tanggal}>{formatTanggalKalender(j.tanggal, bahasa)}{j.tanggal !== j.asli ? ` ${t.digeser}` : ""}</span>
+                <span className="w-full text-xs text-tinta-2">{j.dasar}</span>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+      {rekapFaktur && jurnal && (
+        <section className="mt-8" aria-labelledby="judul-rekap" data-testid="rekap-ppn">
+          <h2 id="judul-rekap" className="text-lg font-semibold">{t.rekapJudul}</h2>
+          <p className="mt-1 text-sm">{t.rekapDpp} <Rupiah nilai={Math.round(rekapFaktur.dpp)} />. {t.rekapPpn} <Rupiah nilai={Math.round(rekapFaktur.ppn)} />. {t.rekapJurnal} <Rupiah nilai={jurnal.kredit_penjualan} />.</p>
+          <p className="mt-1 text-sm font-semibold" data-cocok={Math.abs(selisih) <= tol ? "ya" : "tidak"}>
+            {Math.abs(selisih) <= tol ? t.rekapCocok : isiTeks(t.rekapSelisih, { rp: new Intl.NumberFormat("id-ID").format(selisih) })}</p>
+        </section>
+      )}
       <section className="mt-8" aria-labelledby="judul-unduh">
         <h2 id="judul-unduh" className="text-lg font-semibold">{t.unduhJudul}</h2>
         <p className="mt-1 text-sm" data-testid="ringkas-faktur">
@@ -60,6 +103,26 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/pajak/faktu
             className="mt-3 inline-flex h-12 items-center rounded-[var(--radius-isian)] bg-tinta px-5 font-semibold text-kertas">{t.unduh}</a>
         ) : <p className="mt-3 text-sm text-tinta-2">{d.identitas ? t.lengkapiDulu : t.identitasDulu}</p>}
         <p className="mt-3 text-sm text-tinta-2">{t.caraUnggah}</p>
+      </section>
+      <section className="mt-8" aria-labelledby="judul-bupot" data-testid="bupot">
+        <h2 id="judul-bupot" className="text-lg font-semibold">{t.bupotJudul}</h2>
+        <p className="mt-1 text-sm text-tinta-2">{t.bupotKet}</p>
+        <datalist id="kode-objek-pajak">
+          {((kode ?? []) as { kode: string; nama: string; tarif: number }[]).map((x) => <option key={x.kode} value={x.kode}>{`${x.nama.slice(0, 80)} (${x.tarif}%)`}</option>)}
+        </datalist>
+        {tagihanBuka.length === 0 ? <p className="mt-3 text-sm text-tinta-2">{t.tanpaTagihan}</p> : tagihanBuka.map((x) => (
+          <div key={x.id} className="mt-4"><p className="font-semibold"><span data-pengguna>{x.pemasok}</span> <span className="font-normal text-tinta-2"><Rupiah nilai={x.total - x.terbayar - x.dikurangi} /></span></p>
+            <FormPotong tagihan={x.id} pemasok={x.pemasok} nomor={x.nomor_pemasok ?? ""} tanggal={x.tanggal} total={x.total} kunci={randomUUID()} teks={t} /></div>
+        ))}
+        {potong.length > 0 && (
+          <>
+            <ul className="mt-4 divide-y divide-garis border-y border-garis text-sm">
+              {potong.map((x, i) => <li key={i} className="flex justify-between gap-3 py-2"><span><span className="font-mono">{x.kode}</span> <span data-pengguna>{x.pemasok}</span></span><Rupiah nilai={x.pph} /></li>)}
+            </ul>
+            {d.identitas && <a href={`/app/pajak/faktur/bupot?bulan=${bulan}`} download data-testid="unduh-bupot"
+              className="mt-3 inline-flex h-12 items-center rounded-[var(--radius-isian)] border-2 border-tinta px-5 font-semibold">{t.unduhBupot}</a>}
+          </>
+        )}
       </section>
       {pelangganKurang.length > 0 && (
         <section className="mt-8" aria-labelledby="judul-pembeli">

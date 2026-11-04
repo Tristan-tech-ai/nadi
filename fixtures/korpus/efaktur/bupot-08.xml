@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<BpuBulk xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<TIN>1091031210912281</TIN>
+	<ListOfBpu>
+		<Bpu>
+			<TaxPeriodMonth>11</TaxPeriodMonth>
+			<TaxPeriodYear>2026</TaxPeriodYear>
+			<CounterpartTin>0811034248520070</CounterpartTin>
+			<IDPlaceOfBusinessActivityOfIncomeRecipient>0811034248520070000000</IDPlaceOfBusinessActivityOfIncomeRecipient>
+			<TaxCertificate>N/A</TaxCertificate>
+			<TaxObjectCode>24-104-24</TaxObjectCode>
+			<TaxBase>4000000</TaxBase>
+			<Rate>2</Rate>
+			<Document>CommercialInvoice</Document>
+			<DocumentNumber>INV &amp; 7/0</DocumentNumber>
+			<DocumentDate>2026-11-01</DocumentDate>
+			<IDPlaceOfBusinessActivity>1091031210912281000000</IDPlaceOfBusinessActivity>
+			<GovTreasurerOpt>N/A</GovTreasurerOpt>
+			<SP2DNumber xsi:nil="true"/>
+			<WithholdingDate>2026-11-10</WithholdingDate>
+		</Bpu>
+		<Bpu>
+			<TaxPeriodMonth>11</TaxPeriodMonth>
+			<TaxPeriodYear>2026</TaxPeriodYear>
+			<CounterpartTin>0811034248520071</CounterpartTin>
+			<IDPlaceOfBusinessActivityOfIncomeRecipient>0811034248520071000000</IDPlaceOfBusinessActivityOfIncomeRecipient>
+			<TaxCertificate>N/A</TaxCertificate>
+			<TaxObjectCode>24-100-02</TaxObjectCode>
+			<TaxBase>5050000</TaxBase>
+			<Rate>2</Rate>
+			<Document>Contract</Document>
+			<DocumentNumber>INV &amp; 7/1</DocumentNumber>
+			<DocumentDate>2026-11-02</DocumentDate>
+			<IDPlaceOfBusinessActivity>1091031210912281000000</IDPlaceOfBusinessActivity>
+			<GovTreasurerOpt>N/A</GovTreasurerOpt>
+			<SP2DNumber xsi:nil="true"/>
+			<WithholdingDate>2026-11-11</WithholdingDate>
+		</Bpu>
+		<Bpu>
+			<TaxPeriodMonth>11</TaxPeriodMonth>
+			<TaxPeriodYear>2026</TaxPeriodYear>
+			<CounterpartTin>0811034248520072</CounterpartTin>
+			<IDPlaceOfBusinessActivityOfIncomeRecipient>0811034248520072000000</IDPlaceOfBusinessActivityOfIncomeRecipient>
+			<TaxCertificate>N/A</TaxCertificate>
+			<TaxObjectCode>28-409-22</TaxObjectCode>
+			<TaxBase>6100000</TaxBase>
+			<Rate>1.75</Rate>
+			<Document>CommercialInvoice</Document>
+			<DocumentNumber>INV &amp; 7/2</DocumentNumber>
+			<DocumentDate>2026-11-03</DocumentDate>
+			<IDPlaceOfBusinessActivity>1091031210912281000000</IDPlaceOfBusinessActivity>
+			<GovTreasurerOpt>N/A</GovTreasurerOpt>
+			<SP2DNumber xsi:nil="true"/>
+			<WithholdingDate>2026-11-12</WithholdingDate>
+		</Bpu>
+		<Bpu>
+			<TaxPeriodMonth>11</TaxPeriodMonth>
+			<TaxPeriodYear>2026</TaxPeriodYear>
+			<CounterpartTin>0811034248520073</CounterpartTin>
+			<IDPlaceOfBusinessActivityOfIncomeRecipient>0811034248520073000000</IDPlaceOfBusinessActivityOfIncomeRecipient>
+			<TaxCertificate>N/A</TaxCertificate>
+			<TaxObjectCode>24-104-39</TaxObjectCode>
+			<TaxBase>7150000</TaxBase>
+			<Rate>2</Rate>
+			<Document>Contract</Document>
+			<DocumentNumber>INV &amp; 7/3</DocumentNumber>
+			<DocumentDate>2026-11-04</DocumentDate>
+			<IDPlaceOfBusinessActivity>1091031210912281000000</IDPlaceOfBusinessActivity>
+			<GovTreasurerOpt>N/A</GovTreasurerOpt>
+			<SP2DNumber xsi:nil="true"/>
+			<WithholdingDate>2026-11-13</WithholdingDate>
+		</Bpu>
+	</ListOfBpu>
+</BpuBulk>

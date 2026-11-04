@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
-import { simpanIdentitas, simpanPembeli, type HasilFaktur } from "@/app/app/pajak/faktur/actions";
+import { potongPph, simpanIdentitas, simpanPembeli, type HasilFaktur } from "@/app/app/pajak/faktur/actions";
 import { Tombol } from "@/components/ui/tombol";
 import type { Kamus } from "@/lib/i18n/kamus";
 
@@ -39,6 +39,23 @@ export function FormPembeli({ nama, awal, teks: t }: { nama: string; awal: { jen
       <Label teks={t.alamat}><input name="alamat" required maxLength={300} defaultValue={awal?.alamat ?? ""} className={`${isian} w-72 max-w-full`} /></Label>
       <Label teks={t.email}><input name="email" type="email" defaultValue={awal?.email ?? ""} className={`${isian} w-56 max-w-full`} /></Label>
       <Tombol type="submit" ragam="kedua" disabled={sibuk}>{t.simpanPembeli}</Tombol><Hasil h={h} />
+    </form>
+  );
+}
+
+export function FormPotong({ tagihan, pemasok, nomor, tanggal, total, kunci, teks: t }: { tagihan: string; pemasok: string; nomor: string; tanggal: string; total: number; kunci: string; teks: Teks }) {
+  const [h, aksi, sibuk] = useActionState<HasilFaktur, FormData>(potongPph, null);
+  return (
+    <form action={aksi} className={kotak} aria-label={`${t.potongAria} ${pemasok}`}>
+      <input type="hidden" name="tagihan" value={tagihan} /><input type="hidden" name="kunci" value={kunci} />
+      <input type="hidden" name="tanggal" value={tanggal} />
+      <Label teks={t.kodeObjek}><input name="kode" required list="kode-objek-pajak" placeholder="24-104-39" className={`${isian} angka w-36`} /></Label>
+      <Label teks={t.dpp}><input name="dpp" required inputMode="numeric" defaultValue={String(total)} className={`${isian} angka w-36 text-right`} /></Label>
+      <Label teks={t.npwpPemasok}><input name="npwp" required inputMode="numeric" className={`${isian} angka w-52 max-w-full`} /></Label>
+      <Label teks={t.dokumen}><select name="dokumen" defaultValue="CommercialInvoice" className={isian}>
+        {Object.entries(t.dokumenNama).map(([v, n]) => <option key={v} value={v}>{n}</option>)}</select></Label>
+      <Label teks={t.nomorDok}><input name="nomor" required defaultValue={nomor} className={`${isian} w-40`} /></Label>
+      <Tombol type="submit" ragam="kedua" disabled={sibuk}>{t.potong}</Tombol><Hasil h={h} />
     </form>
   );
 }

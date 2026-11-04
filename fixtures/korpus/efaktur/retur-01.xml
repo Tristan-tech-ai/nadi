@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<InputTaxInvoiceReturn>
+	<TIN>1091031210912281</TIN>
+	<InputReturnDataList>
+		<InputReturnData>
+			<TransactionDocumentData>
+				<InvoiceNumber>04002600000348920</InvoiceNumber>
+				<SellerTIN>1091031210920664</SellerTIN>
+				<ReturnDate>10-11-2026</ReturnDate>
+				<ReturnTaxBase>200000</ReturnTaxBase>
+				<ReturnOtherTaxBase>183333.33</ReturnOtherTaxBase>
+				<ReturnVAT>22000</ReturnVAT>
+				<ReturnSTLG>0</ReturnSTLG>
+			</TransactionDocumentData>
+			<TransactionDetailsData>
+				<Rows>
+					<Type>A</Type>
+					<Name>Barang 1</Name>
+					<Code>000000</Code>
+					<Quantity>20</Quantity>
+					<Unit>UM.0021</Unit>
+					<UnitPrice>200000</UnitPrice>
+					<STLGRate>0</STLGRate>
+					<ReturnQuantity>1</ReturnQuantity>
+					<ReturnDiscount>0</ReturnDiscount>
+					<ReturnTaxBase>200000</ReturnTaxBase>
+					<ReturnOtherTaxBase>183333.33</ReturnOtherTaxBase>
+					<ReturnOtherTaxBaseCheck>true</ReturnOtherTaxBaseCheck>
+					<ReturnVAT>22000</ReturnVAT>
+					<ReturnSTLG>0</ReturnSTLG>
+				</Rows>
+				<FooterRow>
+					<ReturnTaxBaseTotal>200000</ReturnTaxBaseTotal>
+					<ReturnOtherTaxBaseTotal>183333.33</ReturnOtherTaxBaseTotal>
+					<ReturnVATTotal>22000</ReturnVATTotal>
+					<ReturnSTLGTotal>0</ReturnSTLGTotal>
+				</FooterRow>
+			</TransactionDetailsData>
+		</InputReturnData>
+	</InputReturnDataList>
+</InputTaxInvoiceReturn>
