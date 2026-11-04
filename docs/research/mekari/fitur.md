@@ -76,9 +76,9 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | JU-11 | Gudang, multi gudang, transfer gudang, lokasi rak/bin | Produk/Gudang, Multi Gudang, Transfer Gudang | gudang banyak, gudang utama untuk invoice, pindah gudang dengan nilai rata-rata (M-02) | SEBAGIAN: lokasi rak/bin (M-02B) | M-02, M-02B |
 | JU-12 | Produksi: BoM bertingkat, perintah kerja, biaya standar, assembly/disassembly, pemetaan akun | Produksi/* | tidak ada | BELUM | M-07 |
 | JU-13 | Pemenuhan pesanan: ambil barang, segregasi stok, surat jalan, terima barang | Pemenuhan/* | tidak ada | BELUM | M-02, M-03 |
-| JU-14 | Kas dan bank: akun, transfer, terima/kirim uang, pemetaan kas | Kas & Bank/* | akun 1-100/1-110 di ledger | SEBAGIAN: layar kas/bank + transaksi manual | M-05 |
-| JU-15 | Rekonsiliasi bank: manual, aturan, otomatis, batal | Kas & Bank/Rekonsiliasi Bank, Aturan Rekonsiliasi, Rekonsiliasi Bank Otomatis, Mengembalikan Rekonsiliasi | cocok mutasi CSV ke invoice (3 aturan, 0 salah di korpus) | SEBAGIAN: semua transaksi (bukan hanya invoice), aturan buatan pengguna | M-05 |
-| JU-16 | Cashlink feeds (mutasi bank otomatis) | Kas & Bank/Cashlink Feeds | unggah CSV mutasi | MITRA (API bank SNAP / agregator); pengganti: Lempar PDF/CSV mutasi, email mutasi ke alamat lempar | M-05 |
+| JU-14 | Kas dan bank: akun, transfer, terima/kirim uang, pemetaan kas | Kas & Bank/* | /app/kas: rekening kas/bank/dompet (akun 1-10x/1-11x), saldo, pindah dana, uang masuk/keluar ke akun pilihan | ADA | M-05 |
+| JU-15 | Rekonsiliasi bank: manual, aturan, otomatis, batal | Kas & Bank/Rekonsiliasi Bank, Aturan Rekonsiliasi, Rekonsiliasi Bank Otomatis, Mengembalikan Rekonsiliasi | /app/kas: mutasi CSV atau e-statement Lempar dicocokkan ke invoice, tagihan pemasok, jurnal yang sudah tercatat, atau aturan kata kunci pengguna; cocokkan semua usulan; batal = jurnal dibalik; korpus 3 format bank 21/22 per format, 0 salah | ADA | M-05 |
+| JU-16 | Cashlink feeds (mutasi bank otomatis) | Kas & Bank/Cashlink Feeds | unggah CSV mutasi di /app/kas; e-statement PDF/CSV lewat Lempar masuk ke rekening Bank saat disetujui | MITRA (API bank SNAP / agregator); pengganti sudah jalan: CSV dan Lempar; alamat email lempar belum dibangun (butuh layanan email masuk, biayanya belum diriset) | M-05 |
 | JU-17 | Aset tetap: daftar, saldo awal, penyusutan, aset tertunda, dijual/dilepas | Aset/* | tidak ada | BELUM | M-06 |
 | JU-18 | Laporan 40+: neraca, laba rugi, arus kas, buku besar, neraca saldo, umur piutang/hutang, penjualan/pembelian per pihak/produk, persediaan, aset, pajak, kurs, bank | Laporan/* | /app/buku: neraca, laba rugi, arus kas tidak langsung, neraca saldo, buku besar, umur tagihan; CSV + cetak PDF (M-01) | SEBAGIAN: laporan per pelanggan/produk/pajak/kurs menyusul M-02, M-03, M-08, M-09 | M-01 |
 | JU-19 | Multi mata uang, kurs, revaluasi, laba rugi kurs | Daftar Lainnya/Daftar Mata Uang; Laporan/Pertukaran Kurs | invoice ekspor USD + kurs per invoice | SEBAGIAN: revaluasi + selisih kurs pelunasan | M-08 |
@@ -92,7 +92,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | JU-27 | Konsolidasi beberapa perusahaan | Aplikasi/Konsolidasi; Integrasi/Jurnal Consolidation | banyak usaha per akun, terpisah | BELUM | M-08 |
 | JU-28 | Jurnal Mobile | Jurnal Apps/Jurnal Mobile | PWA | ADA | - |
 | JU-29 | Asisten AI (Airene): analisis laporan, tanya data | Beranda/Mekari Airene | MCP (AI milik pengguna), Sarapan Data | SEBAGIAN: tanya data di dalam aplikasi | M-22 |
-| JU-30 | Mekari Pay: terima pembayaran (VA, QRIS dinamis, kartu), bayar supplier, saldo | Mekari Pay/* | QRIS statis pemilik, transfer, tunai | MITRA (PJP berizin BI) | M-05 |
+| JU-30 | Mekari Pay: terima pembayaran (VA, QRIS dinamis, kartu), bayar supplier, saldo | Mekari Pay/* | QRIS statis pemilik, transfer, tunai; mutasi masuknya dicocokkan di /app/kas | MITRA (PJP berizin BI); sambung payment gateway milik pemilik belum diriset | M-05 |
 | JU-31 | Jurnal Touch (POS), Jurnal Channel (marketplace), App Store, integrasi software lain | Integrasi/* | MCP, rencana W-08/W-09 | SEBAGIAN: POS BELUM, marketplace MITRA | M-19, W-08, W-09 |
 | JU-32 | Landed cost | tabel paket Jurnal 360 | jurnal PIB (bea, PPh 22, PPN impor) | SEBAGIAN: alokasi biaya ke harga pokok barang | M-02 |
 | JU-33 | Studi kasus per tipe bisnis, panduan, FAQ, video, sistem pembayaran langganan, referral | Studi Kasus/*; Memulai dengan Jurnal/*; FAQ; Video; What's New | /panduan, /fitur/*, paket industri | ADA (isi panduan diperluas bersama fitur) | - |
@@ -191,8 +191,8 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 
 | Status | Jumlah |
 |---|---|
-| ADA | 17 |
-| SEBAGIAN | 58 |
+| ADA | 19 |
+| SEBAGIAN | 56 |
 | BELUM | 39 |
 | MITRA | 18 |
 | LUAR | 2 |

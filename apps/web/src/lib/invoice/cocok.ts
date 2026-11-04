@@ -10,12 +10,12 @@ export const TOLERANSI_POTONG = 10_000;
 const JENDELA_HARI = 90;
 const ALASAN = { 1: "nomor invoice disebut", 2: "nama pelanggan dan nominal sama", 3: "nominal sama, satu-satunya tagihan sebesar itu" } as const;
 
-const huruf = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, "");
+export const huruf = (s: string) => s.toUpperCase().replace(/[^A-Z0-9]/g, "");
 const kata = (s: string) => s.toUpperCase().split(/[^A-Z0-9]+/).filter(Boolean);
 const tambahHari = (t: string, n: number) => { const d = new Date(`${t}T00:00:00Z`); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
-const TRANSFER = /\b(TRSF|TRF|TRANSFER|BIFAST|BI-FAST|KLIRING|RTGS|SKN)\b/;
+export const TRANSFER = /\b(TRSF|TRF|TRANSFER|BIFAST|BI-FAST|KLIRING|RTGS|SKN)\b/;
 
-function namaDisebut(pelanggan: string, keterangan: string): boolean {
+export function namaDisebut(pelanggan: string, keterangan: string): boolean {
   const k = kata(keterangan);
   const n = kata(pelanggan).filter((w) => w.length >= 3);
   return n.length > 0 && n.every((w) => k.some((x) => x.startsWith(w)));

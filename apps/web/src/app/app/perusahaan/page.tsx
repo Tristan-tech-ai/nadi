@@ -93,6 +93,7 @@ async function Tautan() {
       <Link href="/app/barang" className="underline underline-offset-4">{t.barang}</Link>
       <Link href="/app/jual" className="underline underline-offset-4">{t.jual}</Link>
       <Link href="/app/beli" className="underline underline-offset-4">{t.beli}</Link>
+      <Link href="/app/kas" className="underline underline-offset-4">{t.kas}</Link>
       <Link href="/app/buku" className="underline underline-offset-4">{t.buku}</Link>
       <Link href="/app/pajak" className="underline underline-offset-4">{t.pajak}</Link>
       <Link href="/app/akuntan" className="underline underline-offset-4">{t.akuntan}</Link>

@@ -1,0 +1,297 @@
+{
+ "invoice": [
+  {
+   "id": "r3-i0",
+   "nomor": "091/INV/X/2026",
+   "pelanggan": "Kafe Senja",
+   "total": 2619500,
+   "tanggal": "2026-10-05",
+   "jatuh_tempo": "2026-10-19"
+  },
+  {
+   "id": "r3-i1",
+   "nomor": "092/INV/X/2026",
+   "pelanggan": "Villa Asri",
+   "total": 1039500,
+   "tanggal": "2026-10-01",
+   "jatuh_tempo": "2026-10-15"
+  },
+  {
+   "id": "r3-i2",
+   "nomor": "093/INV/X/2026",
+   "pelanggan": "CV Maju Jaya",
+   "total": 4114500,
+   "tanggal": "2026-10-01",
+   "jatuh_tempo": "2026-10-15"
+  },
+  {
+   "id": "r3-i3",
+   "nomor": "094/INV/X/2026",
+   "pelanggan": "Toko Berkah",
+   "total": 4326000,
+   "tanggal": "2026-10-06",
+   "jatuh_tempo": "2026-10-20"
+  },
+  {
+   "id": "r3-i4",
+   "nomor": "095/INV/X/2026",
+   "pelanggan": "Bengkel Jaya Motor",
+   "total": 1942000,
+   "tanggal": "2026-10-06",
+   "jatuh_tempo": "2026-10-20"
+  },
+  {
+   "id": "r3-i5",
+   "nomor": "096/INV/X/2026",
+   "pelanggan": "Apotek Sehat",
+   "total": 3652000,
+   "tanggal": "2026-10-01",
+   "jatuh_tempo": "2026-10-15"
+  },
+  {
+   "id": "r3-i6",
+   "nomor": "097/INV/X/2026",
+   "pelanggan": "Rina Wulandari",
+   "total": 1698000,
+   "tanggal": "2026-10-05",
+   "jatuh_tempo": "2026-10-19"
+  },
+  {
+   "id": "r3-i7",
+   "nomor": "098/INV/X/2026",
+   "pelanggan": "Hendra Gunawan",
+   "total": 2592000,
+   "tanggal": "2026-10-05",
+   "jatuh_tempo": "2026-10-19"
+  },
+  {
+   "id": "r3-i8",
+   "nomor": "099/INV/X/2026",
+   "pelanggan": "Hotel Melati",
+   "total": 2592000,
+   "tanggal": "2026-10-04",
+   "jatuh_tempo": "2026-10-18"
+  }
+ ],
+ "tagihan": [
+  {
+   "id": "r3-t0",
+   "pemasok": "PT Susu Segar",
+   "nomor_pemasok": "FK-130",
+   "sisa": 1254000,
+   "tanggal": "2026-10-02",
+   "jatuh_tempo": "2026-11-01"
+  },
+  {
+   "id": "r3-t1",
+   "pemasok": "Toko Plastik Abadi",
+   "nomor_pemasok": "INV-131",
+   "sisa": 1258000,
+   "tanggal": "2026-10-03",
+   "jatuh_tempo": "2026-11-02"
+  },
+  {
+   "id": "r3-t2",
+   "pemasok": "CV Tani Makmur",
+   "nomor_pemasok": "NT-132",
+   "sisa": 1055000,
+   "tanggal": "2026-10-01",
+   "jatuh_tempo": "2026-10-31"
+  },
+  {
+   "id": "r3-t3",
+   "pemasok": "CV Gas Lancar",
+   "nomor_pemasok": "FK-133",
+   "sisa": 2488000,
+   "tanggal": "2026-10-01",
+   "jatuh_tempo": "2026-10-31"
+  },
+  {
+   "id": "r3-t4",
+   "pemasok": "UD Sumber Rejeki",
+   "nomor_pemasok": "INV-134",
+   "sisa": 2656500,
+   "tanggal": "2026-10-01",
+   "jatuh_tempo": "2026-10-31"
+  },
+  {
+   "id": "r3-t5",
+   "pemasok": "UD Beras Pulen",
+   "nomor_pemasok": "NT-135",
+   "sisa": 2545000,
+   "tanggal": "2026-10-05",
+   "jatuh_tempo": "2026-11-04"
+  }
+ ],
+ "jurnal": [
+  {
+   "id": "r3-j0",
+   "tanggal": "2026-10-04",
+   "keterangan": "Setoran modal pemilik",
+   "jumlah": 8210000,
+   "arah": "CR"
+  },
+  {
+   "id": "r3-j1",
+   "tanggal": "2026-10-10",
+   "keterangan": "Gaji Oktober Sari",
+   "jumlah": 3862000,
+   "arah": "DB"
+  },
+  {
+   "id": "r3-j2",
+   "tanggal": "2026-10-10",
+   "keterangan": "Gaji Oktober Made",
+   "jumlah": 4000000,
+   "arah": "DB"
+  },
+  {
+   "id": "r3-j3",
+   "tanggal": "2026-10-13",
+   "keterangan": "Pindah dana dari Kas",
+   "jumlah": 1123000,
+   "arah": "CR"
+  },
+  {
+   "id": "r3-j4",
+   "tanggal": "2026-10-16",
+   "keterangan": "Sewa ruko Oktober",
+   "jumlah": 5640000,
+   "arah": "DB"
+  },
+  {
+   "id": "r3-j5",
+   "tanggal": "2026-10-03",
+   "keterangan": "Pinjaman dari saudara",
+   "jumlah": 1843000,
+   "arah": "CR"
+  }
+ ],
+ "aturan": [
+  {
+   "id": "r3-a0",
+   "kata": "PLN",
+   "arah": "DB",
+   "akun_kode": "6-300"
+  },
+  {
+   "id": "r3-a1",
+   "kata": "BIAYA ADM",
+   "arah": "DB",
+   "akun_kode": "6-910"
+  },
+  {
+   "id": "r3-a2",
+   "kata": "BUNGA",
+   "arah": "CR",
+   "akun_kode": "4-900"
+  },
+  {
+   "id": "r3-a3",
+   "kata": "PAJAK BUNGA",
+   "arah": "DB",
+   "akun_kode": "6-910"
+  },
+  {
+   "id": "r3-a4",
+   "kata": "TELKOM",
+   "arah": "DB",
+   "akun_kode": "6-300"
+  }
+ ],
+ "jawaban": [
+  {
+   "jenis": "invoice",
+   "target": "r3-i1"
+  },
+  {
+   "jenis": "jurnal",
+   "target": "r3-j0"
+  },
+  {
+   "jenis": "invoice",
+   "target": "r3-i5"
+  },
+  {
+   "jenis": "invoice",
+   "target": "r3-i2"
+  },
+  {
+   "jenis": "akun",
+   "target": "6-300"
+  },
+  {
+   "jenis": "akun",
+   "target": "6-300"
+  },
+  {
+   "jenis": "tagihan_beli",
+   "target": "r3-t1"
+  },
+  {
+   "jenis": "tagihan_beli",
+   "target": "r3-t3"
+  },
+  {
+   "jenis": "tagihan_beli",
+   "target": "r3-t4"
+  },
+  {
+   "jenis": "tagihan_beli",
+   "target": "r3-t0"
+  },
+  {
+   "jenis": "invoice",
+   "target": "r3-i7"
+  },
+  {
+   "jenis": "jurnal",
+   "target": "r3-j1"
+  },
+  {
+   "jenis": "jurnal",
+   "target": "r3-j2"
+  },
+  {
+   "jenis": "invoice",
+   "target": "r3-i4"
+  },
+  {
+   "jenis": "tagihan_beli",
+   "target": "r3-t2"
+  },
+  null,
+  {
+   "jenis": "invoice",
+   "target": "r3-i0"
+  },
+  {
+   "jenis": "jurnal",
+   "target": "r3-j3"
+  },
+  null,
+  {
+   "jenis": "invoice",
+   "target": "r3-i3"
+  },
+  null,
+  {
+   "jenis": "jurnal",
+   "target": "r3-j4"
+  },
+  null,
+  null,
+  {
+   "jenis": "akun",
+   "target": "6-910"
+  },
+  {
+   "jenis": "akun",
+   "target": "4-900"
+  },
+  {
+   "jenis": "akun",
+   "target": "6-910"
+  }
+ ]
+}
