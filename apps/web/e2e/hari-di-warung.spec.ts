@@ -81,7 +81,13 @@ test("satu hari di warung", async ({ page, browser }, info) => {
     expect((await sb.rpc("simpan_zona_mata", { p_zona: zona.map((z) => ({ nama: z.nama, jenis: z.jenis, poligon: z.poligon })) })).error).toBeNull();
     await page.goto("/app/mata");
     await expect(page.getByTestId("zona-mata")).toHaveCount(3);
-    await page.getByTestId("pilih-video").setInputFiles(join(KORPUS, "video.webm"));
+    // Berkas yang dipilih sebelum hidrasi selesai hilang (tombol tetap nonaktif), dan memilih berkas yang sama lagi tidak memicu
+    // change: kosongkan pilihan dulu, lalu pilih ulang sampai tombol aktif.
+    await expect(async () => {
+      await page.getByTestId("pilih-video").setInputFiles([]);
+      await page.getByTestId("pilih-video").setInputFiles(join(KORPUS, "video.webm"));
+      await expect(page.getByTestId("mulai-pantau")).toBeEnabled({ timeout: 3_000 });
+    }).toPass({ timeout: 60_000 });
     await page.getByTestId("mulai-pantau").click();
     await expect(page.getByTestId("mata-status")).toContainText("Video selesai dipantau.", { timeout: 600_000 });
     expect(await page.getByTestId("riwayat-mata").locator("li").count()).toBeGreaterThan(3);

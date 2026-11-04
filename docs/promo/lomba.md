@@ -34,11 +34,12 @@ Fokus hanya ke lomba dan program yang **terbuka untuk umum**. Lomba khusus pelaj
 | Founder Institute | tunda | umum, tahap ide/pra-seed | biaya program tidak tertulis; tidak didaftarkan tanpa keputusan bayar Tristan |
 | Pertamuda, Gemastik, P2MW | tidak | khusus mahasiswa | |
 
-## Bahan pendaftaran yang disiapkan loop
+## Bahan pendaftaran yang disiapkan loop (diperbarui 4 Nov 2026)
 | Bahan | Dipakai di | Status |
 |---|---|---|
-| Tautan demo publik /demo | APINDO, Dicoding (tautan proyek), BI-OJK | ada |
-| Video demo MP4 <= 7 menit | APINDO | ada dalam webm (DONE-01); konversi MP4 menyusul bersama F6-06 |
-| Video promo < 60 dtk | APINDO (pembuka video demo), konten | F6-06 |
-| Project Brief / pitch deck PDF | Dicoding, BI-OJK, investor | B-04 |
-| Ringkasan 1 halaman | semua | menyusul bersama B-04 |
+| Tautan demo publik https://nadi-swart.vercel.app/demo | APINDO, Dicoding (tautan proyek), BI-OJK | ada |
+| Video demo MP4 <= 7 menit: docs/promo/demo-apindo.mp4 (promo 46 dtk + rekaman satu hari di produksi) | APINDO | ada |
+| Video promo 46 dtk docs/promo/nadi-promo.mp4, teaser 15 dtk, 4 potongan fitur docs/promo/fitur/ | APINDO (pembuka), konten | ada |
+| Project Brief / pitch deck: docs/bisnis/pitch-deck.pptx dan pitch-deck.pdf (11 slide) | Dicoding, BI-OJK, investor | ada |
+| Ringkasan 1 halaman docs/promo/ringkasan.md | semua | ada |
+| Pendaftaran (APINDO Feb 2027, Dicoding Apr 2027, 1000 Startup Digital sekarang) | Tristan | loop/UNTUK-TRISTAN.md |

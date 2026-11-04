@@ -1,5 +1,7 @@
 # DONE-01: satu hari di warung (produksi)
 
+**Diulang 4 Nov 2026 14.4x WIB** ke https://nadi-swart.vercel.app (Next 16.4.5, desain D-10/D-11, Mata memakai RPC vision_* I-04): 1 passed (1,0 menit), video baru `satu-hari-di-warung.webm` (62 dtk, 960 px VP9). Spec diperbaiki: tombol landing kini "Coba usaha contoh", dan memilih video sebelum halaman Mata terhidrasi hilang (memilih berkas yang sama lagi tidak memicu change), jadi pilihan dikosongkan lalu diulang sampai tombol Mulai pantau aktif. Catatan lama di bawah.
+
 Dijalankan 3 Nov 2026 19.07 WIB terhadap https://nadi-tristan-tech-ais-projects.vercel.app (deploy 3728eca) dengan
 `E2E_BASE_URL=<produksi> E2E_VIDEO_DIR=<folder> pnpm exec playwright test e2e/hari-di-warung.spec.ts --project=desktop --workers=1`.
 Hasil: 1 passed (1,0 menit). Video rekaman 62 detik: `satu-hari-di-warung.webm` (dikecilkan ke 960 px VP9 dari rekaman Playwright 1280 px, 9,2 MB).
