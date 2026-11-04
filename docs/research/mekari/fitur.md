@@ -192,8 +192,8 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 | Status | Jumlah |
 |---|---|
 | ADA | 23 |
-| SEBAGIAN | 52 |
-| BELUM | 39 |
+| SEBAGIAN | 53 |
+| BELUM | 38 |
 | MITRA | 18 |
 | LUAR | 2 |
 
