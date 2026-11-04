@@ -58,3 +58,62 @@ export async function centangPeriksa(_: HasilHr, f: FormData): Promise<HasilHr> 
   revalidatePath("/app/orang/kerja");
   return null;
 }
+
+// M-11B: bidang kustom, delegasi persetujuan, SP menjadi surat keluar, templat dokumen bebas.
+export async function simpanBidang(_: HasilHr, f: FormData): Promise<HasilHr> {
+  const k = ambilKamus(await bahasaAplikasi()).hrPesan;
+  const supabase = await createClient();
+  const pilihan = teks(f, "pilihan").split(",").map((x) => x.trim()).filter(Boolean);
+  const { error } = await supabase.rpc("simpan_bidang_kustom", {
+    p_id: null, p_label: teks(f, "label"), p_tipe: teks(f, "tipe"), p_pilihan: pilihan.length ? pilihan : null, p_staf_lihat: f.get("staf_lihat") === "on", p_aktif: true,
+  });
+  if (error) return galat(error);
+  revalidatePath("/app/orang/kerja");
+  return { pesan: k.bidangTersimpan };
+}
+
+export async function isiNilai(_: HasilHr, f: FormData): Promise<HasilHr> {
+  const k = ambilKamus(await bahasaAplikasi()).hrPesan;
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("isi_nilai_kustom", { p_orang: teks(f, "orang"), p_bidang: teks(f, "bidang"), p_nilai: teks(f, "nilai") });
+  if (error) return galat(error);
+  revalidatePath("/app/orang/kerja");
+  return { pesan: k.nilaiTersimpan };
+}
+
+export async function aturDelegasi(_: HasilHr, f: FormData): Promise<HasilHr> {
+  const k = ambilKamus(await bahasaAplikasi()).hrPesan;
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("atur_delegasi", { p_dari: teks(f, "dari"), p_ke: teks(f, "ke"), p_mulai: tanggal(f, "mulai"), p_selesai: tanggal(f, "selesai") });
+  if (error) return galat(error);
+  revalidatePath("/app/orang/kerja");
+  return { pesan: k.delegasiTersimpan };
+}
+
+export async function terbitkanSp(_: HasilHr, f: FormData): Promise<HasilHr> {
+  const k = ambilKamus(await bahasaAplikasi()).hrPesan;
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("terbitkan_sp", { p_sp: teks(f, "sp") });
+  if (error) return galat(error);
+  revalidatePath("/app/orang/kerja");
+  revalidatePath("/app/surat-keluar");
+  return { pesan: isiTeks(k.spTerbit, { nomor: (data as { nomor: string }).nomor }) };
+}
+
+export async function simpanTemplat(_: HasilHr, f: FormData): Promise<HasilHr> {
+  const k = ambilKamus(await bahasaAplikasi()).hrPesan;
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("simpan_templat_dokumen", { p_nama: teks(f, "nama"), p_judul: teks(f, "judul"), p_isi: String(f.get("isi") ?? "") });
+  if (error) return galat(error);
+  revalidatePath("/app/orang/kerja");
+  return { pesan: k.templatTersimpan };
+}
+
+export async function buatDokumen(_: HasilHr, f: FormData): Promise<HasilHr> {
+  const k = ambilKamus(await bahasaAplikasi()).hrPesan;
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("buat_dokumen", { p_templat: teks(f, "templat"), p_orang: teks(f, "orang") });
+  if (error) return galat(error);
+  revalidatePath("/app/surat-keluar");
+  return { pesan: k.dokumenDibuat };
+}

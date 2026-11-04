@@ -25,13 +25,15 @@ async function Isi() {
   const zona = await zonaUsahaIni(sesi.perusahaanId);
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const [{ data: pg }, { data: baca }, ringkas, { data: pf }, { data: sp }] = await Promise.all([
+  const [{ data: pg }, { data: baca }, ringkas, { data: pf }, { data: sp }, { data: nk }] = await Promise.all([
     supabase.from("pengumuman").select("id, judul, isi, untuk_peran, dibuat_at").order("dibuat_at", { ascending: false }).limit(30),
     supabase.from("pengumuman_baca").select("pengumuman_id").eq("user_id", user?.id ?? ""),
     pengelola ? supabase.rpc("ringkas_pengumuman") : Promise.resolve({ data: [] }),
     pengelola ? Promise.resolve({ data: [] }) : supabase.from("profil_kerja").select("jabatan, level, departemen, status_kerja, kontrak_sampai").limit(1),
     pengelola ? Promise.resolve({ data: [] }) : supabase.from("surat_peringatan").select("id, tingkat, terakhir, tanggal, berlaku_sampai, pelanggaran").order("tanggal", { ascending: false }).order("dibuat_at", { ascending: false }),
+    pengelola ? Promise.resolve({ data: [] }) : supabase.from("nilai_kustom").select("nilai, bidang_kustom(label)"),
   ]);
+  const kustom = ((nk ?? []) as unknown as { nilai: string; bidang_kustom: { label: string } | null }[]);
   const sudah = new Set(((baca ?? []) as { pengumuman_id: string }[]).map((b) => b.pengumuman_id));
   const angka = new Map(((ringkas.data ?? []) as { id: string; sasaran: number; dibaca: number }[]).map((r) => [r.id, r]));
   const daftar = (pg ?? []) as Pengumuman[];
@@ -40,6 +42,7 @@ async function Isi() {
   return (
     <div lang={bahasa}>
       <h1 className="text-2xl font-semibold">{t.pengumumanJudul}</h1>
+      <p className="mt-1 text-sm"><a href="/app/survei" className="underline underline-offset-4">{ambilKamus(bahasa).survei.judulHalaman}</a></p>
       {daftar.length === 0 ? (
         <p className="mt-4 text-tinta-2" data-testid="pengumuman-kosong">{t.pengumumanKosong}</p>
       ) : (
@@ -91,6 +94,11 @@ async function Isi() {
             </ul>
           )}
           {peringatan.length > 0 && <p className="mt-2 text-xs text-tinta-2">{t.spBanding}</p>}
+          {kustom.length > 0 && (
+            <dl className="mt-4 grid grid-cols-[auto_1fr] gap-x-4 gap-y-1 text-sm" data-testid="kustom-saya">
+              {kustom.map((k) => <div key={k.bidang_kustom?.label} className="contents"><dt className="text-tinta-2">{k.bidang_kustom?.label}</dt><dd data-pengguna>{k.nilai}</dd></div>)}
+            </dl>
+          )}
         </section>
       )}
     </div>

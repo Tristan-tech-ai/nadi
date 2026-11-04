@@ -2,7 +2,7 @@
 
 import { CheckIcon } from "@phosphor-icons/react";
 import { cloneElement, useActionState, useId } from "react";
-import { beriSp, centangPeriksa, mulaiPeriksa, ubahProfil, type HasilHr } from "@/app/app/orang/kerja/actions";
+import { aturDelegasi, beriSp, buatDokumen, centangPeriksa, isiNilai, mulaiPeriksa, simpanBidang, simpanTemplat, terbitkanSp, ubahProfil, type HasilHr } from "@/app/app/orang/kerja/actions";
 import { buatPengumuman, tandaiBaca, type HasilPengumuman } from "@/app/app/pengumuman/actions";
 import { Tombol } from "@/components/ui/tombol";
 import type { Kamus } from "@/lib/i18n/kamus";
@@ -104,6 +104,85 @@ export function TombolBaca({ id, judul, teks: t }: { id: string; judul: string; 
       <input type="hidden" name="id" value={id} />
       <Tombol type="submit" ragam="kedua" disabled={sibuk} aria-label={`${t.tandaiBaca}: ${judul}`}>{t.tandaiBaca}</Tombol>
       {h && "galat" in h && <p role="alert" className="mt-1 text-cap">{h.galat}</p>}
+    </form>
+  );
+}
+
+// M-11B ------------------------------------------------------------------------------------------------------------------------
+const PilihOrang = ({ orang, name = "orang", t, id }: { orang: Orang[]; name?: string; t: T; id?: string }) => (
+  <select id={id} name={name} required defaultValue="" className={isian}><option value="" disabled>{t.pilih}</option>{orang.map((o) => <option key={o.id} value={o.id}>{o.nama}</option>)}</select>
+);
+
+export function FormBidang({ teks: t }: { teks: T }) {
+  const [h, aksi, sibuk] = useActionState<HasilHr, FormData>(simpanBidang, null);
+  return (
+    <form action={aksi} className="mt-3 grid grid-cols-2 gap-3 text-sm" aria-label={t.bidangAria}>
+      <Kolom label={t.bidangLabel}><input name="label" required minLength={2} maxLength={60} placeholder={t.bidangContoh} className={isian} /></Kolom>
+      <Kolom label={t.bidangTipe}><select name="tipe" defaultValue="teks" className={isian}>{(Object.keys(t.tipeNama) as (keyof T["tipeNama"])[]).map((x) => <option key={x} value={x}>{t.tipeNama[x]}</option>)}</select></Kolom>
+      <Kolom label={t.bidangPilihan} lebar><input name="pilihan" maxLength={400} placeholder={t.bidangPilihanContoh} className={isian} /></Kolom>
+      <label className="col-span-2 flex items-center gap-2"><input type="checkbox" name="staf_lihat" className="size-5" /><span>{t.stafLihat}</span></label>
+      <div className="col-span-2 flex flex-col items-start gap-2"><Tombol type="submit" ragam="kedua" disabled={sibuk}>{t.simpanBidang}</Tombol><Hasil h={h} /></div>
+    </form>
+  );
+}
+
+export function FormNilai({ orang, bidang, teks: t }: { orang: Orang[]; bidang: { id: string; label: string }[]; teks: T }) {
+  const [h, aksi, sibuk] = useActionState<HasilHr, FormData>(isiNilai, null);
+  return (
+    <form action={aksi} className="mt-3 grid grid-cols-2 gap-3 text-sm" aria-label={t.nilaiAria}>
+      <Kolom label={t.orang}><PilihOrang orang={orang} t={t} /></Kolom>
+      <Kolom label={t.bidangLabel}><select name="bidang" required defaultValue="" className={isian}><option value="" disabled>{t.pilihBidang}</option>{bidang.map((b) => <option key={b.id} value={b.id}>{b.label}</option>)}</select></Kolom>
+      <Kolom label={t.nilai} lebar><input name="nilai" required maxLength={300} className={isian} /></Kolom>
+      <div className="col-span-2 flex flex-col items-start gap-2"><Tombol type="submit" ragam="kedua" disabled={sibuk}>{t.simpanNilai}</Tombol><Hasil h={h} /></div>
+    </form>
+  );
+}
+
+export function FormDelegasi({ orang, hari, teks: t }: { orang: Orang[]; hari: string; teks: T }) {
+  const [h, aksi, sibuk] = useActionState<HasilHr, FormData>(aturDelegasi, null);
+  return (
+    <form action={aksi} className="mt-3 grid grid-cols-2 gap-3 text-sm" aria-label={t.delegasiAria}>
+      <Kolom label={t.delegasiDari}><PilihOrang orang={orang} name="dari" t={t} /></Kolom>
+      <Kolom label={t.delegasiKe}><PilihOrang orang={orang} name="ke" t={t} /></Kolom>
+      <Kolom label={t.mulai}><input type="date" name="mulai" required min={hari} defaultValue={hari} className={isian} /></Kolom>
+      <Kolom label={t.selesai}><input type="date" name="selesai" required min={hari} className={isian} /></Kolom>
+      <div className="col-span-2 flex flex-col items-start gap-2"><Tombol type="submit" ragam="kedua" disabled={sibuk}>{t.simpanDelegasi}</Tombol><Hasil h={h} /></div>
+    </form>
+  );
+}
+
+export function TombolTerbitkanSp({ sp, nama, teks: t }: { sp: string; nama: string; teks: T }) {
+  const [h, aksi, sibuk] = useActionState<HasilHr, FormData>(terbitkanSp, null);
+  return (
+    <form action={aksi} className="mt-2">
+      <input type="hidden" name="sp" value={sp} />
+      <Tombol type="submit" ragam="kedua" disabled={sibuk} aria-label={`${t.terbitkanSp}: ${nama}`}>{t.terbitkanSp}</Tombol>
+      <Hasil h={h} />
+    </form>
+  );
+}
+
+export function FormTemplat({ teks: t }: { teks: T }) {
+  const [h, aksi, sibuk] = useActionState<HasilHr, FormData>(simpanTemplat, null);
+  return (
+    <form action={aksi} className="mt-3 flex flex-col gap-3 text-sm" aria-label={t.templatAria}>
+      <Kolom label={t.templatNama}><input name="nama" required minLength={3} maxLength={80} defaultValue={t.contohNama} className={isian} /></Kolom>
+      <Kolom label={t.templatJudul}><input name="judul" required minLength={3} maxLength={120} defaultValue={t.contohJudul} className={isian} /></Kolom>
+      <Kolom label={t.templatIsi}><textarea name="isi" required rows={8} maxLength={9000} defaultValue={t.contohIsi} className="rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-2 py-2 text-base" /></Kolom>
+      <p className="text-xs text-tinta-2">{t.penanda}</p>
+      <div className="flex flex-col items-start gap-2"><Tombol type="submit" ragam="kedua" disabled={sibuk}>{t.simpanTemplat}</Tombol><Hasil h={h} /></div>
+    </form>
+  );
+}
+
+export function FormBuatDokumen({ orang, templat, teks: t }: { orang: Orang[]; templat: { id: string; nama: string }[]; teks: T }) {
+  const [h, aksi, sibuk] = useActionState<HasilHr, FormData>(buatDokumen, null);
+  return (
+    <form action={aksi} className="mt-3 grid grid-cols-2 gap-3 text-sm" aria-label={t.dokumenAria}>
+      <Kolom label={t.templatNama}><select name="templat" required defaultValue="" className={isian}><option value="" disabled>{t.pilihTemplat}</option>{templat.map((x) => <option key={x.id} value={x.id}>{x.nama}</option>)}</select></Kolom>
+      <Kolom label={t.orang}><PilihOrang orang={orang} t={t} /></Kolom>
+      <div className="col-span-2 flex flex-col items-start gap-2"><Tombol type="submit" ragam="kedua" disabled={sibuk}>{t.buatDokumen}</Tombol><Hasil h={h} />
+        {h && "pesan" in h && <a href="/app/surat-keluar" className="underline underline-offset-4">{t.keSuratKeluar}</a>}</div>
     </form>
   );
 }

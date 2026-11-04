@@ -28,7 +28,8 @@ describe("kamus", () => {
   it("teks Inggris tidak memuat kata Indonesia umum (kecuali nama produk, orang, dan regulasi)", () => {
     const kata = /\b(dan|yang|untuk|dengan|tidak|kamu|usaha|karyawan|belum|sudah|atau)\b/i;
     const pengecualian = ["Bahasa Indonesia", "UD Sumber Rejeki"];
-    for (const t of semuaTeks(kamusEn)) if (!pengecualian.includes(t)) expect(t, t).not.toMatch(kata);
+    // Penanda {nama}, {usaha}, ... adalah kunci yang diurai database, bukan kalimat, jadi diabaikan.
+    for (const t of semuaTeks(kamusEn)) if (!pengecualian.includes(t)) expect(t.replace(/\{[a-z_]+\}/g, ""), t).not.toMatch(kata);
   });
   it("isiTeks mengisi {nama}", () => {
     expect(isiTeks("sampai {n} orang", { n: 15 })).toBe("sampai 15 orang");

@@ -22,17 +22,17 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 |---|---|---|---|---|---|
 | TA-01 | Direktori karyawan + profil lengkap (pribadi, keluarga, pendidikan, pengalaman, rekening, BPJS, NPWP, riwayat), impor massal | Employees/Employee Directory; Employee Profile; For Employee/Employee Profile | /app/orang: nama, HP, NIK hash, topi, gaji rahasia, impor dari Excel/KTP lewat Lempar | SEBAGIAN: keluarga, pendidikan, riwayat jabatan, dokumen per orang | M-11 |
 | TA-02 | Struktur organisasi, cabang, job level, posisi, SBU, multi NPWP, cost center, bagan organisasi | Settings/Company; Launchpad/Company | topi, peta organisasi (Kerja > peta), tempat absen, multi usaha; jabatan, level, departemen/cost center, atasan langsung, bagan organisasi (/app/orang/kerja, M-11) | SEBAGIAN: multi NPWP satu usaha, cabang per orang | M-11 |
-| TA-03 | Custom fields karyawan | Settings/Company | kolom data jsonb, tanpa layar | BELUM | M-11 |
+| TA-03 | Custom fields karyawan | Settings/Company | kolom data tambahan per usaha (teks, angka, tanggal, pilihan, ya/tidak) diperiksa database, staf hanya melihat kolom yang diizinkan (M-11B) | ADA | M-11 |
 | TA-04 | Peran akses fleksibel dan custom roles | Settings/Users | pemilik, admin, akuntan, staf (tetap) | SEBAGIAN: peran kustom berbasis izin | M-21 |
-| TA-05 | Alur persetujuan bertingkat per jenis pengajuan, delegasi | Settings/Workflows; Inbox | Feed usulan untuk_peran, rute pemilik bila uang besar, izin otopilot | SEBAGIAN: rantai atasan langsung > HR > pemilik, delegasi saat cuti | M-11 |
+| TA-05 | Alur persetujuan bertingkat per jenis pengajuan, delegasi | Settings/Workflows; Inbox | Feed usulan untuk_peran, rute pemilik bila uang besar, izin otopilot; persetujuan bertingkat atasan langsung lalu pemilik, delegasi saat atasan izin/cuti (M-11B) | SEBAGIAN: rantai atasan langsung > pemilik dengan delegasi untuk izin dan lembur (M-11B); jenis lain (uang, kasbon) dan rantai lebih dari dua tingkat belum | M-11 |
 | TA-06 | Employee self-service web + mobile | For Employee/*; Mobile App/*; Settings/ESS | PWA staf: absen, izin, slip, jadwal, kerja, rekam ilmu; data kerja dan surat peringatan sendiri, pengumuman (/app/pengumuman, M-11) | ADA (pengajuan perubahan data belum) | M-11 |
 | TA-07 | Onboarding karyawan baru (daftar tugas, dokumen, akun) | Employees/New Joiner; Employees/Onboarding | akun staf + PIN, topi otomatis; daftar periksa onboarding bawaan 6 butir dengan centang (M-11) | SEBAGIAN: unggah dokumen oleh karyawan baru | M-11 |
 | TA-08 | Offboarding, resign, transfer/mutasi/promosi dengan riwayat | Employees/Offboarding; API Employee Transfer | Serah terima, hak berhenti, wawancara keluar, SK mutasi; riwayat jabatan (masuk, promosi, mutasi, demosi) dengan tanggal berlaku, daftar periksa offboarding (M-11) | SEBAGIAN: promosi lewat persetujuan bertingkat, riwayat gaji | M-11 |
-| TA-09 | Teguran / surat peringatan | Employees/Reprimand; API Reprimand | surat peringatan SP1-SP3 berurutan dengan masa berlaku 6 bulan atau sesuai PK/PP/PKB, SP pertama dan terakhir, SP baru ditolak saat SP3 berlaku (PP 35/2021 Pasal 36 huruf k, Penjelasan Pasal 52); staf melihat SP sendiri (M-11) | SEBAGIAN: cetak SP sebagai surat keluar bernomor | M-11 |
+| TA-09 | Teguran / surat peringatan | Employees/Reprimand; API Reprimand | surat peringatan SP1-SP3 berurutan dengan masa berlaku 6 bulan atau sesuai PK/PP/PKB, SP pertama dan terakhir, SP baru ditolak saat SP3 berlaku (PP 35/2021 Pasal 36 huruf k, Penjelasan Pasal 52); staf melihat SP sendiri (M-11); SP terbit sebagai surat keluar bernomor ber-QR (M-11B) | ADA | M-11 |
 | TA-10 | Manpower planning: rencana posisi, headcount, anggaran per periode | Employees/Manpower Planning | lowongan per topi | BELUM | M-14 |
-| TA-11 | Templat dokumen karyawan (kontrak, offering, keterangan) diisi otomatis | Productivity/Document Templates; Company/Files | surat keluar (SK mutasi, surat tugas, keterangan kerja) + QR verifikasi | SEBAGIAN: templat bebas (kontrak PKWT, offering) | M-11, M-17 |
+| TA-11 | Templat dokumen karyawan (kontrak, offering, keterangan) diisi otomatis | Productivity/Document Templates; Company/Files | surat keluar (SK mutasi, surat tugas, keterangan kerja) + QR verifikasi; templat dokumen bebas dengan penanda nama/jabatan/status menjadi draf surat keluar bernomor ber-QR (M-11B) | ADA | M-11, M-17 |
 | TA-12 | Pengumuman + tanda sudah dibaca (acknowledgement) | Company/Announcement; Dashboard/Announcement | pengumuman untuk semua atau per peran, tanda sudah dibaca, jumlah yang sudah membaca untuk pengelola, tautan di Feed (M-11) | ADA | M-11 |
-| TA-13 | Form dan survei karyawan | Productivity/Forms and Surveys; API Form | wawancara keluar | BELUM | M-11 |
+| TA-13 | Form dan survei karyawan | Productivity/Forms and Surveys; API Form | survei skala/pilihan/teks, anonim tanpa akun dengan ringkasan setelah 3 jawaban, wawancara keluar (M-11B) | SEBAGIAN: formulir pengajuan bebas belum | M-11 |
 | TA-14 | Aset perusahaan yang dipinjam karyawan | Company/Assets; API Asset | Serah terima butir barang | SEBAGIAN: daftar aset + pinjam/kembali | M-06 |
 | TA-15 | File perusahaan, aktivitas pengguna, antrean proses, notifikasi | Company/Files; Company/User Activity; Company/Queue Activity; Company/Notification | Lempar (arsip berkas), audit_log, push | SEBAGIAN: layar log aktivitas | M-21 |
 | TA-16 | Insights: headcount, absensi, payroll, karyawan berisiko, kinerja, lembur, dasbor kustom, report builder | Insights/*; Company/Report Builder; Dashboard/*; Time/Time Reports | KPI, beban tim, sinyal beban, alur nyata, Sarapan Data | SEBAGIAN: dasbor HR baku + pembuat laporan | M-23 |
@@ -191,9 +191,9 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 
 | Status | Jumlah |
 |---|---|
-| ADA | 24 |
-| SEBAGIAN | 58 |
-| BELUM | 33 |
+| ADA | 27 |
+| SEBAGIAN | 57 |
+| BELUM | 31 |
 | MITRA | 17 |
 | LUAR | 2 |
 

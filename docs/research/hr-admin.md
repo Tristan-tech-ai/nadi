@@ -32,8 +32,13 @@ Yang dibangun (public.beri_sp):
 ## Daftar periksa
 - Onboarding dan offboarding, masing-masing 6 butir bawaan yang dicentang pengelola.
 
-## Belum (M-11B)
-- Custom field karyawan.
-- Form dan survei.
-- Persetujuan bertingkat (atasan langsung, HR, pemilik) dan delegasi saat cuti.
-- Templat dokumen bebas (kontrak PKWT, offering) dan cetak SP sebagai surat keluar bernomor.
+## M-11B
+- Kolom data tambahan: tipe teks, angka, tanggal (YYYY-MM-DD sah), pilihan, ya/tidak; database menolak isian yang tidak cocok. Staf hanya melihat kolom yang ditandai boleh dilihat. Kolom dinonaktifkan, tidak dihapus.
+- Survei: skala 1-5, pilih satu, jawaban bebas; sekali per akun. Anonim: siapa yang mengisi disimpan terpisah (survei_isi, hanya tanggal), jawaban tanpa akun dengan id acak; pengelola hanya melihat ringkasan, dan ringkasan baru dibuka setelah 3 jawaban; jawaban teks diacak urutannya. Tidak anonim: pengelola melihat jawaban per orang.
+- Persetujuan bertingkat: usulan izin.setujui dan lembur.ajukan dari staf yang punya atasan langsung berakun staf berstatus menunggu_atasan (tidak tampil di Feed). Atasan memutus lewat Feed-nya (langkah_saya, putuskan_langkah); setuju = diteruskan ke Feed pemilik/admin dengan catatan siapa yang menyetujui; tolak wajib alasan dan izin langsung ditolak. Bila atasan sedang izin/sakit/cuti yang disetujui, delegasi yang aktif pada tanggal itu menyetujui atas nama atasan; tanpa delegasi, langsung ke pemilik. Atasan yang pemilik/admin tidak memakai langkah ini karena sudah memutus di Feed.
+- SP terbit sebagai surat keluar jenis surat_peringatan bernomor {no}/{kode}/SP/{bulan}/{tahun} dengan QR verifikasi /v; isinya menyebut pelanggaran, dasar, masa berlaku, dan akibat sesuai tingkat.
+- Templat dokumen bebas dengan penanda {nama}, {jabatan}, {level}, {departemen}, {status}, {kontrak_sampai}, {mulai}, {usaha}, {tanggal}; penanda lain ditolak; hasilnya draf surat keluar jenis dokumen (nomor DOK) yang diterbitkan dari halaman Surat keluar. Contoh bawaan hanya surat penawaran kerja; isi kontrak PKWT ditulis pemilik dan layar mengingatkan memeriksa aturan.
+
+## Belum
+- Formulir pengajuan bebas (selain survei).
+- Rantai lebih dari dua tingkat dan untuk jenis lain (uang, kasbon).

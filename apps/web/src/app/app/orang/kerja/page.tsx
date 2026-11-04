@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { randomUUID } from "node:crypto";
 import { Suspense } from "react";
-import { CentangPeriksa, FormMulaiPeriksa, FormProfil, FormSp } from "@/components/app/hr";
+import { CentangPeriksa, FormBidang, FormBuatDokumen, FormDelegasi, FormMulaiPeriksa, FormNilai, FormProfil, FormSp, FormTemplat, TombolTerbitkanSp } from "@/components/app/hr";
 import { Cap } from "@/components/ui/cap";
 import { formatTanggalKalender } from "@/lib/format";
 import type { Bahasa } from "@/lib/i18n/bahasa";
@@ -15,7 +15,7 @@ import { zonaUsahaIni } from "@/lib/zona-usaha";
 export const metadata: Metadata = { title: "Administrasi orang" };
 
 type Profil = { orang_id: string; jabatan: string | null; level: string | null; departemen: string | null; atasan_id: string | null; status_kerja: string | null; kontrak_sampai: string | null };
-type Sp = { id: string; orang_id: string; tingkat: number; terakhir: boolean; tanggal: string; berlaku_sampai: string; pelanggaran: string };
+type Sp = { id: string; orang_id: string; tingkat: number; terakhir: boolean; tanggal: string; berlaku_sampai: string; pelanggaran: string; surat_id: string | null };
 type Periksa = { id: string; orang_id: string; jenis: string; urutan: number; butir: string; selesai_at: string | null };
 type Riwayat = { id: string; orang_id: string; berlaku_dari: string; jenis: string; jabatan: string | null; level: string | null };
 
@@ -40,13 +40,19 @@ async function Isi() {
   if (sesi.peran !== "pemilik" && sesi.peran !== "admin") return <p className="mt-6">{t.hanyaPengelola}</p>;
   const hari = hariIni(new Date(), await zonaUsahaIni(sesi.perusahaanId));
   const supabase = await createClient();
-  const [{ data: org }, { data: pf }, { data: sp }, { data: dp }, { data: rw }] = await Promise.all([
+  const [{ data: org }, { data: pf }, { data: sp }, { data: dp }, { data: rw }, { data: bk }, { data: nk }, { data: dl }, { data: tp }] = await Promise.all([
     supabase.from("orang").select("id, nama").eq("status", "aktif").order("nama"),
     supabase.from("profil_kerja").select("orang_id, jabatan, level, departemen, atasan_id, status_kerja, kontrak_sampai"),
-    supabase.from("surat_peringatan").select("id, orang_id, tingkat, terakhir, tanggal, berlaku_sampai, pelanggaran").order("tanggal", { ascending: false }).order("dibuat_at", { ascending: false }).limit(50),
+    supabase.from("surat_peringatan").select("id, orang_id, tingkat, terakhir, tanggal, berlaku_sampai, pelanggaran, surat_id").order("tanggal", { ascending: false }).order("dibuat_at", { ascending: false }).limit(50),
     supabase.from("daftar_periksa").select("id, orang_id, jenis, urutan, butir, selesai_at").order("urutan"),
     supabase.from("riwayat_kerja").select("id, orang_id, berlaku_dari, jenis, jabatan, level").order("berlaku_dari", { ascending: false }).limit(30),
+    supabase.from("bidang_kustom").select("id, label, tipe, staf_lihat").eq("aktif", true).order("urutan"),
+    supabase.from("nilai_kustom").select("orang_id, bidang_id, nilai"),
+    supabase.from("delegasi_persetujuan").select("id, dari_orang, ke_orang, mulai, selesai").gte("selesai", hari).order("mulai"),
+    supabase.from("templat_dokumen").select("id, nama").order("nama"),
   ]);
+  const bidang = (bk ?? []) as { id: string; label: string; tipe: string; staf_lihat: boolean }[];
+  const nilai = (nk ?? []) as { orang_id: string; bidang_id: string; nilai: string }[];
   const orang = (org ?? []) as { id: string; nama: string }[];
   const nama = new Map(orang.map((o) => [o.id, o.nama]));
   const profil = new Map(((pf ?? []) as Profil[]).map((p) => [p.orang_id, p]));
@@ -102,11 +108,55 @@ async function Isi() {
                   </div>
                   <p className="mt-1 text-tinta-2">{isiTeks(t.spMasa, { dari: formatTanggalKalender(s.tanggal, bahasa), sampai: formatTanggalKalender(s.berlaku_sampai, bahasa) })}</p>
                   <p className="mt-1" data-pengguna>{s.pelanggaran}</p>
+                  {s.surat_id ? <a href={`/cetak/surat/${s.surat_id}`} target="_blank" className="mt-2 inline-block font-semibold text-laut underline underline-offset-4">{t.cetakSp}</a>
+                    : <TombolTerbitkanSp sp={s.id} nama={nama.get(s.orang_id) ?? ""} teks={t} />}
                 </li>
               );
             })}
           </ul>
         )}
+      </section>
+
+      <section className="mt-8 border-t border-garis pt-6" aria-labelledby="judul-bidang" data-testid="bidang-kustom">
+        <h2 id="judul-bidang" className={judul}>{t.bidangJudul}</h2>
+        <p className="mt-1 text-sm text-tinta-2">{t.bidangKet}</p>
+        <FormBidang teks={t} />
+        {bidang.length > 0 && (
+          <>
+            <FormNilai orang={orang} bidang={bidang} teks={t} />
+            <div className="mt-4 overflow-x-auto" tabIndex={0} role="region" aria-label={t.bidangJudul}><table className="w-full min-w-max text-sm" data-testid="tabel-kustom">
+              <thead><tr className="border-b border-garis text-left"><th className="py-2">{t.orang}</th>{bidang.map((b) => <th key={b.id}>{b.label}</th>)}</tr></thead>
+              <tbody>
+                {orang.filter((o) => nilai.some((n) => n.orang_id === o.id)).map((o) => (
+                  <tr key={o.id} className="border-b border-garis" data-orang={o.nama}>
+                    <td className="py-2" data-pengguna>{o.nama}</td>
+                    {bidang.map((b) => <td key={b.id} data-pengguna>{nilai.find((n) => n.orang_id === o.id && n.bidang_id === b.id)?.nilai ?? "-"}</td>)}
+                  </tr>
+                ))}
+              </tbody>
+            </table></div>
+          </>
+        )}
+      </section>
+
+      <section className="mt-8 border-t border-garis pt-6" aria-labelledby="judul-delegasi">
+        <h2 id="judul-delegasi" className={judul}>{t.delegasiJudul}</h2>
+        <p className="mt-1 text-sm text-tinta-2">{t.delegasiKet}</p>
+        <FormDelegasi orang={orang} hari={hari} teks={t} />
+        {(dl ?? []).length > 0 && (
+          <ul className="mt-3 text-sm" data-testid="daftar-delegasi">
+            {((dl ?? []) as { id: string; dari_orang: string; ke_orang: string; mulai: string; selesai: string }[]).map((d) => (
+              <li key={d.id}>{isiTeks(t.delegasiBaris, { dari: nama.get(d.dari_orang) ?? "-", ke: nama.get(d.ke_orang) ?? "-", mulai: formatTanggalKalender(d.mulai, bahasa), selesai: formatTanggalKalender(d.selesai, bahasa) })}</li>
+            ))}
+          </ul>
+        )}
+      </section>
+
+      <section className="mt-8 border-t border-garis pt-6" aria-labelledby="judul-templat">
+        <h2 id="judul-templat" className={judul}>{t.templatBagian}</h2>
+        <p className="mt-1 text-sm text-tinta-2">{t.templatKet}</p>
+        <FormTemplat teks={t} />
+        {(tp ?? []).length > 0 && <FormBuatDokumen orang={orang} templat={(tp ?? []) as { id: string; nama: string }[]} teks={t} />}
       </section>
 
       <section className="mt-8 border-t border-garis pt-6" aria-labelledby="judul-periksa">
