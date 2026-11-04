@@ -87,3 +87,43 @@ describe("teksMasaKerja", () => {
     expect(teksMasaKerja(b)).toBe(t);
   });
 });
+
+// F4-09B: uang kompensasi PKWT (PP 35/2021 Pasal 15-17) dan iuran dana pensiun pengusaha (Pasal 58).
+const KOMP = { pembagi_bulan: 12, minimal_bulan: 1 };
+
+describe("uang kompensasi PKWT (Pasal 16 ayat (1), proporsional masa kerja / 12 x 1 bulan upah)", () => {
+  it("9 bulan, upah Rp4.000.000 = Rp3.000.000; tanpa pengali alasan", () => {
+    const b = hitungPesangon(orang({ mulai: "2026-02-01", kontrak_selesai: "2027-01-31" }), PP35, HARI, KOMP);
+    expect(b).toMatchObject({ status: "kompensasi", masaBulan: 9, dasar: 3_000_000, rugi: 3_000_000, pensiun: 3_000_000, bulanPesangon: 0, bulanUpmk: 0 });
+  });
+  it("lebih dari 12 bulan tetap proporsional: 18 bulan = 1,5 bulan upah", () => {
+    expect(hitungPesangon(orang({ mulai: "2025-05-01", kontrak_selesai: "2027-04-30" }), PP35, HARI, KOMP).dasar).toBe(6_000_000);
+  });
+  it("masa kerja kurang dari 1 bulan belum berhak (Pasal 15 ayat (3))", () => {
+    expect(hitungPesangon(orang({ mulai: "2026-10-15", kontrak_selesai: "2027-04-14" }), PP35, HARI, KOMP)).toMatchObject({ status: "kompensasi", dasar: 0 });
+  });
+  it("pecahan rupiah dibuang", () => {
+    expect(hitungPesangon(orang({ mulai: "2026-04-01", kontrak_selesai: "2027-03-31", pokok: 3_500_001, tunjangan_tetap: 0 }), PP35, HARI, KOMP).dasar).toBe(2_041_667);
+  });
+  it("kontrak tanpa tanggal mulai atau tanpa gaji tetap meminta isian", () => {
+    expect(hitungPesangon(orang({ mulai: null, kontrak_selesai: "2027-01-31" }), PP35, HARI, KOMP).status).toBe("tanpa_mulai");
+    expect(hitungPesangon(orang({ pokok: null, kontrak_selesai: "2027-01-31" }), PP35, HARI, KOMP).status).toBe("tanpa_gaji");
+  });
+});
+
+describe("iuran dana pensiun pengusaha mengurangi kekurangan orang itu (Pasal 58)", () => {
+  const sari = hitungPesangon(orang({ iuran_pensiun: 10_000_000 }), PP35, HARI);
+  const budi = hitungPesangon(orang({ id: "o2", nama: "Budi", mulai: "2025-11-01", pokok: 3_000_000, tunjangan_tetap: 0, iuran_pensiun: 9_000_000 }), PP35, HARI);
+  const kontrak = hitungPesangon(orang({ id: "o4", nama: "Rina", mulai: "2026-02-01", kontrak_selesai: "2027-01-31", iuran_pensiun: 5_000_000 }), PP35, HARI, KOMP);
+  it("tertutup paling banyak sebesar kewajiban orang itu", () => {
+    expect(sari.tertutupPensiun).toBe(10_000_000);
+    expect(budi.tertutupPensiun).toBe(6_000_000);
+  });
+  it("tidak berlaku untuk uang kompensasi PKWT (Pasal 58 menyebut pesangon, UPMK, uang pisah)", () => {
+    expect(kontrak.tertutupPensiun).toBe(0);
+  });
+  it("kekurangan = kewajiban - iuran tertutup - saldo", () => {
+    const r = ringkasCadangan([sari, budi, kontrak], 10_000_000);
+    expect(r).toMatchObject({ dasar: 28_000_000 + 6_000_000 + 3_000_000, tertutupPensiun: 16_000_000, kekurangan: 11_000_000, dihitung: 3 });
+  });
+});

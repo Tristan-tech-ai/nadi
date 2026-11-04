@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { aturGajiOrang, aturSaldoPesangon, bagikanSlip, catatLembur, lepasTahan, setujuiGaji, siapkanGaji, type HasilGaji, type HasilTautanSlip } from "@/app/app/gaji/actions";
+import { aturGajiOrang, aturIuranPensiun, aturSaldoPesangon, bagikanSlip, catatLembur, lepasTahan, setujuiGaji, siapkanGaji, type HasilGaji, type HasilTautanSlip } from "@/app/app/gaji/actions";
 import { Tombol } from "@/components/ui/tombol";
 import { JENIS_LEMBUR } from "@/lib/gaji/lembur";
 import { isiTeks } from "@/lib/i18n/isi-teks";
@@ -158,6 +158,21 @@ export function FormSaldoPesangon({ saldo }: { saldo: number }) {
       <label className="flex flex-col gap-1"><span className="text-tinta-2">Sudah disisihkan (Rp)</span>
         <input name="saldo" inputMode="numeric" required defaultValue={isi.saldo ?? String(saldo)} className={pilihan} /></label>
       <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? "Menyimpan..." : "Simpan saldo"}</Tombol>
+      <Hasil h={h} />
+    </form>
+  );
+}
+
+/** F4-09B: iuran dana pensiun pengusaha per orang (Pasal 58), mengurangi kekurangan cadangan orang itu. */
+export function FormIuranPensiun({ orang, nama, nilai }: { orang: string; nama: string; nilai: number }) {
+  const [h, aksi, sibuk] = useActionState<HasilGaji, FormData>(aturIuranPensiun, null);
+  const isi = h && "galat" in h ? (h.isian ?? {}) : {};
+  return (
+    <form key={JSON.stringify(isi)} action={aksi} className="mt-2 flex flex-wrap items-end gap-2 text-sm" aria-label={`Iuran dana pensiun ${nama}`}>
+      <input type="hidden" name="orang" value={orang} />
+      <label className="flex flex-col gap-1"><span className="text-tinta-2">Iuran dana pensiun dari usaha yang sudah dibayar (Rp)</span>
+        <input name="iuran" inputMode="numeric" required defaultValue={isi.iuran ?? new Intl.NumberFormat("id-ID").format(nilai)} className={pilihan} /></label>
+      <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? "Menyimpan..." : `Simpan iuran ${nama}`}</Tombol>
       <Hasil h={h} />
     </form>
   );

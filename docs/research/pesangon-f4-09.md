@@ -69,3 +69,21 @@ Kartu "Cadangan pesangon" di /app/gaji (pemilik saja): total kewajiban dasar sem
 
 ## Uji untuk kriteria
 Tes unit tabel ayat (2)/(3) di batas tahun (0, 0,99, 1, 2,99, 3, 8, 23,99, 24 tahun); tes SQL bahwa hanya pemilik membaca angka per orang (data gaji rahasia); setiap baris membawa sumber pasal dan label belum final.
+
+## F4-09B: karyawan kontrak dan iuran dana pensiun (4 Nov 2026)
+Dibaca dari lapisan teks PDF resmi PP 35/2021 (https://peraturan.bpk.go.id/Download/154582/PP%20Nomor%2035%20Tahun%202021.pdf, hlm 11-13; pdftotext, tanpa OCR):
+- **Pasal 15:** (1) pengusaha wajib memberi uang kompensasi kepada pekerja PKWT; (2) diberikan saat PKWT berakhir; (3) bagi yang punya masa kerja paling sedikit 1 bulan terus menerus; (4) bila diperpanjang, kompensasi diberikan saat jangka waktu sebelum perpanjangan selesai, lalu lagi setelah perpanjangan berakhir; (5) tidak berlaku bagi tenaga kerja asing.
+- **Pasal 16:**
+  - Ayat (1): PKWT 12 bulan terus menerus mendapat 1 bulan upah. PKWT 1 sampai kurang dari 12 bulan dan PKWT lebih dari 12 bulan sama-sama dihitung proporsional, "masa kerja / 12 x 1 (satu) bulan Upah".
+  - Ayat (2): upah = upah pokok + tunjangan tetap.
+  - Ayat (3)-(4): tanpa komponen itu, upah tanpa tunjangan; bila ada tunjangan tidak tetap, upah pokok saja.
+  - Ayat (5): PKWT selesainya pekerjaan dihitung sampai pekerjaan selesai.
+  - **Ayat (6): untuk usaha mikro dan usaha kecil, besarnya berdasarkan kesepakatan pengusaha dan pekerja.**
+- **Pasal 17:** bila salah satu pihak mengakhiri sebelum jangka waktu berakhir, kompensasi dihitung berdasarkan jangka waktu PKWT yang telah dilaksanakan.
+
+Pakai di Nadi:
+- **Karyawan kontrak** (ada `orang.data.kontrak_selesai`) dihitung `floor(upah x masa kerja bulan penuh / 12)` sampai hari ini. Ini sesuai Pasal 17 dan cocok dengan "kalau berhenti hari ini" di kartu.
+- Masa kerja kurang dari 1 bulan dihitung 0. Uang kompensasi tidak dikali pengali alasan PHK, dan kartu menyebut ayat (6) sebagai catatan bahwa angkanya acuan.
+- **Aturan bertanggal:** `kompensasi.pkwt` {pembagi_bulan 12, minimal_bulan 1, mikro_kecil_kesepakatan true}, terverifikasi.
+- **Iuran dana pensiun pengusaha (Pasal 58):** disimpan di `public.iuran_pensiun` (pemilik saja, `atur_iuran_pensiun`). Mengurangi kekurangan pesangon + UPMK orang itu, paling banyak sebesar kewajibannya. Tidak mengurangi kompensasi PKWT, karena Pasal 58 menyebut pesangon, UPMK, dan uang pisah.
+- **Batas:** masa kerja dihitung dari tanggal mulai kerja. Untuk kontrak yang sudah diperpanjang dan kompensasinya sudah dibayar (Pasal 15 ayat (4)), pemilik mengubah tanggal mulai ke awal kontrak terakhir.

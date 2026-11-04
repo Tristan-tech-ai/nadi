@@ -164,6 +164,22 @@ export async function aturSaldoPesangon(_: HasilGaji, form: FormData): Promise<H
   return { pesan: t.saldoTersimpan };
 }
 
+/** F4-09B: iuran dana pensiun yang sudah dibayar usaha untuk satu orang (PP 35/2021 Pasal 58; bukan BPJS JP), pemilik saja.
+ * Kartu cadangan pesangon berbahasa Indonesia (dibungkus lang=id di mode lain), jadi pesannya juga. */
+export async function aturIuranPensiun(_: HasilGaji, form: FormData): Promise<HasilGaji> {
+  const orang = String(form.get("orang") ?? "");
+  const teks = String(form.get("iuran") ?? "");
+  const nilai = rupiahIsian(teks);
+  if (teks.trim() === "" || !/^[\d.\s]+$/.test(teks.replace(/^Rp/i, "")) || nilai > 100_000_000_000) {
+    return { galat: "Isi iuran dalam rupiah bulat, 0 atau lebih.", isian: { iuran: teks } };
+  }
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("atur_iuran_pensiun", { p_orang: orang, p_nilai: nilai });
+  if (error) return { galat: error.code === "42501" ? "Hanya pemilik yang mengisi iuran dana pensiun." : "Iuran belum tersimpan. Coba lagi sebentar; isianmu tidak hilang.", isian: { iuran: teks } };
+  revalidatePath("/app/gaji");
+  return { pesan: "Iuran tersimpan." };
+}
+
 /** Catat jam lembur satu orang satu hari (RPC catat_lembur memeriksa batas PP 35/2021 dan kunci bulan yang sudah disetujui). */
 export async function catatLembur(_: HasilGaji, form: FormData): Promise<HasilGaji> {
   const orang = String(form.get("orang") ?? "");
