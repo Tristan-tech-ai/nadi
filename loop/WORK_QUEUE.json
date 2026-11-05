@@ -3762,8 +3762,10 @@
    "accept": "docs/promo/nadi-demo.mp4 <= 300 dtk 1920x1080 30 fps; UI dari snapshot DOM aplikasi asli dengan data sintetis; hyperframes check bersih, lembar kontak ditinjau sendiri (REVIEW.md: teks terpotong, kursor, ritme), audio -14 LUFS true peak <= -1 dBTP; semua fitur di storyboard tampil; dikerjakan TERAKHIR setelah fitur yang diperlihatkan selesai UI di video adalah UI asli Nadi yang DIREKONSTRUKSI menjadi lapisan terpisah (kartu, tombol, baris tabel, angka, kursor) dari DOM/komponen aplikasi dengan CSS dan data sintetis yang sama, sehingga tiap lapisan bisa digerakkan, dipisah, diperbesar, dan ditumpuk dengan motion lain; tangkapan layar datar yang kaku dilarang (perintah Tristan 6 Nov 2026).",
    "how": "skill hyperframes + video-produksi; ganti tautan bahan lomba di UNTUK-TRISTAN",
    "blocked_by": "V-07A,V-07B,V-07C,V-07D,V-07E,V-07F,V-07G,V-07H",
-   "status": "ready",
-   "created": "2026-11-05T20:01:08"
+   "status": "done",
+   "created": "2026-11-05T20:01:08",
+   "done": "2026-11-06T05:29:56",
+   "result": "d9ff4e1 (gate LULUS, push): docs/promo/nadi-demo.mp4 278 dtk 1920x1080 30 fps, UI dari DOM asli aplikasi (data sintetis Toko Bu Sari) direkonstruksi berlapis, footage CCTV asli untuk Mata; hyperframes check 0 error; tinjauan docs/promo/demo-v3/REVIEW.md (berdampingan dengan rujukan, 3 masalah besar diperbaiki: bidikan dekat Feed dan struk, dinding karya); audio -14,0 LUFS, LRA 9,1, puncak -1,3 dBFS, efek foley nyata, sinkron cap dalam 1 bingkai; semua fitur storyboard tampil; kredit CC BY di kartu akhir; tautan bahan lomba di UNTUK-TRISTAN diganti"
   },
   {
    "id": "L-01",
@@ -3825,8 +3827,10 @@
    "accept": "storyboard (V-06) dan video (V-07) memuat satu babak yang memperlihatkan: berkas onboarding yang ribet (Excel karyawan berantakan, nota, daftar harga) dilempar ke chat AI umum yang tersambung MCP Nadi, AI menulis draf, pemilik mengobrol untuk merevisi (misal ganti topi), lalu Terapkan sekali di layar tinjau draf Nadi; antarmuka chat digambar netral tanpa logo/merek pihak ketiga kecuali yang diizinkan pedoman merek resminya, layar Nadi dari DOM asli; alur ini benar-benar bisa dijalankan (alat MCP tulis/baca/ubah draf ada dan teruji)",
    "how": "U-04 (draf AI + MCP), pola dari RUJUKAN.md",
    "blocked_by": "U-04",
-   "status": "ready",
-   "created": "2026-11-05T20:08:54"
+   "status": "done",
+   "created": "2026-11-05T20:08:54",
+   "done": "2026-11-06T05:29:56",
+   "result": "8ea233d + d9ff4e1: storyboard v3 (docs/promo/demo-v2/STORYBOARD.md babak 3) dan video docs/promo/nadi-demo.mp4 (0:56-1:44) memuat babak kerja dari AI-mu lewat MCP: Excel karyawan + daftar harga dilempar ke chat netral tanpa logo pihak ketiga, AI memanggil tulis_draf (15 baris), pemilik merevisi (Budi ke Kasir pagi) lewat ubah_draf, layar tinjau draf asli Nadi, Terapkan, jendela batal 10 menit; alat MCP tulis/baca/ubah draf ada dan teruji (U-04: src/lib/mcp/protokol.test.ts, supabase/tests/ai_draft.test.sql 30/30, e2e/siapkan.spec.ts); draf film dibuat lewat save_ai_draft sungguhan"
   },
   {
    "id": "T-02",
@@ -3886,9 +3890,10 @@
    "title": "Proposal lomba AIWIC 2026 (PDF A4, bahasa Indonesia, maks 5 halaman isi): rapi seperti paper profesional dengan figure, LaTeX",
    "accept": "berkas AIWIC2026_nadi_nadi.pdf A4 tanpa kata sandi: cover (nama produk, tim, anggota, instansi) + 10 bagian sesuai urutan kriteria (Problem & Background, Target User, Proposed Solution + user journey, AI Implementation (bagian ber-AI, model/API/metode, input-output, alasan perlu AI), MVP & Key Features yang berfungsi saat submit, Technical Architecture berupa diagram frontend -> backend -> database -> AI/API -> result, Innovation & Differentiation, Impact & Development Potential + keterbatasan, Technology Disclosure (framework, database, model/API, pustaka, dataset, hosting, AI coding assistant), Submission Links (GitHub, URL deploy, akun demo)); isi maksimal 5 halaman di luar cover dan lampiran (dihitung dari PDF); semua angka dan klaim dari sumber repo/produksi; figure vektor terbaca; dibuat dengan LaTeX (xelatex MiKTeX ada di perangkat); AI coding assistant WAJIB diungkap jujur di PDF, jadi sumber proposal dan PDF disimpan DI LUAR repo (C:/Users/Tristan/Downloads/project-pkl/proposal/) agar aturan tanpa jejak repo tetap terjaga; data akun demo tidak masuk repo; dikerjakan PALING AKHIR",
    "how": "kriteria Tristan 6 Nov 2026",
-   "blocked_by": "V-07,L-01,L-02,T-01,W-10,U-09",
+   "blocked_by": "",
    "status": "ready",
-   "created": "2026-11-05T20:36:28"
+   "created": "2026-11-05T20:36:28",
+   "catatan": "6 Nov 2026: ketergantungan dilepas atas perintah Tristan (setelah video selesai, LANGSUNG proposal PDF, baru tugas lain); bagian yang belum ada (L-01/L-02/T-01D/W-10A) ditulis jujur sebagai rencana."
   },
   {
    "id": "PP-02",

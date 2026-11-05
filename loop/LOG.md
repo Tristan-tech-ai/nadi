@@ -323,3 +323,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 2026-11-06 tick 302 | done V-13D/E/F/G/I, V-13, V-03, V-10: 8 rujukan dibedah, pola lintas GERAK.md, uji gerak berdampingan (kurva cocok, rasa belum) |
 | 2026-11-06 tick 303 | video demo v3 dimulai (perintah Tristan): V-07A kait+masalah, V-07B Lempar, V-07C Feed+cap, V-07D tagihan QRIS, V-07E Mata placeholder; 58 dtk dirender dan ditinjau |
 | 2026-11-06 tick 304 | done V-07F belajar format, V-07G babak MCP/gaji/otomasi/tanya/Sarapan/kerangka/kartu akhir, V-07I perpanjangan ke 4:30 (Excel asli, harga resmi, Feed rincian, Mata papan, pengawas), V-14 cara mendengar + pustaka foley nyata, V-02 rantai olah foley; film 270,5 dtk, mix -14,1 LUFS LRA 8,7 |
+| 2026-11-06 tick 305 | done V-04 footage CCTV asli, V-12 pelacakan dirancang ulang (stabilisasi, kepekaan tinggi, gambar.ts), V-06 storyboard v3, V-11 babak MCP, V-07 video final nadi-demo.mp4 4:38 (REVIEW.md); grup video 100% |
