@@ -2,10 +2,24 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { formatTanggal } from "@/lib/format";
+import { buatIcs } from "@/lib/rekrut/ics";
 import { LABEL_PELAMAR, tahapSah, tokenStatusSah } from "@/lib/rekrut/keputusan";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 
-type Status = { usaha: string; lowongan: string; nama: string; tahap: string; pesan: string | null; tahap_at: string | null; dibuat_at: string };
+type Wawancara = { id: string; mulai: string; selesai: string; lokasi: string; catatan: string | null; urutan: number };
+type Status = { usaha: string; lowongan: string; nama: string; tahap: string; pesan: string | null; tahap_at: string | null; dibuat_at: string; zona?: string; wawancara?: Wawancara[] };
+
+const ZONA: Record<string, string> = { "Asia/Jakarta": "WIB", "Asia/Pontianak": "WIB", "Asia/Makassar": "WITA", "Asia/Jayapura": "WIT" };
+
+/** Unduh .ics buatan peramban (tanpa server): kalender HP membuka berkas ini dan menambahkan acaranya. */
+function simpanKalender(w: Wawancara, s: Status) {
+  const teks = buatIcs({ uid: `${w.id}@nadi`, mulai: new Date(w.mulai), selesai: new Date(w.selesai), urutan: w.urutan,
+    judul: `Wawancara ${s.lowongan}, ${s.usaha}`, lokasi: w.lokasi, keterangan: w.catatan });
+  const url = URL.createObjectURL(new Blob([teks], { type: "text/calendar;charset=utf-8" }));
+  const a = Object.assign(document.createElement("a"), { href: url, download: "wawancara.ics" });
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
 
 // Tautan baru yang ditempel di tab yang sama hanya mengubah fragmen (tanpa muat ulang), jadi ikuti hashchange.
 const langganan = (ubah: () => void) => {
@@ -78,6 +92,24 @@ export function StatusLamaran() {
           </figure>
         )}
       </section>
+
+      {(status.wawancara ?? []).length > 0 && (
+        <section className="mt-6 rounded-[var(--radius-kartu)] border border-garis p-5" aria-labelledby="judul-wawancara" data-testid="status-wawancara">
+          <h2 id="judul-wawancara" className="font-semibold">Jadwal wawancara</h2>
+          <ul className="mt-2 grid gap-3">
+            {status.wawancara!.map((w) => (
+              <li key={w.id}>
+                <p>{new Intl.DateTimeFormat("id-ID", { dateStyle: "full", timeStyle: "short", timeZone: status.zona || zona }).format(new Date(w.mulai)).replace(/(\d{2}):(\d{2})/, "$1.$2")} {ZONA[status.zona || zona] ?? ""}</p>
+                <p className="text-tinta-2">{w.lokasi}</p>
+                {w.catatan && <p className="text-tinta-2">{w.catatan}</p>}
+                <button type="button" onClick={() => simpanKalender(w, status)} className="mt-2 inline-flex h-11 items-center rounded-[var(--radius-isian)] border border-garis-kuat px-4 font-semibold">
+                  Simpan ke kalender
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <p className="mt-6 text-sm text-tinta-2">
         Nadi hanya menyampaikan kabar dari {status.usaha}. Untuk pertanyaan soal lowongan ini, hubungi mereka langsung. Tautan ini berlaku 180 hari sejak kamu melamar.

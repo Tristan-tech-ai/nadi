@@ -29,7 +29,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | TA-07 | Onboarding karyawan baru (daftar tugas, dokumen, akun) | Employees/New Joiner; Employees/Onboarding | akun staf + PIN, topi otomatis; daftar periksa onboarding bawaan 6 butir dengan centang (M-11) | SEBAGIAN: unggah dokumen oleh karyawan baru | M-11 |
 | TA-08 | Offboarding, resign, transfer/mutasi/promosi dengan riwayat | Employees/Offboarding; API Employee Transfer | Serah terima, hak berhenti, wawancara keluar, SK mutasi; riwayat jabatan (masuk, promosi, mutasi, demosi) dengan tanggal berlaku, daftar periksa offboarding (M-11) | SEBAGIAN: promosi lewat persetujuan bertingkat, riwayat gaji | M-11 |
 | TA-09 | Teguran / surat peringatan | Employees/Reprimand; API Reprimand | surat peringatan SP1-SP3 berurutan dengan masa berlaku 6 bulan atau sesuai PK/PP/PKB, SP pertama dan terakhir, SP baru ditolak saat SP3 berlaku (PP 35/2021 Pasal 36 huruf k, Penjelasan Pasal 52); staf melihat SP sendiri (M-11); SP terbit sebagai surat keluar bernomor ber-QR (M-11B) | ADA | M-11 |
-| TA-10 | Manpower planning: rencana posisi, headcount, anggaran per periode | Employees/Manpower Planning | lowongan per topi | BELUM | M-14 |
+| TA-10 | Manpower planning: rencana posisi, headcount, anggaran per periode | Employees/Manpower Planning | /app/rekrutmen: rencana per topi per tahun (target orang, anggaran gaji per bulan, catatan) dibandingkan dengan orang aktif bertopi itu dan lowongan buka | ADA | M-14 |
 | TA-11 | Templat dokumen karyawan (kontrak, offering, keterangan) diisi otomatis | Productivity/Document Templates; Company/Files | surat keluar (SK mutasi, surat tugas, keterangan kerja) + QR verifikasi; templat dokumen bebas dengan penanda nama/jabatan/status menjadi draf surat keluar bernomor ber-QR (M-11B) | ADA | M-11, M-17 |
 | TA-12 | Pengumuman + tanda sudah dibaca (acknowledgement) | Company/Announcement; Dashboard/Announcement | pengumuman untuk semua atau per peran, tanda sudah dibaca, jumlah yang sudah membaca untuk pengelola, tautan di Feed (M-11) | ADA | M-11 |
 | TA-13 | Form dan survei karyawan | Productivity/Forms and Surveys; API Form | survei skala/pilihan/teks, anonim tanpa akun dengan ringkasan setelah 3 jawaban, wawancara keluar (M-11B) | SEBAGIAN: formulir pengajuan bebas belum | M-11 |
@@ -50,7 +50,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | TA-28 | Payroll disbursement dan berkas e-banking | Payroll/Payroll Processing; API Payroll Payment Schedule | tautan slip + wa.me; berkas payroll CIMB Niaga OCTO Biz (CSV inhouse dan SKN dari spesifikasi resmi bank, diperiksa sebelum diunduh) dari rekening karyawan di halaman Orang | SEBAGIAN: format bank lain (BCA, Mandiri, BRI) karena panduan kolomnya tidak publik. Transfer otomatis: MITRA | M-10 |
 | TA-29 | Alokasi biaya payroll ke cost center/cabang | Payroll/Payroll Allocation; API Cost Center | jurnal gaji tunggal | BELUM | M-10 |
 | TA-30 | Reimbursement, cash advance, pinjaman karyawan | Finance/*; Mobile App/Reimbursement; Settings/Finance; API Loans, Reimbursement | kasbon (uang muka upah) dari kas usaha sendiri, jurnal piutang karyawan 1-150, cicilan dibatasi 50% upah (PP 36/2021 Pasal 63 dan 65); cicilan otomatis di slip, sisa berkurang saat gaji disetujui (jurnal 6-100/1-150), /app/gaji/kasbon; reimbursement /app/klaim dibayar lewat slip (penggantian, bukan upah) atau kas (M-18) | SEBAGIAN: pinjaman berbunga atau pihak ketiga tidak dibuat (Nadi tidak meminjamkan uang) | M-18, M-10 |
-| TA-31 | Rekrutmen ATS: lowongan, kandidat, talent pool, asesmen, MBTI, CV parsing, AI scoring, kalender, laporan, job portal | Recruitment/*; For Employee/Recruitment | lowongan, /lamar, baca CV tanpa model, rubrik, wawancara suara + transkrip, uji kerja, IPIP, Bank Talenta, status pelamar, lingkaran rekrut, penjaga bias | SEBAGIAN: kalender wawancara, laporan rekrutmen. Pasang ke job portal: MITRA | M-14 |
+| TA-31 | Rekrutmen ATS: lowongan, kandidat, talent pool, asesmen, MBTI, CV parsing, AI scoring, kalender, laporan, job portal | Recruitment/*; For Employee/Recruitment | lowongan, /lamar, baca CV tanpa model, rubrik, wawancara suara + transkrip, uji kerja, IPIP, Bank Talenta, status pelamar, lingkaran rekrut, penjaga bias, jadwal wawancara + .ics + undangan wa.me, laporan rekrutmen (tahap, sumber ?src=, hari sampai terisi, biaya iklan per pelamar), data JobPosting di /lamar | SEBAGIAN: pasang ke job portal MITRA, MBTI tidak dibuat | M-14 |
 | TA-32 | Kinerja: goals KPI/OKR, review (diri, atasan, rekan), kalibrasi, talents/9-box, kompetensi, suksesi, IDP | Performance Management/* | KPI dari papan kerja, kolam bonus | SEBAGIAN: siklus review dan goal | M-13 |
 | TA-33 | LMS: materi, tes, progres, sertifikat | LMS/* | Rekam ilmu (SOP rekaman + langkah) | SEBAGIAN: kursus, kuis, sertifikat | M-13 |
 | TA-34 | Inbox persetujuan terpusat | Inbox/* | Feed Keputusan | ADA | - |
@@ -191,9 +191,9 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 
 | Status | Jumlah |
 |---|---|
-| ADA | 39 |
+| ADA | 40 |
 | SEBAGIAN | 71 |
-| BELUM | 5 |
+| BELUM | 4 |
 | MITRA | 17 |
 | LUAR | 2 |
 

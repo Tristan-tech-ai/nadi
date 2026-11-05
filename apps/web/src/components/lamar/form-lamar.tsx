@@ -41,6 +41,9 @@ export function FormLamar({ kode, usaha, pertanyaan = [] }: { kode: string; usah
       }
       const { error: eSelesai } = await sb.rpc("lamar_selesai", { p_lamaran: d.lamaran });
       if (eSelesai) return setGalat(eSelesai.message);
+      // M-14: sumber tautan (?src=instagram dan sejenisnya) untuk laporan rekrutmen; gagal di sini diabaikan.
+      const sumber = new URLSearchParams(window.location.search).get("src");
+      if (sumber) await sb.rpc("tag_application_source", { p_lamaran: d.lamaran, p_source: sumber });
       // F2-05: izin dihubungi lagi + tautan status tanpa akun. Gagal di sini tidak membatalkan lamaran.
       const { data: token } = await sb.rpc("lamar_lanjut", { p_lamaran: d.lamaran, p_boleh_dihubungi: form.get("boleh_dihubungi") === "ya" });
       if (typeof token === "string") setTautan(`${window.location.origin}/lamar/status#${token}`);
