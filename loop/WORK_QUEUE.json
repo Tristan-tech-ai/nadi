@@ -3676,13 +3676,15 @@
    "accept": "untuk 7 tautan YouTube (STATE 6 Nov): cara mendengar tercatat (pengunduh resmi/terbuka dari GitHub, audio hanya untuk analisis lokal, tidak masuk repo dan tidak dipakai ulang); per video: lembar kontak per adegan, peta potongan (waktu cut), analisis audio (onset/ketukan, BPM, LUFS, spektrogram, kapan SFX muncul terhadap gerak UI, ducking), cara menjelaskan tanpa suara orang, hal unik, struktur; ringkasan pola lintas video di docs/promo/riset-video/RUJUKAN.md Kriteria tambahan: tonton PENUH tiap rujukan (semua potongan, adegan kunci 4-8 bingkai/dtk), metadata yt-dlp info json + ffprobe, gerak kamera dan kurva easing diukur dari posisi elemen antar bingkai, efek suara dipisah per stem lalu dinilai per kejadian.",
    "how": "yt-dlp/ffmpeg + analisis python (librosa bila ada, atau ffmpeg ebur128/silencedetect/showspectrumpic); bila pengunduhan gagal, catat dan pakai cara lain",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-05T20:01:07",
    "riwayat_done": {
     "done": "2026-11-05T23:14:14",
     "result": "docs/promo/riset-video/RUJUKAN.md: 7 video diukur (potongan, BPM, LUFS/LRA/puncak, onset, <150 Hz, sinkron bunyi-potongan 63%), lembar kontak dilihat, narasi dari takarir otomatis, pola lintas 8 rujukan + yang tidak dipakai"
    },
-   "catatan": "dibuka ulang 6 Nov 2026 atas penilaian Tristan: \"sound effect ketik mu bahkan tidak seperti suara ketikan dan suara transisi nya kaya suara animasi busuk\", animasi antrean pengganti CCTV \"jelek dan jadul\", \"cara kamu mendengar masih salah\". Klaim done sebelumnya berdiri di atas ukuran angka (LUFS, BPM, onset, lembar kontak 36 bingkai), bukan menonton penuh dan menilai bunyi."
+   "catatan": "dibuka ulang 6 Nov 2026 atas penilaian Tristan: \"sound effect ketik mu bahkan tidak seperti suara ketikan dan suara transisi nya kaya suara animasi busuk\", animasi antrean pengganti CCTV \"jelek dan jadul\", \"cara kamu mendengar masih salah\". Klaim done sebelumnya berdiri di atas ukuran angka (LUFS, BPM, onset, lembar kontak 36 bingkai), bukan menonton penuh dan menilai bunyi.",
+   "done": "2026-11-06T02:21:06",
+   "result": "kriteria buka ulang dipenuhi bedah per video: docs/promo/riset-video/bedah/{xNUx-rMGvvw,KNAGNQeu5J8,k3d_xeVxEOE,yRc5HcGJ-Cs,awUYikrGsKk,pZv7me6dFns,wwIt5ZvROrs}.md (V-13B-H): tonton penuh 6 fps + fps asli di transisi, metadata, gerak kamera + easing terukur, stem demucs per kejadian"
   },
   {
    "id": "V-04",
@@ -3794,13 +3796,15 @@
    "accept": "docs/promo/riset-video/RUJUKAN.md bagian rujukan 8 (https://youtu.be/orTd3grSYsQ): ditonton DAN didengar seperti V-03 (lembar kontak, peta potongan, BPM, LUFS, kapan SFX jatuh, tipografi, kecepatan potong per detik), lalu diturunkan menjadi arah nada video Nadi dengan angka (durasi rata-rata potongan, tempo, kerapatan teks) dan catatan bagian mana yang tidak cocok untuk Nadi beserta alasannya Kriteria tambahan sama dengan V-03 untuk rujukan 8.",
    "how": "cara mendengar sama dengan V-03; analisis lokal saja, tidak dipakai ulang",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-05T20:08:54",
    "riwayat_done": {
     "done": "2026-11-05T22:55:44",
     "result": "docs/promo/riset-video/RUJUKAN.md rujukan 8: 8 potongan/87 dtk, rata 10,9 dtk, 117 BPM, -28 LUFS, onset 4,49/dtk, energi <150 Hz 13,4%; arah nada Nadi dengan angka + 5 bagian yang tidak cocok"
    },
-   "catatan": "dibuka ulang 6 Nov 2026 atas penilaian Tristan: \"sound effect ketik mu bahkan tidak seperti suara ketikan dan suara transisi nya kaya suara animasi busuk\", animasi antrean pengganti CCTV \"jelek dan jadul\", \"cara kamu mendengar masih salah\". Klaim done sebelumnya berdiri di atas ukuran angka (LUFS, BPM, onset, lembar kontak 36 bingkai), bukan menonton penuh dan menilai bunyi."
+   "catatan": "dibuka ulang 6 Nov 2026 atas penilaian Tristan: \"sound effect ketik mu bahkan tidak seperti suara ketikan dan suara transisi nya kaya suara animasi busuk\", animasi antrean pengganti CCTV \"jelek dan jadul\", \"cara kamu mendengar masih salah\". Klaim done sebelumnya berdiri di atas ukuran angka (LUFS, BPM, onset, lembar kontak 36 bingkai), bukan menonton penuh dan menilai bunyi.",
+   "done": "2026-11-06T02:21:07",
+   "result": "kriteria buka ulang dipenuhi docs/promo/riset-video/bedah/orTd3grSYsQ.md (V-13A): 22 lembar 6 fps + fps asli di 4 transisi, metadata, 8 gerak kamera terukur, stem demucs + spektrogram per kejadian"
   },
   {
    "id": "V-11",
@@ -4066,9 +4070,11 @@
    "accept": "tepat 8 video yang ditunjuk Tristan (xNUx-rMGvvw, KNAGNQeu5J8, k3d_xeVxEOE, yRc5HcGJ-Cs, awUYikrGsKk, pZv7me6dFns, wwIt5ZvROrs, dan orTd3grSYsQ sebagai contoh vibe) diunduh hanya untuk analisis lokal; per video: metadata lengkap (yt-dlp info json, ffprobe: durasi, fps, resolusi, bitrate, codec audio, bab, deskripsi); SEMUA potongan dengan waktu; setiap adegan dilihat bingkai demi bingkai (minimal 6 bingkai/dtk, 30 bingkai/dtk di transisi dan gerak kamera); setiap gerak kamera dan transisi diukur (jenis, durasi dalam bingkai, skala/posisi awal-akhir, kurva easing dari posisi elemen antar bingkai); setiap kejadian bunyi didaftar dengan waktunya, dipisah dari musik, dan digambar sebagai spektrogram + amplop untuk dinilai (jenis bunyi, serangan, ekor, rentang frekuensi, hubungan dengan gambar); hasil per video di docs/promo/riset-video/bedah/<id>.md dan pola lintas video di GERAK.md; satu uji gerak 10 dtk di hyperframes yang meniru satu gerak rujukan 8 diletakkan berdampingan dengan rujukannya dan dinilai jujur",
    "how": "yt-dlp, ffmpeg, ffprobe, scenedetect bila ada, skrip ukur posisi elemen (template matching OpenCV); skill hyperframes motion.md",
    "blocked_by": "V-13I",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T01:18:25",
-   "catatan": "perintah Tristan 6 Nov 2026: fokus video dulu saat mengerjakan video, lihat dan dengar semuanya Tristan 6 Nov 2026: \"lihat semua video di bawah ini aja\" (7 rujukan + orTd3grSYsQ vibe), \"frame by frame audio by audio\". Dipecah 6 Nov 2026 menjadi V-13A-H (satu video utuh per tugas) dan V-13I (pola lintas + uji gerak); V-13 done bila V-13I done."
+   "catatan": "perintah Tristan 6 Nov 2026: fokus video dulu saat mengerjakan video, lihat dan dengar semuanya Tristan 6 Nov 2026: \"lihat semua video di bawah ini aja\" (7 rujukan + orTd3grSYsQ vibe), \"frame by frame audio by audio\". Dipecah 6 Nov 2026 menjadi V-13A-H (satu video utuh per tugas) dan V-13I (pola lintas + uji gerak); V-13 done bila V-13I done.",
+   "done": "2026-11-06T02:20:46",
+   "result": "lingkup diubah Tristan 6 Nov 2026 menjadi tepat 8 video rujukannya: V-13A-H (8 bedah di docs/promo/riset-video/bedah) + V-13I (GERAK.md, UJI-GERAK.md)"
   },
   {
    "id": "V-14",
@@ -4147,9 +4153,11 @@
    "accept": "docs/promo/riset-video/bedah/k3d_xeVxEOE.md berisi: metadata (yt-dlp info json + ffprobe); daftar SEMUA potongan dengan waktu dan bingkai; untuk setiap adegan lembar bingkai minimal 6 bingkai/dtk yang benar-benar dilihat, dan 1 bingkai/bingkai (fps asli) di setiap transisi dan gerak kamera; setiap gerak kamera/transisi diukur (jenis, durasi dalam bingkai, skala dan posisi awal-akhir, kurva easing dari posisi elemen antar bingkai, digambar sebagai grafik); setiap kejadian bunyi didaftar dengan waktunya, dipisah dari musik, spektrogram + amplop tiap efek disimpan sebagai gambar dan dinilai (jenis bunyi, serangan ms, ekor ms, rentang frekuensi, apa yang terjadi di gambar saat itu); musik: tempo, struktur, di mana naik/turun terhadap gambar; tulisan di layar (huruf, ukuran relatif, cara masuk); 5 hal paling layak ditiru Nadi dan 3 yang tidak, dengan alasan; gambar analisis disimpan di scratchpad (bukan repo), angka dan temuan di berkas bedah Catat juga bagaimana UI produk direkonstruksi menjadi lapisan (apa yang dipisah, digerakkan, diperbesar, ditumpuk) di tiap adegan.",
    "how": "scratchpad rujukan<n> (r.mp4/r8.mp4 + wav sudah diunduh), ffmpeg select/tile, audio-venv (librosa, opencv), pemisah stem bila bisa dipasang",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T01:25:41",
-   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\""
+   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\"",
+   "done": "2026-11-06T02:16:22",
+   "result": "docs/promo/riset-video/bedah/k3d_xeVxEOE.md: metadata + ebur128 (-19,0 LUFS LRA 15,3), 28 lembar 6 fps dilihat, 25 bagian bertanda waktu, ritme potongan 3 dtk ke 0,25 dtk, stem demucs + 6 jendela spektrogram (ketikan bernada, ledakan butiran, sunyi + suara alam), 5 tiru 3 tidak"
   },
   {
    "id": "V-13E",
@@ -4162,9 +4170,11 @@
    "accept": "docs/promo/riset-video/bedah/yRc5HcGJ-Cs.md berisi: metadata (yt-dlp info json + ffprobe); daftar SEMUA potongan dengan waktu dan bingkai; untuk setiap adegan lembar bingkai minimal 6 bingkai/dtk yang benar-benar dilihat, dan 1 bingkai/bingkai (fps asli) di setiap transisi dan gerak kamera; setiap gerak kamera/transisi diukur (jenis, durasi dalam bingkai, skala dan posisi awal-akhir, kurva easing dari posisi elemen antar bingkai, digambar sebagai grafik); setiap kejadian bunyi didaftar dengan waktunya, dipisah dari musik, spektrogram + amplop tiap efek disimpan sebagai gambar dan dinilai (jenis bunyi, serangan ms, ekor ms, rentang frekuensi, apa yang terjadi di gambar saat itu); musik: tempo, struktur, di mana naik/turun terhadap gambar; tulisan di layar (huruf, ukuran relatif, cara masuk); 5 hal paling layak ditiru Nadi dan 3 yang tidak, dengan alasan; gambar analisis disimpan di scratchpad (bukan repo), angka dan temuan di berkas bedah Catat juga bagaimana UI produk direkonstruksi menjadi lapisan (apa yang dipisah, digerakkan, diperbesar, ditumpuk) di tiap adegan.",
    "how": "scratchpad rujukan<n> (r.mp4/r8.mp4 + wav sudah diunduh), ffmpeg select/tile, audio-venv (librosa, opencv), pemisah stem bila bisa dipasang",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T01:25:41",
-   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\""
+   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\"",
+   "done": "2026-11-06T02:13:26",
+   "result": "docs/promo/riset-video/bedah/yRc5HcGJ-Cs.md: metadata + ebur128 (-17,5 LUFS LRA 6,8), 25 lembar 6 fps dari 60 fps dilihat, 30 adegan bertanda waktu, 6 gerak kamera diukur (kamera jarang bergerak, makro komponen), detail kendali pemilik, stem demucs + 6 jendela spektrogram (suara dikte produk sebagai efek), 5 tiru 3 tidak"
   },
   {
    "id": "V-13F",
@@ -4177,9 +4187,11 @@
    "accept": "docs/promo/riset-video/bedah/awUYikrGsKk.md berisi: metadata (yt-dlp info json + ffprobe); daftar SEMUA potongan dengan waktu dan bingkai; untuk setiap adegan lembar bingkai minimal 6 bingkai/dtk yang benar-benar dilihat, dan 1 bingkai/bingkai (fps asli) di setiap transisi dan gerak kamera; setiap gerak kamera/transisi diukur (jenis, durasi dalam bingkai, skala dan posisi awal-akhir, kurva easing dari posisi elemen antar bingkai, digambar sebagai grafik); setiap kejadian bunyi didaftar dengan waktunya, dipisah dari musik, spektrogram + amplop tiap efek disimpan sebagai gambar dan dinilai (jenis bunyi, serangan ms, ekor ms, rentang frekuensi, apa yang terjadi di gambar saat itu); musik: tempo, struktur, di mana naik/turun terhadap gambar; tulisan di layar (huruf, ukuran relatif, cara masuk); 5 hal paling layak ditiru Nadi dan 3 yang tidak, dengan alasan; gambar analisis disimpan di scratchpad (bukan repo), angka dan temuan di berkas bedah Catat juga bagaimana UI produk direkonstruksi menjadi lapisan (apa yang dipisah, digerakkan, diperbesar, ditumpuk) di tiap adegan.",
    "how": "scratchpad rujukan<n> (r.mp4/r8.mp4 + wav sudah diunduh), ffmpeg select/tile, audio-venv (librosa, opencv), pemisah stem bila bisa dipasang",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T01:25:41",
-   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\""
+   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\"",
+   "done": "2026-11-06T02:10:32",
+   "result": "docs/promo/riset-video/bedah/awUYikrGsKk.md: metadata + ebur128 (-13,6 LUFS LRA 1,9), 24 lembar 6 fps dilihat, 25 adegan bertanda waktu, 9 gerak kamera diukur (gulir ease-out quint 20-27 bingkai), log kerja AI + bukti belajar, stem demucs + 6 jendela spektrogram, 5 tiru 3 tidak"
   },
   {
    "id": "V-13G",
@@ -4192,9 +4204,11 @@
    "accept": "docs/promo/riset-video/bedah/pZv7me6dFns.md berisi: metadata (yt-dlp info json + ffprobe); daftar SEMUA potongan dengan waktu dan bingkai; untuk setiap adegan lembar bingkai minimal 6 bingkai/dtk yang benar-benar dilihat, dan 1 bingkai/bingkai (fps asli) di setiap transisi dan gerak kamera; setiap gerak kamera/transisi diukur (jenis, durasi dalam bingkai, skala dan posisi awal-akhir, kurva easing dari posisi elemen antar bingkai, digambar sebagai grafik); setiap kejadian bunyi didaftar dengan waktunya, dipisah dari musik, spektrogram + amplop tiap efek disimpan sebagai gambar dan dinilai (jenis bunyi, serangan ms, ekor ms, rentang frekuensi, apa yang terjadi di gambar saat itu); musik: tempo, struktur, di mana naik/turun terhadap gambar; tulisan di layar (huruf, ukuran relatif, cara masuk); 5 hal paling layak ditiru Nadi dan 3 yang tidak, dengan alasan; gambar analisis disimpan di scratchpad (bukan repo), angka dan temuan di berkas bedah Catat juga bagaimana UI produk direkonstruksi menjadi lapisan (apa yang dipisah, digerakkan, diperbesar, ditumpuk) di tiap adegan.",
    "how": "scratchpad rujukan<n> (r.mp4/r8.mp4 + wav sudah diunduh), ffmpeg select/tile, audio-venv (librosa, opencv), pemisah stem bila bisa dipasang",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T01:25:41",
-   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\""
+   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\"",
+   "done": "2026-11-06T02:08:00",
+   "result": "docs/promo/riset-video/bedah/pZv7me6dFns.md: metadata + ebur128 (-17,8 LUFS LRA 3,5), transkrip, 13 lembar 6 fps dilihat, 25 adegan bertanda waktu, 8 gerak kamera diukur (tarik mundur ease-out expo galat 0,019), stem demucs + 6 jendela spektrogram (drum keluar-masuk di titik cerita), 5 tiru 3 tidak"
   },
   {
    "id": "V-13H",
@@ -4224,8 +4238,10 @@
    "accept": "docs/promo/riset-video/GERAK.md: pola gerak kamera, transisi, ritme potongan, efek suara, dan mix yang berulang di 8 bedah, dengan angka (durasi bingkai, easing, serangan/ekor bunyi); satu uji gerak 10 dtk di hyperframes yang meniru satu gerak rujukan 8 dirender berdampingan dengan potongan rujukannya (video perbandingan di scratchpad) dan dinilai jujur bingkai demi bingkai; STORYBOARD lama ditandai usang Catat juga bagaimana UI produk direkonstruksi menjadi lapisan (apa yang dipisah, digerakkan, diperbesar, ditumpuk) di tiap adegan.",
    "how": "hasil V-13A-H, skill hyperframes",
    "blocked_by": "V-13A,V-13B,V-13C,V-13D,V-13E,V-13F,V-13G,V-13H",
-   "status": "ready",
-   "created": "2026-11-06T01:25:41"
+   "status": "done",
+   "created": "2026-11-06T01:25:41",
+   "done": "2026-11-06T02:20:46",
+   "result": "docs/promo/riset-video/GERAK.md (pola gerak/UI/tulisan/bunyi lintas 8 bedah + keputusan film Nadi), UJI-GERAK.md: uji 10 dtk HyperFrames dari DOM Feed asli, tarik mundur terukur 0,476x vs rujukan 0,466x, kurva ease-out cubic keduanya; penilaian rasa jujur: 6 masalah (subjek lemah, stabilo dan cap meleset, bingkai kosong, gelembung salah, tahan mati); scratchpad uji-gerak/berdampingan.mp4"
   }
  ]
 }

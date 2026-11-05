@@ -320,3 +320,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 6 Nov 2026 tick 300 selesai: 5 wajib (V-04 aset demo, V-06 storyboard, V-12 pelacakan Mata, T-01A belajar tanya, T-01C belajar pindah) diuji produksi; T-01 dipecah A-D; wajib 193/202, V 7/9.
 | 2026-11-06 tick 301 | T-01B done (struk belajar, token 0 di struk ke-4); gate jejak konteks produk; video dibuka ulang atas penilaian Tristan, V-13 dipecah per video rujukan |
 | 2026-11-06 tick 301 selesai | 5 wajib: T-01B, V-13A, V-13B, V-13C, V-13H (bedah rujukan bingkai demi bingkai dan bunyi demi bunyi); wajib 194/218, V 5/21 |
+| 2026-11-06 tick 302 | done V-13D/E/F/G/I, V-13, V-03, V-10: 8 rujukan dibedah, pola lintas GERAK.md, uji gerak berdampingan (kurva cocok, rasa belum) |
