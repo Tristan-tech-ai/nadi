@@ -3909,8 +3909,10 @@
    "accept": "setiap kartu usulan punya Lihat rincian (disclosure, bukan halaman baru) yang menampilkan isi usulan sebagai daftar berlabel bahasa manusia, bukan JSON: baris yang akan DITAMBAH (mis. orang, produk, baris mutasi, tagihan pemasok dengan pemasok/nomor/total/jatuh tempo), nilai yang akan DIUBAH dengan sebelum -> sesudah dari data sekarang (aturan izin, profil usaha, topi orang, jumlah stok opname, nilai KPI), dan yang DILEWATI karena sudah ada; dihitung dari RPC baca-saja milik pengelola (preview_proposal) yang memakai aturan sama dengan pemicu; staf tidak bisa membaca rincian usulan usaha lain (tes SQL isolasi); tes unit pemformat; e2e: usulan onboarding.izin yang mengubah nilai menampilkan sebelum -> sesudah, usulan orang.impor menampilkan orang yang ditambah dan yang dilewati",
    "how": "Tristan 6 Nov 2026: kasi bisa liat detail apanya yang diubah, diganti, ditambah",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T21:17:32"
+   "status": "done",
+   "created": "2026-11-05T21:17:32",
+   "done": "2026-11-05T21:25:54",
+   "result": "f4aad8d; migrasi rincian_usulan (md5 ed3c0fa7 sama), RPC preview_proposal baca-saja pengelola, tes SQL 6/6 (sebelum dari data sekarang, nama ada dilewati tanpa beda huruf besar, usaha lain P0002, staf 42501), src/lib/rincian-usulan.test.ts 6/6 (sebelum->sesudah, ditambah, dilewati, rupiah, stok bukan rupiah, id jadi nama), komponen Lihat rincian di kartu Feed/Lempar; e2e/rincian.spec.ts produksi: aturan cuti Sekarang->Jadi dengan nilai berubah, impor orang menampilkan yang dilewati; axe 0 serius terang/gelap, 390 tanpa gulir samping"
   }
  ]
 }
