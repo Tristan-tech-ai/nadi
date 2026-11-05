@@ -4271,9 +4271,11 @@
    "accept": "dibangun di docs/promo/demo-v3/buat.py dari DOM asli (lapisan diposisikan dari ukur.json), dirender, dan ditinjau bingkai besar terhadap aturan GERAK.md + UJI-GERAK.md; temuan dan status dicatat di CATATAN.md; hyperframes check 0 error",
    "how": "docs/promo/demo-v3/CATATAN.md",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T02:33:05",
-   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)"
+   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)",
+   "done": "2026-11-06T02:36:10",
+   "result": "docs/promo/demo-v3/buat.py babak 2 (16-26 dtk): kalimat diketik (display, kursor menempel), area Lempar asli 2,2x + 4 berkas jatuh + bingkai kunyit, daftar Lempar asli Membaca lalu Siap ditinjau 1,45x dengan gulir ease-out; tumpuk lapisan diperbaiki; ditinjau 4 bingkai besar; check 0 error; catatan rasa di CATATAN.md"
   },
   {
    "id": "V-07C",
