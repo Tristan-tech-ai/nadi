@@ -1,93 +1,44 @@
-# Storyboard video demo Nadi v2 (V-06)
+# Storyboard video demo Nadi (v3, 4:35)
 
-Ditulis 6 Nov 2026 dari RISET.md (V-01), SUARA.md (V-02), RUJUKAN.md (V-03, V-10), dan aset docs/promo/aset-demo (V-04). Video lama (D-21, D-28) tidak dipakai sebagai acuan.
-Dikerjakan menjadi video di V-07, setelah V-12 (pelacakan Mata terlihat) dan T-01 (belajar format) selesai, karena keduanya tampil di layar dan tidak boleh digambar palsu.
+Ditulis ulang dari nol 6 Nov 2026, setelah 8 rujukan dibedah bingkai demi bingkai dan bunyi demi bunyi (docs/promo/riset-video/GERAK.md, MENDENGAR.md). Storyboard v2 lama dan videonya dilupakan.
 
-## Satu hal yang diingat penonton
+- **Implementasi:** docs/promo/demo-v3/buat.py (gambar) dan campur.py (suara). Durasi babak = daftar `D` di buat.py.
+- **Format:** 1920×1080 30 fps, tanpa narator. Cerita dibawa kalimat pendek yang diketik (≤ 8 kata, ditahan 1-1,5 dtk) dan UI asli Nadi yang bekerja.
 
-"Aku lempar berkas kerjaku yang berantakan, Nadi yang merapikan, dan aku cukup menyetujui."
+## Bahasa visual
 
-- **Satu orang, satu hari:** Bu Sari, pemilik Toko Bu Sari (usaha contoh, data sintetis), dari pagi sampai tutup toko.
-- **Data yang berjalan dari kait sampai akhir:** satu foto nota pemasok dan satu Excel karyawan berantakan.
-
-## Bentuk
-
-- **Dunia:** satu dunia utama, yaitu aplikasi Nadi di atas kertas hangat. Kamera mengikuti pekerjaan Bu Sari, dan setiap babak dimasuki lewat benda yang sudah ada di layar. Pola ini dari rujukan 8 dan 7: potongan keras jarang, gerak terjadi di dalam bingkai.
-- **Tanpa narasi suara orang.** Kata-kata dibawa oleh teks produk asli dan satu baris judul per babak (≤ 10 kata, Bahasa Indonesia sehari-hari sesuai VOICE.md). 4 dari 8 rujukan juga tanpa narasi.
-- **Panjang:** ±4 menit 45 dtk, dibagi 11 babak. Babak 0-2 berdiri sendiri sebagai potongan 50 dtk untuk media sosial.
-- **Ritme:**
-  - rata-rata 6-10 dtk per bingkai saat UI bekerja;
-  - montase cepat 0,3-0,4 dtk per potongan hanya dua kali (babak 1 dan babak 10);
-  - judul tahan 0,5 dtk + 0,3 dtk per kata, baris terakhir ≥ 2 dtk.
-
-## Tampilan (dari DIRECTION.md, bukan bawaan alat)
-
-| Hal | Nilai |
-|---|---|
-| Latar | kertas #F6F2EA; kertas-2 #EFE9DD untuk panggung kedua. Babak masalah memakai kertas yang lebih abu (#E4DED2) supaya terasa lelah |
-| Tinta | #1C1B18; teks kedua #5B574F |
-| Aksen | kunyit #E9A825 hanya sebagai stabilo di belakang satu kata per judul dan di angka hasil; cap #B4372A untuk cap stempel; daun #23704A untuk centang lunas |
-| Huruf | Bricolage Grotesque 800 untuk judul (4-7% tinggi frame), Plus Jakarta Sans untuk teks, IBM Plex Mono untuk nomor dokumen dan rupiah di tabel; semua huruf OFL dan dimuat dari berkas |
-| Kursor | panah tinta 5% lebar frame, tanpa cincin klik; klik menyebabkan perubahan pada bingkai yang sama |
-| Dilarang | gradien ungu/biru, ruang gelap dengan benda melayang, UI dimiringkan 3D, tiga kartu sejajar, logo di pojok, judul yang terus bergeser setelah mendarat, loop bernapas pada UI, judul di atas tangkapan layar yang diredupkan, mengetik di kotak prompt sebagai pembuka |
-
-**Transisi** (5 jenis, masing-masing punya penyebab di layar):
-1. *benda menjadi dunia*: nota melebar menjadi layar Lempar;
-2. *iris dari titik klik*: tombol Setujui membuka babak berikutnya;
-3. *bawa menyeberang*: kartu hasil mengecil masuk ke layar berikutnya;
-4. *whip* horizontal 0,2 dtk antarbab di babak 10;
-5. *dip cut*: gelap 40% selama 3 bingkai sebelum kartu akhir.
-
-**Suara:**
-- Bed: "Inspiring Advertising - Upbeat Summer Corporate" (Rafael Krux, CC BY 4.0, 117 BPM), masuk di bar kuat (15 dtk). Babak masalah hanya ambience lirih dan tik jam; musik baru terbuka saat Nadi muncul.
-- Efek dari docs/promo/audio-v2: klik, ketik, cap, lempar, notifikasi, transisi, sonic-logo. Serangan efek jatuh satu bingkai setelah gambarnya.
-- Mix −14 LUFS, ≤ −1 dBTP.
+| Unsur | Pilihan | Sumber |
+|---|---|---|
+| Palet | kertas #F6F2EA, tinta #1C1B18, satu aksen kunyit (stabilo), cap untuk tolak, daun untuk lunas/aktif | DIRECTION.md |
+| Huruf | Plus Jakarta Sans (UI dan kalimat), IBM Plex Mono (nota, struk, kode, token) | DIRECTION.md |
+| UI | DOM asli aplikasi (Toko Bu Sari, data sintetis) direkonstruksi berlapis; lapisan (stabilo, cap, kursor, kotak) diposisikan dari elemen terukur (ukur.mjs) atau ditanam langsung di teks DOM | perintah Tristan 6 Nov 2026 |
+| Karakter | cap stempel: Setujui menjadi DITERIMA, tagihan dicap LUNAS, aturan buruk dicap DITOLAK, lalu cap menjadi logo di kartu akhir | GERAK.md (rujukan 1 dan 3) |
+| Transisi | potongan keras ke bidikan dekat; dorong 1,3-1,5× dalam 14-16 bingkai (TEKAN, ease-in-out); tarik mundur 36-48 bingkai dengan ease-out berawalan lembut (MUNDUR = cubic-bezier(0.35,0,0.1,1)); tanpa miring 3D, tanpa guncangan | GERAK.md, UJI-GERAK.md |
+| Tulisan | VOICE.md: kamu, kalimat pendek, angka mengalahkan kata sifat, tanpa tanda pisah panjang, tanpa klaim mutlak | VOICE.md |
+| Merek | tanpa logo pihak ketiga; chat AI digambar netral ("AI-mu, tersambung ke Nadi lewat MCP") | pedoman merek |
 
 ## Babak
 
-Kolom **DOM** menyebut layar asli yang ditangkap sebagai cuplikan DOM dari usaha contoh (Toko Bu Sari, akun uji B, data sintetis). Semua yang mengaku produk adalah produk.
+| # | Waktu | Isi | DOM asli | Kamera | Suara |
+|---|---|---|---|---|---|
+| 0 Kait | 0:00-0:06 | Nota dipindai baris demi baris (pita kunyit), kotak di TOTAL, nota menjadi kartu usulan asli, stabilo Rp376.500 | kartu-nota | potongan dekat 2,4× ke TOTAL, tarik mundur 36 bingkai (MUNDUR), dorong 2,6× 14 bingkai ke angka | sunyi; kertas saat nota menjadi kartu |
+| 1 Masalah | 0:06-0:36 | "Masih mengetik ulang nota satu per satu?" diketik, "satu per satu?" disorot lalu dihapus jadi "setiap malam?"; "Otomatis itu mahal. Yang murah, manual."; Excel karyawan asli direkonstruksi sel per sel (format tanggal/gaji campur disorot, nama dobel dikotak, rumus total salah); kartu harga resmi bertanggal (kasir/operasional, modul AI asisten +Rp499.000 per outlet, gaji/HR per karyawan, akuntansi) | aset-demo/karyawan-berantakan.xlsx, docs/bisnis/harga-pesaing.md (3 Nov 2026) | Excel: dorong 1,5× ke baris dobel, lalu 1,7× ke rumus | suara toko nyata (Supermarket Ambience); ketikan rumpun; kertas saat berkas muncul; intro lagu masuk menjelang babak 2 |
+| 2 Lempar | 0:36-0:56 | "Lempar berkasnya. Nadi yang merapikan."; 4 berkas jatuh ke area Lempar; Membaca lalu Siap ditinjau; daftar ditelusuri per berkas (nota PNG, invoice PDF, absen XLSX, mutasi CSV, slip PDF), tiap "Siap disetujui" disorot, berakhir di "Lihat semua usulan di Feed" | lempar-kosong, lempar-membaca, lempar-siap | dekat 2,2× ke area; gulir ease-in-out per berkas | alas penuh masuk saat Nadi muncul; whoosh + kertas sekali (berkas berjatuhan) |
+| 3 Kerja dari AI-mu (MCP) | 0:56-1:44 | "Atau kerja dari AI-mu sendiri."; chat netral: Excel dan daftar harga dilempar, AI membaca, kartu alat tulis_draf (15 baris), pemilik merevisi ("Budi pindah ke kasir pagi"), ubah_draf, "Gaji tidak aku centang"; layar tinjau draf asli: ringkasan, baris Perlu dicek, gaji tidak dicentang otomatis, Terapkan, "10 baris diterapkan. Bisa dibatalkan selama 10 menit." | tinjau-draf (draf AI sungguhan lewat save_ai_draft, tidak diterapkan) | dekat 1,6× ke ringkasan, tarik mundur 44 bingkai; gulir ke gaji dan Terapkan | ketikan; notifikasi |
+| 4 Feed | 1:44-2:06 | "Tahu dulu, datanya masuk ke mana."; Feed meredup, kartu tagihan INV/2026/X/0007 diangkat; "Kalau disetujui: Masuk Pembelian sebagai tagihan pemasok" disorot; Lihat rincian terbuka (Akan ditambah (3)); Setujui menjadi cap DITERIMA; "Disetujui." | feed-rincian (Feed produksi sekarang, U-10/U-13) | dorong 1,3× ke rincian, tarik mundur 40 bingkai, mundur 0,86× di akhir | drum berhenti 2 birama sebelum cap; klik 1 bingkai setelah tekan; cap karet asli |
+| 5 Tagihan + QRIS | 2:06-2:16 | "Tagih. Pelanggan bayar QRIS."; QRIS dekat lalu tagihan publik utuh; "Pembayaran masuk Rp1.448.000 dari Hotel Segara, lewat QRIS"; BELUM DIBAYAR dicap LUNAS; stabilo total | invoice-publik | dekat 2,4× ke QRIS, tarik mundur 40 bingkai | drum berhenti sebelum LUNAS; notifikasi; cap |
+| 6 Gaji | 2:16-2:38 | "Gaji dihitung. Yang janggal, ditahan dulu."; draf gaji November: ringkasan "2 ditahan Gerbang Gaji" disorot; dorong ke Dodi DITAHAN dengan alasan asli; Rincian BPJS Kesehatan dan PPh 21 disorot; alasan melepas Rina diketik, Lepas, "Dilepas. Alasanmu tercatat di slip." | gaji-draf (gaji pokok sintetis lewat formulir Orang, draf tidak disetujui) | dorong 1,35× 14 bingkai, tarik mundur 44 bingkai; gulir ease-in-out | drum berhenti sebelum Lepas; ketikan; klik |
+| 7 Mata | 2:38-3:11 | "Kamera menghitung. Wajah tidak disimpan."; **footage CCTV asli** kamera atas (lorong mal, stan bazar) dengan lapisan pelacakan Nadi: kotak sudut per orang, nomor anonim #n mengikuti gerak, jejak 3 dtk memudar, zona menyala dengan jumlah orang, Masuk/Keluar bertambah saat jejak melewati ujung lorong; peta panas asli; kunjungan 177 dihitung naik; jalur paling sering disorot; papan informasi kamera UU 27/2022 Pasal 17 | footage Pexels 37706044 + jejak keluaran Pelacak aplikasi (jejak-nyata.test.ts), lapisan src/lib/mata/gambar.ts; peta-panas, mata-panel | peta panas: dekat 1,9× ke Antrean, tarik mundur 44 bingkai; dorong 1,35× ke angka; panel: tarik mundur 44 bingkai | musik turun 6 dB; suara toko nyata |
+| 8 Otomasi, tanya data, Sarapan | 3:11-3:39 | "Yang berulang, biar jalan sendiri."; alur: nama "Kirim pesanan setelah lunas", Ketika Invoice lunas, kerja "Kirim pesanan {nomor}", Buat alur, "Alur dibuat dan langsung aktif."; "Tanya angkanya. Nadi tunjukkan sumbernya."; "Laba bulan ini berapa?" dijawab Rp1.448.000 + Lihat sumbernya; "Tiap pagi, yang berdampak rupiah."; Sarapan Data dua butir | alur, tanya (jawaban produksi), sarapan | dekat 1,45× ke nama alur, tarik mundur 44 bingkai; dorong 1,3× ke jawaban | ketikan; klik; notifikasi |
+| 9 Belajar sendiri + pengawas bukan AI | 3:39-4:15 | "Format yang sama, dibaca tanpa AI."; struk SPBU ke-1 dibaca AI (600 token) + "Nadi sedang mempelajari format baru, sekali saja"; struk ke-4 tanpa AI, 0 token; "Aturan dari AI diperiksa kode biasa."; aturan buruk dari model ditolak dengan 4 alasan keluaran asli periksaAturan, cap DITOLAK; aturan baik lulus, bayangan 0/1/2 dari 2, aktif; "Beda sekali saja, aturan dimatikan."; tiga kartu: struk, tanya data, pindah data belajar sekali | kamus klaim asli; pengawas.ts dijalankan pada aturan contoh | potongan keras antar bagian | drum berhenti sebelum token 0 dan sebelum DITOLAK; cap |
+| 10 Satu kerangka | 4:15-4:27 | "Di laptop dan HP, tempatnya sama."; Hari ini di 1440 (sidebar), 768 (rail), 390 (bilah bawah) | hari-1440/768/390 (iframe selebar perangkat) | muncul berselang 0,5 dtk, MUNDUR | alas penuh |
+| 11 Kartu akhir | 4:27-4:35 | cap DITERIMA turun lalu menjadi logo Nadi asli; "Lempar berkasnya. Nadi yang merapikan."; nadi-swart.vercel.app/demo | logo dari DOM | diam | musik berhenti sebelum logo; sonic logo (kertas bergeser, cap mendarat, ruang 1,2 dtk) |
 
-| # | Waktu | Yang terlihat | Judul di layar | DOM / aset | Suara | Transisi keluar |
-|---|---|---|---|---|---|---|
-| 0 Kait | 0:00-0:06 | Frame 0: foto nota pemasok di meja kasir (korpus nota-03). Dalam 1,5 dtk baris-barisnya "tercetak" berurutan menjadi kartu usulan asli: "Catat belanja Rp... di ...", dengan "Kalau disetujui: masuk ke uang keluar" | (tanpa judul) | fixtures/korpus/nota/nota-03.png; kartu Feed `/app` (KartuFeed, tujuan U-10) | kertas, lalu ketik pendek | kartu mengecil ke pojok meja: bawa menyeberang |
-| 1 Masalah | 0:06-0:40 | Malam di toko. Excel karyawan berantakan dibuka apa adanya: judul bergabung, gaji "4,5 jt" di samping "Rp 4.200.000", Budi tercatat dua kali; stabilo kunyit menandai tiga masalah satu per satu. Daftar pelanggan ganda ("Ibu Sari" dan "Sari Wulandari"). CCTV toko diputar sementara Bu Sari menghitung pengunjung dengan turus di kertas. Kartu fakta harga | "Kerja malam yang sama, setiap hari" lalu "Otomatis mahal. Murah berarti manual" | docs/promo/aset-demo/karyawan-berantakan.xlsx (ditampilkan sebagai tabel HTML yang dibaca dari berkasnya), pelanggan-ganda.csv, cctv-toko.mp4. Kartu fakta: "Modul AI asisten dijual terpisah: Rp499.000 per outlet per bulan" dengan sumber kecil "halaman harga resmi majoo, dibaca 3 Nov 2026" (docs/bisnis/harga-pesaing.md; diperiksa ulang tanggalnya saat V-07) | ambience toko lirih, tik jam; tanpa musik | montase cepat 4 potongan 0,35 dtk (Excel, CSV, CCTV, turus), lalu potongan keras ke putih kertas |
-| 2 Pengungkapan | 0:40-0:48 | Nadi muncul tanpa logo dulu: kotak Lempar kosong di layar | "Lempar berkasnya. Nadi yang merapikan" | `/app/lempar` keadaan kosong | musik masuk di bar | Excel dari babak 1 jatuh ke kotak: benda menjadi dunia |
-| 3 AI-mu lewat MCP (V-11) | 0:48-1:35 | Excel karyawan, daftar harga, dan 2 foto nota dilempar ke jendela chat AI umum yang digambar netral (tanpa logo atau merek pihak ketiga), yang tersambung ke MCP Nadi. AI memanggil `tulis_draf`; pemilik mengetik "Budi pindah ke topi kasir pagi, yang dobel hapus saja"; AI memanggil `ubah_draf`. Lalu layar tinjau draf Nadi: baris Budi ganda ditandai Perlu dicek, gaji tidak tercentang otomatis, sel diubah di tempat. Satu klik "Terapkan 20 baris", lalu muncul jendela batal 10 menit | "AI-mu yang menyiapkan. Kamu yang menyetujui" | chat: panel netral buatan sendiri, berisi panggilan alat MCP sungguhan (tulis_draf, baca_draf, ubah_draf, src/lib/mcp/protokol.ts) yang dijalankan saat produksi dan direkam keluarannya; Nadi: `/app/siapkan/draf/[id]` (tinjau-draf.tsx) dari draf sungguhan | ketik pada pesan, notifikasi saat draf tiba, cap pada Terapkan | tombol Terapkan memancarkan iris ke Hari ini |
-| 4 Lempar dan Feed | 1:35-2:10 | Pagi berikutnya: nota, slip gaji, struk dilempar dari HP. Status asli Membaca, lalu Siap ditinjau. Di Hari ini, kartu usulan dengan "Kalau disetujui" dan "Lihat rincian" (tabel Sekarang → Jadi; pelanggan "Ibu Sari" Dilewati karena sudah ada). Setujui: kartu dicap DISETUJUI lalu bergeser keluar | "Setiap usulan bilang ke mana datanya masuk" | `/app/lempar`, `/app` (KartuFeed, RincianUsulan U-13, cap), korpus nota/slip_gaji/struk-foto, aset pelanggan-ganda.csv | lempar ×3 (variasi), cap, klik | kartu tersetujui terbawa ke Uang: bawa menyeberang |
-| 5 Invoice + QRIS | 2:10-2:35 | Invoice baru untuk katering langganan; tagihan publik dengan QRIS; saat ditandai lunas, centang daun dan jurnal tercatat | "Tagih, terima QRIS, tercatat sendiri" | `/app/invoice` (Invoice baru), halaman publik `/i/[kode]` dengan QRIS sintetis | ketik, notifikasi pembayaran | iris dari QR |
-| 6 Gaji | 2:35-3:00 | Draf gaji bulan ini: PPh 21 dan BPJS terhitung; satu nama ditahan Gerbang Gaji dengan alasannya; Bu Sari menyetujui sisanya | "Gaji dihitung, yang janggal ditahan" | `/app/gaji` (slip, gerbang gaji) | klik, cap | dip ke CCTV toko |
-| 7 Mata | 3:00-3:40 | CCTV toko yang sama dengan babak 1, kini di Mata: setiap orang punya nomor anonim dan garis lintasannya mengikuti gerak; hitungan masuk/keluar bertambah saat jejak melewati pintu; zona kasir menyala saat ada antrean; lalu peta panas di Peta Usaha terisi. Gambar diproses di perangkat; yang tersimpan hanya rekap per jam | "Kamera menghitung. Wajah tidak disimpan" | `/app/mata` (hitung-kunjungan.tsx; **jejak bernomor, garis, dan hitungan live dibangun di V-12**), `/app/peta-usaha` (peta-panas.tsx); aset cctv-toko.mp4 + cctv-jawaban.json (hitungan di layar dicocokkan dengan jawaban) | pop kecil setiap hitungan bertambah, bed turun 3 dB | peta panas menjadi warna dasar babak berikut: banjir warna |
-| 8 Otomasi + tanya data | 3:40-4:05 | Alur: "Kalau invoice lunas, buat kartu di Hari ini" disusun dari pilihan; Tanya data: "laba bulan ini berapa?" dijawab angka dari laporan dengan tautan ke sumbernya | "Atur sekali, jalan sendiri" lalu "Tanya, dijawab dari datamu" | `/app/alur` (pembuat alur M-20), `/app/tanya` (M-22) | ketik, klik | jawaban angka terbawa ke babak 9 |
-| 9 Belajar format | 4:05-4:20 | Nota dari pemasok yang sama, untuk kedua kalinya. Pertama: "Nadi sedang mempelajari format baru, sekali saja". Kedua: terbaca tanpa AI, token 0 | "Format yang sama, dibaca tanpa AI" | `/app/lempar` dengan status belajar format (**T-01**), hasil baca-berkas sumber aturan | ketik, notifikasi | whip ke babak 10 |
-| 10 Satu kerangka, semua layar | 4:20-4:32 | Hari ini yang sama di 1440 (sidebar dengan Disematkan), 768 (rail), dan 390 (bilah bawah), berganti setiap 0,35 dtk; lalu tahan di HP | "Di laptop dan HP, tempatnya sama" | kerangka.tsx, cuplikan DOM `/app` pada 3 lebar | transisi ×2 (variasi) | dip cut 3 bingkai |
-| 11 Kartu akhir | 4:32-4:45 | Logo Nadi di tengah dicap masuk; satu kalimat; URL; atribusi musik kecil | "Lempar berkasnya. Nadi yang merapikan" + nadi-swart.vercel.app/demo + "Musik: Rafael Krux, CC BY 4.0" | logo dari apps/web/public | sonic-logo (2 dtk), musik berakhir di bar | (akhir) |
+## Suara (campur.py)
 
-## Pemetaan fitur wajib ke babak
-
-| Fitur | Babak |
-|---|---|
-| Lempar | 2, 4, 9 |
-| Feed setujui + tujuan + rincian | 0, 4 |
-| Invoice + QRIS | 5 |
-| Gaji | 6 |
-| Mata (pelacakan jelas + peta panas) | 7 |
-| Otomasi | 8 |
-| Tanya data | 8 |
-| Belajar format / self-improvement | 9 |
-| Kerangka adaptif | 10 |
-| MCP AI-mu | 3 |
-
-## Aset dan tempatnya
-
-| Aset (docs/promo/aset-demo) | Babak |
-|---|---|
-| karyawan-berantakan.xlsx | 1, 3 |
-| harga-berantakan.xlsx | 3 |
-| pelanggan-ganda.csv | 1, 4 |
-| cctv-toko.mp4 + cctv-jawaban.json | 1, 7 |
-
-## Prasyarat sebelum V-07
-
-- **V-12:** Mata menggambar jejak bernomor anonim dengan garis lintasan, hitungan masuk/keluar live, dan zona menyala di perangkat. Saat ini hanya titik kunyit (hitung-kunjungan.tsx `gambarTitik`), jadi adegan 7 tidak boleh dibuat sebelum V-12 selesai.
-- **T-01:** status belajar format tampil di Lempar.
-- Harga pembanding di babak 1 diperiksa ulang dari halaman resminya pada hari render, lalu tanggal di layar diperbarui.
+- **Alas:** lagu "Inspiring Advertising" (Rafael Krux, CC BY 4.0, atribusi wajib di deskripsi), dipisah stem dan disusun ulang per birama (±120 BPM).
+- **Efek:** rekaman nyata CC0, hanya untuk aksi yang terlihat, ditaruh dari timeline gambar:
+  - ketikan berupa rumpun 45-90 ms;
+  - klik 1 bingkai setelah tekan;
+  - cap saat mendarat.
+- **Mix:** −14 LUFS, LRA 6-9 LU, ≤ −1 dBTP.

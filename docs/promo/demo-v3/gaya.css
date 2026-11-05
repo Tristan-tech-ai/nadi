@@ -82,3 +82,6 @@ html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; backgro
 .k3 { flex: 1; padding: 30px 32px; background: #FFFDF8; border: 1px solid #DDD5C6; border-radius: 14px; box-shadow: 0 14px 40px rgba(28,27,24,0.10); opacity: 0; }
 .k3 b { display: block; font-size: 36px; margin-bottom: 14px; }
 .k3 span { font-size: 26px; line-height: 1.45; color: #5B574F; }
+/* Kartu akhir: dinding karya Nadi (layar asli dari tangkapan DOM) */
+.karya { position: absolute; width: 580px; height: 320px; overflow: hidden; border-radius: 10px; background: #FFFDF8; border: 1px solid #DDD5C6; box-shadow: 0 10px 30px rgba(28,27,24,0.10); }
+.karya img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; }

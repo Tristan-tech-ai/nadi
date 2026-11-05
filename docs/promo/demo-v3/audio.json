@@ -1,5 +1,5 @@
 {
- "durasi": 275.0,
+ "durasi": 278.0,
  "tempo": 119.68085106382979,
  "birama_dtk": 2.0,
  "jumlah_birama": 115,
@@ -128,18 +128,18 @@
   "pengawas DITOLAK (babak 9)": 236.66
  },
  "spot": {
-  "notifikasi": 4,
-  "lempar": 1,
-  "kertas": 5,
-  "cap": 3,
+  "klik": 5,
   "ketik": 298,
   "sonic-logo": 1,
-  "klik": 5
+  "cap": 3,
+  "kertas": 5,
+  "notifikasi": 4,
+  "lempar": 1
  },
  "ukur": {
   "lufs": -14.0,
   "true_peak": -1.5,
   "jendela": "utuh",
-  "durasi": 275.0
+  "durasi": 278.0
  }
 }

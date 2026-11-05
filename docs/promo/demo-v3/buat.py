@@ -84,7 +84,7 @@ def kamera(fx, fy, s, tx=W / 2, ty=H / 2):
 def bangun():
     f = Film()
     # Urutan dan durasi babak (detik). Waktu di dalam babak relatif terhadap M[babak]; menyisipkan atau memperpanjang cukup di sini.
-    D = {0: 6.5, 1: 30.0, 2: 20.0, 3: 48.0, 4: 22.0, 5: 10.0, 6: 22.0, 7: 32.5, 8: 28.0, 9: 36.0, 10: 12.0, 11: 8.0}
+    D = {0: 6.5, 1: 30.0, 2: 20.0, 3: 48.0, 4: 22.0, 5: 10.0, 6: 22.0, 7: 32.5, 8: 28.0, 9: 36.0, 10: 12.0, 11: 11.0}
     M, TOTAL = {}, 0.0
     for k in D:
         M[k], TOTAL = TOTAL, TOTAL + D[k]
@@ -297,9 +297,9 @@ def bangun():
                 + '</div></div>')
     isi4 = (f'<div class="kal" id="b4t" style="top:480px">{k4}</div>'
             f'<div id="b4k" class="kam" style="opacity:0">'
-            f'<div class="jendela" data-layout-allow-overflow style="left:{JX}px; top:{JY}px; width:{JW}px; height:{JH}px">'
+            f'<div class="jendela" data-layout-allow-overflow data-layout-allow-occlusion data-layout-allow-overlap style="left:{JX}px; top:{JY}px; width:{JW}px; height:{JH}px">'
             f'<div class="isi" data-layout-allow-overflow style="left:{-OX * S4}px; top:{-OY * S4}px; transform:scale({S4}); transform-origin:0 0">{ftutup}</div>'
-            f'<div id="redup" style="position:absolute; inset:0; background:#F6F2EA; opacity:0"></div></div>'
+            f'<div id="redup" data-layout-allow-occlusion data-layout-allow-overlap style="position:absolute; inset:0; background:#F6F2EA; opacity:0"></div></div>'
             + salin("kt4", ftutup, kt["h"], 0) + salin("kb4", fbuka, kb["h"], 0)
             + f'<div id="capbesar" class="capbesar" data-layout-allow-overlap data-layout-allow-occlusion style="left:{kx + kb["w"] * S4 / 2 - 170}px; top:{ky + 30}px">DITERIMA</div>'
             + f'<div class="kursor" id="kur4">{KURSOR}</div></div>'
@@ -313,6 +313,7 @@ def bangun():
     f.add(f'tl.to("#redup", {{opacity: 0.72, duration: 0.35, ease: "power2.out"}}, {T4a + 0.5:.3f});')
     f.add(f'tl.set("#kt4", {{opacity: 1}}, {T4a + 0.5:.3f});')
     f.add(f'tl.to("#kt4", {{scale: 1.03, boxShadow: "0 30px 70px rgba(28,27,24,0.22)", duration: 0.4, ease: "power2.out"}}, {T4a + 0.55:.3f});')
+    f.add(f'tl.to("#b4k", {{**{json.dumps(kamera(kx + kb["w"] * S4 / 2, ky + kt["h"] * S4 / 2, 1.35))}, duration: {16 / FPS:.3f}, ease: TEKAN}}, {T4a + 0.55:.3f});'.replace('{**{', '{').replace('}, duration', ', duration'))
     f.add(f'tl.fromTo("#kt4-s1", {{scaleX: 0}}, {{scaleX: 1, duration: 0.45, ease: "power2.out"}}, {T4a + 1.3:.3f});')
     f.add(f'tl.fromTo("#kt4-s2", {{scaleX: 0}}, {{scaleX: 1, duration: 0.2, ease: "power2.out"}}, {T4a + 1.75:.3f});')
     # kursor ke Lihat rincian, klik, rincian terbuka (salinan terbuka disingkap dari atas ke bawah)
@@ -333,7 +334,7 @@ def bangun():
     rx, ry = fp(fr["rincian"]["x"] + fr["rincian"]["w"] / 2, fr["rincian"]["y"] + fr["rincian"]["h"] / 2)
     f.add(f'tl.to("#b4k", {{**{json.dumps(kamera(rx, ry, 1.3))}, duration: {14 / FPS:.3f}, ease: TEKAN}}, {TL + 0.8:.3f});'.replace('{**{', '{').replace('}, duration', ', duration'))
     f.add(f'tl.fromTo("#kb4-s3", {{scaleX: 0}}, {{scaleX: 1, duration: 0.4, ease: "power2.out", immediateRender: false}}, {TL + 1.5:.3f});')
-    f.add(f'tl.to("#b4k", {{x: 0, y: 0, scale: 1, duration: {40 / FPS:.3f}, ease: MUNDUR}}, {TL + 4.4:.3f});')
+    f.add(f'tl.to("#b4k", {{**{json.dumps(kamera(kx + kb["w"] * S4 / 2, ky + kb["h"] * S4 / 2 + 20, 1.12))}, duration: {40 / FPS:.3f}, ease: MUNDUR}}, {TL + 4.4:.3f});'.replace('{**{', '{').replace('}, duration', ', duration'))
     # kursor ke Setujui, klik, cap DITERIMA turun di kartu (karakter film), notifikasi tujuan
     sx, sy = fp(fr["setujui"]["x"] + fr["setujui"]["w"] * 0.45, fr["setujui"]["y"] + fr["setujui"]["h"] / 2)
     sx, sy = kx + (sx - kx) * 1.03 - kb["w"] * S4 * 0.015, ky + (sy - ky) * 1.03
@@ -479,12 +480,15 @@ const o7 = { t: 0 };''')
     T9b = s9 + 0.8
     f.add(f'tl.set("#b9t", {{opacity: 0}}, {T9b:.3f});')
     f.add(f'tl.set("#b9k", {{opacity: 1}}, {T9b:.3f});')
+    f.add(f'tl.set("#b9k", {json.dumps(kamera(520, 430, 1.4))}, {T9b:.3f});')
     # struk 1 dipindai pelan (model), status muncul, kalimat belajar disorot kunyit
     f.add(f'tl.fromTo("#st1-p", {{y: 0}}, {{y: 250, duration: 1.4, ease: "none"}}, {T9b + 0.3:.3f});')
     f.add(f'tl.to("#st1-p", {{opacity: 0, duration: 0.2}}, {T9b + 1.7:.3f});')
     f.add(f'tl.fromTo("#sa1", {{opacity: 0, y: 12}}, {{opacity: 1, y: 0, duration: 0.3, ease: "power2.out"}}, {T9b + 1.8:.3f});')
     # struk 4 masuk, dipindai sangat cepat (aturan), token menghitung 0
     T94 = T9b + 4.6
+    f.add(f'tl.to("#b9k", {{x: 0, y: 0, scale: 1, duration: {36 / FPS:.3f}, ease: MUNDUR}}, {T94 - 1.3:.3f});')
+    f.add(f'tl.to("#b9k", {{**{json.dumps(kamera(1400, 430, 1.4))}, duration: {16 / FPS:.3f}, ease: TEKAN}}, {T94 + 0.5:.3f});'.replace('{**{', '{').replace('}, duration', ', duration'))
     f.add(f'tl.to("#kol4", {{opacity: 1, duration: 0.3}}, {T94:.3f});')
     f.add(f'tl.fromTo("#st4-p", {{y: 0}}, {{y: 250, duration: 0.35, ease: "power2.in"}}, {T94 + 0.4:.3f});')
     f.add(f'tl.to("#st4-p", {{opacity: 0, duration: 0.15}}, {T94 + 0.75:.3f});')
@@ -554,14 +558,21 @@ const o7 = { t: 0 };''')
         f.add(f'tl.fromTo("#k3{i}", {{opacity: 0, y: 30}}, {{opacity: 1, y: 0, duration: 0.4, ease: MUNDUR}}, {s9r + 0.3 + i * 0.35:.3f});')
 
     # ---------- Babak 11 kartu akhir (70 - 76 dtk): cap turun, menjadi logo Nadi asli, satu kalimat, URL ----------
-    T11 = M[11]
+    T11w = M[11]
+    KARYA = ["feed-rincian", "tinjau-draf", "invoice-publik", "gaji-draf", "peta-panas", "alur", "tanya", "sarapan", "hari-1440"]
+    dinding = "".join(f'<div class="karya" style="left:{60 + (i % 3) * 610}px; top:{40 + (i // 3) * 340}px"><img src="assets/app/{n}.png" alt=""></div>' for i, n in enumerate(KARYA))
+    f.adegan("b11w", T11w, T11w + 3.4, f'<div id="b11wk" class="kam">{dinding}</div>', z=12)
+    f.add(f'tl.set("#b11wk", {json.dumps(kamera(60 + 610 + 290, 40 + 340 + 160, 2.6))}, {T11w:.3f});')
+    f.add(f'tl.to("#b11wk", {{x: 0, y: 0, scale: 1, duration: {60 / FPS:.3f}, ease: MUNDUR}}, {T11w + 0.3:.3f});')
+    f.add(f'tl.to("#b11wk", {{opacity: 0, duration: 0.3}}, {T11w + 3.1:.3f});')
+    T11 = M[11] + 3.0
     logo = re.search(r'<svg[^>]*aria-label="Nadi".*?</svg>', open(os.path.join(SUMBER, "app", "feed.html"), encoding="utf8").read(), re.S).group(0)
     logo = re.sub(r'width="\d+" height="\d+"', 'width="220" height="220"', logo, count=1)
     isi11 = (f'<div id="capakhir" class="capbesar" data-layout-allow-overlap data-layout-allow-occlusion style="left:{W / 2 - 170}px; top:330px">DITERIMA</div>'
              f'<div id="logo11" style="position:absolute; left:{W / 2 - 110}px; top:300px; width:220px; height:220px; opacity:0">{logo}</div>'
              '<div class="kal" id="k11" style="top:600px; opacity:0">Lempar berkasnya. Nadi yang merapikan.</div>'
              '<div class="kal dua" id="u11" style="top:720px; opacity:0">nadi-swart.vercel.app/demo</div>')
-    f.adegan("b11", T11, T11 + D[11], isi11, z=11)
+    f.adegan("b11", T11w, M[11] + D[11], isi11, z=11)
     f.add(f'tl.fromTo("#capakhir", {{opacity: 0, scale: 2.4, rotation: -14}}, {{opacity: 1, scale: 1, rotation: -7, duration: 0.16, ease: "power3.in"}}, {T11 + 0.3});')
     f.add(f'tl.to("#capakhir", {{opacity: 0, scale: 0.6, rotation: 0, duration: 0.3, ease: TEKAN}}, {T11 + 1.2});')
     f.add(f'tl.fromTo("#logo11", {{opacity: 0, scale: 0.6}}, {{opacity: 1, scale: 1, duration: 0.35, ease: "power3.out"}}, {T11 + 1.3});')
