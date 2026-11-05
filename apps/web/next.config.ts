@@ -28,6 +28,8 @@ const nextConfig: NextConfig = {
       // F3-07C: orang yang berhenti merekam penjelasan Rekam Ilmu di /app/ilmu.
       // M-12: halaman absen staf boleh membaca lokasi HP untuk geofence tempat absen.
       { source: "/absen", headers: [{ key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(self), payment=()" }] },
+      // M-15: sales boleh menyertakan lokasi saat mencatat kunjungan pelanggan (hanya bila dicentang sendiri).
+      { source: "/app/pelanggan", headers: [{ key: "Permissions-Policy", value: "camera=(self), microphone=(), geolocation=(self), payment=()" }] },
       { source: "/app/ilmu", headers: [{ key: "Permissions-Policy", value: "camera=(self), microphone=(self), geolocation=(), payment=()" }] },
       { source: "/lamar/:kode", headers: [{ key: "Permissions-Policy", value: "camera=(self), microphone=(self), geolocation=(), payment=()" }] },
       { source: "/sw.js", headers: [{ key: "Content-Type", value: "application/javascript; charset=utf-8" }, { key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }, { key: "Content-Security-Policy", value: "default-src 'self'; script-src 'self'" }] },

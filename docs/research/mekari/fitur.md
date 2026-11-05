@@ -37,7 +37,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | TA-15 | File perusahaan, aktivitas pengguna, antrean proses, notifikasi | Company/Files; Company/User Activity; Company/Queue Activity; Company/Notification | Lempar (arsip berkas), audit_log, push | SEBAGIAN: layar log aktivitas | M-21 |
 | TA-16 | Insights: headcount, absensi, payroll, karyawan berisiko, kinerja, lembur, dasbor kustom, report builder | Insights/*; Company/Report Builder; Dashboard/*; Time/Time Reports | KPI, beban tim, sinyal beban, alur nyata, Sarapan Data | SEBAGIAN: dasbor HR baku + pembuat laporan | M-23 |
 | TA-17 | Absensi mobile: selfie, GPS/geofence, liveness AI, kunci absensi | Time/Attendance; Mobile App/Time Management | QR TOTP 15 detik + cek wajah di perangkat; geofence radius per tempat dengan pesan jarak; kunci absensi per bulan (M-12) | ADA | M-12 |
-| TA-18 | Live tracking karyawan lapangan (rute, kunjungan, penyimpangan) | Time/Live Tracking; API Live Attendance | tidak ada | BELUM (dengan izin orangnya, UU PDP) | M-15 |
+| TA-18 | Live tracking karyawan lapangan (rute, kunjungan, penyimpangan) | Time/Live Tracking; API Live Attendance | kunjungan sales: lokasi diambil sekali saat mencatat, hanya bila sales mencentang izin, bertujuan bukti kunjungan (M-15) | SEBAGIAN: pelacakan rute terus-menerus sengaja tidak dibuat (UU 27/2022, data lokasi karyawan) | M-15 |
 | TA-19 | Shift, scheduler, multiple shift, on-call, tukar shift | Time/Scheduler; Time/Multiple Shift; Time/On-call; Time/Calendar; Settings/Time | jadwal shift, tukar shift, usulan jadwal, batas PP 35/2021; shift siaga (on-call) (M-12) | SEBAGIAN: banyak shift sehari belum diuji khusus | M-12 |
 | TA-20 | Lembur: pengajuan karyawan, aturan, perhitungan | Time/Overtime; API Overtime | catat_lembur pemilik/admin + upah lembur di slip; staf mengajukan lembur sendiri lewat Feed (M-12) | ADA | M-12 |
 | TA-21 | Cuti: jatah, saldo, carry forward, cuti per jam, block leave | Time/Time Off; API Time Off | izin otopilot, jatah cuti, bukti | SEBAGIAN: cuti per jam, block leave, sisa cuti terbawa belum | M-12 |
@@ -120,10 +120,10 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | QO-03 | Chatbot AI dan AI agent, ringkas/parafrase chat, produktivitas agen | AI Chatbot & Automation/* | model di Edge Function, tangga kecerdasan | BELUM | M-16 |
 | QO-04 | Tiket, SLA hitung mundur, umpan balik/CSAT, laporan layanan | Customer Support & Ticketing/* | tidak ada | BELUM | M-16 |
 | QO-05 | Basis pengetahuan | Operation & Workflow Automation/Knowledge Base | Rekam ilmu (internal) | BELUM untuk pelanggan | M-16 |
-| QO-06 | CRM: kontak, perusahaan, deal pipeline, produk, field, goal, dokumen, catatan, tugas | Sales Management/*; Customer Data Platform/Contact (CRM), Company Module; Operation & Workflow Automation/Task Management, Product Catalog | graf usaha (pihak) | BELUM | M-15 |
-| QO-07 | Live location dan kunjungan sales lapangan | Sales Management/Live Location & Tracking | tidak ada | BELUM (dengan izin) | M-15 |
-| QO-08 | Laporan sales, report builder | Report Management/* | tidak ada | BELUM | M-15, M-23 |
-| QO-09 | Customer Data Platform, kontak omnichannel, insight pelanggan, segmen | Customer Data Platform/* | tidak ada | BELUM | M-15 |
+| QO-06 | CRM: kontak, perusahaan, deal pipeline, produk, field, goal, dokumen, catatan, tugas | Sales Management/*; Customer Data Platform/Contact (CRM), Company Module; Operation & Workflow Automation/Task Management, Product Catalog | pelanggan orang/perusahaan (kontak menempel ke perusahaan), deal 6 tahap dengan sales, nilai, perkiraan tutup, catatan dan tugas berjatuh tempo, deal menjadi penawaran M-03 dan menang saat jadi pesanan, /app/pelanggan (M-15) | SEBAGIAN: field kustom dan dokumen per deal belum | M-15 |
+| QO-07 | Live location dan kunjungan sales lapangan | Sales Management/Live Location & Tracking | kunjungan berlokasi dengan izin per kunjungan, dihitung di laporan sales (M-15) | SEBAGIAN: peta lokasi langsung tidak dibuat (lokasi tidak dilacak terus) | M-15 |
+| QO-08 | Laporan sales, report builder | Report Management/* | laporan sales bulanan: corong per tahap, menang, kalah, tingkat menang, per sales menang vs target, kunjungan (M-15) | SEBAGIAN: pembuat laporan bebas (report builder) belum | M-15, M-23 |
+| QO-09 | Customer Data Platform, kontak omnichannel, insight pelanggan, segmen | Customer Data Platform/* | segmen otomatis dari invoice 365 hari (belanja terbesar, setia, baru, lama tidak belanja) + segmen isian (M-15) | SEBAGIAN: kontak omnichannel (chat masuk) butuh integrasi WhatsApp Business (MITRA) | M-15 |
 | QO-10 | Kampanye WhatsApp blast, kampanye email, evaluasi | Marketing & Campaign Management/* | tidak ada | MITRA (WhatsApp API berbayar per pesan, email butuh layanan kirim); pengganti: daftar penerima + tautan wa.me satu per satu, ekspor segmen | M-16 |
 | QO-11 | Workflow automation | Operation & Workflow Automation/Workflow Automation | aturan otomatis, izin otopilot, rute | SEBAGIAN | M-20 |
 | QO-12 | Call center, cloud PBX, WhatsApp Call | Call & Voice/* | tidak ada | MITRA (operator telekomunikasi) | - |
@@ -192,8 +192,8 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 | Status | Jumlah |
 |---|---|
 | ADA | 33 |
-| SEBAGIAN | 60 |
-| BELUM | 22 |
+| SEBAGIAN | 65 |
+| BELUM | 17 |
 | MITRA | 17 |
 | LUAR | 2 |
 

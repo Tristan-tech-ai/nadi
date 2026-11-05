@@ -2877,8 +2877,10 @@
    "accept": "tes SQL konsolidasi mengeliminasi transaksi antarusaha; e2e",
    "how": "docs/research/mekari/rencana.md; menutup JU-19..JU-22, JU-27, EX-08; isi: Anggaran per akun/bulan + laba rugi anggaran, tag/dimensi (cabang, proyek) + laporan dimensional, transaksi berulang, revaluasi valas + selisih kurs pelunasan, kurs resmi publik, konsolidasi beberapa usaha milik pemilik yang sama",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:53"
+   "status": "done",
+   "created": "2026-11-04T20:17:53",
+   "done": "2026-11-05T09:39:57",
+   "result": "61de6b7: migrasi akuntansi_lanjutan md5 ae801895 + bagan_siap md5 f6e21a3e; tes SQL 56/56 (konsolidasi mengeliminasi jual+pinjam antarusaha 6.000.000, neraca gabungan seimbang; revaluasi +1.561.875, pelunasan -735.000) + ensure_chart 3/3, regresi invoice_ekspor 26/26; vitest lanjut 7/7; e2e buku-lanjut + buku lulus produksi nadi-swart.vercel.app (axe 390/1440 terang/gelap)"
   },
   {
    "id": "M-09",
