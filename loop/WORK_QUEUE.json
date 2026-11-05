@@ -4113,9 +4113,11 @@
    "accept": "docs/promo/riset-video/bedah/xNUx-rMGvvw.md berisi: metadata (yt-dlp info json + ffprobe); daftar SEMUA potongan dengan waktu dan bingkai; untuk setiap adegan lembar bingkai minimal 6 bingkai/dtk yang benar-benar dilihat, dan 1 bingkai/bingkai (fps asli) di setiap transisi dan gerak kamera; setiap gerak kamera/transisi diukur (jenis, durasi dalam bingkai, skala dan posisi awal-akhir, kurva easing dari posisi elemen antar bingkai, digambar sebagai grafik); setiap kejadian bunyi didaftar dengan waktunya, dipisah dari musik, spektrogram + amplop tiap efek disimpan sebagai gambar dan dinilai (jenis bunyi, serangan ms, ekor ms, rentang frekuensi, apa yang terjadi di gambar saat itu); musik: tempo, struktur, di mana naik/turun terhadap gambar; tulisan di layar (huruf, ukuran relatif, cara masuk); 5 hal paling layak ditiru Nadi dan 3 yang tidak, dengan alasan; gambar analisis disimpan di scratchpad (bukan repo), angka dan temuan di berkas bedah Catat juga bagaimana UI produk direkonstruksi menjadi lapisan (apa yang dipisah, digerakkan, diperbesar, ditumpuk) di tiap adegan.",
    "how": "scratchpad rujukan<n> (r.mp4/r8.mp4 + wav sudah diunduh), ffmpeg select/tile, audio-venv (librosa, opencv), pemisah stem bila bisa dipasang",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T01:25:41",
-   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\""
+   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\"",
+   "done": "2026-11-06T01:57:29",
+   "result": "docs/promo/riset-video/bedah/xNUx-rMGvvw.md: metadata + ebur128 (-17,6 LUFS), 16 potongan + perpindahan morph, 26 lembar 6,25 fps dilihat, 5 gerak kamera diukur (ease-out puncak 9-30%), teknik isolasi fokus/morph/penghitung, stem demucs + 6 jendela spektrogram, 5 tiru 3 tidak"
   },
   {
    "id": "V-13C",
@@ -4128,9 +4130,11 @@
    "accept": "docs/promo/riset-video/bedah/KNAGNQeu5J8.md berisi: metadata (yt-dlp info json + ffprobe); daftar SEMUA potongan dengan waktu dan bingkai; untuk setiap adegan lembar bingkai minimal 6 bingkai/dtk yang benar-benar dilihat, dan 1 bingkai/bingkai (fps asli) di setiap transisi dan gerak kamera; setiap gerak kamera/transisi diukur (jenis, durasi dalam bingkai, skala dan posisi awal-akhir, kurva easing dari posisi elemen antar bingkai, digambar sebagai grafik); setiap kejadian bunyi didaftar dengan waktunya, dipisah dari musik, spektrogram + amplop tiap efek disimpan sebagai gambar dan dinilai (jenis bunyi, serangan ms, ekor ms, rentang frekuensi, apa yang terjadi di gambar saat itu); musik: tempo, struktur, di mana naik/turun terhadap gambar; tulisan di layar (huruf, ukuran relatif, cara masuk); 5 hal paling layak ditiru Nadi dan 3 yang tidak, dengan alasan; gambar analisis disimpan di scratchpad (bukan repo), angka dan temuan di berkas bedah Catat juga bagaimana UI produk direkonstruksi menjadi lapisan (apa yang dipisah, digerakkan, diperbesar, ditumpuk) di tiap adegan.",
    "how": "scratchpad rujukan<n> (r.mp4/r8.mp4 + wav sudah diunduh), ffmpeg select/tile, audio-venv (librosa, opencv), pemisah stem bila bisa dipasang",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T01:25:41",
-   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\""
+   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\"",
+   "done": "2026-11-06T02:00:47",
+   "result": "docs/promo/riset-video/bedah/KNAGNQeu5J8.md: metadata + ebur128 (-18,4 LUFS LRA 4,4), transkrip takarir, 27 lembar 6 fps dilihat, struktur 30+ adegan, 6 gerak kamera diukur, pola bab berulang, stem demucs + 6 jendela spektrogram (narasi di depan), 5 tiru 3 tidak"
   },
   {
    "id": "V-13D",
@@ -4203,9 +4207,11 @@
    "accept": "docs/promo/riset-video/bedah/wwIt5ZvROrs.md berisi: metadata (yt-dlp info json + ffprobe); daftar SEMUA potongan dengan waktu dan bingkai; untuk setiap adegan lembar bingkai minimal 6 bingkai/dtk yang benar-benar dilihat, dan 1 bingkai/bingkai (fps asli) di setiap transisi dan gerak kamera; setiap gerak kamera/transisi diukur (jenis, durasi dalam bingkai, skala dan posisi awal-akhir, kurva easing dari posisi elemen antar bingkai, digambar sebagai grafik); setiap kejadian bunyi didaftar dengan waktunya, dipisah dari musik, spektrogram + amplop tiap efek disimpan sebagai gambar dan dinilai (jenis bunyi, serangan ms, ekor ms, rentang frekuensi, apa yang terjadi di gambar saat itu); musik: tempo, struktur, di mana naik/turun terhadap gambar; tulisan di layar (huruf, ukuran relatif, cara masuk); 5 hal paling layak ditiru Nadi dan 3 yang tidak, dengan alasan; gambar analisis disimpan di scratchpad (bukan repo), angka dan temuan di berkas bedah Catat juga bagaimana UI produk direkonstruksi menjadi lapisan (apa yang dipisah, digerakkan, diperbesar, ditumpuk) di tiap adegan.",
    "how": "scratchpad rujukan<n> (r.mp4/r8.mp4 + wav sudah diunduh), ffmpeg select/tile, audio-venv (librosa, opencv), pemisah stem bila bisa dipasang",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T01:25:41",
-   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\""
+   "catatan": "perintah Tristan 6 Nov 2026: \"tolong benar benar lihat bagaimana mereka terlihat dan terdengar frame by frame audio by audio\"",
+   "done": "2026-11-06T02:02:40",
+   "result": "docs/promo/riset-video/bedah/wwIt5ZvROrs.md: metadata + ebur128 (-16,2 LUFS LRA 2,3), 12 lembar 6 fps dilihat, 19 adegan bertanda waktu, 7 gerak kamera diukur (dorong 12-13 bingkai, tarik mundur 34-99 bingkai ease-out expo/cubic), pemindaian dokumen + persetujuan bertingkat, stem demucs + 6 jendela spektrogram (jeda musik di titik cerita), 5 tiru 3 tidak"
   },
   {
    "id": "V-13I",
