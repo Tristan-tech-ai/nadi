@@ -23,7 +23,10 @@ function detikTeks(d: number) {
 
 /** Mata: pilih video atau kamera, gambar zona di atas cuplikan, lalu pantau. Gambar diproses di perangkat ini dan langsung dibuang. */
 export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMata; zonaAwal: Zona[]; teks: Kamus["mata"]; bahasa: string }) {
-  const JENIS: { nilai: JenisZona; label: string }[] = [{ nilai: "meja", label: t.jMeja }, { nilai: "antrean", label: t.jAntrean }];
+  const JENIS: { nilai: JenisZona; label: string }[] = [
+    { nilai: "meja", label: t.jMeja }, { nilai: "antrean", label: t.jAntrean }, { nilai: "kasir", label: t.jKasir },
+    { nilai: "pintu", label: t.jPintu }, { nilai: "lorong", label: t.jLorong }, { nilai: "kerja", label: t.jKerja },
+  ];
   const video = useRef<HTMLVideoElement>(null);
   const layar = useRef<HTMLCanvasElement>(null);
   const pekerja = useRef<Worker | null>(null);

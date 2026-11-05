@@ -5,7 +5,8 @@
 export type Titik = [number, number];
 export type Kotak = { xmin: number; ymin: number; xmax: number; ymax: number };
 export type Deteksi = { label: string; score: number; box: Kotak };
-export type JenisZona = "meja" | "antrean" | "rak";
+/** meja dan antrean/rak dipantau statusnya (F5-01); kasir, pintu, lorong, kerja dipakai hitung kunjungan Mata v2 (W-02). */
+export type JenisZona = "meja" | "antrean" | "rak" | "kasir" | "pintu" | "lorong" | "kerja";
 export type Zona = { id: string; nama: string; jenis: JenisZona; poligon: Titik[] };
 export type StatusMeja = "kosong" | "terisi";
 export type Status = { nilai: StatusMeja; berturut: number };

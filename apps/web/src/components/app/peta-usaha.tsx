@@ -12,7 +12,7 @@ const klienSupabase = () => (klienJanji ??= import("@/lib/supabase/browser").the
 export type ZonaPeta = {
   id: string;
   nama: string;
-  jenis: "meja" | "antrean" | "rak";
+  jenis: "meja" | "antrean" | "rak" | "kasir" | "pintu" | "lorong" | "kerja";
   poligon: [number, number][];
   status?: "kosong" | "terisi" | null;
   jumlah?: number | null;

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { HitungKunjungan } from "@/components/app/hitung-kunjungan";
 import { LayarMata, type ModelMata } from "@/components/app/layar-mata";
 import type { Zona } from "@/lib/mata/resep";
 import { ambilKamus } from "@/lib/i18n/kamus";
@@ -12,7 +13,8 @@ export const metadata: Metadata = { title: "Mata" };
 async function IsiMata() {
   const sesi = await wajibPerusahaan();
   const bahasa = await bahasaAplikasi(sesi.bahasa);
-  const t = ambilKamus(bahasa).mata;
+  const kamus = ambilKamus(bahasa);
+  const t = kamus.mata;
   const kepala = (
     <>
       <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
@@ -20,9 +22,11 @@ async function IsiMata() {
     </>
   );
   const supabase = await createClient();
-  const [konf, zona] = await Promise.all([
+  const hari = new Date().toISOString().slice(0, 10);
+  const [konf, zona, panas] = await Promise.all([
     supabase.from("konfigurasi").select("nilai").eq("kunci", "model_mata").maybeSingle(),
     supabase.rpc("vision_state"),
+    supabase.rpc("vision_heatmap", { p_from: hari, p_to: hari }),
   ]);
   if (zona.error) {
     return <div lang={bahasa}>{kepala}<p className="mt-6 text-tinta-2" data-testid="mata-tanpa-izin">{t.tanpaIzin}</p></div>;
@@ -32,7 +36,14 @@ async function IsiMata() {
     return <div lang={bahasa}>{kepala}<p role="alert" className="mt-6 text-tinta-2">{t.belumModel}</p></div>;
   }
   const awal = ((zona.data ?? []) as Zona[]).map((z) => ({ id: z.id, nama: z.nama, jenis: z.jenis, poligon: z.poligon }));
-  return <div lang={bahasa}>{kepala}<LayarMata model={model} zonaAwal={awal} teks={t} bahasa={bahasa} /></div>;
+  const papan = Boolean((panas.data as { papan?: unknown } | null)?.papan);
+  return (
+    <div lang={bahasa}>
+      {kepala}
+      <LayarMata model={model} zonaAwal={awal} teks={t} bahasa={bahasa} />
+      <HitungKunjungan zona={awal} papanAwal={papan} teks={kamus.kunjungan} bahasa={bahasa} />
+    </div>
+  );
 }
 
 export default function HalamanMata() {

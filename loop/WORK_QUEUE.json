@@ -3247,6 +3247,34 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-05T16:00:00"
+  },
+  {
+   "id": "W-02B",
+   "fase": "F5",
+   "kind": "test",
+   "priority": 3,
+   "size": "m",
+   "wajib": true,
+   "title": "Mata v2 diuji pada rekaman CCTV publik berlisensi bebas (permintaan Tristan 5 Nov 2026)",
+   "accept": "Minimal 2 rekaman CCTV/kamera atas toko atau ruang publik berlisensi bebas (CC0/CC BY/domain publik, lisensi dibaca dari halaman sumber dan dicatat di docs/ASSETS.md) diunduh ke scratchpad (tidak ke repo bila berisi wajah); jumlah orang masuk/keluar dihitung tangan sebagai jawaban; Mata v2 (src/lib/mata/jejak.ts) dijalankan pada rekaman itu, akurasi jumlah dan galat lama dilaporkan jujur di docs/research/mata-v2.md termasuk bila di bawah target; perbaikan kalibrasi (ukuran orang, kamera miring) bila perlu dengan tes; cuplikan yang lisensinya membolehkan dipakai dicatat sebagai calon bahan video promo dengan wajah dikaburkan",
+   "how": "Cari dataset/arsip kamera publik dari sumber resmi, baca lisensinya, ffmpeg ke 160 px, skrip eval di scratchpad",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T07:03:55"
+  },
+  {
+   "id": "D-28",
+   "fase": "F6",
+   "kind": "design",
+   "priority": 3,
+   "size": "l",
+   "wajib": true,
+   "title": "Video promo yang memperlihatkan fitur bekerja langsung (permintaan Tristan 5 Nov 2026)",
+   "accept": "Video promo baru <= 60 dtk di docs/promo/ yang tiap fitur diperlihatkan sedang bekerja, bukan diceritakan: Lempar Saja = banyak berkas berbagai jenis (foto nota, PDF, Excel, CSV, slip) berserakan dilempar ke layar Nadi lalu tersusun rapi jadi usulan; Feed = kartu disetujui dengan cap; invoice + QRIS terbit; Mata = rekaman kamera (sintetis atau CCTV berlisensi dari W-02B, wajah dikaburkan) dengan titik orang bergerak dan peta panas yang terisi; Sarapan Data; kartu akhir ke /demo; layar dari aplikasi produksi atau HTML dengan data contoh Nadi, teks >= 20 px, musik berlisensi dicatat di docs/ASSETS.md, -14 LUFS; snapshot ditinjau; DECISIONS mencatat konsep tiap adegan",
+   "how": "HyperFrames (skill hyperframes), adegan per fitur dengan demonstrasi langsung, bahan dari scratchpad/d21",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T07:03:55"
   }
  ]
 }

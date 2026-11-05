@@ -34,3 +34,31 @@ export async function catatMata(butir: { zona: string; status?: "kosong" | "teri
   if (error) return { galat: await galatDb(error) };
   return { dicatat: Number(data) || 0 };
 }
+
+type RekapKirim = import("@/lib/mata/jejak").RekapJam;
+
+async function galatKunjungan(e: { code?: string; message: string }): Promise<string> {
+  const k = ambilKamus(await bahasaAplikasi()).kunjunganPesan;
+  if (e.code === "42501") return k.hanya;
+  if (["22023", "P0002", "55000", "54000"].includes(e.code ?? "")) return isiTeks(k.galatDb, { pesan: e.message });
+  return k.gagal;
+}
+
+/** W-02: pemilik/admin menyatakan papan informasi kamera terpasang (UU 27/2022 Pasal 17 ayat (1) huruf b). */
+export async function aturPapan(pasang: boolean): Promise<{ ok: true } | { galat: string }> {
+  await wajibPerusahaan();
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("set_vision_notice", { p_on: pasang });
+  if (error) return { galat: await galatKunjungan(error) };
+  return { ok: true };
+}
+
+/** W-02: kirim rekap kunjungan per jam (jumlah dan detik saja). Kunci yang sama tidak dijumlahkan dua kali. */
+export async function kirimRekap(rekap: RekapKirim[], kunci: string): Promise<{ sudah: boolean; jam: number } | { galat: string }> {
+  await wajibPerusahaan();
+  if (!rekap.length) return { sudah: false, jam: 0 };
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("record_vision_visits", { p_hours: rekap.slice(0, 48), p_key: kunci });
+  if (error) return { galat: await galatKunjungan(error) };
+  return data as { sudah: boolean; jam: number };
+}

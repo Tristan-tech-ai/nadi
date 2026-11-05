@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { PetaPanas, type DataPanas } from "@/components/app/peta-panas";
 import { PetaUsaha, type ZonaPeta } from "@/components/app/peta-usaha";
+import { hariIni } from "@/lib/izin";
+import { zonaUsahaIni } from "@/lib/zona-usaha";
 import { ambilKamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { createClient } from "@/lib/supabase/server";
@@ -23,9 +26,17 @@ async function IsiPeta() {
     </>
   );
   const supabase = await createClient();
-  const { data, error } = await supabase.rpc("vision_state");
+  const hari = hariIni(new Date(), await zonaUsahaIni(sesi.perusahaanId));
+  const awal = new Date(Date.parse(`${hari}T00:00:00Z`) - 6 * 86400_000).toISOString().slice(0, 10);
+  const [{ data, error }, panas] = await Promise.all([supabase.rpc("vision_state"), supabase.rpc("vision_heatmap", { p_from: awal, p_to: hari })]);
   if (error) return <div lang={bahasa}>{kepala}<p className="mt-6 text-tinta-2" data-testid="peta-tanpa-izin">{t.tanpaIzin}</p></div>;
-  return <div lang={bahasa}>{kepala}<PetaUsaha awal={(data ?? []) as ZonaPeta[]} topik={`peta:${sesi.perusahaanId}`} privat judul={t.denahSekarang} teks={kamus.petaDenah} bahasa={bahasa} /></div>;
+  return (
+    <div lang={bahasa}>
+      {kepala}
+      <PetaUsaha awal={(data ?? []) as ZonaPeta[]} topik={`peta:${sesi.perusahaanId}`} privat judul={t.denahSekarang} teks={kamus.petaDenah} bahasa={bahasa} />
+      {panas.data ? <PetaPanas data={panas.data as DataPanas} teks={kamus.petaPanas} bahasa={bahasa} /> : null}
+    </div>
+  );
 }
 
 export default function HalamanPeta() {

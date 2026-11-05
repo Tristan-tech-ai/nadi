@@ -1,0 +1,50 @@
+[
+ {
+  "nama": "sepi",
+  "durasi": 301,
+  "fps": 5,
+  "kunjungan": 10,
+  "karyawan": false,
+  "uji": false
+ },
+ {
+  "nama": "ramai",
+  "durasi": 900,
+  "fps": 5,
+  "kunjungan": 45,
+  "karyawan": true,
+  "uji": false
+ },
+ {
+  "nama": "antrean",
+  "durasi": 732,
+  "fps": 5,
+  "kunjungan": 24,
+  "karyawan": true,
+  "uji": false
+ },
+ {
+  "nama": "ramai-2",
+  "durasi": 900,
+  "fps": 5,
+  "kunjungan": 50,
+  "karyawan": true,
+  "uji": true
+ },
+ {
+  "nama": "sepi-2",
+  "durasi": 400,
+  "fps": 5,
+  "kunjungan": 12,
+  "karyawan": false,
+  "uji": true
+ },
+ {
+  "nama": "pendek",
+  "durasi": 79,
+  "fps": 5,
+  "kunjungan": 5,
+  "karyawan": false,
+  "uji": true
+ }
+]
