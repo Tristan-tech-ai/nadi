@@ -28,7 +28,7 @@ html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; backgro
 .isi { position: absolute; left: 0; }
 .kursor { position: absolute; left: 0; top: 0; width: 72px; height: 72px; z-index: 40; opacity: 0; }
 .capbesar { position: absolute; padding: 10px 26px; border: 6px solid #23704A; border-radius: 10px; color: #23704A; font-size: 64px; font-weight: 800; letter-spacing: 0.08em; opacity: 0; transform-origin: 50% 50%; background: rgba(246,242,234,0.6); }
-.notif { position: absolute; width: 540px; padding: 18px 22px; border-radius: 14px; background: #FFFDF8; border: 1px solid #DDD5C6; box-shadow: 0 16px 40px rgba(28,27,24,0.16); font-size: 24px; line-height: 1.35; opacity: 0; }
+.notif { position: absolute; width: 640px; padding: 22px 28px; border-radius: 14px; background: #FFFDF8; border: 1px solid #DDD5C6; box-shadow: 0 16px 40px rgba(28,27,24,0.16); font-size: 30px; line-height: 1.35; opacity: 0; }
 .kolom { position: absolute; top: 110px; width: 740px; }
 .struk { position: relative; width: 560px; margin: 0 auto; padding: 16px 28px 20px; background: #FFFDF8; border-radius: 6px; box-shadow: 0 2px 6px rgba(28,27,24,0.06), 0 20px 50px rgba(28,27,24,0.12); font-family: var(--font-plex-mono), ui-monospace, monospace; overflow: hidden; }
 .sb { height: 44px; display: flex; align-items: center; font-size: 24px; }
@@ -49,7 +49,36 @@ html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; backgro
 .cb.t { background: #F6F2EA; border: 2px solid #DDD5C6; font-size: 24px; font-weight: 700; }
 .cb .mono, .mono { font-family: var(--font-plex-mono), monospace; font-weight: 400; color: #23704A; }
 .chip { display: inline-block; margin: 0 8px 8px 0; padding: 4px 14px; border-radius: 8px; background: #FFFDF8; border: 1px solid #DDD5C6; font-family: var(--font-plex-mono), monospace; font-size: 22px; }
-.chat-tulis { position: absolute; left: 40px; right: 40px; bottom: 30px; height: 70px; border: 1px solid #DDD5C6; border-radius: 14px; display: flex; align-items: center; padding: 0 24px; color: #A8A196; font-size: 26px; background: #FFFDF8; }
+.chat-tulis { position: absolute; left: 40px; right: 40px; bottom: 30px; height: 70px; border: 1px solid #DDD5C6; border-radius: 14px; display: flex; align-items: center; padding: 0 24px; color: #6E695F; font-size: 26px; background: #FFFDF8; }
 .chat-jendela { position: absolute; left: 0; right: 0; top: 71px; bottom: 120px; overflow: hidden; }
 .chat-jendela .chat-isi { top: 20px; }
 .perangkat { position: absolute; overflow: hidden; border-radius: 18px; border: 8px solid #1C1B18; background: #F6F2EA; box-shadow: 0 24px 60px rgba(28,27,24,0.18); }
+/* Bilah sticky (Terapkan di tinjau draf) diletakkan di tempat aslinya: film tidak menggulir halaman, jadi sticky melayang di tengah daftar. */
+.app .sticky:not(header) { position: static !important; }
+/* Babak 1: lembar Excel direkonstruksi sel per sel, dan kartu harga resmi */
+.xh, .xc { position: absolute; height: 32px; box-sizing: border-box; border-right: 1px solid #D4D4D4; border-bottom: 1px solid #D4D4D4; font-family: var(--font-jakarta), sans-serif; font-size: 18px; line-height: 31px; padding: 0 8px; white-space: nowrap; overflow: hidden; color: #1C1B18; background: #FFFFFF; }
+.xh { height: 30px; line-height: 29px; background: #EFEFEF; color: #5B574F; text-align: center; padding: 0; }
+.xh.xn { height: 32px; line-height: 31px; }
+.xc.xr { text-align: right; }
+.xc.xb { font-weight: 700; }
+.harga { position: absolute; left: 260px; top: 260px; width: 1400px; padding: 28px 44px 30px; background: #FFFDF8; border-radius: 16px; border: 1px solid #DDD5C6; box-shadow: 0 24px 60px rgba(28,27,24,0.12); transform-origin: 50% 50%; }
+.hb { display: flex; justify-content: space-between; align-items: baseline; padding: 22px 0; border-bottom: 1px solid #DDD5C6; font-size: 34px; opacity: 0; }
+.hk { color: #5B574F; }
+.hr { font-size: 28px; color: #5B574F; }
+.hr b { font-size: 40px; color: #1C1B18; font-variant-numeric: tabular-nums; padding: 0 6px; border-radius: 4px; }
+.hs { margin-top: 20px; font-size: 22px; color: #5B574F; }
+/* Babak 9: aturan dari model dan pengawas deterministik */
+.lbl9 { position: absolute; font-size: 26px; font-weight: 700; color: #5B574F; }
+.kode { position: absolute; left: 0; top: 0; width: 940px; box-sizing: border-box; padding: 26px 30px; background: #1C1B18; color: #ECE7DD; border-radius: 12px; font-family: var(--font-plex-mono), monospace; font-size: 25px; line-height: 1.6; white-space: nowrap; }
+.kode .jm { font-weight: 400; background: rgba(224,101,79,0.45); color: #FFFFFF; border-radius: 3px; padding: 0 3px; }
+.pengawas { position: absolute; left: 1090px; top: 224px; width: 720px; box-sizing: border-box; padding: 26px 30px; background: #FFFDF8; border: 1px solid #DDD5C6; border-radius: 12px; min-height: 520px; }
+.pa { font-family: var(--font-plex-mono), monospace; font-size: 26px; line-height: 1.45; color: #B4372A; margin-bottom: 14px; opacity: 0; }
+.px, .pv { display: inline-block; width: 30px; font-weight: 700; }
+.pok { position: absolute; left: 30px; top: 26px; font-size: 36px; font-weight: 700; color: #23704A; opacity: 0; }
+.ptahap { position: absolute; left: 30px; top: 100px; font-size: 32px; color: #1C1B18; opacity: 0; }
+.pil { display: inline-block; padding: 2px 16px; border-radius: 999px; border: 2px solid #5B574F; font-family: var(--font-plex-mono), monospace; font-weight: 700; margin-right: 10px; }
+.pmati { position: absolute; left: 30px; top: 186px; font-size: 30px; color: #5B574F; opacity: 0; }
+.tiga { position: absolute; left: 160px; top: 420px; width: 1600px; display: flex; gap: 40px; }
+.k3 { flex: 1; padding: 30px 32px; background: #FFFDF8; border: 1px solid #DDD5C6; border-radius: 14px; box-shadow: 0 14px 40px rgba(28,27,24,0.10); opacity: 0; }
+.k3 b { display: block; font-size: 36px; margin-bottom: 14px; }
+.k3 span { font-size: 26px; line-height: 1.45; color: #5B574F; }

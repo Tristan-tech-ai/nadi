@@ -1,5 +1,5 @@
-// Video demo v3: tangkap DOM asli beberapa layar BACA-SAJA di usaha contoh "Toko Bu Sari" (akun uji B, produksi, data sintetis)
-// untuk babak gaji, otomasi, tanya data, dan satu kerangka. Tidak ada yang ditulis ke data usaha. Keluaran:
+// Video demo v3: tangkap DOM asli beberapa layar (baca saja kecuali gaji-isi dan gaji-draf) di usaha contoh "Toko Bu Sari" (akun uji B, produksi, data sintetis)
+// untuk babak gaji, otomasi, tanya data, dan satu kerangka. Selain gaji pokok dua karyawan sintetis dan draf gaji (tidak disetujui), tidak ada yang ditulis. Keluaran:
 // docs/promo/film-langsung/assets/app/<nama>.{html,png}. Jalankan dari apps/web: node scripts/promo-layar.mjs [nama ...]
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
@@ -12,6 +12,33 @@ const BASE = "https://nadi-swart.vercel.app";
 const KELUAR = join(import.meta.dirname, "..", "..", "..", "docs", "promo", "film-langsung", "assets", "app");
 const LAYAR = {
   gaji: { jalur: "/app/gaji", lebar: 1440 },
+  // Menulis: gaji pokok dua karyawan sintetis lewat formulir asli halaman Orang (jalur sama dengan e2e/gaji.spec.ts), bila belum diisi.
+  "gaji-isi": { jalur: "/app/orang", lebar: 1440, isi: async (p) => {
+    for (const [nama, pokok, ptkp] of [["Rina Lestari", "4200000", "TK/0"], ["Dodi Pratama", "3750000", "K/1"]]) {
+      const baris = p.getByRole("listitem").filter({ hasText: nama });
+      if (!(await baris.getByText("Gaji belum diisi").count())) continue;
+      await baris.getByText("Gaji belum diisi").click();
+      const form = baris.getByRole("form", { name: `Gaji ${nama}` });
+      await form.getByLabel("Gaji pokok (Rp)").fill(pokok);
+      await form.getByLabel("Status PTKP").selectOption(ptkp);
+      await form.getByRole("button", { name: `Simpan gaji ${nama}` }).click();
+      await form.getByText("Tersimpan.").waitFor({ timeout: 30000 });
+    }
+  } },
+  // Menulis: draf gaji bulan ini (tombol asli "Siapkan gaji bulan ini"); draf TIDAK disetujui, slip tidak terkunci.
+  "gaji-draf": { jalur: "/app/gaji", lebar: 1440, isi: async (p) => {
+    const tombol = p.getByRole("button", { name: /Siapkan gaji bulan ini|Hitung ulang draf/ });
+    await tombol.first().click();
+    await p.getByText(/Draf gaji siap|Belum ada karyawan dengan gaji pokok/).first().waitFor({ timeout: 60000 });
+    await p.waitForLoadState("networkidle");
+  } },
+  // Baca saja: Feed dengan rincian kartu tagihan pemasok INV/2026/X/0007 dibuka (Kalau disetujui + Lihat rincian, U-10/U-13).
+  "feed-rincian": { jalur: "/app", lebar: 1440, isi: async (p) => {
+    const kartu = p.locator("article").filter({ hasText: "INV/2026/X/0007" }).first();
+    await kartu.getByTestId("rincian-usulan").locator("summary").click();
+    await kartu.getByTestId("rincian-usulan").getByText(/Memuat/).waitFor({ state: "detached", timeout: 30000 }).catch(() => {});
+    await p.waitForLoadState("networkidle");
+  } },
   alur: { jalur: "/app/alur", lebar: 1440 },
   tanya: { jalur: "/app/tanya", lebar: 1440, isi: async (p) => {
     const f = p.getByRole("form", { name: "Tanya data" });

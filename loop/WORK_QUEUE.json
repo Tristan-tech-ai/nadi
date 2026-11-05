@@ -4374,6 +4374,20 @@
    "status": "ready",
    "created": "2026-11-06T02:33:05",
    "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)"
+  },
+  {
+   "id": "V-07I",
+   "fase": "V",
+   "kind": "build",
+   "priority": 4,
+   "size": "m",
+   "wajib": true,
+   "title": "Video demo v3: perpanjang ke ±4:30 dengan semua fitur utama (teguran Tristan 6 Nov)",
+   "accept": "film 260-300 dtk; babak 1 Excel karyawan asli direkonstruksi sel per sel + kartu harga resmi bertanggal; babak 2 lima jenis berkas Siap disetujui; babak 4 dari DOM Feed terbaru dengan Kalau disetujui + Lihat rincian; babak 7 angka kunjungan asli, jalur, papan informasi kamera UU 27/2022; babak 9 pengawas bukan AI dengan alasan keluaran asli periksaAturan, bayangan 2x lalu aktif; dirender dan ditinjau bingkai besar; hyperframes check 0 error; dicatat di CATATAN.md",
+   "how": "docs/promo/demo-v3/buat.py daftar D",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-06T04:04:48"
   }
  ]
 }
