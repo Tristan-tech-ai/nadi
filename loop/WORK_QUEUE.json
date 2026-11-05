@@ -3732,7 +3732,7 @@
    "title": "Produksi video demo Nadi <= 5 menit dari DOM asli + paket suara sendiri",
    "accept": "docs/promo/nadi-demo.mp4 <= 300 dtk 1920x1080 30 fps; UI dari snapshot DOM aplikasi asli dengan data sintetis; hyperframes check bersih, lembar kontak ditinjau sendiri (REVIEW.md: teks terpotong, kursor, ritme), audio -14 LUFS true peak <= -1 dBTP; semua fitur di storyboard tampil; dikerjakan TERAKHIR setelah fitur yang diperlihatkan selesai",
    "how": "skill hyperframes + video-produksi; ganti tautan bahan lomba di UNTUK-TRISTAN",
-   "blocked_by": "V-05,V-06,V-11,U-04,U-05,T-01",
+   "blocked_by": "V-05,V-06,V-11,U-04,U-05,T-01,V-12",
    "status": "ready",
    "created": "2026-11-05T20:01:08"
   },
@@ -3947,6 +3947,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-05T21:49:46"
+  },
+  {
+   "id": "V-12",
+   "fase": "V",
+   "kind": "build",
+   "priority": 2,
+   "size": "m",
+   "wajib": false,
+   "title": "Mata memperlihatkan pelacakan: jejak bernomor anonim, garis lintasan, hitungan masuk/keluar live, zona menyala",
+   "accept": "hitung-kunjungan.tsx menggambar tiap jejak dengan nomor anonim (1, 2, 3 per sesi, tidak tersimpan) dan garis lintasan 3 dtk terakhir, penghitung masuk/keluar bertambah saat jejak melewati zona pintu, zona kasir/antrean menyala saat terisi, semua hanya di perangkat (tidak ada stream atau nomor jejak yang dikirim); tes unit penghitung pintu; e2e memutar docs/promo/aset-demo/cctv-toko.mp4 di /app/mata dan hitungan masuk = 12 +- 1 sesuai cctv-jawaban.json, tangkapan 1440/390 terang/gelap, axe 0 serius",
+   "how": "src/lib/mata/jejak.ts Pelacak (terlihat, kunjungan), docs/promo/demo-v2/STORYBOARD.md babak 7",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T23:37:49"
   }
  ]
 }
