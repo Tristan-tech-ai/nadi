@@ -2913,6 +2913,8 @@ export const kamusEn: Kamus = {
     putuskanAria: "Decide request", catatanTolak: "Reason (required when declining)", setujui: "Approve", tolak: "Decline", atasNama: "You are covering for {nama}, who is on leave.",
   },
   klaim: {
+    terbacaAturan: "Read with a learned receipt rule, without AI. Check the numbers.",
+    belajarStruk: "Nadi is learning a new format, just once. Receipts from the same shop are read without AI next time.",
     uangHarianBaris: "daily allowance {hari} days",
     membacaFoto: "Reading the receipt photo...", terbacaFoto: "Read from the photo on this phone, without AI. Check the numbers before submitting.", terbacaAi: "Read by Nadi with AI, {n}% sure. Check the numbers before submitting.", fotoTakTerbaca: "The total in this photo could not be read. Take a closer photo, or type the total.", uangHarianJudul: "Daily allowance for business trips", uangHarianKet: "Rate per day by destination city. When a trip is approved, Nadi creates the daily allowance claim itself. Write * for other cities.", uangHarianAria: "Set daily allowance", uangHarianKota: "Destination city", uangHarianKotaContoh: "Surabaya, or *", uangHarianNominal: "Daily allowance (Rp per day, empty = turn off)", uangHarianSimpan: "Save rate", uangHarianLain: "Other cities", uangHarianPerHari: "per day",
     judul: "Expense claims", ket: "Pay back personal money spent for the business: fuel, parking, tolls, meals on duty, business trips. Approved by the direct manager then the owner, paid through payroll or cash.",

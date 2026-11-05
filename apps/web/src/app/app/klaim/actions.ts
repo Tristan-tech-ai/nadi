@@ -82,14 +82,14 @@ export async function selesaikanDinas(_: HasilKlaim, f: FormData): Promise<Hasil
 }
 
 /** M-18B: baca foto struk lewat baca-berkas mode struk (model, dipakai hanya bila OCR di perangkat tidak cukup yakin). Tanpa usulan. */
-export type HasilBacaStruk = { total: number | null; tanggal: string | null; pemasok: string | null; keyakinan: number } | { galat: string };
+export type HasilBacaStruk = { total: number | null; tanggal: string | null; pemasok: string | null; keyakinan: number; sumber?: "aturan" | "model"; belajar?: boolean } | { galat: string };
 export async function bacaStrukAksi(berkasId: string): Promise<HasilBacaStruk> {
   const k = ambilKamus(await bahasaAplikasi()).klaim;
   if (!/^[0-9a-f-]{36}$/i.test(berkasId)) return { galat: k.fotoTakTerbaca };
   const supabase = await createClient();
-  const { data, error } = await supabase.functions.invoke<{ status: string; hasil?: { total: number | null; tanggal: string | null; pemasok: string | null; keyakinan: number } }>("baca-berkas", { body: { berkas_id: berkasId, mode: "struk" } });
+  const { data, error } = await supabase.functions.invoke<{ status: string; sumber?: "aturan" | "model"; belajar?: boolean; hasil?: { total: number | null; tanggal: string | null; pemasok: string | null; keyakinan: number } }>("baca-berkas", { body: { berkas_id: berkasId, mode: "struk" } });
   if (error || !data?.hasil) return { galat: k.fotoTakTerbaca };
-  return data.hasil;
+  return { ...data.hasil, sumber: data.sumber, belajar: data.belajar };
 }
 
 export async function aturUangHarian(_: HasilKlaim, f: FormData): Promise<HasilKlaim> {

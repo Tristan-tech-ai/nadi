@@ -61,10 +61,12 @@ export function FormKlaim({ kategori, perjalanan, hari, kunci, teks: t }: { kate
       const up = await lemparBerkas(createBrowserSupabase(), { isi: await f.arrayBuffer(), nama: f.name, mime }, { baca: false });
       if (up.status === "galat" || !up.berkasId) return setInfo("pesan" in up ? up.pesan : t.fotoTakTerbaca);
       setBerkasId(up.berkasId);
+      // T-01B: teks OCR HP ikut disimpan supaya Nadi bisa mempelajari tata letak struk ini (berikutnya tanpa AI).
+      if (o?.teks) await createBrowserSupabase().rpc("simpan_ocr", { p_berkas: up.berkasId, p_teks: o.teks, p_keyakinan: o.keyakinan });
       const m = await bacaStrukAksi(up.berkasId);
       if ("galat" in m) return setInfo(m.galat);
       isi(m.total, m.tanggal, m.pemasok, r ? cocokKategori(r.kategori, kategori) : null);
-      setInfo(isiTeks(t.terbacaAi, { n: Math.round(m.keyakinan * 100) }));
+      setInfo(m.sumber === "aturan" ? t.terbacaAturan : `${isiTeks(t.terbacaAi, { n: Math.round(m.keyakinan * 100) })}${m.belajar ? ` ${t.belajarStruk}` : ""}`);
     } finally {
       setMembaca(false);
     }

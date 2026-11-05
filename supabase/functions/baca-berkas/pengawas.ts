@@ -84,7 +84,8 @@ export function periksaAturan(aturan: Aturan, korpus = KORPUS_PEMBANDING): Hasil
   const kunciBoleh = a.bentuk === "teks" ? ["bentuk", "jenis", "jangkar", "bidang", "tabel"] : ["bentuk", "jenis", "jangkar", "kolom"];
   for (const k of Object.keys(a)) if (!kunciBoleh.includes(k)) alasan.push(`kunci tidak dikenal: ${k}`);
   if (a.bentuk !== "teks" && a.bentuk !== "kolom") alasan.push("bentuk harus teks atau kolom");
-  if (typeof a.jenis !== "string" || !(JENIS as readonly string[]).includes(a.jenis)) alasan.push("jenis berkas tidak dikenal");
+  // T-01B: aturan struk foto klaim (pemasok, tanggal, total) memakai jenis "struk" di luar JENIS inti Lempar.
+  if (typeof a.jenis !== "string" || ![...JENIS, "struk"].includes(a.jenis)) alasan.push("jenis berkas tidak dikenal");
   const jangkar = a.jangkar;
   if (!Array.isArray(jangkar) || jangkar.length < 2 || jangkar.length > 8) alasan.push("jangkar 2-8 label");
   else for (const [i, j] of jangkar.entries()) {

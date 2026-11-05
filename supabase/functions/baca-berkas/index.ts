@@ -10,7 +10,7 @@ import { extractText, getDocumentProxy } from "npm:unpdf@1.9.1";
 import { BIDANG, INSTRUKSI, SKEMA_HASIL, hasilDari, rapikan, usulanDari, usulanLamar, xlsxKeTeks, type Hasil, type Jenis } from "./inti.ts";
 import { bacaCv } from "./cv.ts";
 import { bacaLogMesin } from "./logmesin.ts";
-import { INSTRUKSI_STRUK, SKEMA_STRUK, rapikanStruk } from "./struk.ts";
+import { BIDANG_STRUK, INSTRUKSI_STRUK, SKEMA_STRUK, rapikanStruk, samaStruk } from "./struk.ts";
 import { INSTRUKSI_ATURAN, SKEMA_ATURAN, akurasi, aturanDari, cocok, jalankan, konsisten, perbaikiTipe, sidik, ujiAturan, type Aturan, type AturanMentah } from "./ekstraktor.ts";
 import { BAYANGAN_WAJIB, periksaAturan } from "./pengawas.ts";
 
@@ -81,14 +81,18 @@ async function catatPemakaian(db: SupabaseClient, perusahaan_id: string, berkas_
 }
 
 type DariAturan = { hasil: Hasil; ekstraktorId: string; bayangan: boolean; cocokSebelum: number };
+/** Skema bidang per jenis; "struk" (T-01B, klaim) bukan jenis Lempar tetapi memakai mesin aturan yang sama. */
+const bidangJenis = (j: string) => (j === "struk" ? BIDANG_STRUK : BIDANG[j as Jenis]);
 
 /**
  * Coba aturan tersimpan milik usaha ini (atau milik bersama) yang cocok, lengkap, dan konsisten. Aturan aktif langsung dipakai.
  * Aturan bayangan (T-02) hanya dijalankan untuk dibandingkan dengan model; hasilnya tidak dipakai sampai lolos masa bayangan.
  */
-async function cobaAturan(db: SupabaseClient, perusahaan_id: string, teks: string): Promise<DariAturan | null> {
-  const { data } = await db.from("ekstraktor").select("id, aturan, dipakai, status, bayangan_cocok")
+async function cobaAturan(db: SupabaseClient, perusahaan_id: string, teks: string, struk = false): Promise<DariAturan | null> {
+  const q = db.from("ekstraktor").select("id, aturan, dipakai, status, bayangan_cocok")
     .in("status", ["aktif", "bayangan"]).or(`perusahaan_id.eq.${perusahaan_id},perusahaan_id.is.null`);
+  // Aturan struk hanya untuk mode struk; Lempar biasa tidak pernah memakai aturan struk (dan sebaliknya).
+  const { data } = await (struk ? q.eq("jenis_berkas", "struk") : q.neq("jenis_berkas", "struk"));
   let bayangan: DariAturan | null = null;
   for (const e of data ?? []) {
     const aturan = e.aturan as Aturan;
@@ -97,7 +101,7 @@ async function cobaAturan(db: SupabaseClient, perusahaan_id: string, teks: strin
       const h = jalankan(aturan, teks);
       if (!h.lengkap || konsisten(aturan.jenis, h.bidang).length) continue;
       const jenis = aturan.jenis as Jenis;
-      const hasil: Hasil = { jenis, keyakinan: 0.99, ringkasan: "", bidang: rapikan(BIDANG[jenis], h.bidang) as Record<string, unknown> };
+      const hasil: Hasil = { jenis, keyakinan: 0.99, ringkasan: "", bidang: rapikan(bidangJenis(jenis), h.bidang) as Record<string, unknown> };
       if (e.status === "bayangan") { bayangan ??= { hasil, ekstraktorId: e.id, bayangan: true, cocokSebelum: e.bayangan_cocok ?? 0 }; continue; }
       await db.from("ekstraktor").update({ dipakai: e.dipakai + 1 }).eq("id", e.id);
       return { hasil, ekstraktorId: e.id, bayangan: false, cocokSebelum: 0 };
@@ -111,11 +115,13 @@ async function cobaAturan(db: SupabaseClient, perusahaan_id: string, teks: strin
 /** T-02 masa bayangan: bandingkan hasil aturan bayangan dengan hasil model. Sama -> dihitung; beda -> aturan dimatikan. */
 async function nilaiBayangan(db: SupabaseClient, b: DariAturan, model: Hasil, longgar: boolean) {
   const a = akurasi(model.bidang, b.hasil.bidang, longgar);
-  const sama = model.jenis === b.hasil.jenis && a.cocok === a.total;
+  // Struk klaim (T-01B): uang dan tanggal persis, pemasok sebagai label boleh dengan atau tanpa alamat.
+  const s = b.hasil.jenis === "struk" ? samaStruk(model.bidang, b.hasil.bidang) : null;
+  const sama = model.jenis === b.hasil.jenis && (s ? s.sama : a.cocok === a.total);
   const cocokBaru = b.cocokSebelum + 1;
   const ubah = sama
     ? { bayangan_cocok: cocokBaru, ...(cocokBaru >= BAYANGAN_WAJIB ? { status: "aktif" } : {}) }
-    : { status: "mati", alasan_mati: `beda dengan model: ${model.jenis === b.hasil.jenis ? `${a.total - a.cocok} dari ${a.total} bidang` : "jenis berkas"}` };
+    : { status: "mati", alasan_mati: `beda dengan model: ${model.jenis !== b.hasil.jenis ? "jenis berkas" : s ? s.beda.join(", ") : `${a.total - a.cocok} dari ${a.total} bidang`}` };
   const { error } = await db.from("ekstraktor").update(ubah).eq("id", b.ekstraktorId);
   console.log("bayangan", b.ekstraktorId, sama ? `cocok ${cocokBaru}` : "mati", error?.message ?? "ok");
 }
@@ -126,7 +132,7 @@ async function nilaiBayangan(db: SupabaseClient, b: DariAturan, model: Hasil, lo
  * Hanya aturan yang lulus yang disimpan.
  */
 async function tulisAturan(db: SupabaseClient, model: string, perusahaan_id: string, berkas_id: string, teks: string, hasil: Hasil, ocr: boolean) {
-  const rapi = (b: Record<string, unknown>) => rapikan(BIDANG[hasil.jenis], b) as Record<string, unknown>;
+  const rapi = (b: Record<string, unknown>) => rapikan(bidangJenis(hasil.jenis), b) as Record<string, unknown>;
   const percakapan: Anthropic.MessageParam[] = [{
     role: "user",
     content: `Jenis berkas: ${hasil.jenis}\n\nTeks berkas${ocr ? " (hasil OCR foto di HP; hasil bacaan di bawah diambil dari fotonya)" : ""} (per baris):\n<teks>\n${teks.slice(0, 30000)}\n</teks>\n\nHasil bacaan yang benar (JSON, nama bidang wajib sama):\n${JSON.stringify(hasil.bidang)}`,
@@ -153,10 +159,19 @@ async function tulisAturan(db: SupabaseClient, model: string, perusahaan_id: str
       const periksa = uji.lulus ? periksaAturan(aturan) : { lulus: false, alasan: [] as string[] };
       if (uji.lulus && !periksa.lulus) uji = { lulus: false, alasan: `pengawas menolak: ${periksa.alasan.slice(0, 4).join("; ")}` };
       if (uji.lulus) {
-        const { error } = await db.from("ekstraktor").insert({
+        const baris = {
           perusahaan_id, sidik_tata_letak: await sidik(aturan), jenis_berkas: hasil.jenis, aturan,
           status: "bayangan", versi: 1, asal: { model, berkas_id, percobaan: coba },
-        });
+        };
+        let { error } = await db.from("ekstraktor").insert(baris);
+        // T-01B: tata letak ini sudah punya aturan bayangan, tetapi aturan itu tidak lengkap pada berkas kembaran ini (kalau
+        // lengkap, cobaAturan sudah memakainya untuk dinilai). Aturan bayangan lama dimatikan dan diganti aturan baru yang lulus
+        // pada berkas ini; aturan aktif tidak pernah diganti diam-diam.
+        if (error?.code === "23505") {
+          await db.from("ekstraktor").update({ status: "mati", alasan_mati: "tidak lengkap pada berkas kembaran; diganti aturan baru" })
+            .eq("perusahaan_id", perusahaan_id).eq("sidik_tata_letak", baris.sidik_tata_letak).eq("status", "bayangan");
+          ({ error } = await db.from("ekstraktor").insert(baris));
+        }
         return console.log("aturan disimpan", berkas_id, hasil.jenis, `percobaan ${coba}`, error?.message ?? "ok");
       }
       console.log("aturan ditolak", berkas_id, `percobaan ${coba}`, uji.alasan, JSON.stringify(aturan).slice(0, 1500));
@@ -226,6 +241,17 @@ Deno.serve(async (req) => {
       const { data: konf } = await admin.from("konfigurasi").select("nilai").eq("kunci", "model_ai").single();
       const tangga = konf?.nilai as { ringan: string; berat: string; ambang_naik: number };
       const isi = isiUntukModel(berkas.mime, byte, berkas.nama_asli ?? "struk", null);
+      // T-01B: teks OCR dari HP (berapa pun keyakinannya) menjadi bahan aturan tata letak struk. Aturan aktif = tanpa model.
+      const teksOcr = typeof berkas.teks_ocr === "string" && berkas.teks_ocr.replace(/\s/g, "").length > 40 ? berkas.teks_ocr : null;
+      const dariAturanStruk = teksOcr ? await cobaAturan(admin, berkas.perusahaan_id, teksOcr, true) : null;
+      if (dariAturanStruk && !dariAturanStruk.bayangan) {
+        const b = dariAturanStruk.hasil.bidang as { pemasok?: string; tanggal?: string; total?: number };
+        const h = rapikanStruk({ pemasok: b.pemasok ?? "", tanggal: b.tanggal ?? "", total: Math.round(Number(b.total) || 0), keyakinan: 0.99 });
+        if (h.total) {
+          await admin.from("berkas").update({ status: "dibaca", jenis_terdeteksi: "struk", hasil: { jenis: "struk", sumber: "aturan", ekstraktor_id: dariAturanStruk.ekstraktorId, ...h }, token_ai: 0, diubah_at: new Date().toISOString() }).eq("id", berkas_id);
+          return json({ status: "dibaca", jenis: "struk", hasil: h, token: 0, model: [], sumber: "aturan" });
+        }
+      }
       const bacaStruk = async (m: string) => {
         const r = await ai.messages.create({
           model: m, max_tokens: 2000,
@@ -246,7 +272,14 @@ Deno.serve(async (req) => {
         return await gagal("Total di struk ini belum terbaca. Foto ulang lebih dekat, atau ketik totalnya.");
       }
       await admin.from("berkas").update({ status: "dibaca", jenis_terdeteksi: "struk", hasil: { jenis: "struk", sumber: "model", ...akhir.h }, token_ai: token, diubah_at: new Date().toISOString() }).eq("id", berkas_id);
-      return json({ status: "dibaca", jenis: "struk", hasil: akhir.h, token, model: coba.map((c) => c.m) });
+      // T-01B: model sudah membaca; tata letak ini dipelajari (aturan baru, bayangan) atau aturan bayangannya dinilai.
+      if (teksOcr) {
+        const hasilModel: Hasil = { jenis: "struk" as Jenis, keyakinan: akhir.h.keyakinan, ringkasan: "",
+          bidang: rapikan(BIDANG_STRUK, { pemasok: akhir.h.pemasok ?? "", tanggal: akhir.h.tanggal ?? "", total: akhir.h.total }) as Record<string, unknown> };
+        if (dariAturanStruk?.bayangan) EdgeRuntime.waitUntil(nilaiBayangan(admin, dariAturanStruk, hasilModel, true));
+        else EdgeRuntime.waitUntil(tulisAturan(admin, tangga.berat, berkas.perusahaan_id, berkas_id, teksOcr, hasilModel, true));
+      }
+      return json({ status: "dibaca", jenis: "struk", hasil: akhir.h, token, model: coba.map((c) => c.m), sumber: "model", belajar: Boolean(teksOcr) });
     }
     // Foto: pakai teks OCR dari perangkat bila keyakinannya cukup (>= 85, docs/research/ml-browser.md).
     const ocrCukup = berkas.mime.startsWith("image/") && berkas.teks_ocr && Number(berkas.ocr_keyakinan) >= 85;

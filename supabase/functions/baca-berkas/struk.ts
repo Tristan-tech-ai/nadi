@@ -1,11 +1,12 @@
 // M-18B: mode struk baca-berkas. Dipanggil layar Klaim hanya bila OCR di perangkat tidak cukup yakin (< 85) atau total tidak
 // terbaca aturan. Mengembalikan pemasok, tanggal, total, keyakinan; TIDAK membuat usulan nota (klaim sendiri yang menjadi
 // usulan setelah staf memeriksa angkanya). Keluaran model = masukan tak tepercaya: dirapikan dan dibatasi di sini.
+import { jarakEdit } from "./ekstraktor.ts";
 
 export const INSTRUKSI_STRUK = `Kamu membaca foto struk atau kuitansi belanja di Indonesia untuk klaim penggantian biaya karyawan.
 Isi skema:
 - pemasok: nama toko, SPBU, restoran, hotel, atau operator jalan tol seperti tercetak di bagian atas struk. Kosongkan bila tidak terbaca.
-- tanggal: tanggal transaksi dalam format YYYY-MM-DD. Kosongkan bila tidak terbaca.
+- tanggal: tanggal transaksi dalam format YYYY-MM-DD. Tanggal di struk Indonesia ditulis hari/bulan/tahun: 04/10/2026 adalah 4 Oktober 2026 (2026-10-04), bukan 10 April. Kosongkan bila tidak terbaca.
 - total: jumlah yang dibayar dalam rupiah, bilangan bulat tanpa titik. Pakai baris total bayar atau grand total, bukan subtotal, tunai, kembalian, atau saldo kartu. 0 bila tidak terbaca.
 - keyakinan: 0 sampai 1, seberapa yakin total yang kamu tulis sama dengan yang tercetak.
 Jangan menebak angka yang tidak terbaca.`;
@@ -21,6 +22,29 @@ export const SKEMA_STRUK = {
   required: ["pemasok", "tanggal", "total", "keyakinan"],
   additionalProperties: false,
 } as const;
+
+/** T-01B: bentuk bidang struk untuk aturan ekstraktor (rapikan di inti.ts memakai skema ini). */
+export const BIDANG_STRUK = {
+  type: "object",
+  properties: { pemasok: { type: "string" }, tanggal: { type: "string" }, total: { type: "number" } },
+  required: ["pemasok", "tanggal", "total"],
+  additionalProperties: false,
+};
+
+/**
+ * T-01B masa bayangan untuk struk: total dan tanggal (uang dan waktu) wajib sama persis dengan bacaan model. Pemasok hanya label
+ * keterangan klaim, dan model kadang menyertakan alamat toko, kadang tidak ("SPBU 34.452.97" lawan "SPBU 34.452.97 JL. RAYA ...").
+ * Jadi pemasok dianggap sama bila yang pendek sama dengan awal yang panjang (boleh beda 1 huruf per 6, salah baca OCR).
+ */
+export function samaStruk(model: Record<string, unknown>, aturan: Record<string, unknown>): { sama: boolean; beda: string[] } {
+  const n = (v: unknown) => String(v ?? "").toLowerCase().replace(/\s+/g, " ").trim();
+  const beda: string[] = [];
+  if (!(Number(model.total) > 0) || Number(model.total) !== Number(aturan.total)) beda.push("total");
+  if (!n(model.tanggal) || n(model.tanggal) !== n(aturan.tanggal)) beda.push("tanggal");
+  const [pendek, panjang] = [n(model.pemasok), n(aturan.pemasok)].sort((a, b) => a.length - b.length);
+  if (!pendek || jarakEdit(pendek, panjang.slice(0, pendek.length)) > Math.max(1, Math.floor(pendek.length / 6))) beda.push("pemasok");
+  return { sama: beda.length === 0, beda };
+}
 
 export type HasilStruk = { pemasok: string | null; tanggal: string | null; total: number | null; keyakinan: number };
 

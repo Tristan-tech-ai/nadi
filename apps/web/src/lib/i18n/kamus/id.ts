@@ -2914,6 +2914,8 @@ export const kamusId = {
     putuskanAria: "Putuskan pengajuan", catatanTolak: "Alasan (wajib bila menolak)", setujui: "Setujui", tolak: "Tolak", atasNama: "Kamu menggantikan {nama} yang sedang izin atau cuti.",
   },
   klaim: {
+    terbacaAturan: "Terbaca dengan aturan struk yang sudah dipelajari, tanpa AI. Periksa angkanya.",
+    belajarStruk: "Nadi sedang mempelajari format baru, sekali saja. Struk dari toko yang sama berikutnya dibaca tanpa AI.",
     uangHarianBaris: "uang harian {hari} hari",
     membacaFoto: "Membaca foto struk...", terbacaFoto: "Dibaca dari foto di HP ini, tanpa AI. Periksa angkanya sebelum mengajukan.", terbacaAi: "Dibaca Nadi dengan AI, yakin {n}%. Periksa angkanya sebelum mengajukan.", fotoTakTerbaca: "Total di foto ini belum terbaca. Foto ulang lebih dekat, atau ketik totalnya.", uangHarianJudul: "Uang harian perjalanan dinas", uangHarianKet: "Tarif per hari menurut kota tujuan. Saat perjalanan disetujui, Nadi membuat klaim uang harian sendiri. Tulis * untuk kota lain.", uangHarianAria: "Atur uang harian", uangHarianKota: "Kota tujuan", uangHarianKotaContoh: "Surabaya, atau *", uangHarianNominal: "Uang harian (Rp per hari, kosong = matikan)", uangHarianSimpan: "Simpan tarif", uangHarianLain: "Kota lain", uangHarianPerHari: "per hari",
     judul: "Klaim pengeluaran", ket: "Ganti uang pribadi yang terpakai untuk usaha: bensin, parkir, tol, makan saat tugas, perjalanan dinas. Disetujui atasan langsung lalu pemilik, dibayar lewat slip gaji atau kas.",

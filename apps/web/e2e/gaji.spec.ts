@@ -686,7 +686,9 @@ test("klaim: foto struk buram dibaca AI sampai formulir terisi, klaim diajukan d
     await s.waitForLoadState("networkidle");
     const foto = readFileSync(join(__dirname, "..", "..", "..", "fixtures", "korpus", "struk-foto", "sulit", "struk-01.jpg"));
     await s.getByTestId("foto-struk").setInputFiles({ name: "struk-spbu.jpg", mimeType: "image/jpeg", buffer: Buffer.concat([foto, Buffer.from(`e2e-${tanda}`)]) });
-    await expect(fm.getByRole("status")).toContainText("Dibaca Nadi dengan AI", { timeout: 90_000 });
+    // T-01B: bacaan model ikut mempelajari tata letaknya bila teks OCR cukup (pesan belajar); setelah aturannya aktif, struk SPBU
+    // yang sama dibaca tanpa AI. Keduanya sah di usaha uji yang dipakai berulang.
+    await expect(fm.getByRole("status")).toContainText(/Dibaca Nadi dengan AI|tanpa AI/, { timeout: 90_000 });
     await expect(fm.getByLabel("Jumlah (Rp)")).toHaveValue("64800");
     await expect(fm.getByLabel("Tanggal struk")).toHaveValue("2026-10-04");
     // Tebakan kategori: kategori bensin pertama di usaha ini (jalan sebelumnya meninggalkan kategori bensin lain).
