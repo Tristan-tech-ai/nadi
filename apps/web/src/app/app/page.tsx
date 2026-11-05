@@ -162,14 +162,6 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
           <dd className="angka mt-1 text-2xl font-semibold" data-testid="jumlah-usulan">{semua}</dd>
         </div>
       </dl>
-      {["pemilik", "admin", "akuntan"].includes(sesi.peran ?? "") ? (
-        <Suspense fallback={null}>
-          <RingkasanUang bahasa={bahasa} />
-        </Suspense>
-      ) : null}
-      <Suspense fallback={null}>
-        <SarapanData bahasa={bahasa} />
-      </Suspense>
       <h2 className="mt-8 text-lg font-semibold">{k.perluKeputusan}</h2>
       {semua === 0 ? (
         <div className="mt-3 flex flex-col items-start gap-3 rounded-[var(--radius-kartu)] bg-kertas-2 p-4 sm:flex-row sm:items-center">
@@ -234,6 +226,15 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
           ) : null}
         </HalamanFeed>
       )}
+      {/* U-01: ringkasan uang dan Sarapan Data mengalir belakangan; ditaruh setelah daftar keputusan supaya tidak menggeser isi (CLS). */}
+      {["pemilik", "admin", "akuntan"].includes(sesi.peran ?? "") ? (
+        <Suspense fallback={null}>
+          <RingkasanUang bahasa={bahasa} />
+        </Suspense>
+      ) : null}
+      <Suspense fallback={null}>
+        <SarapanData bahasa={bahasa} />
+      </Suspense>
     </section>
   );
 }

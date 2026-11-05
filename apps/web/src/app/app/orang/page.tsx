@@ -56,7 +56,6 @@ async function Isi() {
       <p className="mt-2 text-tinta-2">
         {sisip(t.kodeUsaha, { kode: <span className="font-mono font-semibold text-tinta" data-testid="kode-usaha">{usaha?.kode}</span> })}
       </p>
-      <p className="mt-1 flex flex-wrap gap-x-5 text-sm"><a href="/app/mitra" className="underline underline-offset-4" data-testid="tautan-mitra">{kamus.mitra.judul}</a><a href="/app/orang/kerja" className="underline underline-offset-4">{kamus.hr.judul}</a><a href="/app/pengumuman" className="underline underline-offset-4">{kamus.hr.pengumumanJudul}</a><a href="/app/survei" className="underline underline-offset-4">{kamus.survei.judulHalaman}</a></p>
       <FormTambahOrang teks={t} />
       {/* Nama bank untuk berkas transfer gaji: CIMB Niaga (inhouse) + daftar SKN resmi CIMB Niaga (lib/gaji/bank-skn.json). */}
       <datalist id="daftar-bank">{["CIMB NIAGA", ...BANK_SKN].map((b) => <option key={b} value={b} />)}</datalist>

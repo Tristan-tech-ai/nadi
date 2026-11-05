@@ -16,3 +16,14 @@ Lighthouse 13.6.0, emulasi mobile bawaan, build produksi lokal (`pnpm build` lal
 Temuan sistemik: navigasi bawah aplikasi `sticky bottom-0` menutupi baris paling bawah layar pertama, jadi halaman mana pun yang
 kebetulan punya tombol tepat di garis lipat gagal audit target-size. Perbaikan yang benar ada di kerangka aplikasi (Q-41), bukan
 menggeser isi per halaman.
+
+## Setelah kerangka adaptif U-01 (6 Nov 2026)
+
+Bilah bawah HP kini `position: fixed` dengan pengganjal. Aturan target-size axe tidak menghitung elemen fixed sebagai penutup tombol, sedangkan elemen sticky dihitung (`_isFixedPosition` di axe-core 4.14.0). Itu sebabnya skor aksesibilitas yang sebelumnya 96/97 sekarang 100.
+
+| Halaman | Performa | Aksesibilitas | CLS | Catatan |
+|---|---|---|---|---|
+| /app | 92 | 100 | 0 | Sebelumnya 84 dengan CLS 0,186. Ringkasan uang dan Sarapan Data dipindah ke bawah daftar keputusan |
+| /app/invoice | 93 | 100 | 0 | |
+| /app/orang | 92 | 100 | 0,002 | Deretan tautan fitur kecil dibuang (gagal target-size; fiturnya ada di navigasi ruang) |
+| /app/kursus, /app/alur, dan 5 halaman Q-41 lainnya | 90-100 | 100 | | Diukur dengan bilah bawah fixed yang sama (scratchpad nav-fixed sebelum U-01) |
