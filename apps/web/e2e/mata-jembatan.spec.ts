@@ -1,4 +1,4 @@
-import { spawn, type ChildProcess } from "node:child_process";
+import { execFileSync, spawn, type ChildProcess } from "node:child_process";
 import { mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -39,10 +39,14 @@ test("Mata: CCTV RTSP lewat jembatan go2rtc dihitung di peramban", async ({ brow
   try {
     // Kamera sintetis: RTSP H.264 dari video korpus, mulai saat jembatan pertama kali membaca.
     const dirKamera = mkdtempSync(join(tmpdir(), "nadi-kamera-"));
-    const video = join(KORPUS, "pendek.webm").replace(/\\/g, "/");
+    // Bantalan bingkai terakhir dibuat dulu sebagai berkas: -re hanya memperlambat masukan, jadi bingkai tpad buatan filter terkirim
+    // sekaligus, ffmpeg selesai, dan go2rtc memulai ulang sumber (rekaman berputar dari awal dan terhitung dua kali). Tanpa B-frame
+    // (zerolatency), seperti CCTV: WebRTC tidak memutar B-frame sehingga hanya bingkai kunci yang tampil.
+    const video = join(dirKamera, "kamera.mp4").replace(/\\/g, "/");
+    execFileSync("ffmpeg", ["-hide_banner", "-loglevel", "error", "-y", "-i", join(KORPUS, "pendek.webm"), "-vf", "tpad=stop_mode=clone:stop_duration=300", "-c:v", "libx264", "-preset", "veryfast", "-tune", "zerolatency", "-g", "10", "-an", video]);
     writeFileSync(join(dirKamera, "go2rtc.yaml"), [
       "app:", "  modules: [rtsp, exec]", "api:", '  listen: ""', "rtsp:", '  listen: "127.0.0.1:18554"', "webrtc:", '  listen: ""', "streams:",
-      `  sumber: exec:ffmpeg -hide_banner -loglevel error -re -i ${video} -vf tpad=stop_mode=clone:stop_duration=600 -c:v libx264 -preset veryfast -tune zerolatency -g 10 -an -rtsp_transport tcp -f rtsp {output}`,
+      `  sumber: exec:ffmpeg -hide_banner -loglevel error -re -i ${video} -c copy -an -rtsp_transport tcp -f rtsp {output}`,
       "",
     ].join("\n"));
     jalankan(dirKamera);
@@ -96,7 +100,7 @@ test("Mata: CCTV RTSP lewat jembatan go2rtc dihitung di peramban", async ({ brow
     await j.getByTestId("jembatan-mulai").click();
     await expect(panel.getByTestId("kunjungan-layar")).toBeVisible({ timeout: 20_000 });
     // Rekaman 79 dtk; tunggu kelima pelanggan selesai, lalu beberapa detik toko kosong (hitungan tidak boleh naik lagi).
-    await expect.poll(async () => Number((await panel.getByTestId("kunjungan-hasil").getAttribute("data-kunjungan").catch(() => "0")) ?? 0), { timeout: 150_000, intervals: [2000] }).toBeGreaterThanOrEqual(benar - 0);
+    await expect.poll(async () => Number((await panel.getByTestId("kunjungan-hasil").getAttribute("data-kunjungan").catch(() => "0")) ?? 0), { timeout: 150_000, intervals: [2000] }).toBeGreaterThanOrEqual(benar);
     await page.waitForTimeout(10_000);
     await panel.getByRole("button", { name: "Berhenti dan kirim" }).click();
     await expect(panel.getByTestId("kunjungan-terkirim")).toBeVisible({ timeout: 30_000 });

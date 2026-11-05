@@ -435,7 +435,7 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
                     ) : null}
                   </div>
                   {merek === "tapo" ? <p className="mt-2 text-tinta-2">{t.jembatanTapo}</p> : null}
-                  {merek === "lengkap" ? <p className="mt-2 text-tinta-2">{t.jembatanRtspKet}</p> : null}
+                  {merek === "lengkap" ? <p className="mt-2 text-tinta-2 [overflow-wrap:anywhere]">{t.jembatanRtspKet}</p> : null}
                   <p className="mt-2 text-tinta-2">{t.jembatanSandiKet}</p>
                   {galatKam ? <p role="alert" className="mt-2 text-cap">{galatKam}</p> : null}
                   <Tombol type="button" ragam="kedua" className="mt-3" onClick={unduhKonfig} data-testid="jembatan-unduh">{t.jembatanUnduh}</Tombol>
@@ -446,7 +446,7 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
                   <div className="mt-2 flex flex-wrap items-end gap-3">
                     <label className="flex flex-col gap-1">
                       <span className="text-tinta-2">{t.jembatanAlamat}</span>
-                      <input value={alamatJembatan} onChange={(e) => setAlamatJembatan(e.target.value)} spellCheck={false} className="min-h-11 rounded-[var(--radius-input)] border border-garis-kuat bg-kertas px-3 font-mono" data-testid="jembatan-alamat" />
+                      <input value={alamatJembatan} onChange={(e) => setAlamatJembatan(e.target.value)} spellCheck={false} className="min-h-11 w-64 max-w-full rounded-[var(--radius-input)] border border-garis-kuat bg-kertas px-3 font-mono" data-testid="jembatan-alamat" />
                     </label>
                     <Tombol type="button" ragam="kedua" onClick={dariJembatan} disabled={jalan} data-testid="jembatan-mulai">{t.jembatanMulai}</Tombol>
                   </div>
