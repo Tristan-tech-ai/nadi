@@ -3915,6 +3915,20 @@
    "created": "2026-11-05T21:17:32",
    "done": "2026-11-05T21:25:54",
    "result": "f4aad8d; migrasi rincian_usulan (md5 ed3c0fa7 sama), RPC preview_proposal baca-saja pengelola, tes SQL 6/6 (sebelum dari data sekarang, nama ada dilewati tanpa beda huruf besar, usaha lain P0002, staf 42501), src/lib/rincian-usulan.test.ts 6/6 (sebelum->sesudah, ditambah, dilewati, rupiah, stok bukan rupiah, id jadi nama), komponen Lihat rincian di kartu Feed/Lempar; e2e/rincian.spec.ts produksi: aturan cuti Sekarang->Jadi dengan nilai berubah, impor orang menampilkan yang dilewati; axe 0 serius terang/gelap, 390 tanpa gulir samping"
+  },
+  {
+   "id": "W-10A",
+   "fase": "W",
+   "kind": "build",
+   "priority": 3,
+   "size": "m",
+   "wajib": true,
+   "title": "Mata membaca CCTV lewat jembatan lokal (go2rtc) + verifikasi merek dari manual resmi",
+   "accept": "docs/research/mata-cctv.md bagian merek terisi dari manual resmi (Hikvision, Dahua, EZVIZ, Imou, Xiaomi, Tapo: RTSP/ONVIF atau hanya cloud, dengan URL dan tanggal); Mata punya pilihan sumber Kamera jembatan: halaman memberi berkas konfigurasi go2rtc berisi alamat kamera yang diketik pemilik (tanpa kata sandi tersimpan di Nadi), membuka WebRTC dari localhost, lalu menghitung seperti kamera biasa; uji otomatis dengan stream RTSP sintetis dari video korpus fixtures lewat go2rtc lokal (lisensi MIT dicatat ASSETS) dan e2e Mata menghitung kunjungan >= 90% seperti korpus; tidak ada stream yang dikirim ke server Nadi",
+   "how": "docs/research/mata-cctv.md, W-02 Mata v2",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T21:49:46"
   }
  ]
 }
