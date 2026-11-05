@@ -47,6 +47,9 @@ Sumber pola: DIRECTION.md, referensi 1 sampai 7.
 - **S51 [T]** Memuat memakai skeleton yang meniru isi, bukan pemutar di tengah layar.
 - **S52 [M]** Tidak ada `alert()`/`confirm()` bawaan browser.
 - **S53 [T]** Tidak ada interaksi yang hanya bisa lewat hover (HP).
+- **S55 [T]** Dalam satu daftar navigasi, setiap tujuan punya ikon sendiri yang mengenali tujuannya; ikon yang sama untuk dua tujuan berbeda dilarang (Material 3 navigation drawer: ikon dipakai untuk semua butir atau tidak sama sekali, dan harus dikenali).
+- **S56 [T]** Kontrol yang hanya berupa ikon wajib punya label teks tampak, kecuali konvensi umum (tutup, cari, menu). Cara memakai fitur (misalnya menyematkan) harus terbaca tanpa menebak.
+- **S57 [T]** Angka atau status yang tampak "hidup" (lencana, hitungan) harus benar-benar mengikuti data tanpa muat ulang, atau menyebut kapan terakhir diperbarui.
 - **S54 [T]** Grafik memakai palet token, bukan warna bawaan pustaka.
 
 ## Gambar

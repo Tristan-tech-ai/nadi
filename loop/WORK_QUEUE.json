@@ -1367,7 +1367,7 @@
    "title": "Ulangi uji Jev setelah kartu Vercel ada",
    "accept": "satu panggilan /v1/evaluate berhasil dari produksi: jawaban, usage, biaya, latensi dicatat di docs/research/jev.md; gerbang keputusan izin memakai Jev bila yakin >= 0,85",
    "how": "route uji sementara lagi atau langsung dari ajukan izin; pustaka src/lib/jev.ts",
-   "blocked_by": "kartu Vercel belum ada (UNTUK-TRISTAN, pembayaran)",
+   "blocked_by": "kartu Vercel belum ada (UNTUK-TRISTAN,pembayaran)",
    "status": "blocked",
    "created": "2026-10-31T10:10:41"
   },
@@ -3725,22 +3725,22 @@
    "created": "2026-11-05T20:01:08"
   },
   {
-   "id": "V-08",
-   "fase": "V",
+   "id": "L-01",
+   "fase": "L",
    "kind": "design",
    "priority": 5,
    "size": "m",
    "wajib": true,
-   "title": "Sesudah video: perbagus branding, animasi, dan motion halaman bantuan/panduan dan aplikasi",
-   "accept": "halaman /panduan dan bantuan dalam aplikasi memakai bahasa visual video (palet, gerak, ilustrasi); gerak mengikuti DIRECTION.md + skill animasi (prefers-reduced-motion); tangkapan layar 390/1440 terang/gelap, axe 0 serius, Lighthouse >= 90; dikerjakan segera setelah V-07 selagi pedoman skill masih dibaca",
+   "title": "Halaman publik yang membuat orang mau mencoba: branding, gerak, dan desain landing, halaman per fitur, panduan/bantuan (setelah video)",
+   "accept": "halaman publik (landing, /fitur/*, /panduan, /harga, /keamanan, /tentang, bantuan) memakai bahasa visual dan pembelajaran video (palet, tipografi, gerak, ilustrasi, tangkapan UI asli) dengan satu tujuan per halaman: orang paham masalahnya, melihat fitur bekerja, lalu mencoba /demo atau mendaftar; gerak mengikuti DIRECTION.md + skill animasi (prefers-reduced-motion); tangkapan layar 390/1440 terang/gelap ditinjau butir demi butir (memori feedback-detail-ui), axe 0 serius, Lighthouse >= 90; dikerjakan segera setelah V-07 selagi pedoman skill video masih dibaca",
    "how": "skill animate/emil-design-eng/impeccable; DIRECTION.md",
    "blocked_by": "V-07",
    "status": "ready",
    "created": "2026-11-05T20:01:08"
   },
   {
-   "id": "V-09",
-   "fase": "V",
+   "id": "L-02",
+   "fase": "L",
    "kind": "research",
    "priority": 5,
    "size": "l",
@@ -3834,7 +3834,7 @@
    "title": "Proposal lomba AIWIC 2026 (PDF A4, bahasa Indonesia, maks 5 halaman isi): rapi seperti paper profesional dengan figure, LaTeX",
    "accept": "berkas AIWIC2026_nadi_nadi.pdf A4 tanpa kata sandi: cover (nama produk, tim, anggota, instansi) + 10 bagian sesuai urutan kriteria (Problem & Background, Target User, Proposed Solution + user journey, AI Implementation (bagian ber-AI, model/API/metode, input-output, alasan perlu AI), MVP & Key Features yang berfungsi saat submit, Technical Architecture berupa diagram frontend -> backend -> database -> AI/API -> result, Innovation & Differentiation, Impact & Development Potential + keterbatasan, Technology Disclosure (framework, database, model/API, pustaka, dataset, hosting, AI coding assistant), Submission Links (GitHub, URL deploy, akun demo)); isi maksimal 5 halaman di luar cover dan lampiran (dihitung dari PDF); semua angka dan klaim dari sumber repo/produksi; figure vektor terbaca; dibuat dengan LaTeX (xelatex MiKTeX ada di perangkat); AI coding assistant WAJIB diungkap jujur di PDF, jadi sumber proposal dan PDF disimpan DI LUAR repo (C:/Users/Tristan/Downloads/project-pkl/proposal/) agar aturan tanpa jejak repo tetap terjaga; data akun demo tidak masuk repo; dikerjakan PALING AKHIR",
    "how": "kriteria Tristan 6 Nov 2026",
-   "blocked_by": "V-07,V-08,V-09,T-01,W-10,U-09",
+   "blocked_by": "V-07,L-01,L-02,T-01,W-10,U-09",
    "status": "ready",
    "created": "2026-11-05T20:36:28"
   },
@@ -3879,6 +3879,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-05T20:42:29"
+  },
+  {
+   "id": "U-12",
+   "fase": "F8",
+   "kind": "fix",
+   "priority": 1,
+   "size": "m",
+   "wajib": true,
+   "title": "Detail sidebar yang terlewat di U-09: ikon unik per halaman, cara menyematkan jelas, lencana live",
+   "accept": "setiap halaman di peta ruang punya ikon sendiri yang mengenali tujuannya (tes unit menolak ikon ganda di satu daftar Disematkan/ruang), ikon ruang hanya di judul ruang; tombol sematkan berlabel teks (Sematkan / Disematkan) dengan penjelasan di bagian Disematkan saat kosong atau pertama kali, dan setiap butir Disematkan bisa dilepas langsung dari sidebar (tombol berlabel, bisa dengan papan ketik); lencana usulan menunggu berubah langsung tanpa muat ulang (Supabase Realtime pada usulan atau penyegaran saat tab kembali aktif, dibaca dari docs resmi) dan diuji e2e: usulan baru masuk -> lencana bertambah dalam 5 dtk; daftar periksa detail (Material ikon/label, NN/g label kontrol dan status sistem) ditulis di bukti dan tangkapan layar 1280/1440/1920 terang/gelap ditinjau butir demi butir",
+   "how": "Tristan 6 Nov 2026; memori feedback-detail-ui",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T20:49:09"
   }
  ]
 }

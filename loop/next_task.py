@@ -217,6 +217,9 @@ def main(a):
         gv, wv, pv = progress({"tasks": [t for t in d["tasks"] if t["fase"] == "V"]})
         if wv:
             print(f"GRUP VIDEO (V) {gv}/{wv} = {pv:.1f}%")
+        gl, wl, pl = progress({"tasks": [t for t in d["tasks"] if t["fase"] == "L"]})
+        if wl:
+            print(f"GRUP HALAMAN PUBLIK (L) {gl}/{wl} = {pl:.1f}%")
     return 0
 
 

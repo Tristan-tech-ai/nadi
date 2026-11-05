@@ -70,11 +70,13 @@ async function Navigasi() {
     supabase.from("usulan").select("id", { count: "exact", head: true }).eq("status", "menunggu"),
   ]);
   const en = bahasa === "en";
-  return <Kerangka ruang={ruang} mati={mati} peran={sesi.peran} bahasa={bahasa} lencana={{ "/app": menunggu ?? 0 }}
+  return <Kerangka ruang={ruang} mati={mati} peran={sesi.peran} bahasa={bahasa} lencana={{ "/app": menunggu ?? 0 }} pid={sesi.perusahaanId ?? undefined}
     teks={{ navUtama: ambilKamus(bahasa).aplikasi.navUtama, menu: "Menu", tutup: en ? "Close" : "Tutup", semuaMenu: en ? "All menus" : "Semua menu",
       peta: en ? "All menus, with what each does" : "Semua menu dan gunanya", cari: teksCari(bahasa),
       menunggu: en ? "{n} waiting for you" : "{n} menunggu keputusanmu", disematkan: en ? "Pinned" : "Disematkan", semuaRuang: en ? "All spaces" : "Semua ruang",
-      bantuan: en ? "Help and guides" : "Bantuan dan panduan" }} />;
+      bantuan: en ? "Help and guides" : "Bantuan dan panduan",
+      petunjukSemat: en ? "Press Pin on a page title to keep it here." : "Tekan Sematkan di judul halaman untuk menaruhnya di sini.",
+      lepas: en ? "Unpin {x}" : "Lepas {x} dari Disematkan" }} />;
 }
 
 export default function LayoutApp({ children }: LayoutProps<"/app">) {

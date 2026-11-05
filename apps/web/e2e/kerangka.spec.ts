@@ -47,6 +47,7 @@ test("kerangka: navigasi benar per kelas lebar, axe bersih, tanpa gulir samping,
   // Desktop: Invoice langsung di sidebar.
   await page.setViewportSize({ width: 1440, height: 900 });
   const sidebar = page.getByRole("navigation", { name: "Navigasi utama" });
+  await expect(sidebar.getByTestId("petunjuk-semat")).toBeVisible();
   // U-09: Disematkan (bawaan pemilik memuat Invoice), kaki bantuan/peta/pengaturan, tanpa angka statis di ruang.
   await expect(sidebar.getByTestId("kaki-sidebar").getByRole("link", { name: "Bantuan dan panduan" })).toBeVisible();
   await expect(sidebar.getByTestId("kaki-sidebar").getByRole("link", { name: "Usahamu" })).toBeVisible();
@@ -61,9 +62,10 @@ test("kerangka: navigasi benar per kelas lebar, axe bersih, tanpa gulir samping,
   await sidebar.getByRole("link", { name: "Kas dan bank", exact: true }).click();
   await page.waitForURL((u) => u.pathname === "/app/kas");
   // Sematkan Kas dan bank dari kepala halaman, lalu lepas lagi.
-  await page.getByRole("button", { name: "Sematkan di samping" }).click();
+  await page.getByRole("button", { name: "Sematkan", exact: true }).click();
+  await expect(sidebar.getByTestId("petunjuk-semat")).toHaveCount(0);
   await expect(sidebar.getByTestId("disematkan").getByRole("link", { name: "Kas dan bank", exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "Lepas sematan" }).click();
+  await sidebar.getByRole("button", { name: "Lepas Kas dan bank dari Disematkan" }).click();
   await expect(sidebar.getByTestId("disematkan").getByRole("link", { name: "Kas dan bank", exact: true })).toHaveCount(0);
   // Tablet: rail Uang membuka panel berisi Invoice.
   await page.goto("/app");

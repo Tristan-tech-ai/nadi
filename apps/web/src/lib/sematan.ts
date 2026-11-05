@@ -26,3 +26,8 @@ export function gantiSematan(peran: string, href: string): string[] {
   window.dispatchEvent(new Event(PERISTIWA_SEMAT));
   return baru;
 }
+
+/** Sudah pernah diubah pengguna di perangkat ini (petunjuk cara menyematkan berhenti tampil). */
+export function sematanDiatur(peran: string): boolean {
+  try { return localStorage.getItem(`${KUNCI}:${peran}`) !== null; } catch { return false; }
+}

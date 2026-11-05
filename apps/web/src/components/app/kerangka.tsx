@@ -5,35 +5,34 @@
 // Dua layar berdampingan (horizontal-viewport-segments: 2) diatur di globals.css (.kerangka-*). Isi navigasi dari src/lib/ruang.ts.
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, type ComponentType, type ReactNode } from "react";
-import {
-  BookOpenTextIcon, CalculatorIcon, CalendarCheckIcon, ClipboardTextIcon, FileTextIcon, GearSixIcon, HouseSimpleIcon, LightningIcon, ListIcon,
-  LifebuoyIcon, MoneyIcon, PackageIcon, PaperPlaneTiltIcon, StorefrontIcon, UsersThreeIcon, VideoCameraIcon, WalletIcon, XIcon, type IconProps,
-} from "@phosphor-icons/react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { ListIcon, LifebuoyIcon, PushPinSlashIcon, UsersThreeIcon, WalletIcon, XIcon } from "@phosphor-icons/react";
+import { IKON_HALAMAN, IKON_RUANG, type Ikon } from "@/components/app/ikon-halaman";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { SEMUA_HALAMAN, halamanDari, type Ruang } from "@/lib/ruang";
-import { PERISTIWA_SEMAT, SEMATAN_BAWAAN, bacaSematan } from "@/lib/sematan";
+import { PERISTIWA_SEMAT, SEMATAN_BAWAAN, bacaSematan, gantiSematan, sematanDiatur } from "@/lib/sematan";
 import { DialogCari, type TeksCari } from "@/components/app/cari-fitur";
 
-type Ikon = ComponentType<IconProps>;
-const IKON_RUANG: Record<string, Ikon> = {
-  "hari-ini": HouseSimpleIcon, uang: WalletIcon, jual: StorefrontIcon, barang: PackageIcon, orang: UsersThreeIcon,
-  tempat: VideoCameraIcon, dokumen: FileTextIcon, otomasi: LightningIcon, pengaturan: GearSixIcon,
-};
-type Teks = { navUtama: string; menu: string; tutup: string; semuaMenu: string; peta: string; cari: TeksCari; menunggu: string; disematkan: string; semuaRuang: string; bantuan: string; };
+
+type Teks = { navUtama: string; menu: string; tutup: string; semuaMenu: string; peta: string; cari: TeksCari; menunggu: string; disematkan: string; semuaRuang: string; bantuan: string; petunjukSemat: string; lepas: string };
 type Butir = { href: string; label: string; Ikon: Ikon };
 
 export function bilahBawah(peran: string, b: Bahasa): Butir[] {
   const t = (id: string, en: string) => (b === "en" ? en : id);
   if (peran === "staf") return [
-    { href: "/app", label: t("Hari ini", "Today"), Ikon: HouseSimpleIcon }, { href: "/app/kerja", label: t("Kerja", "Work"), Ikon: ClipboardTextIcon },
-    { href: "/app/izin", label: t("Izin", "Leave"), Ikon: CalendarCheckIcon }, { href: "/app/gaji", label: t("Gaji", "Pay"), Ikon: MoneyIcon }];
+    { href: "/app", label: t("Hari ini", "Today"), Ikon: IKON_HALAMAN["/app"] }, { href: "/app/kerja", label: t("Kerja", "Work"), Ikon: IKON_HALAMAN["/app/kerja"] },
+    { href: "/app/izin", label: t("Izin", "Leave"), Ikon: IKON_HALAMAN["/app/izin"] }, { href: "/app/gaji", label: t("Gaji", "Pay"), Ikon: IKON_HALAMAN["/app/gaji"] }];
   if (peran === "akuntan") return [
-    { href: "/app", label: t("Hari ini", "Today"), Ikon: HouseSimpleIcon }, { href: "/app/lempar", label: t("Lempar", "Drop"), Ikon: PaperPlaneTiltIcon },
-    { href: "/app/buku", label: t("Laporan", "Reports"), Ikon: BookOpenTextIcon }, { href: "/app/akuntan", label: t("Akuntan", "Accountant"), Ikon: CalculatorIcon }];
+    { href: "/app", label: t("Hari ini", "Today"), Ikon: IKON_HALAMAN["/app"] }, { href: "/app/lempar", label: t("Lempar", "Drop"), Ikon: IKON_HALAMAN["/app/lempar"] },
+    { href: "/app/buku", label: t("Laporan", "Reports"), Ikon: IKON_HALAMAN["/app/buku"] }, { href: "/app/akuntan", label: t("Akuntan", "Accountant"), Ikon: IKON_HALAMAN["/app/akuntan"] }];
   return [
-    { href: "/app", label: t("Hari ini", "Today"), Ikon: HouseSimpleIcon }, { href: "/app/lempar", label: t("Lempar", "Drop"), Ikon: PaperPlaneTiltIcon },
+    { href: "/app", label: t("Hari ini", "Today"), Ikon: IKON_HALAMAN["/app"] }, { href: "/app/lempar", label: t("Lempar", "Drop"), Ikon: IKON_HALAMAN["/app/lempar"] },
     { href: "/app/invoice", label: t("Uang", "Money"), Ikon: WalletIcon }, { href: "/app/orang", label: t("Orang", "People"), Ikon: UsersThreeIcon }];
+}
+
+function IkonHalaman({ href, size = 16 }: { href: string; size?: number }) {
+  const I = IKON_HALAMAN[href] ?? ListIcon;
+  return <I size={size} aria-hidden className="shrink-0" />;
 }
 
 /** Lencana hanya untuk hal yang bisa ditindak (mis. usulan menunggu), tidak tampil bila nol (NN/g, indikator bersifat kondisional). */
@@ -45,7 +44,7 @@ function Lencana({ n, label }: { n?: number; label: string }) {
 
 const aktifDi = (jalur: string, href: string) => (href === "/app" ? jalur === "/app" : jalur === href || jalur.startsWith(`${href}/`));
 
-function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, lencana = {}, labelLencana = "" }: { ruang: Ruang[]; jalur: string; b: Bahasa; guna?: boolean; lipat?: boolean; onPilih?: () => void; lencana?: Record<string, number>; labelLencana?: string }) {
+function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, lencana = {}, labelLencana = "", disemat }: { ruang: Ruang[]; jalur: string; b: Bahasa; guna?: boolean; lipat?: boolean; onPilih?: () => void; lencana?: Record<string, number>; labelLencana?: string; disemat?: ReadonlySet<string> }) {
   const jumlahRuang = (r: Ruang) => r.halaman.reduce((a, x) => a + (lencana[x.href] ?? 0), 0);
   const kini = halamanDari(jalur)?.href;
   const ruangKini = halamanDari(jalur)?.ruang;
@@ -63,7 +62,7 @@ function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, le
               <ul className="mb-2 ml-6 mt-0.5 grid gap-0.5 border-l border-garis pl-2">{r.halaman.map((x) => (
                 <li key={x.href}>
                   <Link href={x.href} aria-current={kini === x.href ? "page" : undefined}
-                    className={`flex items-center gap-2 rounded-[var(--radius-isian)] px-2 py-1.5 text-sm hover:bg-kertas-2 ${kini === x.href ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}>{x.label[b]}<Lencana n={lencana[x.href]} label={labelLencana} /></Link>
+                    className={`flex items-center gap-2 rounded-[var(--radius-isian)] px-2 py-1.5 text-sm hover:bg-kertas-2 ${kini === x.href ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}><IkonHalaman href={x.href} /><span className="truncate">{x.label[b]}</span>{!disemat?.has(x.href) && <Lencana n={lencana[x.href]} label={labelLencana} />}</Link>
                 </li>))}</ul>
             </details>
           );
@@ -84,7 +83,7 @@ function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, le
               <li key={x.href}>
                 <Link href={x.href} onClick={onPilih} aria-current={kini === x.href ? "page" : undefined}
                   className={`block rounded-[var(--radius-isian)] px-2 py-2 text-sm hover:bg-kertas-2 ${kini === x.href ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}>
-                  <span className="flex items-center gap-2">{x.label[b]}<Lencana n={lencana[x.href]} label={labelLencana} /></span>{guna && <span className="block text-xs font-normal text-tinta-2">{x.guna[b]}</span>}
+                  <span className="flex items-center gap-2"><IkonHalaman href={x.href} />{x.label[b]}<Lencana n={lencana[x.href]} label={labelLencana} /></span>{guna && <span className="block text-xs font-normal text-tinta-2">{x.guna[b]}</span>}
                 </Link>
               </li>))}</ul>
           </section>
@@ -94,10 +93,40 @@ function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, le
   );
 }
 
-export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana = {}, kaki }: {
+export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana: lencanaAwal = {}, kaki, pid }: {
   ruang: Ruang[]; mati?: Ruang[]; peran: string; bahasa: Bahasa; teks: Teks; lencana?: Record<string, number>;
-  kaki?: ReactNode;
+  kaki?: ReactNode; pid?: string;
 }) {
+  // U-12 lencana live: jumlah usulan menunggu dihitung ulang saat tabel usulan usaha ini berubah (Supabase Realtime Postgres Changes,
+  // RLS memeriksa setiap pelanggan) dan saat tab kembali aktif. Angka awal dari server.
+  const [lencana, setLencana] = useState(lencanaAwal);
+  const [lencanaDari, setLencanaDari] = useState(lencanaAwal);
+  if (lencanaDari !== lencanaAwal) { setLencanaDari(lencanaAwal); setLencana(lencanaAwal); }
+  useEffect(() => {
+    if (!pid) return;
+    let batal = false;
+    let lepas: (() => void) | undefined;
+    (async () => {
+      const { createBrowserSupabase } = await import("@/lib/supabase/browser");
+      if (batal) return;
+      const sb = createBrowserSupabase();
+      // Realtime memeriksa RLS dengan token sesi; tanpa setAuth kanal tersambung sebagai anon dan tidak menerima perubahan.
+      const { data: sesi } = await sb.auth.getSession();
+      if (batal) return;
+      if (sesi.session) await sb.realtime.setAuth(sesi.session.access_token);
+      const hitung = async () => {
+        const { count } = await sb.from("usulan").select("id", { count: "exact", head: true }).eq("status", "menunggu");
+        if (!batal && typeof count === "number") setLencana((l) => ({ ...l, "/app": count }));
+      };
+      const kanal = sb.channel(`usulan-${pid}`)
+        .on("postgres_changes", { event: "*", schema: "public", table: "usulan", filter: `perusahaan_id=eq.${pid}` }, () => { void hitung(); })
+        .subscribe();
+      const saatTampil = () => { if (document.visibilityState === "visible") void hitung(); };
+      document.addEventListener("visibilitychange", saatTampil);
+      lepas = () => { document.removeEventListener("visibilitychange", saatTampil); void sb.removeChannel(kanal); };
+    })();
+    return () => { batal = true; lepas?.(); };
+  }, [pid]);
   const jalur = usePathname();
   const [menu, setMenu] = useState(false);
   const [panel, setPanel] = useState<string | null>(null);
@@ -115,8 +144,9 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana = {
   }, [menu, panel]);
   // U-09 Disematkan: bawaan per peran, diubah dari tombol sematkan di kepala halaman (localStorage per perangkat).
   const [sematan, setSematan] = useState<string[]>(() => SEMATAN_BAWAAN[peran] ?? SEMATAN_BAWAAN.pemilik); // sama di server dan klien, lalu dibaca dari perangkat
+  const [diatur, setDiatur] = useState(true);
   useEffect(() => {
-    const segarkan = () => setSematan(bacaSematan(peran));
+    const segarkan = () => { setSematan(bacaSematan(peran)); setDiatur(sematanDiatur(peran)); };
     segarkan();
     window.addEventListener(PERISTIWA_SEMAT, segarkan);
     return () => window.removeEventListener(PERISTIWA_SEMAT, segarkan);
@@ -137,21 +167,25 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana = {
           {disemat.length > 0 && (
             <>
               <p className="px-2 pb-1 text-xs font-semibold text-tinta-2">{teks.disematkan}</p>
+              {!diatur && <p className="px-2 pb-2 text-xs text-tinta-2" data-testid="petunjuk-semat">{teks.petunjukSemat}</p>}
               <ul className="mb-4 grid gap-0.5" data-testid="disematkan">{disemat.map((x) => {
-                const Ikon = IKON_RUANG[x.ruang] ?? ListIcon;
                 const aktif = halamanDari(jalur)?.href === x.href;
                 return (
-                  <li key={x.href}>
+                  <li key={x.href} className="group flex items-center gap-1">
                     <Link href={x.href} aria-current={aktif ? "page" : undefined}
-                      className={`flex items-center gap-2 rounded-[var(--radius-isian)] px-2 py-2 text-sm hover:bg-kertas-2 ${aktif ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}>
-                      <Ikon size={18} aria-hidden /><span className="truncate">{x.label[b]}</span><Lencana n={lencana[x.href]} label={teks.menunggu} />
+                      className={`flex min-w-0 flex-1 items-center gap-2 rounded-[var(--radius-isian)] px-2 py-2 text-sm hover:bg-kertas-2 ${aktif ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}>
+                      <IkonHalaman href={x.href} size={18} /><span className="truncate">{x.label[b]}</span><Lencana n={lencana[x.href]} label={teks.menunggu} />
                     </Link>
+                    <button type="button" onClick={() => setSematan(gantiSematan(peran, x.href))}
+                      className="inline-flex size-8 shrink-0 items-center justify-center rounded-full text-tinta-2 opacity-0 hover:bg-kertas-2 hover:text-tinta focus-visible:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100">
+                      <PushPinSlashIcon size={16} aria-hidden /><span className="sr-only">{teks.lepas.replace("{x}", x.label[b])}</span>
+                    </button>
                   </li>);
               })}</ul>
             </>
           )}
           <p className="px-2 pb-1 text-xs font-semibold text-tinta-2">{teks.semuaRuang}</p>
-          <DaftarRuang ruang={ruangBadan} jalur={jalur} b={b} lipat lencana={lencana} labelLencana={teks.menunggu} />
+          <DaftarRuang ruang={ruangBadan} jalur={jalur} b={b} lipat lencana={lencana} labelLencana={teks.menunggu} disemat={new Set(disemat.map((x) => x.href))} />
         </div>
         {/* Kaki tetap: bantuan, peta menu, pengaturan, akun. */}
         <div className="border-t border-garis px-3 py-2" data-testid="kaki-sidebar">
@@ -162,7 +196,7 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana = {
               const aktif = halamanDari(jalur)?.href === x.href;
               return (
                 <li key={x.href}><Link href={x.href} aria-current={aktif ? "page" : undefined} className={`flex items-center gap-2 rounded-[var(--radius-isian)] px-2 py-2 text-tinta hover:bg-kertas-2 ${aktif ? "bg-kertas-2 font-semibold" : ""}`}>
-                  <GearSixIcon size={18} aria-hidden /><span className="truncate">{x.label[b]}</span></Link></li>);
+                  <IkonHalaman href={x.href} size={18} /><span className="truncate">{x.label[b]}</span></Link></li>);
             })}
           </ul>
           {kaki && <div className="mt-1 flex items-center justify-between gap-2 border-t border-garis px-2 pt-2 text-sm">{kaki}</div>}
