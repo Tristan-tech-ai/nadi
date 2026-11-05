@@ -67,7 +67,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | JU-02 | Bagan akun, saldo awal, jurnal umum, tutup buku, kunci periode | Daftar Akun/*; Daftar Lainnya/Daftar Penutupan Buku & Kunci Periode | ledger, 17 akun bawaan, posting/balik jurnal, kunci/buka periode, saldo awal + penyeimbang, tutup buku tahunan ke laba ditahan, neraca saldo CSV (M-01) | ADA | M-01 |
 | JU-03 | Penjualan: penawaran, pemesanan, pengiriman (surat jalan), penagihan, uang muka, retur, draft dan approval, impor templat | Penjualan/*; Pemenuhan/Penjualan; Daftar Lainnya/Cara Pembayaran, Syarat Pembayaran | invoice bernomor, QRIS statis, pengingat 4 tahap; /app/jual: penawaran > pesanan > surat jalan > invoice, uang muka, retur/nota kredit dengan stok kembali (M-03) | SEBAGIAN: draf dan approval penjualan, impor templat | M-03 |
 | JU-04 | Multiple withholding (potong PPh di invoice), tukar invoice/faktur | Penjualan/Multiple Withholding; Penjualan/Tukar Invoice; Pembelian/Tukar Faktur; Daftar Lainnya/Pajak | lunas dipotong PPh oleh pembeli ke 1-430, jenis PPh 23/4(2)/22 (M-03) | SEBAGIAN: tukar invoice/faktur | M-03, M-09 |
-| JU-05 | e-Meterai pada invoice | Penjualan/Stamp eMeterai | tidak ada | MITRA (Peruri lewat distributor resmi) | M-17 |
+| JU-05 | e-Meterai pada invoice | Penjualan/Stamp eMeterai | tanda wajib meterai pada dokumen bertanda tangan (M-17) | MITRA (Peruri lewat distributor resmi) | M-17 |
 | JU-06 | Pembelian: permintaan, penawaran, pesanan, penerimaan, tagihan pemasok, pembayaran, approval | Pembelian/*; Pemenuhan/Pembelian | /app/beli: permintaan (PR), pesanan (PO), penerimaan barang masuk stok, tagihan pemasok dicocokkan ke PO (selisih), jatuh tempo, bayar sebagian, retur/nota debit, saldo per pemasok; nota Lempar menyebut PO yang cocok dan jadi hutang saat disetujui; PIB impor | SEBAGIAN: penawaran harga dari pemasok dan approval berjenjang PO belum | M-04 |
 | JU-07 | Biaya dengan approval draft | Biaya/* | Lempar nota, Feed | ADA (dasar); pemetaan akun per kategori belum | M-04 |
 | JU-08 | Kontak: pelanggan, supplier, karyawan, pihak lain, grup, kredit/debit memo | Kontak/* | graf usaha (pihak), saldo per pelanggan (/app/jual) dan per pemasok (/app/beli), nota kredit dan nota debit | SEBAGIAN: buku kontak terpusat (alamat, NPWP, grup) belum | M-03, M-04 |
@@ -139,16 +139,16 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 
 | ID | Kemampuan Mekari | Bagian | Nadi sekarang | Status | Tugas |
 |---|---|---|---|---|---|
-| SI-01 | Tanda tangan elektronik tersertifikasi | Document/Tanda Tangan Dokumen; Mobile App/Menandatangani Dokumen | tidak ada | MITRA (PSrE berinduk Kominfo); pengganti: tanda tangan elektronik tidak tersertifikasi dengan jejak bukti (lihat pihak-ketiga.md) | M-17 |
-| SI-02 | Unggah dan kirim dokumen, urutan penanda tangan, pengingat, kedaluwarsa, kelola dokumen | Document/Unggah dan Kirim Dokumen, Mengelola Dokumen, Sekilas Menu Dokumen | surat keluar terbit + QR | BELUM | M-17 |
-| SI-03 | Templat dan kirim massal, berbagi templat | Templates/* | templat surat keluar | SEBAGIAN | M-17 |
-| SI-04 | Repositori kontrak, field lintas perusahaan, pengingat berakhir | Contracts/* | kontrak_selesai di gerbang gaji | BELUM | M-17 |
+| SI-01 | Tanda tangan elektronik tersertifikasi | Document/Tanda Tangan Dokumen; Mobile App/Menandatangani Dokumen | tanda tangan elektronik tidak tersertifikasi (PP 71/2019 Pasal 60 ayat (4)) dengan jejak bukti, disebut jujur di setiap layar (M-17) | MITRA untuk yang tersertifikasi (PSrE berinduk Kominfo); tidak tersertifikasi ADA | M-17 |
+| SI-02 | Unggah dan kirim dokumen, urutan penanda tangan, pengingat, kedaluwarsa, kelola dokumen | Document/Unggah dan Kirim Dokumen, Mengelola Dokumen, Sekilas Menu Dokumen | /app/tanda-tangan: dokumen teks, penanda tangan berurutan, tautan sekali pakai, kedaluwarsa, tolak, batal, status per penanda (M-17) | ADA | M-17 |
+| SI-03 | Templat dan kirim massal, berbagi templat | Templates/* | templat dengan {nama} dan kirim massal sampai 50 penerima (M-17) | ADA | M-17 |
+| SI-04 | Repositori kontrak, field lintas perusahaan, pengingat berakhir | Contracts/* | tanggal berakhir kontrak dan pengingat N hari sebelumnya, penanda tangan tertunda > 2 hari (M-17) | SEBAGIAN: field kustom lintas perusahaan belum | M-17 |
 | SI-05 | Approval request, workflow, form template | Approvals/* | Feed usulan | SEBAGIAN | M-17, M-20 |
-| SI-06 | e-Meterai (beli, bubuhkan) | e-Meterai/* | tidak ada | MITRA (Peruri lewat distributor resmi) | M-17 |
-| SI-07 | Signing proof (bukti tanda tangan) | Signing Proof/*; Mobile App/Signing Proof | /v/<kode> verifikasi surat | SEBAGIAN | M-17 |
+| SI-06 | e-Meterai (beli, bubuhkan) | e-Meterai/* | tanda wajib meterai menurut UU 10/2020 Pasal 3 ayat (2) huruf a dan g (M-17) | MITRA (pembelian dan pembubuhan e-Meterai lewat distributor resmi Peruri); penanda wajib meterai ADA | M-17 |
+| SI-07 | Signing proof (bukti tanda tangan) | Signing Proof/*; Mobile App/Signing Proof | bukti tanda tangan publik /tanda/cek/<kode>: penanda dan waktu, isi utuh (sidik SHA-256), rantai jejak hash utuh, cocokkan salinan di perangkat (M-17) | ADA | M-17 |
 | SI-08 | Kontak, tag, insight, custom fields, preferensi, notifikasi | Contacts/*; Insight/*; Settings/*; Getting Started/* | tidak ada | BELUM | M-17 |
 | SI-09 | Fitur AI dokumen (ringkas, cari klausul) | Document/Fitur AI | Lempar membaca 14 jenis berkas | SEBAGIAN | M-17 |
-| SI-10 | Cap perusahaan digital (corporate stamp) | pusat bantuan Mekari umum (Corporate Stamp) | tidak ada | BELUM (gambar cap tidak tersertifikasi) | M-17 |
+| SI-10 | Cap perusahaan digital (corporate stamp) | pusat bantuan Mekari umum (Corporate Stamp) | cap perusahaan sebagai gambar di dokumen, diberi label tidak tersertifikasi (M-17) | SEBAGIAN: segel elektronik tersertifikasi (PP 71/2019 Pasal 59 ayat (2)) butuh PSrE (MITRA) | M-17 |
 | SI-11 | Aplikasi mobile, FAQ, video, rilis | Mobile App/*; FAQ; Video; What's New | PWA | ADA | - |
 
 ## Expense (pengeluaran, perjalanan, pembelian, kartu)
@@ -191,9 +191,9 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 
 | Status | Jumlah |
 |---|---|
-| ADA | 35 |
+| ADA | 38 |
 | SEBAGIAN | 70 |
-| BELUM | 10 |
+| BELUM | 7 |
 | MITRA | 17 |
 | LUAR | 2 |
 
