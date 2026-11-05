@@ -40,3 +40,13 @@ html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; backgro
 .stat b { background: rgba(233,168,37,0.55); }
 .tok { float: right; margin-left: 14px; padding: 2px 12px; border-radius: 999px; border: 2px solid #5B574F; font-family: var(--font-plex-mono), monospace; font-weight: 700; font-size: 22px; }
 .tok.nol { border-color: #23704A; color: #23704A; display: inline-block; transform-origin: 50% 50%; }
+.chat { position: absolute; left: 360px; top: 60px; width: 1200px; height: 960px; background: #FFFDF8; border: 1px solid #DDD5C6; border-radius: 18px; box-shadow: 0 24px 60px rgba(28,27,24,0.12); overflow: hidden; }
+.chat-kepala { height: 70px; display: flex; align-items: center; padding: 0 32px; border-bottom: 1px solid #DDD5C6; font-size: 24px; font-weight: 600; color: #5B574F; }
+.chat-isi { position: absolute; left: 0; right: 0; top: 90px; padding: 0 40px; }
+.cb { margin: 0 0 22px; max-width: 820px; padding: 18px 24px; border-radius: 20px; font-size: 30px; line-height: 1.4; opacity: 0; }
+.cb.u { margin-left: auto; background: #EFE9DD; }
+.cb.a { background: transparent; padding-left: 0; }
+.cb.t { background: #F6F2EA; border: 2px solid #DDD5C6; font-size: 24px; font-weight: 700; }
+.cb .mono, .mono { font-family: var(--font-plex-mono), monospace; font-weight: 400; color: #23704A; }
+.chip { display: inline-block; margin: 0 8px 8px 0; padding: 4px 14px; border-radius: 8px; background: #FFFDF8; border: 1px solid #DDD5C6; font-family: var(--font-plex-mono), monospace; font-size: 22px; }
+.chat-tulis { position: absolute; left: 40px; right: 40px; bottom: 30px; height: 70px; border: 1px solid #DDD5C6; border-radius: 14px; display: flex; align-items: center; padding: 0 24px; color: #A8A196; font-size: 26px; background: #FFFDF8; }

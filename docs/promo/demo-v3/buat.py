@@ -63,6 +63,7 @@ def kamera(fx, fy, s, tx=W / 2, ty=H / 2):
 
 def bangun():
     f = Film()
+    G3 = 48.0  # panjang babak 3 MCP (sisipan setelah babak 2)
     # ---------- Babak 0 kait (0 - 6,5 dtk): nota dipindai, tarik mundur, nota menjadi kartu usulan asli ----------
     NOTA = [("UD Sumber Rejeki", "judul"), ("Jl. Gatot Subroto Barat No. 18, Denpasar", "kecil"), ("-", "garis"),
             ("No: NT-4671", ""), ("Tgl: 13/10/2026", ""), ("-", "garis"),
@@ -168,7 +169,7 @@ def bangun():
     f.add(f'tl.to("#m2", {{y: -{round(gulir * 0.55)}, duration: {27 / FPS:.3f}, ease: "power4.out"}}, {T2c + 3.2});')
 
     # ---------- Babak 4 Feed: kartu diangkat, Setujui menjadi cap (26 - 36 dtk) ----------
-    T4 = 26.0
+    T4 = 26.0 + G3
     fe, kn, dc = U["feed"], U["kartu-nota"], U["kartu-nota-dicap"]
     OX, OY = 340, fe["nota"]["y"] - 330  # potongan Feed yang tampil di jendela
     JX, JY, JW, JH = 200, 60, 1520, 960
@@ -189,7 +190,7 @@ def bangun():
             f'<div id="capbesar" class="capbesar" style="left:{nx + 150 * S4}px; top:{ny + 30 * S4}px">DITERIMA</div>'
             f'<div id="tutup" style="position:absolute; left:{nx - 4}px; top:{ny - 4}px; width:{640 * S4 + 8}px; height:{178 * S4 + 8}px; background:#F6F2EA; opacity:0"></div>'
             f'<div class="kursor" id="kur4">{KURSOR}</div></div>')
-    f.adegan("b4", T4, 36.0, isi4, z=4)
+    f.adegan("b4", T4, 36.0 + G3, isi4, z=4)
     f.add(f'tl.set("#b4k", {json.dumps(kamera(nx + 320 * S4, ny + 89 * S4, 1.0))}, {T4});')
     # 27,0: sekeliling meredup, kartu terangkat sedikit (skala 1,05, bayangan) - "satu kartu yang perlu keputusanmu"
     f.add(f'tl.to("#redup", {{opacity: 0.72, duration: 0.35, ease: "power2.out"}}, {T4 + 0.9});')
@@ -213,7 +214,7 @@ def bangun():
     f.add(f'tl.to("#b4k", {{x: 0, y: 0, scale: 0.86, duration: {48 / FPS:.3f}, ease: MUNDUR}}, {TK + 3.0:.3f});')
 
     # ---------- Babak 5 invoice + QRIS (36 - 46 dtk) ----------
-    T5 = 36.0
+    T5 = 36.0 + G3
     k5, s5 = f.ketik("k5", "Tagih. Pelanggan bayar QRIS.", T5 + 0.2, cps=30)
     ip = U["invoice-publik"]
     S5 = 1.12
@@ -232,7 +233,7 @@ def bangun():
             f'<div id="stab5" class="stab" style="left:{tx - ip["totalrp"]["w"] * S5 / 2 - 4}px; top:{ty - 13}px; width:{ip["totalrp"]["w"] * S5 + 8}px; height:26px"></div>'
             f'<div class="notif" id="notif5" style="left:{W - 620}px; top:70px"><b>Pembayaran masuk</b><br>Rp1.448.000 dari Hotel Segara, lewat QRIS</div>'
             f'</div>')
-    f.adegan("b5", T5, 46.0, isi5, z=5)
+    f.adegan("b5", T5, 46.0 + G3, isi5, z=5)
     f.add(f'tl.set("#k5-c", {{opacity: 1}}, {T5 + 0.2});')
     T5b = s5 + 0.8
     f.add(f'tl.set("#b5t", {{opacity: 0}}, {T5b:.3f});')
@@ -249,7 +250,7 @@ def bangun():
     f.add(f'tl.to("#notif5", {{opacity: 0, duration: 0.3}}, {TN + 3.4:.3f});')
 
     # ---------- Babak 7 Mata (46 - 58 dtk): footage CCTV PLACEHOLDER, lalu peta panas asli ----------
-    T7 = 46.0
+    T7 = 46.0 + G3
     k7, s7 = f.ketik("k7", "Kamera menghitung. Wajah tidak disimpan.", T7 + 0.2, cps=30)
     pp = U["peta-panas"]
     S7 = 1.5
@@ -260,7 +261,7 @@ def bangun():
             '<div style="position:absolute; right:40px; bottom:36px; color:#ECE7DD; font-size:34px; font-weight:700" id="hit7">Masuk 0 &middot; Keluar 0</div></div>'
             f'<div id="b7k" class="kam" style="opacity:0"><div class="jendela" style="left:{PX - 30}px; top:60px; width:{pp["lebar"] * S7 + 60}px; height:960px"></div>'
             f'<div style="position:absolute; left:{PX}px; top:{PY}px; transform:scale({S7}); transform-origin:0 0">{frag("peta-panas")}</div></div>')
-    f.adegan("b7", T7, 58.0, isi7, z=7)
+    f.adegan("b7", T7, 58.0 + G3, isi7, z=7)
     f.add(f'tl.set("#k7-c", {{opacity: 1}}, {T7 + 0.2});')
     T7b = s7 + 0.8
     f.add(f'tl.set("#b7t", {{opacity: 0}}, {T7b:.3f});')
@@ -276,7 +277,7 @@ def bangun():
 
     # ---------- Babak 9 belajar format (58 - 70 dtk): struk SPBU ke-1 dibaca AI dan dipelajari, struk ke-4 tanpa AI ----------
     # Teks status = kamus asli klaim (terbacaAi, belajarStruk, terbacaAturan); angka = eval produksi T-01B (struk-belajar.spec).
-    T9 = 58.0
+    T9 = 58.0 + G3
     k9, s9 = f.ketik("k9", "Format yang sama, dibaca tanpa AI.", T9 + 0.2, cps=30)
     def struk(sid, no, waktu, total, x):
         b = [("SPBU " + no, "judul"), ("JL. RAYA SINGARAJA", "kecil"), ("Waktu : " + waktu, ""), ("Nama Produk : PERTALITE", ""),
@@ -293,7 +294,7 @@ def bangun():
             f'<div class="kolom" style="left:150px">{st1}<div class="lbl">Struk pertama dari SPBU ini</div>{status1}</div>'
             f'<div class="kolom" id="kol4" style="left:1030px; opacity:0">{st4}<div class="lbl">Struk keempat, SPBU lain di jalan yang sama</div>{status4}</div>'
             f'</div>')
-    f.adegan("b9", T9, 70.0, isi9, z=9)
+    f.adegan("b9", T9, 70.0 + G3, isi9, z=9)
     f.add(f'tl.set("#k9-c", {{opacity: 1}}, {T9 + 0.2});')
     T9b = s9 + 0.8
     f.add(f'tl.set("#b9t", {{opacity: 0}}, {T9b:.3f});')
@@ -311,21 +312,67 @@ def bangun():
     f.add(f'tl.fromTo("#tok4", {{scale: 1.6}}, {{scale: 1, duration: 0.3, ease: "power3.out"}}, {T94 + 0.85:.3f});')
 
     # ---------- Babak 11 kartu akhir (70 - 76 dtk): cap turun, menjadi logo Nadi asli, satu kalimat, URL ----------
-    T11 = 70.0
+    T11 = 70.0 + G3
     logo = re.search(r'<svg[^>]*aria-label="Nadi".*?</svg>', open(os.path.join(SUMBER, "app", "feed.html"), encoding="utf8").read(), re.S).group(0)
     logo = re.sub(r'width="\d+" height="\d+"', 'width="220" height="220"', logo, count=1)
     isi11 = (f'<div id="capakhir" class="capbesar" style="left:{W / 2 - 170}px; top:330px">DITERIMA</div>'
              f'<div id="logo11" style="position:absolute; left:{W / 2 - 110}px; top:300px; width:220px; height:220px; opacity:0">{logo}</div>'
              '<div class="kal" id="k11" style="top:600px; opacity:0">Lempar berkasnya. Nadi yang merapikan.</div>'
              '<div class="kal dua" id="u11" style="top:720px; opacity:0">nadi-swart.vercel.app/demo</div>')
-    f.adegan("b11", T11, 76.0, isi11, z=11)
+    f.adegan("b11", T11, 76.0 + G3, isi11, z=11)
     f.add(f'tl.fromTo("#capakhir", {{opacity: 0, scale: 2.4, rotation: -14}}, {{opacity: 1, scale: 1, rotation: -7, duration: 0.16, ease: "power3.in"}}, {T11 + 0.3});')
     f.add(f'tl.to("#capakhir", {{opacity: 0, scale: 0.6, rotation: 0, duration: 0.3, ease: TEKAN}}, {T11 + 1.2});')
     f.add(f'tl.fromTo("#logo11", {{opacity: 0, scale: 0.6}}, {{opacity: 1, scale: 1, duration: 0.35, ease: "power3.out"}}, {T11 + 1.3});')
     f.add(f'tl.fromTo("#k11", {{opacity: 0, y: 16}}, {{opacity: 1, y: 0, duration: 0.3, ease: "power2.out"}}, {T11 + 1.9});')
     f.add(f'tl.fromTo("#u11", {{opacity: 0}}, {{opacity: 1, duration: 0.3}}, {T11 + 2.5});')
 
-    durasi = 76.0
+    # ---------- Babak 3 kerja dari AI-mu lewat MCP (26 - 26+G3 dtk) ----------
+    # Jendela chat NETRAL (tanpa logo atau nama aplikasi pihak ketiga); alat tulis_draf/ubah_draf = alat MCP Nadi yang sungguhan
+    # (src/lib/mcp/protokol.ts); layar tinjau = DOM asli (scripts/promo-draf.mjs, draf 15 baris dari karyawan-berantakan.xlsx).
+    T3 = 26.0
+    k3a, s3a = f.ketik("k3a", "Atau kerja dari AI-mu sendiri.", T3 + 0.2, cps=30)
+    CHAT = [
+        ("u", '<span class="chip">karyawan-berantakan.xlsx</span><span class="chip">harga-berantakan.xlsx</span><br>Tolong siapkan data karyawan tokoku untuk Nadi.', 3.2),
+        ("a", "Aku baca dulu Excel-nya. Ada 10 orang, tanggal masuk dan gaji ditulis macam-macam. Satu nama tercatat dua kali.", 5.6),
+        ("t", "Nadi &middot; tulis_draf<br><span class=\"mono\">15 baris dikirim ke Nadi untuk kamu periksa</span>", 8.4),
+        ("u", "Budi pindah ke kasir pagi ya. Yang dobel biar aku cek sendiri.", 11.0),
+        ("t", "Nadi &middot; ubah_draf<br><span class=\"mono\">Topi Budi Santoso: kasir &rarr; Kasir pagi</span>", 13.6),
+        ("a", "Sudah. Drafnya siap di Nadi. Gaji tidak aku centang, kamu yang periksa.", 15.4),
+    ]
+    gel = "".join(f'<div class="cb {k}" id="c3-{i}">{t}</div>' for i, (k, t, _) in enumerate(CHAT))
+    isi3 = (f'<div class="kal" id="b3t" style="top:480px">{k3a}</div>'
+            f'<div id="b3c" class="chat" style="opacity:0"><div class="chat-kepala">AI-mu &middot; tersambung ke Nadi lewat MCP</div>'
+            f'<div class="chat-isi" id="c3isi">{gel}</div><div class="chat-tulis">Tulis pesan&hellip;</div></div>')
+    f.adegan("b3", T3, T3 + 19.0, isi3, z=3)
+    f.add(f'tl.set("#k3a-c", {{opacity: 1}}, {T3 + 0.2});')
+    f.add(f'tl.set("#b3t", {{opacity: 0}}, {s3a + 0.9:.3f});')
+    f.add(f'tl.set("#b3c", {{opacity: 1}}, {s3a + 0.9:.3f});')
+    for i, (k, t, w) in enumerate(CHAT):
+        f.add(f'tl.fromTo("#c3-{i}", {{opacity: 0, y: 20}}, {{opacity: 1, y: 0, duration: 0.3, ease: "power2.out"}}, {T3 + w:.3f});')
+    f.add(f'tl.to("#c3isi", {{y: -260, duration: 0.6, ease: TEKAN}}, {T3 + 10.6:.3f});')
+    f.add(f'tl.to("#c3isi", {{y: -520, duration: 0.6, ease: TEKAN}}, {T3 + 15.0:.3f});')
+    # Layar tinjau draf asli: dekat ke ringkasan + baris Perlu dicek, lalu catatan gaji, lalu Terapkan.
+    T3b = T3 + 19.0
+    td = U["tinjau-draf"]
+    S3 = 1.0
+    OYT = 60
+    isi3b = (f'<div id="b3k" class="kam"><div class="jendela" data-layout-allow-overflow style="left:200px; top:40px; width:1520px; height:1000px">'
+             f'<div class="isi" id="td" data-layout-allow-overflow style="left:-28px; top:{-OYT}px">{frag("tinjau-draf")}</div></div>'
+             f'<div class="notif" id="n3" style="left:1180px; top:80px"><b>10 baris diterapkan.</b><br>Bisa dibatalkan selama 10 menit.</div></div>')
+    f.adegan("b3b", T3b, T3b + 29.0, isi3b, z=3)
+    def tdp(r, fy=0.5):
+        return 200 - 28 + r["x"] + r["w"] / 2, 40 - OYT + r["y"] + r["h"] * fy
+    rx, ry = tdp(td["ringkas"])
+    f.add(f'tl.set("#b3k", {json.dumps(kamera(rx, ry + 120, 1.6))}, {T3b});')
+    f.add(f'tl.to("#b3k", {{x: 0, y: 0, scale: 1, duration: {44 / FPS:.3f}, ease: MUNDUR}}, {T3b + 2.2:.3f});')
+    # gulir ke gaji (tidak dicentang otomatis), lalu ke tombol Terapkan
+    gx, gy = tdp(td["gaji"])
+    f.add(f'tl.to("#td", {{y: -{round(gy - 380)}, duration: 1.0, ease: TEKAN}}, {T3b + 6.5:.3f});')
+    tx, ty = tdp(td["terapkan"])
+    f.add(f'tl.to("#td", {{y: -{round(ty - 760)}, duration: 1.0, ease: TEKAN}}, {T3b + 11.0:.3f});')
+    f.add(f'tl.fromTo("#n3", {{opacity: 0, y: -20}}, {{opacity: 1, y: 0, duration: 0.3, ease: "power2.out"}}, {T3b + 13.5:.3f});')
+
+    durasi = 76.0 + G3
     css = open(os.path.join(AKAR, "gaya.css"), encoding="utf8").read()
     html = f"""<!doctype html>
 <html lang="id">

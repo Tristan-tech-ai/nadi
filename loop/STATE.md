@@ -3,6 +3,7 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
+- CHECKPOINT tick 304 (konteks penuh): babak 3 MCP disisipkan di docs/promo/demo-v3/buat.py (film 124 dtk) tetapi DUA MASALAH TERBUKA dicatat di CATATAN.md (chat menabrak kepala; tinjau-draf bertumpuk satu kolom). Perbaiki dulu, render, tinjau, lalu lanjut babak 6 gaji, 8 otomasi/tanya/Sarapan, 10 kerangka, perpanjang 1/2/4/9 + pengawas bukan AI, audio, review berdampingan, lalu proposal PDF.
 - URUTAN TRISTAN 6 Nov 2026: (1) video lengkap 4:40 + audio, (2) review berdampingan dengan rujukan bingkai demi bingkai dan iterasi, (3) LANGSUNG proposal PDF PP-01, (4) baru tugas lain. Detail di docs/promo/demo-v3/CATATAN.md bagian URUTAN KERJA. DOM tinjau draf (babak MCP) sudah ditangkap.
 - TEGURAN TRISTAN 6 Nov 2026: film harus ±4:40 (maks 5:00) dan memuat SEMUA fitur utama (self improvement + pengawas bukan AI, kerja dari AI mereka lewat MCP, dll). Rencana durasi per babak + status ada di docs/promo/demo-v3/CATATAN.md bagian TEGURAN TRISTAN. Film sekarang 76 dtk kerangka. Kerjakan babak BELUM dulu (3 MCP, 6 gaji, 8 otomasi/tanya/Sarapan, 10 kerangka), lalu perpanjang babak 1, 2, 4, 9.
 - CHECKPOINT tick 304: video demo v3 70 dtk (babak 0,1,2,4,5,7,9) dirender dan ditinjau; V-07F done. BERIKUTNYA V-07G (babak 3 MCP: tangkap DOM /app/siapkan/draf lewat apps/web/scripts/promo-dom.mjs di usaha contoh; babak 6 gaji, 8 otomasi/tanya, 10 satu kerangka, 11 kartu akhir logo + cap), lalu V-07H audio, V-14, V-04 footage. Baca CHECKPOINT di docs/promo/demo-v3/CATATAN.md.

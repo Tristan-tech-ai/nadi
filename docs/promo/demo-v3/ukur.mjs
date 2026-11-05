@@ -8,6 +8,7 @@ const { chromium } = require("@playwright/test");
 const AKAR = import.meta.dirname;
 const APP = join(AKAR, "..", "film-langsung", "assets", "app");
 const TARGET = {
+  "tinjau-draf": { tinjau: "[data-testid=tinjau-draf]", ringkas: "[data-testid=ringkas-draf]", terapkan: "[data-testid=terapkan-draf]", ragu: "text=Perlu dicek: Keyakinan AI 60%", judul: "h1", gaji: "text=Gaji tidak dicentang otomatis" },
   "invoice-publik": { status: "text=/belum dibayar/i", total: "text=Total >> nth=-1", totalrp: "text=Rp1.448.000 >> nth=-2", qris: "svg[viewBox='0 0 39 39']", nominal: "text=Pindai, lalu ketik nominal" },
   "kartu-nota-dicap": { kartu: "article", cap: ".cap-turun > span" },
   "kartu-nota": { kartu: "article", judul: "article h3", dampak: "span[title='Rp376.500']", setujui: "button:text-is('Setujui')", tolak: "button:text-is('Tolak')", baru: "[data-testid=penanda-baru]" },
