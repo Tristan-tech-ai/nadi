@@ -318,3 +318,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 6 Nov 2026 tick 298 selesai: 5 wajib (U-11, W-10, T-02 deploy baca-berkas v18, U-05 Mulai di Nadi + keadaan kosong, V-01 riset video) diuji produksi; wajib 186/202, V 1/9.
 - 6 Nov 2026 tick 299 selesai: 5 wajib (U-08 keterpahaman sesudah, V-10, V-02 sound design, V-03 7 rujukan, V-05 paket audio v2); wajib 191/202, V 5/9.
 - 6 Nov 2026 tick 300 selesai: 5 wajib (V-04 aset demo, V-06 storyboard, V-12 pelacakan Mata, T-01A belajar tanya, T-01C belajar pindah) diuji produksi; T-01 dipecah A-D; wajib 193/202, V 7/9.
+| 2026-11-06 tick 301 | T-01B done (struk belajar, token 0 di struk ke-4); gate jejak konteks produk; video dibuka ulang atas penilaian Tristan, V-13 dipecah per video rujukan |
