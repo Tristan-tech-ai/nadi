@@ -4009,8 +4009,10 @@
    "accept": "unggahan /app/pindah yang judul kolomnya tidak cocok format bawaan dikirim ke model ringan yang memetakan judul kolom ke bidang Nadi (struktur saja, tanpa isi baris); pengawas memeriksa pemetaan (judul ada di berkas, bidang dari daftar tetap, tipe sel cocok pada contoh baris) lalu disimpan bayangan per usaha; berkas dengan judul kolom sama berikutnya dipetakan tanpa model setelah cocok 2 kali (token 0, tes); layar menulis 'Nadi sedang mempelajari format baru, sekali saja'",
    "how": "src/lib/pindah/format.ts, supabase/functions/baca-berkas/pengawas.ts",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T23:55:24"
+   "status": "done",
+   "created": "2026-11-05T23:55:24",
+   "done": "2026-11-06T00:21:40",
+   "result": "f7b39ba; migrasi pindah_peta md5 0d3a8538 sama, tes SQL 12/12, Edge Function pelajari-pindah v2 (hanya judul+tipe kolom ke model), peta.test 14/14 (salinan identik + format ringkas berperilaku sama); e2e pindah-belajar: model lalu tanpa AI (produksi: tanpa AI), pindah.spec produksi lulus"
   },
   {
    "id": "T-01D",
