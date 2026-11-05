@@ -84,7 +84,7 @@ def kamera(fx, fy, s, tx=W / 2, ty=H / 2):
 def bangun():
     f = Film()
     # Urutan dan durasi babak (detik). Waktu di dalam babak relatif terhadap M[babak]; menyisipkan atau memperpanjang cukup di sini.
-    D = {0: 6.5, 1: 30.0, 2: 20.0, 3: 48.0, 4: 22.0, 5: 10.0, 6: 22.0, 7: 28.0, 8: 28.0, 9: 36.0, 10: 12.0, 11: 8.0}
+    D = {0: 6.5, 1: 30.0, 2: 20.0, 3: 48.0, 4: 22.0, 5: 10.0, 6: 22.0, 7: 32.5, 8: 28.0, 9: 36.0, 10: 12.0, 11: 8.0}
     M, TOTAL = {}, 0.0
     for k in D:
         M[k], TOTAL = TOTAL, TOTAL + D[k]
@@ -383,30 +383,46 @@ def bangun():
     f.add(f'tl.fromTo("#stab5", {{scaleX: 0}}, {{scaleX: 1, duration: 0.4, ease: "power2.out"}}, {TN + 1.1:.3f});')
     f.add(f'tl.to("#notif5", {{opacity: 0, duration: 0.3}}, {TN + 3.4:.3f});')
 
-    # ---------- Babak 7 Mata (46 - 58 dtk): footage CCTV PLACEHOLDER, lalu peta panas asli ----------
+    # ---------- Babak 7 Mata: footage CCTV asli (Pexels 37706044, ASSETS.md) + lapisan pelacakan Nadi, lalu peta panas asli ----------
     T7 = M[7]
     k7, s7 = f.ketik("k7", "Kamera menghitung. Wajah tidak disimpan.", T7 + 0.2, cps=30)
     pp = U["peta-panas"]
     S7 = 1.5
     PX, PY = W / 2 - pp["lebar"] * S7 / 2, -pp["svg"]["y"] * S7 + 80
     isi7 = (f'<div class="kal" id="b7t" style="top:480px">{k7}</div>'
-            f'<div id="b7v" style="position:absolute; left:240px; top:120px; width:1440px; height:810px; background:#2A2925; border-radius:14px; opacity:0; overflow:hidden">'
-            '<div class="ph" style="left:40px; top:40px; background:#2A2925; color:#F0B53D; border-color:#F0B53D">PLACEHOLDER: footage CCTV toko asli berlisensi bebas (V-04), dengan pelacakan Mata v2 (V-12 dirancang ulang)</div>'
-            '<div style="position:absolute; right:40px; bottom:36px; color:#ECE7DD; font-size:34px; font-weight:700" id="hit7">Masuk 0 &middot; Keluar 0</div></div>'
             f'<div id="b7k" class="kam" style="opacity:0"><div class="jendela" style="left:{PX - 30}px; top:60px; width:{pp["lebar"] * S7 + 60}px; height:960px"></div>'
             f'<div id="pp7" style="position:absolute; left:{PX}px; top:{PY}px; transform:scale({S7}); transform-origin:0 0">'
             + bungkus(frag("peta-panas").replace('data-testid="panas-jumlah">177<', 'data-testid="panas-jumlah"><span id="n177">177</span><', 1),
                       "Pintu &gt; Lorong B &gt; Antrean &gt; Kasir &gt; Antrean &gt; Pintu", "pj1")
             + '</div></div>')
-    f.adegan("b7", T7, T7 + 20.0, isi7, z=7)
+    f.adegan("b7", T7, T7 + 24.5, isi7, z=7)
     f.add(f'tl.set("#k7-c", {{opacity: 1}}, {T7 + 0.2});')
     T7b = s7 + 0.8
     f.add(f'tl.set("#b7t", {{opacity: 0}}, {T7b:.3f});')
-    f.add(f'tl.set("#b7v", {{opacity: 1}}, {T7b:.3f});')
-    for i in range(1, 12):  # hitungan sesuai jawaban korpus Mata (11 masuk, 11 keluar) sampai footage asli terpasang
-        f.add(f'tl.set("#hit7", {{textContent: "Masuk {i} · Keluar {max(0, i - 1)}"}}, {T7b + 0.35 * i:.3f});')
-    T7c = T7b + 4.6
-    f.add(f'tl.to("#b7v", {{opacity: 0, duration: 0.3}}, {T7c:.3f});')
+    # Footage asli lorong bawah (1440x810, assets/mata/pasar.mp4) dan kanvas lapisan pelacakan Nadi: jejak = keluaran Pelacak aplikasi
+    # pada footage ini (apps/web/src/lib/mata/jejak-nyata.test.ts, MATA_TULIS), digambar oleh fungsi yang sama dengan layar Mata
+    # (src/lib/mata/gambar.ts, ditranspilasi ke assets/mata/gambar.js). Posisi antarbingkai (data 5 fps) diinterpolasi.
+    DV = 9.0
+    VX, VY = 240, 135
+    f.klip.append(f'<video id="v7" class="clip" src="assets/mata/pasar.mp4" muted playsinline data-start="{T7b:.3f}" data-duration="{DV}" data-track-index="7" '
+                  f'style="position:absolute; left:{VX}px; top:{VY}px; width:1440px; height:810px; z-index:8; border-radius:14px; object-fit:cover"></video>')
+    f.adegan("b7c", T7b, T7b + DV, f'<canvas id="kv7" width="1440" height="810" style="position:absolute; left:{VX}px; top:{VY}px; width:1440px; height:810px; border-radius:14px"></canvas>', latar="transparent", z=9)
+    gjs = open(os.path.join(AKAR, "assets", "mata", "gambar.js"), encoding="utf8").read().replace("export function", "function").replace("export {};", "")
+    mata = open(os.path.join(AKAR, "assets", "mata", "jejak.json"), encoding="utf8").read()
+    f.add(gjs)
+    f.add(f"const MATA = {mata};")
+    f.add('''const kv7 = document.getElementById("kv7"), kg7 = kv7.getContext("2d");
+function lukis7(t) {
+  kg7.clearRect(0, 0, 1440, 810);
+  const per = MATA.per, f = Math.min(per.length - 1.001, t * MATA.fps), i = Math.floor(f), a = f - i, A = per[i], B = per[i + 1];
+  const jejak = A.jejak.map((j) => { const k = B.jejak.find((q) => q.nomor === j.nomor); if (!k) return j;
+    const x = j.x + (k.x - j.x) * a, y = j.y + (k.y - j.y) * a; return { ...j, x, y, garis: [...j.garis, [x, y]] }; });
+  gambarMata(kg7, 1440, 810, { jejak, zona: MATA.zona, pintu: A.pintu, teks: { hud: "Mata · di perangkat ini", masuk: "Masuk", keluar: "Keluar" },
+    warna: { aksen: "#E9A825", terang: "white", gelap: "black", hidup: "#4FB07F" } });
+}
+const o7 = { t: 0 };''')
+    f.add(f'tl.to(o7, {{t: {DV}, duration: {DV}, ease: "none", onUpdate: () => lukis7(o7.t)}}, {T7b:.3f});')
+    T7c = T7b + DV
     f.add(f'tl.set("#b7k", {{opacity: 1}}, {T7c:.3f});')
     ax, ay = PX + (pp["antrean"]["x"] + pp["antrean"]["w"] / 2) * S7, PY + (pp["antrean"]["y"] + pp["antrean"]["h"] / 2) * S7
     f.add(f'tl.set("#b7k", {json.dumps(kamera(ax, ay, 1.9))}, {T7c:.3f});')
@@ -424,7 +440,7 @@ def bangun():
     f.add(f'tl.to("#pp7", {{y: {-round((pp["jalur"]["y"] - pp["svg"]["y"] - 260) * S7)}, duration: 0.8, ease: TEKAN}}, {T7e:.3f});')
     f.add(f'tl.fromTo("#pj1", {{scaleX: 0}}, {{scaleX: 1, duration: 0.45, ease: "power2.out"}}, {T7e + 1.0:.3f});')
 
-    T7m = T7 + 20.0
+    T7m = T7 + 24.5
     mp = U["mata-panel"]
     S7m = 1.6
     MX, MY = W / 2 - mp["lebar"] * S7m / 2, H / 2 - (mp["papan"]["y"] + 60) * S7m

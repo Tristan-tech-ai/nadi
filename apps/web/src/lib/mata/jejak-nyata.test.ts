@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, test } from "vitest";
 import { deteksi, latarMedianStabil, OPSI_DETEKSI, OPSI_DETEKSI_PEKA, OPSI_PELACAK, Pelacak, stabilkan, type Bingkai, type ZonaV2 } from "./jejak";
@@ -19,11 +19,15 @@ function jalankan(opsi: typeof OPSI_DETEKSI, stabil: boolean) {
   const latar = latarMedianStabil(contoh);
   const p = new Pelacak(ZONA, OPSI_PELACAK);
   let gumpal = 0;
+  const per: unknown[] = [];
   for (let i = 0; i < n; i++) {
     const g = deteksi(latar, stabil ? stabilkan(latar, bingkai[i]) : bingkai[i], opsi);
     gumpal += g.length;
     p.langkah(i / J.fps, g);
+    per.push({ t: i / J.fps, jejak: p.tampil, pintu: p.pintu });
   }
+  // Film demo v3 (babak Mata) memakai keluaran ini apa adanya: MATA_TULIS=<berkas.json> npx vitest run src/lib/mata/jejak-nyata.test.ts
+  if (process.env.MATA_TULIS && opsi === OPSI_DETEKSI_PEKA && stabil) writeFileSync(process.env.MATA_TULIS, JSON.stringify({ fps: J.fps, zona: ZONA, per }));
   return { pintu: p.pintu, gumpal: gumpal / n };
 }
 

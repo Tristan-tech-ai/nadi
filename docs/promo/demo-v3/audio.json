@@ -1,8 +1,8 @@
 {
- "durasi": 270.5,
+ "durasi": 275.0,
  "tempo": 119.68085106382979,
  "birama_dtk": 2.0,
- "jumlah_birama": 113,
+ "jumlah_birama": 115,
  "urut_birama": [
   0,
   1,
@@ -53,6 +53,8 @@
   46,
   47,
   48,
+  49,
+  50,
   8,
   9,
   10,
@@ -122,22 +124,22 @@
   "Setujui jadi cap (babak 4)": 118.22,
   "QRIS lunas (babak 5)": 131.853,
   "Lepas gaji (babak 6)": 153.483,
-  "struk ke-4 token 0 (babak 9)": 222.083,
-  "pengawas DITOLAK (babak 9)": 232.16
+  "struk ke-4 token 0 (babak 9)": 226.583,
+  "pengawas DITOLAK (babak 9)": 236.66
  },
  "spot": {
   "notifikasi": 4,
-  "ketik": 298,
   "lempar": 1,
-  "klik": 5,
-  "cap": 3,
   "kertas": 5,
-  "sonic-logo": 1
+  "cap": 3,
+  "ketik": 298,
+  "sonic-logo": 1,
+  "klik": 5
  },
  "ukur": {
-  "lufs": -14.1,
+  "lufs": -14.0,
   "true_peak": -1.5,
   "jendela": "utuh",
-  "durasi": 270.5
+  "durasi": 275.0
  }
 }
