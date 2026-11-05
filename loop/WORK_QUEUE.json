@@ -3819,8 +3819,10 @@
    "accept": "sesuai docs/design/REKONSTRUKSI-APP.md bagian 4b (sumber NN/g, Material 3, Atlassian, GitLab Pajamas, Carbon, dibaca 6 Nov 2026): angka statis jumlah halaman dibuang, lencana hanya untuk hal yang bisa ditindak (usulan menunggu) dan tidak tampil bila nol; kepala sidebar = usaha aktif + jenisnya + ganti usaha; badan bergulir = Disematkan (bawaan per peran, bisa diubah dari tombol bintang di kepala halaman) lalu ruang berlabel dengan halaman ruang aktif terbuka; kaki tetap = Bantuan dan panduan, Yang baru, Usahamu (pengaturan), akun (nama, bahasa, keluar); bilah atas hanya logo + Cari; ikon dipakai di semua butir atau tidak sama sekali; label tidak dibungkus dua baris; tangkapan layar 1280/1440/1920 terang/gelap ditinjau, axe 0 serius, e2e kerangka + keterpahaman tetap lulus",
    "how": "REKONSTRUKSI-APP.md 4b",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T20:28:40"
+   "status": "done",
+   "created": "2026-11-05T20:28:40",
+   "done": "2026-11-05T20:46:45",
+   "result": "202bf93; sidebar: Disematkan (bawaan per peran + tombol pin di kepala halaman), Semua ruang tanpa angka statis, lencana hanya usulan menunggu dan disembunyikan saat ruang terbuka, kaki Bantuan dan panduan/Semua menu/Pengaturan; e2e/kerangka.spec.ts + cari.spec produksi lulus (9 lebar terang/gelap, axe 0 serius); deviasi tercatat di DECISIONS: akun dan nama usaha tetap di bilah atas, halaman Yang baru tidak dibuat"
   },
   {
    "id": "PP-01",
