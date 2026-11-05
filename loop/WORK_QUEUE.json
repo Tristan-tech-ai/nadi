@@ -3395,8 +3395,10 @@
    "accept": "tes SQL: RAB per proyek, realisasi dari jurnal bertag proyek, jam kerja per orang per proyek, laporan selisih, isolasi; e2e satu proyek dengan anggaran dan realisasi",
    "how": "docs/research/kebutuhan-usaha.md urut 4; tag proyek M-08",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T13:17:51"
+   "status": "done",
+   "created": "2026-11-05T13:17:51",
+   "done": "2026-11-05T14:20:48",
+   "result": "37a293e + 8189812: migrasi proyek md5 29c5f4e9 + proyek_daftar md5 9074fcdd, tes SQL 17/17 (RAB beban/pendapatan, realisasi hanya jurnal bertag proyek itu, selisih 6 jt, jam sendiri/oleh pengelola, batas 24 jam dan tanggal, biaya tenaga 11 x 3.460.000/173 = 220.000 hanya pengelola, staf tidak melihat laporan, active_projects, isolasi); e2e/proyek.spec.ts lulus produksi nadi-swart.vercel.app (buat proyek, RAB 10 jt, tagihan pemasok 4 jt dimasukkan ke proyek dari daftar jurnal, laporan Biaya Rp4.000.000 dari Rp10.000.000, jam 7,5; axe 390/1440 terang/gelap); Lighthouse /app/proyek 92/100; fitur.md TA-24"
   }
  ]
 }
