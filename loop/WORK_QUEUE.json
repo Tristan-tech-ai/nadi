@@ -3117,8 +3117,10 @@
    "accept": "e2e; angka sama dengan RPC sumber",
    "how": "docs/research/mekari/rencana.md; menutup TA-16, QO-08; isi: Dasbor wawasan: headcount, turnover, absen, lembur, biaya gaji, karyawan berisiko (sinyal beban), penjualan, pembuat laporan sederhana (pilih kolom, filter, ekspor)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T16:01:51",
+   "result": "92854b0; migrasi 20261105092000_wawasan md5 90dea83f sama; supabase/tests/wawasan.test.sql 13/13 (turnover contoh tangan 28,6%, gaji/berisiko hanya pemilik); src/lib/wawasan/laporan.test.ts 6/6; e2e/wawasan.spec.ts lokal + produksi: angka layar = RPC insight_dashboard, CSV invoice Nomor;Total baris = tabel"
   },
   {
    "id": "M-24",
