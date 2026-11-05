@@ -90,6 +90,52 @@ export function latarMedian(bingkai: Bingkai[]): Float32Array {
   return latar;
 }
 
+/**
+ * W-10A: latar untuk sumber langsung (kamera perangkat, CCTV lewat jembatan). Bingkai pertama jarang toko kosong; orang yang berdiri
+ * di sana menjadi "hantu" saat pergi. Maka bingkai ditampung selama `jendela` detik pertama, latar = median 15 contoh tersebar,
+ * lalu semua bingkai tampungan dideteksi berurutan (tidak ada yang hilang). Setelah itu latar disegarkan tiap `segar` detik dari
+ * `jendela` detik terakhir, mengikuti cahaya yang berubah. Diuji pada korpus mata-v2 yang dikodekan ulang H.264 seperti RTSP.
+ */
+export class LatarHidup {
+  latar: Float32Array | null = null;
+  private riwayat: { t: number; b: Bingkai }[] = [];
+  private segarAkhir = 0;
+  constructor(private jendela = 30, private segar = 10) {}
+
+  private median(r: { b: Bingkai }[]): Float32Array {
+    const n = Math.min(15, r.length);
+    return latarMedianStabil(Array.from({ length: n }, (_, k) => r[Math.floor(((k + 0.5) / n) * r.length)].b));
+  }
+
+  /** Detik tersisa sebelum latar pertama jadi. */
+  sisa(t: number): number {
+    return this.latar || !this.riwayat.length ? 0 : Math.max(0, this.jendela - (t - this.riwayat[0].t));
+  }
+
+  /** Tambah bingkai; kembalikan bingkai yang siap dideteksi dengan `latar` sekarang (seluruh tampungan saat latar pertama jadi). */
+  tambah(t: number, b: Bingkai): { t: number; b: Bingkai }[] {
+    this.riwayat.push({ t, b });
+    if (!this.latar) {
+      if (t - this.riwayat[0].t < this.jendela) return [];
+      return this.paksa();
+    }
+    if (t - this.segarAkhir >= this.segar) {
+      this.latar = this.median(this.riwayat.filter((x) => x.t >= t - this.jendela));
+      this.segarAkhir = t;
+    }
+    while (this.riwayat.length && this.riwayat[0].t < t - this.jendela - 1) this.riwayat.shift();
+    return [{ t, b }];
+  }
+
+  /** Hitungan dihentikan sebelum pemanasan selesai: latar dari tampungan yang ada. */
+  paksa(): { t: number; b: Bingkai }[] {
+    if (this.latar || !this.riwayat.length) return [];
+    this.latar = this.median(this.riwayat);
+    this.segarAkhir = this.riwayat[this.riwayat.length - 1].t;
+    return [...this.riwayat];
+  }
+}
+
 /** Latar awal dari satu bingkai (toko kosong). */
 export function latarDari(b: Bingkai): Float32Array {
   return Float32Array.from(b.data);

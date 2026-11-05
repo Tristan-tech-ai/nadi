@@ -5,7 +5,7 @@ import { Tombol } from "@/components/ui/tombol";
 import { isiTeks } from "@/lib/i18n/isi-teks";
 import type { Kamus } from "@/lib/i18n/kamus";
 import { aturPapan, kirimRekap } from "@/app/app/mata/actions";
-import { abuDari, deteksi, formatDurasi, latarDari, latarMedianStabil, OPSI_DETEKSI, OPSI_DETEKSI_PEKA, OPSI_PELACAK, OPSI_PELACAK_MIRING, Pelacak, rekapJam, stabilkan, titikDariKotak, type Bingkai, type Kunjungan, type ZonaV2 } from "@/lib/mata/jejak";
+import { abuDari, deteksi, formatDurasi, LatarHidup, latarMedianStabil, OPSI_DETEKSI, OPSI_DETEKSI_PEKA, OPSI_PELACAK, OPSI_PELACAK_MIRING, Pelacak, rekapJam, stabilkan, titikDariKotak, type Bingkai, type Kunjungan, type ZonaV2 } from "@/lib/mata/jejak";
 import { gambarMata } from "@/lib/mata/gambar";
 import { alamatKamera, ALAMAT_JEMBATAN, bukaJembatan, jembatanSah, konfigJembatan, MEREK, type Merek } from "@/lib/mata/jembatan";
 import type { Deteksi } from "@/lib/mata/resep";
@@ -270,7 +270,9 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
     aliran.getVideoTracks()[0]?.addEventListener("ended", () => { putus = true; berhenti.current = true; });
     const miring = kamera === "miring" && Boolean(model);
     const p = new Pelacak(zona, miring ? OPSI_PELACAK_MIRING : OPSI_PELACAK);
-    let latar: Float32Array | null = null;
+    const lh = new LatarHidup();
+    const fps = miring ? FPS_MIRING : FPS;
+    let berikut = Date.now();
     let tertunda: Kunjungan[] = [];
     const semua: Kunjungan[] = [];
     let kirimAkhir = Date.now();
@@ -288,18 +290,23 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
       }
       const b = bingkai(v, c);
       const t0 = (Date.now() - asalMs) / 1000;
-      if (!latar) latar = latarDari(b);
-      else {
+      // Kamera atas: latar median bergulir (LatarHidup); bingkai pemanasan ditampung lalu dideteksi, jadi tidak ada yang terlewat.
+      const siap = miring ? [{ t: t0, b }] : lh.tambah(t0, b);
+      if (!miring && !lh.latar) setPesan({ jenis: "info", teks: isiTeks(t.latarHidup, { n: Math.ceil(lh.sisa(t0)) }) });
+      else if (siap.length > 1) setPesan(null);
+      for (const x of siap) {
         let titik: { x: number; y: number }[] = [];
         try {
-          titik = miring ? await titikModel(v) : deteksi(latar, stabilkan(latar, b), opsiDeteksi);
+          titik = miring ? await titikModel(v) : deteksi(lh.latar!, stabilkan(lh.latar!, x.b), opsiDeteksi);
         } catch {
           setPesan({ jenis: "galat", teks: t.modelGagal });
           berhenti.current = true;
         }
-        const k = p.langkah(t0, titik);
+        const k = p.langkah(x.t, titik);
         tertunda.push(...k);
         semua.push(...k);
+      }
+      if (siap.length) {
         gambarLayar(v, p);
         setTerlihat(p.terlihat.length);
         setSelesai([...semua]);
@@ -308,8 +315,12 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
         if (await kirim(tertunda, asalMs, `${sesi}-${ke++}`)) tertunda = [];
         kirimAkhir = Date.now();
       }
-      await new Promise((ok) => setTimeout(ok, 1000 / (miring ? FPS_MIRING : FPS)));
+      // Irama tetap (bukan jeda tetap): waktu proses tidak menurunkan bingkai per detik.
+      berikut += 1000 / fps;
+      if (berikut < Date.now() - 1000) berikut = Date.now();
+      await new Promise((ok) => setTimeout(ok, Math.max(0, berikut - Date.now())));
     }
+    if (!miring) for (const x of lh.paksa()) p.langkah(x.t, deteksi(lh.latar!, stabilkan(lh.latar!, x.b), opsiDeteksi));
     const akhir = p.selesai();
     tertunda.push(...akhir);
     semua.push(...akhir);

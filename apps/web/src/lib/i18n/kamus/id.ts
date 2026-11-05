@@ -2985,6 +2985,7 @@ export const kamusId = {
     kameraMiringKet: "Memakai model pengenal orang di perangkat ini, 2 bingkai per detik. Lebih berat, tetapi tahan rak dan latar yang ramai.",
     modelGagal: "Model pengenal orang gagal dimuat di perangkat ini. Periksa sambungan internet lalu coba lagi.",
     kosong: "Belum ada kunjungan yang selesai di rekaman ini.", gagalVideo: "Video tidak bisa dibaca di browser ini. Coba berkas MP4 atau WebM.",
+    latarHidup: "Mengenali lantai kosong dulu, {n} dtk lagi. Orang yang lewat sekarang tetap dihitung.",
     jembatanJudul: "Hitung dari CCTV lewat jembatan",
     jembatanKet: "Untuk CCTV atau NVR yang sudah terpasang. Program kecil go2rtc di komputer toko membaca kamera, lalu halaman ini menghitung di komputer yang sama. Video tidak keluar dari jaringan toko.",
     jembatanLangkah1: "Unduh go2rtc untuk Windows (go2rtc_win64.zip, gratis, lisensi MIT), lalu ekstrak ke satu folder.",

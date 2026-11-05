@@ -2984,6 +2984,7 @@ export const kamusEn: Kamus = {
     kameraMiringKet: "Uses a person detector on this device, 2 frames per second. Heavier, but handles shelves and busy backgrounds.",
     modelGagal: "The person detector could not load on this device. Check the internet connection and try again.",
     kosong: "No finished visits in this recording yet.", gagalVideo: "This browser cannot read the video. Try an MP4 or WebM file.",
+    latarHidup: "Learning the empty floor first, {n} s to go. People passing now are still counted.",
     jembatanJudul: "Count from CCTV through a bridge",
     jembatanKet: "For CCTV or an NVR that is already installed. A small program, go2rtc, on the shop computer reads the camera, and this page counts on the same computer. Video never leaves the shop network.",
     jembatanLangkah1: "Download go2rtc for Windows (go2rtc_win64.zip, free, MIT licence) and extract it into one folder.",
