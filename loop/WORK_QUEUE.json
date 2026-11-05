@@ -3908,8 +3908,10 @@
    "accept": "README.md di akar repo memuat minimal: Project Name & Description, Problem & Target User, Key Features (hanya yang benar-benar berfungsi di produksi, dengan bukti tes), Tech Stack (frontend, backend, database, hosting, versi dari package.json), AI Implementation (model/API/metode dan fungsinya, ID model tidak ditulis di kode tetapi disebut kelasnya), Run Instructions (pnpm install, env contoh tanpa rahasia, supabase, pnpm dev, tes), Architecture / Data Flow (diagram mermaid sederhana), Deployment URL (nadi-swart.vercel.app dan /demo), Team Members (I Made Tristan Hope Firdaus, semua peran), Known Limitations + rencana ke depan (jujur walau sudah v1), Third-party Resources (pustaka, dataset, API, aset, template, kredit dari docs/ASSETS.md dan package.json); plus hal lain yang berguna (lisensi, keamanan/privasi, cara melapor celah, struktur repo menunjuk loop/README.md); lolos gerbang tulisan dan gerbang jejak (asisten pengembang diungkap di proposal PDF di luar repo, bukan di README, karena aturan TANPA JEJAK)",
    "how": "kriteria Tristan 6 Nov 2026",
    "blocked_by": "V-07,U-09,T-01,W-10",
-   "status": "ready",
-   "created": "2026-11-05T20:39:03"
+   "status": "done",
+   "created": "2026-11-05T20:39:03",
+   "done": "2026-11-06T05:51:57",
+   "result": "cc0fcbf: README.md di akar repo: nama dan deskripsi, masalah dan pengguna (harga resmi bertanggal), fitur utama yang berjalan di produksi dengan berkas tes buktinya (semua berkas diverifikasi ada), teknologi dengan versi dari package.json, implementasi AI (kelas model, ID di tabel konfigurasi), cara menjalankan (env contoh tanpa rahasia, migrasi, pnpm dev/test/e2e, gate), arsitektur mermaid, URL produksi dan /demo, tim I Made Tristan Hope Firdaus semua peran, keterbatasan + rencana, sumber pihak ketiga dari ASSETS.md, keamanan/privasi, struktur repo ke loop/README.md, lisensi; gerbang tulisan, slop, dan jejak lulus"
   },
   {
    "id": "U-10",
