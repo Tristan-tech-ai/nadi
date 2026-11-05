@@ -2622,6 +2622,8 @@ export const kamusEn: Kamus = {
     unduhSemua: "Download all data (XLSX)", eksporHanyaPemilik: "Only the owner can download all data.", lembarGagal: "This sheet could not be read.",
   },
   pindahPesan: {
+    tanpaAi: "This file's columns were learned before; read without AI.",
+    belajar: "Nadi is learning a new format, just once. Files with the same columns are read without AI next time.",
     pilihBerkas: "Choose a file first.", terlaluBesar: "The file is over 900 KB. Split it into several files.", jenisBerkas: "Use a CSV or XLSX file.",
     rusak: "The file cannot be read. Save it again as CSV or XLSX from the app.",
     tidakDikenali: "These columns are not recognised yet. Make sure the first row holds column titles, for example Account Name and Category Number, or Name and Position.",

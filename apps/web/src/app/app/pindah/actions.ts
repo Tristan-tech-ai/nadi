@@ -5,9 +5,10 @@ import { revalidatePath } from "next/cache";
 import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { kenali, uraiCsv } from "@/lib/pindah/format";
+import { ringkasKolom, terapkanPeta, type Peta } from "@/lib/pindah/peta";
 import { createClient } from "@/lib/supabase/server";
 
-export type HasilPindah = { pesan: string } | { galat: string } | null;
+export type HasilPindah = { pesan: string; asal?: "aturan" | "model"; token?: number } | { galat: string } | null;
 
 // Batas body server action Next bawaan 1 MB (termasuk overhead multipart), jadi berkas dibatasi 900 KB.
 const BATAS_BYTE = 900 * 1024;
@@ -41,13 +42,36 @@ export async function pindahkan(_: HasilPindah, form: FormData): Promise<HasilPi
   } catch {
     return { galat: p.rusak };
   }
-  const h = kenali(rows);
+  const supabase = await createClient();
+  let h = kenali(rows);
+  // T-01C: judul kolom tidak dikenali -> peta yang sudah dipelajari usaha ini (aktif: tanpa model), atau model lewat pelajari-tanya
+  // pindah sekali (hanya judul + tipe kolom yang dikirim, bukan isi baris), disimpan bayangan, aktif setelah cocok 2 kali.
+  let asal: { asal: "aturan" | "model"; token: number } | null = null;
+  if (!h) {
+    const r = ringkasKolom(rows);
+    if (r) {
+      const { data: tersimpan } = await supabase.from("pindah_peta").select("id, format, peta, status").eq("sidik", r.sidik).in("status", ["aktif", "bayangan"]).maybeSingle();
+      let peta: Peta | null = null;
+      if (tersimpan?.status === "aktif") {
+        peta = { format: tersimpan.format as Peta["format"], kolom: tersimpan.peta as Record<string, string> };
+        asal = { asal: "aturan", token: 0 };
+      } else {
+        const { data: b } = await supabase.functions.invoke("pelajari-pindah", { body: { ringkas: { baris_judul: r.baris_judul, judul: r.judul, tipe: r.tipe }, peta_id: tersimpan?.id } });
+        const hasil = b as { peta: Peta | null; token?: number } | null;
+        if (hasil?.peta) { peta = hasil.peta; asal = { asal: "model", token: hasil.token ?? 0 }; }
+      }
+      if (peta) {
+        const t = terapkanPeta(rows, r, peta);
+        h = { format: peta.format, sumber: "umum", baris: t.baris, dilewati: t.dilewati };
+      }
+    }
+  }
   if (!h) return { galat: p.tidakDikenali };
   if ("belum" in h) return { galat: p.penagihanBelum };
   if (h.baris.length === 0) return { galat: p.kosong };
-  const supabase = await createClient();
   const { error } = await supabase.rpc("propose_migration", { p_format: h.format, p_berkas: berkas.name, p_baris: h.baris });
   if (error) return { galat: ["22023", "23505", "42501"].includes(error.code ?? "") ? isiTeks(p.galatDb, { pesan: error.message }) : p.gagal };
   revalidatePath("/app/pindah");
-  return { pesan: isiTeks(p.diajukan, { n: h.baris.length, jenis: k.pindah.formatNama[h.format], lewat: h.dilewati }) };
+  const pesan = isiTeks(p.diajukan, { n: h.baris.length, jenis: k.pindah.formatNama[h.format], lewat: h.dilewati });
+  return asal ? { pesan: `${pesan} ${asal.asal === "model" ? p.belajar : p.tanpaAi}`, ...asal } : { pesan };
 }

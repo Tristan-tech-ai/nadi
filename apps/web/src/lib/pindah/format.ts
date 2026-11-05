@@ -43,6 +43,9 @@ export function angka(v: unknown): number | null {
   if (typeof v === "number") return Number.isFinite(v) ? v : null;
   let s = isi(v).replace(/rp\.?/i, "").replace(/\s/g, "");
   if (!s) return null;
+  // T-01C: singkatan rupiah sehari-hari "72rb", "4,5jt", "1,2 juta".
+  const singkat = /^(\d+(?:[.,]\d+)?)(rb|ribu|k|jt|juta)$/i.exec(s);
+  if (singkat) return Number(singkat[1].replace(",", ".")) * (/^(jt|juta)$/i.test(singkat[2]) ? 1_000_000 : 1_000);
   const neg = /^\(.*\)$/.test(s) || s.startsWith("-");
   s = s.replace(/[()-]/g, "");
   if (/^\d{1,3}([.,]\d{3})+$/.test(s)) s = s.replace(/[.,]/g, "");

@@ -2623,6 +2623,8 @@ export const kamusId = {
     unduhSemua: "Unduh semua data (XLSX)", eksporHanyaPemilik: "Unduh semua data hanya untuk pemilik.", lembarGagal: "Lembar ini gagal dibaca.",
   },
   pindahPesan: {
+    tanpaAi: "Kolom berkas ini sudah dipelajari, dibaca tanpa AI.",
+    belajar: "Nadi sedang mempelajari format baru, sekali saja. Berkas dengan kolom yang sama berikutnya dibaca tanpa AI.",
     pilihBerkas: "Pilih berkasnya dulu.", terlaluBesar: "Berkas lebih dari 900 KB. Pecah jadi beberapa berkas.", jenisBerkas: "Pakai berkas CSV atau XLSX.",
     rusak: "Berkas tidak bisa dibaca. Simpan ulang sebagai CSV atau XLSX dari aplikasinya.",
     tidakDikenali: "Kolom berkas ini belum dikenali. Pastikan baris pertama berisi judul kolom, misalnya Account Name dan Category Number, atau Nama dan Jabatan.",
