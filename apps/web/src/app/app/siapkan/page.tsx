@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { randomUUID } from "node:crypto";
 import { Suspense } from "react";
 import { TempelHasil, TombolSalinTeks } from "@/components/app/siapkan";
 import type { Bahasa } from "@/lib/i18n/bahasa";
@@ -42,7 +41,12 @@ async function Isi() {
         <ol className="mt-2 list-decimal space-y-1 pl-5 text-sm">
           <li>{t.langkah1}</li><li>{t.langkah2}</li><li>{t.langkah3}</li>
         </ol>
-        <div className="mt-3 flex flex-wrap gap-3"><TombolSalinTeks teks={PROMPT_ONBOARDING} label={t.salinPrompt} labelSudah={t.tersalin} /></div>
+        <div className="mt-3 flex flex-wrap items-center gap-3"><TombolSalinTeks teks={PROMPT_ONBOARDING} label={t.salinPrompt} labelSudah={t.tersalin} />
+          {/* U-04: tautan prompt terisi tidak didokumentasikan resmi oleh penyedia (LEARN 6 Nov 2026), jadi hanya membuka halaman utamanya. */}
+          <span className="text-sm text-tinta-2">{bahasa === "en" ? "then open" : "lalu buka"}</span>
+          <a href="https://chatgpt.com/" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold underline underline-offset-4">ChatGPT</a>
+          <a href="https://gemini.google.com/" target="_blank" rel="noopener noreferrer" className="text-sm font-semibold underline underline-offset-4">Gemini</a>
+          <span className="text-sm text-tinta-2">{bahasa === "en" ? "or any AI chat" : "atau chat AI lain"}</span></div>
         <details className="mt-3 text-sm">
           <summary className="cursor-pointer text-tinta-2 underline underline-offset-4">{t.lihatPrompt}</summary>
           <pre className="mt-2 overflow-x-auto whitespace-pre-wrap rounded-[var(--radius-kartu)] bg-kertas-2 p-3 font-mono text-xs" lang="id" tabIndex={0}>{PROMPT_ONBOARDING}</pre>
@@ -51,7 +55,7 @@ async function Isi() {
           <summary className="cursor-pointer text-tinta-2 underline underline-offset-4">{t.lihatContoh}</summary>
           <pre className="mt-2 overflow-x-auto whitespace-pre-wrap rounded-[var(--radius-kartu)] bg-kertas-2 p-3 font-mono text-xs" lang="id" tabIndex={0} data-testid="contoh-teks-nadi">{CONTOH_TEKS_NADI}</pre>
         </details>
-        <TempelHasil hari={hariIni(new Date(), zona)} kunci={randomUUID()} teks={t} />
+        <TempelHasil hari={hariIni(new Date(), zona)} teks={t} />
       </section>
 
       <section id="sambung" className="mt-10 scroll-mt-20" aria-labelledby="judul-sambung">

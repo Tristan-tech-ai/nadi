@@ -46,6 +46,9 @@ test("Lainnya, ceritakan usahamu: paket produksi dan topi baru lewat Feed", asyn
       await page.screenshot({ path: test.info().outputPath(`mulai-lainnya-${w}.png`), fullPage: true });
     }
     await page.getByRole("button", { name: "Siapkan usahaku" }).click();
+    // U-04: langkah 2 Mulai menawarkan Isi sendiri atau Siapkan dengan AI-mu; tes ini melewatinya.
+    await page.waitForURL((u) => u.pathname === "/app/mulai/lanjut");
+    await page.getByRole("link", { name: "Lewati dulu, buka Hari ini" }).click();
     await page.waitForURL((u) => u.pathname === "/app");
 
     await sb.auth.refreshSession();

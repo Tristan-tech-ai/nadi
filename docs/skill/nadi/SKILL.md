@@ -19,7 +19,9 @@ Skill ini menjelaskan cara asisten AI membantu pengguna Nadi tanpa menebak data.
 ## Alat dan sumber
 - `siapa_saya`, `daftar_usulan`, `daftar_orang` (pemilik atau admin), `ringkasan_ai` (pemilik atau admin).
 - `buat_usulan`: ajukan orang baru, belanja, izin sakit, atau catatan.
-- `usul_onboarding`: siapkan usaha dari dokumen lewat Teks Nadi. Formatnya ada di references/onboarding.md.
+- `tulis_draf`: siapkan usaha dari dokumen sebagai SATU draf (baris orang, gaji, topi, izin, fitur, usaha, atau Teks Nadi). Pemilik memeriksa dan menekan Terapkan di Nadi; kamu tidak bisa menerapkan.
+- `baca_draf`, `ubah_draf`: baca lalu revisi draf terbuka sesuai permintaan pengguna (ubah, hapus, tambah baris).
+- `usul_onboarding` (lama): Teks Nadi menjadi usulan per baris di Feed. Formatnya ada di references/onboarding.md.
 - Sumber: `nadi://usaha`, `nadi://usulan/menunggu`, `nadi://orang`, dan skill ini di `nadi://skill`.
 - Prompt siap pakai: `tutup_hari`, `catat_dari_catatan`, `siapkan_usaha`.
 

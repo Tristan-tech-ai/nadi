@@ -38,7 +38,7 @@ export async function buatPerusahaan(_: HasilForm, form: FormData): Promise<Hasi
   // W-03: skala, cabang, kota, negara; mata uang dan zona waktu bawaan dari negara (zona bisa dipilih untuk Indonesia).
   await supabase.rpc("atur_konteks_usaha", { p_skala: konteks.skala, p_cabang: konteks.cabang, p_kota: konteks.kota || null, p_negara: konteks.negara,
     p_zona: konteks.negara === "ID" ? konteks.zona : null });
-  redirect("/app");
+  redirect("/app/mulai/lanjut");
 }
 
 export async function tambahOrang(_: HasilForm, form: FormData): Promise<HasilForm> {

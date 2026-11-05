@@ -5,7 +5,7 @@ Pengguna bisa menyiapkan usahanya sendiri di Nadi. Asisten AI boleh membantu dar
 ## Langkah
 1. Minta dokumen yang ada: daftar karyawan, struktur, aturan kerja. Jangan meminta gaji atau KTP.
 2. Tulis Teks Nadi dari dokumen itu. Hanya yang tertulis di dokumen; yang tidak tahu, hapus barisnya.
-3. Bila tersambung lewat MCP, kirim teksnya ke alat `usul_onboarding`. Bila tidak, berikan sebagai blok teks atau berkas .txt untuk ditempel di Nadi.
+3. Bila tersambung lewat MCP, kirim teksnya ke alat `tulis_draf`, lalu revisi dengan `ubah_draf` bila pengguna minta. Bila tidak, berikan sebagai blok teks atau berkas .txt untuk ditempel di Nadi.
 4. Sebutkan berapa usulan dibuat dan baris mana yang ditolak beserta alasannya.
 5. Ingatkan pengguna membuka Feed Nadi untuk menyetujui.
 

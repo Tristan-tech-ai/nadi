@@ -191,3 +191,28 @@ describe("W-04 usul_onboarding", () => {
     expect(PROMPT.find((x) => x.name === "siapkan_usaha")?.cakupan).toBe("nadi.usul");
   });
 });
+
+describe("U-04 draf AI lewat MCP", () => {
+  it("tulis_draf dari Teks Nadi: baris draf ke mcp_save_ai_draft, gaji ditolak; tidak ada alat untuk menerapkan", async () => {
+    const { rpc, panggilan } = rpcPalsu();
+    const a = modern("tools/call", { name: "tulis_draf", arguments: { teks: `${CONTOH_TEKS_NADI}\n- Budi | kasir | gaji Rp4.500.000` } }, { "Mcp-Name": "tulis_draf" });
+    const r = await tangani(a.h, a.body, rpc, "nmc_x", RES);
+    expect((r.body as { result: { isError: boolean } }).result.isError).toBe(false);
+    const p = panggilan.find((x) => x.fungsi === "mcp_save_ai_draft")!;
+    const baris = p.param.p_baris as { bagian: string }[];
+    expect(baris.filter((b) => b.bagian === "orang")).toHaveLength(8);
+    expect(baris.some((b) => b.bagian === "gaji")).toBe(false);
+    expect(ALAT.map((t) => t.name).filter((n) => /terap|apply/.test(n))).toEqual([]);
+  });
+  it("tulis_draf menerima baris JSON langsung; ubah_draf meneruskan operasi; alat draf hanya untuk pengelola", async () => {
+    const { rpc, panggilan } = rpcPalsu();
+    const baris = [{ bagian: "orang", nilai: { nama: "Sari", jabatan: "kasir" }, alasan: "karyawan.xlsx baris 2", keyakinan: 95 }];
+    const a = modern("tools/call", { name: "tulis_draf", arguments: { baris } }, { "Mcp-Name": "tulis_draf" });
+    await tangani(a.h, a.body, rpc, "nmc_x", RES);
+    expect(panggilan.find((x) => x.fungsi === "mcp_save_ai_draft")?.param.p_baris).toEqual(baris);
+    const u = modern("tools/call", { name: "ubah_draf", arguments: { operasi: [{ op: "ubah", id: "ab12", nilai: { jabatan: "pelayan" } }] } }, { "Mcp-Name": "ubah_draf" });
+    await tangani(u.h, u.body, rpc, "nmc_x", RES);
+    expect(panggilan.find((x) => x.fungsi === "mcp_edit_ai_draft")?.param.p_ops).toEqual([{ op: "ubah", id: "ab12", nilai: { jabatan: "pelayan" } }]);
+    expect(daftarAlat({ peran: "staf", cakupan: ["nadi.baca", "nadi.usul"] }).map((t) => t.name)).not.toContain("tulis_draf");
+  });
+});

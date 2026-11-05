@@ -28,7 +28,9 @@ Skill ini menjelaskan cara asisten AI membantu pengguna Nadi tanpa menebak data.
 ## Alat dan sumber
 - \`siapa_saya\`, \`daftar_usulan\`, \`daftar_orang\` (pemilik atau admin), \`ringkasan_ai\` (pemilik atau admin).
 - \`buat_usulan\`: ajukan orang baru, belanja, izin sakit, atau catatan.
-- \`usul_onboarding\`: siapkan usaha dari dokumen lewat Teks Nadi. Formatnya ada di references/onboarding.md.
+- \`tulis_draf\`: siapkan usaha dari dokumen sebagai SATU draf (baris orang, gaji, topi, izin, fitur, usaha, atau Teks Nadi). Pemilik memeriksa dan menekan Terapkan di Nadi; kamu tidak bisa menerapkan.
+- \`baca_draf\`, \`ubah_draf\`: baca lalu revisi draf terbuka sesuai permintaan pengguna (ubah, hapus, tambah baris).
+- \`usul_onboarding\` (lama): Teks Nadi menjadi usulan per baris di Feed. Formatnya ada di references/onboarding.md.
 - Sumber: \`nadi://usaha\`, \`nadi://usulan/menunggu\`, \`nadi://orang\`, dan skill ini di \`nadi://skill\`.
 - Prompt siap pakai: \`tutup_hari\`, \`catat_dari_catatan\`, \`siapkan_usaha\`.
 
@@ -116,7 +118,7 @@ Pengguna bisa menyiapkan usahanya sendiri di Nadi. Asisten AI boleh membantu dar
 ## Langkah
 1. Minta dokumen yang ada: daftar karyawan, struktur, aturan kerja. Jangan meminta gaji atau KTP.
 2. Tulis Teks Nadi dari dokumen itu. Hanya yang tertulis di dokumen; yang tidak tahu, hapus barisnya.
-3. Bila tersambung lewat MCP, kirim teksnya ke alat \`usul_onboarding\`. Bila tidak, berikan sebagai blok teks atau berkas .txt untuk ditempel di Nadi.
+3. Bila tersambung lewat MCP, kirim teksnya ke alat \`tulis_draf\`, lalu revisi dengan \`ubah_draf\` bila pengguna minta. Bila tidak, berikan sebagai blok teks atau berkas .txt untuk ditempel di Nadi.
 4. Sebutkan berapa usulan dibuat dan baris mana yang ditolak beserta alasannya.
 5. Ingatkan pengguna membuka Feed Nadi untuk menyetujui.
 
@@ -138,7 +140,7 @@ ${contoh}
 Nadi memegang uang dan data orang. Asisten AI bekerja dengan aturan ini.
 
 ## Pemilik yang memutuskan
-- Semua perubahan lewat \`buat_usulan\` atau \`usul_onboarding\`. Tidak ada jalan lain dari asisten.
+- Semua perubahan lewat \`buat_usulan\`, \`tulis_draf\`/\`ubah_draf\`, atau \`usul_onboarding\`. Tidak ada jalan lain dari asisten, dan asisten tidak bisa menerapkan draf.
 - Asisten tidak menyetujui, menolak, atau menghapus apa pun.
 - Usulan uang selalu menyebut nilainya di \`dampak_rp\` supaya pemilik melihatnya.
 
@@ -174,7 +176,7 @@ Pengguna: "Dodi sakit 2 hari mulai besok, ada surat dokter."
 Asisten: \`buat_usulan\` aksi \`izin.sakit\` dengan nama, mulai YYYY-MM-DD, dan lama_hari 2. Ingatkan untuk melempar foto surat dokternya.
 
 Pengguna: "Ini daftar karyawan dari Excel lama."
-Asisten: tulis Teks Nadi tanpa kolom gaji, kirim lewat \`usul_onboarding\`, lalu sebut baris yang ditolak.
+Asisten: tulis Teks Nadi tanpa kolom gaji, kirim lewat \`tulis_draf\`, lalu sebut baris yang ditolak dan minta pemilik menekan Terapkan di Nadi.
 
 ## Akuntan
 Pengguna: "Berapa PPh final bulan ini?"
@@ -207,7 +209,9 @@ This skill explains how an AI assistant helps Nadi users without guessing data.
 ## Tools and resources
 - \`siapa_saya\`, \`daftar_usulan\`, \`daftar_orang\` (owner or admin), \`ringkasan_ai\` (owner or admin).
 - \`buat_usulan\`: propose a new person, a purchase, sick leave, or a note.
-- \`usul_onboarding\`: set up a business from documents with Nadi Text. The format is in references/onboarding.md.
+- \`tulis_draf\`: set up a business from documents as ONE draft (rows for people, pay, hats, leave, features, business, or Nadi Text). The owner reviews and presses Apply in Nadi; you cannot apply it.
+- \`baca_draf\`, \`ubah_draf\`: read then revise the open draft as the user asks (change, delete, add rows).
+- \`usul_onboarding\` (older): Nadi Text becomes one proposal per line in the Feed. The format is in references/onboarding.md.
 - Resources: \`nadi://usaha\`, \`nadi://usulan/menunggu\`, \`nadi://orang\`, and this skill at \`nadi://skill/en\`.
 - Ready prompts: \`tutup_hari\`, \`catat_dari_catatan\`, \`siapkan_usaha\`.
 
@@ -294,7 +298,7 @@ Users can set up their business in Nadi by themselves. An AI assistant may help 
 ## Steps
 1. Ask for the documents they have: staff list, structure, work rules. Never ask for salaries or ID cards.
 2. Write Nadi Text from those documents. Only what is written there; drop a line when unsure.
-3. When connected over MCP, send the text to the \`usul_onboarding\` tool. Otherwise give it as a text block or a .txt file to paste into Nadi.
+3. When connected over MCP, send the text to the \`tulis_draf\` tool, then revise with \`ubah_draf\` when the user asks. Otherwise give it as a text block or a .txt file to paste into Nadi.
 4. Say how many proposals were created and which lines were rejected, with the reasons.
 5. Remind the user to open the Nadi Feed to approve.
 
@@ -317,7 +321,7 @@ ${contoh}
 Nadi holds money and personal data. An AI assistant works under these rules.
 
 ## The owner decides
-- Every change goes through \`buat_usulan\` or \`usul_onboarding\`. The assistant has no other way in.
+- Every change goes through \`buat_usulan\`, \`tulis_draf\`/\`ubah_draf\`, or \`usul_onboarding\`. The assistant has no other way in and cannot apply a draft.
 - The assistant never approves, rejects, or deletes anything.
 - Money proposals always state the amount in \`dampak_rp\` so the owner sees it.
 
@@ -353,7 +357,7 @@ User: "Dodi is sick for 2 days from tomorrow, he has a doctor's note."
 Assistant: \`buat_usulan\` with action \`izin.sakit\`, the name, start date YYYY-MM-DD, and lama_hari 2. Remind them to drop a photo of the note.
 
 User: "Here is the staff list from an old spreadsheet."
-Assistant: write Nadi Text without the salary column, send it with \`usul_onboarding\`, then name the rejected lines.
+Assistant: write Nadi Text without the salary column, send it with \`tulis_draf\`, then name the rejected lines and ask the owner to press Apply in Nadi.
 
 ## Accountant
 User: "How much final income tax this month?"

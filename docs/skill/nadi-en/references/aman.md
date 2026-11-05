@@ -3,7 +3,7 @@
 Nadi holds money and personal data. An AI assistant works under these rules.
 
 ## The owner decides
-- Every change goes through `buat_usulan` or `usul_onboarding`. The assistant has no other way in.
+- Every change goes through `buat_usulan`, `tulis_draf`/`ubah_draf`, or `usul_onboarding`. The assistant has no other way in and cannot apply a draft.
 - The assistant never approves, rejects, or deletes anything.
 - Money proposals always state the amount in `dampak_rp` so the owner sees it.
 

@@ -5,7 +5,7 @@ Users can set up their business in Nadi by themselves. An AI assistant may help 
 ## Steps
 1. Ask for the documents they have: staff list, structure, work rules. Never ask for salaries or ID cards.
 2. Write Nadi Text from those documents. Only what is written there; drop a line when unsure.
-3. When connected over MCP, send the text to the `usul_onboarding` tool. Otherwise give it as a text block or a .txt file to paste into Nadi.
+3. When connected over MCP, send the text to the `tulis_draf` tool, then revise with `ubah_draf` when the user asks. Otherwise give it as a text block or a .txt file to paste into Nadi.
 4. Say how many proposals were created and which lines were rejected, with the reasons.
 5. Remind the user to open the Nadi Feed to approve.
 

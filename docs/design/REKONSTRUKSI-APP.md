@@ -55,6 +55,22 @@ Aturan: halaman pengaturan tidak boleh lagi menjadi daftar fitur. Setiap fitur b
 
 Ditegakkan oleh tes: setiap halaman dicek di 360, 412, 600, 768, 1024, 1280, 1440, 1920, dan 2560 px, terang dan gelap. Kriteria: axe tanpa pelanggaran serius, tanpa gulir samping, dan navigasi yang benar untuk kelasnya.
 
+### 4b. Sidebar yang benar untuk SaaS (koreksi 6 Nov 2026, pertanyaan Tristan)
+
+Tristan: angka di samping ruang terbaca seperti notifikasi, dan sidebar terasa kosong karena bagian bawahnya tidak berisi apa pun. Dua-duanya benar. Sumber: LEARN 6 Nov 2026, navigasi samping.
+
+Yang salah di versi U-01:
+- Angka jumlah halaman per ruang (Uang 11, Orang 15) memakai bentuk yang di aplikasi lain berarti "belum dibaca". Angka itu tidak membantu memutuskan apa pun.
+- Hanya ruang yang aktif yang terbuka, jadi sisa layar kosong. Tidak ada kaki untuk bantuan, pengaturan, dan akun, padahal sistem navigasi besar punya slot kepala, badan, dan kaki.
+- Nama usaha, bahasa, dan Keluar ada di bilah atas, jauh dari navigasi.
+
+Bentuk baru (U-09):
+1. Kepala: usaha aktif, jenisnya, dan tombol ganti usaha.
+2. Badan yang bergulir: bagian Disematkan berisi 4 sampai 6 halaman. Isi bawaannya per peran, dan bisa diubah dari tombol bintang di kepala halaman. Di bawahnya ruang berlabel, dengan halaman ruang aktif terbuka.
+3. Kaki tetap: Bantuan dan panduan, Yang baru, Usahamu (pengaturan), dan akun (nama, bahasa, keluar).
+4. Lencana hanya untuk hal yang bisa ditindak, misalnya usulan yang menunggu keputusanmu, dan tidak tampil bila nol. Jumlah fitur hanya disebut di halaman Semua menu.
+5. Bilah atas tinggal logo dan Cari.
+
 ## 5. Arah: "aku di mana, bisa apa, ngapain berikutnya"
 
 - **Kepala halaman seragam**: jejak ruang ("Uang > Invoice"), judul, satu kalimat tujuan halaman, satu aksi utama, dan tombol bantuan "?" ke panduan bagian itu.

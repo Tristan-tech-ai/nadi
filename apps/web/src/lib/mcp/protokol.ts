@@ -4,6 +4,7 @@
 // Murni: akses database lewat `rpc` yang disuntikkan, jadi bisa diuji tanpa jaringan.
 import { createHash } from "node:crypto";
 import { PROMPT_ONBOARDING } from "@/lib/onboarding/prompt";
+import { barisDariButir } from "@/lib/onboarding/draf";
 import { uraiTeksNadi } from "@/lib/onboarding/teks-nadi";
 import { kontenSkill, type BahasaSkill } from "@/lib/skill/umum";
 
@@ -26,7 +27,7 @@ type Siapa = { peran: string; cakupan: string[]; usaha: { nama: string } };
 
 const INSTRUKSI =
   "Nadi: sistem kerja usaha (orang, usulan, uang, absen). Mulai dengan siapa_saya untuk melihat usaha, peran, dan izin token. " +
-  "Semua perubahan dari asisten AI menjadi usulan lewat buat_usulan atau usul_onboarding (menyiapkan usaha dari dokumen pengguna) dan baru berlaku setelah disetujui pemilik atau admin di aplikasi Nadi. " +
+  "Semua perubahan dari asisten AI menjadi usulan lewat buat_usulan, atau draf onboarding lewat tulis_draf (menyiapkan usaha dari dokumen pengguna; baca_draf dan ubah_draf untuk merevisi), dan baru berlaku setelah pemilik atau admin menyetujui atau menerapkannya di aplikasi Nadi. AI tidak bisa menerapkan draf. " +
   "Rupiah ditulis sebagai angka utuh, tanggal YYYY-MM-DD. " +
   "Cara memakai Nadi selengkapnya (peta fitur, kosakata, onboarding, aturan aman, contoh per peran) ada di sumber nadi://skill; bahasa Inggris: nadi://skill/en.";
 const INFO = { name: "nadi", title: "Nadi", version: "0.9.1" };
@@ -135,6 +136,63 @@ export const ALAT: Alat[] = [
     },
     tambahan: (a) => ({ ditolak: cetakBiru(a).ditolak }),
   },
+  {
+    name: "tulis_draf", title: "Tulis draf onboarding", cakupan: "nadi.usul", pengelola: true, fungsi: "mcp_save_ai_draft",
+    description:
+      "Tulis SATU draf onboarding dari dokumen pengguna (daftar karyawan, struktur, aturan kerja, gaji). Kirim baris per bagian (orang, gaji, topi, izin, fitur, usaha) " +
+      "atau Teks Nadi. Draf langsung tampil di Nadi sebagai tabel yang bisa diubah pemilik; baris ragu dan baris gaji tidak tercentang otomatis. Draf baru menutup draf lama yang belum diterapkan. " +
+      "Kamu TIDAK bisa menerapkan draf; minta pemilik membuka Nadi, memeriksa, lalu menekan Terapkan. Jangan kirim NIK atau nomor rekening.",
+    inputSchema: objek({
+      baris: {
+      type: "array", minItems: 1, maxItems: 200, description: "Baris draf",
+      items: objek({
+        bagian: { type: "string", enum: ["orang", "gaji", "topi", "izin", "fitur", "usaha"] },
+        nilai: { type: "object", description: "orang: nama, jabatan, mulai YYYY-MM-DD; gaji: nama, pokok (rupiah utuh); topi: nama; izin: jenis, otomatis, maks_hari, butuh_bukti, jatah_tahunan; fitur: modul (kasir, stok, produksi, dagang_luar, servis, janji, proyek, mata, crm, layanan), nyala; usaha: skala, cabang, kota, negara" },
+        alasan: { type: "string", maxLength: 300, description: "Dari mana baris ini (nama berkas dan baris), supaya pemilik bisa memeriksa" },
+        keyakinan: { type: "integer", minimum: 0, maximum: 100, description: "Seberapa yakin; di bawah 70 tidak tercentang" },
+      }, ["bagian", "nilai"]),
+    },
+      teks: { type: "string", minLength: 18, maxLength: 20000, description: "Atau Teks Nadi (baris pertama NADI ONBOARDING 1)" },
+    }),
+    annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
+    param: (a) => {
+      if (Array.isArray(a.baris) && a.baris.length) return { p_baris: a.baris };
+      const { h, ditolak } = cetakBiru(a);
+      const baris = barisDariButir(h.butir, "AI-mu");
+      if (h.galat || !baris.length) {
+        const sebab = h.galat ? (ALASAN_TOLAK[h.galat] ?? h.galat) : ditolak.map((d) => `baris ${d.baris}: ${d.alasan}`).join("; ");
+        throw new RpcGalat(`Tidak ada baris yang bisa dijadikan draf. ${sebab}`.slice(0, 480), "22023");
+      }
+      return { p_baris: baris };
+    },
+    tambahan: (a) => (Array.isArray(a.baris) ? {} : { ditolak: cetakBiru(a).ditolak }),
+  },
+  {
+    name: "baca_draf", title: "Baca draf onboarding", cakupan: "nadi.usul", pengelola: true, fungsi: "mcp_read_ai_draft",
+    description: "Baca draf onboarding yang sedang terbuka di Nadi: setiap baris dengan id, bagian, nilai, centang, dan alasan bila perlu dicek (ragu). Pakai sebelum ubah_draf.",
+    inputSchema: objek({}), annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+    param: () => ({}),
+  },
+  {
+    name: "ubah_draf", title: "Ubah draf onboarding", cakupan: "nadi.usul", pengelola: true, fungsi: "mcp_edit_ai_draft",
+    description:
+      "Revisi draf terbuka sesuai permintaan pengguna, misalnya ganti topi Sari menjadi kasir. Operasi: ubah (id + nilai yang diganti), hapus (id), tambah (baris baru). " +
+      "Perubahan langsung tampil di layar tinjau Nadi. Mencentang dan menerapkan hanya bisa dilakukan pemilik di Nadi.",
+    inputSchema: objek({
+      operasi: {
+        type: "array", minItems: 1, maxItems: 200,
+        items: objek({
+          op: { type: "string", enum: ["ubah", "hapus", "tambah"] },
+          id: { type: "string", maxLength: 16, description: "id baris dari baca_draf (untuk ubah dan hapus)" },
+          nilai: { type: "object", description: "Kolom yang diganti (untuk ubah)" },
+          baris: { type: "object", description: "Baris baru: bagian, nilai, alasan, keyakinan (untuk tambah)" },
+          alasan: { type: "string", maxLength: 300 },
+        }, ["op"]),
+      },
+    }, ["operasi"]),
+    annotations: { readOnlyHint: false, destructiveHint: false, idempotentHint: false, openWorldHint: false },
+    param: (a) => ({ p_ops: a.operasi }),
+  },
 ];
 
 /** Daftar alat untuk pemanggil ini: alat pengelola disembunyikan dari staf, alat tulis dari token tanpa nadi.usul. Urutan tetap. */
@@ -176,7 +234,7 @@ export const PROMPT: Prompt[] = [
     description: "Baca dokumen usahamu (daftar karyawan, aturan kerja) lalu siapkan Nadi lewat usulan yang kamu setujui.",
     teks: () => `${PROMPT_ONBOARDING}
 
-Setelah blok selesai, kirim isinya ke alat usul_onboarding (argumen teks), lalu sebutkan berapa usulan dibuat dan baris mana yang ditolak beserta alasannya. Ingatkan saya membuka Feed Nadi untuk menyetujui.`,
+Setelah blok selesai, kirim isinya ke alat tulis_draf (argumen teks), lalu sebutkan berapa baris masuk draf dan baris mana yang ditolak beserta alasannya. Bila saya minta perubahan, pakai baca_draf lalu ubah_draf. Ingatkan saya membuka Nadi untuk memeriksa draf lalu menekan Terapkan.`,
   },
 ];
 

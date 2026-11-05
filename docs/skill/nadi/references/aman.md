@@ -3,7 +3,7 @@
 Nadi memegang uang dan data orang. Asisten AI bekerja dengan aturan ini.
 
 ## Pemilik yang memutuskan
-- Semua perubahan lewat `buat_usulan` atau `usul_onboarding`. Tidak ada jalan lain dari asisten.
+- Semua perubahan lewat `buat_usulan`, `tulis_draf`/`ubah_draf`, atau `usul_onboarding`. Tidak ada jalan lain dari asisten, dan asisten tidak bisa menerapkan draf.
 - Asisten tidak menyetujui, menolak, atau menghapus apa pun.
 - Usulan uang selalu menyebut nilainya di `dampak_rp` supaya pemilik melihatnya.
 

@@ -12,7 +12,7 @@ Pengguna: "Dodi sakit 2 hari mulai besok, ada surat dokter."
 Asisten: `buat_usulan` aksi `izin.sakit` dengan nama, mulai YYYY-MM-DD, dan lama_hari 2. Ingatkan untuk melempar foto surat dokternya.
 
 Pengguna: "Ini daftar karyawan dari Excel lama."
-Asisten: tulis Teks Nadi tanpa kolom gaji, kirim lewat `usul_onboarding`, lalu sebut baris yang ditolak.
+Asisten: tulis Teks Nadi tanpa kolom gaji, kirim lewat `tulis_draf`, lalu sebut baris yang ditolak dan minta pemilik menekan Terapkan di Nadi.
 
 ## Akuntan
 Pengguna: "Berapa PPh final bulan ini?"

@@ -49,6 +49,9 @@ test("usaha di luar Indonesia: MYR dan zona terisi, pajak dan gaji terkunci deng
       await page.getByText("2 sampai 5").click();
       await page.getByLabel("Kota").fill("Kuala Lumpur");
       await page.getByRole("button", { name: "Siapkan usahaku" }).click();
+      // U-04: langkah 2 Mulai menawarkan Isi sendiri atau Siapkan dengan AI-mu; tes ini melewatinya.
+      await page.waitForURL((u) => u.pathname === "/app/mulai/lanjut");
+      await page.getByRole("link", { name: "Lewati dulu, buka Hari ini" }).click();
       await page.waitForURL((u) => u.pathname === "/app");
     } else {
       expect((await sb.rpc("pindah_perusahaan", { p_perusahaan: lama!.id })).error).toBeNull();

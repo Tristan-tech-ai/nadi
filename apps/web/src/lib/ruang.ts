@@ -90,7 +90,7 @@ export const RUANG: Ruang[] = [
 ];
 
 /** Halaman di bawah /app yang sengaja tidak masuk menu (alur sekali jalan, halaman detail, atau peta menu itu sendiri). */
-export const DI_LUAR_MENU = ["/app/mulai", "/app/wawancara/[lamaran]", "/app/menu"] as const;
+export const DI_LUAR_MENU = ["/app/mulai", "/app/mulai/lanjut", "/app/wawancara/[lamaran]", "/app/menu", "/app/siapkan/draf/[id]"] as const;
 
 export const SEMUA_HALAMAN = RUANG.flatMap((r) => r.halaman.map((x) => ({ ...x, ruang: r.id })));
 

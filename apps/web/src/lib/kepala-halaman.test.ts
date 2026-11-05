@@ -22,7 +22,7 @@ function periksaKepala(rute: string, isi: string): string[] {
   const jalur = [...isi.matchAll(/<KepalaHalaman jalur="([^"]+)"/g)].map((m) => m[1]);
   if (jalur.length === 0) galat.push(`${rute}: tanpa KepalaHalaman`);
   for (const j of jalur) {
-    if (rute === "/app/mulai" || rute === "/app/menu") continue; // di luar peta ruang: alur sebelum usaha ada, dan peta menu itu sendiri
+    if (rute.startsWith("/app/mulai") || rute === "/app/menu") continue; // di luar peta ruang: alur sebelum usaha ada, dan peta menu itu sendiri
     if (!halamanDari(j)) galat.push(`${rute}: jalur ${j} tidak ada di peta ruang`);
     else if (j !== rute && !rute.startsWith(`${j}/`) && !(rute.startsWith("/app/wawancara/") && j === "/app/rekrutmen"))
       galat.push(`${rute}: jalur ${j} bukan halaman ini`);

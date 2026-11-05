@@ -19,7 +19,9 @@ This skill explains how an AI assistant helps Nadi users without guessing data.
 ## Tools and resources
 - `siapa_saya`, `daftar_usulan`, `daftar_orang` (owner or admin), `ringkasan_ai` (owner or admin).
 - `buat_usulan`: propose a new person, a purchase, sick leave, or a note.
-- `usul_onboarding`: set up a business from documents with Nadi Text. The format is in references/onboarding.md.
+- `tulis_draf`: set up a business from documents as ONE draft (rows for people, pay, hats, leave, features, business, or Nadi Text). The owner reviews and presses Apply in Nadi; you cannot apply it.
+- `baca_draf`, `ubah_draf`: read then revise the open draft as the user asks (change, delete, add rows).
+- `usul_onboarding` (older): Nadi Text becomes one proposal per line in the Feed. The format is in references/onboarding.md.
 - Resources: `nadi://usaha`, `nadi://usulan/menunggu`, `nadi://orang`, and this skill at `nadi://skill/en`.
 - Ready prompts: `tutup_hari`, `catat_dari_catatan`, `siapkan_usaha`.
 

@@ -12,7 +12,7 @@ User: "Dodi is sick for 2 days from tomorrow, he has a doctor's note."
 Assistant: `buat_usulan` with action `izin.sakit`, the name, start date YYYY-MM-DD, and lama_hari 2. Remind them to drop a photo of the note.
 
 User: "Here is the staff list from an old spreadsheet."
-Assistant: write Nadi Text without the salary column, send it with `usul_onboarding`, then name the rejected lines.
+Assistant: write Nadi Text without the salary column, send it with `tulis_draf`, then name the rejected lines and ask the owner to press Apply in Nadi.
 
 ## Accountant
 User: "How much final income tax this month?"

@@ -19,7 +19,7 @@ const IKON_RUANG: Record<string, Ikon> = {
   "hari-ini": HouseSimpleIcon, uang: WalletIcon, jual: StorefrontIcon, barang: PackageIcon, orang: UsersThreeIcon,
   tempat: VideoCameraIcon, dokumen: FileTextIcon, otomasi: LightningIcon, pengaturan: GearSixIcon,
 };
-type Teks = { navUtama: string; menu: string; tutup: string; semuaMenu: string; peta: string; cari: TeksCari };
+type Teks = { navUtama: string; menu: string; tutup: string; semuaMenu: string; peta: string; cari: TeksCari; menunggu: string };
 type Butir = { href: string; label: string; Ikon: Ikon };
 
 export function bilahBawah(peran: string, b: Bahasa): Butir[] {
@@ -35,9 +35,17 @@ export function bilahBawah(peran: string, b: Bahasa): Butir[] {
     { href: "/app/invoice", label: t("Uang", "Money"), Ikon: WalletIcon }, { href: "/app/orang", label: t("Orang", "People"), Ikon: UsersThreeIcon }];
 }
 
+/** Lencana hanya untuk hal yang bisa ditindak (mis. usulan menunggu), tidak tampil bila nol (NN/g, indikator bersifat kondisional). */
+function Lencana({ n, label }: { n?: number; label: string }) {
+  if (!n) return null;
+  return <span className="ml-auto inline-flex min-w-5 items-center justify-center rounded-full bg-tinta px-1.5 text-[11px] font-semibold leading-5 text-kertas" data-lencana={n}>
+    <span aria-hidden>{n > 99 ? "99+" : n}</span><span className="sr-only">{label.replace("{n}", String(n))}</span></span>;
+}
+
 const aktifDi = (jalur: string, href: string) => (href === "/app" ? jalur === "/app" : jalur === href || jalur.startsWith(`${href}/`));
 
-function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih }: { ruang: Ruang[]; jalur: string; b: Bahasa; guna?: boolean; lipat?: boolean; onPilih?: () => void }) {
+function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, lencana = {}, labelLencana = "" }: { ruang: Ruang[]; jalur: string; b: Bahasa; guna?: boolean; lipat?: boolean; onPilih?: () => void; lencana?: Record<string, number>; labelLencana?: string }) {
+  const jumlahRuang = (r: Ruang) => r.halaman.reduce((a, x) => a + (lencana[x.href] ?? 0), 0);
   const kini = halamanDari(jalur)?.href;
   const ruangKini = halamanDari(jalur)?.ruang;
   if (lipat) {
@@ -49,12 +57,12 @@ function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih }: 
           return (
             <details key={r.id} open={r.id === ruangKini || undefined} className="group">
               <summary className="flex cursor-pointer list-none items-center gap-2 rounded-[var(--radius-isian)] px-2 py-2 text-sm font-semibold text-tinta hover:bg-kertas-2">
-                <Ikon size={18} aria-hidden />{r.label[b]}<span className="ml-auto text-xs font-normal text-tinta-2">{r.halaman.length}</span>
+                <Ikon size={18} aria-hidden />{r.label[b]}<Lencana n={jumlahRuang(r)} label={labelLencana} />
               </summary>
               <ul className="mb-2 ml-6 mt-0.5 grid gap-0.5 border-l border-garis pl-2">{r.halaman.map((x) => (
                 <li key={x.href}>
                   <Link href={x.href} aria-current={kini === x.href ? "page" : undefined}
-                    className={`block rounded-[var(--radius-isian)] px-2 py-1.5 text-sm hover:bg-kertas-2 ${kini === x.href ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}>{x.label[b]}</Link>
+                    className={`flex items-center gap-2 rounded-[var(--radius-isian)] px-2 py-1.5 text-sm hover:bg-kertas-2 ${kini === x.href ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}>{x.label[b]}<Lencana n={lencana[x.href]} label={labelLencana} /></Link>
                 </li>))}</ul>
             </details>
           );
@@ -75,7 +83,7 @@ function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih }: 
               <li key={x.href}>
                 <Link href={x.href} onClick={onPilih} aria-current={kini === x.href ? "page" : undefined}
                   className={`block rounded-[var(--radius-isian)] px-2 py-2 text-sm hover:bg-kertas-2 ${kini === x.href ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}>
-                  {x.label[b]}{guna && <span className="block text-xs font-normal text-tinta-2">{x.guna[b]}</span>}
+                  <span className="flex items-center gap-2">{x.label[b]}<Lencana n={lencana[x.href]} label={labelLencana} /></span>{guna && <span className="block text-xs font-normal text-tinta-2">{x.guna[b]}</span>}
                 </Link>
               </li>))}</ul>
           </section>
@@ -85,7 +93,7 @@ function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih }: 
   );
 }
 
-export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks }: { ruang: Ruang[]; mati?: Ruang[]; peran: string; bahasa: Bahasa; teks: Teks }) {
+export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana = {} }: { ruang: Ruang[]; mati?: Ruang[]; peran: string; bahasa: Bahasa; teks: Teks; lencana?: Record<string, number> }) {
   const jalur = usePathname();
   const [menu, setMenu] = useState(false);
   const [panel, setPanel] = useState<string | null>(null);
@@ -108,7 +116,7 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks }: { ruang: 
     <>
       {/* >= 1200 px: sidebar penuh. */}
       <nav aria-label={teks.navUtama} className="kerangka-sidebar fixed bottom-0 left-0 top-[3.25rem] z-10 hidden w-64 overflow-y-auto border-r border-garis bg-kertas px-3 py-4 min-[1200px]:block print:hidden">
-        <DaftarRuang ruang={ruang} jalur={jalur} b={b} lipat />
+        <DaftarRuang ruang={ruang} jalur={jalur} b={b} lipat lencana={lencana} labelLencana={teks.menunggu} />
         <Link href="/app/menu" aria-current={jalur === "/app/menu" ? "page" : undefined} className="mt-3 flex items-center gap-2 rounded-[var(--radius-isian)] border-t border-garis px-2 pt-3 text-sm text-tinta-2 hover:text-tinta">
           <ListIcon size={18} aria-hidden />{teks.peta}
         </Link>
@@ -123,7 +131,8 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks }: { ruang: 
             <li key={r.id}>
               <button type="button" onClick={() => setPanel(panel === r.id ? null : r.id)} aria-expanded={panel === r.id} aria-controls="panel-ruang"
                 className={`flex min-h-14 w-full flex-col items-center justify-center gap-0.5 px-1 text-center text-[11px] leading-tight ${aktif ? "font-semibold text-tinta" : "text-tinta-2"}`}>
-                <Ikon size={22} weight={aktif ? "fill" : "regular"} aria-hidden />{r.label[b]}
+                <span className="relative"><Ikon size={22} weight={aktif ? "fill" : "regular"} aria-hidden />
+                  {r.halaman.some((x) => lencana[x.href]) && <span className="absolute -right-2 -top-1"><Lencana n={r.halaman.reduce((a, x) => a + (lencana[x.href] ?? 0), 0)} label={teks.menunggu} /></span>}</span>{r.label[b]}
               </button>
             </li>);
         })}
@@ -137,7 +146,7 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks }: { ruang: 
       </nav>
       {ruangPanel && (
         <div id="panel-ruang" className="fixed bottom-0 left-20 top-[3.25rem] z-20 hidden w-72 overflow-y-auto border-r border-garis bg-kertas p-3 shadow-sm min-[600px]:block min-[1200px]:hidden">
-          <DaftarRuang ruang={[ruangPanel]} jalur={jalur} b={b} guna onPilih={() => setPanel(null)} />
+          <DaftarRuang ruang={[ruangPanel]} jalur={jalur} b={b} guna onPilih={() => setPanel(null)} lencana={lencana} labelLencana={teks.menunggu} />
         </div>
       )}
 
@@ -150,7 +159,8 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks }: { ruang: 
             return (
               <li key={href} className="flex-1">
                 <Link href={href} aria-current={aktif ? "page" : undefined} className={`flex min-h-14 flex-col items-center justify-center gap-0.5 text-xs ${aktif ? "font-semibold text-tinta" : "text-tinta-2"}`}>
-                  <Ikon size={22} weight={aktif ? "fill" : "regular"} aria-hidden />{label}
+                  <span className="relative"><Ikon size={22} weight={aktif ? "fill" : "regular"} aria-hidden />
+                    {lencana[href] ? <span className="absolute -right-3 -top-1"><Lencana n={lencana[href]} label={teks.menunggu} /></span> : null}</span>{label}
                 </Link>
               </li>);
           })}
@@ -169,7 +179,7 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks }: { ruang: 
               <XIcon size={22} aria-hidden /><span className="sr-only">{teks.tutup}</span>
             </button>
           </div>
-          <div className="mt-4"><DaftarRuang ruang={ruang} jalur={jalur} b={b} guna onPilih={() => setMenu(false)} /></div>
+          <div className="mt-4"><DaftarRuang ruang={ruang} jalur={jalur} b={b} guna onPilih={() => setMenu(false)} lencana={lencana} labelLencana={teks.menunggu} /></div>
         </div>
       )}
       <DialogCari ruang={ruang} mati={mati} peran={peran} bahasa={b} teks={teks.cari} />
