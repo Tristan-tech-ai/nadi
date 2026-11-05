@@ -571,13 +571,17 @@ const o7 = { t: 0 };''')
     isi11 = (f'<div id="capakhir" class="capbesar" data-layout-allow-overlap data-layout-allow-occlusion style="left:{W / 2 - 170}px; top:330px">DITERIMA</div>'
              f'<div id="logo11" style="position:absolute; left:{W / 2 - 110}px; top:300px; width:220px; height:220px; opacity:0">{logo}</div>'
              '<div class="kal" id="k11" style="top:600px; opacity:0">Lempar berkasnya. Nadi yang merapikan.</div>'
-             '<div class="kal dua" id="u11" style="top:720px; opacity:0">nadi-swart.vercel.app/demo</div>')
+             '<div class="kal dua" id="u11" style="top:720px; opacity:0">nadi-swart.vercel.app/demo</div>'
+             # Atribusi wajib CC BY 4.0 (ASSETS.md): judul, pencipta, sumber, lisensi. Rekaman CC0 dan Pexels tidak mewajibkan.
+             '<div id="kr11" style="position:absolute; left:0; right:0; top:1000px; text-align:center; font-size:20px; color:#5B574F; opacity:0">'
+             'Musik: &ldquo;Inspiring Advertising&rdquo; oleh Rafael Krux (filmmusic.io), CC BY 4.0. Footage kamera: Shruthi Pradeep, Pexels.</div>')
     f.adegan("b11", T11w, M[11] + D[11], isi11, z=11)
     f.add(f'tl.fromTo("#capakhir", {{opacity: 0, scale: 2.4, rotation: -14}}, {{opacity: 1, scale: 1, rotation: -7, duration: 0.16, ease: "power3.in"}}, {T11 + 0.3});')
     f.add(f'tl.to("#capakhir", {{opacity: 0, scale: 0.6, rotation: 0, duration: 0.3, ease: TEKAN}}, {T11 + 1.2});')
     f.add(f'tl.fromTo("#logo11", {{opacity: 0, scale: 0.6}}, {{opacity: 1, scale: 1, duration: 0.35, ease: "power3.out"}}, {T11 + 1.3});')
     f.add(f'tl.fromTo("#k11", {{opacity: 0, y: 16}}, {{opacity: 1, y: 0, duration: 0.3, ease: "power2.out"}}, {T11 + 1.9});')
     f.add(f'tl.fromTo("#u11", {{opacity: 0}}, {{opacity: 1, duration: 0.3}}, {T11 + 2.5});')
+    f.add(f'tl.fromTo("#kr11", {{opacity: 0}}, {{opacity: 1, duration: 0.3}}, {T11 + 2.8});')
 
     # ---------- Babak 3 kerja dari AI-mu lewat MCP  ----------
     # Jendela chat NETRAL (tanpa logo atau nama aplikasi pihak ketiga); alat tulis_draf/ubah_draf = alat MCP Nadi yang sungguhan

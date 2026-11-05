@@ -3699,13 +3699,15 @@
    "accept": "aset di docs/promo/aset-demo/ dengan lisensi tiap berkas di docs/ASSETS.md (CC0/CC BY atau buatan sendiri), tanpa orang yang dapat dikenali, data sintetis; animasi buatan sendiri mengikuti prinsip animation design yang dipelajari (V-01); tiap aset dipakai minimal di satu adegan storyboard Kriteria tambahan: CCTV dari footage nyata berlisensi bebas (lisensi dibaca dan dicatat, kamera atas toko/ritel), bukan animasi buatan sendiri; Mata diuji pada footage itu.",
    "how": "Wikimedia Commons, Pexels/Pixabay (cek lisensi), atau render sendiri (Blender tidak tersedia: HyperFrames/Python)",
    "blocked_by": "V-01,V-03",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-05T20:01:08",
    "riwayat_done": {
     "done": "2026-11-05T23:37:58",
     "result": "ef64599 + docs/promo/aset-demo (karyawan-berantakan.xlsx, harga-berantakan.xlsx, pelanggan-ganda.csv, cctv-toko.mp4 1280x720 60 dtk sosok abstrak + jawaban 12 kunjungan, buat.py berbenih), ASSETS; tiap aset dipetakan ke babak storyboard (1, 3, 4, 7)"
    },
-   "catatan": "dibuka ulang 6 Nov 2026 atas penilaian Tristan: \"sound effect ketik mu bahkan tidak seperti suara ketikan dan suara transisi nya kaya suara animasi busuk\", animasi antrean pengganti CCTV \"jelek dan jadul\", \"cara kamu mendengar masih salah\". Klaim done sebelumnya berdiri di atas ukuran angka (LUFS, BPM, onset, lembar kontak 36 bingkai), bukan menonton penuh dan menilai bunyi."
+   "catatan": "dibuka ulang 6 Nov 2026 atas penilaian Tristan: \"sound effect ketik mu bahkan tidak seperti suara ketikan dan suara transisi nya kaya suara animasi busuk\", animasi antrean pengganti CCTV \"jelek dan jadul\", \"cara kamu mendengar masih salah\". Klaim done sebelumnya berdiri di atas ukuran angka (LUFS, BPM, onset, lembar kontak 36 bingkai), bukan menonton penuh dan menilai bunyi.",
+   "done": "2026-11-06T05:20:24",
+   "result": "7cccd1d + 62bbceb (gate LULUS, push): footage CCTV asli Pexels 37706044 (kamera atas lorong mal, stan bazar, Pexels License dibaca dan dicatat di ASSETS.md, orang hanya tampak dari atas, potongan tanpa papan merek), disiapkan docs/promo/aset-demo/cctv-nyata.sh; Mata diuji pada footage itu: fixtures/korpus/mata-nyata + src/lib/mata/jejak-nyata.test.ts (masuk 3 vs tangan 2-3, keluar 6 vs tangan 4-5); dipakai di babak Mata film; aset lain (Excel berantakan, pelanggan ganda) dipakai di babak 1 dan 3"
   },
   {
    "id": "V-05",
@@ -3718,13 +3720,15 @@
    "accept": "docs/promo/audio-v2/: tiap berkas mentah tercatat sumber + lisensi di ASSETS.md, tiap hasil olah punya resep (rantai efek) yang bisa diulang; set minimal: klik, ketik, cap/setujui, lempar/whoosh, notifikasi, transisi, sonic logo 2 dtk, satu lagu dasar; diuji di potongan 20 dtk: -14 LUFS, true peak <= -1 dBTP, SFX jatuh di bingkai gerak Kriteria tambahan: ketik terdengar seperti ketikan keyboard nyata dan transisi seperti whoosh/swipe film produk modern, dibuktikan A/B dengan efek rujukan (spektrogram berdampingan) sebelum dipakai.",
    "how": "Freesound (CC0/CC BY), Openverse, katalog HeyGen bila masuk; rantai V-02",
    "blocked_by": "V-02,V-03,V-14",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-05T20:01:08",
    "riwayat_done": {
     "done": "2026-11-05T23:19:37",
     "result": "docs/promo/audio-v2 (buat.py resep, 7 efek .wav -3 dBTP, laporan.json), ASSETS 7 baris sumber CC0/PD/CC BY 4.0; uji 20 dtk -20,5 -> -14,2 LUFS / -1,5 dBTP, serangan efek 18,7-33,8 ms setelah bingkai gambar"
    },
-   "catatan": "dibuka ulang 6 Nov 2026 atas penilaian Tristan: \"sound effect ketik mu bahkan tidak seperti suara ketikan dan suara transisi nya kaya suara animasi busuk\", animasi antrean pengganti CCTV \"jelek dan jadul\", \"cara kamu mendengar masih salah\". Klaim done sebelumnya berdiri di atas ukuran angka (LUFS, BPM, onset, lembar kontak 36 bingkai), bukan menonton penuh dan menilai bunyi."
+   "catatan": "dibuka ulang 6 Nov 2026 atas penilaian Tristan: \"sound effect ketik mu bahkan tidak seperti suara ketikan dan suara transisi nya kaya suara animasi busuk\", animasi antrean pengganti CCTV \"jelek dan jadul\", \"cara kamu mendengar masih salah\". Klaim done sebelumnya berdiri di atas ukuran angka (LUFS, BPM, onset, lembar kontak 36 bingkai), bukan menonton penuh dan menilai bunyi.",
+   "done": "2026-11-06T04:28:42",
+   "result": "406ba32 + fc967ff: docs/promo/audio-v2 dibuat ulang dari 7 rekaman nyata CC0 (ASSETS.md), resep berulang foley.py; set: ketik-00..15, klik, cap, whoosh/lempar, notifikasi, transisi, sonic-logo 2,0 dtk, lagu dasar Krux (stem demucs, campur.py); uji potongan 20 dtk babak Feed -13,8 LUFS / -1,5 dBTP (mix) dan -13,9 LUFS di MP4, efek 5-12 ms setelah bingkai; A/B spektrogram dengan efek rujukan di MENDENGAR.md"
   },
   {
    "id": "V-06",
@@ -3737,13 +3741,15 @@
    "accept": "docs/promo/demo-v2/STORYBOARD.md: masalah jelas (aplikasi otomatis mahal, yang murah manual; harga pesaing hanya dari halaman harga resmi bertanggal, tanpa merendahkan), semua fitur utama (Lempar, Feed setujui, invoice + QRIS, gaji, Mata, otomasi, tanya data, belajar format/self-improvement, kerangka adaptif, MCP AI-mu), penjelasan tanpa suara orang, palet, tipografi, transisi unik, branding, gaya tulisan VOICE.md; tiap adegan menyebut sumber DOM asli dan isyarat suara; adegan Mata wajib memperlihatkan pelacakan dengan jelas: setiap orang punya jejak/garis lintasan dan nomor anonim yang mengikuti geraknya, hitungan masuk/keluar bertambah saat jejak melewati pintu, zona antrean/kasir menyala, lalu peta panas terisi (Tristan 6 Nov 2026) Storyboard ditulis ulang setelah V-03/V-10/V-13 diulang, dengan gerak kamera per babak (jenis, durasi, easing) dan suara per kejadian.",
    "how": "pola dari RUJUKAN.md (V-03), RISET.md, SUARA.md",
    "blocked_by": "V-03,V-04,V-10,V-03,V-10,V-13,V-14",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-05T20:01:08",
    "riwayat_done": {
     "done": "2026-11-05T23:37:58",
     "result": "docs/promo/demo-v2/STORYBOARD.md: 11 babak 4:45, masalah dengan harga resmi bertanggal, 10 fitur wajib dipetakan, DOM asli + isyarat suara per babak, palet/huruf/5 transisi/larangan, Mata jejak bernomor + hitungan + zona + peta panas (prasyarat V-12)"
    },
-   "catatan": "dibuka ulang 6 Nov 2026 atas penilaian Tristan: \"sound effect ketik mu bahkan tidak seperti suara ketikan dan suara transisi nya kaya suara animasi busuk\", animasi antrean pengganti CCTV \"jelek dan jadul\", \"cara kamu mendengar masih salah\". Klaim done sebelumnya berdiri di atas ukuran angka (LUFS, BPM, onset, lembar kontak 36 bingkai), bukan menonton penuh dan menilai bunyi."
+   "catatan": "dibuka ulang 6 Nov 2026 atas penilaian Tristan: \"sound effect ketik mu bahkan tidak seperti suara ketikan dan suara transisi nya kaya suara animasi busuk\", animasi antrean pengganti CCTV \"jelek dan jadul\", \"cara kamu mendengar masih salah\". Klaim done sebelumnya berdiri di atas ukuran angka (LUFS, BPM, onset, lembar kontak 36 bingkai), bukan menonton penuh dan menilai bunyi.",
+   "done": "2026-11-06T05:20:24",
+   "result": "8ea233d: docs/promo/demo-v2/STORYBOARD.md ditulis ulang dari nol untuk v3 (4:38): masalah dengan harga resmi bertanggal, semua fitur utama (Lempar, MCP AI-mu, Feed, tagihan QRIS, gaji, Mata footage asli dengan jejak bernomor dan hitungan pintu, otomasi, tanya data, Sarapan, belajar format + pengawas bukan AI, kerangka adaptif), tanpa narator, palet, huruf, transisi, karakter cap, VOICE; per babak: sumber DOM asli, gerak kamera (jenis, durasi, easing), isyarat suara"
   },
   {
    "id": "V-07",
@@ -3987,13 +3993,15 @@
    "accept": "hitung-kunjungan.tsx menggambar tiap jejak dengan nomor anonim (1, 2, 3 per sesi, tidak tersimpan) dan garis lintasan 3 dtk terakhir, penghitung masuk/keluar bertambah saat jejak melewati zona pintu, zona kasir/antrean menyala saat terisi, semua hanya di perangkat (tidak ada stream atau nomor jejak yang dikirim); tes unit penghitung pintu; e2e memutar docs/promo/aset-demo/cctv-toko.mp4 di /app/mata dan hitungan masuk = 12 +- 1 sesuai cctv-jawaban.json, tangkapan 1440/390 terang/gelap, axe 0 serius Kriteria tambahan (dibuka ulang 6 Nov 2026, Tristan: animasinya \"jelek banget\" dan \"usahakan banget pakai footage cctv asli\"): diuji dan diperlihatkan pada footage CCTV asli berlisensi bebas (lisensi dibaca dan dicatat di docs/ASSETS.md), bukan animasi sintetis; tampilan pelacakan (jejak, nomor, zona, hitungan) dirancang ulang mengikuti pola produk analitik video yang nyata dan dinilai berdampingan dengan rujukan sebelum done.",
    "how": "src/lib/mata/jejak.ts Pelacak (terlihat, kunjungan), docs/promo/demo-v2/STORYBOARD.md babak 7",
    "blocked_by": "V-04",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-05T23:37:49",
    "catatan": "wajib dibetulkan 6 Nov 2026: saat ditambah, argumen wajib ditulis \"wajib\" bukan \"1\" sehingga tercatat tidak wajib; maksudnya wajib (V-12 perintah Tristan, T-01A-D pecahan T-01 wajib) Klaim done sebelumnya salah: diuji hanya pada animasi antrean sintetis buatan sendiri yang dinilai Tristan jelek.",
    "riwayat_done": {
     "done": "2026-11-05T23:54:33",
     "result": "6cbfb40; jejak.ts tampil/pintu/zonaTerisi + jejak-tampil.test.ts 4/4 (lib/mata 28/28), hitung-kunjungan.tsx layar 640 px (zona menyala, garis 3 dtk, nomor anonim, Masuk/Keluar); e2e/mata-jejak.spec.ts produksi: masuk 11 keluar 12 kunjungan 11 dari 12, axe 0 serius 390/1440 terang/gelap; aset CCTV diperbaiki (kontras baju, pintu di dalam bingkai)"
-   }
+   },
+   "done": "2026-11-06T05:20:24",
+   "result": "7cccd1d (produksi READY, e2e mata-jejak produksi lulus: masuk 11 keluar 12 jawaban 12, axe 0 serius 390/1440 terang/gelap): lapisan pelacakan dirancang ulang di src/lib/mata/gambar.ts (kotak sudut per orang, nomor anonim #n, jejak 3 dtk memudar, zona berlabel jumlah orang menyala, panel kepala Masuk/Keluar) dipakai layar Mata dan film; diuji pada footage CCTV asli (jejak-nyata.test.ts) dan dinilai berdampingan dengan rujukan (REVIEW.md); perbaikan dari uji nyata: stabilisasi bingkai + kepekaan tinggi (stabil.test.ts, korpus v2 tetap lulus); tes gambar.test.ts"
   },
   {
    "id": "T-01A",
@@ -4377,9 +4385,11 @@
    "accept": "dibangun di docs/promo/demo-v3/buat.py dari DOM asli (lapisan diposisikan dari ukur.json), dirender, dan ditinjau bingkai besar terhadap aturan GERAK.md + UJI-GERAK.md; temuan dan status dicatat di CATATAN.md; hyperframes check 0 error; audio -14 LUFS, <= -1 dBTP, efek dari rekaman berlisensi bebas tercatat di ASSETS",
    "how": "docs/promo/demo-v3/CATATAN.md",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T02:33:05",
-   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)"
+   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)",
+   "done": "2026-11-06T04:28:42",
+   "result": "406ba32 + fc967ff: audio film demo v3 dari campur.py (spotting dari timeline index.html, foley nyata, lagu disusun per birama, drum berhenti sebelum 5 momen kunci, suara toko di babak masalah dan Mata, sonic logo cap); MP4 v3a: AAC 48 kHz, -14,1 LUFS, LRA 8,6 LU, puncak -2,9 dBFS; sinkron cap -7/+27/-1 ms; hyperframes check 0 error; ASSETS.md mencatat rekaman"
   },
   {
    "id": "V-07I",
