@@ -3347,8 +3347,10 @@
    "accept": "tes SQL: jadwal bulanan menerbitkan tepat satu invoice per periode (idempoten, tanggal akhir bulan aman), berhenti saat kontrak berakhir/dijeda, isolasi; e2e satu langganan terbit dan muncul di /i/kode",
    "how": "docs/research/kebutuhan-usaha.md urut 1; pakai invoice + QRIS + pengingat yang ada, pg_cron harian",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T13:17:51"
+   "status": "done",
+   "created": "2026-11-05T13:17:51",
+   "done": "2026-11-05T13:33:01",
+   "result": "0a6e6ca + 21e63f1: migrasi tagihan_berulang md5 f1912214 + pg_cron nadi-tagihan-berulang 23.30 UTC; tes SQL 18/18 (akhir bulan 31 Jan>28 Feb>31 Mar>30 Apr, kabisat, 3 periode tertinggal terbit sekali, jalan ulang tanpa ganda, jurnal piutang, jeda tanpa terbit, lanjut melompati periode jeda, berhenti di tanggal selesai, baris rusak = galat, pembuat kehilangan peran = galat, staf/isolasi); e2e/berulang.spec.ts lulus produksi nadi-swart.vercel.app (simpan jadwal = 1 invoice periode pertama, tombol terbitkan tidak menggandakan, /i/kode total Rp750.000, jeda; axe 390/1440 terang/gelap); fitur.md JU-22"
   },
   {
    "id": "W-07B",
