@@ -110,3 +110,21 @@ test("latarMedian membuang orang yang lewat", async () => {
   const b = (v: number[]) => ({ lebar: 2, tinggi: 1, data: Uint8Array.from(v) });
   expect([...latarMedian([b([150, 150]), b([40, 150]), b([150, 40]), b([150, 150]), b([40, 150])])]).toEqual([150, 150]);
 });
+
+test("kamera miring: kotak model menjadi titik kaki dan dilacak sebagai satu kunjungan lewat pintu", async () => {
+  const { titikDariKotak, Pelacak, OPSI_PELACAK_MIRING } = await import("./jejak");
+  const zona = [{ id: "p", nama: "Pintu", jenis: "pintu" as const, poligon: [[0, 0.7], [0.3, 0.7], [0.3, 1], [0, 1]] as [number, number][] }];
+  expect(titikDariKotak([{ label: "person", score: 0.9, box: { xmin: 0.1, ymin: 0.2, xmax: 0.3, ymax: 0.8 } }, { label: "person", score: 0.3, box: { xmin: 0, ymin: 0, xmax: 1, ymax: 1 } }, { label: "chair", score: 0.9, box: { xmin: 0, ymin: 0, xmax: 1, ymax: 1 } }]))
+    .toEqual([{ x: 0.2, y: 0.77 }]);
+  const p = new Pelacak(zona, OPSI_PELACAK_MIRING);
+  const k = [];
+  for (let i = 0; i <= 40; i++) {
+    // 2 bingkai per detik: masuk di pintu, berjalan ke kanan atas, kembali ke pintu.
+    const f = i <= 20 ? i / 20 : (40 - i) / 20;
+    const kotak = { xmin: 0.05 + 0.5 * f, ymin: 0.4 - 0.3 * f, xmax: 0.2 + 0.5 * f, ymax: 0.95 - 0.3 * f };
+    k.push(...p.langkah(i / 2, titikDariKotak([{ label: "person", score: 0.8, box: kotak }])));
+  }
+  k.push(...p.selesai());
+  expect(k).toHaveLength(1);
+  expect(k[0].lama).toBeCloseTo(20, 0);
+});

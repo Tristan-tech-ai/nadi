@@ -67,6 +67,21 @@ Kesimpulan:
 - Latar sekarang diambil dari median 15 bingkai tersebar (layar berkas), karena rekaman nyata jarang dimulai dari ruang kosong.
 - Calon bahan promo: hanya Madero (titik orang tidak dapat dikenali), dengan atribusi dan konsekuensi CC BY-SA. Ezymart tidak dipakai.
 
+## Kamera miring (W-02C, 5 Nov 2026)
+
+Layar Hitung kunjungan kini punya pilihan letak kamera. "Miring, seperti CCTV toko" memakai model pengenal orang Mata F5-01 (RF-DETR nano q8 lewat transformers.js 4.3.1 di Web Worker, ID dari public.konfigurasi model_mata) pada 2 bingkai per detik; titik kaki tiap kotak orang (`titikDariKotak`) menjadi masukan Pelacak dengan gerbang lebih lebar (`OPSI_PELACAK_MIRING`). Kamera atas tetap memakai beda latar.
+
+Rekaman Ezymart, 10 bingkai, median 3 bingkai per titik waktu, diukur di Node dengan model dan pustaka yang sama (scratchpad/mata-node/eval-model.mjs), 82 sampai 87 ms per bingkai di CPU:
+
+| Cara | Akurasi jumlah orang |
+|---|---|
+| Beda latar (W-02B) | 40% |
+| Model, ambang 0,35 | 70% |
+| Model, ambang 0,45 / 0,5 / 0,6 | 75% |
+| Model ambang 0,5, hitungan tangan diperiksa ulang | 85% |
+
+Hitungan tangan pertama dibuat buta dari lembar 320 px. Tiga bingkai yang berselisih diperiksa ulang di 640 px dengan aturan "kepala terlihat di bingkai" (t = 39 dan 51 menjadi 2 orang). Pemeriksaan ulang ini dilakukan sesudah melihat keluaran model, jadi angka 85% bisa bias; angka buta 75% di bawah target 80%. Sisa salah: orang yang hanya tampak kepala di tepi bawah dan orang di balik rak.
+
 ## Belum
 
 - Agen edge Rust (edge/mata-agen) belum mengirim rekap kunjungan; baru layar Mata di peramban.

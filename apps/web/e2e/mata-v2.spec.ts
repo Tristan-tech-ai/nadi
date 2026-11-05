@@ -44,6 +44,9 @@ test("Mata v2: hitung kunjungan dari video, peta panas di Peta Usaha", async ({ 
   const panel = page.getByTestId("hitung-kunjungan");
   await expect(panel.getByTestId("kunjungan-berkas")).toHaveCount(0);
   await panel.getByTestId("kunjungan-papan").check();
+  await expect(panel.getByRole("radio", { name: "Miring, seperti CCTV toko" })).toBeVisible();
+  const axeMata = await new AxeBuilder({ page }).include('[data-testid="hitung-kunjungan"]').analyze();
+  expect(axeMata.violations.filter((v) => ["serious", "critical"].includes(v.impact ?? "")).map((v) => v.id)).toEqual([]);
   await panel.getByTestId("kunjungan-berkas").setInputFiles(join(KORPUS, "pendek.webm"));
   await expect(panel.getByTestId("kunjungan-terkirim")).toBeVisible({ timeout: 480_000 });
   const n = Number(await panel.getByTestId("kunjungan-hasil").getAttribute("data-kunjungan"));

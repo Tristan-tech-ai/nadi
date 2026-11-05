@@ -52,6 +52,19 @@ export function perbaruiLatar(latar: Float32Array, b: Bingkai, topeng: ArrayLike
   for (let i = 0; i < latar.length; i++) latar[i] += (b.data[i] - latar[i]) * (!topeng || !topeng[i] ? laju : laju * 0.004);
 }
 
+/**
+ * Kamera miring (W-02C): titik kaki orang dari kotak model deteksi (koordinat 0..1), dipakai Pelacak menggantikan gumpal beda
+ * latar. Kaki = tengah bawah kotak, sedikit naik supaya tetap di lantai saat kotak terpotong tepi bingkai.
+ */
+export function titikDariKotak(d: { label: string; score: number; box: { xmin: number; ymin: number; xmax: number; ymax: number } }[], ambang = 0.5): { x: number; y: number }[] {
+  return d
+    .filter((o) => o.label === "person" && o.score >= ambang)
+    .map((o) => ({ x: (o.box.xmin + o.box.xmax) / 2, y: Math.min(1, o.box.ymax - 0.05 * (o.box.ymax - o.box.ymin)) }));
+}
+
+/** Gerbang pelacak lebih lebar untuk kamera miring: model lebih lambat (2 bingkai per detik) dan orang tampak lebih besar. */
+export const OPSI_PELACAK_MIRING: OpsiPelacak = { gerbang: 0.16, umurHilang: 3, umurHilangDalam: 20, minLama: 4, porsiKerja: 0.6 };
+
 /** Lama dalam menit dan detik untuk layar: "4 mnt 10 dtk" / "4 min 10 s"; di bawah satu menit hanya detik. */
 export function formatDurasi(detik: number, bahasa = "id"): string {
   const d = Math.max(0, Math.round(detik));

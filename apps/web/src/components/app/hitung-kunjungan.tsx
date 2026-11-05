@@ -5,12 +5,17 @@ import { Tombol } from "@/components/ui/tombol";
 import { isiTeks } from "@/lib/i18n/isi-teks";
 import type { Kamus } from "@/lib/i18n/kamus";
 import { aturPapan, kirimRekap } from "@/app/app/mata/actions";
-import { abuDari, deteksi, formatDurasi, latarDari, latarMedian, Pelacak, rekapJam, type Bingkai, type Kunjungan, type ZonaV2 } from "@/lib/mata/jejak";
+import { abuDari, deteksi, formatDurasi, latarDari, latarMedian, OPSI_PELACAK, OPSI_PELACAK_MIRING, Pelacak, rekapJam, titikDariKotak, type Bingkai, type Kunjungan, type ZonaV2 } from "@/lib/mata/jejak";
+import type { Deteksi } from "@/lib/mata/resep";
+import type { ModelMata } from "@/components/app/layar-mata";
 
 // W-02 Mata v2: kamera atas atau rekaman diproses di perangkat ini (beda latar + pelacak posisi, src/lib/mata/jejak.ts).
 // Bingkai diperkecil ke 160 px, dibaca, lalu dibuang. Yang dikirim hanya rekap per jam (jumlah dan detik).
 const LEBAR = 160;
 const FPS = 5;
+// Kamera miring memakai model deteksi orang (sekitar 0,1 sampai 0,3 detik per bingkai di perangkat), jadi 2 bingkai per detik.
+const FPS_MIRING = 2;
+const LEBAR_MODEL = 640;
 const KIRIM_TIAP_MS = 5 * 60 * 1000;
 
 type Ringkas = { n: number; lama: number; tungguN: number; tunggu: number; layanN: number; layan: number };
@@ -30,7 +35,7 @@ function ringkas(k: Kunjungan[]): Ringkas {
   return r;
 }
 
-export function HitungKunjungan({ zona, papanAwal, teks: t, bahasa }: { zona: ZonaV2[]; papanAwal: boolean; teks: Kamus["kunjungan"]; bahasa: string }) {
+export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { zona: ZonaV2[]; papanAwal: boolean; model?: ModelMata; teks: Kamus["kunjungan"]; bahasa: string }) {
   const video = useRef<HTMLVideoElement>(null);
   const pratinjau = useRef<HTMLCanvasElement>(null);
   const berhenti = useRef(false);
@@ -41,12 +46,40 @@ export function HitungKunjungan({ zona, papanAwal, teks: t, bahasa }: { zona: Zo
   const [selesai, setSelesai] = useState<Kunjungan[]>([]);
   const [pesan, setPesan] = useState<{ jenis: "info" | "galat"; teks: string } | null>(null);
   const [terkirim, setTerkirim] = useState(false);
+  const [kamera, setKamera] = useState<"atas" | "miring">("atas");
+  const pekerja = useRef<Worker | null>(null);
   const adaPintu = zona.some((z) => z.jenis === "pintu");
 
   useEffect(() => () => {
     berhenti.current = true;
+    pekerja.current?.terminate();
     (video.current?.srcObject as MediaStream | null)?.getTracks().forEach((x) => x.stop());
   }, []);
+
+  /** Kamera miring: kotak orang dari model Mata di Web Worker, lalu titik kaki. Gambar tidak keluar dari perangkat. */
+  function titikModel(v: HTMLVideoElement): Promise<{ x: number; y: number }[]> {
+    const m = model!;
+    const s = Math.min(1, LEBAR_MODEL / v.videoWidth);
+    const k = document.createElement("canvas");
+    k.width = Math.round(v.videoWidth * s);
+    k.height = Math.round(v.videoHeight * s);
+    const g = k.getContext("2d", { willReadFrequently: true })!;
+    g.drawImage(v, 0, 0, k.width, k.height);
+    const data = g.getImageData(0, 0, k.width, k.height).data;
+    pekerja.current ??= new Worker("/mata-worker.js", { type: "module" });
+    const w = pekerja.current;
+    const id = Math.random().toString(36).slice(2);
+    return new Promise((selesai, gagal) => {
+      const dengar = (e: MessageEvent) => {
+        if (e.data.id !== id || e.data.jenis === "unduh") return;
+        w.removeEventListener("message", dengar);
+        if (e.data.jenis === "hasil") selesai(titikDariKotak(e.data.orang as Deteksi[], m.ambang));
+        else gagal(new Error(e.data.pesan));
+      };
+      w.addEventListener("message", dengar);
+      w.postMessage({ id, model: { id: m.id, dtype: m.dtype, ambang: m.ambang }, gambar: { data, lebar: k.width, tinggi: k.height } }, [data.buffer]);
+    });
+  }
 
   async function ubahPapan(pasang: boolean) {
     setPapan(pasang);
@@ -108,10 +141,12 @@ export function HitungKunjungan({ zona, papanAwal, teks: t, bahasa }: { zona: Zo
       return setPesan({ jenis: "galat", teks: t.gagalVideo });
     }
     setJalan(true);
-    const n = Math.floor(v.duration * FPS);
+    const miring = kamera === "miring" && Boolean(model);
+    const fps = miring ? FPS_MIRING : FPS;
+    const n = Math.floor(v.duration * fps);
     // Rekaman dianggap baru selesai: detik 0 = sekarang dikurangi panjang video.
     const asalMs = Date.now() - v.duration * 1000;
-    const p = new Pelacak(zona);
+    const p = new Pelacak(zona, miring ? OPSI_PELACAK_MIRING : OPSI_PELACAK);
     const hasil: Kunjungan[] = [];
     const ke = (t: number) => new Promise<void>((ok) => {
       v.addEventListener("seeked", () => ok(), { once: true });
@@ -125,9 +160,16 @@ export function HitungKunjungan({ zona, papanAwal, teks: t, bahasa }: { zona: Zo
     }
     const latar = latarMedian(contoh);
     for (let i = 0; i < n && !berhenti.current; i++) {
-      await ke(i / FPS);
+      await ke(i / fps);
       const b = bingkai(v, c);
-      hasil.push(...p.langkah(i / FPS, deteksi(latar, b)));
+      let titik: { x: number; y: number }[];
+      try {
+        titik = miring ? await titikModel(v) : deteksi(latar, b);
+      } catch {
+        setPesan({ jenis: "galat", teks: t.modelGagal });
+        break;
+      }
+      hasil.push(...p.langkah(i / fps, titik));
       if (i % 5 === 0) {
         gambarTitik(p.terlihat);
         setKemajuan({ ke: i + 1, dari: n });
@@ -164,7 +206,8 @@ export function HitungKunjungan({ zona, papanAwal, teks: t, bahasa }: { zona: Zo
     setJalan(true);
     const asalMs = Date.now();
     const sesi = `kamera-${asalMs}`;
-    const p = new Pelacak(zona);
+    const miring = kamera === "miring" && Boolean(model);
+    const p = new Pelacak(zona, miring ? OPSI_PELACAK_MIRING : OPSI_PELACAK);
     let latar: Float32Array | null = null;
     let tertunda: Kunjungan[] = [];
     const semua: Kunjungan[] = [];
@@ -175,7 +218,14 @@ export function HitungKunjungan({ zona, papanAwal, teks: t, bahasa }: { zona: Zo
       const t0 = (Date.now() - asalMs) / 1000;
       if (!latar) latar = latarDari(b);
       else {
-        const k = p.langkah(t0, deteksi(latar, b));
+        let titik: { x: number; y: number }[] = [];
+        try {
+          titik = miring ? await titikModel(v) : deteksi(latar, b);
+        } catch {
+          setPesan({ jenis: "galat", teks: t.modelGagal });
+          berhenti.current = true;
+        }
+        const k = p.langkah(t0, titik);
         tertunda.push(...k);
         semua.push(...k);
         gambarTitik(p.terlihat);
@@ -186,7 +236,7 @@ export function HitungKunjungan({ zona, papanAwal, teks: t, bahasa }: { zona: Zo
         if (await kirim(tertunda, asalMs, `${sesi}-${ke++}`)) tertunda = [];
         kirimAkhir = Date.now();
       }
-      await new Promise((ok) => setTimeout(ok, 1000 / FPS));
+      await new Promise((ok) => setTimeout(ok, 1000 / (miring ? FPS_MIRING : FPS)));
     }
     const akhir = p.selesai();
     tertunda.push(...akhir);
@@ -216,6 +266,20 @@ export function HitungKunjungan({ zona, papanAwal, teks: t, bahasa }: { zona: Zo
             </label>
             <a href="/cetak/papan-mata" target="_blank" rel="noopener" className="mt-2 inline-block text-sm font-semibold text-laut underline underline-offset-4">{t.papanCetak}</a>
           </div>
+          {model ? (
+            <fieldset className="mt-4">
+              <legend className="text-sm font-semibold">{t.kameraJudul}</legend>
+              <div className="mt-2 flex flex-wrap gap-2">
+                {(["atas", "miring"] as const).map((k) => (
+                  <label key={k} className="flex min-h-11 cursor-pointer items-center gap-2 rounded-[var(--radius-isian)] border border-garis px-3 text-sm has-[:checked]:border-tinta has-[:checked]:bg-kertas-2">
+                    <input type="radio" name="kamera-mata" value={k} checked={kamera === k} onChange={() => setKamera(k)} disabled={jalan} className="accent-[var(--tinta)]" />
+                    {k === "atas" ? t.kameraAtas : t.kameraMiring}
+                  </label>
+                ))}
+              </div>
+              <p className="mt-1 text-xs text-tinta-2">{kamera === "atas" ? t.kameraAtasKet : t.kameraMiringKet}</p>
+            </fieldset>
+          ) : null}
           {!papan ? (
             <p className="mt-3 text-sm text-tinta-2">{t.papanBelum}</p>
           ) : (

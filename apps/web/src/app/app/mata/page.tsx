@@ -41,7 +41,7 @@ async function IsiMata() {
     <div lang={bahasa}>
       {kepala}
       <LayarMata model={model} zonaAwal={awal} teks={t} bahasa={bahasa} />
-      <HitungKunjungan zona={awal} papanAwal={papan} teks={kamus.kunjungan} bahasa={bahasa} />
+      <HitungKunjungan zona={awal} papanAwal={papan} model={model} teks={kamus.kunjungan} bahasa={bahasa} />
     </div>
   );
 }
