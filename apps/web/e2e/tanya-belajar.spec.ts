@@ -38,6 +38,9 @@ test("belajar format tanya data: model sekali, bayangan 2 kali, lalu token 0", a
     await page.getByLabel("Kata sandi").fill(E.E2E_SANDI);
     await page.getByRole("button", { name: "Masuk" }).click();
     await page.waitForURL((u) => u.pathname === "/app/tanya");
+    // Pengaman: tes ini menulis aturan, jadi wajib di usaha uji. Usaha aktif akun B bisa tertukar bila spec akun B lain berjalan
+    // bersamaan (6 Nov 2026 satu aturan sempat tercatat di Toko Bu Sari); jalankan spec ini sendirian.
+    await expect(page.getByTestId("nama-perusahaan")).toHaveText(USAHA);
 
     const asal: { asal: string; token: number }[] = [];
     for (let i = 0; i < 5; i++) {
@@ -45,6 +48,7 @@ test("belajar format tanya data: model sekali, bayangan 2 kali, lalu token 0", a
       await page.waitForLoadState("networkidle");
       const f = page.getByRole("form", { name: "Tanya data" });
       await f.getByLabel("Pertanyaanmu").fill(KALIMAT);
+      await expect(page.getByTestId("nama-perusahaan")).toHaveText(USAHA);
       await f.getByRole("button", { name: "Tanya", exact: true }).click();
       const jawab = page.getByTestId("tanya-jawaban");
       await expect(jawab).toContainText("Laba", { timeout: 60_000 });
