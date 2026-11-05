@@ -18,6 +18,7 @@ import { catatanRubrik, nilaiPelamar, rubrikDariTopi, saringCv } from "@/lib/rek
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
+import { tujuanUsulan } from "@/lib/tujuan-usulan";
 
 type TeksFeed = Kamus["feed"];
 
@@ -185,7 +186,7 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
                 <KartuInfo key={u.id} usulanId={u.id} teks={kamus.kartuInfo} teksKartu={kamus.kartu} bahasa={bahasa} tautan={u.aksi === "info.kepatuhan" ? "/app/kepatuhan" : u.aksi === "info.alur" ? "/app/alur" : "/app/kerja?tab=beban"} label={u.aksi === "info.kepatuhan" ? kamus.kartuInfo.lihatKalender : u.aksi === "info.alur" ? kamus.kartuInfo.lihatAlur : undefined}
                   usulan={{ judul: u.judul, penjelasan: u.penjelasan ?? "", sumber: k.sumber[u.sumber as keyof TeksFeed["sumber"]] ?? u.sumber, baru: u.baru }} />
               ) : (
-                <KartuFeed key={u.id} usulanId={u.id} teks={kamus.kartu} cap={kamus.cap} bahasa={bahasa} usulan={{ judul: u.judul, penjelasan: u.penjelasan ?? "", sumber: k.sumber[u.sumber as keyof TeksFeed["sumber"]] ?? u.sumber, keyakinan: u.keyakinan ?? undefined, dampakRp: u.dampak_rp ?? undefined, catatan: pelamar.get(u.id)?.catatan, tautan: pelamar.get(u.id)?.tautan, baru: u.baru }} />
+                <KartuFeed key={u.id} usulanId={u.id} teks={kamus.kartu} cap={kamus.cap} bahasa={bahasa} usulan={{ judul: u.judul, penjelasan: u.penjelasan ?? "", sumber: k.sumber[u.sumber as keyof TeksFeed["sumber"]] ?? u.sumber, keyakinan: u.keyakinan ?? undefined, dampakRp: u.dampak_rp ?? undefined, catatan: pelamar.get(u.id)?.catatan, tautan: pelamar.get(u.id)?.tautan, baru: u.baru, tujuan: tujuanUsulan(u.aksi, bahasa) }} />
               ))}
             </div>
           ) : (

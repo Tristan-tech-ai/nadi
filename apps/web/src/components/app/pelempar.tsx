@@ -16,6 +16,7 @@ import { bacaTeksFoto, perluOcr } from "@/lib/ocr";
 import { createBrowserSupabase } from "@/lib/supabase/browser";
 import { isiTeks } from "@/lib/i18n/isi-teks";
 import { sisip } from "@/lib/i18n/sisip";
+import { tujuanUsulan } from "@/lib/tujuan-usulan";
 
 // Lempar Saja (D-13): setiap berkas berjalan lewat empat langkah yang terlihat, usulan hasilnya langsung bisa diputuskan di sini,
 // berkas yang gagal terkirim karena sinyal ditahan di halaman ini dan dikirim lagi otomatis begitu sinyal kembali.
@@ -225,7 +226,7 @@ export function Pelempar({ antre = [], teks, bahasa = "id" }: { antre?: string[]
                     teks={teks.kartu}
                     cap={teks.cap}
                     bahasa={bahasa}
-                    usulan={{ judul: b.hasil.usulan.judul, penjelasan: b.hasil.usulan.penjelasan, sumber: teks.sumber, keyakinan: b.hasil.usulan.keyakinan, dampakRp: b.hasil.usulan.dampakRp }}
+                    usulan={{ judul: b.hasil.usulan.judul, penjelasan: b.hasil.usulan.penjelasan, sumber: teks.sumber, keyakinan: b.hasil.usulan.keyakinan, dampakRp: b.hasil.usulan.dampakRp, tujuan: b.hasil.usulan.aksi ? tujuanUsulan(b.hasil.usulan.aksi, bahasa) : undefined }}
                   />
                 </div>
               ) : null}

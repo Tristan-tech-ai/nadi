@@ -97,6 +97,11 @@ export function KartuFeed({ usulanId, usulan, teks = TEKS_KARTU_ID, cap, bahasa 
             <span className="cap-turun"><Cap jenis={status} label={cap?.[status]} /></span>
             <span className="min-w-0 truncate font-semibold" lang={isiLang}>{usulan.judul}</span>
             <span className="text-tinta-2">{hasil.pesan ?? (tertunda?.setuju ? teks.disetujui : teks.ditolak)}</span>
+            {status === "diterima" && hasil.status && usulan.tujuan ? (
+              <a href={usulan.tujuan.href} className="font-semibold text-tinta underline underline-offset-4" data-testid="lihat-hasil">
+                {(teks.lihatDi ?? "Lihat di {x}").replace("{x}", usulan.tujuan.tempat)}
+              </a>
+            ) : null}
           </p>
           {tertunda && !tertunda.dikirim && !hasil.status ? (
             <button type="button" onClick={batal} className="shrink-0 rounded-[var(--radius-isian)] px-3 py-2 font-semibold underline underline-offset-4" data-testid="batalkan-putusan">

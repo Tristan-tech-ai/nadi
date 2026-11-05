@@ -17,14 +17,16 @@ export type Usulan = {
   catatan?: string;
   /** Tautan lanjutan, misalnya ke wawancara suara pelamar. */
   tautan?: { href: string; label: string };
+  /** U-10: apa yang terjadi bila disetujui dan di mana hasilnya terlihat. */
+  tujuan?: { akibat: string; href: string; tempat: string };
   /** Usulan berumur kurang dari 24 jam (D-05): penanda teks, bukan warna saja. */
   baru?: boolean;
 };
 
-export type TeksKartu = { setujui: string; tolak: string; batalkan: string; disetujui: string; ditolak: string; baru: string; sumber: string; yakin: string; dampak: string };
+export type TeksKartu = { setujui: string; tolak: string; batalkan: string; disetujui: string; ditolak: string; baru: string; sumber: string; yakin: string; dampak: string; kalauDisetujui?: string; lihatDi?: string };
 
 /** Teks bawaan = kamus id `kartu` (diuji sama di kartu-usulan.test.ts); ditulis di sini agar kamus tidak ikut ke bundel klien. */
-export const TEKS_KARTU_ID: TeksKartu = { setujui: "Setujui", tolak: "Tolak", batalkan: "Batalkan", disetujui: "Disetujui.", ditolak: "Ditolak.", baru: "Baru", sumber: "Sumber", yakin: "Yakin", dampak: "Dampak" };
+export const TEKS_KARTU_ID: TeksKartu = { setujui: "Setujui", tolak: "Tolak", batalkan: "Batalkan", disetujui: "Disetujui.", ditolak: "Ditolak.", baru: "Baru", sumber: "Sumber", yakin: "Yakin", dampak: "Dampak", kalauDisetujui: "Kalau disetujui:", lihatDi: "Lihat di {x}" };
 
 /** Kartu di Feed Keputusan. Tepi bawahnya sobekan kertas thermal (satu-satunya ornamen bentuk, DIRECTION §1).
  *  `isiLang` menandai judul dan penjelasan yang ditulis dalam bahasa lain dari antarmuka (WCAG 3.1.2). */
@@ -50,6 +52,11 @@ export function KartuUsulan({ usulan, aksi, teks = TEKS_KARTU_ID, bahasa = "id",
         <Link href={usulan.tautan.href} className="mt-2 inline-block text-sm font-semibold text-laut underline underline-offset-4" data-testid="tautan-usulan">
           {usulan.tautan.label}
         </Link>
+      ) : null}
+      {usulan.tujuan ? (
+        <p className="mt-2 text-sm" data-testid="tujuan-usulan">
+          <span className="font-semibold">{teks.kalauDisetujui ?? "Kalau disetujui:"}</span> {usulan.tujuan.akibat}
+        </p>
       ) : null}
       <dl className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-tinta-2">
         <div>

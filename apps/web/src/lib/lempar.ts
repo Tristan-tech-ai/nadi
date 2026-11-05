@@ -30,7 +30,7 @@ export async function sha256Hex(isi: ArrayBuffer): Promise<string> {
 }
 
 /** Usulan hasil bacaan, untuk kartu yang bisa langsung diputuskan di layar Lempar (D-13). Null bila peran tidak boleh melihatnya. */
-export type UsulanLempar = { id: string; judul: string; penjelasan: string; keyakinan?: number; dampakRp?: number };
+export type UsulanLempar = { id: string; judul: string; penjelasan: string; keyakinan?: number; dampakRp?: number; aksi?: string };
 
 export type HasilLempar =
   | { status: "usulan"; berkasId: string; judul?: string; jenis?: string; usulan?: UsulanLempar }
@@ -77,9 +77,9 @@ export async function bacaBerkas(sb: SupabaseClient, berkasId: string, t: TeksLe
     return { status: "galat", pesan: t === TEKS_LEMPAR_PESAN_ID && isi?.galat ? isi.galat : t.gagalBaca };
   }
   if (data.status === "usulan" && data.usulan_id) {
-    const { data: u } = await sb.from("usulan").select("id, judul, penjelasan, keyakinan, dampak_rp, status").eq("id", data.usulan_id).maybeSingle();
+    const { data: u } = await sb.from("usulan").select("id, judul, penjelasan, keyakinan, dampak_rp, status, aksi").eq("id", data.usulan_id).maybeSingle();
     const usulan = u && u.status === "menunggu"
-      ? { id: u.id as string, judul: u.judul as string, penjelasan: (u.penjelasan as string | null) ?? "", keyakinan: (u.keyakinan as number | null) ?? undefined, dampakRp: (u.dampak_rp as number | null) ?? undefined }
+      ? { id: u.id as string, judul: u.judul as string, penjelasan: (u.penjelasan as string | null) ?? "", keyakinan: (u.keyakinan as number | null) ?? undefined, dampakRp: (u.dampak_rp as number | null) ?? undefined, aksi: u.aksi as string }
       : undefined;
     return { status: "usulan", berkasId, judul: u?.judul, jenis: data.jenis, usulan };
   }
