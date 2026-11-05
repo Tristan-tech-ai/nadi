@@ -274,7 +274,43 @@ def bangun():
     f.add(f'tl.set("#b7k", {json.dumps(kamera(ax, ay, 1.9))}, {T7c:.3f});')
     f.add(f'tl.to("#b7k", {{x: 0, y: 0, scale: 1, duration: {44 / FPS:.3f}, ease: MUNDUR}}, {T7c + 0.8:.3f});')
 
-    durasi = 58.0
+    # ---------- Babak 9 belajar format (58 - 70 dtk): struk SPBU ke-1 dibaca AI dan dipelajari, struk ke-4 tanpa AI ----------
+    # Teks status = kamus asli klaim (terbacaAi, belajarStruk, terbacaAturan); angka = eval produksi T-01B (struk-belajar.spec).
+    T9 = 58.0
+    k9, s9 = f.ketik("k9", "Format yang sama, dibaca tanpa AI.", T9 + 0.2, cps=30)
+    def struk(sid, no, waktu, total, x):
+        b = [("SPBU " + no, "judul"), ("JL. RAYA SINGARAJA", "kecil"), ("Waktu : " + waktu, ""), ("Nama Produk : PERTALITE", ""),
+             ("Total Harga : Rp. " + total, "total"), ("Operator : NYOMAN", "")]
+        isi = "".join(f'<div class="sb {k}">{t}</div>' for t, k in b)
+        return f'<div class="struk" id="{sid}">{isi}<div class="pita" id="{sid}-p" style="top:16px; height:44px"></div></div>'
+    st1 = struk("st1", "34.520.88", "04/10/2026 11:42", "64.800", 230)
+    st4 = struk("st4", "34.549.21", "27-07-2026 15:37", "275.100", 1110)
+    status1 = ('<div class="stat" id="sa1"><span class="tok">600 token</span>Dibaca Nadi dengan AI, yakin 98%. Periksa angkanya sebelum mengajukan.'
+               '<br><b>Nadi sedang mempelajari format baru, sekali saja.</b> Struk dari toko yang sama berikutnya dibaca tanpa AI.</div>')
+    status4 = ('<div class="stat" id="sa4"><span class="tok nol" id="tok4">0 token</span>Terbaca dengan aturan struk yang sudah dipelajari, tanpa AI. Periksa angkanya.</div>')
+    isi9 = (f'<div class="kal" id="b9t" style="top:480px">{k9}</div>'
+            f'<div id="b9k" class="kam" style="opacity:0">'
+            f'<div class="kolom" style="left:150px">{st1}<div class="lbl">Struk pertama dari SPBU ini</div>{status1}</div>'
+            f'<div class="kolom" id="kol4" style="left:1030px; opacity:0">{st4}<div class="lbl">Struk keempat, SPBU lain di jalan yang sama</div>{status4}</div>'
+            f'</div>')
+    f.adegan("b9", T9, 70.0, isi9, z=9)
+    f.add(f'tl.set("#k9-c", {{opacity: 1}}, {T9 + 0.2});')
+    T9b = s9 + 0.8
+    f.add(f'tl.set("#b9t", {{opacity: 0}}, {T9b:.3f});')
+    f.add(f'tl.set("#b9k", {{opacity: 1}}, {T9b:.3f});')
+    # struk 1 dipindai pelan (model), status muncul, kalimat belajar disorot kunyit
+    f.add(f'tl.fromTo("#st1-p", {{y: 0}}, {{y: 250, duration: 1.4, ease: "none"}}, {T9b + 0.3:.3f});')
+    f.add(f'tl.to("#st1-p", {{opacity: 0, duration: 0.2}}, {T9b + 1.7:.3f});')
+    f.add(f'tl.fromTo("#sa1", {{opacity: 0, y: 12}}, {{opacity: 1, y: 0, duration: 0.3, ease: "power2.out"}}, {T9b + 1.8:.3f});')
+    # struk 4 masuk, dipindai sangat cepat (aturan), token menghitung 0
+    T94 = T9b + 4.6
+    f.add(f'tl.to("#kol4", {{opacity: 1, duration: 0.3}}, {T94:.3f});')
+    f.add(f'tl.fromTo("#st4-p", {{y: 0}}, {{y: 250, duration: 0.35, ease: "power2.in"}}, {T94 + 0.4:.3f});')
+    f.add(f'tl.to("#st4-p", {{opacity: 0, duration: 0.15}}, {T94 + 0.75:.3f});')
+    f.add(f'tl.fromTo("#sa4", {{opacity: 0, y: 12}}, {{opacity: 1, y: 0, duration: 0.25, ease: "power2.out"}}, {T94 + 0.8:.3f});')
+    f.add(f'tl.fromTo("#tok4", {{scale: 1.6}}, {{scale: 1, duration: 0.3, ease: "power3.out"}}, {T94 + 0.85:.3f});')
+
+    durasi = 70.0
     css = open(os.path.join(AKAR, "gaya.css"), encoding="utf8").read()
     html = f"""<!doctype html>
 <html lang="id">
