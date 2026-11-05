@@ -4,6 +4,7 @@ import { ambilKamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { createClient } from "@/lib/supabase/server";
 import { FormMulai } from "./form-mulai";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Siapkan usahamu" };
 
@@ -16,8 +17,7 @@ async function Isi() {
   const negara = ((data ?? []) as { kode: string; nama_id: string; nama_en: string }[]).map((n) => ({ kode: n.kode, nama: bahasa === "en" ? n.nama_en : n.nama_id }));
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold leading-tight tracking-tight">{t.judul}</h1>
-      <p className="mt-2 text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/mulai" judul={t.judul} ket={t.ket} />
       <div className="mt-8">
         <FormMulai teks={t} negara={negara.length ? negara : [{ kode: "ID", nama: "Indonesia" }]} />
       </div>

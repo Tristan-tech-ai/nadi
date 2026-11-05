@@ -13,6 +13,7 @@ import { hariIni } from "@/lib/izin";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Jadwal" };
 
@@ -185,7 +186,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/jadwal">["s
   const k: K = { t: kamus.jadwal, f: kamus.jadwalForm, bahasa };
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{k.t.judul}</h1>
+      <KepalaHalaman jalur="/app/jadwal" judul={k.t.judul} />
       {sesi.peran === "staf" ? <Staf hari={hari} k={k} /> : <Pengelola minggu={minggu} kelola={sesi.peran === "pemilik" || sesi.peran === "admin"} hari={hari} k={k} />}
     </div>
   );

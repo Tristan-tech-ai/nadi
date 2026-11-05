@@ -11,6 +11,7 @@ import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Administrasi orang" };
 
@@ -45,7 +46,7 @@ async function Isi() {
     supabase.from("profil_kerja").select("orang_id, jabatan, level, departemen, atasan_id, status_kerja, kontrak_sampai"),
     supabase.from("surat_peringatan").select("id, orang_id, tingkat, terakhir, tanggal, berlaku_sampai, pelanggaran, surat_id").order("tanggal", { ascending: false }).order("dibuat_at", { ascending: false }).limit(50),
     supabase.from("daftar_periksa").select("id, orang_id, jenis, urutan, butir, selesai_at").order("urutan"),
-    supabase.from("riwayat_kerja").select("id, orang_id, berlaku_dari, jenis, jabatan, level").order("berlaku_dari", { ascending: false }).limit(30),
+    supabase.from("riwayat_kerja").select("id, orang_id, berlaku_dari, jenis, jabatan, level").order("berlaku_dari", { ascending: false }).order("id", { ascending: false }).limit(30),
     supabase.from("bidang_kustom").select("id, label, tipe, staf_lihat").eq("aktif", true).order("urutan"),
     supabase.from("nilai_kustom").select("orang_id, bidang_id, nilai"),
     supabase.from("delegasi_persetujuan").select("id, dari_orang, ke_orang, mulai, selesai").gte("selesai", hari).order("mulai"),
@@ -55,6 +56,15 @@ async function Isi() {
   const nilai = (nk ?? []) as { orang_id: string; bidang_id: string; nilai: string }[];
   const orang = (org ?? []) as { id: string; nama: string }[];
   const nama = new Map(orang.map((o) => [o.id, o.nama]));
+  // Riwayat, SP, daftar periksa, dan delegasi bisa merujuk orang yang sudah tidak aktif atau di luar halaman hasil daftar aktif;
+  // nama mereka diambil langsung menurut id supaya tidak tampil "-".
+  const rujukan = [...(rw ?? []), ...(sp ?? []), ...(dp ?? [])].map((x) => (x as { orang_id: string }).orang_id)
+    .concat(((dl ?? []) as { dari_orang: string; ke_orang: string }[]).flatMap((d) => [d.dari_orang, d.ke_orang]));
+  const kurang = [...new Set(rujukan)].filter((id) => id && !nama.has(id));
+  if (kurang.length > 0) {
+    const { data: ext } = await supabase.from("orang").select("id, nama").in("id", kurang.slice(0, 300));
+    for (const o of (ext ?? []) as { id: string; nama: string }[]) nama.set(o.id, o.nama);
+  }
   const profil = new Map(((pf ?? []) as Profil[]).map((p) => [p.orang_id, p]));
   const anak = new Map<string, string[]>();
   const puncak: string[] = [];
@@ -68,8 +78,7 @@ async function Isi() {
   const judul = "text-lg font-semibold";
   return (
     <div lang={bahasa}>
-      <h1 className="text-2xl font-semibold">{t.judul}</h1>
-      <p className="mt-2 text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/orang/kerja" judul={t.judul} ket={t.ket} />
 
       <section className="mt-8" aria-labelledby="judul-bagan" data-testid="bagan">
         <h2 id="judul-bagan" className={judul}>{t.baganJudul}</h2>

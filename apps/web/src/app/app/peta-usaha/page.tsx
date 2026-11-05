@@ -9,6 +9,7 @@ import { ambilKamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Peta usaha" };
 
@@ -19,7 +20,7 @@ async function IsiPeta() {
   const t = kamus.petaUsaha;
   const kepala = (
     <>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
+      <KepalaHalaman jalur="/app/peta-usaha" judul={t.judul} ket={false} />
       <p className="mt-2 text-tinta-2">
         {t.ketAwal} <Link href="/app/mata" className="font-semibold underline underline-offset-4">{t.mata}</Link>.
       </p>

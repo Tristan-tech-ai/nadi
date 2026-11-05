@@ -11,6 +11,7 @@ import { hitungBaris, siapFaktur, type Identitas, type InvoicePajak, type Pembel
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Faktur pajak Coretax" };
 
@@ -57,8 +58,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/pajak/faktu
   const tol = d.faktur.reduce((n, f) => n + f.baris.length, 0);
   return (
     <div lang={bahasa}>
-      <h1 className="text-2xl font-semibold">{t.judul}</h1>
-      <p className="mt-2 text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/pajak/faktur" judul={t.judul} ket={t.ket} />
       <nav className="mt-4 flex flex-wrap gap-2 text-sm" aria-label={t.bulanAria}>
         {pilihan.map((p) => (
           <a key={p.nilai} href={`/app/pajak/faktur?bulan=${p.nilai}`} aria-current={p.nilai === bulan ? "page" : undefined}

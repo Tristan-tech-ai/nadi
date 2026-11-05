@@ -7,6 +7,7 @@ import { ambilKamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Mata" };
 
@@ -17,8 +18,7 @@ async function IsiMata() {
   const t = kamus.mata;
   const kepala = (
     <>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-2 max-w-2xl text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/mata" judul={t.judul} ket={t.ket} />
     </>
   );
   const supabase = await createClient();

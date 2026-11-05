@@ -11,6 +11,7 @@ import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Aset tetap" };
 
@@ -37,8 +38,7 @@ async function Isi() {
   const total = aktif.reduce((s, a) => s + a.harga - a.penyusutan_aset.reduce((x, p) => x + p.nilai, 0), 0);
   return (
     <div lang={bahasa}>
-      <h1 className="text-2xl font-semibold">{sesi.peran === "staf" ? t.judulStaf : t.judul}</h1>
-      <p className="mt-2 text-tinta-2">{sesi.peran === "staf" ? t.ketStaf : t.ket}</p>
+      <KepalaHalaman jalur="/app/aset" judul={sesi.peran === "staf" ? t.judulStaf : t.judul} ket={sesi.peran === "staf" ? t.ketStaf : t.ket} />
       {aset.length === 0 ? <p className="mt-6 text-tinta-2" data-testid="aset-kosong">{sesi.peran === "staf" ? t.kosongStaf : t.kosong}</p> : (
         <>
           {sesi.peran !== "staf" && <p className="mt-6 font-semibold" data-testid="total-nilai-buku">{t.totalNilaiBuku} <Rupiah nilai={total} bahasa={bahasa} /></p>}

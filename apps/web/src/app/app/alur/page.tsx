@@ -9,6 +9,7 @@ import { bahasaAplikasi } from "@/lib/i18n/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Alur" };
 
@@ -35,8 +36,7 @@ async function Isi() {
 
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 max-w-2xl text-sm text-tinta-2">{pengelola ? t.ket : t.ketStaf}</p>
+      <KepalaHalaman jalur="/app/alur" judul={t.judul} ket={pengelola ? t.ket : t.ketStaf} />
 
       <section className="mt-8" aria-labelledby="al-isi"><h2 id="al-isi" className="text-lg font-semibold">{t.isiJudul}</h2>
         {formulir.length === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.formulirKosong}</p> : (

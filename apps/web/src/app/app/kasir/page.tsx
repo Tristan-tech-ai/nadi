@@ -7,6 +7,7 @@ import { ambilKamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Kasir" };
 
@@ -19,8 +20,7 @@ async function Isi() {
   const qris = q?.qris ? { svg: await QRCode.toString(q.qris, { type: "svg", margin: 1, errorCorrectionLevel: "M" }), nama: q.nama ?? "" } : null;
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/kasir" judul={t.judul} ket={t.ket} />
       <KasirApp pid={sesi.perusahaanId} bahasa={bahasa} teks={t} qris={qris} />
     </div>
   );

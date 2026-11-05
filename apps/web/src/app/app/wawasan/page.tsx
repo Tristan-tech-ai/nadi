@@ -11,6 +11,7 @@ import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { ambilBaris } from "@/lib/wawasan/ambil";
 import { bacaPilihan, BATAS_BARIS, SUMBER, type Sumber } from "@/lib/wawasan/laporan";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Wawasan" };
 
@@ -38,7 +39,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/wawasan">["
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const t = ambilKamus(bahasa).wawasan;
   if (sesi.peran !== "pemilik" && sesi.peran !== "admin") {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanyaPengelola}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/wawasan" judul={t.judul} ket={t.hanyaPengelola} /></div>;
   }
   const sp = await searchParams;
   const p = bacaPilihan(sp);
@@ -64,8 +65,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/wawasan">["
 
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 max-w-2xl text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/wawasan" judul={t.judul} ket={t.ket} />
       {(error || !w) && <p role="alert" className="mt-4 text-cap">{t.gagalBaca}</p>}
       {w && (<>
         <section className="mt-8" aria-labelledby="ws-hr">

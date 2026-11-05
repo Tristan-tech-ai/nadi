@@ -14,6 +14,7 @@ import { pesanStatusServis } from "@/lib/servis";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Order servis" };
 
@@ -70,8 +71,7 @@ async function Isi() {
 
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 max-w-2xl text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/servis" judul={t.judul} ket={t.ket} />
       <section className="mt-8" aria-labelledby="terima"><h2 id="terima" className="text-lg font-semibold">{t.terimaJudul}</h2>
         <FormTerima kunci={randomUUID()} hariIni={hariIni(new Date(), zona)} teks={t} /></section>
       <section className="mt-8" aria-labelledby="jalan"><h2 id="jalan" className="text-lg font-semibold">{t.daftarJudul}</h2>

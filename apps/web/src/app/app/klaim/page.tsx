@@ -12,6 +12,7 @@ import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Klaim pengeluaran" };
 
@@ -69,8 +70,7 @@ async function Isi() {
   const judul = "text-lg font-semibold";
   return (
     <div lang={bahasa}>
-      <h1 className="text-2xl font-semibold">{t.judul}</h1>
-      <p className="mt-2 text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/klaim" judul={t.judul} ket={t.ket} />
 
       {sesi.peran === "staf" && (
         <>

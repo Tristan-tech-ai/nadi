@@ -17,6 +17,7 @@ import { sisip } from "@/lib/i18n/sisip";
 import { catatanRubrik, nilaiPelamar, rubrikDariTopi, saringCv } from "@/lib/rekrut/rubrik";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 type TeksFeed = Kamus["feed"];
 
@@ -144,8 +145,7 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
   const peran = sesi.peran ? (k.namaPeran[sesi.peran as keyof TeksFeed["namaPeran"]] ?? sesi.peran) : "";
   return (
     <section className="mx-auto w-full max-w-2xl px-4 py-8" lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{k.judul}</h1>
-      <p className="mt-2 text-tinta-2" data-testid="peran">{isiTeks(k.peran, { peran })}</p>
+      <KepalaHalaman jalur="/app" judul={k.judul} ket={<span data-testid="peran">{isiTeks(k.peran, { peran })}</span>} />
       <Suspense fallback={null}>
         <PengumumanBaru bahasa={bahasa} />
       </Suspense>

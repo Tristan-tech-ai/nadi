@@ -14,6 +14,7 @@ import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Paket pembiayaan" };
 
@@ -37,7 +38,7 @@ async function Isi() {
   const t = ambilKamus(bahasa).pembiayaan;
   const kel = ambilKamus(bahasa).buku.kel;
   if (!["pemilik", "admin", "akuntan"].includes(sesi.peran)) {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanyaPengelola}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/buku/pembiayaan" judul={t.judul} ket={t.hanyaPengelola} /></div>;
   }
   const supabase = await createClient();
   const hari = hariIni(new Date(), await zonaUsahaIni(sesi.perusahaanId));
@@ -64,8 +65,7 @@ async function Isi() {
       <p className="text-sm print:hidden"><Link href="/app/buku" className="text-laut underline underline-offset-2">{t.kembali}</Link></p>
       <header className="mt-3">
         <p className="text-sm text-tinta-2" data-pengguna>{usaha.data?.nama as string}</p>
-        <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-        <p className="mt-1 text-sm text-tinta-2" data-testid="periode" data-dari={r.dari} data-sampai={r.sampai}>{isiTeks(t.periode, { dari: formatTanggalKalender(r.dari, bahasa), sampai: formatTanggalKalender(r.sampai, bahasa) })}</p>
+        <KepalaHalaman jalur="/app/buku/pembiayaan" judul={t.judul} ket={<span data-testid="periode" data-dari={r.dari} data-sampai={r.sampai}>{isiTeks(t.periode, { dari: formatTanggalKalender(r.dari, bahasa), sampai: formatTanggalKalender(r.sampai, bahasa) })}</span>} />
         <p className="mt-2 max-w-2xl text-sm">{t.ket}</p>
       </header>
       <div className="mt-4 flex flex-wrap items-center gap-3 print:hidden"><TombolCetak label={t.cetak} /><p className="text-sm text-tinta-2">{t.kirimSendiri}</p></div>

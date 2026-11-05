@@ -19,6 +19,7 @@ import { BagianKomisi } from "@/app/app/gaji/komisi";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Gaji" };
 
@@ -72,7 +73,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
   const negara = await negaraUsaha(sesi.perusahaanId, bahasa);
   if (negara.kode !== "ID") {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><KunciAturan negara={negara.nama} bahasa={bahasa} /></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/gaji" judul={t.judul} ket={false} /><KunciAturan negara={negara.nama} bahasa={bahasa} /></div>;
   }
   const sp = await searchParams;
   const bulan = typeof sp.bulan === "string" && /^\d{4}-(0[1-9]|1[0-2])$/.test(sp.bulan) ? sp.bulan : hariIni(new Date(), await zonaUsahaIni(sesi.perusahaanId)).slice(0, 7);
@@ -87,8 +88,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
 
   const kepala = (
     <>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-2 text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/gaji" judul={t.judul} ket={t.ket} />
       {bahasa !== "id" ? (
         <p className="mt-3 rounded-[var(--radius-kartu)] border border-garis-kuat px-3 py-2 text-sm" data-testid="khusus-indonesia">
           <span className="font-semibold">{t.hanyaIndonesia}.</span> {t.hanyaIndonesiaKet}

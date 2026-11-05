@@ -10,6 +10,7 @@ import { bahasaAplikasi } from "@/lib/i18n/server";
 import { sisip } from "@/lib/i18n/sisip";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Surat keluar" };
 
@@ -38,8 +39,7 @@ async function Isi() {
   const isiLang = bahasa === "id" ? undefined : "id";
   const kepala = (
     <>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-2 text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/surat-keluar" judul={t.judul} ket={t.ket} />
       {bahasa !== "id" && <p className="mt-2 text-sm text-tinta-2" data-testid="khusus-indonesia">{t.khususId}</p>}
     </>
   );

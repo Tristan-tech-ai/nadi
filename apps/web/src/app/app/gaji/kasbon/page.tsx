@@ -8,6 +8,7 @@ import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Kasbon" };
 
@@ -28,8 +29,7 @@ async function Isi() {
   const sisa = daftar.reduce((s, k) => s + k.sisa, 0);
   return (
     <div lang={bahasa}>
-      <h1 className="text-2xl font-semibold">{t.judul}</h1>
-      <p className="mt-2 text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/gaji/kasbon" judul={t.judul} ket={t.ket} />
       {daftar.length === 0 ? (
         <p className="mt-6 text-tinta-2" data-testid="kasbon-kosong">{t.kosong}</p>
       ) : (

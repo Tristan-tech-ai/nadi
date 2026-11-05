@@ -11,6 +11,7 @@ import { resourceMcp } from "@/lib/mcp/http";
 import { CONTOH_TEKS_NADI, PROMPT_ONBOARDING } from "@/lib/onboarding/prompt";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Siapkan usaha dengan AI" };
 
@@ -21,15 +22,14 @@ async function Isi() {
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const t = ambilKamus(bahasa).siapkan;
   if (!["pemilik", "admin"].includes(sesi.peran)) {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanya}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/siapkan" judul={t.judul} ket={t.hanya} /></div>;
   }
   const [h, zona] = [await headers(), await zonaUsahaIni(sesi.perusahaanId)];
   const alamat = resourceMcp(h);
   const cursor = `cursor://anysphere.cursor-deeplink/mcp/install?name=nadi&config=${encodeURIComponent(Buffer.from(JSON.stringify({ url: alamat })).toString("base64"))}`;
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 text-sm text-tinta-2">{t.ket} <a href="/app/perusahaan" className="underline underline-offset-4">{t.formulirBiasa}</a></p>
+      <KepalaHalaman jalur="/app/siapkan" judul={t.judul} ket={<>{t.ket} <a href="/app/perusahaan" className="underline underline-offset-4">{t.formulirBiasa}</a></>} />
 
       <nav aria-label={t.pilihanAria} className="mt-6 grid gap-2 text-sm sm:grid-cols-3">
         <a href="#prompt" className="rounded-[var(--radius-kartu)] border border-garis p-3 hover:bg-kertas-2"><span className="font-semibold">{t.jalanPrompt}</span><br /><span className="text-tinta-2">{t.jalanPromptKet}</span></a>

@@ -9,6 +9,7 @@ import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Kalender kepatuhan" };
 
@@ -36,8 +37,7 @@ async function Isi() {
   for (const d of daftar) perBulan.set(d.tanggal.slice(0, 7), [...(perBulan.get(d.tanggal.slice(0, 7)) ?? []), d]);
   return (
     <div lang={bahasa}>
-      <h1 className="text-2xl font-semibold">{t.judul}</h1>
-      <p className="mt-2 text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/kepatuhan" judul={t.judul} ket={t.ket} />
       {daftar.length === 0 ? <p className="mt-6 text-tinta-2" data-testid="kepatuhan-kosong">{t.kosong}</p> : (
         <div className="mt-6" data-testid="kalender-kepatuhan">
           {[...perBulan.entries()].map(([b, isi]) => (

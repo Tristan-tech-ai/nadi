@@ -8,6 +8,7 @@ import type { Bahasa } from "@/lib/i18n/bahasa";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { ruangSesi } from "@/lib/ruang-sesi";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Semua menu" };
 
@@ -27,7 +28,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/menu">["sea
   const en = b === "en";
   return (
     <div lang={b}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{en ? "All menus" : "Semua menu"}</h1>
+      <KepalaHalaman jalur="/app/menu" judul={en ? "All menus" : "Semua menu"} ket={false} />
       <p className="mt-1 max-w-2xl text-sm text-tinta-2">
         {en ? `${jumlah} features in ${ruang.length} spaces. Each line says what the feature is for.` : `${jumlah} fitur dalam ${ruang.length} ruang. Tiap baris menyebut gunanya.`}
       </p>

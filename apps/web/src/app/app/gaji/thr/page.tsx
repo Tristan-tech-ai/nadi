@@ -8,6 +8,7 @@ import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "THR" };
 
@@ -31,8 +32,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji/thr">[
   const total = d ? d.orang.reduce((s, o) => s + (o.thr ?? 0), 0) : 0;
   return (
     <div lang={bahasa}>
-      <h1 className="text-2xl font-semibold">{t.judul}</h1>
-      <p className="mt-2 text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/gaji/thr" judul={t.judul} ket={t.ket} />
       <form method="get" className="mt-4 flex flex-wrap items-end gap-3 text-sm" aria-label={t.pilihAria}>
         <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.hariRaya}</span>
           <input type="date" name="hari" required defaultValue={hari} className="h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-2 text-base" /></label>

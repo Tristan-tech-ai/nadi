@@ -9,6 +9,7 @@ import { bahasaAplikasi } from "@/lib/i18n/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Janji temu, katalog, dan poin" };
 
@@ -22,7 +23,7 @@ async function Isi() {
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const t = ambilKamus(bahasa).janji;
   if (sesi.peran !== "pemilik" && sesi.peran !== "admin") {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanya}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/janji-temu" judul={t.judul} ket={t.hanya} /></div>;
   }
   const zona = await zonaUsahaIni(sesi.perusahaanId);
   const supabase = await createClient();
@@ -44,8 +45,7 @@ async function Isi() {
 
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/janji-temu" judul={t.judul} ket={t.ket} />
 
       <section className="mt-8" aria-labelledby="judul-jadwal">
         <h2 id="judul-jadwal" className={judul}>{t.jadwalJudul}</h2>

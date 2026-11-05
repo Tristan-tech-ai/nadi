@@ -6,6 +6,7 @@ import { ambilKamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Pindah ke Nadi" };
 
@@ -14,7 +15,7 @@ async function Isi() {
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const t = ambilKamus(bahasa).pindah;
   if (sesi.peran !== "pemilik" && sesi.peran !== "admin") {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanyaPengelola}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/pindah" judul={t.judul} ket={t.hanyaPengelola} /></div>;
   }
   const supabase = await createClient();
   const { data } = await supabase.from("pindah_akun").select("kode_asal, nama_asal, akun_kode, digabung").order("dibuat_at", { ascending: false }).limit(100);
@@ -22,8 +23,7 @@ async function Isi() {
   const sel = "border-b border-garis py-2 pr-3";
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 max-w-2xl text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/pindah" judul={t.judul} ket={t.ket} />
 
       <section className="mt-8" aria-labelledby="pd-impor"><h2 id="pd-impor" className="text-lg font-semibold">{t.formJudul}</h2>
         <ul className="mt-2 grid max-w-2xl list-disc gap-1 pl-5 text-sm">{t.didukung.map((x) => <li key={x}>{x}</li>)}</ul>

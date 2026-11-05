@@ -5,6 +5,7 @@ import type { Bahasa } from "@/lib/i18n/bahasa";
 import { ambilKamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Tanya data" };
 
@@ -15,8 +16,7 @@ async function Isi() {
   const boleh = ["pemilik", "admin", "akuntan"].includes(sesi.peran);
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 max-w-2xl text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/tanya" judul={t.judul} ket={t.ket} />
       {boleh ? <FormTanya contoh={t.contohDaftar} bahasa={bahasa} teks={t} /> : <p className="mt-4 text-tinta-2">{t.hanyaPengelola}</p>}
     </div>
   );

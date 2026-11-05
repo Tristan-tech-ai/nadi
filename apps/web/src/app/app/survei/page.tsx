@@ -7,6 +7,7 @@ import { ambilKamus, isiTeks, type Kamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Survei" };
 
@@ -58,8 +59,7 @@ async function Isi() {
   }
   return (
     <div lang={bahasa}>
-      <h1 className="text-2xl font-semibold">{t.judulHalaman}</h1>
-      <p className="mt-2 text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/survei" judul={t.judulHalaman} ket={t.ket} />
       {daftar.length === 0 ? (
         <p className="mt-6 text-tinta-2" data-testid="survei-kosong">{t.kosong}</p>
       ) : (

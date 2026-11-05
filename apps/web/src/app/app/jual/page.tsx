@@ -11,6 +11,7 @@ import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Penjualan" };
 
@@ -25,7 +26,7 @@ async function Isi() {
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const t = ambilKamus(bahasa).jual;
   if (!["pemilik", "admin", "akuntan"].includes(sesi.peran)) {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanya}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/jual" judul={t.judul} ket={t.hanya} /></div>;
   }
   const supabase = await createClient();
   const [dok, saldo, produk, zona] = await Promise.all([
@@ -40,8 +41,7 @@ async function Isi() {
 
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/jual" judul={t.judul} ket={t.ket} />
 
       <section className="mt-6" aria-labelledby="judul-baru"><h2 id="judul-baru" className="text-lg font-semibold">{t.baru}</h2>
         <FormDokumen kunci={randomUUID()} produk={(produk.data ?? []) as { id: string; nama: string; harga_jual: number }[]} teks={t} /></section>

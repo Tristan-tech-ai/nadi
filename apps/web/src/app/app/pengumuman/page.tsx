@@ -11,6 +11,7 @@ import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
 import { createClient } from "@/lib/supabase/server";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Pengumuman" };
 
@@ -41,8 +42,7 @@ async function Isi() {
   const peringatan = (sp ?? []) as { id: string; tingkat: number; terakhir: boolean; tanggal: string; berlaku_sampai: string; pelanggaran: string }[];
   return (
     <div lang={bahasa}>
-      <h1 className="text-2xl font-semibold">{t.pengumumanJudul}</h1>
-      <p className="mt-1 text-sm"><a href="/app/survei" className="underline underline-offset-4">{ambilKamus(bahasa).survei.judulHalaman}</a></p>
+      <KepalaHalaman jalur="/app/pengumuman" judul={t.pengumumanJudul} ket={<><a href="/app/survei" className="underline underline-offset-4">{ambilKamus(bahasa).survei.judulHalaman}</a></>} />
       {daftar.length === 0 ? (
         <p className="mt-4 text-tinta-2" data-testid="pengumuman-kosong">{t.pengumumanKosong}</p>
       ) : (

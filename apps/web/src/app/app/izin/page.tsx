@@ -13,6 +13,7 @@ import { capStatus, rentangTanggal } from "@/lib/izin";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Izin dan cuti" };
 
@@ -51,8 +52,7 @@ async function Isi() {
   const tw = ambilKamus(bahasa).waktu;
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-2 text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/izin" judul={t.judul} ket={t.ket} />
       {ringkas?.punya_orang ? (
         <>
           {ringkas.cuti.jatah !== null && (

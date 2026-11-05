@@ -17,6 +17,7 @@ import { sisip } from "@/lib/i18n/sisip";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Wawancara dan uji pelamar" };
 
@@ -67,8 +68,7 @@ async function Isi({ params }: { params: Promise<{ lamaran: string }> }) {
   return (
     <div lang={bahasa}>
       {kembali}
-      <p className="mt-8 text-sm text-tinta-2">{sisip(t.melamar, { lowongan: <span data-pengguna>{lamaran.lowongan?.judul}</span>, tanggal: formatTanggal(new Date(lamaran.dibuat_at), zona, bahasa) })}</p>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight" data-pengguna>{lamaran.nama}</h1>
+      <div className="mt-6"><KepalaHalaman jalur="/app/rekrutmen" judul={<span data-pengguna>{lamaran.nama}</span>} ket={sisip(t.melamar, { lowongan: <span data-pengguna>{lamaran.lowongan?.judul}</span>, tanggal: formatTanggal(new Date(lamaran.dibuat_at), zona, bahasa) })} /></div>
       {bahasa !== "id" && <p className="mt-2 text-sm text-tinta-2" data-testid="khusus-indonesia">{t.khususId}</p>}
 
       <HasilUji baris={(uji ?? []) as BarisUji[]} teks={t} bahasa={bahasa} />

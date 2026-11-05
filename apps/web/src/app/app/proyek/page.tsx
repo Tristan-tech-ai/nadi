@@ -10,6 +10,7 @@ import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Proyek" };
 
@@ -31,7 +32,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/proyek">["s
   const dipilih = proyek.find((p) => p.id === sp.p) ?? proyek[0];
   const rp = (n: number) => formatRupiah(n, { bahasa });
   const angka = new Intl.NumberFormat(bahasa === "en" ? "en-GB" : "id-ID", { maximumFractionDigits: 2 });
-  const judul = <><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-1 max-w-2xl text-sm text-tinta-2">{pengelola ? t.ket : t.hanyaJam}</p></>;
+  const judul = <><KepalaHalaman jalur="/app/proyek" judul={t.judul} ket={pengelola ? t.ket : t.hanyaJam} /></>;
 
   if (!pengelola) {
     const { data: jamSaya } = await supabase.from("project_time").select("id, tanggal, jam, catatan, dimension_id").order("tanggal", { ascending: false }).limit(30);

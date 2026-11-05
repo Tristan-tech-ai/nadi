@@ -17,6 +17,7 @@ import { asalTautan } from "@/lib/mcp/http";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Invoice" };
 
@@ -44,8 +45,7 @@ async function Isi() {
   const LABEL_UMUR: Record<Umur, string> = { belum: t.umurBelum, "1-30": t.umur1, "31-60": t.umur31, "61-90": t.umur61, "90+": t.umur90 };
   const kepala = (
     <>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/invoice" judul={t.judul} ket={t.ket} />
       {bahasa !== "id" ? <p className="mt-1 text-sm text-tinta-2">{t.catatanPelanggan}</p> : null}
       <p className="mt-2 text-sm"><a href="/app/ekspor" className="underline underline-offset-4" data-testid="tautan-ekspor">{kamus.ekspor.tautanEkspor}</a></p>
     </>

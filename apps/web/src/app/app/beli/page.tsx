@@ -12,6 +12,7 @@ import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Pembelian" };
 
@@ -28,7 +29,7 @@ async function Isi() {
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const t = ambilKamus(bahasa).beli;
   if (!["pemilik", "admin", "akuntan"].includes(sesi.peran)) {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanya}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/beli" judul={t.judul} ket={t.hanya} /></div>;
   }
   const ubah = sesi.peran !== "akuntan";
   const supabase = await createClient();
@@ -51,8 +52,7 @@ async function Isi() {
 
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/beli" judul={t.judul} ket={t.ket} />
 
       <section className="mt-6" aria-labelledby="judul-hutang">
         <h2 id="judul-hutang" className="text-lg font-semibold">{t.tagihanJudul}</h2>

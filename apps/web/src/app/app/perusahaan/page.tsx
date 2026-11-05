@@ -18,6 +18,7 @@ import { ambilKamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { createClient } from "@/lib/supabase/server";
 import { wajibSesi } from "@/lib/sesi";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Usahamu" };
 
@@ -78,8 +79,7 @@ async function Kepala() {
 function KepalaIsi({ t, bahasa }: { t: ReturnType<typeof ambilKamus>["usaha"]; bahasa: Bahasa }) {
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-2 text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/perusahaan" judul={t.judul} ket={t.ket} />
     </div>
   );
 }

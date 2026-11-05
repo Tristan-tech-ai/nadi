@@ -14,6 +14,7 @@ import { formatLamaMenit, totalUangSaku, type BarisMinggu, type Peringatan, type
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Magang" };
 
@@ -181,8 +182,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/magang">["s
   const lama = (n: number) => formatLamaMenit(n, bahasa);
   const kepala = (
     <>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-2 text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/magang" judul={t.judul} ket={t.ket} />
     </>
   );
   const sp = await searchParams;

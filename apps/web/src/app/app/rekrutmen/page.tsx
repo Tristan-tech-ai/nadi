@@ -13,6 +13,7 @@ import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { nomorWa } from "@/lib/tanda";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Rekrutmen lanjutan" };
 
@@ -28,7 +29,7 @@ async function Isi() {
   const sesi = await wajibPerusahaan();
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const t = ambilKamus(bahasa).rekrutmen;
-  const judul = <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>;
+  const judul = <KepalaHalaman jalur="/app/rekrutmen" judul={t.judul} ket={false} />;
   if (!["pemilik", "admin"].includes(sesi.peran ?? "")) return <div lang={bahasa}>{judul}<p className="mt-2 text-tinta-2">{t.hanya}</p></div>;
   const zona = await zonaUsahaIni(sesi.perusahaanId);
   const hari = hariIni(new Date(), zona);

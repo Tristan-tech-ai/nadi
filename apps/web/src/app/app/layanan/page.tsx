@@ -9,6 +9,7 @@ import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Layanan pelanggan" };
 
@@ -38,7 +39,7 @@ async function Isi() {
   const templat = (tp.data ?? []) as { judul: string; isi: string }[];
   const percakapan = (cv.data ?? []) as Percakapan[];
   if (!kelola && percakapan.length === 0) {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanya}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/layanan" judul={t.judul} ket={t.hanya} /></div>;
   }
   const pesan = (ms.data ?? []) as Pesan[];
   const atur = st.data as { kunci: string; aktif: boolean; jam_mulai: string; jam_selesai: string; sla_menit: number; pesan_sambutan: string; pesan_luar_jam: string } | null;
@@ -51,8 +52,7 @@ async function Isi() {
 
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 text-sm text-tinta-2">{kelola ? t.ket : t.ketStaf}</p>
+      <KepalaHalaman jalur="/app/layanan" judul={t.judul} ket={kelola ? t.ket : t.ketStaf} />
 
       {L && (
         <dl className="mt-5 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4" data-testid="ringkas-layanan">

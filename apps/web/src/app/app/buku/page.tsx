@@ -12,6 +12,7 @@ import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Laporan keuangan" };
 
@@ -117,7 +118,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/buku">["sea
   const kodeAkun = typeof sp.akun === "string" ? sp.akun.slice(0, 20) : "";
   const supabase = await createClient();
   if (!["pemilik", "admin", "akuntan"].includes(sesi.peran)) {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{ambilKamus(bahasa).buku.hanyaPemilikAkuntan}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/buku" judul={t.judul} ket={ambilKamus(bahasa).buku.hanyaPemilikAkuntan} /></div>;
   }
   const [lap, akun, saldoAwal, buku, umur] = await Promise.all([
     supabase.rpc("laporan_keuangan", { p_dari: dari, p_sampai: sampai }),
@@ -137,8 +138,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/buku">["sea
 
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/buku" judul={t.judul} ket={t.ket} />
       <nav aria-label={t.judul} className="mt-5 flex flex-wrap gap-2 print:hidden">
         {JENIS_LAPORAN.map((j) => (
           <Link key={j} href={q(j)} aria-current={j === jenis ? "page" : undefined}

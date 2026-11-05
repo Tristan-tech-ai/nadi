@@ -9,6 +9,7 @@ import { ambilKamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Produksi" };
 
@@ -22,7 +23,7 @@ async function Isi() {
   const sesi = await wajibPerusahaan();
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const t = ambilKamus(bahasa).produksi;
-  const judul = <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>;
+  const judul = <KepalaHalaman jalur="/app/produksi" judul={t.judul} ket={false} />;
   if (!["pemilik", "admin", "akuntan"].includes(sesi.peran)) return <div lang={bahasa}>{judul}<p className="mt-2 text-tinta-2">{t.hanya}</p></div>;
   const ubah = sesi.peran !== "akuntan";
   const supabase = await createClient();

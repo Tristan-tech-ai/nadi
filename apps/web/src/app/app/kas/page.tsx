@@ -14,6 +14,7 @@ import { usulkanRekon, type AturanRekon, type JurnalKas, type TagihanTerbuka } f
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Kas dan bank" };
 
@@ -26,7 +27,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kas">["sear
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const t = ambilKamus(bahasa).kas;
   if (!["pemilik", "admin", "akuntan"].includes(sesi.peran)) {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanya}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/kas" judul={t.judul} ket={t.hanya} /></div>;
   }
   const ubah = sesi.peran !== "akuntan";
   const supabase = await createClient();
@@ -71,8 +72,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kas">["sear
 
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/kas" judul={t.judul} ket={t.ket} />
 
       <section className="mt-6" aria-labelledby="judul-rek">
         <h2 id="judul-rek" className="text-lg font-semibold">{t.rekeningJudul}</h2>

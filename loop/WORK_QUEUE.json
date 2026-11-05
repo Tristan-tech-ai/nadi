@@ -3515,8 +3515,10 @@
    "accept": "/app/menu menampilkan setiap ruang dan fitur dengan satu kalimat guna; pencarian menemukan fitur dari nama, sinonim, dan kata Inggris (korpus 60 kata kunci >= 95% ke halaman yang benar, unit test); tes memastikan setiap halaman di peta ruang bisa dicapai <= 2 ketukan dari halaman mana pun untuk tiap peran; e2e HP dan desktop",
    "how": "REKONSTRUKSI-APP.md bagian 5",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T17:30:59"
+   "status": "done",
+   "created": "2026-11-05T17:30:59",
+   "done": "2026-11-05T19:02:57",
+   "result": "dc6dc65; src/lib/cari-fitur.ts korpus 60 kata 57/60 (95%, buta 56/60), jangkauan <=2 ketukan per peran (cari-fitur.test.ts); /app/menu 53 fitur + cari GET; dialog Ctrl+K combobox APG; e2e/cari.spec.ts lulus produksi 390+1440 terang/gelap axe 0 serius; Lighthouse /app/menu 92/100 CLS 0"
   },
   {
    "id": "U-03",

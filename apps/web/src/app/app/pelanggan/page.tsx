@@ -14,6 +14,7 @@ import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Pelanggan dan deal" };
 
@@ -87,7 +88,7 @@ async function Isi() {
   ]);
   const deal = (dl.data ?? []) as unknown as Deal[];
   if (!kelola && sesi.peran !== "akuntan" && deal.length === 0) {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanya}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/pelanggan" judul={t.judul} ket={t.hanya} /></div>;
   }
   const akt = (ak.data ?? []) as Aktivitas[];
   const pelanggan = (cs.data ?? []) as { id: string; nama: string; jenis: string }[];
@@ -100,8 +101,7 @@ async function Isi() {
 
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 text-sm text-tinta-2">{kelola ? t.ket : t.ketStaf}</p>
+      <KepalaHalaman jalur="/app/pelanggan" judul={t.judul} ket={kelola ? t.ket : t.ketStaf} />
 
       {L && (
         <dl className="mt-5 grid grid-cols-2 gap-2 text-sm sm:grid-cols-4" data-testid="ringkas-crm" aria-label={t.corongJudul}>

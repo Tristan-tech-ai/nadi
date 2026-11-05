@@ -12,6 +12,7 @@ import { BANK_SKN } from "@/lib/gaji/transfer";
 import { KartuLowongan } from "@/components/app/lowongan";
 import { LingkaranRekrut } from "@/components/app/lingkaran-rekrut";
 import { FormAkunStaf, FormTambahOrang } from "./form-orang";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Orang" };
 
@@ -40,8 +41,7 @@ async function Isi() {
   if (sesi.peran !== "pemilik" && sesi.peran !== "admin") {
     return (
       <section className="mx-auto w-full max-w-xl px-5 py-10" lang={bahasa}>
-        <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.khususJudul}</h1>
-        <p className="mt-2 text-tinta-2" data-testid="ditolak">{t.khususKet}</p>
+        <KepalaHalaman jalur="/app/orang" judul={t.khususJudul} ket={<span data-testid="ditolak">{t.khususKet}</span>} />
       </section>
     );
   }
@@ -52,7 +52,7 @@ async function Isi() {
   ]);
   return (
     <section className="mx-auto w-full max-w-2xl px-5 py-10" lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
+      <KepalaHalaman jalur="/app/orang" judul={t.judul} ket={false} />
       <p className="mt-2 text-tinta-2">
         {sisip(t.kodeUsaha, { kode: <span className="font-mono font-semibold text-tinta" data-testid="kode-usaha">{usaha?.kode}</span> })}
       </p>

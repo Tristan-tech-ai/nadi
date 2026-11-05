@@ -14,6 +14,7 @@ import { wajibPerusahaan } from "@/lib/sesi";
 import { teksAtribut, type Tingkat } from "@/lib/stok/harga";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Barang dan stok" };
 
@@ -27,7 +28,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/barang">["s
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const t = ambilKamus(bahasa).barang;
   if (!["pemilik", "admin", "akuntan"].includes(sesi.peran)) {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanyaPengelola}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/barang" judul={t.judul} ket={t.hanyaPengelola} /></div>;
   }
   const sp = await searchParams;
   const pilih = typeof sp.produk === "string" && /^[0-9a-f-]{36}$/.test(sp.produk) ? sp.produk : null;
@@ -55,8 +56,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/barang">["s
 
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/barang" judul={t.judul} ket={t.ket} />
       <p className="mt-3 text-sm" data-testid="nilai-persediaan">{t.nilaiPersediaan} <span className="font-semibold"><Rupiah nilai={totalNilai} bahasa={bahasa} /></span></p>
 
       <section className="mt-6" aria-labelledby="judul-produk">

@@ -9,6 +9,7 @@ import { ambilKamus, isiTeks, type Kamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Dokumen dan tanda tangan" };
 
@@ -24,7 +25,7 @@ async function Isi() {
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const t = ambilKamus(bahasa).tanda;
   if (sesi.peran !== "pemilik" && sesi.peran !== "admin") {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanya}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/tanda-tangan" judul={t.judul} ket={t.hanya} /></div>;
   }
   const h = await headers();
   const asal = `${h.get("x-forwarded-proto") ?? "https"}://${h.get("x-forwarded-host") ?? h.get("host") ?? "nadi-swart.vercel.app"}`;
@@ -42,8 +43,7 @@ async function Isi() {
 
   return (
     <div lang={bahasa}>
-      <h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/tanda-tangan" judul={t.judul} ket={t.ket} />
       <p className="mt-3 rounded-[var(--radius-kartu)] bg-kertas-2 p-3 text-sm" data-testid="jujur-tanda">{t.jujur}</p>
 
       {P && (P.tertunda.length > 0 || P.berakhir.length > 0) && (

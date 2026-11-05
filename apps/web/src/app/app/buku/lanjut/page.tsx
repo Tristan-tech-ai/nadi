@@ -15,6 +15,7 @@ import { hariIni } from "@/lib/izin";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
+import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Anggaran, cabang, dan konsolidasi" };
 
@@ -101,7 +102,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/buku/lanjut
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const t = ambilKamus(bahasa).bukuLanjut;
   if (!["pemilik", "admin", "akuntan"].includes(sesi.peran)) {
-    return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanya}</p></div>;
+    return <div lang={bahasa}><KepalaHalaman jalur="/app/buku/lanjut" judul={t.judul} ket={t.hanya} /></div>;
   }
   const sp = await searchParams;
   const hari = hariIni(new Date(), await zonaUsahaIni(sesi.perusahaanId));
@@ -141,8 +142,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/buku/lanjut
   return (
     <div lang={bahasa}>
       <p className="text-sm print:hidden"><Link href={`/app/buku?${rentang}`} className="text-laut underline underline-offset-2">{t.kembali}</Link></p>
-      <h1 className="mt-2 font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1>
-      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
+      <KepalaHalaman jalur="/app/buku/lanjut" judul={t.judul} ket={t.ket} />
       {!bolehTulis && <p className="mt-2 text-sm text-tinta-2">{t.bacaSaja}</p>}
       <form method="get" action="/app/buku/lanjut" className="mt-4 flex flex-wrap items-end gap-3 text-sm" aria-label={t.tampilkan}>
         <label className="flex flex-col gap-1"><span className="text-tinta-2">{t.dari}</span><input type="date" name="dari" defaultValue={dari} className="h-10 rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-2" /></label>
