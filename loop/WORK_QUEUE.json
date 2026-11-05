@@ -3611,8 +3611,10 @@
    "accept": "skrip e2e 5 tugas (setujui usulan, buat invoice, tambah karyawan, lihat laba bulan ini, staf ajukan izin) mencatat jumlah klik dan halaman dari masuk sampai selesai; hasil sebelum (sekarang) dan sesudah U-01..U-06 di docs/quality/keterpahaman.md; sesudah lebih sedikit atau sama di semua tugas",
    "how": "REKONSTRUKSI-APP.md bagian 10",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T17:30:59"
+   "status": "done",
+   "created": "2026-11-05T17:30:59",
+   "done": "2026-11-05T22:55:44",
+   "result": "361e412; e2e/keterpahaman.spec.ts produksi 2/2: klik sesudah <= sebelum di 5 tugas (invoice 2->1, laba desktop 3->2, karyawan 1, izin 1, setujui 0); tautan dipindai naik (20->32 desktop) dicatat jujur di docs/quality/keterpahaman.md; Orang masuk sematan bawaan pemilik"
   },
   {
    "id": "T-01",
@@ -3655,8 +3657,10 @@
    "accept": "docs/promo/riset-video/SUARA.md: apa yang dikerjakan sound designer profesional (spotting, layering transien/body/tail, EQ, kompresi, reverb/ruang, pitch, ducking, sinkron ke bingkai, sonic logo, loudness -14 LUFS / true peak -1 dBTP) dengan sumber; rantai olah yang bisa dijalankan (ffmpeg/sox/python: potong, fade, EQ, reverb konvolusi, layering, normalisasi) diuji pada 3 suara contoh dengan ukuran LUFS sebelum/sesudah",
    "how": "sumber primer (EBU R128, ITU-R BS.1770, panduan platform), buku/artikel sound design; catat di LEARN",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T20:01:07"
+   "status": "done",
+   "created": "2026-11-05T20:01:07",
+   "done": "2026-11-05T23:10:42",
+   "result": "docs/promo/riset-video/SUARA.md + docs/promo/audio/olah.py; 3 bunyi (klik, kertas, cap 3 lapis) LUFS/dBTP sebelum-sesudah, mix uji -27,0 -> -13,6 LUFS / -1,5 dBTP; LEARN 6 Nov 2026"
   },
   {
    "id": "V-03",
@@ -3669,8 +3673,10 @@
    "accept": "untuk 7 tautan YouTube (STATE 6 Nov): cara mendengar tercatat (pengunduh resmi/terbuka dari GitHub, audio hanya untuk analisis lokal, tidak masuk repo dan tidak dipakai ulang); per video: lembar kontak per adegan, peta potongan (waktu cut), analisis audio (onset/ketukan, BPM, LUFS, spektrogram, kapan SFX muncul terhadap gerak UI, ducking), cara menjelaskan tanpa suara orang, hal unik, struktur; ringkasan pola lintas video di docs/promo/riset-video/RUJUKAN.md",
    "how": "yt-dlp/ffmpeg + analisis python (librosa bila ada, atau ffmpeg ebur128/silencedetect/showspectrumpic); bila pengunduhan gagal, catat dan pakai cara lain",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T20:01:07"
+   "status": "done",
+   "created": "2026-11-05T20:01:07",
+   "done": "2026-11-05T23:14:14",
+   "result": "docs/promo/riset-video/RUJUKAN.md: 7 video diukur (potongan, BPM, LUFS/LRA/puncak, onset, <150 Hz, sinkron bunyi-potongan 63%), lembar kontak dilihat, narasi dari takarir otomatis, pola lintas 8 rujukan + yang tidak dipakai"
   },
   {
    "id": "V-04",
@@ -3697,8 +3703,10 @@
    "accept": "docs/promo/audio-v2/: tiap berkas mentah tercatat sumber + lisensi di ASSETS.md, tiap hasil olah punya resep (rantai efek) yang bisa diulang; set minimal: klik, ketik, cap/setujui, lempar/whoosh, notifikasi, transisi, sonic logo 2 dtk, satu lagu dasar; diuji di potongan 20 dtk: -14 LUFS, true peak <= -1 dBTP, SFX jatuh di bingkai gerak",
    "how": "Freesound (CC0/CC BY), Openverse, katalog HeyGen bila masuk; rantai V-02",
    "blocked_by": "V-02,V-03",
-   "status": "ready",
-   "created": "2026-11-05T20:01:08"
+   "status": "done",
+   "created": "2026-11-05T20:01:08",
+   "done": "2026-11-05T23:19:37",
+   "result": "docs/promo/audio-v2 (buat.py resep, 7 efek .wav -3 dBTP, laporan.json), ASSETS 7 baris sumber CC0/PD/CC BY 4.0; uji 20 dtk -20,5 -> -14,2 LUFS / -1,5 dBTP, serangan efek 18,7-33,8 ms setelah bingkai gambar"
   },
   {
    "id": "V-06",
@@ -3767,8 +3775,10 @@
    "accept": "docs/promo/riset-video/RUJUKAN.md bagian rujukan 8 (https://youtu.be/orTd3grSYsQ): ditonton DAN didengar seperti V-03 (lembar kontak, peta potongan, BPM, LUFS, kapan SFX jatuh, tipografi, kecepatan potong per detik), lalu diturunkan menjadi arah nada video Nadi dengan angka (durasi rata-rata potongan, tempo, kerapatan teks) dan catatan bagian mana yang tidak cocok untuk Nadi beserta alasannya",
    "how": "cara mendengar sama dengan V-03; analisis lokal saja, tidak dipakai ulang",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T20:08:54"
+   "status": "done",
+   "created": "2026-11-05T20:08:54",
+   "done": "2026-11-05T22:55:44",
+   "result": "docs/promo/riset-video/RUJUKAN.md rujukan 8: 8 potongan/87 dtk, rata 10,9 dtk, 117 BPM, -28 LUFS, onset 4,49/dtk, energi <150 Hz 13,4%; arah nada Nadi dengan angka + 5 bagian yang tidak cocok"
   },
   {
    "id": "V-11",
