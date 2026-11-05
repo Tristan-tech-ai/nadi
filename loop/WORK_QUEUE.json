@@ -3879,8 +3879,10 @@
    "accept": "docs/quality/audit-kejelasan.md: setiap halaman /app dibuka sebagai pemilik dan staf (Playwright + tangkapan layar), setiap tombol aksi diperiksa apakah orang tahu apa yang terjadi dan di mana hasilnya terlihat sebelum menekan (pola: label kata kerja + objek, kalimat akibat, tujuan setelahnya); temuan diberi nomor dan diperbaiki, atau dijadikan tugas bila besar; minimal 50 halaman diperiksa, daftar temuan dan perbaikannya dengan commit",
    "how": "NN/g visibility of system status + match between system and real world; U-10",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T20:42:29"
+   "status": "done",
+   "created": "2026-11-05T20:42:29",
+   "done": "2026-11-05T21:39:47",
+   "result": "dffee14; docs/quality/audit-kejelasan.md (K-01..K-09), e2e/audit-kejelasan.spec.ts produksi: pemilik 53 halaman 399 tombol + staf sementara 18 halaman 54 tombol, 0 tombol tanpa nama, label umum tersisa hanya Cari (konvensi) dan Setujui/Tolak di kartu (berkonteks + kalimat akibat U-10); perbaikan: Tambah orang, Tambah ke daftar, Kirim isian, Buka <nama usaha>, Simpan <jenis izin>, Simpan kunci bulan; izin.spec produksi lulus"
   },
   {
    "id": "U-12",
