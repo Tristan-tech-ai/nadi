@@ -2723,8 +2723,10 @@
    "accept": "docs/research/kebutuhan-usaha.md: 10 jenis usaha x satu hari kerja dengan sumber (wawancara sintetis tidak dihitung bukti; pakai data resmi BPS/KemenKopUKM dan dokumentasi pesaing), tabel modul ada/kosong, urutan modul baru dengan alasan; tiap modul baru menjadi tugas dengan kriteria terima",
    "how": "docs/research/rencana-luas-nadi.md 4c",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T19:02:41"
+   "status": "done",
+   "created": "2026-11-04T19:02:41",
+   "done": "2026-11-05T13:19:09",
+   "result": "a4aa6fd: docs/research/kebutuhan-usaha.md (10 jenis usaha + kontraktor/agensi, satu hari kerja, modul ada/kosong; sumber BPS SE2016 BRS 50/04/Th. XX: G 46,17%, I 16,72%, C ~16,5%, UMK 98,33%; majoo.id/solusi; Mekari fitur.md; kategori lain ditandai belum terverifikasi), urutan 4 modul baru dengan alasan, tugas W-07A tagihan berulang, W-07B order titipan/servis, W-07C komisi ke slip, W-07D anggaran proyek + jam kerja, masing-masing dengan kriteria terima"
   },
   {
    "id": "W-08",
