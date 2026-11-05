@@ -1,0 +1,68 @@
+{
+ "klik": {
+  "rujukan": {
+   "serangan_ms": 6.0,
+   "ekor_ms": 12.0,
+   "centroid": 5278.5,
+   "pita_lo": 597.0,
+   "pita_hi": 8319.5,
+   "db": -37.25,
+   "n": 4
+  },
+  "kandidat": {
+   "klik.wav": {
+    "serangan_ms": 12.0,
+    "ekor_ms": 26.0,
+    "centroid": 4309.0,
+    "pita_lo": 914.0,
+    "pita_hi": 7734.0,
+    "db": -47.6,
+    "n": 1
+   }
+  }
+ },
+ "ketik": {
+  "rujukan": {
+   "serangan_ms": 10.0,
+   "ekor_ms": 8.0,
+   "centroid": 3262.0,
+   "pita_lo": 46.0,
+   "pita_hi": 3269.0,
+   "db": -21.9,
+   "ioi_med": 72.00000000000001,
+   "ioi_cv": 0.3119251469460218,
+   "n": 6
+  },
+  "kandidat": {
+   "ketik-uji.wav": {
+    "serangan_ms": 6.0,
+    "ekor_ms": 20.0,
+    "centroid": 3159.0,
+    "pita_lo": 421.0,
+    "pita_hi": 3562.0,
+    "db": -14.2,
+    "n": 3
+   }
+  }
+ },
+ "whoosh": {
+  "rujukan": {
+   "serangan_ms": 356.0,
+   "ekor_ms": 324.0,
+   "centroid": 2702,
+   "pita_lo": 46,
+   "pita_hi": 1218,
+   "db": -15.9
+  },
+  "kandidat": {
+   "whoosh.wav": {
+    "serangan_ms": 78.0,
+    "ekor_ms": 312.0,
+    "centroid": 2652,
+    "pita_lo": 257,
+    "pita_hi": 820,
+    "db": -9.4
+   }
+  }
+ }
+}

@@ -1,23 +1,29 @@
-# Paket audio v2 (V-05)
+# Paket audio v2 (V-05), dibuat ulang dari foley nyata 6 Nov 2026
 
-Tujuh efek dan satu sonic logo untuk video demo V-07, dibuat ulang setiap kali dari bahan mentah berlisensi bebas dengan `buat.py`. Fungsi olahnya ada di `../audio/olah.py`, risetnya di `../riset-video/SUARA.md`. Sumber dan lisensi tiap bahan mentah tercatat di `docs/ASSETS.md` dan di `SUMBER` di dalam `buat.py`. Lagu dasar tidak masuk repo; buat.py memotongnya dari berkas yang diunduh ulang dari URL resminya.
+Semua efek berasal dari **rekaman nyata** berlisensi CC0 (freesound lewat Openverse). Sumber dan lisensi tiap rekaman tercatat di `docs/ASSETS.md`.
+Rekaman mentah tidak masuk repo. `foley.py` mengolahnya ulang dengan resep yang sama setiap kali:
 
-| Berkas | Resep singkat (lengkap di buat.py) | dBTP | Dtk |
+```
+python foley.py <folder_rekaman_mentah>
+```
+
+Cara menilai tiap efek terhadap rujukan: `../riset-video/MENDENGAR.md`. Rantai olah: `../riset-video/SUARA.md` bagian 5.
+Versi sebelumnya (klik Commons, dentum mesin, ketikan satu potongan yang diulang) dibuang setelah Tristan menilainya tidak seperti ketikan dan seperti animasi murahan.
+
+| Berkas | Dari rekaman | Olah singkat | Puncak |
 |---|---|---|---|
-| klik.wav | klik CC0, transien 0,12 dtk, highpass 150 Hz, +3 dB 4 kHz, kompresi 4:1, ruang 12% | −3,0 | 0,72 |
-| ketik.wav | ketikan CC0 terpadat 1,2 dtk, pita 250 Hz-10 kHz, kompresi 2,5:1 | −3,0 | 1,20 |
-| cap.wav | klik −3 semitone + dentum mesin lowpass 400 Hz (+8 ms) + ekor RT60 0,8 dtk, lem 3:1 | −3,0 | 1,56 |
-| lempar.wav | whoosh CC0, lalu kertas mendarat di +320 ms, ruang 15% | −3,0 | 1,32 |
-| notifikasi.wav | dua ketuk lembut (klik +5 semitone, lowpass 5 kHz) berjarak 90 ms. Bukan nada sintetis | −3,0 | 0,75 |
-| transisi.wav | swipe CC0, highpass 250 Hz, +2 dB 5 kHz | −3,0 | 1,05 |
-| sonic-logo.wav | kertas menggeser, lalu cap mendarat di 0,55 dtk, reverb RT60 1,4 dtk, 2,0 dtk | −3,0 | 2,00 |
+| ketik-00..15.wav | Keyboard Typing 7, Topre (grcekh, 546164) | 16 ketukan terpisah yang kerasnya mirip, 70 ms, pita 350 Hz-10 kHz, +3 dB 2,5 kHz | −6 dBFS |
+| klik.wav | mouse-click-double-00 (pbimal, 534104) | 50 ms, pita 300 Hz-10 kHz, +3 dB 2,5 kHz, ruang 12 ms | −3 dBFS |
+| cap.wav | 17_stamp, rubber, plastic (15FPanska_KristynaHaupt, 461888) | 350 ms, high-pass 60 Hz, +3 dB 180 Hz, ruang 40 ms | −2 dBFS |
+| whoosh.wav | Swosh swoosh whoosh air sound (qubodup, 60026) | diregang 2×, high-pass 600 Hz, +4 dB 5 kHz | −4 dBFS |
+| notifikasi.wav | paper3 (florian_reinke, 63512) | high-pass 400 Hz, +2 dB 2,5 kHz | −8 dBFS |
+| kertas.wav | Paper sheets (paulocorona, 334994) | 600 ms, pita 200 Hz-10 kHz | −8 dBFS |
+| lempar.wav | whoosh + kertas mendarat +320 ms | komposit | −3 dBFS |
+| transisi.wav | whoosh −3 dB | komposit, lirih | −6 dBFS |
+| sonic-logo.wav | kertas bergeser, cap mendarat di 0,55 dtk, ruang 1,2 dtk | komposit, 2,0 dtk | −3 dBFS |
+| toko.wav (tidak di repo) | Supermarket Ambience (neilraouf, 617520) | 50 dtk, pita 80 Hz-9 kHz | −14 dBFS |
+| contoh-dengar.wav | rangkaian 7,5 dtk semua efek | untuk didengar Tristan (opsional) | |
 
-## Uji potongan 20 dtk (6 Nov 2026, diukur ffmpeg ebur128)
+## Pakai di film
 
-- Bed: lagu dasar mulai 15 dtk (bagian penuh pertama), 117 BPM, fade masuk 0,4 dtk dan keluar 1,5 dtk.
-- Delapan efek ditaruh di bingkai 30 fps yang jatuh pada ketukan ke-4, 8, 10, 16, 20, 28, 32, dan 34. Bingkainya dihitung dari indeks ketukan, bukan dijumlah berulang.
-- Setiap efek digeser maju sebesar letak serangannya sendiri, supaya bunyi tiba satu bingkai setelah gambarnya.
-- Hasil: −20,5 LUFS / −3,9 dBTP sebelum, **−14,2 LUFS / −1,5 dBTP** sesudah normalisasi dua lintasan.
-- Serangan efek di jalur efek terukur 18,7-33,8 ms setelah bingkai gambarnya (sasaran 0-67 ms, satu bingkai = 33,3 ms). Angka per efek ada di `laporan.json`.
-
-Diukur, bukan didengar. Akhir lagu dan titik loop perlu didengar Tristan sebelum V-07 dirilis.
+`docs/promo/demo-v3/campur.py` menaruh efek dari timeline film. Hasil mix dan uji potongan 20 dtk ada di `docs/promo/demo-v3/audio.json` dan CATATAN.md.

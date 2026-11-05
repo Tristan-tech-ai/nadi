@@ -790,6 +790,9 @@ def bangun():
     f.add(f'tl.to("#kur6", {{opacity: 0, duration: 0.3}}, {TK6 + 0.9:.3f});')
 
     durasi = TOTAL
+    json.dump({str(k): v for k, v in M.items()}, open(os.path.join(AKAR, "babak.json"), "w"), indent=1)  # dibaca campur.py
+    ada_audio = os.path.exists(os.path.join(AKAR, "assets", "audio", "mix.wav"))
+    f.klip.append(f'<audio id="mix" class="clip" src="assets/audio/mix.wav" data-start="0" data-duration="{durasi}" data-track-index="9"></audio>' if ada_audio else "")
     css = open(os.path.join(AKAR, "gaya.css"), encoding="utf8").read()
     html = f"""<!doctype html>
 <html lang="id">

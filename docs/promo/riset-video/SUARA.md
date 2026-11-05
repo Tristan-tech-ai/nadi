@@ -64,3 +64,23 @@ Yang kupelajari dari pengujian ini (kesalahan yang ditemukan, lalu diperbaiki):
 
 - V-05 mengumpulkan bahan mentah berlisensi bebas (klik, ketik, kertas, gesekan, whoosh, dentum, ambience toko) dan menjalankannya lewat `olah.py`. Setiap berkas dicatat di docs/ASSETS.md.
 - V-07 memakai `normalkan` pada mix akhir dan melaporkan LUFS/true peak dari berkas render. Pemeriksaan telinga oleh Tristan dicatat terpisah.
+
+## 5. Rantai baru dari foley nyata (6 Nov 2026, setelah teguran Tristan)
+
+Efek bagian 2-3 dibuang. Bahannya klik Commons tunggal dan dentum mesin, dan ketikannya satu potongan yang diulang. Tristan menilai ketikan itu tidak seperti ketikan dan transisinya seperti animasi murahan.
+
+Pengganti: `docs/promo/audio-v2/foley.py`.
+- **Bahan:** tujuh rekaman nyata CC0 dari freesound lewat Openverse (dicatat di ASSETS.md).
+- **Penilaian:** tiap efek dinilai berdampingan dengan efek sejenis di rujukan 8 memakai `MENDENGAR.md` (spektrogram, amplop, serangan, ekor, centroid, pita).
+- **Rantai:** potong satu kejadian, high-pass, low-pass 10 kHz orde 8, angkat 2,5 kHz, ruang pendek, pudar, normalisasi puncak. Komposit (lempar, transisi, sonic logo) disusun dari hasil olah itu.
+
+Ukuran sebelum dan sesudah (ffmpeg ebur128; bunyi di bawah 1 dtk diberi senyap sampai 1 dtk):
+
+| Bunyi | Mentah (1 dtk pertama) LUFS / puncak | Olah LUFS / puncak / dtk | Dibandingkan dengan rujukan |
+|---|---|---|---|
+| Klik (534104) | −23,4 / −3,1 dBFS | −30,7 / −2,8 / 0,05 | serangan 12 ms, ekor 26 ms, pita 0,9-7,7 kHz (rujukan 6 / 12 ms, 0,6-8,3 kHz) |
+| Ketik, satu ketukan (546164) | −20,4 / +1,1 dBFS (mentah MP3 memuat over) | −30,2 / −6,0 / 0,07 | centroid 3159 Hz (rujukan 3262 Hz) |
+| Cap karet (461888) | −32,9 / −10,3 dBFS | −29,7 / −2,0 / 0,35 | tidak ada cap di rujukan; cap = karakter film Nadi |
+| Whoosh (60026, diregang 2×) | −19,1 / −7,3 dBFS | −17,9 / −4,0 / 0,98 | centroid 2652 Hz, ekor 312 ms (rujukan 2702 Hz, 324 ms) |
+
+Mix film (`docs/promo/demo-v3/campur.py`) memakai `normalkan()` dari bagian 2. Hasil dan laporannya ada di `docs/promo/demo-v3/audio.json`.

@@ -1,0 +1,110 @@
+{
+ "resep": {
+  "klik": {
+   "sumber": "fs_534104.mp3",
+   "ambil": "onset0",
+   "panjang": 0.05,
+   "hp": 300,
+   "lp": 10000,
+   "eq": [
+    2500,
+    3.0
+   ],
+   "ruang": 0.012,
+   "puncak": -3.0
+  },
+  "ketik": {
+   "sumber": "fs_546164.mp3",
+   "ambil": "semua",
+   "panjang": 0.07,
+   "hp": 350,
+   "lp": 10000,
+   "eq": [
+    2500,
+    3.0
+   ],
+   "ruang": 0.02,
+   "puncak": -6.0,
+   "jumlah": 16
+  },
+  "cap": {
+   "sumber": "fs_461888.mp3",
+   "ambil": "onset0",
+   "panjang": 0.35,
+   "hp": 60,
+   "lp": 10000,
+   "eq": [
+    180,
+    3.0
+   ],
+   "ruang": 0.04,
+   "puncak": -2.0
+  },
+  "whoosh": {
+   "sumber": "fs_60026.mp3",
+   "ambil": "utuh",
+   "regang": 2.0,
+   "hp": 600,
+   "lp": 10000,
+   "eq": [
+    5000,
+    4.0
+   ],
+   "ruang": 0.05,
+   "puncak": -4.0
+  },
+  "notifikasi": {
+   "sumber": "fs_63512.mp3",
+   "ambil": "utuh",
+   "hp": 400,
+   "lp": 10000,
+   "eq": [
+    2500,
+    2.0
+   ],
+   "ruang": 0.03,
+   "puncak": -8.0
+  },
+  "kertas": {
+   "sumber": "fs_334994.mp3",
+   "ambil": "onset0",
+   "panjang": 0.6,
+   "hp": 200,
+   "lp": 10000,
+   "eq": [
+    3000,
+    1.0
+   ],
+   "ruang": 0.03,
+   "puncak": -8.0
+  },
+  "toko": {
+   "sumber": "fs_617520.mp3",
+   "ambil": "utuh",
+   "potong": [
+    2.0,
+    52.0
+   ],
+   "hp": 80,
+   "lp": 9000,
+   "eq": [
+    1000,
+    0.0
+   ],
+   "ruang": 0.0,
+   "puncak": -14.0
+  }
+ },
+ "hasil": {
+  "klik": 1,
+  "ketik": 16,
+  "cap": 1,
+  "whoosh": 1,
+  "notifikasi": 1,
+  "kertas": 1,
+  "toko": 1,
+  "lempar": 1,
+  "transisi": 1,
+  "sonic-logo": 1
+ }
+}
