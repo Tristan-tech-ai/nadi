@@ -2330,7 +2330,7 @@ export const kamusEn: Kamus = {
   katalogPublik: { judul: "{usaha} catalog", tidakAktif: "This catalog is not active yet.", kosong: "No products yet.", pesan: "Order on WhatsApp", teks: "Hello {usaha}, I would like to order {nama} ({harga})." },
   tanda: {
     judul: "Documents and signatures", ket: "Send agreements, statements, or receipts to be signed in order. Every signature is recorded with time, network address, and device.",
-    jujur: "These are uncertified electronic signatures (Government Regulation 71/2019 Article 60(4)): valid when Article 59(3) is met, but not certified signatures from an Electronic Certification Provider.",
+    jujur: "These are uncertified electronic signatures (Government Regulation 71/2019 Article 60(4)). They are valid when Article 59(3) is met. They are not certified signatures from an Electronic Certification Provider.",
     hanya: "This page is for owners or admins.", daftarJudul: "Documents", kosong: "No documents yet.",
     status: { draf: "Draft", dikirim: "Awaiting signatures", selesai: "Completed", ditolak: "Declined", batal: "Cancelled" },
     statusPenanda: { menunggu: "waiting for turn", aktif: "their turn", ditandatangani: "signed", ditolak: "declined" },

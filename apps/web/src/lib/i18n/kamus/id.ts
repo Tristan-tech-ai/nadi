@@ -2331,7 +2331,7 @@ export const kamusId = {
   katalogPublik: { judul: "Katalog {usaha}", tidakAktif: "Katalog ini belum aktif.", kosong: "Belum ada produk.", pesan: "Pesan lewat WhatsApp", teks: "Halo {usaha}, saya mau pesan {nama} ({harga})." },
   tanda: {
     judul: "Dokumen dan tanda tangan", ket: "Kirim perjanjian, pernyataan, atau kuitansi untuk ditandatangani berurutan. Setiap tanda tangan tercatat dengan waktu, alamat jaringan, dan perangkat.",
-    jujur: "Ini tanda tangan elektronik tidak tersertifikasi (PP 71/2019 Pasal 60 ayat (4)): sah bila syarat Pasal 59 ayat (3) terpenuhi, tetapi bukan tanda tangan bersertifikat dari Penyelenggara Sertifikasi Elektronik.",
+    jujur: "Ini tanda tangan elektronik tidak tersertifikasi (PP 71/2019 Pasal 60 ayat (4)). Sah bila syarat Pasal 59 ayat (3) terpenuhi. Bukan tanda tangan bersertifikat dari Penyelenggara Sertifikasi Elektronik.",
     hanya: "Halaman ini untuk pemilik atau admin.", daftarJudul: "Dokumen", kosong: "Belum ada dokumen.",
     status: { draf: "Draf", dikirim: "Menunggu tanda tangan", selesai: "Selesai", ditolak: "Ditolak", batal: "Dibatalkan" },
     statusPenanda: { menunggu: "menunggu giliran", aktif: "gilirannya", ditandatangani: "sudah menandatangani", ditolak: "menolak" },
