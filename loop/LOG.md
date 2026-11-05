@@ -322,3 +322,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 2026-11-06 tick 301 selesai | 5 wajib: T-01B, V-13A, V-13B, V-13C, V-13H (bedah rujukan bingkai demi bingkai dan bunyi demi bunyi); wajib 194/218, V 5/21 |
 | 2026-11-06 tick 302 | done V-13D/E/F/G/I, V-13, V-03, V-10: 8 rujukan dibedah, pola lintas GERAK.md, uji gerak berdampingan (kurva cocok, rasa belum) |
 | 2026-11-06 tick 303 | video demo v3 dimulai (perintah Tristan): V-07A kait+masalah, V-07B Lempar, V-07C Feed+cap, V-07D tagihan QRIS, V-07E Mata placeholder; 58 dtk dirender dan ditinjau |
+| 2026-11-06 tick 304 | done V-07F belajar format, V-07G babak MCP/gaji/otomasi/tanya/Sarapan/kerangka/kartu akhir, V-07I perpanjangan ke 4:30 (Excel asli, harga resmi, Feed rincian, Mata papan, pengawas), V-14 cara mendengar + pustaka foley nyata, V-02 rantai olah foley; film 270,5 dtk, mix -14,1 LUFS LRA 8,7 |

@@ -3657,13 +3657,15 @@
    "accept": "docs/promo/riset-video/SUARA.md: apa yang dikerjakan sound designer profesional (spotting, layering transien/body/tail, EQ, kompresi, reverb/ruang, pitch, ducking, sinkron ke bingkai, sonic logo, loudness -14 LUFS / true peak -1 dBTP) dengan sumber; rantai olah yang bisa dijalankan (ffmpeg/sox/python: potong, fade, EQ, reverb konvolusi, layering, normalisasi) diuji pada 3 suara contoh dengan ukuran LUFS sebelum/sesudah Kriteria tambahan: setiap efek dinilai berdampingan dengan rekaman asli sejenis (spektrogram + amplop + transien dilihat sebagai gambar), dari rekaman foley nyata berlisensi bebas, bukan sintetis.",
    "how": "sumber primer (EBU R128, ITU-R BS.1770, panduan platform), buku/artikel sound design; catat di LEARN",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-05T20:01:07",
    "riwayat_done": {
     "done": "2026-11-05T23:10:42",
     "result": "docs/promo/riset-video/SUARA.md + docs/promo/audio/olah.py; 3 bunyi (klik, kertas, cap 3 lapis) LUFS/dBTP sebelum-sesudah, mix uji -27,0 -> -13,6 LUFS / -1,5 dBTP; LEARN 6 Nov 2026"
    },
-   "catatan": "dibuka ulang 6 Nov 2026 atas penilaian Tristan: \"sound effect ketik mu bahkan tidak seperti suara ketikan dan suara transisi nya kaya suara animasi busuk\", animasi antrean pengganti CCTV \"jelek dan jadul\", \"cara kamu mendengar masih salah\". Klaim done sebelumnya berdiri di atas ukuran angka (LUFS, BPM, onset, lembar kontak 36 bingkai), bukan menonton penuh dan menilai bunyi."
+   "catatan": "dibuka ulang 6 Nov 2026 atas penilaian Tristan: \"sound effect ketik mu bahkan tidak seperti suara ketikan dan suara transisi nya kaya suara animasi busuk\", animasi antrean pengganti CCTV \"jelek dan jadul\", \"cara kamu mendengar masih salah\". Klaim done sebelumnya berdiri di atas ukuran angka (LUFS, BPM, onset, lembar kontak 36 bingkai), bukan menonton penuh dan menilai bunyi.",
+   "done": "2026-11-06T04:26:06",
+   "result": "406ba32: SUARA.md bagian 5 rantai foley nyata (foley.py: potong kejadian, HP, LP 10 kHz orde 8, +2,5 kHz, ruang, normalisasi puncak) diuji pada klik/ketik/cap/whoosh dengan LUFS dan puncak sebelum/sesudah (ebur128), tiap efek dinilai berdampingan dengan rekaman rujukan sejenis (MENDENGAR.md, spektrogram + amplop)"
   },
   {
    "id": "V-03",
@@ -4087,9 +4089,11 @@
    "accept": "metode tertulis di docs/promo/riset-video/MENDENGAR.md: pisah stem (musik/efek/vokal), deteksi kejadian, spektrogram dan amplop tiap efek rujukan disimpan sebagai gambar dan dibandingkan dengan efek Nadi berdampingan; pustaka efek baru (ketik keyboard asli, klik, whoosh/swipe, notifikasi, cap) dari rekaman berlisensi bebas yang dicatat di docs/ASSETS.md; setiap efek lolos perbandingan (transien, rentang frekuensi, panjang ekor) terhadap efek sejenis di rujukan; berkas contoh dengar disebut di UNTUK-TRISTAN sebagai opsional, loop tidak menunggu",
    "how": "demucs atau pemisah stem lain bila bisa dipasang lokal, librosa, ffmpeg showspectrumpic",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T01:18:25",
-   "catatan": "perintah Tristan 6 Nov 2026: cara mendengar sebelumnya salah"
+   "catatan": "perintah Tristan 6 Nov 2026: cara mendengar sebelumnya salah",
+   "done": "2026-11-06T04:26:06",
+   "result": "406ba32 (gate LULUS, push): metode docs/promo/riset-video/MENDENGAR.md (stem demucs, deteksi kejadian, serangan/ekor/centroid/pita/jarak antarklik), gambar berdampingan dengan rujukan 8 di riset-video/dengar/*.png, alat dengar/mendengar.py; pustaka efek dari 7 rekaman nyata CC0 freesound (ASSETS.md); klik 12/26 ms pita 0,9-7,7 kHz vs rujukan 6/12 ms 0,6-8,3 kHz, ketik centroid 3159 vs 3262 Hz, whoosh centroid 2652 vs 2702 Hz ekor 312 vs 324 ms; contoh dengar disebut di UNTUK-TRISTAN (opsional)"
   },
   {
    "id": "V-13A",
@@ -4356,9 +4360,11 @@
    "accept": "dibangun di docs/promo/demo-v3/buat.py dari DOM asli (lapisan diposisikan dari ukur.json), dirender, dan ditinjau bingkai besar terhadap aturan GERAK.md + UJI-GERAK.md; temuan dan status dicatat di CATATAN.md; hyperframes check 0 error",
    "how": "docs/promo/demo-v3/CATATAN.md",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T02:33:05",
-   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)"
+   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)",
+   "done": "2026-11-06T04:15:36",
+   "result": "0ba1ecb (gate LULUS, push): babak 3 MCP, 6 gaji (DOM gaji-draf, Gerbang Gaji menahan dengan alasan asli, lepas), 8 otomasi+tanya+Sarapan, 10 kerangka 3 lebar, 11 kartu akhir dibangun di docs/promo/demo-v3/buat.py dari DOM asli + ukur.json; dirender 270,5 dtk dan ditinjau bingkai besar (lembar 94-116, 106-134, 136-158 dtk); hyperframes check 0 error; CATATAN.md diperbarui"
   },
   {
    "id": "V-07H",
@@ -4386,8 +4392,10 @@
    "accept": "film 260-300 dtk; babak 1 Excel karyawan asli direkonstruksi sel per sel + kartu harga resmi bertanggal; babak 2 lima jenis berkas Siap disetujui; babak 4 dari DOM Feed terbaru dengan Kalau disetujui + Lihat rincian; babak 7 angka kunjungan asli, jalur, papan informasi kamera UU 27/2022; babak 9 pengawas bukan AI dengan alasan keluaran asli periksaAturan, bayangan 2x lalu aktif; dirender dan ditinjau bingkai besar; hyperframes check 0 error; dicatat di CATATAN.md",
    "how": "docs/promo/demo-v3/buat.py daftar D",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-06T04:04:48"
+   "status": "done",
+   "created": "2026-11-06T04:04:48",
+   "done": "2026-11-06T04:15:36",
+   "result": "0ba1ecb: film 270,5 dtk (4:30,5); babak 1 Excel karyawan asli sel per sel + kartu harga resmi 3 Nov 2026; babak 2 lima berkas Siap disetujui; babak 4 DOM Feed terbaru dengan Kalau disetujui + rincian Akan ditambah (3); babak 7 kunjungan 177, jalur paling sering, papan informasi kamera UU 27/2022 Pasal 17; babak 9 pengawas dengan alasan keluaran asli periksaAturan, bayangan 2 dari 2 lalu aktif; ditinjau bingkai 17/20,5/44,6/113,5/175,4/183,6/232,8/240,2 dtk; check 0 error"
   }
  ]
 }
