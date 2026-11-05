@@ -3891,9 +3891,11 @@
    "accept": "berkas AIWIC2026_nadi_nadi.pdf A4 tanpa kata sandi: cover (nama produk, tim, anggota, instansi) + 10 bagian sesuai urutan kriteria (Problem & Background, Target User, Proposed Solution + user journey, AI Implementation (bagian ber-AI, model/API/metode, input-output, alasan perlu AI), MVP & Key Features yang berfungsi saat submit, Technical Architecture berupa diagram frontend -> backend -> database -> AI/API -> result, Innovation & Differentiation, Impact & Development Potential + keterbatasan, Technology Disclosure (framework, database, model/API, pustaka, dataset, hosting, AI coding assistant), Submission Links (GitHub, URL deploy, akun demo)); isi maksimal 5 halaman di luar cover dan lampiran (dihitung dari PDF); semua angka dan klaim dari sumber repo/produksi; figure vektor terbaca; dibuat dengan LaTeX (xelatex MiKTeX ada di perangkat); AI coding assistant WAJIB diungkap jujur di PDF, jadi sumber proposal dan PDF disimpan DI LUAR repo (C:/Users/Tristan/Downloads/project-pkl/proposal/) agar aturan tanpa jejak repo tetap terjaga; data akun demo tidak masuk repo; dikerjakan PALING AKHIR",
    "how": "kriteria Tristan 6 Nov 2026",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-05T20:36:28",
-   "catatan": "6 Nov 2026: ketergantungan dilepas atas perintah Tristan (setelah video selesai, LANGSUNG proposal PDF, baru tugas lain); bagian yang belum ada (L-01/L-02/T-01D/W-10A) ditulis jujur sebagai rencana."
+   "catatan": "6 Nov 2026: ketergantungan dilepas atas perintah Tristan (setelah video selesai, LANGSUNG proposal PDF, baru tugas lain); bagian yang belum ada (L-01/L-02/T-01D/W-10A) ditulis jujur sebagai rencana.",
+   "done": "2026-11-06T05:48:31",
+   "result": "C:/Users/Tristan/Downloads/project-pkl/proposal/AIWIC2026_nadi_nadi.pdf (di luar repo; sumber .tex + identitas.tex + fonts OFL): A4, tanpa kata sandi (pdfinfo Encrypted no), 5 halaman = cover + 4 halaman isi (batas 5), 10 bagian sesuai urutan kriteria, figure vektor TikZ perjalanan pengguna dan arsitektur frontend-backend-basis data-AI-hasil, angka dari repo (169 migrasi, 133 tes SQL, 109 e2e, 124 tes unit, 59 halaman) dan produksi 6 Nov (45 usaha uji, token rata per tugas dari pemakaian_ai, eval ekstraktor 396/399), AI coding assistant diungkap jujur, keterbatasan ditulis; identitas dan akses repo untuk Tristan di UNTUK-TRISTAN"
   },
   {
    "id": "PP-02",
