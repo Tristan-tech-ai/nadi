@@ -5,7 +5,7 @@ import { buatPerusahaan } from "@/app/app/actions";
 import { Tombol } from "@/components/ui/tombol";
 import type { Kamus } from "@/lib/i18n/kamus";
 
-const JENIS = ["fnb", "toko", "kantor", "bengkel", "klinik", "konstruksi", "logistik", "hotel", "salon", "laundry", "lainnya"] as const;
+const JENIS = ["fnb", "toko", "kantor", "bengkel", "klinik", "konstruksi", "logistik", "hotel", "salon", "laundry", "produksi", "pertanian", "pendidikan", "lainnya"] as const;
 
 const SKALA = ["1", "2-5", "6-15", "16-50", "50+"] as const;
 const ZONA_ID = ["Asia/Jakarta", "Asia/Pontianak", "Asia/Makassar", "Asia/Jayapura"] as const;
@@ -14,6 +14,7 @@ const isian = "mt-1 h-12 w-full rounded-[var(--radius-isian)] border border-gari
 export function FormMulai({ teks: t, negara }: { teks: Kamus["mulai"]; negara: { kode: string; nama: string }[] }) {
   const [hasil, kirim, menunggu] = useActionState(buatPerusahaan, {});
   const [pilihNegara, setPilihNegara] = useState(hasil.isian?.negara ?? "ID");
+  const [jenis, setJenis] = useState(hasil.isian?.industri ?? "fnb");
   return (
     <form action={kirim} className="grid gap-5">
       <div>
@@ -28,11 +29,19 @@ export function FormMulai({ teks: t, negara }: { teks: Kamus["mulai"]; negara: {
         <div className="mt-2 grid gap-2 sm:grid-cols-2">
           {JENIS.map((kode) => (
             <label key={kode} className="flex min-h-12 cursor-pointer items-center gap-3 rounded-[var(--radius-isian)] border border-garis px-3 has-[:checked]:border-tinta has-[:checked]:bg-kertas-2">
-              <input type="radio" name="industri" value={kode} defaultChecked={(hasil.isian?.industri ?? "fnb") === kode} className="accent-[var(--tinta)]" />
+              <input type="radio" name="industri" value={kode} checked={jenis === kode} onChange={() => setJenis(kode)} className="accent-[var(--tinta)]" />
               <span className="text-sm">{t[kode]}</span>
             </label>
           ))}
         </div>
+        {jenis === "lainnya" && (
+          <div className="mt-3">
+            <label htmlFor="cerita" className="text-sm font-medium">{t.cerita}</label>
+            <textarea id="cerita" name="cerita" required minLength={10} maxLength={1000} rows={3} defaultValue={hasil.isian?.cerita} placeholder={t.ceritaContoh}
+              className="mt-1 w-full rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-3 py-2 text-base text-tinta placeholder:text-tinta-2" />
+            <p className="mt-1 text-xs text-tinta-2">{t.ceritaBantu}</p>
+          </div>
+        )}
       </fieldset>
       <fieldset>
         <legend className="text-sm font-medium">{t.skala}</legend>
