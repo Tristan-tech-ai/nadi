@@ -2863,8 +2863,10 @@
    "accept": "tes SQL stok dan jurnal WIP; e2e satu perintah kerja",
    "how": "docs/research/mekari/rencana.md; menutup JU-12; isi: Produksi: BoM bertingkat, perintah kerja, ambil material, hasil multiproduk, biaya standar dan selisih, assembly/disassembly",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:53"
+   "status": "done",
+   "created": "2026-11-04T20:17:53",
+   "done": "2026-11-05T12:08:07",
+   "result": "1d0c343 + 34e05d1: migrasi produksi md5 4a5a739a + produksi_perbaikan md5 ef8e2504, tes SQL produksi 34/34 (BoM bertingkat, lingkaran ditolak, urai 100 roti = 5 kg tepung + 1 kg gula, PK adonan 130.000, PK roti biaya 265.000 selisih standar 5.300, sampingan NRV 5.000, saldo 1-320 kembali 0, 5-310 kredit 200.000, jurnal 1-300 = nilai stok, produk bersama 5.263/4.737, bongkar nilai utuh, batal mengembalikan bahan, staf/isolasi/anon); e2e/produksi.spec.ts lulus produksi nadi-swart.vercel.app (resep di layar, satu PK ambil bahan sampai selesai, stok tepung 50->40, roti 98 senilai 330.000, selisih Rp6.600; axe 390/1440 terang/gelap); Lighthouse /app/produksi 96/100; fitur.md JU-12 SEBAGIAN; LEARN IAS 2"
   },
   {
    "id": "M-08",
@@ -2971,8 +2973,10 @@
    "accept": "e2e undangan; validasi JobPosting dengan uji struktur",
    "how": "docs/research/mekari/rencana.md; menutup TA-10, TA-31; isi: Rekrutmen lanjutan: kalender wawancara + undangan .ics, talent pool, laporan rekrutmen (waktu isi, sumber), manpower planning (rencana headcount + anggaran per topi), data JobPosting schema di /lamar",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T12:37:01",
+   "result": "cf349d1 + 9d78c2c: migrasi rekrut_lanjutan md5 e8172986, tes SQL rekrut_lanjutan 26/26 + regresi keputusan_rekrut 21/21 (sumber sekali dalam 2 jam, jadwal idempoten + bentrok dihitung + batal, jadwal di status pelamar, laporan 3 pelamar hari isi 3 biaya per pelamar 50.000 per sumber, rencana target 4 terisi 1, isolasi/staf/anon); vitest rekrut-lanjut 7/7 (.ics RFC 5545 CRLF + lipat 75 oktet + escape, JobPosting uji struktur properti wajib Google, zona WIB/WITA/WIT); e2e/rekrutmen.spec.ts lulus produksi nadi-swart.vercel.app (JobPosting /lamar lolos, robots tanpa noindex, ?src=instagram terhitung, undangan wa.me + .ics pemilik, pelamar menyimpan .ics dari status, rencana tersimpan; axe 390/1440 terang/gelap) + regresi rekrut-keputusan produksi; fitur.md TA-10 ADA, TA-31 diperbarui; LEARN Google JobPosting + RFC 5545"
   },
   {
    "id": "M-15",
@@ -3049,8 +3053,10 @@
    "accept": "e2e jual luring lalu sinkron; uji 200 transaksi tanpa selisih stok/jurnal; Lighthouse >= 90",
    "how": "docs/research/mekari/rencana.md; menutup LA-03, JU-31; isi: Kasir PWA: jual cepat (cari/scan barcode kamera), luring dengan antrean kirim, struk cetak 58 mm dan tautan struk WA, QRIS statis + tunai + transfer, shift kasir + setoran, stok berkurang dan jurnal otomatis, laporan harian",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T11:48:30",
+   "result": "96f81a3 + bd0a853: migrasi kasir md5 aa3ff4a9 + kasir_qris md5 b00a6fdb, tes SQL kasir 23/23 (200 transaksi tanpa selisih: penjualan 4-100 6.318.000 = struk, HPP 4.414.000 = turun nilai persediaan, kas 4.818.000, bank 1.500.000; sinkron ulang 200 kunci idempoten; stok/uang kurang ditolak; selisih kas -8.000 ke 6-940; QRIS staf tanpa rekening; isolasi); vitest kasir 3/3; e2e/kasir.spec.ts lulus produksi nadi-swart.vercel.app (context.setOffline: 2 penjualan antre di HP, daring lagi terkirim, stok 20->16, rekap +2 transaksi Rp30.000, struk /struk/kode, QRIS tampil, tutup shift; axe 390/1440 terang/gelap); Lighthouse mobile /app/kasir performa 100 aksesibilitas 100; fitur.md LA-03 ADA"
   },
   {
    "id": "M-20",
@@ -3077,8 +3083,10 @@
    "accept": "e2e 2FA; tes SQL izin peran kustom",
    "how": "docs/research/mekari/rencana.md; menutup TA-04, TA-15, JU-24, JU-25, QO-18, EX-09, LA-05; isi: Akses dan keamanan: 2FA TOTP (MFA Supabase), peran kustom per izin, log aktivitas pengguna (masuk/keluar, perangkat), daftar audit yang bisa dibaca, sesi perangkat dicabut",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T13:01:15",
+   "result": "8ad0240 + 83ea77a + afda9aa: migrasi akses md5 e04e9b98 (2FA ditegakkan di app.pid: sesi aal1 akun ber-2FA tanpa usaha aktif; peran kustom stok.lihat/stok.ubah di RLS + wajib_stok; activity_log; my_sessions) + kasir_produk_baca md5 f14d0bd6 (perbaikan pos_products STABLE); tes SQL akses 23/23 (izin peran kustom, katalog, isolasi, 2FA aal1 tertutup/aal2 terbuka, faktor belum terverifikasi tidak mengunci, log); e2e/akses.spec.ts lulus produksi nadi-swart.vercel.app (nyalakan 2FA dengan TOTP RFC 6238, sesi kata sandi saja ditolak 42501, masuk ulang diminta kode di /masuk/2fa, kode salah ditolak, log 2fa.lolos, matikan, keluarkan perangkat lain = token penyegar ditolak; axe 390/1440 terang/gelap); regresi kasir + asap produksi 20 lulus; fitur.md TA-04, TA-15, JU-24, JU-25, QO-18, EX-09, LA-05 diperbarui"
   },
   {
    "id": "M-22",
