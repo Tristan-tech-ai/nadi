@@ -163,6 +163,7 @@ def bangun():
              f'<div class="isi" id="m2" style="transform:scale({MS}); transform-origin:0 0; top:{-(lm["area"]["y"] - 20) * MS}px; opacity:0">{frag("lempar-siap")}</div></div></div>')
     f.adegan("b2b", T2c, 26.0, isi2b, z=3)
     f.add(f'tl.to("#m2", {{opacity: 1, duration: 0.25}}, {T2c + 2.0});')
+    f.add(f'tl.to("#m1", {{opacity: 0, duration: 0.25}}, {T2c + 2.0});')  # lapisan Membaca hilang saat Siap muncul (dulu tumpuk)
     gulir = (ls_["daftar"]["y"] + ls_["daftar"]["h"] - 900) * MS
     f.add(f'tl.to("#m2", {{y: -{round(gulir * 0.55)}, duration: {27 / FPS:.3f}, ease: "power4.out"}}, {T2c + 3.2});')
 
