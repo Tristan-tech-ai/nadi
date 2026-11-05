@@ -6,7 +6,7 @@ import { createClient } from "@supabase/supabase-js";
 // U-08: ukur 5 tugas umum. Metrik: klik navigasi dari halaman pertama setelah masuk sampai layar tugas terbuka, dan jumlah tautan
 // yang harus dipindai di setiap titik keputusan. Langkah mengisi formulir tidak dihitung karena tidak berubah oleh rombakan.
 // Jalan di HP (390x844) dan desktop (1440x900). Hasil ditulis ke test-results/keterpahaman-<lebar>.json untuk docs/quality/keterpahaman.md.
-// Jalur di skrip ini adalah jalur UI saat diukur; setelah rombakan U-01..U-06 jalurnya diganti dan angkanya dibandingkan.
+// Angka SEBELUM (jalur lama lewat Usaha) tercatat di docs/quality/keterpahaman.md; skrip ini kini mengukur jalur SESUDAH U-01..U-06.
 function bacaEnv(nama: string): Record<string, string> {
   try {
     return Object.fromEntries(readFileSync(join(__dirname, "..", nama), "utf8").split("\n").filter((l) => l.includes("=")).map((l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1).trim()]));
@@ -60,35 +60,43 @@ for (const [lebar, tinggi] of [[390, 844], [1440, 900]] as const) {
       await expect(page.locator("article", { hasText: `ukur-${tanda}.csv` }).getByRole("button", { name: "Setujui" })).toBeVisible();
       hasil.push({ tugas: "Setujui satu usulan", klik: 0, pilihanDipindai: p1, jalur: ["/app"] });
 
-      // 2. Buat invoice: Usaha -> Invoice.
-      const nav = page.getByRole("navigation", { name: "Navigasi utama" });
-      const p2 = [await pilihan(page)];
-      await nav.getByRole("link", { name: "Usaha" }).click();
-      await page.waitForURL((u) => u.pathname === "/app/perusahaan");
-      p2.push(await pilihan(page));
-      await page.locator("main").getByRole("link", { name: "Invoice", exact: true }).click();
-      await page.waitForURL((u) => u.pathname === "/app/invoice");
-      hasil.push({ tugas: "Buat invoice", klik: 2, pilihanDipindai: p2, jalur: ["/app", "/app/perusahaan", "/app/invoice"] });
+      // Sesudah rombakan U-01..U-06: HP memakai bilah bawah + lembar Menu, desktop memakai sidebar (Disematkan bawaan pemilik).
+      const hp = lebar < 600;
+      const nav = page.getByRole("navigation", { name: "Navigasi utama" }).filter({ visible: true });
+      const sidebar = page.getByTestId("disematkan");
+      const buka = async (nama: string) => (hp ? nav.getByRole("link", { name: nama, exact: true }) : sidebar.getByRole("link", { name: nama, exact: true })).click();
 
-      // 3. Tambah karyawan: Orang.
+      // 2. Buat invoice: HP bilah bawah Uang, desktop Disematkan > Invoice.
+      const p2 = [await pilihan(page)];
+      await buka(hp ? "Uang" : "Invoice");
+      await page.waitForURL((u) => u.pathname === "/app/invoice");
+      hasil.push({ tugas: "Buat invoice", klik: 1, pilihanDipindai: p2, jalur: ["/app", "/app/invoice"] });
+
+      // 3. Tambah karyawan: HP bilah bawah Orang, desktop Disematkan > Orang.
       await page.goto("/app");
       const p3 = [await pilihan(page)];
-      await nav.getByRole("link", { name: "Orang" }).click();
+      await buka("Orang");
       await page.waitForURL((u) => u.pathname === "/app/orang");
       hasil.push({ tugas: "Tambah karyawan", klik: 1, pilihanDipindai: p3, jalur: ["/app", "/app/orang"] });
 
-      // 4. Lihat laba bulan ini: Usaha -> Laporan keuangan -> Laba rugi.
+      // 4. Lihat laba bulan ini: HP Menu > Laporan keuangan > Laba rugi, desktop Disematkan > Laporan keuangan > Laba rugi.
       await page.goto("/app");
       const p4 = [await pilihan(page)];
-      await nav.getByRole("link", { name: "Usaha" }).click();
-      await page.waitForURL((u) => u.pathname === "/app/perusahaan");
-      p4.push(await pilihan(page));
-      await page.locator("main").getByRole("link", { name: "Laporan keuangan", exact: true }).click();
+      let k4 = 2;
+      if (hp) {
+        await nav.getByRole("button", { name: "Menu" }).click();
+        const lembar = page.getByRole("dialog");
+        p4.push(await lembar.locator("a[href^='/app']").filter({ visible: true }).count());
+        await lembar.getByRole("link", { name: /^Laporan keuangan/ }).click();
+        k4 = 3;
+      } else {
+        await buka("Laporan keuangan");
+      }
       await page.waitForURL((u) => u.pathname === "/app/buku");
       p4.push(await pilihan(page));
       await page.locator("main").getByRole("link", { name: "Laba rugi", exact: true }).click();
       await page.waitForURL((u) => u.searchParams.get("jenis") === "laba_rugi");
-      hasil.push({ tugas: "Lihat laba bulan ini", klik: 3, pilihanDipindai: p4, jalur: ["/app", "/app/perusahaan", "/app/buku", "/app/buku?jenis=laba_rugi"] });
+      hasil.push({ tugas: "Lihat laba bulan ini", klik: k4, pilihanDipindai: p4, jalur: hp ? ["/app", "Menu", "/app/buku", "/app/buku?jenis=laba_rugi"] : ["/app", "/app/buku", "/app/buku?jenis=laba_rugi"] });
 
       // 5. Staf mengajukan izin: Izin.
       const { data: o } = await sb.from("orang").insert({ perusahaan_id: pid, nama: `Staf Ukur ${tanda}` }).select("id").single();
@@ -107,7 +115,8 @@ for (const [lebar, tinggi] of [[390, 844], [1440, 900]] as const) {
       const awal = new URL(staf.url()).pathname;
       let k5 = 0;
       if (awal !== "/app/izin") {
-        await staf.getByRole("navigation", { name: "Navigasi utama" }).getByRole("link", { name: "Izin" }).click();
+        const navStaf = lebar < 600 ? staf.getByRole("navigation", { name: "Navigasi utama" }).filter({ visible: true }) : staf.getByTestId("disematkan");
+        await navStaf.getByRole("link", { name: /^Izin/ }).first().click();
         await staf.waitForURL((u) => u.pathname === "/app/izin");
         k5 = 1;
       }

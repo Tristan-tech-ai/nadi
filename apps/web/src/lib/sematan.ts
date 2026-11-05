@@ -4,7 +4,7 @@ const KUNCI = "nadi:sematan";
 export const MAKS_SEMAT = 8;
 
 export const SEMATAN_BAWAAN: Record<string, string[]> = {
-  pemilik: ["/app", "/app/lempar", "/app/invoice", "/app/gaji", "/app/buku"],
+  pemilik: ["/app", "/app/lempar", "/app/invoice", "/app/orang", "/app/gaji", "/app/buku"],
   admin: ["/app", "/app/lempar", "/app/orang", "/app/gaji", "/app/izin"],
   akuntan: ["/app", "/app/lempar", "/app/buku", "/app/kas", "/app/pajak"],
   staf: ["/app", "/app/kerja", "/app/izin", "/app/gaji", "/app/klaim"],
