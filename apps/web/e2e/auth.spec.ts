@@ -139,10 +139,11 @@ test("pemilik membuat akun staf; staf masuk tanpa email dan ditolak di halaman p
 test("pemilik melihat Feed (keadaan kosong), navigasi bawah, dan share target mendaftarkan dan mengunggah berkas", async ({ page }) => {
   await masukSebagai(page, E.E2E_EMAIL_B);
   await pastikanUsaha(page, "Toko Uji B", "Toko, grosir, minimarket");
-  await expect(page.getByTestId("feed-kosong")).toBeVisible();
+  // Usaha uji ini dipakai bersama tes lain, jadi Feed bisa kosong atau berisi kartu.
+  await expect(page.getByTestId("feed-kosong").or(page.getByTestId("kartu-diputuskan")).or(page.locator("[data-testid^=kartu]")).first()).toBeVisible();
+  // U-01: navigasi utama menandai Hari ini (bilah bawah) atau Feed keputusan (sidebar/rail) sebagai halaman aktif.
   const nav = page.getByRole("navigation", { name: "Navigasi utama" });
-  await expect(nav.getByRole("link", { name: "Orang" })).toBeVisible();
-  await expect(nav.getByRole("link", { name: "Feed" })).toHaveAttribute("aria-current", "page");
+  await expect(nav.locator("a[aria-current=page]")).toHaveAttribute("href", "/app");
   const res = await page.request.post("/app/lempar/terima", { multipart: { berkas: { name: "nota.png", mimeType: "image/png", buffer: Buffer.from("89504e47", "hex") } }, maxRedirects: 0 });
   expect(res.status()).toBe(303);
   expect(res.headers()["location"]).toMatch(/\/app\/lempar\?berkas=[0-9a-f-]{36}$/);

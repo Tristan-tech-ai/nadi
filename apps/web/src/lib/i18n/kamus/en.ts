@@ -1333,6 +1333,8 @@ export const kamusEn: Kamus = {
     emailContoh: "made@warungku.id",
     sandi: "Password",
     minimal8: "At least 8 characters.",
+    googleAtau: "or", googleTombol: "Continue with Google", googleBelum: "Google sign-in is not switched on for this Nadi yet. Use email and password for now.",
+    googleGagal: "Google could not be opened. Try again, or sign in with email.",
     sebentar: "One moment...",
     masuk: "Sign in",
     buatAkun: "Create account",

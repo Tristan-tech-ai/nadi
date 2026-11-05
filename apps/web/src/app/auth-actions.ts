@@ -85,3 +85,16 @@ export async function keluar() {
   await supabase.auth.signOut();
   redirect("/masuk");
 }
+
+/** U-07: masuk/daftar dengan Google (alur PKCE @supabase/ssr). Verifier disimpan di kuki oleh klien server, lalu /auth/konfirmasi menukar kodenya. */
+export async function masukGoogle(form: FormData) {
+  const next = jalurAman(teks(form, "next") || null, "/app");
+  const supabase = await createClient();
+  const h = await headers();
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: { redirectTo: `${asalTautan(h)}/auth/konfirmasi?next=${encodeURIComponent(next)}` },
+  });
+  if (error || !data.url) redirect(`/masuk?galat=google&next=${encodeURIComponent(next)}`);
+  redirect(data.url);
+}

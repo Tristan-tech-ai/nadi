@@ -1334,6 +1334,8 @@ export const kamusId = {
     emailContoh: "made@warungku.id",
     sandi: "Kata sandi",
     minimal8: "Minimal 8 karakter.",
+    googleAtau: "atau", googleTombol: "Masuk dengan Google", googleBelum: "Masuk dengan Google belum dinyalakan di Nadi ini. Pakai email dan kata sandi dulu.",
+    googleGagal: "Google belum bisa dibuka. Coba lagi, atau masuk dengan email.",
     sebentar: "Sebentar...",
     masuk: "Masuk",
     buatAkun: "Buat akun",

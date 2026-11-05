@@ -3531,8 +3531,10 @@
    "accept": "komponen KepalaHalaman dipakai semua 50 halaman (tes statis menolak halaman /app tanpa KepalaHalaman); judul dan kalimat tujuan dari peta ruang (id/en); tombol ? menuju panduan bagian; tangkapan layar 390/1440 ditinjau",
    "how": "REKONSTRUKSI-APP.md bagian 5",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T17:30:59"
+   "status": "done",
+   "created": "2026-11-05T17:30:59",
+   "done": "2026-11-05T19:26:51",
+   "result": "a31fa52; KepalaHalaman di 56 halaman /app (jejak ruang, judul, tujuan, aksi, bantuan ?), tes statis src/lib/kepala-halaman.test.ts (merah dulu), e2e/kepala.spec.ts produksi 53 halaman pemilik satu h1 + jejak, 390/1440 terang/gelap axe 0 serius; regresi 14 spec lokal, hr.spec diperbaiki"
   },
   {
    "id": "U-04",
