@@ -2364,7 +2364,7 @@ export const kamusEn: Kamus = {
     kembalian: "Change {rp}", tersimpan: "Sale saved. Receipt {kode}.", luring: "No internet. The sale is kept on this device and sent later.",
     antre: "{n} sales waiting to be sent", sinkron: "Send now", gagalKirim: "Could not send: {pesan}", struk: "Open receipt", strukWa: "Send receipt on WhatsApp",
     pindai: "Scan with camera", tutupShift: "Close shift", kasHitung: "Counted cash in drawer (Rp)", tutupTombol: "Close shift", selisih: "Expected cash {harus}, difference {selisih}.",
-    hariIni: "Today", transaksi: "{n} sales", stok: "stock {n}", kurang: "Cash received is less than the total {rp}.", strukTeks: "Receipt {kode}, total {rp}: {url}", pindaiTak: "This browser cannot scan barcodes. Type the code or use a scanner.",
+    hariIni: "Today", transaksi: "{n} sales", stok: "stock {n}", kurang: "Cash received is less than the total {rp}.", strukTeks: "Receipt {kode}, total {rp}: {url}", pindaiTak: "This browser cannot scan barcodes. Type the code or use a scanner.", qrisKet: "Ask the customer to scan and enter {rp}. Press Pay once the payment arrives.", qrisBelum: "The business QRIS is not set yet. The owner can add it in Invoices.",
   },
   strukPublik: { judul: "{usaha} receipt", tidakAda: "Receipt not found.", total: "Total", bayar: "Paid", kembalian: "Change", terima: "Thank you." },
   barang: {

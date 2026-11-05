@@ -2365,7 +2365,7 @@ export const kamusId = {
     kembalian: "Kembalian {rp}", tersimpan: "Penjualan tersimpan. Struk {kode}.", luring: "Tanpa internet. Penjualan disimpan di HP ini dan dikirim nanti.",
     antre: "{n} penjualan menunggu dikirim", sinkron: "Kirim sekarang", gagalKirim: "Gagal dikirim: {pesan}", struk: "Buka struk", strukWa: "Kirim struk lewat WhatsApp",
     pindai: "Pindai dengan kamera", tutupShift: "Tutup shift", kasHitung: "Hasil hitung kas laci (Rp)", tutupTombol: "Tutup shift", selisih: "Kas seharusnya {harus}, selisih {selisih}.",
-    hariIni: "Hari ini", transaksi: "{n} transaksi", stok: "stok {n}", kurang: "Uang diterima kurang dari total {rp}.", strukTeks: "Struk {kode}, total {rp}: {url}", pindaiTak: "Peramban ini belum bisa memindai barcode. Ketik kodenya atau pakai alat pindai.",
+    hariIni: "Hari ini", transaksi: "{n} transaksi", stok: "stok {n}", kurang: "Uang diterima kurang dari total {rp}.", strukTeks: "Struk {kode}, total {rp}: {url}", pindaiTak: "Peramban ini belum bisa memindai barcode. Ketik kodenya atau pakai alat pindai.", qrisKet: "Minta pelanggan memindai dan mengetik {rp}. Tekan Bayar setelah pembayaran masuk.", qrisBelum: "QRIS usaha belum diatur. Pemilik bisa memasangnya di Invoice.",
   },
   strukPublik: { judul: "Struk {usaha}", tidakAda: "Struk tidak ditemukan.", total: "Total", bayar: "Dibayar", kembalian: "Kembalian", terima: "Terima kasih." },
   barang: {

@@ -36,11 +36,14 @@ begin
     perform app.gerak_stok(pa, pr1, g, 500, 5000000, 'masuk', v_hari, 'awal', 'uji', null, 'uji:kopi');
     perform app.gerak_stok(pa, pr2, g, 300, 4200000, 'masuk', v_hari, 'awal', 'uji', null, 'uji:gula');
     select sum(jumlah), sum(nilai) into stok_awal, nilai_awal from public.stok where perusahaan_id = pa;
+    insert into public.bayar_usaha (perusahaan_id, qris, qris_nama, rekening) values (pa, '000201010211265700UJIQRISKASIRNADI6304ABCD', 'WARUNG UJI KASIR', 'BCA 1234567890');
 
     execute 'set local role authenticated';
     perform set_config('request.jwt.claims', ks, true);
     sh := public.pos_open_shift(200000);
     perform pg_temp.cek('buka shift dua kali = shift yang sama', public.pos_open_shift(0) = sh);
+    perform pg_temp.cek('kasir staf mendapat QRIS statis tanpa rekening', public.pos_payment_qr() = '{"qris": "000201010211265700UJIQRISKASIRNADI6304ABCD", "nama": "WARUNG UJI KASIR"}'::jsonb, public.pos_payment_qr()::text);
+    perform pg_temp.cek('kasir staf tetap tidak membaca bayar_usaha', (select count(*) from public.bayar_usaha) = 0);
     -- 200 transaksi: genap tunai 2 kopi + 1 gula (Rp48.000), ganjil QRIS 1 kopi (Rp15.000).
     for n in 1..200 loop
       if n % 2 = 0 then
@@ -95,11 +98,14 @@ begin
     perform set_config('request.jwt.claims', '{"role": "anon"}', true);
     r := public.pos_receipt(kode);
     perform pg_temp.cek('struk publik dari kode: total dan kembalian, tanpa data kasir', (r ->> 'total')::bigint = 18000 and (r ->> 'kembalian')::bigint = 2000 and not (r ? 'shift_id'), r::text);
+    begin perform public.pos_payment_qr(); perform pg_temp.cek('anon tidak mendapat QRIS', false);
+    exception when sqlstate '42501' then perform pg_temp.cek('anon tidak mendapat QRIS', true); end;
     begin perform public.pos_open_shift(0); perform pg_temp.cek('anon tidak membuka shift', false);
     exception when sqlstate '42501' then perform pg_temp.cek('anon tidak membuka shift', true); end;
     execute 'reset role';
     execute 'set local role authenticated';
     perform set_config('request.jwt.claims', kb, true);
+    perform pg_temp.cek('usaha lain mendapat QRIS kosong', public.pos_payment_qr() is null);
     perform pg_temp.cek('usaha lain tidak melihat shift dan penjualan', (select count(*) from public.pos_sale) = 0 and (select count(*) from public.pos_shift) = 0);
     begin perform public.pos_record_sale(sh, gen_random_uuid(), now(), jsonb_build_array(jsonb_build_object('produk', pr1, 'jumlah', 1)), 'qris', null); perform pg_temp.cek('usaha lain tidak memakai shift A', false);
     exception when sqlstate 'P0002' then perform pg_temp.cek('usaha lain tidak memakai shift A', true); end;

@@ -19,7 +19,7 @@ const penyimpanan = () => { try { return localStorage; } catch { return null; } 
  * Kasir: daftar produk dan shift disimpan di perangkat; setiap penjualan masuk antrean lokal dulu (kunci uuid) lalu dikirim.
  * Tanpa internet, antrean tetap tersimpan dan dikirim otomatis saat peramban kembali daring.
  */
-export function KasirApp({ pid, bahasa, teks: t }: { pid: string; bahasa: Bahasa; teks: T }) {
+export function KasirApp({ pid, bahasa, teks: t, qris }: { pid: string; bahasa: Bahasa; teks: T; qris: { svg: string; nama: string } | null }) {
   const kp = `nadi-kasir-produk-${pid}`;
   const ksh = `nadi-kasir-shift-${pid}`;
   const [produk, setProduk] = useState<Produk[]>([]);
@@ -199,6 +199,12 @@ export function KasirApp({ pid, bahasa, teks: t }: { pid: string; bahasa: Bahasa
             <label key={c} className="flex items-center gap-1"><input type="radio" name="bayar" value={c} checked={bayar === c} onChange={() => setBayar(c)} className="h-5 w-5" />{t.caraNama[c]}</label>
           ))}</div>
         </fieldset>
+        {bayar === "qris" && (qris ? (
+          <div className="mt-3 flex flex-col items-center gap-1" data-testid="kasir-qris">
+            <div className="h-48 w-48 bg-[white] p-2 [&_svg]:h-full [&_svg]:w-full" role="img" aria-label={`QRIS ${qris.nama}`} dangerouslySetInnerHTML={{ __html: qris.svg }} />
+            <p className="text-center text-xs text-tinta-2">{isiTeks(t.qrisKet, { rp: rp(total) })}</p>
+          </div>
+        ) : <p className="mt-3 text-sm text-tinta-2">{t.qrisBelum}</p>)}
         {bayar === "tunai" && <div className="mt-3 flex flex-col gap-1"><label htmlFor={id.terima} className="text-sm text-tinta-2">{t.diterima}</label>
           <input id={id.terima} value={diterima} onChange={(e) => setDiterima(e.target.value)} inputMode="numeric" className={`${isian} angka`} /></div>}
         <Tombol type="button" className="mt-4 w-full" disabled={!kk.length} onClick={() => void jual()}>{t.bayarTombol}</Tombol>

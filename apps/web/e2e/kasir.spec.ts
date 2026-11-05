@@ -3,6 +3,7 @@ import { join } from "node:path";
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
+import { crc16, tlv } from "../src/lib/invoice/qris";
 
 // M-19: kasir (akun B, usaha "Uji Kasir E2E") membuka shift, menjual saat peramban tanpa internet (penjualan masuk antrean HP),
 // lalu internet kembali dan antrean terkirim sendiri; stok berkurang tepat, rekap harian cocok, struk publik terbuka, shift ditutup.
@@ -53,6 +54,9 @@ test("kasir: jual tanpa internet, antrean terkirim saat daring, stok dan rekap c
     expect((await sb.rpc("pindah_perusahaan", { p_perusahaan: pid })).error).toBeNull();
     await sb.auth.refreshSession();
     const tanda = Date.now().toString(36).toUpperCase();
+    const isi = [tlv("00", "01"), tlv("01", "11"), tlv("51", tlv("00", "ID.CO.QRIS.WWW") + tlv("02", "ID1026000000002") + tlv("03", "UMI")),
+      tlv("52", "5411"), tlv("53", "360"), tlv("58", "ID"), tlv("59", "KASIR UJI NADI"), tlv("60", "DENPASAR")].join("") + "6304";
+    expect((await sb.rpc("atur_bayar", { p_qris: isi + crc16(isi), p_qris_nama: "KASIR UJI NADI", p_qris_nmid: null, p_rekening: null })).error).toBeNull();
     const nama = `Teh melati ${tanda}`;
     const { data: produk, error: ep } = await sb.rpc("simpan_produk", { p: { kode: `TEH${tanda}`, nama, jenis: "barang", satuan: "bks", harga_jual: 7500, boleh_minus: false, barcode: `899${tanda}` } });
     expect(ep).toBeNull();
@@ -95,7 +99,9 @@ test("kasir: jual tanpa internet, antrean terkirim saat daring, stok dan rekap c
     await expect(page.getByTestId("kasir-antre")).toHaveAttribute("data-jumlah", "1");
     // Kedua: QRIS satu bungkus, juga antre.
     await page.getByRole("button", { name: `Tambah ${nama}` }).click();
-    await page.getByLabel("QRIS").check();
+    await page.getByLabel("QRIS", { exact: true }).check();
+    await expect(page.getByTestId("kasir-qris")).toContainText("Rp7.500");
+    await expect(page.getByRole("img", { name: "QRIS KASIR UJI NADI" })).toBeVisible();
     await page.getByRole("button", { name: "Bayar", exact: true }).click();
     await expect(page.getByTestId("kasir-antre")).toHaveAttribute("data-jumlah", "2");
     expect(await stok()).toBe(20);
