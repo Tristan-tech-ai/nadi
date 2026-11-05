@@ -2415,7 +2415,7 @@ export const kamusEn: Kamus = {
   },
   keamanan: {
     judul: "Account and security", ket: "Two-step verification, devices signed in, and activity history.",
-    duaJudul: "Two-step verification", duaKet: "After your password, Nadi asks for a 6 digit code from an authenticator app on your phone, such as Google Authenticator or Microsoft Authenticator.",
+    duaJudul: "Two-step verification", duaKet: "After your password, Nadi asks for a 6 digit code from an authenticator app on your phone. Google Authenticator or Microsoft Authenticator both work.",
     duaAktif: "On. Every sign-in needs a code from your authenticator app.", duaMati: "Not on yet.", nyalakan: "Turn on two-step verification",
     pindai: "Scan this QR code with your authenticator app, or type the key below it.", qr: "Two-step verification QR code", kunci: "Secret key", kode: "6 digit code", aktifkan: "Turn on",
     matikan: "Turn off two-step verification", kodeSalah: "That code does not match. Check your phone clock and type the code shown now.",
