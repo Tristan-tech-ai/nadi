@@ -4288,9 +4288,11 @@
    "accept": "dibangun di docs/promo/demo-v3/buat.py dari DOM asli (lapisan diposisikan dari ukur.json), dirender, dan ditinjau bingkai besar terhadap aturan GERAK.md + UJI-GERAK.md; temuan dan status dicatat di CATATAN.md; hyperframes check 0 error",
    "how": "docs/promo/demo-v3/CATATAN.md",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T02:33:05",
-   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)"
+   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)",
+   "done": "2026-11-06T02:43:06",
+   "result": "docs/promo/demo-v3/buat.py babak 4 (26-36 dtk): Feed asli 1,45x, redup + kartu diangkat di posisi terukur, kursor klik Setujui, cap besar DITERIMA turun lalu mengecil ke posisi cap asli (ukur.json kartu-nota-dicap.cap), baris Diterima asli, kamera mundur; ditinjau 3 putaran bingkai besar (kursor di lapisan kamera, header visibility hidden); check 0 error"
   },
   {
    "id": "V-07D",
@@ -4303,9 +4305,11 @@
    "accept": "dibangun di docs/promo/demo-v3/buat.py dari DOM asli (lapisan diposisikan dari ukur.json), dirender, dan ditinjau bingkai besar terhadap aturan GERAK.md + UJI-GERAK.md; temuan dan status dicatat di CATATAN.md; hyperframes check 0 error",
    "how": "docs/promo/demo-v3/CATATAN.md",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T02:33:05",
-   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)"
+   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)",
+   "done": "2026-11-06T02:45:11",
+   "result": "docs/promo/demo-v3/buat.py babak 5 (36-46 dtk): kalimat diketik, QRIS dekat 2,4x, tarik mundur 40 bingkai ke tagihan publik asli, notifikasi pembayaran, lencana BELUM DIBAYAR terukur dicap LUNAS, stabilo total terukur; ditinjau 6 bingkai besar; check 0 error"
   },
   {
    "id": "V-07E",
@@ -4318,9 +4322,11 @@
    "accept": "dibangun di docs/promo/demo-v3/buat.py dari DOM asli (lapisan diposisikan dari ukur.json), dirender, dan ditinjau bingkai besar terhadap aturan GERAK.md + UJI-GERAK.md; temuan dan status dicatat di CATATAN.md; hyperframes check 0 error",
    "how": "docs/promo/demo-v3/CATATAN.md",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T02:33:05",
-   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)"
+   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)",
+   "done": "2026-11-06T02:47:09",
+   "result": "docs/promo/demo-v3/buat.py babak 7 (46-58 dtk): kalimat diketik, kotak PLACEHOLDER footage CCTV asli (V-04/V-12), hitungan Masuk/Keluar, peta panas asli dari zona Antrean 1,9x tarik mundur 44 bingkai; ditinjau 6 bingkai besar; check 0 error; footage asli menyusul (izin Tristan: placeholder)"
   },
   {
    "id": "V-07F",
