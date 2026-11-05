@@ -3105,8 +3105,10 @@
    "accept": "korpus 50 pertanyaan: >= 90% benar, 0 data usaha lain (tes)",
    "how": "docs/research/mekari/rencana.md; menutup JU-29, LA-11; isi: Tanya data di aplikasi: pertanyaan bahasa sehari-hari jadi kueri RPC yang dibatasi (bukan SQL bebas), jawaban berangka dengan tautan sumber, kuota harian",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T16:45:24",
+   "result": "9eaef17; migrasi 20261105094000_tanya_data md5 50fb13bc sama; korpus 50/50 (src/lib/tanya/urai.test.ts), uji buta pertama 15/20 lalu 20/20 setelah perbaikan (docs/quality/eval-tanya.md); supabase/tests/tanya_data.test.sql 20/20 (0 data usaha lain, kuota 200/hari, gaji hanya pemilik); e2e/tanya.spec.ts lokal + produksi: jawaban laba = halaman sumber"
   },
   {
    "id": "M-23",
@@ -3425,6 +3427,62 @@
    "created": "2026-11-05T14:38:48",
    "done": "2026-11-05T15:05:54",
    "result": "7396e5e; migrasi 20261105090000_kursus md5 b5aa54cb sama; supabase/tests/kursus.test.sql 25/25; e2e/kursus.spec.ts lokal + produksi nadi-swart.vercel.app lulus (axe 0 serius, 390/1440 terang/gelap); /app/kursus + /sertifikat/<kode>"
+  },
+  {
+   "id": "Q-41",
+   "fase": "F7",
+   "kind": "test",
+   "priority": 4,
+   "size": "s",
+   "wajib": false,
+   "title": "Lighthouse mobile halaman baru tick 294-295",
+   "accept": "Lighthouse mobile performa >= 90 dan aksesibilitas 100 untuk /app/kinerja, /app/kursus, /sertifikat/<kode>, /app/wawasan, /app/buku/pembiayaan, /app/alur, /app/tanya (angka dicatat di docs/quality/lighthouse.md)",
+   "how": "scratchpad lh_masuk.cjs + npx lighthouse@13.6.0 --extra-headers",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T16:46:09"
+  },
+  {
+   "id": "M-22B",
+   "fase": "F7",
+   "kind": "build",
+   "priority": 6,
+   "size": "m",
+   "wajib": false,
+   "title": "Tanya data: rentang tanggal bebas dan pertanyaan gabungan",
+   "accept": "urai 'tanggal 3 sampai 10 November' dan 'penjualan dan laba bulan ini' (dua jawaban); korpus 50 tetap >= 90%, korpus tambahan 15 kalimat >= 80%; e2e satu pertanyaan gabungan",
+   "how": "src/lib/tanya/urai.ts",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T16:46:09"
+  },
+  {
+   "id": "M-20B",
+   "fase": "F7",
+   "kind": "build",
+   "priority": 6,
+   "size": "m",
+   "wajib": false,
+   "title": "Alur: jeda waktu dan pengingat ulang",
+   "accept": "aksi tunda N jam (pg_cron menjalankan aksi yang jatuh tempo), tes SQL jeda dan pembatalan saat alur dimatikan, e2e alur dengan jeda 0",
+   "how": "supabase/migrations alur",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T16:46:09"
+  },
+  {
+   "id": "M-24B",
+   "fase": "F7",
+   "kind": "build",
+   "priority": 6,
+   "size": "m",
+   "wajib": false,
+   "title": "Pindah lanjutan: invoice terbuka dan jurnal umum dari aplikasi lama + rujukan mitra akuntan",
+   "accept": "invoice terbuka berformat Penagihan Penjualan Jurnal menjadi tagihan saldo awal yang tampil di umur piutang tanpa menggandakan pendapatan (tes SQL); jurnal umum berformat Import Jurnal Umum Jurnal; kode rujukan per akuntan mitra tercatat saat usaha baru mendaftar (tes SQL + e2e)",
+   "how": "docs/research/mekari/rencana.md M-24; src/lib/pindah/format.ts",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T17:04:56"
   }
  ]
 }

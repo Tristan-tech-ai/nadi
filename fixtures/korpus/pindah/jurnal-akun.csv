@@ -1,0 +1,13 @@
+*Account Name,Account Number,Description,*Category Number,Opening Balance,Default Tax Name,Header Account Number
+Kas Toko,'1-10001,Uang tunai di laci,3,2500000,,
+Bank BCA Usaha,'1-10002,,3,18750000,,
+Piutang Usaha,'1-10100,,1,4200000,,
+Persediaan Barang Dagang,'1-10200,,4,9600000,,
+Peralatan Toko,'1-10700,,5,12000000,,
+Akumulasi Penyusutan Peralatan,'1-10751,,7,3000000,,
+Utang Usaha,'2-20100,,8,5100000,,
+Modal Pemilik,'3-30000,,12,38950000,,
+Pendapatan Penjualan,'4-40000,,13,,,
+Harga Pokok Penjualan,'5-50000,,15,,,
+Beban Listrik dan Air,'6-60200,,16,,,
+Beban Bunga Bank,'8-80100,,17,,,

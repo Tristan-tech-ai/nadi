@@ -1,0 +1,2 @@
+*Customer,Email,Billing Address,Shipping Address,*Invoice Date,*Due Date,Shipping Date,Ship Via,Tracking No,Customer Ref No,Invoice Number,Message,Memo,*Product Name,Description,*Quantity,Unit,*Unit Price,Product Discount Rate(%),Invoice Discount Rate (value or %),Tax Name,Tax Rate(%),Shipping Fee,WitholdingAccountCode,WitholdingAmount(value or %),Paid,Payment Method,Paid To Account Code,Tags,WarehouseName
+Hotel Segara,,,,'28/10/2026,'27/11/2026,,,,,INV-0091,,,Roti Tawar,,40,pcs,18000,,,,,,,,,,,,

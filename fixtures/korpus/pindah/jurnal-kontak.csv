@@ -1,0 +1,7 @@
+*Type,*Display Name,Company Name,Title,First Name,Middle Name,Last Name,Email,Mobile,Phone,Fax,Billing Address,Billing Address City,Tax Number,*Default Account Payable Code,*Default Account Receivable Code
+customer,Hotel Segara,PT Segara Jaya,,Made,,Wirawan,pembelian@segara-uji.test,081234567801,,,Jl. Pantai Kuta 12,Badung,,2-20100,1-10100
+customer,Warung Bu Ani,,,Ani,,,,0812 3456 7802,,,Jl. Gatot Subroto 5,Denpasar,,2-20100,1-10100
+vendor,CV Sumber Beras,CV Sumber Beras,,,,,,,0361 224455,,,Tabanan,,2-20100,1-10100
+customer; vendor,Koperasi Tani Makmur,Koperasi Tani Makmur,,,,,koperasi@tani-uji.test,+62 812-3456-7804,,,,Gianyar,,2-20100,1-10100
+employee,Budi Santoso,,,Budi,,Santoso,,081234567805,,,,,,2-20100,1-10100
+others,Dinas Pasar,,,,,,,,,,,Denpasar,,2-20100,1-10100
