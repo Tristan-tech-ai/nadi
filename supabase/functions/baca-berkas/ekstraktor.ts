@@ -239,7 +239,8 @@ Bentuk "teks" (PDF/teks berbaris):
 - tabel (bila ada daftar baris barang): tabel_pola = regex untuk SATU baris tabel dengan grup bernama sesuai nama kolom, mis. (?<nama>.+?)\\s+(?<qty>\\d+)\\s+(?<harga>Rp[\\d.,]+)\\s+(?<jumlah>Rp[\\d.,]+)$ ; tabel_setelah = teks baris judul tabel; tabel_sebelum = teks baris setelah tabel; tabel_kolom = tipe tiap grup; tabel_gabung = jumlah baris teks untuk satu baris tabel (biasanya 1; 2 bila nama barang di satu baris dan "qty x harga jumlah" di baris berikutnya; baris kosong diabaikan dan baris-baris itu disatukan dengan spasi sebelum dicocokkan). Kosongkan semuanya (tabel_gabung 1) bila tidak ada tabel.
 Teks hasil OCR foto: huruf bisa salah baca (mis. "NT" terbaca "NI", "kg" terbaca "ko") dan spasi tidak tetap ("9x" atau "9 x"). Tulis pola yang menangkap teks OCR apa adanya dan longgar terhadap spasi.
 Bentuk "kolom" (CSV/Excel): jangkar = judul kolom persis; kolom = pemetaan nama bidang baris ke judul kolom dan tipenya. Kosongkan bidang dan tabel.
-Nama bidang harus sama dengan kunci di hasil bacaan yang diberikan. Aturan akan langsung diuji pada berkas ini dan ditolak bila hasilnya berbeda.`;
+Nama bidang harus sama dengan kunci di hasil bacaan yang diberikan. Aturan akan langsung diuji pada berkas ini dan ditolak bila hasilnya berbeda.
+Pemeriksa otomatis juga menolak: pola lebih dari 300 huruf, rujukan balik (\\1), lookahead/lookbehind, pengulangan bersarang seperti (\\w+\\s?)+, dan jangkar yang juga cocok dengan jenis berkas lain. Pakai label yang khas untuk tata letak ini.`;
 
 /**
  * Label tetap tanpa nilai: potong di angka/rupiah pertama ("Total tagihan Rp3.558.000" menjadi "Total tagihan").
