@@ -236,7 +236,20 @@ type JejakAktif = {
   zonaDetik: Record<string, number>;
   urutan: string[];
   zonaKini: string | null;
+  /** V-12 tampilan di layar perangkat saja: nomor anonim per sesi (1, 2, 3, ...), posisi 3 detik terakhir, tanda hitung pintu.
+   *  Tidak pernah masuk Kunjungan, rekap, atau kiriman ke server. */
+  nomor: number;
+  riwayat: [number, number, number][];
+  pernahLuar: boolean;
+  masukDihitung: boolean;
+  keluarDihitung: boolean;
+  /** Hanya untuk hitungan layar; awalPintu (dipakai kunjungan resmi) tidak diubah. */
+  masukUlang: boolean;
 };
+
+/** Jejak yang tampil di layar: nomor anonim sesi ini, posisi, garis lintasan (x, y) 3 detik terakhir, zona sekarang. */
+export type JejakTampil = { nomor: number; x: number; y: number; garis: [number, number][]; zona: string | null };
+const RIWAYAT_DETIK = 3;
 
 /** Potongan jejak yang sudah ditutup; potongan disambung menjadi satu kunjungan bila orangnya hilang di dalam toko lalu muncul lagi. */
 type Rantai = {
@@ -267,6 +280,10 @@ export class Pelacak {
   /** Rantai yang tidak bisa disambung lagi tetapi hanya punya satu ujung di pintu; menunggu pasangannya (neraca pintu). */
   private yatim: Rantai[] = [];
   private tAkhir = 0;
+  private nomorBerikut = 1;
+  /** Hitungan pintu untuk layar: masuk = jejak yang muncul di pintu lalu berjalan ke dalam; keluar = jejak yang sudah di dalam
+   *  lalu sampai di pintu. Angka resmi tetap kunjungan dari rantai (lepas), bukan hitungan ini. */
+  private hitung = { masuk: 0, keluar: 0 };
   private adaPintu: boolean;
   private zona: ZonaV2[];
   private opsi: OpsiPelacak;
@@ -317,11 +334,14 @@ export class Pelacak {
       jk.y = g.y;
       jk.akhir = t;
       if (g.kutub !== undefined) jk.kutub = 0.8 * jk.kutub + 0.2 * g.kutub;
+      this.catatTampil(jk, t);
     }
     gumpal.forEach((g, gi) => {
       if (gPakai.has(gi)) return;
       const z = this.zonaDi(g.x, g.y);
-      this.jejak.push({ mulai: t, akhir: t, x0: g.x, y0: g.y, awalPintu: this.diPintu(g.x, g.y), x: g.x, y: g.y, vx: 0, vy: 0, kutub: g.kutub ?? 0, zonaDetik: {}, urutan: [], zonaKini: z?.id ?? null });
+      const pintu = this.diPintu(g.x, g.y);
+      this.jejak.push({ mulai: t, akhir: t, x0: g.x, y0: g.y, awalPintu: pintu, x: g.x, y: g.y, vx: 0, vy: 0, kutub: g.kutub ?? 0, zonaDetik: {}, urutan: [], zonaKini: z?.id ?? null,
+        nomor: this.nomorBerikut++, riwayat: [[t, g.x, g.y]], pernahLuar: !pintu, masukDihitung: false, keluarDihitung: false, masukUlang: false });
     });
     this.jejak = this.jejak.filter((jk) => {
       const pintu = !this.adaPintu || this.diPintu(jk.x, jk.y);
@@ -481,6 +501,47 @@ export class Pelacak {
     for (const jk of this.jejak) this.simpanPotongan(jk);
     this.jejak = [];
     return this.lepas(this.tAkhir, true);
+  }
+
+  private catatTampil(jk: JejakAktif, t: number) {
+    jk.riwayat.push([t, jk.x, jk.y]);
+    while (jk.riwayat.length && jk.riwayat[0][0] < t - RIWAYAT_DETIK) jk.riwayat.shift();
+    if (!this.adaPintu) return;
+    const pintu = this.diPintu(jk.x, jk.y);
+    if (!pintu) {
+      // Jejak yang sudah dihitung keluar lalu berjalan ke dalam lagi: orang yang keluar dan orang yang masuk berpapasan di pintu
+      // sehingga pelacak meneruskan jejak yang sama. Untuk layar, itu orang baru: nomor baru, garis baru, masuk bertambah.
+      if (jk.keluarDihitung) {
+        jk.keluarDihitung = false;
+        jk.masukDihitung = false;
+        jk.masukUlang = true;
+        jk.nomor = this.nomorBerikut++;
+        jk.riwayat = [[t, jk.x, jk.y]];
+      }
+      if ((jk.awalPintu || jk.masukUlang) && !jk.masukDihitung) { jk.masukDihitung = true; this.hitung.masuk++; }
+      jk.pernahLuar = true;
+    } else if (jk.pernahLuar && !jk.keluarDihitung) {
+      jk.keluarDihitung = true;
+      this.hitung.keluar++;
+    }
+  }
+
+  /** Jejak yang sedang terlihat, dengan nomor dan garis lintasannya (untuk layar perangkat). */
+  get tampil(): JejakTampil[] {
+    return this.jejak.filter((j) => j.akhir === this.tAkhir)
+      .map((j) => ({ nomor: j.nomor, x: j.x, y: j.y, garis: j.riwayat.map(([, x, y]) => [x, y] as [number, number]), zona: j.zonaKini }));
+  }
+
+  /** Hitungan masuk/keluar lewat pintu sejak sesi dimulai (untuk layar). */
+  get pintu(): { masuk: number; keluar: number } {
+    return { ...this.hitung };
+  }
+
+  /** Zona yang sedang berisi orang (untuk menyalakan zona di layar). */
+  get zonaTerisi(): Set<string> {
+    const isi = new Set<string>();
+    for (const j of this.jejak) if (j.akhir === this.tAkhir) { const z = this.zonaDi(j.x, j.y); if (z) isi.add(z.id); }
+    return isi;
   }
 
   /** Posisi jejak yang sedang terlihat (untuk layar). */

@@ -2955,6 +2955,9 @@ export const kamusEn: Kamus = {
   },
   asetPesan: { hanya: "Only the owner or an admin changes assets.", gagal: "Not saved yet. Try again in a moment.", tercatat: "Asset recorded.", disusutkan: "{n} months depreciated.", disusutkanLewat: "{n} months depreciated, {m} months skipped because the period is locked.", dijualLaba: "Recorded. Gain on disposal Rp{n}.", dijualRugi: "Recorded. Loss on disposal Rp{n}.", dipinjamkan: "Asset lent.", dikembalikan: "Asset returned." },
   kunjungan: {
+    layarAria: "Tracking on this device. Numbers and lines only show here and are not saved.",
+    pintuKeluar: "Out",
+    pintuMasuk: "In",
     judul: "Count visits from an overhead camera",
     ket: "Nadi counts people from entering through the door until they leave, how long they stay, wait in the queue, and are served at checkout. Only counts and minutes per hour are sent. Faces, clothing colours, and images are never stored.",
     perluPintu: "Draw a Door zone above first, then save. Visits are counted from people who enter and leave through the door.",

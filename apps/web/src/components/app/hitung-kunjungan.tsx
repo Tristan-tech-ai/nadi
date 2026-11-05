@@ -5,7 +5,7 @@ import { Tombol } from "@/components/ui/tombol";
 import { isiTeks } from "@/lib/i18n/isi-teks";
 import type { Kamus } from "@/lib/i18n/kamus";
 import { aturPapan, kirimRekap } from "@/app/app/mata/actions";
-import { abuDari, deteksi, formatDurasi, latarDari, latarMedian, OPSI_PELACAK, OPSI_PELACAK_MIRING, Pelacak, rekapJam, titikDariKotak, type Bingkai, type Kunjungan, type ZonaV2 } from "@/lib/mata/jejak";
+import { abuDari, deteksi, formatDurasi, latarDari, latarMedian, OPSI_PELACAK, OPSI_PELACAK_MIRING, Pelacak, rekapJam, titikDariKotak, type Bingkai, type JejakTampil, type Kunjungan, type ZonaV2 } from "@/lib/mata/jejak";
 import type { Deteksi } from "@/lib/mata/resep";
 import type { ModelMata } from "@/components/app/layar-mata";
 
@@ -17,6 +17,9 @@ const FPS = 5;
 const FPS_MIRING = 2;
 const LEBAR_MODEL = 640;
 const KIRIM_TIAP_MS = 5 * 60 * 1000;
+// V-12 layar pelacakan: video asli di perangkat, digambar ulang 640 px dengan zona, garis lintasan, dan nomor anonim.
+const LEBAR_LAYAR = 640;
+const WARNA_JEJAK = ["--laut", "--cap", "--daun", "--kunyit", "--tinta-2"];
 
 type Ringkas = { n: number; lama: number; tungguN: number; tunggu: number; layanN: number; layan: number };
 function ringkas(k: Kunjungan[]): Ringkas {
@@ -38,6 +41,8 @@ function ringkas(k: Kunjungan[]): Ringkas {
 export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { zona: ZonaV2[]; papanAwal: boolean; model?: ModelMata; teks: Kamus["kunjungan"]; bahasa: string }) {
   const video = useRef<HTMLVideoElement>(null);
   const pratinjau = useRef<HTMLCanvasElement>(null);
+  const layar = useRef<HTMLCanvasElement>(null);
+  const [pintu, setPintu] = useState({ masuk: 0, keluar: 0 });
   const berhenti = useRef(false);
   const [papan, setPapan] = useState(papanAwal);
   const [jalan, setJalan] = useState(false);
@@ -100,13 +105,48 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
     return abuDari(g.getImageData(0, 0, LEBAR, tinggi).data, LEBAR, tinggi);
   }
 
-  function gambarTitik(titik: { x: number; y: number }[]) {
-    const c = pratinjau.current;
-    if (!c) return;
+  /** Gambar bingkai video, zona (menyala bila terisi), garis lintasan 3 detik, nomor anonim, dan hitungan pintu. Hanya di layar ini. */
+  function gambarLayar(v: HTMLVideoElement, p: Pelacak) {
+    const c = layar.current;
+    if (!c || !v.videoWidth) return;
+    const tinggi = Math.round((LEBAR_LAYAR * v.videoHeight) / v.videoWidth);
+    if (c.width !== LEBAR_LAYAR || c.height !== tinggi) { c.width = LEBAR_LAYAR; c.height = tinggi; }
     const g = c.getContext("2d")!;
-    const tinta = getComputedStyle(document.documentElement).getPropertyValue("--kunyit").trim() || "orange";
-    g.fillStyle = tinta;
-    for (const p of titik) g.fillRect(p.x * c.width - 3, p.y * c.height - 3, 6, 6);
+    const css = getComputedStyle(document.documentElement);
+    const warna = (v: string, cadangan: string) => css.getPropertyValue(v).trim() || cadangan;
+    g.drawImage(v, 0, 0, c.width, c.height);
+    const isi = p.zonaTerisi;
+    for (const z of zona) {
+      g.beginPath();
+      z.poligon.forEach(([x, y], i) => (i ? g.lineTo(x * c.width, y * c.height) : g.moveTo(x * c.width, y * c.height)));
+      g.closePath();
+      if (isi.has(z.id)) { g.globalAlpha = 0.35; g.fillStyle = warna("--kunyit", "orange"); g.fill(); g.globalAlpha = 1; }
+      g.lineWidth = isi.has(z.id) ? 3 : 1.5;
+      g.strokeStyle = isi.has(z.id) ? warna("--kunyit", "orange") : "white";
+      g.stroke();
+      g.font = "600 12px system-ui, sans-serif";
+      g.fillStyle = "white";
+      g.fillText(z.nama, z.poligon[0][0] * c.width + 4, z.poligon[0][1] * c.height + 14);
+    }
+    const jejak: JejakTampil[] = p.tampil;
+    for (const j of jejak) {
+      const w = warna(WARNA_JEJAK[(j.nomor - 1) % WARNA_JEJAK.length], "steelblue");
+      g.beginPath();
+      j.garis.forEach(([x, y], i) => (i ? g.lineTo(x * c.width, y * c.height) : g.moveTo(x * c.width, y * c.height)));
+      g.lineWidth = 3; g.lineJoin = "round"; g.strokeStyle = w; g.stroke();
+      g.beginPath(); g.arc(j.x * c.width, j.y * c.height, 11, 0, Math.PI * 2);
+      g.fillStyle = w; g.fill(); g.lineWidth = 2; g.strokeStyle = "white"; g.stroke();
+      g.font = "700 12px system-ui, sans-serif"; g.textAlign = "center"; g.textBaseline = "middle"; g.fillStyle = "white";
+      g.fillText(String(j.nomor), j.x * c.width, j.y * c.height + 0.5);
+      g.textAlign = "start"; g.textBaseline = "alphabetic";
+    }
+    const h = p.pintu;
+    const label = `${t.pintuMasuk} ${h.masuk}   ${t.pintuKeluar} ${h.keluar}`;
+    g.font = "700 15px system-ui, sans-serif";
+    const lebar = g.measureText(label).width + 20;
+    g.globalAlpha = 0.8; g.fillStyle = "black"; g.fillRect(c.width - lebar - 10, 10, lebar, 30); g.globalAlpha = 1;
+    g.fillStyle = "white"; g.fillText(label, c.width - lebar, 31);
+    setPintu(h);
   }
 
   async function kirim(k: Kunjungan[], asalMs: number, kunci: string) {
@@ -129,6 +169,7 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
     setPesan(null);
     setSelesai([]);
     setTerkirim(false);
+    setPintu({ masuk: 0, keluar: 0 });
     berhenti.current = false;
     v.srcObject = null;
     v.src = URL.createObjectURL(f);
@@ -170,8 +211,8 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
         break;
       }
       hasil.push(...p.langkah(i / fps, titik));
+      gambarLayar(v, p);
       if (i % 5 === 0) {
-        gambarTitik(p.terlihat);
         setKemajuan({ ke: i + 1, dari: n });
         setTerlihat(p.terlihat.length);
         setSelesai([...hasil]);
@@ -228,7 +269,7 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
         const k = p.langkah(t0, titik);
         tertunda.push(...k);
         semua.push(...k);
-        gambarTitik(p.terlihat);
+        gambarLayar(v, p);
         setTerlihat(p.terlihat.length);
         setSelesai([...semua]);
       }
@@ -294,7 +335,15 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
         </>
       )}
       <video ref={video} className="hidden" muted playsInline />
-      <canvas ref={pratinjau} className={`mt-4 w-full max-w-sm rounded-[var(--radius-kartu)] border border-garis ${jalan ? "" : "hidden"}`} aria-hidden />
+      <canvas ref={pratinjau} className="hidden" aria-hidden />
+      <figure className={`mt-4 ${jalan || selesai.length > 0 ? "" : "hidden"}`}>
+        <canvas ref={layar} className="w-full max-w-2xl rounded-[var(--radius-kartu)] border border-garis" role="img" aria-label={t.layarAria} data-testid="kunjungan-layar" />
+        <figcaption className="sr-only">{t.layarAria}</figcaption>
+      </figure>
+      <dl className={`mt-2 flex gap-6 text-sm ${jalan || selesai.length > 0 ? "" : "hidden"}`} data-testid="kunjungan-pintu" data-masuk={pintu.masuk} data-keluar={pintu.keluar}>
+        <div className="flex items-baseline gap-2"><dt className="text-tinta-2">{t.pintuMasuk}</dt><dd className="text-lg font-semibold tabular-nums">{pintu.masuk}</dd></div>
+        <div className="flex items-baseline gap-2"><dt className="text-tinta-2">{t.pintuKeluar}</dt><dd className="text-lg font-semibold tabular-nums">{pintu.keluar}</dd></div>
+      </dl>
       <p className="mt-2 text-sm text-tinta-2" aria-live="polite">
         {kemajuan ? isiTeks(t.memproses, { ke: kemajuan.ke, dari: kemajuan.dari }) + ". " : ""}
         {jalan ? isiTeks(t.terlihat, { n: terlihat }) : ""}

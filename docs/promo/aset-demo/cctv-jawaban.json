@@ -2,10 +2,10 @@
  "lebar": 1280,
  "tinggi": 720,
  "fps": 30,
- "durasi": 60.0,
+ "durasi": 85.0,
  "pintu": [
   620,
-  700
+  655
  ],
  "kasir": [
   930,
@@ -43,51 +43,51 @@
  "kunjungan": [
   {
    "masuk": 1.0,
-   "keluar": 16.81
+   "keluar": 17.63
   },
   {
-   "masuk": 3.9,
-   "keluar": 29.67
+   "masuk": 5.6,
+   "keluar": 30.06
   },
   {
-   "masuk": 6.8,
-   "keluar": 23.47
+   "masuk": 10.2,
+   "keluar": 27.09
   },
   {
-   "masuk": 9.7,
-   "keluar": 30.26
+   "masuk": 14.8,
+   "keluar": 36.83
   },
   {
-   "masuk": 12.6,
-   "keluar": 31.42
+   "masuk": 19.4,
+   "keluar": 37.83
   },
   {
-   "masuk": 15.5,
-   "keluar": 38.14
+   "masuk": 24.0,
+   "keluar": 48.33
   },
   {
-   "masuk": 18.4,
-   "keluar": 37.92
+   "masuk": 28.6,
+   "keluar": 47.68
   },
   {
-   "masuk": 21.3,
-   "keluar": 42.71
+   "masuk": 33.2,
+   "keluar": 55.08
   },
   {
-   "masuk": 24.2,
-   "keluar": 42.42
+   "masuk": 37.8,
+   "keluar": 56.49
   },
   {
-   "masuk": 27.1,
-   "keluar": 50.69
+   "masuk": 42.4,
+   "keluar": 64.75
   },
   {
-   "masuk": 30.0,
-   "keluar": 48.5
+   "masuk": 47.0,
+   "keluar": 63.35
   },
   {
-   "masuk": 32.9,
-   "keluar": 55.3
+   "masuk": 51.6,
+   "keluar": 74.7
   }
  ]
 }

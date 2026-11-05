@@ -2956,6 +2956,9 @@ export const kamusId = {
   },
   asetPesan: { hanya: "Hanya pemilik atau admin yang mengubah aset.", gagal: "Belum tersimpan. Coba lagi sebentar.", tercatat: "Aset tercatat.", disusutkan: "{n} bulan disusutkan.", disusutkanLewat: "{n} bulan disusutkan, {m} bulan dilewati karena periodenya dikunci.", dijualLaba: "Tercatat. Laba pelepasan Rp{n}.", dijualRugi: "Tercatat. Rugi pelepasan Rp{n}.", dipinjamkan: "Aset dipinjamkan.", dikembalikan: "Aset dikembalikan." },
   kunjungan: {
+    layarAria: "Pelacakan di perangkat ini. Nomor dan garis hanya tampil di sini, tidak disimpan.",
+    pintuKeluar: "Keluar",
+    pintuMasuk: "Masuk",
     judul: "Hitung kunjungan dari kamera atas",
     ket: "Nadi menghitung orang masuk lewat pintu sampai keluar, berapa lama mereka di toko, menunggu di antrean, dan dilayani di kasir. Yang dikirim hanya jumlah dan menit per jam. Wajah, warna baju, dan gambar tidak pernah disimpan.",
     perluPintu: "Gambar dulu zona Pintu di atas, lalu simpan. Kunjungan dihitung dari orang yang masuk dan keluar lewat pintu.",

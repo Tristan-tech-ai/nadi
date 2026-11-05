@@ -8,7 +8,7 @@
 - harga-berantakan.xlsx: daftar harga barang dengan satuan dan rupiah tidak seragam, catatan di sel harga, dan kode kosong.
 - pelanggan-ganda.csv: pelanggan dari ekspor kontak WhatsApp + buku catatan. Orang yang sama muncul dengan sapaan, ejaan, dan
   format nomor berbeda.
-- cctv-toko.mp4: kamera atas toko 1280x720 30 fps 60 dtk dengan sosok abstrak (lingkaran kepala + elips bahu dari atas, tanpa
+- cctv-toko.mp4: kamera atas toko 1280x720 30 fps 85 dtk dengan sosok abstrak (lingkaran kepala + elips bahu dari atas, tanpa
   wajah), masuk lewat pintu, berhenti di rak, membayar di kasir, keluar. Gerak memakai easing (percepat lalu perlambat, V-01)
   dan pegas kecil saat berhenti. Satu karyawan diam di kasir. cctv-jawaban.json menyimpan kunjungan sebenarnya untuk uji Mata.
 Nama, nomor HP, dan angka adalah karangan.
@@ -107,8 +107,8 @@ def csv_pelanggan():
 
 
 # ---------- CCTV kamera atas ----------
-W, H, FPS, DUR = 1280, 720, 30, 60.0
-PINTU = (620, 700)  # tengah bawah
+W, H, FPS, DUR = 1280, 720, 30, 85.0
+PINTU = (620, 655)  # tengah bawah, seluruh badan masih di dalam bingkai
 RAK = [(140, 150, 360, 210), (140, 330, 360, 390), (520, 150, 760, 210), (520, 330, 760, 390)]
 KASIR = (930, 470, 1150, 540)
 TITIK_RAK = [(250, 270), (250, 440), (640, 270), (640, 440)]
@@ -122,15 +122,16 @@ def mulus(u):  # easing masuk-keluar (smootherstep): percepat lalu perlambat, ti
 
 def jalur_pengunjung(k):
     """Satu pengunjung: pintu -> 1-2 rak (berhenti) -> kasir (berhenti) -> pintu. Kembali [(t0, t1, a, b)]."""
-    mulai = 1.0 + k * 2.9
+    mulai = 1.0 + k * 4.6
     r = np.random.default_rng(100 + k)
     henti = [TITIK_RAK[i] for i in r.choice(len(TITIK_RAK), size=1 + k % 2, replace=False)]
     # Jalan lewat lorong (x=440 di antara dua kolom rak, y=560 di depan kasir) supaya tidak menembus rak.
-    titik, berhenti = [PINTU, (440, 560)], set()
+    lx = 440 + int(r.integers(-28, 28))  # tiap orang punya jalur sendiri di lorong, tidak satu garis yang sama
+    titik, berhenti = [PINTU, (lx, 560)], set()
     for x, y in henti:
         tujuan = (x + int(r.integers(-25, 25)), y + int(r.integers(-8, 8)))
-        titik += [(440, y), tujuan, (440, y)]; berhenti.add(tujuan)
-    titik += [(440, 560), TITIK_KASIR, PINTU]; berhenti.add(TITIK_KASIR)
+        titik += [(lx, y), tujuan, (lx, y)]; berhenti.add(tujuan)
+    titik += [(lx, 560), TITIK_KASIR, PINTU]; berhenti.add(TITIK_KASIR)
     seg, t = [], mulai
     for a, b in zip(titik, titik[1:]):
         jarak = math.dist(a, b); lama = max(jarak, 1) / (140 + r.integers(0, 50))  # 140-190 px per dtk
@@ -165,7 +166,7 @@ def lantai():
             d.rectangle([i, y0 + 8, i + 24, y1 - 8], fill=[(176, 64, 52), (60, 112, 160), (220, 180, 70), (80, 140, 90)][(i // 34) % 4])
     d.rectangle([KASIR[0] + 6, KASIR[1] + 8, KASIR[2] + 6, KASIR[3] + 8], fill=(170, 165, 154))
     d.rectangle(KASIR, fill=(90, 88, 84)); d.rectangle([KASIR[0] + 20, KASIR[1] + 15, KASIR[0] + 80, KASIR[1] + 50], fill=(40, 40, 44))
-    d.rectangle([560, 690, 680, 720], fill=(150, 146, 138))  # keset pintu
+    d.rectangle([540, 625, 700, 690], fill=(176, 171, 162))  # keset pintu
     return gb
 
 
@@ -184,7 +185,7 @@ def cctv():
     latar = lantai()
     huruf = ImageFont.load_default(size=22)
     pengunjung = [jalur_pengunjung(k) for k in range(12)]
-    warna = [(64, 108, 170), (176, 70, 60), (90, 140, 96), (200, 168, 80), (120, 90, 150), (70, 150, 150)]
+    warna = [(64, 108, 170), (176, 70, 60), (90, 140, 96), (150, 110, 30), (120, 90, 150), (60, 130, 130)]  # semua >= 60 lebih gelap dari lantai (abu ±210)
     jawaban = [{"masuk": round(s[0][0], 2), "keluar": round(s[-1][1], 2)} for s in pengunjung]
     proc = subprocess.Popen(["ffmpeg", "-hide_banner", "-loglevel", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
                              "-r", str(FPS), "-i", "-", "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", "-movflags", "+faststart",
