@@ -93,7 +93,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | JU-28 | Jurnal Mobile | Jurnal Apps/Jurnal Mobile | PWA | ADA | - |
 | JU-29 | Asisten AI (Airene): analisis laporan, tanya data | Beranda/Mekari Airene | MCP (AI milik pengguna), Sarapan Data | SEBAGIAN: tanya data di dalam aplikasi | M-22 |
 | JU-30 | Mekari Pay: terima pembayaran (VA, QRIS dinamis, kartu), bayar supplier, saldo | Mekari Pay/* | QRIS statis pemilik, transfer, tunai; mutasi masuknya dicocokkan di /app/kas | MITRA (PJP berizin BI); sambung payment gateway milik pemilik belum diriset | M-05 |
-| JU-31 | Jurnal Touch (POS), Jurnal Channel (marketplace), App Store, integrasi software lain | Integrasi/* | MCP, rencana W-08/W-09 | SEBAGIAN: POS BELUM, marketplace MITRA | M-19, W-08, W-09 |
+| JU-31 | Jurnal Touch (POS), Jurnal Channel (marketplace), App Store, integrasi software lain | Integrasi/* | MCP, pintu data W-08, kasir /app/kasir (M-19) | SEBAGIAN: POS ADA, marketplace MITRA | M-19, W-08, W-09 |
 | JU-32 | Landed cost | tabel paket Jurnal 360 | jurnal PIB (bea, PPh 22, PPN impor) | SEBAGIAN: alokasi biaya ke harga pokok barang | M-02 |
 | JU-33 | Studi kasus per tipe bisnis, panduan, FAQ, video, sistem pembayaran langganan, referral | Studi Kasus/*; Memulai dengan Jurnal/*; FAQ; Video; What's New | /panduan, /fitur/*, paket industri | ADA (isi panduan diperluas bersama fitur) | - |
 
@@ -173,7 +173,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 |---|---|---|---|---|---|
 | LA-01 | Flex: akses gaji lebih awal (EWA), benefit fleksibel, asuransi, cicilan, Flex Savings, poin dan promo | Mekari Flex for Company/*; Mekari Flex for Individual Employee/*; Flex Savings/* | tidak ada | MITRA (lembaga keuangan berizin OJK); pengganti: kasbon dari kas usaha sendiri dengan potongan gaji yang disepakati | M-10 |
 | LA-02 | Capital: pembiayaan invoice, pembelian, persediaan, revolving | halaman /produk/capital/* | tidak ada | MITRA (OJK); pengganti: paket data laporan siap kirim ke pemberi pinjaman pilihan pemilik | M-01 |
-| LA-03 | POS: produk, pesanan, pengaturan, integrasi Jurnal | Mekari POS/* | tidak ada | BELUM | M-19 |
+| LA-03 | POS: produk, pesanan, pengaturan, integrasi Jurnal | Mekari POS/* | /app/kasir: produk dan barcode (alat pindai atau kamera BarcodeDetector), keranjang, tunai/QRIS/transfer, jalan tanpa internet (antrean HP berkunci, idempoten), stok dan jurnal penjualan + HPP otomatis, buka/tutup shift dengan selisih kas, struk /struk/kode + WhatsApp, rekap harian per cara bayar dan kasir | ADA | M-19 |
 | LA-04 | Officeless: Studio, Workflow, Insight, Connection, Settings; jasa aplikasi kustom | Mekari Officeless/* | aturan otomatis, MCP | SEBAGIAN: pembuat alur + formulir kustom; jasa = LUAR | M-20 |
 | LA-05 | Mekari Account: satu akun, info pribadi, perusahaan, keamanan, marketplace, integrasi, Mekari Access (2FA, SSO) | Mekari Account/* | satu akun Supabase, ganti usaha | SEBAGIAN: 2FA TOTP, sesi perangkat; SSO SAML butuh paket berbayar Supabase (keputusan Tristan) | M-21 |
 | LA-06 | Mekari Partners Platform (program mitra/reseller) | Mekari Partners Platform/* | direktori mitra | SEBAGIAN: program rujukan mitra akuntan | M-24 |
@@ -191,9 +191,9 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 
 | Status | Jumlah |
 |---|---|
-| ADA | 38 |
+| ADA | 39 |
 | SEBAGIAN | 70 |
-| BELUM | 7 |
+| BELUM | 6 |
 | MITRA | 17 |
 | LUAR | 2 |
 

@@ -3017,8 +3017,10 @@
    "accept": "sidik dokumen berubah = verifikasi gagal (tes); e2e dua penanda tangan; layar menyebut jenis tanda tangan dengan jujur",
    "how": "docs/research/mekari/rencana.md; menutup SI-01..SI-10, JU-05; isi: Dokumen dan tanda tangan: kirim dokumen ke penanda tangan berurutan, tautan sekali pakai, pengingat, kedaluwarsa, tanda tangan elektronik tidak tersertifikasi dengan jejak bukti, cap perusahaan, verifikasi publik, repositori kontrak + pengingat berakhir, templat + kirim massal, penanda dokumen wajib meterai",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T11:06:27",
+   "result": "ac16864 + 64f5f59: migrasi tanda_tangan md5 d4a6a663, tes SQL 30/30 (sidik beku; isi diubah diam-diam -> isi_utuh false; jejak diubah -> rantai putus; salinan diubah -> tidak cocok; token sekali pakai; berurutan; kedaluwarsa; meterai UU 10/2020); vitest tanda 3/3; e2e dua penanda tangan lulus produksi nadi-swart.vercel.app (label 'tidak tersertifikasi (PP 71/2019 Pasal 60 ayat (4))', halaman cek utuh, salinan diubah BERBEDA; axe 390/1440 terang/gelap)"
   },
   {
    "id": "M-18",
