@@ -3575,8 +3575,10 @@
    "accept": "paket industri menentukan ruang tampil; pengaturan Fitur yang dipakai menyimpan pilihan (tes SQL isolasi); fitur yang mati tetap bisa dicari dan dinyalakan; e2e toko vs klinik menampilkan menu berbeda",
    "how": "REKONSTRUKSI-APP.md bagian 5",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T17:30:59"
+   "status": "done",
+   "created": "2026-11-05T17:30:59",
+   "done": "2026-11-05T19:47:39",
+   "result": "9ab6680; migrasi fitur_usaha (md5 ce1b4f53 sama), tes SQL 10/10 (isolasi, staf/anon ditolak, modul tak dikenal ditolak), src/lib/fitur-usaha.test.ts toko vs klinik menu berbeda, e2e/fitur-usaha.spec.ts produksi: sembunyikan Kasir -> hilang dari navigasi, dicari bertanda Tidak di menu, Semua menu bagian tidak dipakai, tampil lagi; axe 0 serius terang/gelap"
   },
   {
    "id": "U-07",
