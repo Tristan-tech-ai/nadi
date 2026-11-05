@@ -125,7 +125,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | QO-08 | Laporan sales, report builder | Report Management/* | laporan sales bulanan: corong per tahap, menang, kalah, tingkat menang, per sales menang vs target, kunjungan (M-15) | SEBAGIAN: pembuat laporan /app/wawasan (M-23) baru untuk orang, produk, invoice; sumber deal dan kunjungan belum | M-15, M-23 |
 | QO-09 | Customer Data Platform, kontak omnichannel, insight pelanggan, segmen | Customer Data Platform/* | segmen otomatis dari invoice 365 hari (belanja terbesar, setia, baru, lama tidak belanja) + segmen isian (M-15) | SEBAGIAN: kontak omnichannel (chat masuk) butuh integrasi WhatsApp Business (MITRA) | M-15 |
 | QO-10 | Kampanye WhatsApp blast, kampanye email, evaluasi | Marketing & Campaign Management/* | tidak ada | MITRA (WhatsApp API berbayar per pesan, email butuh layanan kirim); pengganti: daftar penerima + tautan wa.me satu per satu, ekspor segmen | M-16 |
-| QO-11 | Workflow automation | Operation & Workflow Automation/Workflow Automation | aturan otomatis, izin otopilot, rute | SEBAGIAN | M-20 |
+| QO-11 | Workflow automation | Operation & Workflow Automation/Workflow Automation | aturan otomatis, izin otopilot, rute, /app/alur (M-20): pemicu kejadian Nadi atau formulir, syarat, aksi kartu Feed / kerja / webhook keluar, batas per jam, riwayat jalan | ADA (cabang bersyarat bertingkat dan jeda waktu belum) | M-20 |
 | QO-12 | Call center, cloud PBX, WhatsApp Call | Call & Voice/* | tidak ada | MITRA (operator telekomunikasi) | - |
 | QO-13 | Loyalitas pelanggan (poin) | Loyalty Management/* | poin dari invoice lunas 365 hari per pelanggan (aturan Rp per poin), penukaran tercatat dan tidak melebihi sisa, /app/janji-temu (M-16B) | ADA | M-16B |
 | QO-14 | Janji temu (appointment) | Qontak Appointment Management/* | janji temu publik /janji/<kunci>: layanan berdurasi, hari dan jam buka, slot kosong per jeda, tidak bisa bertumpuk (constraint database), pemilik menandai datang atau batal (M-16B) | SEBAGIAN: pengingat otomatis ke pelanggan butuh WhatsApp API (MITRA) | M-16B |
@@ -143,7 +143,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | SI-02 | Unggah dan kirim dokumen, urutan penanda tangan, pengingat, kedaluwarsa, kelola dokumen | Document/Unggah dan Kirim Dokumen, Mengelola Dokumen, Sekilas Menu Dokumen | /app/tanda-tangan: dokumen teks, penanda tangan berurutan, tautan sekali pakai, kedaluwarsa, tolak, batal, status per penanda (M-17) | ADA | M-17 |
 | SI-03 | Templat dan kirim massal, berbagi templat | Templates/* | templat dengan {nama} dan kirim massal sampai 50 penerima (M-17) | ADA | M-17 |
 | SI-04 | Repositori kontrak, field lintas perusahaan, pengingat berakhir | Contracts/* | tanggal berakhir kontrak dan pengingat N hari sebelumnya, penanda tangan tertunda > 2 hari (M-17) | SEBAGIAN: field kustom lintas perusahaan belum | M-17 |
-| SI-05 | Approval request, workflow, form template | Approvals/* | Feed usulan | SEBAGIAN | M-17, M-20 |
+| SI-05 | Approval request, workflow, form template | Approvals/* | Feed usulan, formulir kustom /app/alur (M-20) yang menjalankan alur | SEBAGIAN: persetujuan bertingkat atas formulir kustom belum | M-17, M-20 |
 | SI-06 | e-Meterai (beli, bubuhkan) | e-Meterai/* | tanda wajib meterai menurut UU 10/2020 Pasal 3 ayat (2) huruf a dan g (M-17) | MITRA (pembelian dan pembubuhan e-Meterai lewat distributor resmi Peruri); penanda wajib meterai ADA | M-17 |
 | SI-07 | Signing proof (bukti tanda tangan) | Signing Proof/*; Mobile App/Signing Proof | bukti tanda tangan publik /tanda/cek/<kode>: penanda dan waktu, isi utuh (sidik SHA-256), rantai jejak hash utuh, cocokkan salinan di perangkat (M-17) | ADA | M-17 |
 | SI-08 | Kontak, tag, insight, custom fields, preferensi, notifikasi | Contacts/*; Insight/*; Settings/*; Getting Started/* | tidak ada | BELUM | M-17 |
@@ -174,13 +174,13 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | LA-01 | Flex: akses gaji lebih awal (EWA), benefit fleksibel, asuransi, cicilan, Flex Savings, poin dan promo | Mekari Flex for Company/*; Mekari Flex for Individual Employee/*; Flex Savings/* | tidak ada | MITRA (lembaga keuangan berizin OJK); pengganti: kasbon dari kas usaha sendiri dengan potongan gaji yang disepakati | M-10 |
 | LA-02 | Capital: pembiayaan invoice, pembelian, persediaan, revolving | halaman /produk/capital/* | tidak ada | MITRA (OJK); pengganti: paket data laporan siap kirim ke pemberi pinjaman pilihan pemilik | M-01 |
 | LA-03 | POS: produk, pesanan, pengaturan, integrasi Jurnal | Mekari POS/* | /app/kasir: produk dan barcode (alat pindai atau kamera BarcodeDetector), keranjang, tunai/QRIS/transfer, jalan tanpa internet (antrean HP berkunci, idempoten), stok dan jurnal penjualan + HPP otomatis, buka/tutup shift dengan selisih kas, struk /struk/kode + WhatsApp, rekap harian per cara bayar dan kasir | ADA | M-19 |
-| LA-04 | Officeless: Studio, Workflow, Insight, Connection, Settings; jasa aplikasi kustom | Mekari Officeless/* | aturan otomatis, MCP | SEBAGIAN: pembuat alur + formulir kustom; jasa = LUAR | M-20 |
+| LA-04 | Officeless: Studio, Workflow, Insight, Connection, Settings; jasa aplikasi kustom | Mekari Officeless/* | aturan otomatis, MCP, pembuat alur + formulir kustom /app/alur (M-20) | SEBAGIAN: pembuat aplikasi bebas (Studio) belum; jasa = LUAR | M-20 |
 | LA-05 | Mekari Account: satu akun, info pribadi, perusahaan, keamanan, marketplace, integrasi, Mekari Access (2FA, SSO) | Mekari Account/* | satu akun Supabase, ganti usaha, 2FA TOTP ditegakkan database, daftar sesi perangkat + keluar dari perangkat lain | SEBAGIAN: SSO SAML butuh paket berbayar Supabase (keputusan Tristan) | M-21 |
 | LA-06 | Mekari Partners Platform (program mitra/reseller) | Mekari Partners Platform/* | direktori mitra | SEBAGIAN: program rujukan mitra akuntan | M-24 |
 | LA-07 | Stream: OCR dan IDP | halaman /produk/stream/* | Lempar Saja + ekstraktor terkompilasi 0 token | ADA (lebih hemat) | - |
 | LA-08 | Desty: omnichannel commerce marketplace | halaman /produk/desty/ | tidak ada | MITRA (API marketplace) | W-09 |
 | LA-09 | Pay: gerbang pembayaran | halaman /produk/pay/ | QRIS statis | MITRA (PJP) | M-05 |
-| LA-10 | Flow: otomasi antaraplikasi | halaman /produk/flow/ | MCP, rencana W-08 | SEBAGIAN | W-08, M-20 |
+| LA-10 | Flow: otomasi antaraplikasi | halaman /produk/flow/ | MCP, pintu data masuk W-08, webhook keluar bertanda HMAC dari alur M-20 | ADA (konektor siap pakai per aplikasi belum, lewat n8n/Make/Zapier) | W-08, M-20 |
 | LA-11 | Airene: asisten AI | halaman /produk/airene/ | MCP, Sarapan Data | SEBAGIAN | M-22 |
 | LA-12 | Rilis produk, panduan, video (umum) | General/*; Video | /panduan | ADA | - |
 | LA-13 | Mekari University, Community, Event, Payroll Service | halaman umum | tidak relevan | LUAR | - |
@@ -191,8 +191,8 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 
 | Status | Jumlah |
 |---|---|
-| ADA | 41 |
-| SEBAGIAN | 70 |
+| ADA | 43 |
+| SEBAGIAN | 68 |
 | BELUM | 4 |
 | MITRA | 17 |
 | LUAR | 2 |
