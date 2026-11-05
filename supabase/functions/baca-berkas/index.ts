@@ -11,7 +11,8 @@ import { BIDANG, INSTRUKSI, SKEMA_HASIL, hasilDari, rapikan, usulanDari, usulanL
 import { bacaCv } from "./cv.ts";
 import { bacaLogMesin } from "./logmesin.ts";
 import { INSTRUKSI_STRUK, SKEMA_STRUK, rapikanStruk } from "./struk.ts";
-import { INSTRUKSI_ATURAN, SKEMA_ATURAN, aturanDari, cocok, jalankan, konsisten, perbaikiTipe, sidik, ujiAturan, type Aturan, type AturanMentah } from "./ekstraktor.ts";
+import { INSTRUKSI_ATURAN, SKEMA_ATURAN, akurasi, aturanDari, cocok, jalankan, konsisten, perbaikiTipe, sidik, ujiAturan, type Aturan, type AturanMentah } from "./ekstraktor.ts";
+import { BAYANGAN_WAJIB, periksaAturan } from "./pengawas.ts";
 
 declare const EdgeRuntime: { waitUntil(p: Promise<unknown>): void };
 
@@ -79,24 +80,44 @@ async function catatPemakaian(db: SupabaseClient, perusahaan_id: string, berkas_
   });
 }
 
-/** Coba aturan tersimpan milik usaha ini (atau milik bersama) yang cocok, lengkap, dan konsisten. */
-async function cobaAturan(db: SupabaseClient, perusahaan_id: string, teks: string): Promise<{ hasil: Hasil; ekstraktorId: string } | null> {
-  const { data } = await db.from("ekstraktor").select("id, aturan, dipakai")
-    .eq("aktif", true).or(`perusahaan_id.eq.${perusahaan_id},perusahaan_id.is.null`);
+type DariAturan = { hasil: Hasil; ekstraktorId: string; bayangan: boolean; cocokSebelum: number };
+
+/**
+ * Coba aturan tersimpan milik usaha ini (atau milik bersama) yang cocok, lengkap, dan konsisten. Aturan aktif langsung dipakai.
+ * Aturan bayangan (T-02) hanya dijalankan untuk dibandingkan dengan model; hasilnya tidak dipakai sampai lolos masa bayangan.
+ */
+async function cobaAturan(db: SupabaseClient, perusahaan_id: string, teks: string): Promise<DariAturan | null> {
+  const { data } = await db.from("ekstraktor").select("id, aturan, dipakai, status, bayangan_cocok")
+    .in("status", ["aktif", "bayangan"]).or(`perusahaan_id.eq.${perusahaan_id},perusahaan_id.is.null`);
+  let bayangan: DariAturan | null = null;
   for (const e of data ?? []) {
     const aturan = e.aturan as Aturan;
     try {
       if (!cocok(aturan, teks)) continue;
       const h = jalankan(aturan, teks);
       if (!h.lengkap || konsisten(aturan.jenis, h.bidang).length) continue;
-      await db.from("ekstraktor").update({ dipakai: e.dipakai + 1 }).eq("id", e.id);
       const jenis = aturan.jenis as Jenis;
-      return { ekstraktorId: e.id, hasil: { jenis, keyakinan: 0.99, ringkasan: "", bidang: rapikan(BIDANG[jenis], h.bidang) as Record<string, unknown> } };
+      const hasil: Hasil = { jenis, keyakinan: 0.99, ringkasan: "", bidang: rapikan(BIDANG[jenis], h.bidang) as Record<string, unknown> };
+      if (e.status === "bayangan") { bayangan ??= { hasil, ekstraktorId: e.id, bayangan: true, cocokSebelum: e.bayangan_cocok ?? 0 }; continue; }
+      await db.from("ekstraktor").update({ dipakai: e.dipakai + 1 }).eq("id", e.id);
+      return { hasil, ekstraktorId: e.id, bayangan: false, cocokSebelum: 0 };
     } catch (err) {
       console.error("aturan rusak", e.id, err instanceof Error ? err.message : err);
     }
   }
-  return null;
+  return bayangan;
+}
+
+/** T-02 masa bayangan: bandingkan hasil aturan bayangan dengan hasil model. Sama -> dihitung; beda -> aturan dimatikan. */
+async function nilaiBayangan(db: SupabaseClient, b: DariAturan, model: Hasil, longgar: boolean) {
+  const a = akurasi(model.bidang, b.hasil.bidang, longgar);
+  const sama = model.jenis === b.hasil.jenis && a.cocok === a.total;
+  const cocokBaru = b.cocokSebelum + 1;
+  const ubah = sama
+    ? { bayangan_cocok: cocokBaru, ...(cocokBaru >= BAYANGAN_WAJIB ? { status: "aktif" } : {}) }
+    : { status: "mati", alasan_mati: `beda dengan model: ${model.jenis === b.hasil.jenis ? `${a.total - a.cocok} dari ${a.total} bidang` : "jenis berkas"}` };
+  const { error } = await db.from("ekstraktor").update(ubah).eq("id", b.ekstraktorId);
+  console.log("bayangan", b.ekstraktorId, sama ? `cocok ${cocokBaru}` : "mati", error?.message ?? "ok");
 }
 
 /**
@@ -128,9 +149,13 @@ async function tulisAturan(db: SupabaseClient, model: string, perusahaan_id: str
         aturan = perbaikiTipe(aturan, teks, hasil.bidang, rapi, ocr);
         uji = ujiAturan(aturan, teks, hasil.bidang, rapi, ocr);
       }
+      // T-02 pengawas bukan AI: skema, regex aman, tanpa skrip/SQL, tidak terlalu umum. Lolos pun baru berstatus bayangan.
+      const periksa = uji.lulus ? periksaAturan(aturan) : { lulus: false, alasan: [] as string[] };
+      if (uji.lulus && !periksa.lulus) uji = { lulus: false, alasan: `pengawas menolak: ${periksa.alasan.slice(0, 4).join("; ")}` };
       if (uji.lulus) {
         const { error } = await db.from("ekstraktor").insert({
           perusahaan_id, sidik_tata_letak: await sidik(aturan), jenis_berkas: hasil.jenis, aturan,
+          status: "bayangan", versi: 1, asal: { model, berkas_id, percobaan: coba },
         });
         return console.log("aturan disimpan", berkas_id, hasil.jenis, `percobaan ${coba}`, error?.message ?? "ok");
       }
@@ -236,10 +261,10 @@ Deno.serve(async (req) => {
     const lamar = sumberUsulan === "lamar";
     const dariAturan = teks && !lamar ? await cobaAturan(admin, berkas.perusahaan_id, teks) : null;
     // CV berteks: pengurai bagian tanpa model (H-02). Berlaku juga untuk lampiran lamaran karena tidak memakai aturan usaha.
-    const dariCv = !dariAturan && teks ? bacaCv(teks) : null;
+    const dariCv = !(dariAturan && !dariAturan.bayangan) && teks ? bacaCv(teks) : null;
     // Log mesin absen sidik jari/wajah: tempelan dikelompokkan per orang per hari tanpa model (M-12).
-    const dariLog = !dariAturan && !dariCv && teks && !lamar ? bacaLogMesin(teks) : null;
-    if (dariAturan) {
+    const dariLog = !(dariAturan && !dariAturan.bayangan) && !dariCv && teks && !lamar ? bacaLogMesin(teks) : null;
+    if (dariAturan && !dariAturan.bayangan) {
       hasil = dariAturan.hasil;
       sumber = "aturan";
     } else if (dariCv) {
@@ -268,7 +293,9 @@ Deno.serve(async (req) => {
       }
       // Berkas berteks dan jenisnya dikenal: tulis aturan sekali agar berkas kembarannya nanti tanpa token.
       // CV dikecualikan: setiap pelamar memakai tata letak sendiri, aturannya tidak pernah terpakai ulang (H-02).
-      if (teks && hasil.jenis !== "lainnya" && hasil.jenis !== "cv" && !lamar) EdgeRuntime.waitUntil(tulisAturan(admin, tangga.berat, berkas.perusahaan_id, berkas_id, teks, hasil, Boolean(ocrCukup)));
+      // Aturan bayangan untuk tata letak ini sudah ada: nilai saja (jangan tulis aturan kedua).
+      if (dariAturan?.bayangan) EdgeRuntime.waitUntil(nilaiBayangan(admin, dariAturan, hasil, Boolean(ocrCukup)));
+      else if (teks && hasil.jenis !== "lainnya" && hasil.jenis !== "cv" && !lamar) EdgeRuntime.waitUntil(tulisAturan(admin, tangga.berat, berkas.perusahaan_id, berkas_id, teks, hasil, Boolean(ocrCukup)));
     }
 
     // Lamaran tanpa akun hanya boleh menjadi usulan pelamar, apa pun isi berkasnya (Q-11).
@@ -292,7 +319,7 @@ Deno.serve(async (req) => {
       dampak_rp: u.dampak_rp, berkas_id,
     }).select("id").single();
     await admin.from("berkas").update({
-      status: "usulan", jenis_terdeteksi: hasil.jenis, hasil: { ...hasil, sumber, ...(dariAturan ? { ekstraktor_id: dariAturan.ekstraktorId } : {}) },
+      status: "usulan", jenis_terdeteksi: hasil.jenis, hasil: { ...hasil, sumber, ...(dariAturan && !dariAturan.bayangan ? { ekstraktor_id: dariAturan.ekstraktorId } : {}) },
       token_ai: token, diubah_at: new Date().toISOString(),
     }).eq("id", berkas_id);
     return json({ status: "usulan", jenis: hasil.jenis, keyakinan: hasil.keyakinan, hasil, usulan_id: usulan?.id, token, sumber, model });
