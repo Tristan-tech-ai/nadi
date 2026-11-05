@@ -3563,8 +3563,10 @@
    "accept": "daftar 5-7 langkah sesuai paket di Hari ini, tercentang otomatis dari data, bisa ditutup dan dipanggil lagi dari Bantuan; semua keadaan kosong di 50 halaman punya kalimat guna + satu langkah pertama (audit tes); tur 60 detik hanya dari menu Bantuan; e2e pengguna baru menyelesaikan 3 langkah",
    "how": "REKONSTRUKSI-APP.md bagian 6 (NN/g 2023)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T17:30:59"
+   "status": "done",
+   "created": "2026-11-05T17:30:59",
+   "done": "2026-11-05T22:37:00",
+   "result": "bf38cca; src/lib/mulai.ts + mulai.test.ts 5/5, komponen mulai-nadi/tur-singkat/langkah-pertama, 66 keadaan kosong ditulis ulang; e2e/mulai.spec.ts produksi 2/2 (3 langkah tercentang dari data, tutup lalu panggil dari bantuan, tur 5 langkah, audit 53 halaman 0 keadaan kosong tanpa guna/langkah); axe 0 serius 390/1440 terang/gelap"
   },
   {
    "id": "U-06",
@@ -3637,8 +3639,10 @@
    "accept": "docs/promo/riset-video/RISET.md memuat: teknik yang biasa dikerjakan di After Effects/Premiere/Blender (kamera, easing, motion blur, parallax, kinetic type, masking, color grade) dan padanannya di alat yang ada (HyperFrames, GSAP, ffmpeg, Playwright DOM, Python), daftar periksa video demo SaaS (kait 2 dtk, satu ide per adegan, UI asli, tanpa narasi, CTA, panjang), dan skill AI bertanggal >= Okt 2026 yang dibaca penuh (video-produksi, hyperframes, motion-graphics, media-use, sound) dengan sumber + tanggal di LEARN",
    "how": "baca skill lokal terbaru (video-produksi references/code-rendered-product-films.md, hyperframes types/launch.md, motion.md, sound.md, hyperframes-animation) + sumber primer web; jangan memakai ingatan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T20:01:07"
+   "status": "done",
+   "created": "2026-11-05T20:01:07",
+   "done": "2026-11-05T22:37:00",
+   "result": "docs/promo/riset-video/RISET.md (sumber skill 3-4 Nov 2026, Adobe Help, manual Blender 5.2, Wistia 2026; padanan 11 teknik, angka gerak, daftar periksa 12 butir); LEARN 6 Nov 2026"
   },
   {
    "id": "V-02",
