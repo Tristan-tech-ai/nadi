@@ -84,6 +84,24 @@ Permintaan: (a) di onboarding ada tombol "onboarding dengan AI kamu sendiri"; (b
 | (f) Teks Nadi | Ada | Juga menerima berkas .txt/.md hasil AI |
 | (g) pilihan saja | Ada | Tetap |
 
+### 7b. Draf AI: lihat, ubah, hapus, lalu terapkan sekali (pertanyaan Tristan 6 Nov 2026)
+
+Sumber, dibaca 6 Nov 2026:
+- Amershi dkk., Guidelines for Human-AI Interaction (CHI 2019), Microsoft HAX Toolkit. G8: mudah menolak atau mengabaikan saran AI. G9: mudah menyunting, memperbaiki, atau memulihkan saat AI salah. G11: bisa melihat alasan AI berbuat begitu. G16: jelaskan akibat sebuah tindakan.
+- Google PAIR Guidebook, bab Feedback + Control. Biarkan pengguna menyesuaikan keluaran. Jalan manual harus tetap ada. Orang ingin memegang kendali saat taruhannya tinggi atau mereka yang bertanggung jawab atas hasilnya.
+- Jakob Nielsen, "Confirmation Dialogs Can Prevent User Errors, If Not Overused" (NN/g 2018, ditinjau Agustus 2026). Konfirmasi yang terlalu sering membuat orang mengklik tanpa berpikir. Undo lebih kuat daripada dialog. Konfirmasi disimpan untuk tindakan berat yang tidak bisa dibatalkan, dan harus menyebut akibatnya.
+- Forum ide produk resmi Xero, "Reconciliation - Bulk OK". Saran pencocokan yang makin akurat justru menambah klik OK satu per satu. Seorang pengguna menekan OK 5.381 kali padahal 95% sarannya benar.
+
+Pola untuk Nadi:
+1. AI (lewat MCP atau Teks Nadi) menulis **draf**, bukan data jadi dan bukan satu usulan per baris. Draf tampil di Nadi saat itu juga dengan label "Draf dari AI-mu".
+2. Halaman tinjau berisi satu tabel per bagian (fitur, topi, orang, produk, akun). Setiap baris sudah tercentang. Setiap sel bisa diubah langsung, baris bisa dihapus (ikon tempat sampah) atau ditambah, dan alasan AI ("dari berkas X, yakin 92%") tampil bila diminta.
+3. Baris yang ragu (keyakinan rendah, bentrok dengan data yang ada, atau kolom wajib kosong) tidak tercentang, diwarnai, dan ditaruh paling atas dengan saringan "Perlu dicek".
+4. Satu tombol **"Terapkan N baris"**, lalu ada jendela batal. Tidak ada konfirmasi per baris.
+5. Butir bertaruhan tinggi (gaji, rekening, saldo awal, pajak) tidak pernah tercentang otomatis walau AI yakin. Penerapan yang tidak bisa dibatalkan (jurnal saldo awal) memakai konfirmasi yang menyebut akibatnya.
+6. AI pengguna bisa membaca dan merevisi draf yang sama lewat MCP (alat baca_draf, ubah_draf). Pengguna bisa menyuruh AI-nya "ganti topi Sari jadi kasir", dan perubahannya tampil di halaman tinjau. Menerapkan tetap hanya bisa dilakukan pemilik atau admin di Nadi.
+
+Jumlah klik: dengan pola ini kasus terbaik selalu 1 klik (Terapkan) berapa pun jumlah barisnya. Mengubah dan menghapus hanya menambah klik di baris yang memang salah, dan itu lebih murah daripada menolak seluruh draf lalu mengulang. "Setujui saja tanpa bisa mengubah" lebih buruk, karena satu sel salah memaksa ulang semuanya. "Setujui per baris" juga lebih buruk, karena kliknya naik seiring jumlah baris. U-08 mengukur ini: onboarding dengan draf AI 20 baris harus selesai dalam ≤ 3 klik bila semuanya benar.
+
 ## 8. Masuk
 
 - Tautan di email konfirmasi jatuh ke localhost. Kode aplikasi sudah memakai alamat produksi; Supabase menolak alamat yang tidak ada di daftar Redirect URLs lalu memakai Site URL proyek. Perlu diubah di dashboard (UNTUK-TRISTAN 6 Nov 2026).
