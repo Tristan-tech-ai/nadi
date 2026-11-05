@@ -1,0 +1,184 @@
+{
+ "efek": {
+  "klik": {
+   "lufs": -32.3,
+   "true_peak": -3.0,
+   "jendela": "1 dtk",
+   "durasi": 0.72,
+   "resep": "klik.wav: jendela terkuat 0,12 dtk; highpass 150; +3 dB 4 kHz; kompresor 4:1; ruang 12%; -3 dBTP"
+  },
+  "ketik": {
+   "lufs": -25.1,
+   "true_peak": -3.0,
+   "jendela": "utuh",
+   "durasi": 1.2,
+   "resep": "ketik.mp3: jendela terkuat 1,2 dtk; pita 250-10k; -2 dB 3 kHz; kompresor 2,5:1; fade; -3 dBTP"
+  },
+  "cap": {
+   "lufs": -24.0,
+   "true_peak": -3.0,
+   "jendela": "utuh",
+   "durasi": 1.558,
+   "resep": "klik -3 semitone (-4 dB) + dentum mesin lowpass 400 (+6 dB, +8 ms) + ekor RT60 0,8 dtk (-6 dB, +8 ms); lem 3:1; -3 dBTP"
+  },
+  "lempar": {
+   "lufs": -17.3,
+   "true_peak": -3.0,
+   "jendela": "utuh",
+   "durasi": 1.32,
+   "resep": "whoosh.mp3 pita 200-8k (-2 dB) lalu kertas 0,4 dtk di +320 ms; ruang 15%; -3 dBTP"
+  },
+  "notifikasi": {
+   "lufs": -28.9,
+   "true_peak": -3.0,
+   "jendela": "1 dtk",
+   "durasi": 0.745,
+   "resep": "klik +5 semitone lowpass 5k, dua ketuk berjarak 90 ms (-4 dB kedua); ruang 25%; -3 dBTP"
+  },
+  "transisi": {
+   "lufs": -25.7,
+   "true_peak": -3.0,
+   "jendela": "utuh",
+   "durasi": 1.048,
+   "resep": "swipe.mp3 highpass 250, +2 dB 5 kHz, fade; ruang 10%; -3 dBTP"
+  },
+  "sonic-logo": {
+   "lufs": -22.9,
+   "true_peak": -3.0,
+   "jendela": "utuh",
+   "durasi": 2.0,
+   "resep": "kertas 0,5 dtk (-8 dB) lalu cap di +550 ms; reverb RT60 1,4 dtk 30%; potong 2,0 dtk dengan fade 0,4 dtk; -3 dBTP"
+  }
+ },
+ "uji": {
+  "bed": {
+   "lufs": -20.9,
+   "true_peak": -6.4,
+   "jendela": "utuh",
+   "durasi": 20.0
+  },
+  "sebelum": {
+   "lufs": -20.5,
+   "true_peak": -3.9,
+   "jendela": "utuh",
+   "durasi": 20.0
+  },
+  "sesudah": {
+   "lufs": -14.2,
+   "true_peak": -1.5,
+   "jendela": "utuh",
+   "durasi": 20.0
+  },
+  "jadwal": [
+   {
+    "efek": "lempar",
+    "ketukan": 4,
+    "gambar_dtk": 2.033,
+    "bingkai": 61,
+    "mulai_dtk": 2.0,
+    "letak_serangan_ms": 66.8,
+    "serangan_setelah_gambar_ms": 33.8
+   },
+   {
+    "efek": "klik",
+    "ketukan": 8,
+    "gambar_dtk": 4.1,
+    "bingkai": 123,
+    "mulai_dtk": 4.133,
+    "letak_serangan_ms": 0.6,
+    "serangan_setelah_gambar_ms": 33.7
+   },
+   {
+    "efek": "ketik",
+    "ketukan": 10,
+    "gambar_dtk": 5.1,
+    "bingkai": 153,
+    "mulai_dtk": 5.111,
+    "letak_serangan_ms": 22.2,
+    "serangan_setelah_gambar_ms": 18.7
+   },
+   {
+    "efek": "notifikasi",
+    "ketukan": 16,
+    "gambar_dtk": 8.167,
+    "bingkai": 245,
+    "mulai_dtk": 8.199,
+    "letak_serangan_ms": 0.5,
+    "serangan_setelah_gambar_ms": 32.5
+   },
+   {
+    "efek": "cap",
+    "ketukan": 20,
+    "gambar_dtk": 10.233,
+    "bingkai": 307,
+    "mulai_dtk": 10.266,
+    "letak_serangan_ms": 0.7,
+    "serangan_setelah_gambar_ms": 33.7
+   },
+   {
+    "efek": "transisi",
+    "ketukan": 28,
+    "gambar_dtk": 14.3,
+    "bingkai": 429,
+    "mulai_dtk": 14.276,
+    "letak_serangan_ms": 57.4,
+    "serangan_setelah_gambar_ms": 33.4
+   },
+   {
+    "efek": "klik",
+    "ketukan": 32,
+    "gambar_dtk": 16.333,
+    "bingkai": 490,
+    "mulai_dtk": 16.366,
+    "letak_serangan_ms": 0.6,
+    "serangan_setelah_gambar_ms": 33.7
+   },
+   {
+    "efek": "sonic-logo",
+    "ketukan": 34,
+    "gambar_dtk": 17.367,
+    "bingkai": 521,
+    "mulai_dtk": 16.849,
+    "letak_serangan_ms": 550.7,
+    "serangan_setelah_gambar_ms": 32.7
+   }
+  ]
+ },
+ "sumber": {
+  "klik.wav": [
+   "Computer Mouse Click.wav",
+   "https://commons.wikimedia.org/wiki/File:Computer_Mouse_Click.wav",
+   "CC0"
+  ],
+  "kertas.ogg": [
+   "Book paper pages assorted.ogg",
+   "https://commons.wikimedia.org/wiki/File:Book_paper_pages_assorted.ogg",
+   "domain publik"
+  ],
+  "mesin.ogg": [
+   "Stomping machine.ogg",
+   "https://commons.wikimedia.org/wiki/File:Stomping_machine.ogg",
+   "domain publik"
+  ],
+  "ketik.mp3": [
+   "Keyboard Typing (fennelliott)",
+   "https://freesound.org/people/fennelliott/sounds/379418",
+   "CC0"
+  ],
+  "whoosh.mp3": [
+   "Swosh swoosh whoosh air sound (qubodup)",
+   "https://freesound.org/people/qubodup/sounds/60026",
+   "CC0"
+  ],
+  "swipe.mp3": [
+   "Swipe Whoosh (qubodup)",
+   "https://freesound.org/people/qubodup/sounds/60007",
+   "CC0"
+  ],
+  "lagu-krux.mp3": [
+   "Inspiring Advertising - Upbeat Summer Corporate (Rafael Krux, filmmusic.io)",
+   "https://commons.wikimedia.org/wiki/File:Rafael_Krux_-_Inspiring_Advertising_-_Upbeat_Summer_Corporate_(cc-by)_(filmmusic).mp3",
+   "CC BY 4.0"
+  ]
+ }
+}
