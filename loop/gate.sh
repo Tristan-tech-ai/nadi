@@ -20,8 +20,9 @@ step() {  # step NAMA perintah...
 for h in scripts/git-hooks/*; do cmp -s "$h" ".git/hooks/$(basename "$h")" || { cp "$h" .git/hooks/ && chmod +x ".git/hooks/$(basename "$h")"; }; done
 step rahasia bash scripts/check-secrets.sh
 # TANPA JEJAK: nama asisten pengembang tidak boleh ada di berkas terlacak maupun riwayat (pola ditulis terpecah agar skrip ini lolos sendiri)
-jejak() { local P='c[l]aude|noreply@a[n]thropic|co-a[u]thored-by'; ! git grep -qiIE "$P" -- . && ! git log --format='%an%n%ae%n%cn%n%ce%n%B' | grep -qiE "$P" && ! git log -p --no-color | grep -qiE '^[+-].*(c[l]aude|noreply@a[n]thropic)'; }
-step jejak jejak
+# TANPA JEJAK (loop/hooks/jejak.py): jejak pengembangan selalu ditolak; nama aplikasi AI boleh hanya dalam konteks produk (Tristan 6 Nov 2026).
+step jejak-uji python -I loop/hooks/jejak.py selftest
+step jejak python -I loop/hooks/jejak.py repo
 step antrean python -I loop/next_task.py selftest
 step penjaga python -I loop/hooks/wake_guard.py selftest
 step macet python -I loop/hooks/macet_guard.py selftest
