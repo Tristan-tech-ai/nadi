@@ -46,7 +46,11 @@ test("kerangka: navigasi benar per kelas lebar, axe bersih, tanpa gulir samping,
   await page.emulateMedia({ colorScheme: "light" });
   // Desktop: Invoice langsung di sidebar.
   await page.setViewportSize({ width: 1440, height: 900 });
-  await page.getByRole("navigation", { name: "Navigasi utama" }).getByRole("link", { name: "Invoice", exact: true }).click();
+  const sidebar = page.getByRole("navigation", { name: "Navigasi utama" });
+  // Ruang lain terlipat: buka Uang dulu.
+  await expect(sidebar.getByRole("link", { name: "Invoice", exact: true })).toBeHidden();
+  await sidebar.locator("summary", { hasText: "Uang" }).click();
+  await sidebar.getByRole("link", { name: "Invoice", exact: true }).click();
   await page.waitForURL((u) => u.pathname === "/app/invoice");
   // Tablet: rail Uang membuka panel berisi Invoice.
   await page.goto("/app");

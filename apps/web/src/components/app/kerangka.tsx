@@ -36,8 +36,31 @@ function bilahBawah(peran: string, b: Bahasa): Butir[] {
 
 const aktifDi = (jalur: string, href: string) => (href === "/app" ? jalur === "/app" : jalur === href || jalur.startsWith(`${href}/`));
 
-function DaftarRuang({ ruang, jalur, b, guna = false, onPilih }: { ruang: Ruang[]; jalur: string; b: Bahasa; guna?: boolean; onPilih?: () => void }) {
+function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih }: { ruang: Ruang[]; jalur: string; b: Bahasa; guna?: boolean; lipat?: boolean; onPilih?: () => void }) {
   const kini = halamanDari(jalur)?.href;
+  const ruangKini = halamanDari(jalur)?.ruang;
+  if (lipat) {
+    // Sidebar: hanya ruang yang sedang dibuka terlipat terbuka; ruang lain cukup satu baris yang bisa diketuk.
+    return (
+      <div className="grid gap-1" key={ruangKini}>
+        {ruang.map((r) => {
+          const Ikon = IKON_RUANG[r.id] ?? ListIcon;
+          return (
+            <details key={r.id} open={r.id === ruangKini || undefined} className="group">
+              <summary className="flex cursor-pointer list-none items-center gap-2 rounded-[var(--radius-isian)] px-2 py-2 text-sm font-semibold text-tinta hover:bg-kertas-2">
+                <Ikon size={18} aria-hidden />{r.label[b]}<span className="ml-auto text-xs font-normal text-tinta-2">{r.halaman.length}</span>
+              </summary>
+              <ul className="mb-2 ml-6 mt-0.5 grid gap-0.5 border-l border-garis pl-2">{r.halaman.map((x) => (
+                <li key={x.href}>
+                  <Link href={x.href} aria-current={kini === x.href ? "page" : undefined}
+                    className={`block rounded-[var(--radius-isian)] px-2 py-1.5 text-sm hover:bg-kertas-2 ${kini === x.href ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}>{x.label[b]}</Link>
+                </li>))}</ul>
+            </details>
+          );
+        })}
+      </div>
+    );
+  }
   return (
     <div className="grid gap-5">
       {ruang.map((r) => {
@@ -84,7 +107,7 @@ export function Kerangka({ ruang, peran, bahasa: b, teks }: { ruang: Ruang[]; pe
     <>
       {/* >= 1200 px: sidebar penuh. */}
       <nav aria-label={teks.navUtama} className="kerangka-sidebar fixed bottom-0 left-0 top-[3.25rem] z-10 hidden w-64 overflow-y-auto border-r border-garis bg-kertas px-3 py-4 min-[1200px]:block print:hidden">
-        <DaftarRuang ruang={ruang} jalur={jalur} b={b} />
+        <DaftarRuang ruang={ruang} jalur={jalur} b={b} lipat />
       </nav>
 
       {/* 600-1199 px: rail ruang, panel halaman ruang yang dipilih. */}
