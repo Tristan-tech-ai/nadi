@@ -4335,13 +4335,15 @@
    "priority": 4,
    "size": "m",
    "wajib": true,
-   "title": "Video demo v3: Babak 9 belajar format (struk ke-4 token 0) + babak 3 MCP",
+   "title": "Video demo v3: Babak 9 belajar format (struk ke-4 token 0)",
    "accept": "dibangun di docs/promo/demo-v3/buat.py dari DOM asli (lapisan diposisikan dari ukur.json), dirender, dan ditinjau bingkai besar terhadap aturan GERAK.md + UJI-GERAK.md; temuan dan status dicatat di CATATAN.md; hyperframes check 0 error",
    "how": "docs/promo/demo-v3/CATATAN.md",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-06T02:33:05",
-   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)"
+   "catatan": "V-07 dipecah per babak 6 Nov 2026 (perintah Tristan: mulai membuat video sekarang)",
+   "done": "2026-11-06T03:02:38",
+   "result": "docs/promo/demo-v3/buat.py babak 9 (58-70 dtk): struk SPBU 01 dan 25 direkonstruksi dari OCR korpus, teks status kamus asli klaim (terbacaAi, belajarStruk, terbacaAturan), pil 600 token lalu 0 token dari eval produksi T-01B; ditinjau 2 putaran bingkai besar (struk ke-4 tergeser diperbaiki); check 0 error"
   },
   {
    "id": "V-07G",
@@ -4350,7 +4352,7 @@
    "priority": 4,
    "size": "m",
    "wajib": true,
-   "title": "Video demo v3: Babak 6 gaji, 8 otomasi/tanya, 10 satu kerangka, 11 kartu akhir",
+   "title": "Video demo v3: Babak 3 MCP (tangkap DOM tinjau draf), 6 gaji, 8 otomasi/tanya, 10 satu kerangka, 11 kartu akhir",
    "accept": "dibangun di docs/promo/demo-v3/buat.py dari DOM asli (lapisan diposisikan dari ukur.json), dirender, dan ditinjau bingkai besar terhadap aturan GERAK.md + UJI-GERAK.md; temuan dan status dicatat di CATATAN.md; hyperframes check 0 error",
    "how": "docs/promo/demo-v3/CATATAN.md",
    "blocked_by": "",
