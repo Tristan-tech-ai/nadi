@@ -1042,6 +1042,7 @@ export const kamusEn: Kamus = {
     galatDb: "Nadi refused this (details in Indonesian): {pesan}",
   },
   mata: {
+    usulDenah: "Suggest zones from a frame", belajarDenah: "Nadi is learning a new layout, just once. The frame is shrunk and blurred on this device first.", denahDikenal: "This camera layout is already known. Zones loaded without AI.", denahDraf: "Check the suggested zones, then approve. You can still edit them later.", setujuiDenah: "Approve this camera layout",
     judul: "Eyes",
     ket: "A tablet camera or a video recording reads which tables are taken and how many people are queuing. Everything is computed on this device; images are never sent.",
     tanpaIzin: "Eyes is only for the business owner or admins.",
@@ -1088,6 +1089,7 @@ export const kamusEn: Kamus = {
     belumPerubahan: "No changes yet. Nadi only records when a table switches between taken and free, or the queue size changes.",
   },
   mataPesan: {
+    denahDitolak: "The suggested zones did not pass the check. Draw the zones yourself below.",
     hanya: "Only the owner or an admin can use Eyes.",
     gagal: "Nadi could not save. Try again in a moment; the zones you drew are kept.",
     galatDb: "Nadi refused this (details in Indonesian): {pesan}",

@@ -5,7 +5,7 @@ import { EyeIcon, VideoCameraIcon } from "@phosphor-icons/react";
 import { Tombol } from "@/components/ui/tombol";
 import { isiTeks } from "@/lib/i18n/isi-teks";
 import type { Kamus } from "@/lib/i18n/kamus";
-import { catatMata, simpanZona } from "@/app/app/mata/actions";
+import { catatMata, denahKamera, setujuiDenah, simpanZona, usulDenah } from "@/app/app/mata/actions";
 import { langkahStatus, medianAntrean, orangDiZona, statusAwal, type Deteksi, type JenisZona, type Status, type Titik, type Zona } from "@/lib/mata/resep";
 
 export type ModelMata = { id: string; dtype: string; ambang: number; interval_detik: number };
@@ -32,6 +32,11 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
   const pekerja = useRef<Worker | null>(null);
   const berhenti = useRef(false);
   const [sumber, setSumber] = useState<"berkas" | "kamera" | null>(null);
+  // T-01D: denah per kamera. Sidik = hash di perangkat dari identitas kamera atau berkas; bingkai tidak pernah disimpan.
+  const [sidik, setSidik] = useState<string | null>(null);
+  const [denahDraf, setDenahDraf] = useState<string | null>(null);
+  const [dikenal, setDikenal] = useState(false);
+  const [belajar, setBelajar] = useState(false);
   const [zona, setZona] = useState<Zona[]>(zonaAwal);
   const [tersimpan, setTersimpan] = useState(zonaAwal.length > 0);
   const [draf, setDraf] = useState<Titik[]>([]);
@@ -89,6 +94,62 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
     video.current.currentTime = 0.5;
     setSumber("berkas");
     setPesan(null);
+    void kenaliKamera(`berkas:${f.name}:${f.size}`);
+  }
+
+  async function hashHex(teks: string): Promise<string> {
+    const h = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(teks));
+    return [...new Uint8Array(h)].slice(0, 16).map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  /** Kamera yang sama berikutnya: denah aktif dimuat tanpa model (token 0). */
+  async function kenaliKamera(identitas: string) {
+    const s = await hashHex(identitas);
+    setSidik(s);
+    setDenahDraf(null);
+    setDikenal(false);
+    const d = await denahKamera(s);
+    if (!d) return;
+    const z = d.zona.map((x) => ({ id: "", nama: x.nama, jenis: x.jenis as Zona["jenis"], poligon: x.poligon }));
+    const h = await simpanZona(z);
+    if ("galat" in h) return setPesan({ jenis: "galat", teks: h.galat });
+    setZona(h.zona);
+    setTersimpan(true);
+    setDikenal(true);
+    setPesan({ jenis: "info", teks: t.denahDikenal });
+  }
+
+  /** Kamera baru: satu bingkai dikecilkan ke 320 px dan dikaburkan di perangkat, lalu model mengusulkan zona (draf). */
+  async function usulkanDenah() {
+    const v = video.current;
+    if (!v || !sidik || !v.videoWidth) return;
+    const k = document.createElement("canvas");
+    k.width = 320;
+    k.height = Math.round((320 * v.videoHeight) / v.videoWidth);
+    const g = k.getContext("2d")!;
+    g.filter = "blur(6px)";
+    g.drawImage(v, 0, 0, k.width, k.height);
+    const gambar = k.toDataURL("image/jpeg", 0.7).split(",")[1];
+    setBelajar(true);
+    setPesan({ jenis: "info", teks: t.belajarDenah });
+    const h = await usulDenah(gambar, sidik);
+    setBelajar(false);
+    if ("galat" in h) return setPesan({ jenis: "galat", teks: h.galat });
+    setZona(h.zona.map((x) => ({ id: "", nama: x.nama, jenis: x.jenis as Zona["jenis"], poligon: x.poligon })));
+    setTersimpan(false);
+    setDenahDraf(h.id);
+    setPesan({ jenis: "info", teks: t.denahDraf });
+  }
+
+  async function setujuiDraf() {
+    if (!denahDraf) return;
+    const h = await setujuiDenah(denahDraf, zona.map((z) => ({ nama: z.nama, jenis: z.jenis, poligon: z.poligon })));
+    if ("galat" in h) return setPesan({ jenis: "galat", teks: h.galat });
+    setZona(h.zona);
+    setTersimpan(true);
+    setDenahDraf(null);
+    setDikenal(true);
+    setPesan({ jenis: "info", teks: isiTeks(t.tersimpan, { n: h.zona.length }) });
   }
 
   async function pakaiKamera() {
@@ -100,6 +161,8 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
       await video.current.play();
       setSumber("kamera");
       setPesan(null);
+      const st = s.getVideoTracks()[0]?.getSettings();
+      void kenaliKamera(`kamera:${st?.deviceId ?? "?"}:${st?.width ?? 0}x${st?.height ?? 0}`);
     } catch {
       setPesan({ jenis: "galat", teks: t.kameraGagal });
     }
@@ -240,6 +303,10 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
             <input type="file" accept="video/*" className="sr-only" data-testid="pilih-video" onChange={(e) => pilihBerkas(e.target.files?.[0])} />
           </label>
           <Tombol ragam="kedua" onClick={pakaiKamera} disabled={pantau}>{t.pakaiKamera}</Tombol>
+          {sumber && sidik && !dikenal && !denahDraf ? (
+            <Tombol ragam="kedua" onClick={usulkanDenah} disabled={pantau || belajar} data-testid="usul-denah">{t.usulDenah}</Tombol>
+          ) : null}
+          {denahDraf ? <Tombol onClick={setujuiDraf} disabled={pantau} data-testid="setujui-denah">{t.setujuiDenah}</Tombol> : null}
         </div>
         <video ref={video} muted playsInline className="hidden" onLoadedData={gambar} onSeeked={gambar} onTimeUpdate={gambar} />
         {sumber ? (

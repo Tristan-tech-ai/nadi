@@ -1043,6 +1043,7 @@ export const kamusId = {
     galatDb: "{pesan}",
   },
   mata: {
+    usulDenah: "Usulkan zona dari bingkai", belajarDenah: "Nadi sedang mempelajari format baru, sekali saja. Bingkai dikecilkan dan dikaburkan di perangkat ini dulu.", denahDikenal: "Denah kamera ini sudah dikenal. Zona dimuat tanpa AI.", denahDraf: "Periksa zona usulan, lalu setujui. Zona bisa diubah setelahnya.", setujuiDenah: "Setujui denah kamera ini",
     judul: "Mata",
     ket: "Kamera tablet atau rekaman video membaca meja mana yang terisi dan berapa orang mengantre. Semua dihitung di perangkat ini; gambar tidak pernah dikirim.",
     tanpaIzin: "Mata hanya untuk pemilik atau admin usaha.",
@@ -1089,6 +1090,7 @@ export const kamusId = {
     belumPerubahan: "Belum ada perubahan. Nadi hanya mencatat saat meja berganti terisi atau kosong, atau jumlah antrean berubah.",
   },
   mataPesan: {
+    denahDitolak: "Zona usulan tidak lolos pemeriksaan. Gambar zona sendiri di bawah.",
     hanya: "Hanya pemilik atau admin yang memakai Mata.",
     gagal: "Nadi gagal menyimpan. Coba lagi sebentar; zona yang kamu gambar tidak hilang.",
     galatDb: "{pesan}",
