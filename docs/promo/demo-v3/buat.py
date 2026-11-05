@@ -248,7 +248,33 @@ def bangun():
     f.add(f'tl.fromTo("#stab5", {{scaleX: 0}}, {{scaleX: 1, duration: 0.4, ease: "power2.out"}}, {TN + 1.1:.3f});')
     f.add(f'tl.to("#notif5", {{opacity: 0, duration: 0.3}}, {TN + 3.4:.3f});')
 
-    durasi = 46.0
+    # ---------- Babak 7 Mata (46 - 58 dtk): footage CCTV PLACEHOLDER, lalu peta panas asli ----------
+    T7 = 46.0
+    k7, s7 = f.ketik("k7", "Kamera menghitung. Wajah tidak disimpan.", T7 + 0.2, cps=30)
+    pp = U["peta-panas"]
+    S7 = 1.5
+    PX, PY = W / 2 - pp["lebar"] * S7 / 2, -pp["svg"]["y"] * S7 + 80
+    isi7 = (f'<div class="kal" id="b7t" style="top:480px">{k7}</div>'
+            f'<div id="b7v" style="position:absolute; left:240px; top:120px; width:1440px; height:810px; background:#2A2925; border-radius:14px; opacity:0; overflow:hidden">'
+            '<div class="ph" style="left:40px; top:40px; background:#2A2925; color:#F0B53D; border-color:#F0B53D">PLACEHOLDER: footage CCTV toko asli berlisensi bebas (V-04), dengan pelacakan Mata v2 (V-12 dirancang ulang)</div>'
+            '<div style="position:absolute; right:40px; bottom:36px; color:#ECE7DD; font-size:34px; font-weight:700" id="hit7">Masuk 0 &middot; Keluar 0</div></div>'
+            f'<div id="b7k" class="kam" style="opacity:0"><div class="jendela" style="left:{PX - 30}px; top:60px; width:{pp["lebar"] * S7 + 60}px; height:960px"></div>'
+            f'<div style="position:absolute; left:{PX}px; top:{PY}px; transform:scale({S7}); transform-origin:0 0">{frag("peta-panas")}</div></div>')
+    f.adegan("b7", T7, 58.0, isi7, z=7)
+    f.add(f'tl.set("#k7-c", {{opacity: 1}}, {T7 + 0.2});')
+    T7b = s7 + 0.8
+    f.add(f'tl.set("#b7t", {{opacity: 0}}, {T7b:.3f});')
+    f.add(f'tl.set("#b7v", {{opacity: 1}}, {T7b:.3f});')
+    for i in range(1, 12):  # hitungan sesuai jawaban korpus Mata (11 masuk, 11 keluar) sampai footage asli terpasang
+        f.add(f'tl.set("#hit7", {{textContent: "Masuk {i} · Keluar {max(0, i - 1)}"}}, {T7b + 0.35 * i:.3f});')
+    T7c = T7b + 4.6
+    f.add(f'tl.to("#b7v", {{opacity: 0, duration: 0.3}}, {T7c:.3f});')
+    f.add(f'tl.set("#b7k", {{opacity: 1}}, {T7c:.3f});')
+    ax, ay = PX + (pp["antrean"]["x"] + pp["antrean"]["w"] / 2) * S7, PY + (pp["antrean"]["y"] + pp["antrean"]["h"] / 2) * S7
+    f.add(f'tl.set("#b7k", {json.dumps(kamera(ax, ay, 1.9))}, {T7c:.3f});')
+    f.add(f'tl.to("#b7k", {{x: 0, y: 0, scale: 1, duration: {44 / FPS:.3f}, ease: MUNDUR}}, {T7c + 0.8:.3f});')
+
+    durasi = 58.0
     css = open(os.path.join(AKAR, "gaya.css"), encoding="utf8").read()
     html = f"""<!doctype html>
 <html lang="id">

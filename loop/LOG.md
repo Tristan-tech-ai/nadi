@@ -321,3 +321,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 2026-11-06 tick 301 | T-01B done (struk belajar, token 0 di struk ke-4); gate jejak konteks produk; video dibuka ulang atas penilaian Tristan, V-13 dipecah per video rujukan |
 | 2026-11-06 tick 301 selesai | 5 wajib: T-01B, V-13A, V-13B, V-13C, V-13H (bedah rujukan bingkai demi bingkai dan bunyi demi bunyi); wajib 194/218, V 5/21 |
 | 2026-11-06 tick 302 | done V-13D/E/F/G/I, V-13, V-03, V-10: 8 rujukan dibedah, pola lintas GERAK.md, uji gerak berdampingan (kurva cocok, rasa belum) |
+| 2026-11-06 tick 303 | video demo v3 dimulai (perintah Tristan): V-07A kait+masalah, V-07B Lempar, V-07C Feed+cap, V-07D tagihan QRIS, V-07E Mata placeholder; 58 dtk dirender dan ditinjau |
