@@ -6,7 +6,7 @@ import { cariFitur } from "@/lib/cari-fitur";
 import { teksCari } from "@/lib/cari-teks";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { bahasaAplikasi } from "@/lib/i18n/server";
-import { ruangSesi } from "@/lib/ruang-sesi";
+import { ruangDanMati } from "@/lib/ruang-sesi";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
@@ -17,14 +17,16 @@ export const metadata: Metadata = { title: "Semua menu" };
 async function Isi({ searchParams }: { searchParams: PageProps<"/app/menu">["searchParams"] }) {
   const sesi = await wajibPerusahaan();
   const b: Bahasa = await bahasaAplikasi(sesi.bahasa);
-  const ruang = await ruangSesi(sesi.peran);
+  const { ruang, mati } = await ruangDanMati(sesi.peran, sesi.perusahaanId);
+  const kelola = sesi.peran === "pemilik" || sesi.peran === "admin";
   const tc = teksCari(b);
   const sp = await searchParams;
   const q = typeof sp.q === "string" ? sp.q.slice(0, 80) : "";
-  const boleh = new Set(ruang.flatMap((r) => r.halaman.map((x) => x.href)));
+  const boleh = new Set([...ruang, ...mati].flatMap((r) => r.halaman.map((x) => x.href)));
+  const hrefMati = new Set(mati.flatMap((r) => r.halaman.map((x) => x.href)));
   const hasil = q.trim().length >= 2 ? cariFitur(q, sesi.peran, b, 8, boleh) : null;
-  const nama = Object.fromEntries(ruang.map((r) => [r.id, r.label[b]]));
-  const jumlah = boleh.size;
+  const nama = Object.fromEntries([...mati, ...ruang].map((r) => [r.id, r.label[b]]));
+  const jumlah = boleh.size - hrefMati.size;
   const en = b === "en";
   return (
     <div lang={b}>
@@ -47,7 +49,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/menu">["sea
             <ul className="mt-2 grid gap-1">{hasil.map((x) => (
               <li key={x.href}>
                 <Link href={x.href} className="block rounded-[var(--radius-isian)] border border-garis px-3 py-2 hover:bg-kertas-2">
-                  <span className="flex items-baseline justify-between gap-3"><span className="font-semibold">{x.label[b]}</span><span className="text-xs text-tinta-2">{nama[x.ruang]}</span></span>
+                  <span className="flex items-baseline justify-between gap-3"><span className="font-semibold">{x.label[b]}</span><span className="text-xs text-tinta-2">{hrefMati.has(x.href) ? tc.tidakDiMenu : nama[x.ruang]}</span></span>
                   <span className="block text-sm text-tinta-2">{x.guna[b]}</span>
                 </Link>
               </li>))}</ul>
@@ -68,6 +70,22 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/menu">["sea
           </section>
         ))}
       </div>
+      {mati.length > 0 && (
+        <section aria-labelledby="menu-mati" className="mt-4 max-w-2xl border-t border-garis pt-6" data-testid="menu-mati">
+          <h2 id="menu-mati" className="text-base font-bold">{en ? "Not in your menu" : "Tidak di menu usahamu"}</h2>
+          <p className="mt-1 text-sm text-tinta-2">
+            {en ? "These features are usually not needed for your kind of business. They still work." : "Fitur ini biasanya tidak dipakai jenis usahamu. Tetap bisa dibuka."}{" "}
+            {kelola && <Link href="/app/perusahaan#fitur" className="font-semibold text-tinta underline underline-offset-4">{en ? "Show them in the menu" : "Tampilkan di menu"}</Link>}
+          </p>
+          <ul className="mt-2">{mati.flatMap((r) => r.halaman).map((x) => (
+            <li key={x.href} className="border-b border-garis/60 last:border-b-0">
+              <Link href={x.href} className="block rounded-[var(--radius-isian)] px-2 py-2 hover:bg-kertas-2">
+                <span className="font-semibold">{x.label[b]}</span>
+                <span className="block text-sm text-tinta-2">{x.guna[b]}</span>
+              </Link>
+            </li>))}</ul>
+        </section>
+      )}
     </div>
   );
 }

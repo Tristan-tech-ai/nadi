@@ -85,7 +85,7 @@ function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih }: 
   );
 }
 
-export function Kerangka({ ruang, peran, bahasa: b, teks }: { ruang: Ruang[]; peran: string; bahasa: Bahasa; teks: Teks }) {
+export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks }: { ruang: Ruang[]; mati?: Ruang[]; peran: string; bahasa: Bahasa; teks: Teks }) {
   const jalur = usePathname();
   const [menu, setMenu] = useState(false);
   const [panel, setPanel] = useState<string | null>(null);
@@ -172,7 +172,7 @@ export function Kerangka({ ruang, peran, bahasa: b, teks }: { ruang: Ruang[]; pe
           <div className="mt-4"><DaftarRuang ruang={ruang} jalur={jalur} b={b} guna onPilih={() => setMenu(false)} /></div>
         </div>
       )}
-      <DialogCari ruang={ruang} peran={peran} bahasa={b} teks={teks.cari} />
+      <DialogCari ruang={ruang} mati={mati} peran={peran} bahasa={b} teks={teks.cari} />
     </>
   );
 }

@@ -23,3 +23,13 @@ export async function simpanAturanKerja(_: HasilAturanKerja, form: FormData): Pr
   revalidatePath("/app/gaji");
   return { pesan: isiTeks(t.tersimpan, { hari: POLA_KERJA[pola].hari }), pola };
 }
+
+/** U-06: pemilik/admin menampilkan atau menyembunyikan satu modul fitur di menu (RPC set_feature_module memeriksa peran). */
+export async function aturModulFitur(form: FormData): Promise<void> {
+  const kode = String(form.get("modul") ?? "");
+  const nyala = form.get("nyala") === "ya";
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("set_feature_module", { p_module: kode, p_on: nyala });
+  if (error) throw new Error(error.code === "42501" ? "Khusus pemilik atau admin" : "Pilihan fitur gagal disimpan");
+  revalidatePath("/app", "layout");
+}

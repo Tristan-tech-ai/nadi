@@ -3589,8 +3589,10 @@
    "accept": "tombol Masuk dengan Google di /masuk dan /daftar (signInWithOAuth, kembali ke /auth/konfirmasi); bila provider belum dinyalakan tombol menjelaskan dengan jujur; e2e tombol dan rute balik; konfigurasi Site URL/Redirect URLs dan klien Google dicatat di UNTUK-TRISTAN",
    "how": "docs.supabase.com auth redirect URLs (dibaca saat dikerjakan)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T17:30:59"
+   "status": "done",
+   "created": "2026-11-05T17:30:59",
+   "done": "2026-11-05T19:36:13",
+   "result": "023b648; server action masukGoogle (signInWithOAuth PKCE, redirectTo /auth/konfirmasi), status penyedia dari /auth/v1/settings (sekarang google=false -> kalimat jujur), e2e/masuk-google.spec.ts produksi lulus (390/1440 terang/gelap axe 0, rute balik kode palsu -> /masuk?galat=tautan, next luar ditolak); cabang tombol aktif belum teruji nyata sampai Tristan menyalakan Google (UNTUK-TRISTAN)"
   },
   {
    "id": "U-08",

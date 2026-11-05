@@ -23,9 +23,9 @@ export function TombolCari({ label }: { label: string }) {
   );
 }
 
-export type TeksCari = { judul: string; isian: string; petunjuk: string; kosong: string; semuaMenu: string; tutup: string; hasil: string };
+export type TeksCari = { judul: string; isian: string; petunjuk: string; kosong: string; semuaMenu: string; tutup: string; hasil: string; tidakDiMenu: string };
 
-export function DialogCari({ ruang, peran, bahasa: b, teks }: { ruang: Ruang[]; peran: string; bahasa: Bahasa; teks: TeksCari }) {
+export function DialogCari({ ruang, mati = [], peran, bahasa: b, teks }: { ruang: Ruang[]; mati?: Ruang[]; peran: string; bahasa: Bahasa; teks: TeksCari }) {
   const router = useRouter();
   const [buka, setBuka] = useState(false);
   const [kata, setKata] = useState("");
@@ -34,8 +34,10 @@ export function DialogCari({ ruang, peran, bahasa: b, teks }: { ruang: Ruang[]; 
   const lembar = useRef<HTMLDialogElement>(null);
   const pemicu = useRef<Element | null>(null);
   const idDaftar = useId();
-  const boleh = useMemo(() => new Set(ruang.flatMap((r) => r.halaman.map((x) => x.href))), [ruang]);
-  const namaRuang = useMemo(() => Object.fromEntries(ruang.map((r) => [r.id, r.label[b]])), [ruang, b]);
+  // U-06: halaman modul yang dimatikan tetap bisa dicari, ditandai "tidak di menu".
+  const hrefMati = useMemo(() => new Set(mati.flatMap((r) => r.halaman.map((x) => x.href))), [mati]);
+  const boleh = useMemo(() => new Set([...ruang.flatMap((r) => r.halaman.map((x) => x.href)), ...hrefMati]), [ruang, hrefMati]);
+  const namaRuang = useMemo(() => Object.fromEntries([...mati, ...ruang].map((r) => [r.id, r.label[b]])), [ruang, mati, b]);
   const hasil = useMemo(() => cariFitur(kata, peran, b, 8, boleh), [kata, peran, b, boleh]);
 
   useEffect(() => {
@@ -100,7 +102,7 @@ export function DialogCari({ ruang, peran, bahasa: b, teks }: { ruang: Ruang[]; 
                     className={`cursor-pointer rounded-[var(--radius-isian)] px-3 py-2 ${i === sorot ? "bg-kertas-2" : ""}`}>
                     <span className="flex items-baseline justify-between gap-3">
                       <span className="font-semibold text-tinta">{x.label[b]}</span>
-                      <span className="shrink-0 text-xs text-tinta-2">{namaRuang[x.ruang]}</span>
+                      <span className="shrink-0 text-xs text-tinta-2">{hrefMati.has(x.href) ? teks.tidakDiMenu : namaRuang[x.ruang]}</span>
                     </span>
                     <span className="block text-sm text-tinta-2">{x.guna[b]}</span>
                   </li>

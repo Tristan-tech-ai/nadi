@@ -4,7 +4,7 @@ import { keluar } from "@/app/auth-actions";
 import { Kerangka } from "@/components/app/kerangka";
 import { TombolCari } from "@/components/app/cari-fitur";
 import { teksCari } from "@/lib/cari-teks";
-import { ruangSesi } from "@/lib/ruang-sesi";
+import { ruangDanMati } from "@/lib/ruang-sesi";
 import { PemilihBahasaApp } from "@/components/app/pemilih-bahasa-app";
 import { TandaNadi } from "@/components/ui/logo";
 import { ambilKamus } from "@/lib/i18n/kamus";
@@ -63,9 +63,9 @@ async function Navigasi() {
   const sesi = await bacaSesi();
   if (!sesi?.peran) return null;
   const bahasa = await bahasaAplikasi(sesi.bahasa);
-  const ruang = await ruangSesi(sesi.peran);
+  const { ruang, mati } = await ruangDanMati(sesi.peran, sesi.perusahaanId);
   const en = bahasa === "en";
-  return <Kerangka ruang={ruang} peran={sesi.peran} bahasa={bahasa}
+  return <Kerangka ruang={ruang} mati={mati} peran={sesi.peran} bahasa={bahasa}
     teks={{ navUtama: ambilKamus(bahasa).aplikasi.navUtama, menu: "Menu", tutup: en ? "Close" : "Tutup", semuaMenu: en ? "All menus" : "Semua menu",
       peta: en ? "All menus, with what each does" : "Semua menu dan gunanya", cari: teksCari(bahasa) }} />;
 }

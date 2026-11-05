@@ -19,6 +19,8 @@ import { bahasaAplikasi } from "@/lib/i18n/server";
 import { createClient } from "@/lib/supabase/server";
 import { wajibSesi } from "@/lib/sesi";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
+import { FiturDipakai } from "@/components/app/fitur-dipakai";
+import { fiturUsaha } from "@/lib/ruang-sesi";
 
 export const metadata: Metadata = { title: "Usahamu" };
 
@@ -59,6 +61,15 @@ async function Daftar() {
       ))}
     </ul>
   );
+}
+
+async function BagianFitur() {
+  const sesi = await wajibSesi();
+  if (!sesi.perusahaanId || (sesi.peran !== "pemilik" && sesi.peran !== "admin")) return null;
+  const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
+  const supabase = await createClient();
+  const [nyala, { data }] = await Promise.all([fiturUsaha(sesi.perusahaanId), supabase.from("perusahaan").select("industri").eq("id", sesi.perusahaanId).maybeSingle()]);
+  return <div lang={bahasa}><FiturDipakai nyala={nyala} paket={(data as { industri: string | null } | null)?.industri ?? null} bahasa={bahasa} /></div>;
 }
 
 async function BagianPemberitahuan() {
@@ -106,6 +117,9 @@ export default function Perusahaan() {
       </Suspense>
       <Suspense fallback={<div className="mt-6 h-12 animate-pulse rounded-[var(--radius-isian)] bg-kertas-2" aria-hidden />}>
         <Tautan />
+      </Suspense>
+      <Suspense fallback={<div className="mt-10 h-96 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+        <BagianFitur />
       </Suspense>
       <Suspense fallback={<div className="mt-10 h-28 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <BagianPemberitahuan />
