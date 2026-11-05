@@ -2754,8 +2754,8 @@
    "title": "Konektor marketplace TikTok Shop dan Shopee: pesanan harian jadi usulan penjualan",
    "accept": "baca dokumentasi resmi dulu (LEARN.md); OAuth toko; tarik pesanan sandbox jadi usulan; tes; akun mitra dicatat di UNTUK-TRISTAN bila belum ada",
    "how": "docs/research/integrasi-aplikasi.md",
-   "blocked_by": "",
-   "status": "ready",
+   "blocked_by": "butuh akun developer Shopee Open Platform (partner_id/partner_key test) dan app TikTok Shop Partner Center (app_key/app_secret) atas nama usaha Tristan; dokumentasi penandatanganan resmi dirender JavaScript/tidak bisa diambil dan sandbox hanya terbuka setelah akun ada (UNTUK-TRISTAN 6 Nov 2026)",
+   "status": "blocked",
    "created": "2026-11-04T19:07:20"
   },
   {
@@ -3137,8 +3137,10 @@
    "accept": "korpus ekspor sintetis berformat kolom dari dokumentasi publik; e2e impor",
    "how": "docs/research/mekari/rencana.md; menutup JU-26, LA-06; isi: Pindah dari aplikasi lain: Lempar ekspor Excel Mekari Talenta/Jurnal dan aplikasi umum lain (karyawan, bagan akun, saldo awal, kontak, produk, invoice terbuka) jadi usulan impor; ekspor semua data Nadi; program rujukan mitra akuntan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T17:09:10",
+   "result": "8106cda; migrasi 20261105095000_pindah md5 a06c8472 sama; korpus fixtures/korpus/pindah (kolom template Akun/COA, Kontak, Penagihan Penjualan dari help-center.jurnal.id + karyawan/produk umum) diuji src/lib/pindah/format.test.ts 9/9; supabase/tests/pindah.test.sql 15/15 (saldo awal seimbang, kas 21.250.000 tanpa piutang/persediaan, isolasi); e2e/pindah.spec.ts lokal + produksi (kontak Jurnal + produk XLSX diunggah, disetujui di Feed, ada di Nadi; unduh semua data 12 lembar). Invoice terbuka, jurnal umum, rujukan mitra dipindah ke M-24B"
   },
   {
    "id": "M-25",
