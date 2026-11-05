@@ -91,7 +91,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | JU-26 | Impor/ekspor data, migrasi dari aplikasi lain | Beranda/Migrasi Data; Daftar Lainnya/Daftar Import dan Ekspor; Penjualan/Mengimpor Template | Lempar Excel/CSV | SEBAGIAN: impor COA, saldo awal, kontak, produk, ekspor semua data | M-24 |
 | JU-27 | Konsolidasi beberapa perusahaan | Aplikasi/Konsolidasi; Integrasi/Jurnal Consolidation | konsolidasi 2 sampai 10 usaha milik pemilik yang sama (neraca + laba rugi), transaksi antarusaha (jual, pinjam, bayar) dicatat di dua usaha dan dieliminasi (M-08) | SEBAGIAN: kepemilikan sebagian (minoritas) dan valuta berbeda antarusaha belum | M-08 |
 | JU-28 | Jurnal Mobile | Jurnal Apps/Jurnal Mobile | PWA | ADA | - |
-| JU-29 | Asisten AI (Airene): analisis laporan, tanya data | Beranda/Mekari Airene | MCP (AI milik pengguna), Sarapan Data | SEBAGIAN: tanya data di dalam aplikasi | M-22 |
+| JU-29 | Asisten AI (Airene): analisis laporan, tanya data | Beranda/Mekari Airene | MCP (AI milik pengguna), Sarapan Data, /app/tanya (M-22): 13 jenis pertanyaan angka dijawab dari sumber laporan dengan tautan, tanpa model | SEBAGIAN: analisis bebas dan pertanyaan gabungan lewat AI pengguna (MCP), belum di dalam aplikasi | M-22 |
 | JU-30 | Mekari Pay: terima pembayaran (VA, QRIS dinamis, kartu), bayar supplier, saldo | Mekari Pay/* | QRIS statis pemilik, transfer, tunai; mutasi masuknya dicocokkan di /app/kas | MITRA (PJP berizin BI); sambung payment gateway milik pemilik belum diriset | M-05 |
 | JU-31 | Jurnal Touch (POS), Jurnal Channel (marketplace), App Store, integrasi software lain | Integrasi/* | MCP, pintu data W-08, kasir /app/kasir (M-19) | SEBAGIAN: POS ADA, marketplace MITRA | M-19, W-08, W-09 |
 | JU-32 | Landed cost | tabel paket Jurnal 360 | jurnal PIB (bea, PPh 22, PPN impor) | SEBAGIAN: alokasi biaya ke harga pokok barang | M-02 |
@@ -181,7 +181,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | LA-08 | Desty: omnichannel commerce marketplace | halaman /produk/desty/ | tidak ada | MITRA (API marketplace) | W-09 |
 | LA-09 | Pay: gerbang pembayaran | halaman /produk/pay/ | QRIS statis | MITRA (PJP) | M-05 |
 | LA-10 | Flow: otomasi antaraplikasi | halaman /produk/flow/ | MCP, pintu data masuk W-08, webhook keluar bertanda HMAC dari alur M-20 | ADA (konektor siap pakai per aplikasi belum, lewat n8n/Make/Zapier) | W-08, M-20 |
-| LA-11 | Airene: asisten AI | halaman /produk/airene/ | MCP, Sarapan Data | SEBAGIAN | M-22 |
+| LA-11 | Airene: asisten AI | halaman /produk/airene/ | MCP, Sarapan Data, tanya data /app/tanya (M-22) | SEBAGIAN: percakapan bebas di dalam aplikasi belum | M-22 |
 | LA-12 | Rilis produk, panduan, video (umum) | General/*; Video | /panduan | ADA | - |
 | LA-13 | Mekari University, Community, Event, Payroll Service | halaman umum | tidak relevan | LUAR | - |
 

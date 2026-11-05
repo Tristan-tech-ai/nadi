@@ -3073,8 +3073,10 @@
    "accept": "tes SQL batas laju dan isolasi; e2e alur sederhana",
    "how": "docs/research/mekari/rencana.md; menutup QO-11, LA-04, LA-10, SI-05; isi: Pembuat alur: pemicu (kejadian Nadi), syarat, aksi (buat usulan, push, ubah status, panggil webhook keluar), formulir kustom; memakai W-08",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T16:33:15",
+   "result": "330f87e; migrasi 20261105093000_alur md5 5bfbfe7e sama; supabase/tests/alur.test.sql 23/23 (batas laju 3 jalan + 2 dibatasi, tanpa rekursi, URL webhook publik saja, rahasia tak terbaca, aksi gagal tercatat, isolasi); e2e/otomasi.spec.ts lokal + produksi (formulir parah jadi kartu Feed, ringan tidak); e2e/alur.spec.ts lama tetap lulus"
   },
   {
    "id": "M-21",
