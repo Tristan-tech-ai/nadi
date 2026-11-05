@@ -20,7 +20,7 @@ for (const [nama, sel] of Object.entries(TARGET)) {
   const frag = readFileSync(join(APP, `${nama}.html`), "utf8");
   const lebar = readFileSync(join(APP, `${nama}.png`)).readUInt32BE(16);
   const sem = join(APP, "_ukur3.html");
-  writeFileSync(sem, `<!doctype html><html lang="id"><head><link rel="stylesheet" href="app.css"></head><body style="margin:0"><div class="app" id="w" style="width:${lebar}px">${frag}</div></body></html>`);
+  writeFileSync(sem, `<!doctype html><html lang="id"><head><link rel="stylesheet" href="${process.env.CSS3 ?? "app.css"}"></head><body style="margin:0"><div class="app" id="w" style="width:${lebar}px">${frag}</div></body></html>`);
   await p.goto("file:///" + sem.replaceAll("\\", "/"));
   await p.evaluate(() => document.fonts.ready);
   await p.waitForTimeout(300);

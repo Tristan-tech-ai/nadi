@@ -15,6 +15,10 @@ U = json.load(open(os.path.join(AKAR, "..", "film-langsung", "ukur.json"), encod
 U.update(json.load(open(os.path.join(AKAR, "ukur.json"), encoding="utf8")))  # ukuran v3 menimpa yang lama
 for d in ["app", "fonts", "berkas"]:
     shutil.copytree(os.path.join(SUMBER, d), os.path.join(AKAR, "assets", d), dirs_exist_ok=True)
+# CSS aplikasi terbaru (node css.mjs) menimpa salinan lama D-28 supaya kelas tata letak baru ikut (CATATAN: tinjau-draf bertumpuk).
+if os.path.exists(os.path.join(AKAR, "css", "app.css")):
+    shutil.copy(os.path.join(AKAR, "css", "app.css"), os.path.join(AKAR, "assets", "app", "app.css"))
+    shutil.copytree(os.path.join(AKAR, "css", "media"), os.path.join(AKAR, "assets", "app", "media"), dirs_exist_ok=True)
 
 # Kurva tarik mundur rujukan 8: ease-out dengan awalan lembut (puncak kecepatan ~30%), lihat UJI-GERAK.md.
 EASE_JS = """
@@ -342,7 +346,7 @@ def bangun():
     gel = "".join(f'<div class="cb {k}" id="c3-{i}">{t}</div>' for i, (k, t, _) in enumerate(CHAT))
     isi3 = (f'<div class="kal" id="b3t" style="top:480px">{k3a}</div>'
             f'<div id="b3c" class="chat" style="opacity:0"><div class="chat-kepala">AI-mu &middot; tersambung ke Nadi lewat MCP</div>'
-            f'<div class="chat-isi" id="c3isi">{gel}</div><div class="chat-tulis">Tulis pesan&hellip;</div></div>')
+            f'<div class="chat-jendela"><div class="chat-isi" id="c3isi">{gel}</div></div><div class="chat-tulis">Tulis pesan&hellip;</div></div>')
     f.adegan("b3", T3, T3 + 19.0, isi3, z=3)
     f.add(f'tl.set("#k3a-c", {{opacity: 1}}, {T3 + 0.2});')
     f.add(f'tl.set("#b3t", {{opacity: 0}}, {s3a + 0.9:.3f});')
@@ -357,11 +361,11 @@ def bangun():
     S3 = 1.0
     OYT = 60
     isi3b = (f'<div id="b3k" class="kam"><div class="jendela" data-layout-allow-overflow style="left:200px; top:40px; width:1520px; height:1000px">'
-             f'<div class="isi" id="td" data-layout-allow-overflow style="left:-28px; top:{-OYT}px">{frag("tinjau-draf")}</div></div>'
+             f'<div class="isi" id="td" data-layout-allow-overflow style="left:-296px; top:{-OYT}px">{frag("tinjau-draf")}</div></div>'
              f'<div class="notif" id="n3" style="left:1180px; top:80px"><b>10 baris diterapkan.</b><br>Bisa dibatalkan selama 10 menit.</div></div>')
     f.adegan("b3b", T3b, T3b + 29.0, isi3b, z=3)
     def tdp(r, fy=0.5):
-        return 200 - 28 + r["x"] + r["w"] / 2, 40 - OYT + r["y"] + r["h"] * fy
+        return 200 - 296 + r["x"] + r["w"] / 2, 40 - OYT + r["y"] + r["h"] * fy
     rx, ry = tdp(td["ringkas"])
     f.add(f'tl.set("#b3k", {json.dumps(kamera(rx, ry + 120, 1.6))}, {T3b});')
     f.add(f'tl.to("#b3k", {{x: 0, y: 0, scale: 1, duration: {44 / FPS:.3f}, ease: MUNDUR}}, {T3b + 2.2:.3f});')
