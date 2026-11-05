@@ -213,6 +213,10 @@ def main(a):
     elif c == "progress":
         n, w, pct = progress(d)
         print(f"WAJIB SELESAI {n}/{w} = {pct:.1f}%")
+        # Grup terpisah (Tristan 6 Nov 2026): video demo dan halaman produk (fase V) dilaporkan tersendiri.
+        gv, wv, pv = progress({"tasks": [t for t in d["tasks"] if t["fase"] == "V"]})
+        if wv:
+            print(f"GRUP VIDEO (V) {gv}/{wv} = {pv:.1f}%")
     return 0
 
 
