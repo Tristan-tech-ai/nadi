@@ -3979,8 +3979,10 @@
    "accept": "kalimat yang tidak cocok niat bawaan (dan bukan pertanyaan pendapat) dikirim ke Edge Function pelajari-tanya: model ringan (naik ke berat bila ragu, ID dari konfigurasi model_ai) memilih satu dari 13 niat tetap dan kata kunci yang ada di kalimat; pengawas bukan AI memeriksa kata (huruf saja, 1-3 kata, ada di kalimat, bukan kata tolak) dan mencoba ulang pengurai dengan aturan itu (harus menghasilkan niat yang sama) sebelum menyimpan ke tanya_aturan berstatus bayangan; bayangan dibandingkan dengan model sampai cocok 2 kali lalu aktif (constraint database), beda sekali mati; layar menulis 'Nadi sedang mempelajari format baru, sekali saja'; aturan bersama hanya kata dan niat tanpa angka/data (tes SQL); eval e2e: kalimat yang sama setelah aturan aktif dijawab dengan token 0",
    "how": "src/lib/tanya/urai.ts, supabase/functions/baca-berkas/pengawas.ts (pola), konfigurasi model_ai",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T23:55:24"
+   "status": "done",
+   "created": "2026-11-05T23:55:24",
+   "done": "2026-11-06T00:07:08",
+   "result": "7dc1c6c; migrasi tanya_aturan md5 2dd47189 sama, tes SQL 15/15, Edge Function pelajari-tanya v1 (pengawas + salinan urai diuji identik), salinan.test 9/9; e2e tanya-belajar produksi: model 56 token x3 (belajar + 2 bayangan) lalu aturan token 0; tanya.spec produksi lulus; insiden: satu aturan sempat tercatat di Toko Bu Sari karena 2 spec akun B paralel, dimatikan dengan alasan"
   },
   {
    "id": "T-01B",
