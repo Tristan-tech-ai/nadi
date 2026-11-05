@@ -11,7 +11,8 @@ AKAR = os.path.dirname(os.path.abspath(__file__))
 SUMBER = os.path.join(AKAR, "..", "film-langsung", "assets")
 FPS = 30
 W, H = 1920, 1080
-U = json.load(open(os.path.join(AKAR, "ukur.json"), encoding="utf8"))
+U = json.load(open(os.path.join(AKAR, "..", "film-langsung", "ukur.json"), encoding="utf8"))
+U.update(json.load(open(os.path.join(AKAR, "ukur.json"), encoding="utf8")))  # ukuran v3 menimpa yang lama
 for d in ["app", "fonts", "berkas"]:
     shutil.copytree(os.path.join(SUMBER, d), os.path.join(AKAR, "assets", d), dirs_exist_ok=True)
 
@@ -50,9 +51,9 @@ class Film:
 
     def ketik(self, sid, teks, t0, cps=26, gaya=""):
         """Teks diketik per huruf (span per huruf diberi opacity 1 pada waktunya) dengan kursor teks; kembalikan (html, t_selesai)."""
-        span = "".join(f'<span class="h" id="{sid}-{i}" style="opacity:0">{"&nbsp;" if c == " " else c}</span>' for i, c in enumerate(teks))
+        span = "".join(f'<span class="h" id="{sid}-{i}" style="display:none">{"&nbsp;" if c == " " else c}</span>' for i, c in enumerate(teks))
         for i in range(len(teks)):
-            self.add(f'tl.set("#{sid}-{i}", {{opacity: 1}}, {t0 + i / cps:.3f});')
+            self.add(f'tl.set("#{sid}-{i}", {{display: "inline"}}, {t0 + i / cps:.3f});')
         return f'<span id="{sid}" style="{gaya}">{span}<span class="caret" id="{sid}-c"></span></span>', t0 + len(teks) / cps
 
 
@@ -130,7 +131,42 @@ def bangun():
     for i in range(len(ser)):
         f.add(f'tl.to("#bk{i}", {{y: -14, duration: 6, ease: "none"}}, {T1 + 1:.2f});')
 
-    durasi = 16.0
+    # ---------- Babak 2 Nadi muncul + Lempar (16 - 26 dtk) ----------
+    T2 = 16.0
+    k3, s3 = f.ketik("k3", "Lempar berkasnya. Nadi yang merapikan.", T2 + 0.25, cps=30)
+    lk, lm, ls_ = U["lempar-kosong"], U["lempar-membaca"], U["lempar-siap"]
+    ar = lk["area"]
+    # Area Lempar di bingkai: potongan 1440 lebar ditaruh sehingga area di tengah; kamera dekat 2,0x ke area.
+    LX, LY = W / 2 - (ar["x"] + ar["w"] / 2), H / 2 - (ar["y"] + ar["h"] / 2)
+    jatuh = [("nota.png", -420, -160, 230), ("absen.png", 2100, -200, 250), ("slip.png", -380, 1250, 230), ("invoice.png", 2150, 1200, 250)]
+    bks2 = "".join(f'<div class="bks" id="j{i}" style="left:{x}px; top:{y}px; width:{w}px; opacity:1"><img src="assets/berkas/{n}" alt=""></div>'
+                   for i, (n, x, y, w) in enumerate(jatuh))
+    isi2 = (f'<div class="kal" id="b2t" style="top:480px">{k3}</div>'
+            f'<div id="b2k" class="kam" style="opacity:0"><div style="position:absolute; left:{LX}px; top:{LY}px">{frag("lempar-kosong")}</div>'
+            f'<div class="kotak" id="ar" style="left:{W / 2 - ar["w"] / 2 - 6}px; top:{H / 2 - ar["h"] / 2 - 6}px; width:{ar["w"] + 12}px; height:{ar["h"] + 12}px; border-color:#E9A825"></div>{bks2}</div>')
+    f.adegan("b2", T2, T2 + 4.2, isi2, z=3)
+    f.add(f'tl.set("#k3-c", {{opacity: 1}}, {T2 + 0.25});')
+    T2b = s3 + 0.9
+    f.add(f'tl.set("#b2t", {{opacity: 0}}, {T2b:.3f});')
+    f.add(f'tl.set("#b2k", {{opacity: 1}}, {T2b:.3f});')
+    f.add(f'tl.set("#b2k", {json.dumps(kamera(W / 2, H / 2, 2.2))}, {T2b:.3f});')
+    for i, (n, x, y, w) in enumerate(jatuh):
+        tx, ty = W / 2 - w / 2 + (i - 1.5) * 40, H / 2 - 60
+        f.add(f'tl.to("#j{i}", {{x: {round(tx - x)}, y: {round(ty - y)}, rotation: {(-1) ** i * 6}, scale: 0.55, duration: 0.5, ease: "power2.in"}}, {T2b + 0.15 + i * 0.22:.3f});')
+        f.add(f'tl.to("#j{i}", {{opacity: 0, scale: 0.35, duration: 0.18, ease: "power1.in"}}, {T2b + 0.65 + i * 0.22:.3f});')
+    f.add(f'tl.fromTo("#ar", {{opacity: 0}}, {{opacity: 1, duration: 0.12, yoyo: true, repeat: 3}}, {T2b + 0.6:.3f});')
+    # Membaca lalu Siap ditinjau: daftar Lempar asli 576 lebar, jendela mengisi ~70% tinggi bingkai (1,45x).
+    T2c = T2 + 4.2
+    MS = 1.45
+    isi2b = (f'<div id="b2m" class="kam"><div class="jendela" style="left:{W / 2 - 576 * MS / 2}px; top:60px; width:{576 * MS}px; height:960px">'
+             f'<div class="isi" id="m1" style="transform:scale({MS}); transform-origin:0 0; top:{-(lm["area"]["y"] - 20) * MS}px">{frag("lempar-membaca")}</div>'
+             f'<div class="isi" id="m2" style="transform:scale({MS}); transform-origin:0 0; top:{-(lm["area"]["y"] - 20) * MS}px; opacity:0">{frag("lempar-siap")}</div></div></div>')
+    f.adegan("b2b", T2c, 26.0, isi2b, z=3)
+    f.add(f'tl.to("#m2", {{opacity: 1, duration: 0.25}}, {T2c + 2.0});')
+    gulir = (ls_["daftar"]["y"] + ls_["daftar"]["h"] - 900) * MS
+    f.add(f'tl.to("#m2", {{y: -{round(gulir * 0.55)}, duration: {27 / FPS:.3f}, ease: "power4.out"}}, {T2c + 3.2});')
+
+    durasi = 26.0
     css = open(os.path.join(AKAR, "gaya.css"), encoding="utf8").read()
     html = f"""<!doctype html>
 <html lang="id">
