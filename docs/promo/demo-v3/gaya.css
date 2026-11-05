@@ -28,3 +28,4 @@ html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; backgro
 .isi { position: absolute; left: 0; }
 .kursor { position: absolute; left: 0; top: 0; width: 72px; height: 72px; z-index: 40; opacity: 0; }
 .capbesar { position: absolute; padding: 10px 26px; border: 6px solid #23704A; border-radius: 10px; color: #23704A; font-size: 64px; font-weight: 800; letter-spacing: 0.08em; opacity: 0; transform-origin: 50% 50%; background: rgba(246,242,234,0.6); }
+.notif { position: absolute; width: 540px; padding: 18px 22px; border-radius: 14px; background: #FFFDF8; border: 1px solid #DDD5C6; box-shadow: 0 16px 40px rgba(28,27,24,0.16); font-size: 24px; line-height: 1.35; opacity: 0; }

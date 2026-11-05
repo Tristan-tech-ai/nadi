@@ -212,7 +212,43 @@ def bangun():
     f.add(f'tl.to("#redup", {{opacity: 0, duration: 0.4}}, {TK + 2.8:.3f});')
     f.add(f'tl.to("#b4k", {{x: 0, y: 0, scale: 0.86, duration: {48 / FPS:.3f}, ease: MUNDUR}}, {TK + 3.0:.3f});')
 
-    durasi = 36.0
+    # ---------- Babak 5 invoice + QRIS (36 - 46 dtk) ----------
+    T5 = 36.0
+    k5, s5 = f.ketik("k5", "Tagih. Pelanggan bayar QRIS.", T5 + 0.2, cps=30)
+    ip = U["invoice-publik"]
+    S5 = 1.12
+    IX, IY = W / 2 - ip["lebar"] * S5 / 2, (H - ip["tinggi"] * S5) / 2
+    def di(r, fx=0.5, fy=0.5):
+        return IX + (r["x"] + r["w"] * fx) * S5, IY + (r["y"] + r["h"] * fy) * S5
+    qx, qy = di(ip["qris"])
+    stx, sty = di(ip["status"])
+    tx, ty = di(ip["totalrp"])
+    isi5 = (f'<div class="kal" id="b5t" style="top:480px">{k5}</div>'
+            f'<div id="b5k" class="kam" style="opacity:0">'
+            f'<div class="jendela" style="left:{IX - 24}px; top:{IY - 20}px; width:{ip["lebar"] * S5 + 48}px; height:{ip["tinggi"] * S5 + 40}px; background:#F6F2EA"></div>'
+            f'<div style="position:absolute; left:{IX}px; top:{IY}px; transform:scale({S5}); transform-origin:0 0">{frag("invoice-publik")}</div>'
+            f'<div id="tutupst" style="position:absolute; left:{stx - ip["status"]["w"] * S5 / 2 - 2}px; top:{sty - ip["status"]["h"] * S5 / 2 - 2}px; width:{ip["status"]["w"] * S5 + 4}px; height:{ip["status"]["h"] * S5 + 4}px; background:#F6F2EA; opacity:0"></div>'
+            f'<div id="lunas" class="capbesar" style="left:{stx - 150}px; top:{sty - 44}px; border-color:#23704A; color:#23704A">LUNAS</div>'
+            f'<div id="stab5" class="stab" style="left:{tx - ip["totalrp"]["w"] * S5 / 2 - 4}px; top:{ty - 13}px; width:{ip["totalrp"]["w"] * S5 + 8}px; height:26px"></div>'
+            f'<div class="notif" id="notif5" style="left:{W - 620}px; top:70px"><b>Pembayaran masuk</b><br>Rp1.448.000 dari Hotel Segara, lewat QRIS</div>'
+            f'</div>')
+    f.adegan("b5", T5, 46.0, isi5, z=5)
+    f.add(f'tl.set("#k5-c", {{opacity: 1}}, {T5 + 0.2});')
+    T5b = s5 + 0.8
+    f.add(f'tl.set("#b5t", {{opacity: 0}}, {T5b:.3f});')
+    f.add(f'tl.set("#b5k", {{opacity: 1}}, {T5b:.3f});')
+    # Bidikan dekat QRIS (2,4x), tahan 0,9 dtk, lalu tarik mundur ke tagihan utuh (kurva MUNDUR, 40 bingkai).
+    f.add(f'tl.set("#b5k", {json.dumps(kamera(qx, qy, 2.4))}, {T5b:.3f});')
+    f.add(f'tl.to("#b5k", {{x: 0, y: 0, scale: 1, duration: {40 / FPS:.3f}, ease: MUNDUR}}, {T5b + 0.9:.3f});')
+    # Notifikasi pembayaran masuk, lalu lencana BELUM DIBAYAR dicap LUNAS (karakter cap), stabilo di total.
+    TN = T5b + 2.6
+    f.add(f'tl.fromTo("#notif5", {{opacity: 0, y: -24}}, {{opacity: 1, y: 0, duration: 0.3, ease: "power2.out"}}, {TN:.3f});')
+    f.add(f'tl.set("#tutupst", {{opacity: 1}}, {TN + 0.7:.3f});')
+    f.add(f'tl.fromTo("#lunas", {{opacity: 0, scale: 2.2, rotation: -14}}, {{opacity: 1, scale: 0.62, rotation: -6, duration: 0.16, ease: "power3.in"}}, {TN + 0.66:.3f});')
+    f.add(f'tl.fromTo("#stab5", {{scaleX: 0}}, {{scaleX: 1, duration: 0.4, ease: "power2.out"}}, {TN + 1.1:.3f});')
+    f.add(f'tl.to("#notif5", {{opacity: 0, duration: 0.3}}, {TN + 3.4:.3f});')
+
+    durasi = 46.0
     css = open(os.path.join(AKAR, "gaya.css"), encoding="utf8").read()
     html = f"""<!doctype html>
 <html lang="id">
