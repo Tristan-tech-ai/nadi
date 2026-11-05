@@ -1,7 +1,8 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { keluar } from "@/app/auth-actions";
-import { NavBawah } from "@/components/app/nav-bawah";
+import { Kerangka } from "@/components/app/kerangka";
+import { ruangUntuk } from "@/lib/ruang";
 import { PemilihBahasaApp } from "@/components/app/pemilih-bahasa-app";
 import { TandaNadi } from "@/components/ui/logo";
 import { ambilKamus } from "@/lib/i18n/kamus";
@@ -70,7 +71,11 @@ async function Navigasi() {
     ilmu = (nIlmu ?? 0) > 0;
   }
   const bahasa = await bahasaAplikasi(sesi.bahasa);
-  return <NavBawah peran={sesi.peran} magang={magang} ilmu={ilmu} teks={ambilKamus(bahasa).aplikasi} lang={bahasa} />;
+  const ruang = ruangUntuk(sesi.peran).map((r) => ({ ...r, halaman: r.halaman.filter((x) =>
+    sesi.peran !== "staf" || ((x.href !== "/app/magang" || magang) && (x.href !== "/app/ilmu" || ilmu))) })).filter((r) => r.halaman.length > 0);
+  const en = bahasa === "en";
+  return <Kerangka ruang={ruang} peran={sesi.peran} bahasa={bahasa}
+    teks={{ navUtama: ambilKamus(bahasa).aplikasi.navUtama, menu: "Menu", tutup: en ? "Close" : "Tutup", semuaMenu: en ? "All menus" : "Semua menu" }} />;
 }
 
 export default function LayoutApp({ children }: LayoutProps<"/app">) {
@@ -80,7 +85,7 @@ export default function LayoutApp({ children }: LayoutProps<"/app">) {
       <Suspense fallback={<TautanKepala lompat={ambilKamus("id").aplikasi.lompat} beranda={ambilKamus("id").aplikasi.beranda} />}>
         <Kepala />
       </Suspense>
-      <div id="isi" tabIndex={-1} className="flex flex-1 flex-col focus:outline-none">{children}</div>
+      <div id="isi" tabIndex={-1} className="kerangka-isi flex flex-1 flex-col focus:outline-none min-[600px]:pl-20 min-[1200px]:pl-64 print:pl-0">{children}</div>
       <Suspense fallback={<div className="h-14 border-t border-garis" aria-hidden />}>
         <Navigasi />
       </Suspense>

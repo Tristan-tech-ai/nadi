@@ -317,3 +317,11 @@ input:is([type="date"], [type="time"], [type="month"], [type="datetime-local"]):
   --jeda-baris: 90ms;
   --jeda-butir: 70ms;
 }
+
+/* U-01: dua layar berdampingan (Media Queries Level 5, eksperimental; MDN dibaca 6 Nov 2026): navigasi penuh di layar kiri,
+   isi di layar kanan, tidak ada isi di engsel. Di luar @layer supaya menang dari utilitas Tailwind. */
+@media (horizontal-viewport-segments: 2) {
+  .kerangka-sidebar { display: block; width: env(viewport-segment-width 0 0); }
+  .kerangka-rail, .kerangka-bawah, #panel-ruang { display: none; }
+  .kerangka-isi { padding-left: env(viewport-segment-left 1 0); }
+}

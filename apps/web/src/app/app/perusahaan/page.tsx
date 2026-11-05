@@ -88,37 +88,9 @@ async function Tautan() {
   const sesi = await wajibSesi();
   const t = ambilKamus(await bahasaAplikasi(sesi.bahasa)).usaha;
   return (
-    <p className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm font-semibold">
+    <p className="mt-6 text-sm font-semibold">
+      {/* U-01: fitur tidak lagi didaftar di sini; semuanya ada di navigasi ruang (src/lib/ruang.ts). */}
       <Link href="/app/mulai" className="underline underline-offset-4">{t.tambahUsaha}</Link>
-      <Link href="/app/surat" className="underline underline-offset-4">{t.agendaSurat}</Link>
-      <Link href="/app/surat-keluar" className="underline underline-offset-4">{t.suratKeluar}</Link>
-      <Link href="/app/invoice" className="underline underline-offset-4">{t.invoice}</Link>
-      <Link href="/app/barang" className="underline underline-offset-4">{t.barang}</Link>
-      <Link href="/app/jual" className="underline underline-offset-4">{t.jual}</Link>
-      <Link href="/app/pelanggan" className="underline underline-offset-4">{t.crm}</Link>
-      <Link href="/app/layanan" className="underline underline-offset-4">{t.layanan}</Link>
-      <Link href="/app/janji-temu" className="underline underline-offset-4">{t.janji}</Link>
-      <Link href="/app/tanda-tangan" className="underline underline-offset-4">{t.tanda}</Link>
-      <Link href="/app/kasir" className="underline underline-offset-4">{t.kasir}</Link>
-      <Link href="/app/servis" className="underline underline-offset-4">{t.servis}</Link>
-      <Link href="/app/proyek" className="underline underline-offset-4">{t.proyek}</Link>
-      <Link href="/app/kinerja" className="underline underline-offset-4">{t.kinerja}</Link>
-      <Link href="/app/kursus" className="underline underline-offset-4">{t.kursus}</Link>
-      <Link href="/app/wawasan" className="underline underline-offset-4">{t.wawasan}</Link>
-      <Link href="/app/alur" className="underline underline-offset-4">{t.otomasi}</Link>
-      <Link href="/app/tanya" className="underline underline-offset-4">{t.tanya}</Link>
-      <Link href="/app/pindah" className="underline underline-offset-4">{t.pindah}</Link>
-      <Link href="/app/produksi" className="underline underline-offset-4">{t.produksi}</Link>
-      <Link href="/app/rekrutmen" className="underline underline-offset-4">{t.rekrutmen}</Link>
-      <Link href="/app/akun/keamanan" className="underline underline-offset-4">{t.keamanan}</Link>
-      <Link href="/app/beli" className="underline underline-offset-4">{t.beli}</Link>
-      <Link href="/app/kas" className="underline underline-offset-4">{t.kas}</Link>
-      <Link href="/app/siapkan" className="underline underline-offset-4">{t.siapkan}</Link>
-      <Link href="/app/buku" className="underline underline-offset-4">{t.buku}</Link>
-      <Link href="/app/pajak" className="underline underline-offset-4">{t.pajak}</Link>
-      <Link href="/app/akuntan" className="underline underline-offset-4">{t.akuntan}</Link>
-      <Link href="/app/mata" className="underline underline-offset-4">{t.mata}</Link>
-      <Link href="/app/peta-usaha" className="underline underline-offset-4">{t.peta}</Link>
     </p>
   );
 }
