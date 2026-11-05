@@ -45,8 +45,8 @@ begin
     perform pg_temp.cek('status terbaca lewat token: usaha, lowongan, nama, tahap masuk',
       r ->> 'usaha' = 'Warung Uji A' and r ->> 'lowongan' = 'Pelayan shift malam' and r ->> 'nama' = 'Dewi Lestari'
         and r ->> 'tahap' = 'masuk' and r -> 'pesan' = 'null'::jsonb and (r ->> 'dibuat_at') is not null, r::text);
-    perform pg_temp.cek('status hanya berisi tujuh kunci (tanpa telepon)',
-      (select array_agg(k order by k) from jsonb_object_keys(r) k) = array['dibuat_at', 'lowongan', 'nama', 'pesan', 'tahap', 'tahap_at', 'usaha'], r::text);
+    perform pg_temp.cek('status hanya berisi sembilan kunci (tanpa telepon; zona dan wawancara sejak M-14)',
+      (select array_agg(k order by k) from jsonb_object_keys(r) k) = array['dibuat_at', 'lowongan', 'nama', 'pesan', 'tahap', 'tahap_at', 'usaha', 'wawancara', 'zona'], r::text);
     begin
       perform public.status_lamaran('nml_' || repeat('0', 64));
       perform pg_temp.cek('token salah ditolak dengan pesan jelas', false);
