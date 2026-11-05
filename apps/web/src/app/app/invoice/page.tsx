@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { randomUUID } from "node:crypto";
 import { Suspense } from "react";
 import { FormRetur } from "@/components/app/jual";
+import { TagihanBerulang } from "@/app/app/invoice/berulang";
 import { CocokMutasi, FormBatalInvoice, FormBayar, FormInvoice, FormLunas, TombolPengingat, type ProdukPilihan } from "@/components/app/invoice";
 import { Cap } from "@/components/ui/cap";
 import { Rupiah } from "@/components/ui/rupiah";
@@ -139,6 +140,8 @@ async function Isi() {
         <h2 id="judul-baru" className="text-lg font-semibold">{t.baruJudul}</h2>
         <FormInvoice kunci={randomUUID()} jatuhTempo={geser(hari, 14)} hariIni={hari} teks={f} bahasa={bahasa} produk={(produk.data ?? []) as ProdukPilihan[]} />
       </section>
+
+      {sesi.peran !== "akuntan" && <TagihanBerulang bahasa={bahasa} hariIni={hari} />}
 
       <section className="mt-8" aria-labelledby="judul-daftar">
         <h2 id="judul-daftar" className="text-lg font-semibold">{t.daftarJudul}</h2>

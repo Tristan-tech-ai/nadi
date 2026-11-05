@@ -2429,6 +2429,18 @@ export const kamusEn: Kamus = {
     beriPeran: "Role for {nama}", tanpaPeran: "No custom role", peranDiberi: "Role updated.", tanpaAnggota: "No staff or accountants yet.", daftarPeran: "Saved roles",
     auditJudul: "Business activity", auditKet: "Sign-ins, sign-outs, and security changes of every member of this business.",
   },
+  berulang: {
+    judul: "Recurring invoices", ket: "For rent, tuition, or subscriptions. Invoices issue themselves each period at 06.30 WIB, with QRIS and WhatsApp reminders.",
+    pelanggan: "Customer name", hp: "WhatsApp number (optional)", uraian: "Description", uraianContoh: "Room 3 rent", harga: "Price per period (Rp)",
+    tiap: "Repeat every", tiapNama: { "1": "1 month", "3": "3 months", "6": "6 months", "12": "12 months" }, mulai: "Start", sampai: "Until (optional)",
+    tempo: "Due (days after issue)", catatan: "Note on the invoice (optional)", simpan: "Save recurring invoice", kosong: "No recurring invoices yet.",
+    berikutnya: "next {tanggal}", kali: "issued {n} times", statusNama: { aktif: "Active", jeda: "Paused", selesai: "Finished" },
+    jeda: "Pause", lanjut: "Resume", terbitkan: "Issue what is due now", galat: "Could not issue: {pesan}",
+  },
+  berulangPesan: {
+    tersimpan: "Recurring invoice saved.", terbit: "{n} invoices issued.", tidakAda: "Nothing is due yet.", diubah: "Status updated.",
+    angkaRusak: "Enter a whole rupiah price, for example 750,000.", hpRusak: "WhatsApp numbers start with 08 or 62.", gagal: "Not saved yet. Try again in a moment.", galatDb: "{pesan}",
+  },
   strukPublik: { judul: "{usaha} receipt", tidakAda: "Receipt not found.", total: "Total", bayar: "Paid", kembalian: "Change", terima: "Thank you." },
   barang: {
     tingkatLabel: "Bulk prices (optional)", tingkatContoh: "10:14,000, 50:13,500", indukLabel: "Variant of (optional)", tanpaInduk: "Not a variant", atributLabel: "Variant traits", atributContoh: "size: 5 kg, color: red", varianDari: "Variant of {nama}", grosir: "Bulk:", grosirMulai: "from {min}", lokasiLabel: "Shelf location", simpanLokasi: "Save location", laporanJudul: "Stock per warehouse",

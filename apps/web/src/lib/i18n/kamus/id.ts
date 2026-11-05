@@ -2430,6 +2430,18 @@ export const kamusId = {
     beriPeran: "Peran untuk {nama}", tanpaPeran: "Tanpa peran kustom", peranDiberi: "Peran diperbarui.", tanpaAnggota: "Belum ada staf atau akuntan.", daftarPeran: "Peran tersimpan",
     auditJudul: "Aktivitas usaha", auditKet: "Masuk, keluar, dan perubahan keamanan semua anggota usaha ini.",
   },
+  berulang: {
+    judul: "Tagihan berulang", ket: "Untuk sewa, SPP, atau langganan. Invoice terbit sendiri tiap periode pukul 06.30 WIB, lengkap dengan QRIS dan pengingat WhatsApp.",
+    pelanggan: "Nama pelanggan", hp: "Nomor WhatsApp (opsional)", uraian: "Uraian", uraianContoh: "Sewa kamar 3", harga: "Harga per periode (Rp)",
+    tiap: "Ulangi tiap", tiapNama: { "1": "1 bulan", "3": "3 bulan", "6": "6 bulan", "12": "12 bulan" }, mulai: "Mulai", sampai: "Sampai (opsional)",
+    tempo: "Jatuh tempo (hari setelah terbit)", catatan: "Catatan di invoice (opsional)", simpan: "Simpan tagihan berulang", kosong: "Belum ada tagihan berulang.",
+    berikutnya: "berikutnya {tanggal}", kali: "{n} kali terbit", statusNama: { aktif: "Aktif", jeda: "Dijeda", selesai: "Selesai" },
+    jeda: "Jeda", lanjut: "Lanjutkan", terbitkan: "Terbitkan yang jatuh tempo sekarang", galat: "Gagal terbit: {pesan}",
+  },
+  berulangPesan: {
+    tersimpan: "Tagihan berulang tersimpan.", terbit: "{n} invoice terbit.", tidakAda: "Belum ada yang jatuh tempo.", diubah: "Status diperbarui.",
+    angkaRusak: "Tulis harga rupiah bulat, misalnya 750.000.", hpRusak: "Nomor WhatsApp diawali 08 atau 62.", gagal: "Belum tersimpan. Coba lagi sebentar.", galatDb: "{pesan}",
+  },
   strukPublik: { judul: "Struk {usaha}", tidakAda: "Struk tidak ditemukan.", total: "Total", bayar: "Dibayar", kembalian: "Kembalian", terima: "Terima kasih." },
   barang: {
     tingkatLabel: "Harga grosir (opsional)", tingkatContoh: "10:14.000, 50:13.500", indukLabel: "Varian dari (opsional)", tanpaInduk: "Bukan varian", atributLabel: "Ciri varian", atributContoh: "ukuran: 5 kg, warna: merah", varianDari: "Varian dari {nama}", grosir: "Grosir:", grosirMulai: "mulai {min}", lokasiLabel: "Lokasi rak", simpanLokasi: "Simpan lokasi", laporanJudul: "Stok per gudang",
