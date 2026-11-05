@@ -60,7 +60,7 @@ async function Isi() {
       {/* Nama bank untuk berkas transfer gaji: CIMB Niaga (inhouse) + daftar SKN resmi CIMB Niaga (lib/gaji/bank-skn.json). */}
       <datalist id="daftar-bank">{["CIMB NIAGA", ...BANK_SKN].map((b) => <option key={b} value={b} />)}</datalist>
       {orang?.length ? (
-        <ul className="mt-6 divide-y divide-garis border-y border-garis">
+        <ul id="daftar-orang" className="mt-6 divide-y divide-garis border-y border-garis">
           {orang.map((o) => (
             <li key={o.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
               <div>

@@ -39,14 +39,14 @@ async function Isi() {
       <KepalaHalaman jalur="/app/alur" judul={t.judul} ket={pengelola ? t.ket : t.ketStaf} />
 
       <section className="mt-8" aria-labelledby="al-isi"><h2 id="al-isi" className="text-lg font-semibold">{t.isiJudul}</h2>
-        {formulir.length === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.formulirKosong}</p> : (
+        {formulir.length === 0 ? <p data-langkah='#al-form' className="mt-2 text-sm text-tinta-2">{t.formulirKosong}</p> : (
           <div className="grid gap-3">{formulir.map((f) => <FormIsi key={f.id} formulir={f} teks={t} />)}</div>
         )}
       </section>
 
       {pengelola && (<>
         <section className="mt-10" aria-labelledby="al-daftar"><h2 id="al-daftar" className="text-lg font-semibold">{t.daftarJudul}</h2>
-          {alur.length === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.alurKosong}</p> : (
+          {alur.length === 0 ? <p data-langkah='#al-baru' className="mt-2 text-sm text-tinta-2">{t.alurKosong}</p> : (
             <ul className="mt-3 grid gap-3">{alur.map((a) => {
               const j = jalan.get(a.id) ?? [];
               const n = { jalan: j.filter((x) => x.status === "jalan").length, dibatasi: j.filter((x) => x.status === "dibatasi").length, gagal: j.filter((x) => x.status === "gagal").length };

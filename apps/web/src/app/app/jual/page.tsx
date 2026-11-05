@@ -48,7 +48,7 @@ async function Isi() {
 
       <section className="mt-8" aria-labelledby="judul-dok">
         <h2 id="judul-dok" className="text-lg font-semibold">{t.daftar}</h2>
-        {daftar.length === 0 ? <p className="mt-2 rounded-[var(--radius-kartu)] bg-kertas-2 p-4 text-tinta-2" data-testid="jual-kosong">{t.kosong}</p> : (
+        {daftar.length === 0 ? <p data-langkah='#judul-baru' className="mt-2 rounded-[var(--radius-kartu)] bg-kertas-2 p-4 text-tinta-2" data-testid="jual-kosong">{t.kosong}</p> : (
           <ul className="mt-2 divide-y divide-garis border-y border-garis">
             {daftar.map((d) => (
               <li key={d.id} className="grid gap-2 py-3 text-sm" data-testid="baris-dokumen-jual" data-jenis={d.jenis} data-pelanggan={d.pelanggan}>
@@ -80,7 +80,7 @@ async function Isi() {
 
       <section className="mt-8" aria-labelledby="judul-saldo">
         <h2 id="judul-saldo" className="text-lg font-semibold">{t.saldoJudul}</h2>
-        {saldoDaftar.length === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.saldoKosong}</p> : (
+        {saldoDaftar.length === 0 ? <p data-langkah='#judul-baru' className="mt-2 text-sm text-tinta-2">{t.saldoKosong}</p> : (
           <div className="mt-2 overflow-x-auto" tabIndex={0} role="region" aria-label={t.saldoJudul}>
             <table className="w-full border-y border-garis text-sm" data-testid="saldo-pelanggan">
               <thead><tr className="border-b border-garis text-left text-tinta-2"><th scope="col" className="py-2 pr-3 font-medium">{t.pelanggan}</th>

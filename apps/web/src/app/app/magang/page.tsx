@@ -246,7 +246,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/magang">["s
         <h2 id="judul-rencana" className="text-lg font-semibold">{t.rencanaJudul}</h2>
         {bahasa !== "id" && daftar.length > 0 ? <p className="mt-1 text-sm text-tinta-2">{t.catatanIsi}</p> : null}
         {daftar.length === 0 ? (
-          <p className="mt-2 text-sm text-tinta-2" data-testid="magang-kosong">{t.rencanaKosong}</p>
+          <p data-langkah='#judul-buat' className="mt-2 text-sm text-tinta-2" data-testid="magang-kosong">{t.rencanaKosong}</p>
         ) : (
           <ul className="mt-2 divide-y divide-garis border-y border-garis" data-testid="daftar-rencana">
             {daftar.map((r) => <KartuRencana key={r.id} r={r} pengelola hari={hari} k={k} />)}

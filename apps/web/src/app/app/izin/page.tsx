@@ -14,6 +14,7 @@ import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 export const metadata: Metadata = { title: "Izin dan cuti" };
 
@@ -75,7 +76,7 @@ async function Isi() {
       <section className="mt-10" aria-labelledby="judul-daftar-izin">
         <h2 id="judul-daftar-izin" className="text-lg font-semibold">{pengelola ? t.pengajuanTim : t.pengajuanmu}</h2>
         {baris.length === 0 ? (
-          <div className="mt-2 flex items-center gap-3"><IlustrasiKalender className="w-20" /><p className="text-sm text-tinta-2" data-testid="izin-kosong">{t.kosong}</p></div>
+          <div className="mt-2 flex items-center gap-3"><IlustrasiKalender className="w-20" /><p className="text-sm text-tinta-2" data-testid="izin-kosong">{t.kosong}{pengelola && <> <LangkahPertama href="/app/perusahaan#judul-kebijakan-izin">{t.langkahKosong}</LangkahPertama></>}</p></div>
         ) : (
           <ul className="mt-3 divide-y divide-garis border-y border-garis" data-testid="daftar-izin">
             {baris.map((p) => (

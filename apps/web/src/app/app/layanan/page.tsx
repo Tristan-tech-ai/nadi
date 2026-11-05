@@ -64,7 +64,7 @@ async function Isi() {
 
       <section className="mt-8" aria-labelledby="judul-kotak">
         <h2 id="judul-kotak" className={judul}>{t.kotakJudul}</h2>
-        {urut.length === 0 ? <p className="mt-2 text-sm text-tinta-2" data-testid="kotak-kosong">{t.kotakKosong}</p> : (
+        {urut.length === 0 ? <p data-langkah='#judul-atur-layanan' className="mt-2 text-sm text-tinta-2" data-testid="kotak-kosong">{t.kotakKosong}</p> : (
           <ul className="mt-3 divide-y divide-garis border-y border-garis" data-testid="kotak-masuk">
             {urut.map((c) => {
               const lewat = !c.dijawab_at && c.status !== "selesai" && new Date(c.tenggat).getTime() < sekarang;

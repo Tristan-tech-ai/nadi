@@ -279,7 +279,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
       <div className="mt-4">{tambah ?? <p className="text-sm text-tinta-2">{t.ditambahPengelola}</p>}</div>
 
       {daftar.length === 0 ? (
-        <div className="mt-6 flex flex-col items-start gap-3"><IlustrasiPapan className="w-28" /><p className="text-tinta-2" data-testid="kerja-kosong">{t.kosong}</p></div>
+        <div className="mt-6 flex flex-col items-start gap-3"><IlustrasiPapan className="w-28" /><p data-langkah='#judul-tambah-kerja' className="text-tinta-2" data-testid="kerja-kosong">{t.kosong}</p></div>
       ) : (
         <>
           <nav aria-label={t.saringKolom} className="mt-6 lg:hidden">

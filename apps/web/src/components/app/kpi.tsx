@@ -6,6 +6,7 @@ import type { Bahasa } from "@/lib/i18n/bahasa";
 import { ambilKamus, isiTeks, type Kamus } from "@/lib/i18n/kamus";
 import { MIN_BANDING, namaHari, teksBanding, ukuranKpi, type Banding, type Kpi, type KpiMinggu, type RataTim, type RincianKerja } from "@/lib/kerja/kpi";
 import { formatMenit, formatPoin } from "@/lib/kerja/poin";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 type TK = Kamus["kpi"];
 const rentang = (mulai: string, akhir: string, t: TK, b: Bahasa) => isiTeks(t.rentang, { a: formatTanggalKalender(mulai, b), b: formatTanggalKalender(akhir, b) });
@@ -116,7 +117,7 @@ export function KpiMingguIni({ data, bahasa = "id" }: { data: KpiMinggu; bahasa?
       <p className="mt-1 text-sm text-tinta-2">{isiTeks(t.ket, { rentang: rentang(data.mulai, data.akhir, t, bahasa), n: data.selesai_n })}</p>
       <p className="mt-2 text-sm text-tinta-2" data-testid="kpi-hadir">{isiTeks(t.hadir, { min: MIN_BANDING })}</p>
       {data.orang.length === 0 ? (
-        <p className="mt-4 text-tinta-2" data-testid="kpi-kosong">{t.kosong}</p>
+        <p className="mt-4 text-tinta-2" data-testid="kpi-kosong">{t.kosong} <LangkahPertama href="/app/orang">{t.langkahKosong}</LangkahPertama></p>
       ) : berkerja.length === 0 ? (
         <p className="mt-4 text-tinta-2" data-testid="kpi-belum-ada">{t.belumAda}</p>
       ) : (

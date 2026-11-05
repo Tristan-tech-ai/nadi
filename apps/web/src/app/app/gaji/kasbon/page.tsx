@@ -31,7 +31,7 @@ async function Isi() {
     <div lang={bahasa}>
       <KepalaHalaman jalur="/app/gaji/kasbon" judul={t.judul} ket={t.ket} />
       {daftar.length === 0 ? (
-        <p className="mt-6 text-tinta-2" data-testid="kasbon-kosong">{t.kosong}</p>
+        <p data-langkah='#judul-beri-kasbon' className="mt-6 text-tinta-2" data-testid="kasbon-kosong">{t.kosong}</p>
       ) : (
         <>
           <p className="mt-6 font-semibold" data-testid="sisa-kasbon">{t.sisaTotal} <Rupiah nilai={sisa} bahasa={bahasa} /></p>

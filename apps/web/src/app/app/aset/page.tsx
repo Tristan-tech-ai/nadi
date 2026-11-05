@@ -39,7 +39,7 @@ async function Isi() {
   return (
     <div lang={bahasa}>
       <KepalaHalaman jalur="/app/aset" judul={sesi.peran === "staf" ? t.judulStaf : t.judul} ket={sesi.peran === "staf" ? t.ketStaf : t.ket} />
-      {aset.length === 0 ? <p className="mt-6 text-tinta-2" data-testid="aset-kosong">{sesi.peran === "staf" ? t.kosongStaf : t.kosong}</p> : (
+      {aset.length === 0 ? <p data-langkah='#judul-catat-aset' className="mt-6 text-tinta-2" data-testid="aset-kosong">{sesi.peran === "staf" ? t.kosongStaf : t.kosong}</p> : (
         <>
           {sesi.peran !== "staf" && <p className="mt-6 font-semibold" data-testid="total-nilai-buku">{t.totalNilaiBuku} <Rupiah nilai={total} bahasa={bahasa} /></p>}
           <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm" data-testid="daftar-aset">

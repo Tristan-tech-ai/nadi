@@ -75,7 +75,7 @@ async function Isi() {
       <section className="mt-8" aria-labelledby="terima"><h2 id="terima" className="text-lg font-semibold">{t.terimaJudul}</h2>
         <FormTerima kunci={randomUUID()} hariIni={hariIni(new Date(), zona)} teks={t} /></section>
       <section className="mt-8" aria-labelledby="jalan"><h2 id="jalan" className="text-lg font-semibold">{t.daftarJudul}</h2>
-        {daftarJalan.length === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.kosong}</p>
+        {daftarJalan.length === 0 ? <p data-langkah='#terima' className="mt-2 text-sm text-tinta-2">{t.kosong}</p>
           : <ul className="mt-2 divide-y divide-garis border-y border-garis text-sm">{daftarJalan.map((o) => baris(o, true))}</ul>}</section>
       {daftarAkhir.length > 0 && (
         <section className="mt-8" aria-labelledby="akhir"><h2 id="akhir" className="text-lg font-semibold">{t.riwayatJudul}</h2>

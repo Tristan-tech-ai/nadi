@@ -83,7 +83,7 @@ async function Isi() {
       })}
       <section className="mt-10" aria-labelledby="judul-permintaan" data-testid="permintaan-saya">
         <h2 id="judul-permintaan" className="text-lg font-semibold">{t.permintaanJudul}</h2>
-        {permintaan.length === 0 ? <p className="mt-1 text-sm text-tinta-2">{t.permintaanKosong}</p> : (
+        {permintaan.length === 0 ? <p data-langkah='#judul-psikolog' className="mt-1 text-sm text-tinta-2">{t.permintaanKosong}</p> : (
           <ul className="mt-2 divide-y divide-garis border-y border-garis">
             {permintaan.map((x) => (
               <li key={x.id} className="grid gap-1 py-3 text-sm" data-testid="baris-permintaan">

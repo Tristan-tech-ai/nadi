@@ -131,9 +131,9 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
           {isiTeks(t.dibayar, { n: slip.filter((s) => !s.ditahan).length })} <Rupiah nilai={total} className="font-semibold text-tinta" bahasa={bahasa} />
         </p>
       )}
-      {!disetujui && <div className="mt-4"><FormSiapkan bulan={bulan} ada={slip.length > 0} teks={f} /></div>}
+      {!disetujui && <div className="mt-4" data-siapkan-gaji><FormSiapkan bulan={bulan} ada={slip.length > 0} teks={f} /></div>}
       {slip.length === 0 ? (
-        <div className="mt-6 flex flex-col items-start gap-3"><IlustrasiSlip className="w-28" /><p className="text-tinta-2" data-testid="gaji-kosong">{t.kosong}</p></div>
+        <div className="mt-6 flex flex-col items-start gap-3"><IlustrasiSlip className="w-28" /><p data-langkah='[data-siapkan-gaji]' className="text-tinta-2" data-testid="gaji-kosong">{t.kosong}</p></div>
       ) : (
         <ul className="mt-6 divide-y divide-garis border-y border-garis" data-testid="daftar-slip">
           {slip.map((s) => (

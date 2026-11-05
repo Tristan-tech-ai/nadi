@@ -246,7 +246,7 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
           <canvas ref={layar} onClick={klikLayar} className="mt-4 w-full cursor-crosshair rounded-[var(--radius-kartu)] border border-garis" data-testid="layar-mata"
             role="img" aria-label={t.layarAria} />
         ) : (
-          <p className="mt-4 rounded-[var(--radius-kartu)] bg-kertas-2 p-4 text-sm text-tinta-2" data-testid="mata-kosong">
+          <p data-langkah='[data-testid="pilih-video"]' className="mt-4 rounded-[var(--radius-kartu)] bg-kertas-2 p-4 text-sm text-tinta-2" data-testid="mata-kosong">
             {t.kosong}
           </p>
         )}
@@ -298,7 +298,7 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
             })}
           </ul>
         ) : (
-          <p className="mt-2 text-sm text-tinta-2">{t.tanpaZona}</p>
+          <p data-langkah='[data-testid="pilih-video"]' className="mt-2 text-sm text-tinta-2">{t.tanpaZona}</p>
         )}
         <div className="mt-4 flex flex-wrap gap-3">
           {!tersimpan ? <Tombol onClick={simpan} disabled={pantau}>{t.simpanZona}</Tombol> : null}
@@ -326,7 +326,7 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
             ))}
           </ol>
         ) : (
-          <p className="mt-2 text-sm text-tinta-2">{t.belumPerubahan}</p>
+          <p data-langkah='[data-testid="pilih-video"]' className="mt-2 text-sm text-tinta-2">{t.belumPerubahan}</p>
         )}
       </div>
     </div>

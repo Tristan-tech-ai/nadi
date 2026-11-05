@@ -38,7 +38,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/proyek">["s
     const { data: jamSaya } = await supabase.from("project_time").select("id, tanggal, jam, catatan, dimension_id").order("tanggal", { ascending: false }).limit(30);
     return (
       <div lang={bahasa}>{judul}
-        {proyek.length === 0 ? <p className="mt-6 text-sm text-tinta-2">{t.kosong}</p> : <FormJam proyek={proyek} orang={null} hariIni={hari} teks={t} />}
+        {proyek.length === 0 ? <p data-langkah='#baru' className="mt-6 text-sm text-tinta-2">{t.kosong}</p> : <FormJam proyek={proyek} orang={null} hariIni={hari} teks={t} />}
         <h2 className="mt-8 text-lg font-semibold">{t.jamSaya}</h2>
         {(jamSaya ?? []).length === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.jamKosong}</p> : (
           <ul className="mt-2 divide-y divide-garis border-y border-garis text-sm">{(jamSaya ?? []).map((j) => (
@@ -65,7 +65,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/proyek">["s
   return (
     <div lang={bahasa}>{judul}
       <section className="mt-6" aria-labelledby="baru"><h2 id="baru" className="sr-only">{t.proyekBaru}</h2><FormProyekBaru teks={t} /></section>
-      {proyek.length === 0 ? <p className="mt-6 text-sm text-tinta-2">{t.kosong}</p> : (<>
+      {proyek.length === 0 ? <p data-langkah='#baru' className="mt-6 text-sm text-tinta-2">{t.kosong}</p> : (<>
         <nav className="mt-6 flex flex-wrap gap-2 text-sm" aria-label={t.pilih}>
           {proyek.map((p) => <a key={p.id} href={`/app/proyek?p=${p.id}`} aria-current={p.id === dipilih?.id ? "page" : undefined}
             className={`rounded-full border px-3 py-1 ${p.id === dipilih?.id ? "border-tinta bg-tinta text-kertas" : "border-garis-kuat"}`} data-pengguna>{p.nama}</a>)}

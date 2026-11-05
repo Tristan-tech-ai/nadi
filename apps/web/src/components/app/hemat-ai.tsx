@@ -3,6 +3,7 @@ import { formatAngka } from "@/lib/format";
 import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { sisip } from "@/lib/i18n/sisip";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 type Ringkasan = { hari: number; berkas_model: number; berkas_aturan: number; token_baca: number; token_tulis_aturan: number; token_cache: number; token_hemat: number; aturan_aktif: number };
 
@@ -20,7 +21,7 @@ export async function HematAi() {
     <section className="mt-10 border-t border-garis pt-6" aria-labelledby="judul-hemat-ai" data-testid="hemat-ai" lang={bahasa}>
       <h2 id="judul-hemat-ai" className="text-lg font-semibold">{isiTeks(t.judul, { n: r.hari })}</h2>
       {kosong ? (
-        <p className="mt-2 text-sm text-tinta-2" data-testid="hemat-ai-kosong">{t.kosong}</p>
+        <p className="mt-2 text-sm text-tinta-2" data-testid="hemat-ai-kosong">{t.kosong} <LangkahPertama href="/app/lempar">{t.langkahKosong}</LangkahPertama></p>
       ) : (
         <>
           <dl className="mt-4 grid grid-cols-2 gap-3">

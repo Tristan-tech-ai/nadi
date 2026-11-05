@@ -71,7 +71,7 @@ test("kerja: pemilik menambah kerja berpoin, staf mulai sampai selesai, durasi n
     await page.getByLabel("Kata sandi").fill(E.E2E_SANDI);
     await page.getByRole("button", { name: "Masuk" }).click();
     await page.waitForURL((u) => u.pathname === "/app/kerja");
-    await expect(page.getByRole("navigation", { name: "Navigasi utama" }).getByRole("link", { name: "Kerja" })).toHaveAttribute("aria-current", "page");
+    await expect(page.getByRole("navigation", { name: "Navigasi utama" }).getByRole("link", { name: "Kerja hari ini" })).toHaveAttribute("aria-current", "page");
     await expect(page.getByTestId("ringkasan-kerja")).toBeVisible();
 
     await page.getByRole("button", { name: "Tambah kerja" }).click();
@@ -117,7 +117,7 @@ test("kerja: pemilik menambah kerja berpoin, staf mulai sampai selesai, durasi n
     await staf.getByLabel("PIN").fill(pin);
     await staf.getByRole("button", { name: "Masuk" }).click();
     await expect(staf.getByTestId("peran")).toContainText("staf");
-    await staf.getByRole("navigation", { name: "Navigasi utama" }).getByRole("link", { name: "Kerja" }).click();
+    await staf.getByRole("navigation", { name: "Navigasi utama" }).getByRole("link", { name: "Kerja hari ini" }).click();
     await staf.waitForURL((u) => u.pathname === "/app/kerja");
     const aktif = staf.getByTestId("kerja-aktif");
     await expect(aktif).toContainText(judul);

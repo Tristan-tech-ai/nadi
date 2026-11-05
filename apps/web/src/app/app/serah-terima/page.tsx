@@ -240,7 +240,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/serah-terim
       {kepala}
       <FormCatatBerhenti orang={orang} pilih={typeof sp.orang === "string" ? sp.orang : ""} hari={hari} kunci={randomUUID()} teks={t} />
       {daftar.length === 0
-        ? <div className="mt-8 flex flex-col items-start gap-3"><IlustrasiKunci className="w-28" /><p className="text-tinta-2" data-testid="serah-kosong">{t.kosong}</p></div>
+        ? <div className="mt-8 flex flex-col items-start gap-3"><IlustrasiKunci className="w-28" /><p data-langkah='form[aria-label="Catat berhenti"]' className="text-tinta-2" data-testid="serah-kosong">{t.kosong}</p></div>
         : daftar.map((b) => <Paket key={b.id} b={b} butir={butir.filter((x) => x.berhenti_id === b.id)} orang={orang} hari={hari} t={t} bahasa={bahasa} url={url} model={model} tIlmu={tIlmu} keluar={keluar.get(b.id)} tKeluar={tKeluar} pemilik={sesi.peran === "pemilik"} zona={zona} hak={hak.get(b.id)} tHak={tHak} />)}
     </div>
   );

@@ -7,6 +7,8 @@ import { IlustrasiNota } from "@/components/ilustrasi";
 import { HalamanFeed, TautanBerikut } from "@/components/app/halaman-feed";
 import { KartuFeed } from "@/components/app/kartu-feed";
 import { KartuInfo } from "@/components/app/kartu-info";
+import { MulaiDiNadi } from "@/components/app/mulai-nadi";
+import { TurSingkat } from "@/components/app/tur-singkat";
 import { RingkasanUang } from "@/components/app/ringkasan-uang";
 import { SarapanData } from "@/components/app/sarapan-data";
 import { bacaTampilan, halaman, hitungJenis, hrefFeed, JENIS, JENIS_DIKENAL, PER_HALAMAN, usulanBaru, type Jenis, type JenisDikenal, type Tampilan, type Urut } from "@/lib/feed";
@@ -19,6 +21,7 @@ import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
 import { tujuanUsulan } from "@/lib/tujuan-usulan";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 type TeksFeed = Kamus["feed"];
 
@@ -133,7 +136,8 @@ async function muatFeed(t: Tampilan, k: TeksFeed) {
 
 // Beranda aplikasi: Feed Keputusan (usulan menunggu, yang paling mendesak dan berdampak di atas).
 async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["searchParams"] }) {
-  const t = bacaTampilan(await searchParams);
+  const sp = await searchParams;
+  const t = bacaTampilan(sp);
   const sesi = await wajibPerusahaan();
   const bahasa: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const kamus = ambilKamus(bahasa);
@@ -147,6 +151,8 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
   return (
     <section className="mx-auto w-full max-w-2xl px-4 py-8" lang={bahasa}>
       <KepalaHalaman jalur="/app" judul={k.judul} ket={<span data-testid="peran">{isiTeks(k.peran, { peran })}</span>} />
+      {sesi.peran === "pemilik" || sesi.peran === "admin" ? <MulaiDiNadi bahasa={bahasa} perusahaanId={sesi.perusahaanId} paksa={sp.mulai === "tampil"} /> : null}
+      {sp.tur === "1" ? <TurSingkat bahasa={bahasa} /> : null}
       <Suspense fallback={null}>
         <PengumumanBaru bahasa={bahasa} />
       </Suspense>
@@ -163,11 +169,11 @@ async function Ringkasan({ searchParams }: { searchParams: PageProps<"/app">["se
           <dd className="angka mt-1 text-2xl font-semibold" data-testid="jumlah-usulan">{semua}</dd>
         </div>
       </dl>
-      <h2 className="mt-8 text-lg font-semibold">{k.perluKeputusan}</h2>
+      <h2 id="perlu-keputusan" className="mt-8 text-lg font-semibold">{k.perluKeputusan}</h2>
       {semua === 0 ? (
         <div className="mt-3 flex flex-col items-start gap-3 rounded-[var(--radius-kartu)] bg-kertas-2 p-4 sm:flex-row sm:items-center">
           <IlustrasiNota className="w-24 shrink-0" />
-          <p className="text-tinta-2" data-testid="feed-kosong">{k.kosong}</p>
+          <p className="text-tinta-2" data-testid="feed-kosong">{k.kosong} <LangkahPertama href="/app/lempar">{k.langkahKosong}</LangkahPertama></p>
         </div>
       ) : (
         <HalamanFeed>

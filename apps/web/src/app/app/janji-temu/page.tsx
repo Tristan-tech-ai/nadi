@@ -49,7 +49,7 @@ async function Isi() {
 
       <section className="mt-8" aria-labelledby="judul-jadwal">
         <h2 id="judul-jadwal" className={judul}>{t.jadwalJudul}</h2>
-        {janji.length === 0 ? <p className="mt-2 text-sm text-tinta-2" data-testid="janji-kosong">{t.jadwalKosong}</p> : (
+        {janji.length === 0 ? <p data-langkah='#judul-atur-janji' className="mt-2 text-sm text-tinta-2" data-testid="janji-kosong">{t.jadwalKosong}</p> : (
           <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm" data-testid="daftar-janji">
             {janji.map((j) => (
               <li key={j.id} className="flex flex-wrap items-start justify-between gap-2 py-3" data-nama={j.nama} data-status={j.status}>

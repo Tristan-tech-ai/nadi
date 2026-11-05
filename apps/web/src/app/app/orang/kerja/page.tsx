@@ -12,6 +12,7 @@ import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 export const metadata: Metadata = { title: "Administrasi orang" };
 
@@ -82,7 +83,7 @@ async function Isi() {
 
       <section className="mt-8" aria-labelledby="judul-bagan" data-testid="bagan">
         <h2 id="judul-bagan" className={judul}>{t.baganJudul}</h2>
-        {orang.length === 0 ? <p className="mt-2 text-tinta-2">{t.kosong}</p> : <ul className="mt-1 text-sm">{puncak.map((p) => <Bagan key={p} induk={p} anak={anak} nama={nama} profil={profil} t={t} />)}</ul>}
+        {orang.length === 0 ? <p className="mt-2 text-tinta-2">{t.kosong} <LangkahPertama href="/app/orang">{t.langkahKosong}</LangkahPertama></p> : <ul className="mt-1 text-sm">{puncak.map((p) => <Bagan key={p} induk={p} anak={anak} nama={nama} profil={profil} t={t} />)}</ul>}
       </section>
 
       <section className="mt-8 border-t border-garis pt-6" aria-labelledby="judul-profil">

@@ -58,7 +58,7 @@ async function Isi() {
 
       <section className="mt-8" aria-labelledby="judul-dok">
         <h2 id="judul-dok" className={judul}>{t.daftarJudul}</h2>
-        {dok.length === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.kosong}</p> : (
+        {dok.length === 0 ? <p data-langkah='#judul-baru' className="mt-2 text-sm text-tinta-2">{t.kosong}</p> : (
           <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm" data-testid="daftar-tanda">
             {dok.map((d) => (
               <li key={d.id} className="py-3" data-judul={d.judul} data-status={d.status}>

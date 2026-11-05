@@ -36,7 +36,7 @@ export async function KeputusanOtomatis() {
       <h2 id="judul-keputusan" className="text-lg font-semibold">{t.judul}</h2>
       <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
       {ringkas.length === 0 ? (
-        <p className="mt-4 text-sm text-tinta-2" data-testid="keputusan-kosong">{t.kosong}</p>
+        <p data-langkah='#judul-kebijakan-izin' className="mt-4 text-sm text-tinta-2" data-testid="keputusan-kosong">{t.kosong}</p>
       ) : (
         <dl className="mt-4 grid grid-cols-2 gap-3">
           {ringkas.map((x) => (

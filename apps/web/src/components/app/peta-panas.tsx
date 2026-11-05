@@ -1,6 +1,7 @@
 import { formatDurasi } from "@/lib/mata/jejak";
 import { isiTeks } from "@/lib/i18n/isi-teks";
 import type { Kamus } from "@/lib/i18n/kamus";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 // W-02: peta panas zona dari rekap kunjungan Mata (vision_heatmap). Komponen server, tanpa JS di peramban.
 export type DataPanas = {
@@ -29,7 +30,7 @@ export function PetaPanas({ data: d, teks: t, bahasa }: { data: DataPanas; teks:
       <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
       {!d.papan ? <p className="mt-2 text-sm text-tinta-2">{t.papanBelum}</p> : null}
       {!d.kunjungan ? (
-        <p className="mt-3 text-sm text-tinta-2" data-testid="panas-kosong">{t.kosong}</p>
+        <p className="mt-3 text-sm text-tinta-2" data-testid="panas-kosong">{t.kosong} <LangkahPertama href="/app/mata">{t.langkahKosong}</LangkahPertama></p>
       ) : (
         <>
           <dl className="mt-4 grid grid-cols-2 gap-4 text-sm sm:grid-cols-4">

@@ -4,6 +4,7 @@ import type { Bahasa } from "@/lib/i18n/bahasa";
 import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { kalimatTerberat, kolomBeban, MIN_SELESAI, ringkasBeban, teksBebanSaya, teksJamBeban, type BebanMinggu, type BebanSaya } from "@/lib/kerja/adil";
 import { formatPoin } from "@/lib/kerja/poin";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 /**
  * Layar pemilik/admin "Beban minggu ini" (docs/design/bagi-adil.md): satu kalimat angka, satu baris per orang bergaris buku kas,
@@ -36,7 +37,7 @@ export function BebanMingguIni({ data, bahasa = "id" }: { data: BebanMinggu; bah
       )}
 
       {orang.length === 0 ? (
-        <p className="mt-4 text-tinta-2" data-testid="beban-kosong">{t.kosong}</p>
+        <p className="mt-4 text-tinta-2" data-testid="beban-kosong">{t.kosong} <LangkahPertama href="/app/orang">{t.langkahKosong}</LangkahPertama></p>
       ) : (
         <>
           <div className={`mt-4 hidden border-b border-garis-kuat pb-1 text-xs font-semibold text-tinta-2 lg:grid ${grid} lg:gap-3`} aria-hidden>

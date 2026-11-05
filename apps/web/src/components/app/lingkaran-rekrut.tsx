@@ -2,6 +2,7 @@ import { laporanLingkaran, MIN_SAMPEL, type BarisLingkaran } from "@/lib/rekrut/
 import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { createClient } from "@/lib/supabase/server";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 // F2-07 (docs/research/lingkaran-rekrut.md): pertanyaan seleksi mana yang searah dengan kinerja bulan ke-3 sampai ke-6.
 // Hanya pemilik dan admin; hanya agregat per pertanyaan, tanpa nama.
@@ -36,7 +37,7 @@ export async function LingkaranRekrut() {
               {isiTeks(t.ringkas, { n: lap.orang, lain: m.belum_genap ? isiTeks(t.lainBelum, { n: m.belum_genap }) : "", min: MIN_SAMPEL })}
             </p>
             {lap.sinyal.length === 0 ? (
-              <p className="mt-2 text-sm text-tinta-2" data-testid="lingkaran-kosong">{t.kosong}</p>
+              <p className="mt-2 text-sm text-tinta-2" data-testid="lingkaran-kosong">{t.kosong} <LangkahPertama href="/app/rekrutmen">{t.langkahKosong}</LangkahPertama></p>
             ) : (
               <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm" data-testid="lingkaran-daftar" lang={bahasa === "id" ? undefined : "id"}>
                 {lap.sinyal.map((s) => (

@@ -4,6 +4,7 @@ import type { Bahasa } from "@/lib/i18n/bahasa";
 import { isiTeks } from "@/lib/i18n/isi-teks";
 import type { Kamus } from "@/lib/i18n/kamus";
 import { formatHari, jalurTeks, kalimatPenyimpangan, labelLangkah, ringkasAlur, sisiBerurut, type Alur } from "@/lib/alur/alur";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 /** Teks bawaan = kamus id `alur` (diuji sama); demo publik memakai bawaan ini tanpa menarik kamus. */
 export const TEKS_ALUR_ID: Kamus["alur"] = {
@@ -13,6 +14,7 @@ export const TEKS_ALUR_ID: Kamus["alur"] = {
   invoice: "Tagihan (invoice)",
   rekrut: "Rekrut",
   kosongInvoice: "Belum ada invoice dalam 90 hari terakhir. Begitu invoice terbit, alurnya tergambar di sini.",
+  langkahKosong: "Buat lowongan",
   kosongRekrut: "Belum ada lamaran dalam 90 hari terakhir. Begitu pelamar masuk, alurnya tergambar di sini.",
   alurKertas: "Alur kertas:",
   tidakAda: "Tidak ada penyimpangan dari alur kertas.",
@@ -35,7 +37,7 @@ export function KartuAlur({ alur, judul, teks: t = TEKS_ALUR_ID, bahasa = "id" }
     <div className="mt-6" data-testid={`alur-${alur.jenis}`}>
       <h3 className="font-semibold">{judul}</h3>
       {!ringkas ? (
-        <p className="mt-2 text-sm text-tinta-2" data-testid="alur-kosong">{alur.jenis === "invoice" ? t.kosongInvoice : t.kosongRekrut}</p>
+        <p className="mt-2 text-sm text-tinta-2" data-testid="alur-kosong">{alur.jenis === "invoice" ? t.kosongInvoice : <>{t.kosongRekrut} <LangkahPertama href="/app/orang#judul-lowongan">{t.langkahKosong}</LangkahPertama></>}</p>
       ) : (
         <>
           <p className="mt-1 text-sm text-tinta-2" data-testid="alur-ringkas" lang={isiLang}>

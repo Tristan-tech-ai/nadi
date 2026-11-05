@@ -10,6 +10,7 @@ import { bahasaAplikasi } from "@/lib/i18n/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 export const metadata: Metadata = { title: "Produksi" };
 
@@ -53,7 +54,7 @@ async function Isi() {
       <section className="mt-8" aria-labelledby="pk-judul">
         <h2 id="pk-judul" className="text-lg font-semibold">{t.pkJudul}</h2>
         {ubah && berResep.length > 0 && <FormPerintahKerja produk={berResep} kunci={randomUUID()} teks={t} />}
-        {wos.length === 0 ? <p className="mt-3 text-sm text-tinta-2">{t.pkKosong}</p> : (
+        {wos.length === 0 ? <p data-langkah='#bom-judul' className="mt-3 text-sm text-tinta-2">{t.pkKosong}</p> : (
           <ul className="mt-4 divide-y divide-garis border-y border-garis text-sm" data-testid="daftar-pk">
             {wos.map((w) => {
               const s = nama.get(w.product_id)?.satuan ?? "";
@@ -89,7 +90,7 @@ async function Isi() {
         <p className="mt-1 text-sm text-tinta-2">{t.bomKet}</p>
         {ubah && produk.length > 1 && <FormResep produk={produk} teks={t} />}
         <h3 className="mt-6 font-semibold">{t.daftarBom}</h3>
-        {boms.length === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.bomKosong}</p> : (
+        {boms.length === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.bomKosong} <LangkahPertama href="/app/barang">{t.bomLangkah}</LangkahPertama></p> : (
           <ul className="mt-2 grid gap-2 text-sm sm:grid-cols-2" data-testid="daftar-bom">
             {boms.map((b) => (
               <li key={b.id} className="rounded-[var(--radius-kartu)] border border-garis p-3">

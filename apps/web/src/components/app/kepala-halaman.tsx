@@ -4,6 +4,7 @@ import { bahasaAplikasi } from "@/lib/i18n/server";
 import { halamanDari, ruangUntuk, RUANG } from "@/lib/ruang";
 import { bacaSesi } from "@/lib/sesi";
 import { TombolSemat } from "@/components/app/tombol-semat";
+import { tampilkanMulai } from "@/app/app/mulai-actions";
 
 // U-03 kepala halaman seragam (docs/design/REKONSTRUKSI-APP.md bagian 5): jejak ruang, judul, satu kalimat tujuan, aksi utama,
 // dan tombol "?" yang membuka bantuan halaman ini (guna, halaman lain di ruang yang sama, panduan peran, cari fitur).
@@ -36,7 +37,7 @@ export async function KepalaHalaman({ jalur, judul, ket, aksi, children }: {
         <div className="flex shrink-0 items-center gap-2 print:hidden">
         {kini && <TombolSemat href={kini.href} peran={peran} label={en ? ["Pin to sidebar", "Pinned to sidebar"] : ["Sematkan di sidebar", "Tersemat di sidebar"]} />}
         <details className="group relative shrink-0">
-          <summary className="inline-flex h-10 min-w-10 cursor-pointer list-none items-center justify-center rounded-full border border-garis px-3 text-sm font-semibold text-tinta-2 hover:bg-kertas-2 hover:text-tinta group-open:bg-kertas-2 group-open:text-tinta">
+          <summary data-tur="bantuan" className="inline-flex h-10 min-w-10 cursor-pointer list-none items-center justify-center rounded-full border border-garis px-3 text-sm font-semibold text-tinta-2 hover:bg-kertas-2 hover:text-tinta group-open:bg-kertas-2 group-open:text-tinta">
             <span className="sr-only">{en ? "Help for this page" : "Bantuan halaman ini"}</span><span aria-hidden>?</span>
           </summary>
           <div className="absolute right-0 top-12 z-20 w-[min(20rem,calc(100vw-2.5rem))] rounded-[var(--radius-kartu)] border border-garis bg-kertas p-4 text-sm shadow-sm">
@@ -50,10 +51,17 @@ export async function KepalaHalaman({ jalur, judul, ket, aksi, children }: {
             )}
             <p className="mt-3 grid gap-1">
               <Link href={`/panduan#${anchorPanduan}`} className="font-semibold underline underline-offset-4">{en ? "Guide for your role" : "Panduan untuk peranmu"}</Link>
+              {(peran === "pemilik" || peran === "admin") && (
+                <>
+                  <button type="submit" form="form-tampil-mulai" className="text-left font-semibold underline underline-offset-4">{en ? "Getting started list" : "Daftar Mulai di Nadi"}</button>
+                  <Link href="/app?tur=1" className="font-semibold underline underline-offset-4">{en ? "60-second tour" : "Tur singkat 60 detik"}</Link>
+                </>
+              )}
               <span className="text-tinta-2">{en ? "Looking for something else? Press Ctrl K or the Search button." : "Cari yang lain? Tekan Ctrl K atau tombol Cari."}</span>
             </p>
           </div>
         </details>
+        {(peran === "pemilik" || peran === "admin") && <form id="form-tampil-mulai" action={tampilkanMulai} hidden />}
         </div>
       </div>
       {(ket ?? kini?.guna[b]) && <p className="mt-1 max-w-2xl text-sm text-tinta-2">{ket ?? kini?.guna[b]}</p>}

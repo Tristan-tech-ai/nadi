@@ -14,6 +14,7 @@ import { createClient } from "@/lib/supabase/server";
 import { nomorWa } from "@/lib/tanda";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 export const metadata: Metadata = { title: "Rekrutmen lanjutan" };
 
@@ -62,8 +63,8 @@ async function Isi() {
 
       <section className="mt-8" aria-labelledby="ww">
         <h2 id="ww" className="text-lg font-semibold">{t.wwJudul}</h2>
-        {pelamar.length ? <FormWawancara pelamar={pelamar} zona={ZONA_SINGKAT[zona] ?? zona} kunci={randomUUID()} teks={t} /> : <p className="mt-2 text-sm text-tinta-2">{t.tanpaPelamar}</p>}
-        {slots.length === 0 ? <p className="mt-3 text-sm text-tinta-2">{t.wwKosong}</p> : (
+        {pelamar.length ? <FormWawancara pelamar={pelamar} zona={ZONA_SINGKAT[zona] ?? zona} kunci={randomUUID()} teks={t} /> : <p className="mt-2 text-sm text-tinta-2">{t.tanpaPelamar} <LangkahPertama href="/app/orang#judul-lowongan">{t.langkahKosong}</LangkahPertama></p>}
+        {slots.length === 0 ? <p data-langkah='a[href="/app/orang#judul-lowongan"]' className="mt-3 text-sm text-tinta-2">{t.wwKosong}</p> : (
           <ul className="mt-4 divide-y divide-garis border-y border-garis text-sm" data-testid="daftar-wawancara">
             {slots.map((s) => {
               const wa = nomorWa(s.lamaran?.telepon ?? null);
@@ -87,7 +88,7 @@ async function Isi() {
 
       <section className="mt-10" aria-labelledby="lap">
         <h2 id="lap" className="text-lg font-semibold">{t.lapJudul}</h2>
-        {!laporan || laporan.pelamar === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.lapKosong}</p> : (<>
+        {!laporan || laporan.pelamar === 0 ? <p data-langkah='a[href="/app/orang#judul-lowongan"]' className="mt-2 text-sm text-tinta-2">{t.lapKosong}</p> : (<>
           <p className="mt-2" data-testid="lap-ringkas">{laporan.rata_hari_isi !== null
             ? isiTeks(t.lapRingkas, { pelamar: laporan.pelamar, diterima: laporan.diterima, hari: String(laporan.rata_hari_isi).replace(".", bahasa === "en" ? "." : ",") })
             : isiTeks(t.lapRingkasTanpa, { pelamar: laporan.pelamar, diterima: laporan.diterima })}</p>
@@ -127,7 +128,7 @@ async function Isi() {
       <section className="mt-10" aria-labelledby="cari">
         <h2 id="cari" className="text-lg font-semibold">{t.cariJudul}</h2>
         <p className="mt-1 max-w-2xl text-sm text-tinta-2">{t.cariKet}</p>
-        {(lw.data ?? []).length === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.cariKosong}</p> : (
+        {(lw.data ?? []).length === 0 ? <p data-langkah='a[href="/app/orang#judul-lowongan"]' className="mt-2 text-sm text-tinta-2">{t.cariKosong}</p> : (
           <ul className="mt-3 grid gap-4">{((lw.data ?? []) as Parameters<typeof FormRincian>[0]["l"][]).map((l) => (
             <li key={l.id} className="rounded-[var(--radius-kartu)] border border-garis p-4"><h3 className="mb-2 font-semibold" data-pengguna>{l.judul}</h3><FormRincian l={l} teks={t} /></li>))}
           </ul>

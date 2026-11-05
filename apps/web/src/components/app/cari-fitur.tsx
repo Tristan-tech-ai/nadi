@@ -14,7 +14,7 @@ const PERISTIWA = "nadi:cari";
 
 export function TombolCari({ label }: { label: string }) {
   return (
-    <button type="button" onClick={() => window.dispatchEvent(new Event(PERISTIWA))} aria-keyshortcuts="Control+K Meta+K"
+    <button type="button" data-tur="cari" onClick={() => window.dispatchEvent(new Event(PERISTIWA))} aria-keyshortcuts="Control+K Meta+K"
       className="inline-flex h-10 items-center gap-2 rounded-[var(--radius-isian)] border border-garis px-3 text-sm text-tinta-2 hover:bg-kertas-2 hover:text-tinta">
       <MagnifyingGlassIcon size={18} aria-hidden />
       <span>{label}</span>

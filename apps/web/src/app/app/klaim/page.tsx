@@ -22,7 +22,7 @@ type Batas = { kategori_id: string; nama: string; batas: number | null; terpakai
 const CAP: Record<string, "menunggu" | "diterima" | "ditolak"> = { menunggu: "menunggu", disetujui: "menunggu", dibayar: "diterima", ditolak: "ditolak", selesai: "diterima" };
 
 function DaftarKlaim({ daftar, t, bahasa, pemilik }: { daftar: Klaim[]; t: Kamus["klaim"]; bahasa: Bahasa; pemilik: boolean }) {
-  if (!daftar.length) return <p className="mt-3 text-sm text-tinta-2" data-testid="klaim-kosong">{t.kosong}</p>;
+  if (!daftar.length) return <p data-langkah='#judul-kategori' className="mt-3 text-sm text-tinta-2" data-testid="klaim-kosong">{t.kosong}</p>;
   return (
     <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm" data-testid="daftar-klaim">
       {daftar.map((k) => (

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { isiTeks } from "@/lib/i18n/isi-teks";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 // H-04: klien Supabase (sekitar 67 KB terkompresi) dimuat saat peta tampil, bukan di bundel awal halaman /demo, sehingga
 // halaman yang menautkan /demo (beranda) tidak ikut mengunduhnya lewat prefetch.
@@ -24,6 +25,7 @@ type Pesan = { zona: string; status?: "kosong" | "terisi"; jumlah?: number; seja
 export const TEKS_PETA_ID = {
   terisi: "Terisi", kosong: "Kosong", belumData: "Belum ada data", orang: "{n} orang", langsung: "Langsung", menyambung: "Menyambung...",
   gagal: "Denah belum bisa dibuka. Coba muat ulang sebentar lagi.",
+  langkahKosong: "Buka Mata",
   tanpaZona: "Belum ada zona. Gambar zona meja atau antrean di Mata, lalu denahnya muncul di sini.",
   ringkasMeja: "{terisi} dari {n} meja terisi", ringkasAntre: "{n} orang di antrean dan rak", denahAria: "Denah {judul}",
   sejak: ", sejak {jam}", sekarang: "{nama} sekarang {status}.",
@@ -116,7 +118,7 @@ export function PetaUsaha({ awal, topik, privat, judul, muatAwal, teks: t = TEKS
       {galat ? (
         <p role="alert" className="mt-3 text-sm text-tinta-2">{t.gagal}</p>
       ) : !zona.length ? (
-        <p className="mt-3 text-sm text-tinta-2" data-testid="peta-kosong">{t.tanpaZona}</p>
+        <p className="mt-3 text-sm text-tinta-2" data-testid="peta-kosong">{t.tanpaZona} <LangkahPertama href="/app/mata">{t.langkahKosong}</LangkahPertama></p>
       ) : (
         <>
           <p className="mt-1 text-sm text-tinta-2" data-testid="peta-ringkas">

@@ -15,6 +15,7 @@ import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 export const metadata: Metadata = { title: "Pelanggan dan deal" };
 
@@ -38,7 +39,7 @@ function KartuDeal({ d, akt, t, b, hari, kelola }: { d: Deal; akt: Aktivitas[]; 
       <div className="flex flex-wrap items-start justify-between gap-2">
         <div className="min-w-0">
           <p className="font-semibold" data-pengguna>{d.judul}</p>
-          <p className="text-sm text-tinta-2"><span data-pengguna>{d.customer?.nama}</span>, {d.orang ? <span data-pengguna>{d.orang.nama}</span> : t.tanpaSales}
+          <p data-langkah='#judul-deal-baru' className="text-sm text-tinta-2"><span data-pengguna>{d.customer?.nama}</span>, {d.orang ? <span data-pengguna>{d.orang.nama}</span> : t.tanpaSales}
             {d.perkiraan_tutup ? `, ${isiTeks(t.tutupPada, { tanggal: formatTanggalKalender(d.perkiraan_tutup, b) })}` : ""}</p>
           {d.dokumen_jual && <p className="text-sm" data-testid="penawaran-deal"><span className="angka">{isiTeks(t.penawaran, { nomor: d.dokumen_jual.nomor })}</span> <Link href="/app/jual" className="text-laut underline underline-offset-2">{t.lihatJual}</Link></p>}
         </div>
@@ -113,7 +114,7 @@ async function Isi() {
 
       <section className="mt-8" aria-labelledby="judul-pipeline">
         <h2 id="judul-pipeline" className={judul}>{t.pipelineJudul}</h2>
-        {terbuka.length === 0 ? <p className="mt-2 text-sm text-tinta-2" data-testid="pipeline-kosong">{t.pipelineKosong}</p> : (
+        {terbuka.length === 0 ? <p data-langkah='#judul-deal-baru' className="mt-2 text-sm text-tinta-2" data-testid="pipeline-kosong">{t.pipelineKosong}</p> : (
           TAHAP_AKTIF.filter((x) => terbuka.some((d) => d.tahap === x)).map((x) => (
             <div key={x} className="mt-4" data-testid={`tahap-${x}`}>
               <h3 className="text-sm font-semibold text-tinta-2">{t.tahap[x]} <span className="angka">({terbuka.filter((d) => d.tahap === x).length})</span></h3>
@@ -146,7 +147,7 @@ async function Isi() {
           </section>
           <section className="mt-10 border-t border-garis pt-6" aria-labelledby="judul-laporan-sales">
             <h2 id="judul-laporan-sales" className={judul}>{t.laporanJudul}</h2>
-            {!L || L.sales.length === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.laporanKosong}</p> : (
+            {!L || L.sales.length === 0 ? <p className="mt-2 text-sm text-tinta-2" data-langkah="#judul-deal-baru">{t.laporanKosong}</p> : (
               <div className="mt-3 overflow-x-auto" tabIndex={0} role="region" aria-label={t.laporanJudul}>
                 <table className="w-full border-y border-garis text-sm" data-testid="laporan-sales">
                   <thead><tr className="border-b border-garis text-left text-tinta-2"><th scope="col" className="py-2 pr-3 font-medium">{t.sales}</th><th scope="col" className="py-2 pl-2 text-right font-medium">{t.menangNilai}</th><th scope="col" className="py-2 pl-2 text-right font-medium">{t.target}</th><th scope="col" className="py-2 pl-2 text-right font-medium">{t.terbukaNilai}</th><th scope="col" className="py-2 pl-2 text-right font-medium">{t.kunjungan}</th></tr></thead>
@@ -164,7 +165,7 @@ async function Isi() {
           <section className="mt-10 border-t border-garis pt-6" aria-labelledby="judul-segmen">
             <h2 id="judul-segmen" className={judul}>{t.segmenJudul}</h2>
             <p className="mt-1 text-sm text-tinta-2">{t.segmenKet}</p>
-            {S.length === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.segmenKosong}</p> : (
+            {S.length === 0 ? <p className="mt-2 text-sm text-tinta-2">{t.segmenKosong} <LangkahPertama href="/app/invoice">{t.segmenLangkah}</LangkahPertama></p> : (
               <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm" data-testid="segmen">
                 {S.slice(0, 30).map((s) => (
                   <li key={s.nama} className="flex flex-wrap items-center justify-between gap-2 py-2" data-nama={s.nama}>

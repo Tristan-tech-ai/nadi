@@ -63,7 +63,7 @@ async function Pengelola({ minggu, kelola, hari, k: { t, f, bahasa } }: { minggu
       {kelola && <PenyusunJadwal minggu={m.mulai} teks={f} hari={t.hari} bahasa={bahasa} />}
       {kelola && <FormShift orang={m.orang.map((o) => ({ id: o.id, nama: o.nama }))} awal={m.mulai >= hari ? m.mulai : hari} kunci={randomUUID()} teks={f} />}
       {!ada ? (
-        <p className="mt-6 text-tinta-2" data-testid="jadwal-kosong">{t.kosong}</p>
+        <p data-langkah='form[aria-label="Tambah shift"]' className="mt-6 text-tinta-2" data-testid="jadwal-kosong">{t.kosong}</p>
       ) : (
         <div className="mt-6" data-testid="jadwal-minggu">
           {t.hari.map((nama, i) => {

@@ -63,7 +63,7 @@ async function Isi() {
       </section>
       <section className="mt-8" aria-labelledby="judul-daftar">
         <h2 id="judul-daftar" className="text-lg font-semibold">{t.daftarJudul}</h2>
-        {daftar.length === 0 ? <p className="mt-1 text-sm text-tinta-2" data-testid="ekspor-kosong">{t.kosong}</p> : (
+        {daftar.length === 0 ? <p data-langkah='#judul-baru' className="mt-1 text-sm text-tinta-2" data-testid="ekspor-kosong">{t.kosong}</p> : (
           <ul className="mt-2 divide-y divide-garis border-y border-garis" data-testid="daftar-ekspor">
             {daftar.map((i) => (
               <li key={i.id} className="grid gap-2 py-3" data-testid="baris-daftar-ekspor" data-nomor={i.nomor}>

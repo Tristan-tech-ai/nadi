@@ -59,7 +59,7 @@ async function Isi() {
       {kepala}
       {kelola && <div className="mt-6"><BuatSurat orang={(org ?? []) as { id: string; nama: string }[]} teks={t} /></div>}
       {daftar.length === 0 ? (
-        <div className="mt-8 flex flex-col items-start gap-3"><IlustrasiSurat className="w-28" /><p className="text-tinta-2" data-testid="surat-kosong">{t.kosong}</p></div>
+        <div className="mt-8 flex flex-col items-start gap-3"><IlustrasiSurat className="w-28" /><p data-langkah='form[aria-label="Minta surat"]' className="text-tinta-2" data-testid="surat-kosong">{t.kosong}</p></div>
       ) : (
         <ul className="mt-8 divide-y divide-garis border-y border-garis" data-testid="daftar-surat-keluar">
           {daftar.map((s) => (

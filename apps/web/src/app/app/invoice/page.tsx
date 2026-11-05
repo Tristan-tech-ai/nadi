@@ -89,7 +89,7 @@ async function Isi() {
       {kepala}
       <section className="mt-6" aria-labelledby="judul-umur" data-testid="umur-piutang">
         <h2 id="judul-umur" className="text-lg font-semibold">{t.umurJudul}</h2>
-        {!adaUmur ? <p className="mt-1 text-sm text-tinta-2">{t.umurKosong}</p> : (
+        {!adaUmur ? <p data-langkah='#judul-baru' className="mt-1 text-sm text-tinta-2">{t.umurKosong}</p> : (
           <table className="mt-2 w-full text-sm">
             <caption className="sr-only">{t.umurCaption}</caption>
             <thead><tr className="border-b border-garis-kuat text-left text-tinta-2"><th scope="col" className="py-1 font-semibold">{t.kolUmur}</th><th scope="col" className="py-1 text-right font-semibold">{t.kolInvoice}</th><th scope="col" className="py-1 text-right font-semibold">{t.kolJumlah}</th></tr></thead>

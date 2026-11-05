@@ -44,7 +44,7 @@ async function Isi() {
     <div lang={bahasa}>
       <KepalaHalaman jalur="/app/pengumuman" judul={t.pengumumanJudul} ket={<><a href="/app/survei" className="underline underline-offset-4">{ambilKamus(bahasa).survei.judulHalaman}</a></>} />
       {daftar.length === 0 ? (
-        <p className="mt-4 text-tinta-2" data-testid="pengumuman-kosong">{t.pengumumanKosong}</p>
+        <p data-langkah='#judul-tulis-pengumuman' className="mt-4 text-tinta-2" data-testid="pengumuman-kosong">{t.pengumumanKosong}</p>
       ) : (
         <ul className="mt-4 divide-y divide-garis border-y border-garis" data-testid="daftar-pengumuman">
           {daftar.map((p) => (

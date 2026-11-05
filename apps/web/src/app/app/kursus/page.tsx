@@ -48,7 +48,7 @@ async function Isi() {
       <KepalaHalaman jalur="/app/kursus" judul={t.judul} ket={t.ket} />
       {!saya && !pengelola && <p className="mt-3 text-sm text-tinta-2">{t.tanpaOrang}</p>}
 
-      {daftar.length === 0 ? <p className="mt-8 text-sm text-tinta-2">{pengelola ? t.kosongPengelola : t.kosong}</p> : (
+      {daftar.length === 0 ? <p data-langkah='#kursus-baru' className="mt-8 text-sm text-tinta-2">{pengelola ? t.kosongPengelola : t.kosong}</p> : (
         <div className="mt-8 grid gap-8">{daftar.map((c) => {
           const qs = soalPer.get(c.id) ?? [];
           const s = sertiPer.get(c.id);

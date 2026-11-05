@@ -15,6 +15,7 @@ import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
+import { LangkahPertama } from "@/components/app/langkah-pertama";
 
 export const metadata: Metadata = { title: "Paket pembiayaan" };
 
@@ -123,7 +124,7 @@ async function Isi() {
 
       <section className="mt-8 break-inside-avoid" aria-labelledby="pb-invoice">
         <h2 id="pb-invoice" className="text-lg font-semibold">{t.invoiceJudul}</h2>
-        <p className="mt-1 text-sm text-tinta-2" data-testid="pb-hari-bayar">{riwayat.rataHariBayar === null ? t.belumAdaLunas : isiTeks(t.rataBayar, { hari: riwayat.rataHariBayar.toLocaleString(bahasa === "en" ? "en-US" : "id-ID"), n: riwayat.tepat })}</p>
+        <p className="mt-1 text-sm text-tinta-2" data-testid="pb-hari-bayar">{riwayat.rataHariBayar === null ? <>{t.belumAdaLunas} <LangkahPertama href="/app/invoice">{t.langkahKosong}</LangkahPertama></> : isiTeks(t.rataBayar, { hari: riwayat.rataHariBayar.toLocaleString(bahasa === "en" ? "en-US" : "id-ID"), n: riwayat.tepat })}</p>
         <Tabel label={t.invoiceJudul} kepala={[t.kolBulan, t.kolTerbit, t.kolNilai, t.kolLunas, t.kolNilaiLunas]}>
           {riwayat.baris.map((b) => (
             <tr key={b.bulan} data-testid="pb-baris-invoice"><td className={sel}>{namaBulan(b.bulan)}</td><td className={`${kanan} angka`}>{b.terbit}</td><td className={`${kanan} angka`}>{rp(b.nilai)}</td>
