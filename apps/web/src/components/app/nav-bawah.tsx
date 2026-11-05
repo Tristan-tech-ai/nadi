@@ -24,7 +24,7 @@ export function NavBawah({ peran, magang = false, ilmu = false, teks, lang }: { 
   const jalur = usePathname();
   const item = SEMUA.filter((i) => (i.peran as readonly string[]).includes(peran) && (i.href !== "/app/magang" || peran !== "staf" || magang) && (i.href !== "/app/ilmu" || ilmu));
   return (
-    <nav aria-label={teks.navUtama} lang={lang} className="sticky bottom-0 z-10 border-t border-garis bg-kertas pb-[env(safe-area-inset-bottom)]">
+    <nav aria-label={teks.navUtama} lang={lang} className="sticky bottom-0 z-10 border-t border-garis bg-kertas pb-[env(safe-area-inset-bottom)] print:hidden">
       <ul className="mx-auto flex max-w-2xl">
         {item.map(({ href, kunci, Ikon }) => {
           const aktif = href === "/app" ? jalur === "/app" : jalur.startsWith(href);

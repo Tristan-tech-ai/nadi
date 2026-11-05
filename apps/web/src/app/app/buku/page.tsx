@@ -196,6 +196,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/buku">["sea
         )}
         <TombolCetak label={t.cetak} />
         <Link href={`/app/buku/lanjut?dari=${dari}&sampai=${sampai}`} className="inline-flex h-10 items-center rounded-[var(--radius-isian)] border border-garis-kuat px-4 text-sm font-semibold hover:bg-kertas-2" data-testid="tautan-lanjut">{ambilKamus(bahasa).bukuLanjut.tautan}</Link>
+        <Link href="/app/buku/pembiayaan" className="inline-flex h-10 items-center rounded-[var(--radius-isian)] border border-garis-kuat px-4 text-sm font-semibold hover:bg-kertas-2" data-testid="tautan-pembiayaan">{ambilKamus(bahasa).pembiayaan.tautan}</Link>
       </div>
 
       {bolehTulis && (

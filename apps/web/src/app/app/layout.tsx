@@ -35,7 +35,7 @@ function TautanKepala({ lompat, beranda, lang }: { lompat: string; beranda: stri
   return (
     <>
       <a href="#isi" className="lompat-isi" lang={lang}>{lompat}</a>
-      <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-garis bg-kertas px-4 py-3">
+      <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-garis bg-kertas px-4 py-3 print:hidden">
         <Link href="/app" aria-label={beranda} lang={lang}>
           <TandaNadi ukuran={26} />
         </Link>

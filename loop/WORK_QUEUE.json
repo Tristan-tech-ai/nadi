@@ -2961,8 +2961,10 @@
    "accept": "e2e satu siklus review; tes SQL rahasia (nilai hanya pemilik/atasan)",
    "how": "docs/research/mekari/rencana.md; menutup TA-32, TA-33; isi: Kinerja dan belajar: goal/KPI per orang (KPI papan kerja jadi salah satu sumber), siklus review (diri, atasan, rekan) dengan formulir, kalibrasi, 9-box, kompetensi per topi, IDP; LMS dari Rekam ilmu: kursus, kuis, progres, sertifikat PDF",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T14:48:03",
+   "result": "fca9175 + 2542d94 + ef4a576: migrasi kinerja md5 36c3e7ed, tes SQL 22/22 (siklus diri + atasan dari profil_kerja + 2 rekan, hanya penilai yang mengisi, skor 1-5 per kompetensi, rekan tampil setelah 2, usulan 3,63 lalu 3,70, kalibrasi k2p3 lalu k3p3 hanya pemilik/admin, RAHASIA: yang dinilai/rekan/staf lain tidak melihat nilai, atasan hanya bawahan langsung, tujuan + IDP, terkunci setelah tutup, isolasi); e2e/kinerja.spec.ts lulus produksi nadi-swart.vercel.app (pemilik buka siklus, staf isi penilaian diri lewat /masuk/staf, ringkasan 1/1, kalibrasi potensi tinggi = Bintang di 9-box, staf tidak melihat ringkasan/9-box, tutup siklus; axe 390/1440 terang/gelap); LMS dipisah ke M-13B; fitur.md TA-32"
   },
   {
    "id": "M-14",
@@ -3173,8 +3175,10 @@
    "accept": "kartu di /app/perusahaan menampilkan token, berkas, storage, dan perkiraan rupiah bulan ini dari public.pemakaian_ai + biaya_usaha; angka sama dengan RPC sumber (tes SQL); e2e id/en",
    "how": "docs/research/mekari/rencana.md nilai tambah",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:18:07"
+   "status": "done",
+   "created": "2026-11-04T20:18:07",
+   "done": "2026-11-05T15:18:31",
+   "result": "20d408f; migrasi 20261105091000_biaya_nyata md5 adc1192c sama; supabase/tests/biaya_nyata.test.sql 10/10 (angka = app.biaya_usaha + contoh tangan dari harga konfigurasi); e2e/biaya.spec.ts id+en lokal + produksi lulus, angka layar = RPC nadi_cost (usaha contoh 53.453 token, Rp1.334,24)"
   },
   {
    "id": "R-MEKARI",
@@ -3411,8 +3415,10 @@
    "accept": "tes SQL: kursus dari Rekam ilmu, kuis dinilai server (jawaban tidak terkirim ke klien), lulus >= ambang memberi sertifikat bernomor, progres per orang hanya pemilik/atasan/diri, isolasi; e2e satu kursus sampai sertifikat",
    "how": "bagian LMS dari M-13 (TA-33) dipisah karena M-13 menutup siklus kinerja dulu",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T14:38:48"
+   "status": "done",
+   "created": "2026-11-05T14:38:48",
+   "done": "2026-11-05T15:05:54",
+   "result": "7396e5e; migrasi 20261105090000_kursus md5 b5aa54cb sama; supabase/tests/kursus.test.sql 25/25; e2e/kursus.spec.ts lokal + produksi nadi-swart.vercel.app lulus (axe 0 serius, 390/1440 terang/gelap); /app/kursus + /sertifikat/<kode>"
   }
  ]
 }
