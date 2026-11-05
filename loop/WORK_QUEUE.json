@@ -3333,6 +3333,62 @@
    "created": "2026-11-05T10:08:58",
    "done": "2026-11-05T10:36:07",
    "result": "f08a55a: migrasi janji_katalog_poin md5 e341bc4d, tes SQL 23/23 (15 slot, tumpukan ditolak juga oleh exclusion constraint 23P01, batal membuka slot, katalog hanya produk berharga, poin 25 dari invoice lunas Rp250.000, tukar tidak melebihi sisa); vitest katalog 3/3; e2e janji-katalog + layanan lulus produksi nadi-swart.vercel.app (pesan jadwal publik > kode > slot hilang > wa.me terisi > pemilik tandai datang; axe 390/1440 terang/gelap)"
+  },
+  {
+   "id": "W-07A",
+   "fase": "F7",
+   "kind": "build",
+   "priority": 4,
+   "size": "m",
+   "wajib": true,
+   "title": "Tagihan berulang: sewa, SPP, langganan terbit otomatis per periode dengan pengingat",
+   "accept": "tes SQL: jadwal bulanan menerbitkan tepat satu invoice per periode (idempoten, tanggal akhir bulan aman), berhenti saat kontrak berakhir/dijeda, isolasi; e2e satu langganan terbit dan muncul di /i/kode",
+   "how": "docs/research/kebutuhan-usaha.md urut 1; pakai invoice + QRIS + pengingat yang ada, pg_cron harian",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T13:17:51"
+  },
+  {
+   "id": "W-07B",
+   "fase": "F7",
+   "kind": "build",
+   "priority": 4,
+   "size": "m",
+   "wajib": true,
+   "title": "Order titipan/servis: tiket, status per tahap, janji selesai, ambil, invoice",
+   "accept": "tes SQL: tiket bernomor, urutan status tidak bisa mundur kecuali batal, invoice dari tiket, isolasi; e2e terima barang sampai diambil + halaman status publik untuk pelanggan",
+   "how": "docs/research/kebutuhan-usaha.md urut 2 (bengkel, laundry, penjahit, servis elektronik)",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T13:17:51"
+  },
+  {
+   "id": "W-07C",
+   "fase": "F7",
+   "kind": "build",
+   "priority": 5,
+   "size": "m",
+   "wajib": true,
+   "title": "Komisi per layanan/penjualan ke slip gaji",
+   "accept": "tes SQL: aturan komisi persen/nominal per produk atau layanan, dihitung dari penjualan kasir/invoice per orang per periode, masuk slip sebagai komponen, isolasi; e2e satu komisi tampil di slip",
+   "how": "docs/research/kebutuhan-usaha.md urut 3 (salon, bengkel, sales)",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T13:17:51"
+  },
+  {
+   "id": "W-07D",
+   "fase": "F7",
+   "kind": "build",
+   "priority": 5,
+   "size": "m",
+   "wajib": true,
+   "title": "Anggaran proyek vs realisasi + jam kerja per proyek",
+   "accept": "tes SQL: RAB per proyek, realisasi dari jurnal bertag proyek, jam kerja per orang per proyek, laporan selisih, isolasi; e2e satu proyek dengan anggaran dan realisasi",
+   "how": "docs/research/kebutuhan-usaha.md urut 4; tag proyek M-08",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T13:17:51"
   }
  ]
 }
