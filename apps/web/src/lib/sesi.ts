@@ -22,6 +22,10 @@ export async function bacaSesi(): Promise<Sesi | null> {
 export async function wajibSesi(): Promise<Sesi> {
   const s = await bacaSesi();
   if (!s) redirect("/masuk");
+  // M-21: sesi aal1 milik akun ber-2FA diarahkan ke langkah kode (database juga menutup usaha untuk sesi ini).
+  const supabase = await createClient();
+  const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (aal?.nextLevel === "aal2" && aal.currentLevel !== "aal2") redirect("/masuk/2fa");
   return s;
 }
 

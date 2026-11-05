@@ -18,7 +18,24 @@ export async function masuk(_: HasilForm, form: FormData): Promise<HasilForm> {
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password: sandi });
   if (error) return { galat: pesanGalatAuth(error.code, await teksAuth()), isian: { email } };
-  redirect(jalurAman(teks(form, "next")));
+  await catatAktivitas(supabase, "masuk");
+  const next = jalurAman(teks(form, "next"));
+  // M-21: akun dengan verifikasi dua langkah wajib memasukkan kode dulu (database menutup usaha untuk sesi aal1).
+  const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
+  if (aal?.nextLevel === "aal2" && aal.currentLevel !== "aal2") redirect(`/masuk/2fa?next=${encodeURIComponent(next)}`);
+  redirect(next);
+}
+
+/** Catat aktivitas akun dengan alamat dan perangkat peramban (dari kepala permintaan, bukan alamat server). Gagal diabaikan. */
+async function catatAktivitas(supabase: Awaited<ReturnType<typeof createClient>>, jenis: "masuk" | "keluar" | "2fa.lolos" | "2fa.aktif" | "2fa.nonaktif" | "sesi.cabut") {
+  const h = await headers();
+  const ip = (h.get("x-forwarded-for") ?? "").split(",")[0].trim() || h.get("x-real-ip") || null;
+  await supabase.rpc("log_activity", { p_kind: jenis, p_ip: ip, p_ua: h.get("user-agent") });
+}
+
+/** Dipanggil peramban setelah langkah keamanan berhasil (kode 2FA benar, 2FA dinyalakan/dimatikan, perangkat lain dikeluarkan). */
+export async function catatAktivitasKeamanan(jenis: "2fa.lolos" | "2fa.aktif" | "2fa.nonaktif" | "sesi.cabut") {
+  await catatAktivitas(await createClient(), jenis);
 }
 
 /** Staf masuk tanpa email: kode usaha + ID staf + PIN 6 angka, dipetakan ke email sintetis buatan buat_akun_staf. */
@@ -64,6 +81,7 @@ export async function daftar(_: HasilForm, form: FormData): Promise<HasilForm> {
 
 export async function keluar() {
   const supabase = await createClient();
+  await catatAktivitas(supabase, "keluar");
   await supabase.auth.signOut();
   redirect("/masuk");
 }
