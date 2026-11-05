@@ -8,6 +8,7 @@ const { chromium } = require("@playwright/test");
 const AKAR = import.meta.dirname;
 const APP = join(AKAR, "..", "film-langsung", "assets", "app");
 const TARGET = {
+  "kartu-nota-dicap": { kartu: "article", cap: ".cap-turun > span" },
   "kartu-nota": { kartu: "article", judul: "article h3", dampak: "span[title='Rp376.500']", setujui: "button:text-is('Setujui')", tolak: "button:text-is('Tolak')", baru: "[data-testid=penanda-baru]" },
 };
 const b = await chromium.launch();
@@ -28,7 +29,7 @@ for (const [nama, sel] of Object.entries(TARGET)) {
     hasil[nama][k] = r ? { x: Math.round(r.x - w.x), y: Math.round(r.y - w.y), w: Math.round(r.width), h: Math.round(r.height) } : null;
   }
   // Rentang teks "Rp376.500" di dalam judul (untuk stabilo tepat di angka).
-  hasil[nama].judul_rp = await p.evaluate(() => {
+  if (nama === "kartu-nota") hasil[nama].judul_rp = await p.evaluate(() => {
     const h = document.querySelector("#w article h3"); const t = h.firstChild; const i = t.textContent.indexOf("Rp376.500");
     const r = document.createRange(); r.setStart(t, i); r.setEnd(t, i + 9); const a = r.getBoundingClientRect(); const w = document.querySelector("#w").getBoundingClientRect();
     return { x: Math.round(a.x - w.x), y: Math.round(a.y - w.y), w: Math.round(a.width), h: Math.round(a.height) };

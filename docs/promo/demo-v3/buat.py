@@ -167,7 +167,52 @@ def bangun():
     gulir = (ls_["daftar"]["y"] + ls_["daftar"]["h"] - 900) * MS
     f.add(f'tl.to("#m2", {{y: -{round(gulir * 0.55)}, duration: {27 / FPS:.3f}, ease: "power4.out"}}, {T2c + 3.2});')
 
-    durasi = 26.0
+    # ---------- Babak 4 Feed: kartu diangkat, Setujui menjadi cap (26 - 36 dtk) ----------
+    T4 = 26.0
+    fe, kn, dc = U["feed"], U["kartu-nota"], U["kartu-nota-dicap"]
+    OX, OY = 340, fe["nota"]["y"] - 330  # potongan Feed yang tampil di jendela
+    JX, JY, JW, JH = 200, 60, 1520, 960
+    S4 = 1.45  # isi Feed diperbesar supaya kolom kartu mengisi ~60% lebar bingkai
+    nx, ny = JX + (fe["nota"]["x"] - OX) * S4, JY + (fe["nota"]["y"] - OY) * S4  # pojok kiri atas kartu nota di bingkai
+    sx, sy = nx + (kn["setujui"]["x"] + kn["setujui"]["w"] * 0.45) * S4, ny + (kn["setujui"]["y"] + kn["setujui"]["h"] / 2) * S4
+    KURSOR = ('<svg viewBox="0 0 32 32" width="72" height="72"><path d="M6 3 L6 25 L11.5 19.8 L15.4 28.4 L19 26.8 L15.2 18.4 L22.6 18.4 Z" '
+              'fill="#1C1B18" stroke="#FFFDF8" stroke-width="2" stroke-linejoin="round"/></svg>')
+    isi4 = (f'<div id="b4k" class="kam">'
+            f'<div class="jendela" data-layout-allow-overflow style="left:{JX}px; top:{JY}px; width:{JW}px; height:{JH}px">'
+            f'<div class="isi" data-layout-allow-overflow style="left:{-OX * S4}px; top:{-OY * S4}px; transform:scale({S4}); transform-origin:0 0">{frag("feed")}</div>'
+            f'<div id="redup" style="position:absolute; inset:0; background:#F6F2EA; opacity:0"></div></div>'
+            # kartu nota diangkat: salinan DOM kartu yang sama, persis di atas posisinya (isolasi fokus, rujukan 1)
+            f'<div id="angkat" style="position:absolute; left:{nx}px; top:{ny}px; transform-origin:50% 50%; opacity:0">'
+            f'<div style="transform:scale({S4}); transform-origin:0 0">{frag("kartu-nota")}</div></div>'
+            f'<div id="dicapx" style="display:none"></div><div id="dicap" style="position:absolute; z-index:5; left:{nx}px; top:{ny + 40 * S4}px; opacity:0">'
+            f'<div style="transform:scale({S4}); transform-origin:0 0">{frag("kartu-nota-dicap")}</div></div>'
+            f'<div id="capbesar" class="capbesar" style="left:{nx + 150 * S4}px; top:{ny + 30 * S4}px">DITERIMA</div>'
+            f'<div id="tutup" style="position:absolute; left:{nx - 4}px; top:{ny - 4}px; width:{640 * S4 + 8}px; height:{178 * S4 + 8}px; background:#F6F2EA; opacity:0"></div>'
+            f'<div class="kursor" id="kur4">{KURSOR}</div></div>')
+    f.adegan("b4", T4, 36.0, isi4, z=4)
+    f.add(f'tl.set("#b4k", {json.dumps(kamera(nx + 320 * S4, ny + 89 * S4, 1.0))}, {T4});')
+    # 27,0: sekeliling meredup, kartu terangkat sedikit (skala 1,05, bayangan) - "satu kartu yang perlu keputusanmu"
+    f.add(f'tl.to("#redup", {{opacity: 0.72, duration: 0.35, ease: "power2.out"}}, {T4 + 0.9});')
+    f.add(f'tl.fromTo("#angkat", {{opacity: 0}}, {{opacity: 1, duration: 0.01}}, {T4 + 0.9});')
+    f.add(f'tl.to("#angkat", {{scale: 1.05, y: -8, boxShadow: "0 30px 70px rgba(28,27,24,0.22)", duration: 0.4, ease: "power2.out"}}, {T4 + 0.95});')
+    # kursor datang ke Setujui, klik di 29,0
+    TK = T4 + 3.0
+    f.add(f'tl.fromTo("#kur4", {{x: {round(sx + 520)}, y: {round(sy + 300)}, opacity: 0}}, {{x: {round(sx - 10)}, y: {round(sy - 8)}, opacity: 1, duration: 1.0, ease: TEKAN}}, {TK - 1.2:.3f});')
+    f.add(f'tl.to("#kur4", {{scale: 0.88, duration: 0.07, yoyo: true, repeat: 1, transformOrigin: "15% 10%"}}, {TK:.3f});')
+    # cap besar turun di atas kartu (karakter film), lalu kartu menyusut menjadi kartu diputuskan asli dengan cap kecil di tempatnya
+    f.add(f'tl.fromTo("#capbesar", {{opacity: 0, scale: 2.2, rotation: -14}}, {{opacity: 1, scale: 1, rotation: -7, duration: 0.16, ease: "power3.in"}}, {TK + 0.06:.3f});')
+    f.add(f'tl.to("#angkat", {{scale: 1.02, duration: 0.06, yoyo: true, repeat: 1}}, {TK + 0.22:.3f});')
+    cx, cy = nx + (dc["cap"]["x"]) * S4, ny + 40 * S4 + dc["cap"]["y"] * S4
+    f.add(f'tl.to("#capbesar", {{x: {round(cx - (nx + 150 * S4))}, y: {round(cy - (ny + 30 * S4))}, scale: 0.36, rotation: 0, opacity: 0, duration: 0.45, ease: TEKAN}}, {TK + 1.0:.3f});')
+    f.add(f'tl.to("#angkat", {{opacity: 0, duration: 0.3}}, {TK + 1.0:.3f});')
+    f.add(f'tl.fromTo("#dicap", {{opacity: 0}}, {{opacity: 1, duration: 0.3}}, {TK + 1.1:.3f});')
+    f.add(f'tl.to("#kur4", {{opacity: 0, duration: 0.3}}, {TK + 1.2:.3f});')
+    # kartu diputuskan bergeser keluar, sekeliling terang lagi, kamera mundur memperlihatkan Feed (kurva MUNDUR)
+    f.add(f'tl.set("#tutup", {{opacity: 1}}, {TK + 1.0:.3f});')
+    f.add(f'tl.to("#redup", {{opacity: 0, duration: 0.4}}, {TK + 2.8:.3f});')
+    f.add(f'tl.to("#b4k", {{x: 0, y: 0, scale: 0.86, duration: {48 / FPS:.3f}, ease: MUNDUR}}, {TK + 3.0:.3f});')
+
+    durasi = 36.0
     css = open(os.path.join(AKAR, "gaya.css"), encoding="utf8").read()
     html = f"""<!doctype html>
 <html lang="id">

@@ -4,7 +4,9 @@ html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; backgro
 .kam { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; }
 .app { background: transparent; }
 .app, .app * { transition: none !important; animation: none !important; }
-.app nav[aria-label="Navigasi utama"], .app .fixed { display: none !important; }
+.app nav[aria-label="Navigasi utama"], .app .fixed, .app .lompat-isi { display: none !important; }
+/* bilah atas disembunyikan tanpa mengubah tata letak (posisi dari ukur.json diukur dengan bilah ada) */
+.app header.sticky { visibility: hidden !important; }
 /* Nota direkonstruksi sebagai lapisan teks (bukan foto) supaya tiap baris bisa dipindai dan diberi kotak. */
 .nota { position: absolute; background: #FFFDF8; border-radius: 6px; box-shadow: 0 2px 6px rgba(28,27,24,0.06), 0 24px 60px rgba(28,27,24,0.14); font-family: var(--font-plex-mono), ui-monospace, monospace; color: #1C1B18; transform-origin: 50% 50%; }
 .nb { position: absolute; left: 28px; right: 28px; height: 52px; display: flex; justify-content: space-between; align-items: center; font-size: 26px; }
@@ -24,3 +26,5 @@ html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; backgro
 .ph { position: absolute; padding: 10px 16px; border: 2px dashed #B4372A; color: #B4372A; font-size: 20px; font-weight: 600; background: #F6F2EA; }
 .jendela { position: absolute; overflow: hidden; background: #F6F2EA; border-radius: 16px; border: 1px solid #DDD5C6; box-shadow: 0 2px 6px rgba(28,27,24,0.06), 0 24px 60px rgba(28,27,24,0.14); }
 .isi { position: absolute; left: 0; }
+.kursor { position: absolute; left: 0; top: 0; width: 72px; height: 72px; z-index: 40; opacity: 0; }
+.capbesar { position: absolute; padding: 10px 26px; border: 6px solid #23704A; border-radius: 10px; color: #23704A; font-size: 64px; font-weight: 800; letter-spacing: 0.08em; opacity: 0; transform-origin: 50% 50%; background: rgba(246,242,234,0.6); }
