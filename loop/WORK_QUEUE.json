@@ -2643,8 +2643,10 @@
    "accept": "korpus video sintetis toko dengan jalur diketahui; akurasi jumlah kunjungan >= 90%, galat lama kunjungan <= 15%; tes SQL isolasi; e2e peta panas di Peta Usaha; docs/research/mata-v2.md dengan pasal UU PDP 27/2022 dari teks resmi",
    "how": "docs/research/rencana-luas-nadi.md W-02",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T18:52:56"
+   "status": "done",
+   "created": "2026-11-04T18:52:56",
+   "done": "2026-11-05T07:18:04",
+   "result": "123aff7; migrasi 20261105073000_mata_v2 md5 1dfa523c; tes SQL mata_v2 32/32; vitest jejak 13 (korpus fixtures/korpus/mata-v2: sepi 10/10 galat lama 10,9%, ramai 41/45 91,1% 12,7%, antrean 24/24 5,3%, ramai-2 uji 49/50 8,3%, sepi-2 uji 12/12 6,3%; merah sengaja tanpa pintu < 90%); e2e mata-v2 produksi 5/5 kunjungan peramban + peta panas + axe 390/1440; docs/research/mata-v2.md (UU 27/2022 Pasal 17 dari PDF resmi BPK); /cetak/papan-mata"
   },
   {
    "id": "W-03",
@@ -2705,8 +2707,10 @@
    "accept": "20 kalimat uji jenis usaha menghasilkan paket dan topi masuk akal; tes SQL; e2e",
    "how": "docs/research/rencana-luas-nadi.md W-06",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T18:52:56"
+   "status": "done",
+   "created": "2026-11-04T18:52:56",
+   "done": "2026-11-05T07:29:08",
+   "result": "1e1471b; migrasi 074000 paket_terbuka md5 49fd8b30 + 074100 kunci md5 b60a2f71; tes SQL paket_terbuka 15/15 (merah dulu: kunci_klien uuid); vitest cocok 25/25 (20 kalimat jenis usaha); e2e paket-terbuka produksi lulus (Lainnya -> paket produksi -> usulan topi disetujui -> pembuat_kue/admin_online/kurir terpasang); docs/research/paket-terbuka.md"
   },
   {
    "id": "W-07",
@@ -3275,6 +3279,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-05T07:03:55"
+  },
+  {
+   "id": "W-02C",
+   "fase": "F5",
+   "kind": "build",
+   "priority": 3,
+   "size": "m",
+   "wajib": true,
+   "title": "Mata v2 untuk CCTV miring: pelacak diberi titik dari model deteksi orang",
+   "accept": "Layar Hitung kunjungan punya pilihan kamera miring yang memakai deteksi orang model Mata F5-01 (titik kaki kotak orang) sebagai masukan Pelacak, bukan beda latar; diuji pada rekaman Ezymart W-02B (hitungan tangan 10 bingkai) dengan akurasi jumlah orang dilaporkan jujur, target >= 80%; vitest Pelacak dengan titik dari kotak; e2e tetap lulus",
+   "how": "Pakai worker mata-worker.js dan jangkar() di resep.ts; skrip eval scratchpad/cctv/eval.ts",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T07:35:53"
   }
  ]
 }

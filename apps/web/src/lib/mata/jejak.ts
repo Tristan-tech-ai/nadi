@@ -20,7 +20,23 @@ export type OpsiDeteksi = {
   /** Perkiraan luas satu orang, bagian dari luas bingkai; gumpal jauh lebih besar dipecah (orang berdempetan). */
   luasOrang: number;
 };
-export const OPSI_DETEKSI: OpsiDeteksi = { ambang: 30, luasMin: 0.002, luasOrang: 0.0059 };
+export const OPSI_DETEKSI: OpsiDeteksi = { ambang: 45, luasMin: 0.002, luasOrang: 0.0059 };
+
+/**
+ * Latar dari median beberapa bingkai yang tersebar waktunya: rekaman sungguhan jarang dimulai dari ruang kosong, dan orang yang
+ * lewat tidak terekam di median selama ia tidak berdiri di tempat yang sama di lebih dari separuh bingkai.
+ */
+export function latarMedian(bingkai: Bingkai[]): Float32Array {
+  const n = bingkai[0].data.length;
+  const latar = new Float32Array(n);
+  const nilai = new Uint8Array(bingkai.length);
+  for (let i = 0; i < n; i++) {
+    for (let k = 0; k < bingkai.length; k++) nilai[k] = bingkai[k].data[i];
+    nilai.sort();
+    latar[i] = nilai[nilai.length >> 1];
+  }
+  return latar;
+}
 
 /** Latar awal dari satu bingkai (toko kosong). */
 export function latarDari(b: Bingkai): Float32Array {

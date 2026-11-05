@@ -47,6 +47,26 @@ Galat lama = rata-rata |lama hasil - lama benar| / lama benar per kunjungan yang
 
 Catatan jujur: ini korpus sintetis dengan orang berupa lingkaran di lantai rata. Kamera sungguhan punya bayangan, orang membawa troli, sudut tidak tegak lurus, dan dua orang yang berjalan berdampingan terhitung satu (sumber kurang hitung di skenario ramai). Uji pada rekaman CCTV publik berlisensi bebas menjadi tugas W-02B.
 
+## Uji rekaman kamera publik (W-02B, 5 Nov 2026)
+
+Permintaan Tristan 5 Nov 2026: uji Mata pada CCTV umum yang boleh dipakai. Dua rekaman dari Wikimedia Commons, lisensinya dibaca dari metadata berkas (docs/ASSETS.md). Keduanya disimpan di scratchpad, tidak di repo.
+
+- **Madero y Eje Central** (CC BY-SA 4.0): drone tegak lurus di atas persimpangan, gerak lambat. 62 detik pertama, zona zebra kanan bawah (118 x 73 piksel dari 640 x 360, diproses 236 px).
+- **Ezymart Newtown** (domain publik): CCTV toko asli, kamera miring di atas kasir, 66 detik.
+
+Rekaman gerak lambat 62 detik hanya memuat sedikit penyeberangan utuh, jadi hitungan kunjungan dari sana tidak bisa dibuat jujur. Yang dihitung tangan adalah jumlah orang di zona pada bingkai yang jelas: Madero 11 bingkai (t = 0 sampai 20 detik, 2 sampai 3 orang), Ezymart 10 bingkai (t = 36 sampai 63 detik, 1 sampai 2 orang). Hitungan tangan di Ezymart bisa meleset satu orang karena orang tertutup rak. Mata membaca median 5 bingkai di sekitar waktu itu dengan latar median.
+
+| Rekaman | Ambang 30 (bawaan lama) | Ambang 45 |
+|---|---|---|
+| Madero zebra (kamera atas) | akurasi 54,5%, galat 6 orang (bayangan panjang ikut terhitung) | akurasi 86,4%, galat rata-rata 0,36 orang |
+| Ezymart (kamera miring) | akurasi 40%, galat 1 orang | akurasi 20%, galat 1,4 orang |
+
+Kesimpulan:
+- Kamera atas di luar ruang: bayangan adalah sumber salah hitung terbesar. Ambang bawaan dinaikkan ke 45; korpus sintetis tetap lulus (akurasi 91 sampai 100%, galat lama 5 sampai 13%). Angka 86,4% disetel pada 11 sampel yang sama, jadi optimis; di bawah target 90%.
+- Kamera miring (CCTV toko biasa): beda latar tidak cocok. Orang tertutup rak, latar penuh warna, dan orang yang berdiri lama di awal ikut menjadi latar. Untuk kamera ini pelacak perlu diberi titik dari model deteksi orang (sudah ada di Mata F5-01), bukan dari beda latar: tugas W-02C.
+- Latar sekarang diambil dari median 15 bingkai tersebar (layar berkas), karena rekaman nyata jarang dimulai dari ruang kosong.
+- Calon bahan promo: hanya Madero (titik orang tidak dapat dikenali), dengan atribusi dan konsekuensi CC BY-SA. Ezymart tidak dipakai.
+
 ## Belum
 
 - Agen edge Rust (edge/mata-agen) belum mengirim rekap kunjungan; baru layar Mata di peramban.

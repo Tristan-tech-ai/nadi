@@ -104,3 +104,9 @@ describe("teks dan bingkai", () => {
     expect([...b.data]).toEqual([255, 76]);
   });
 });
+
+test("latarMedian membuang orang yang lewat", async () => {
+  const { latarMedian } = await import("./jejak");
+  const b = (v: number[]) => ({ lebar: 2, tinggi: 1, data: Uint8Array.from(v) });
+  expect([...latarMedian([b([150, 150]), b([40, 150]), b([150, 40]), b([150, 150]), b([40, 150])])]).toEqual([150, 150]);
+});

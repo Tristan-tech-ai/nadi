@@ -5,7 +5,7 @@ import { Tombol } from "@/components/ui/tombol";
 import { isiTeks } from "@/lib/i18n/isi-teks";
 import type { Kamus } from "@/lib/i18n/kamus";
 import { aturPapan, kirimRekap } from "@/app/app/mata/actions";
-import { abuDari, deteksi, formatDurasi, latarDari, Pelacak, rekapJam, type Kunjungan, type ZonaV2 } from "@/lib/mata/jejak";
+import { abuDari, deteksi, formatDurasi, latarDari, latarMedian, Pelacak, rekapJam, type Bingkai, type Kunjungan, type ZonaV2 } from "@/lib/mata/jejak";
 
 // W-02 Mata v2: kamera atas atau rekaman diproses di perangkat ini (beda latar + pelacak posisi, src/lib/mata/jejak.ts).
 // Bingkai diperkecil ke 160 px, dibaca, lalu dibuang. Yang dikirim hanya rekap per jam (jumlah dan detik).
@@ -113,17 +113,20 @@ export function HitungKunjungan({ zona, papanAwal, teks: t, bahasa }: { zona: Zo
     const asalMs = Date.now() - v.duration * 1000;
     const p = new Pelacak(zona);
     const hasil: Kunjungan[] = [];
-    let latar: Float32Array | null = null;
+    const ke = (t: number) => new Promise<void>((ok) => {
+      v.addEventListener("seeked", () => ok(), { once: true });
+      v.currentTime = t;
+    });
+    // Latar = median 15 bingkai tersebar: rekaman jarang dimulai dari ruang kosong (W-02B).
+    const contoh: Bingkai[] = [];
+    for (let k = 0; k < 15; k++) {
+      await ke(((k + 0.5) / 15) * v.duration);
+      contoh.push(bingkai(v, c));
+    }
+    const latar = latarMedian(contoh);
     for (let i = 0; i < n && !berhenti.current; i++) {
-      await new Promise<void>((ok) => {
-        v.addEventListener("seeked", () => ok(), { once: true });
-        v.currentTime = i / FPS;
-      });
+      await ke(i / FPS);
       const b = bingkai(v, c);
-      if (!latar) {
-        latar = latarDari(b);
-        continue;
-      }
       hasil.push(...p.langkah(i / FPS, deteksi(latar, b)));
       if (i % 5 === 0) {
         gambarTitik(p.terlihat);
