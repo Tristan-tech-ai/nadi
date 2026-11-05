@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { FormArtikel, FormAtur, FormBalas, FormTugaskan, TombolTutup } from "@/components/app/layanan";
+import { FormArtikel, FormAtur, FormBalas, FormTemplat, FormTugaskan, TombolTutup } from "@/components/app/layanan";
 import { Cap } from "@/components/ui/cap";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { ambilKamus, isiTeks, type Kamus } from "@/lib/i18n/kamus";
@@ -26,14 +26,16 @@ async function Isi() {
   const zona = await zonaUsahaIni(sesi.perusahaanId);
   const hari = hariIni(new Date(), zona);
   const supabase = await createClient();
-  const [cv, ms, st, ar, or, lap] = await Promise.all([
+  const [cv, ms, st, ar, or, lap, tp] = await Promise.all([
     supabase.from("conversation").select("id, pengunjung, kontak, status, agen_id, tenggat, dijawab_at, csat, diubah_at").order("diubah_at", { ascending: false }).limit(50),
     supabase.from("conversation_message").select("conversation_id, dari, isi, dibuat_at").order("dibuat_at").limit(1000),
     kelola ? supabase.from("support_setting").select("kunci, aktif, jam_mulai, jam_selesai, sla_menit, pesan_sambutan, pesan_luar_jam").maybeSingle() : Promise.resolve({ data: null }),
     kelola ? supabase.from("support_article").select("id, judul, isi").eq("aktif", true).order("judul") : Promise.resolve({ data: [] }),
     kelola ? supabase.from("orang").select("id, nama").eq("status", "aktif").order("nama") : Promise.resolve({ data: [] }),
     kelola ? supabase.rpc("service_report", { p_dari: `${hari.slice(0, 7)}-01`, p_sampai: hari }) : Promise.resolve({ data: null }),
+    supabase.from("reply_template").select("judul, isi").order("judul"),
   ]);
+  const templat = (tp.data ?? []) as { judul: string; isi: string }[];
   const percakapan = (cv.data ?? []) as Percakapan[];
   if (!kelola && percakapan.length === 0) {
     return <div lang={bahasa}><h1 className="font-judul text-3xl font-extrabold tracking-tight">{t.judul}</h1><p className="mt-2 text-tinta-2">{t.hanya}</p></div>;
@@ -83,7 +85,7 @@ async function Isi() {
                   {c.csat && <p className="mt-1 text-sm text-tinta-2">{isiTeks(t.nilaiPelanggan, { n: c.csat })}</p>}
                   {c.status !== "selesai" && (
                     <div className="mt-2 space-y-3">
-                      <FormBalas id={c.id} nama={c.pengunjung} teks={t} />
+                      <FormBalas id={c.id} nama={c.pengunjung} templat={templat} teks={t} />
                       <div className="flex flex-wrap items-end gap-4">
                         {kelola && <FormTugaskan id={c.id} nama={c.pengunjung} agen={agen} sekarang={c.agen_id} teks={t} />}
                         <TombolTutup id={c.id} nama={c.pengunjung} teks={t} />
@@ -114,6 +116,8 @@ async function Isi() {
               </ul>
             )}
             <FormArtikel teks={t} />
+            <h3 className="mt-6 font-semibold">{t.templatJudul}</h3>
+            <FormTemplat teks={t} />
           </section>
         </>
       )}

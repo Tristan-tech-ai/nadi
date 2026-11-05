@@ -2985,8 +2985,10 @@
    "accept": "tes SQL; e2e deal sampai menjadi penawaran (M-03)",
    "how": "docs/research/mekari/rencana.md; menutup QO-06..QO-09, TA-18; isi: CRM: pelanggan/perusahaan (graf usaha), deal pipeline bertahap, tugas sales, catatan, target, kunjungan lapangan dengan izin lokasi, laporan sales, segmen pelanggan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T09:55:04",
+   "result": "3a76484: migrasi crm md5 d51b5b87, tes SQL crm 27/27 (deal_to_quote > PNW, pesanan > menang, lokasi hanya dengan izin, laporan + segmen, isolasi); vitest crm 2/2; e2e crm lulus produksi nadi-swart.vercel.app (pelanggan > deal > tugas > penawaran PNW tampil di /app/jual > pesanan > menang; axe 390/1440 terang/gelap); Permissions-Policy geolocation=(self) di /app/pelanggan"
   },
   {
    "id": "M-16",
@@ -2999,8 +3001,10 @@
    "accept": "e2e pesan web chat masuk, dijawab agen, tiket tertutup; jawaban bot hanya dari basis pengetahuan (tes jawaban terburuk)",
    "how": "docs/research/mekari/rencana.md; menutup QO-01..QO-05, QO-10, QO-13..QO-15, QO-17; isi: Layanan pelanggan: kotak masuk untuk web chat (widget di situs pemilik), Telegram bot, dan email masuk; penugasan agen, jam operasional, templat; tiket + SLA + CSAT; basis pengetahuan; chatbot yang menjawab dari basis pengetahuan dan menyerahkan ke manusia; janji temu publik; poin loyalitas; katalog publik dengan pesan wa.me",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T10:08:58",
+   "result": "4dd9f08: migrasi layanan md5 af7ad5f1, tes SQL layanan 24/24 (bot mengutip artikel apa adanya; injeksi 'diskon 90%' dan 'ongkir gratis' tidak menghasilkan pesan bot; bot diam setelah agen menangani; token hash; batas 20 obrolan/jam); e2e layanan lulus produksi nadi-swart.vercel.app (pengunjung /bantuan/<kunci> > bot > agen membalas dalam SLA > tutup > CSAT 5; axe 390/1440 terang/gelap). Sisa janji temu, poin, katalog: tugas M-16B"
   },
   {
    "id": "M-17",
@@ -3303,6 +3307,20 @@
    "created": "2026-11-05T07:35:53",
    "done": "2026-11-05T07:46:11",
    "result": "e2da060; pilihan letak kamera di Hitung kunjungan (miring = model RF-DETR nano q8 F5-01 di Web Worker, 2 fps, titikDariKotak, OPSI_PELACAK_MIRING); Ezymart 10 bingkai: model 75% hitungan buta (di bawah target 80%), 85% setelah hitungan tangan diperiksa ulang (bias, dicatat), beda latar 40%; vitest jejak 15/15 termasuk kotak->kunjungan; e2e mata-v2 produksi 5/5 + axe panel; docs/research/mata-v2.md"
+  },
+  {
+   "id": "M-16B",
+   "fase": "F7",
+   "kind": "build",
+   "priority": 4,
+   "size": "m",
+   "wajib": true,
+   "title": "Layanan lanjutan: janji temu publik, poin loyalitas, katalog publik dengan pesan wa.me, templat balasan agen",
+   "accept": "tes SQL slot janji temu tidak bentrok dan poin loyalitas dari invoice lunas; e2e pelanggan memesan janji temu dari halaman publik dan pemilik melihatnya; katalog publik membuka wa.me terisi",
+   "how": "lanjutan M-16 (QO-13, QO-14, QO-15 pengganti tanpa WhatsApp API, QO-02 templat); halaman publik memakai kunci acak seperti /bantuan; poin dari invoice lunas per pelanggan (customer M-15)",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T10:08:58"
   }
  ]
 }

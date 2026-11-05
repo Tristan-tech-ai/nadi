@@ -1,7 +1,7 @@
 "use client";
 
-import { useActionState, useId, type ReactNode } from "react";
-import { balasObrolan, simpanArtikel, simpanAtur, tugaskanObrolan, tutupObrolan, type HasilLayanan } from "@/app/app/layanan/actions";
+import { useActionState, useId, useState, type ReactNode } from "react";
+import { balasObrolan, simpanArtikel, simpanAtur, simpanTemplat, tugaskanObrolan, tutupObrolan, type HasilLayanan } from "@/app/app/layanan/actions";
 import { Tombol } from "@/components/ui/tombol";
 import type { Kamus } from "@/lib/i18n/kamus";
 
@@ -49,11 +49,25 @@ export function FormArtikel({ teks: t }: { teks: T }) {
   );
 }
 
-export function FormBalas({ id: c, nama, teks: t }: { id: string; nama: string; teks: T }) {
+export function FormBalas({ id: c, nama, templat = [], teks: t }: { id: string; nama: string; templat?: { judul: string; isi: string }[]; teks: T }) {
+  const [isi, setIsi] = useState("");
   return (
     <Formulir aksi={balasObrolan} label={`${t.balas}: ${nama}`} tombol={t.kirim} ragam="utama">
       <input type="hidden" name="id" value={c} />
-      <Kolom label={t.tulisBalas} lebar>{(id) => <textarea id={id} name="isi" required maxLength={2000} rows={2} className={isian} />}</Kolom>
+      {templat.length > 0 && <Kolom label={t.pakaiTemplat} lebar>{(id) => (
+        <select id={id} defaultValue="" onChange={(e) => { const x = templat.find((p) => p.judul === e.target.value); if (x) setIsi(x.isi.replace("{nama}", nama)); }} className={isian}>
+          <option value="">{t.pakaiTemplat}</option>{templat.map((p) => <option key={p.judul} value={p.judul} data-pengguna>{p.judul}</option>)}
+        </select>)}</Kolom>}
+      <Kolom label={t.tulisBalas} lebar>{(id) => <textarea id={id} name="isi" required maxLength={2000} rows={2} value={isi} onChange={(e) => setIsi(e.target.value)} className={isian} />}</Kolom>
+    </Formulir>
+  );
+}
+
+export function FormTemplat({ teks: t }: { teks: T }) {
+  return (
+    <Formulir aksi={simpanTemplat} label={t.templatJudul} tombol={t.simpanTemplat}>
+      <Kolom label={t.judulTemplat} lebar>{(id) => <input id={id} name="judul" required minLength={2} maxLength={60} className={isian} />}</Kolom>
+      <Kolom label={t.isiTemplat} lebar>{(id) => <textarea id={id} name="isi" required minLength={2} maxLength={2000} rows={2} placeholder="Halo {nama}, ..." className={isian} />}</Kolom>
     </Formulir>
   );
 }

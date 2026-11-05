@@ -52,6 +52,14 @@ export async function tutupObrolan(_: HasilLayanan, f: FormData): Promise<HasilL
   return { pesan: k.tutup };
 }
 
+export async function simpanTemplat(_: HasilLayanan, f: FormData): Promise<HasilLayanan> {
+  const { k, supabase, salah } = await siap();
+  const { error } = await supabase.rpc("save_reply_template", { p_judul: teks(f, "judul"), p_isi: teks(f, "isi") });
+  if (error) return salah(error);
+  segarkan();
+  return { pesan: k.templat };
+}
+
 export async function tugaskanObrolan(_: HasilLayanan, f: FormData): Promise<HasilLayanan> {
   const { k, supabase, salah } = await siap();
   const { error } = await supabase.rpc("assign_conversation", { p_id: uuid(f, "id"), p_agen: uuid(f, "agen") });
