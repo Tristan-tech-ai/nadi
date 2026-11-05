@@ -7,6 +7,7 @@ import { AiMilikmu } from "@/components/app/ai-milikmu";
 import { PintuData } from "@/components/app/pintu-data";
 import { AlurUsaha } from "@/components/app/alur-usaha";
 import { AturanKerja } from "@/components/app/aturan-kerja";
+import { BiayaNadi } from "@/components/app/biaya-nadi";
 import { HematAi } from "@/components/app/hemat-ai";
 import { KebijakanIzin } from "@/components/app/kebijakan-izin";
 import { KeputusanOtomatis } from "@/components/app/keputusan-otomatis";
@@ -156,6 +157,9 @@ export default function Perusahaan() {
       </Suspense>
       <Suspense fallback={<div className="mt-10 h-32 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <HematAi />
+      </Suspense>
+      <Suspense fallback={<div className="mt-10 h-32 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+        <BiayaNadi />
       </Suspense>
       <Suspense fallback={<div className="mt-10 h-64 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <AlurUsaha />
