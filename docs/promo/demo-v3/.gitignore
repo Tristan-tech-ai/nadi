@@ -1,0 +1,7 @@
+assets/
+renders/
+.hyperframes/
+index.html
+meta.json
+hyperframes.json
+*.mp4
