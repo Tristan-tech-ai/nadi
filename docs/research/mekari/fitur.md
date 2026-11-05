@@ -74,7 +74,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | JU-09 | Produk dan jasa: kategori, satuan, varian, bundle, konversi, aturan harga, barcode, batch/seri | Produk/*; Daftar Lainnya/Atribut Varian Produk, Satuan Produk, Produk | /app/barang: produk barang/jasa/paket, satuan besar + faktor, barcode, kode; layar varian (induk + ciri) dan harga grosir bertingkat yang terisi sendiri di invoice, daftar produk dari Excel/foto lewat Lempar jadi usulan produk.impor (M-02B) | ADA | M-02, M-02B |
 | JU-10 | Persediaan: penyesuaian, stok opname, nilai (rata-rata), hitung ulang, tipe penyimpanan | Produk/Penyesuaian Stok; Daftar Lainnya/Penghitungan Ulang Nilai Persediaan, Tipe Penyimpanan Persediaan | rata-rata tertimbang bergerak, opname per produk dengan jurnal selisih 5-200, kartu stok berjalan (M-02); hitung stok banyak barang dari foto/Excel lewat Lempar jadi opname gudang utama (M-02B) | SEBAGIAN: hitung ulang nilai persediaan dan tipe penyimpanan belum | M-02, M-02B |
 | JU-11 | Gudang, multi gudang, transfer gudang, lokasi rak/bin | Produk/Gudang, Multi Gudang, Transfer Gudang | gudang banyak, gudang utama untuk invoice, pindah gudang dengan nilai rata-rata (M-02); lokasi rak/bin per stok dan laporan stok per gudang (M-02B) | ADA | M-02, M-02B |
-| JU-12 | Produksi: BoM bertingkat, perintah kerja, biaya standar, assembly/disassembly, pemetaan akun | Produksi/* | tidak ada | BELUM | M-07 |
+| JU-12 | Produksi: BoM bertingkat, perintah kerja, biaya standar, assembly/disassembly, pemetaan akun | Produksi/* | /app/produksi: resep bertingkat (lingkaran ditolak), urai kebutuhan bahan, perintah kerja ambil bahan ke barang dalam proses lalu selesai pada biaya sebenarnya, produk bersama dan sampingan, biaya standar + selisih, rakit, bongkar, batal mengembalikan bahan | SEBAGIAN: pemetaan akun per usaha belum (akun tetap 1-320/5-310), tenaga dari timesheet belum | M-07 |
 | JU-13 | Pemenuhan pesanan: ambil barang, segregasi stok, surat jalan, terima barang | Pemenuhan/* | tidak ada | BELUM | M-02, M-03 |
 | JU-14 | Kas dan bank: akun, transfer, terima/kirim uang, pemetaan kas | Kas & Bank/* | /app/kas: rekening kas/bank/dompet (akun 1-10x/1-11x), saldo, pindah dana, uang masuk/keluar ke akun pilihan | ADA | M-05 |
 | JU-15 | Rekonsiliasi bank: manual, aturan, otomatis, batal | Kas & Bank/Rekonsiliasi Bank, Aturan Rekonsiliasi, Rekonsiliasi Bank Otomatis, Mengembalikan Rekonsiliasi | /app/kas: mutasi CSV atau e-statement Lempar dicocokkan ke invoice, tagihan pemasok, jurnal yang sudah tercatat, atau aturan kata kunci pengguna; cocokkan semua usulan; batal = jurnal dibalik; korpus 3 format bank 21/22 per format, 0 salah | ADA | M-05 |
@@ -192,8 +192,8 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 | Status | Jumlah |
 |---|---|
 | ADA | 39 |
-| SEBAGIAN | 70 |
-| BELUM | 6 |
+| SEBAGIAN | 71 |
+| BELUM | 5 |
 | MITRA | 17 |
 | LUAR | 2 |
 
