@@ -75,10 +75,12 @@ begin
     perform pg_temp.cek('perkiraan biaya tenaga Budi = 11 x 3.460.000 / 173 = 220.000', (select (e ->> 'biaya')::numeric from jsonb_array_elements(r -> 'jam') e where (e ->> 'orang')::uuid = o_s) = 220000);
     perform set_config('request.jwt.claims', ks, true);
     perform pg_temp.cek('staf hanya melihat jamnya sendiri', (select count(*) from public.project_time) = 2 and (select count(*) from public.project_budget) = 0);
+    perform pg_temp.cek('staf mendapat daftar proyek aktif lewat RPC, tabel dimensi tetap tertutup', jsonb_array_length(public.active_projects()) = 2 and (select count(*) from public.dimension) = 0);
 
     -- Isolasi.
     perform set_config('request.jwt.claims', kb, true);
     perform pg_temp.cek('usaha lain tidak melihat RAB dan jam', (select count(*) from public.project_budget) = 0 and (select count(*) from public.project_time) = 0);
+    perform pg_temp.cek('usaha lain: daftar proyek kosong', jsonb_array_length(public.active_projects()) = 0);
     begin perform public.set_project_budget(d1, '6-900', 1, null); perform pg_temp.cek('usaha lain tidak mengubah RAB A', false);
     exception when sqlstate 'P0002' then perform pg_temp.cek('usaha lain tidak mengubah RAB A', true); end;
     begin perform public.project_report(d1); perform pg_temp.cek('usaha lain tidak membaca laporan A', false);
