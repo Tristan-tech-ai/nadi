@@ -54,7 +54,7 @@ async function Daftar() {
           ) : (
             <form action={pindahPerusahaan}>
               <input type="hidden" name="perusahaan" value={b.id} />
-              <button type="submit" className="h-10 rounded-[var(--radius-isian)] border border-garis-kuat px-3 text-sm font-semibold">{t.buka}</button>
+              <button type="submit" className="h-10 rounded-[var(--radius-isian)] border border-garis-kuat px-3 text-sm font-semibold">{t.buka}<span className="sr-only"> {b.nama}</span></button>
             </form>
           )}
         </li>

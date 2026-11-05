@@ -52,7 +52,7 @@ export function FormKebijakan({ jenis, label, awal, teks: t }: { jenis: string; 
         )}
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-3">
-        <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? t.menyimpan : t.simpan}</Tombol>
+        <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? t.menyimpan : t.simpan}<span className="sr-only"> {label.toLowerCase()}</span></Tombol>
         {hasil && "tersimpan" in hasil && <p role="status" className="text-sm text-daun">{hasil.tersimpan}</p>}
         {hasil && "galat" in hasil && <p role="alert" className="text-sm text-cap">{hasil.galat}</p>}
       </div>
