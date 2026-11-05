@@ -3161,8 +3161,10 @@
    "accept": "e2e unduh; angka sama dengan M-01",
    "how": "docs/research/mekari/rencana.md nilai tambah; isi: Paket siap pembiayaan. Laporan keuangan 12 bulan, umur piutang, arus kas, dan riwayat invoice dalam satu PDF yang dikirim sendiri oleh pemilik (lihat pihak-ketiga.md no 12)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-04T20:17:54"
+   "status": "done",
+   "created": "2026-11-04T20:17:54",
+   "done": "2026-11-05T15:28:57",
+   "result": "db733d0; /app/buku/pembiayaan (12 bulan: laba rugi per bulan, neraca, arus kas, umur piutang, riwayat invoice); src/lib/buku/pembiayaan.test.ts 4/4; e2e/pembiayaan.spec.ts lokal + produksi: angka = RPC laporan_keuangan/umur_piutang = halaman M-01, page.pdf A4 3 halaman tanpa navigasi"
   },
   {
    "id": "M-27",
