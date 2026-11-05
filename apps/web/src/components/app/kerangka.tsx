@@ -5,13 +5,14 @@
 // Dua layar berdampingan (horizontal-viewport-segments: 2) diatur di globals.css (.kerangka-*). Isi navigasi dari src/lib/ruang.ts.
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState, type ComponentType } from "react";
+import { useEffect, useRef, useState, type ComponentType, type ReactNode } from "react";
 import {
   BookOpenTextIcon, CalculatorIcon, CalendarCheckIcon, ClipboardTextIcon, FileTextIcon, GearSixIcon, HouseSimpleIcon, LightningIcon, ListIcon,
-  MoneyIcon, PackageIcon, PaperPlaneTiltIcon, StorefrontIcon, UsersThreeIcon, VideoCameraIcon, WalletIcon, XIcon, type IconProps,
+  LifebuoyIcon, MoneyIcon, PackageIcon, PaperPlaneTiltIcon, StorefrontIcon, UsersThreeIcon, VideoCameraIcon, WalletIcon, XIcon, type IconProps,
 } from "@phosphor-icons/react";
 import type { Bahasa } from "@/lib/i18n/bahasa";
-import { halamanDari, type Ruang } from "@/lib/ruang";
+import { SEMUA_HALAMAN, halamanDari, type Ruang } from "@/lib/ruang";
+import { PERISTIWA_SEMAT, SEMATAN_BAWAAN, bacaSematan } from "@/lib/sematan";
 import { DialogCari, type TeksCari } from "@/components/app/cari-fitur";
 
 type Ikon = ComponentType<IconProps>;
@@ -19,7 +20,7 @@ const IKON_RUANG: Record<string, Ikon> = {
   "hari-ini": HouseSimpleIcon, uang: WalletIcon, jual: StorefrontIcon, barang: PackageIcon, orang: UsersThreeIcon,
   tempat: VideoCameraIcon, dokumen: FileTextIcon, otomasi: LightningIcon, pengaturan: GearSixIcon,
 };
-type Teks = { navUtama: string; menu: string; tutup: string; semuaMenu: string; peta: string; cari: TeksCari; menunggu: string };
+type Teks = { navUtama: string; menu: string; tutup: string; semuaMenu: string; peta: string; cari: TeksCari; menunggu: string; disematkan: string; semuaRuang: string; bantuan: string; };
 type Butir = { href: string; label: string; Ikon: Ikon };
 
 export function bilahBawah(peran: string, b: Bahasa): Butir[] {
@@ -57,7 +58,7 @@ function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, le
           return (
             <details key={r.id} open={r.id === ruangKini || undefined} className="group">
               <summary className="flex cursor-pointer list-none items-center gap-2 rounded-[var(--radius-isian)] px-2 py-2 text-sm font-semibold text-tinta hover:bg-kertas-2">
-                <Ikon size={18} aria-hidden />{r.label[b]}<Lencana n={jumlahRuang(r)} label={labelLencana} />
+                <Ikon size={18} aria-hidden />{r.label[b]}{r.id !== ruangKini && <Lencana n={jumlahRuang(r)} label={labelLencana} />}
               </summary>
               <ul className="mb-2 ml-6 mt-0.5 grid gap-0.5 border-l border-garis pl-2">{r.halaman.map((x) => (
                 <li key={x.href}>
@@ -93,7 +94,10 @@ function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, le
   );
 }
 
-export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana = {} }: { ruang: Ruang[]; mati?: Ruang[]; peran: string; bahasa: Bahasa; teks: Teks; lencana?: Record<string, number> }) {
+export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana = {}, kaki }: {
+  ruang: Ruang[]; mati?: Ruang[]; peran: string; bahasa: Bahasa; teks: Teks; lencana?: Record<string, number>;
+  kaki?: ReactNode;
+}) {
   const jalur = usePathname();
   const [menu, setMenu] = useState(false);
   const [panel, setPanel] = useState<string | null>(null);
@@ -109,17 +113,60 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana = {
     if (menu) tutupMenu.current?.focus();
     return () => window.removeEventListener("keydown", esc);
   }, [menu, panel]);
+  // U-09 Disematkan: bawaan per peran, diubah dari tombol sematkan di kepala halaman (localStorage per perangkat).
+  const [sematan, setSematan] = useState<string[]>(() => SEMATAN_BAWAAN[peran] ?? SEMATAN_BAWAAN.pemilik); // sama di server dan klien, lalu dibaca dari perangkat
+  useEffect(() => {
+    const segarkan = () => setSematan(bacaSematan(peran));
+    segarkan();
+    window.addEventListener(PERISTIWA_SEMAT, segarkan);
+    return () => window.removeEventListener(PERISTIWA_SEMAT, segarkan);
+  }, [peran]);
+  const boleh = new Set(ruang.flatMap((r) => r.halaman.map((x) => x.href)));
+  const disemat = sematan.map((h) => SEMUA_HALAMAN.find((x) => x.href === h)).filter((x): x is (typeof SEMUA_HALAMAN)[number] => !!x && boleh.has(x.href));
+  const ruangBadan = ruang.filter((r) => r.id !== "pengaturan");
+  const pengaturan = ruang.find((r) => r.id === "pengaturan");
   const butir = bilahBawah(peran, b);
   const ruangPanel = ruang.find((r) => r.id === panel);
 
   return (
     <>
       {/* >= 1200 px: sidebar penuh. */}
-      <nav aria-label={teks.navUtama} className="kerangka-sidebar fixed bottom-0 left-0 top-[3.25rem] z-10 hidden w-64 overflow-y-auto border-r border-garis bg-kertas px-3 py-4 min-[1200px]:block print:hidden">
-        <DaftarRuang ruang={ruang} jalur={jalur} b={b} lipat lencana={lencana} labelLencana={teks.menunggu} />
-        <Link href="/app/menu" aria-current={jalur === "/app/menu" ? "page" : undefined} className="mt-3 flex items-center gap-2 rounded-[var(--radius-isian)] border-t border-garis px-2 pt-3 text-sm text-tinta-2 hover:text-tinta">
-          <ListIcon size={18} aria-hidden />{teks.peta}
-        </Link>
+      <nav aria-label={teks.navUtama} className="kerangka-sidebar fixed bottom-0 left-0 top-[3.25rem] z-10 hidden w-64 flex-col border-r border-garis bg-kertas min-[1200px]:flex print:hidden">
+        {/* Badan bergulir: Disematkan lalu semua ruang. */}
+        <div className="min-h-0 flex-1 overflow-y-auto px-3 py-3">
+          {disemat.length > 0 && (
+            <>
+              <p className="px-2 pb-1 text-xs font-semibold text-tinta-2">{teks.disematkan}</p>
+              <ul className="mb-4 grid gap-0.5" data-testid="disematkan">{disemat.map((x) => {
+                const Ikon = IKON_RUANG[x.ruang] ?? ListIcon;
+                const aktif = halamanDari(jalur)?.href === x.href;
+                return (
+                  <li key={x.href}>
+                    <Link href={x.href} aria-current={aktif ? "page" : undefined}
+                      className={`flex items-center gap-2 rounded-[var(--radius-isian)] px-2 py-2 text-sm hover:bg-kertas-2 ${aktif ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}>
+                      <Ikon size={18} aria-hidden /><span className="truncate">{x.label[b]}</span><Lencana n={lencana[x.href]} label={teks.menunggu} />
+                    </Link>
+                  </li>);
+              })}</ul>
+            </>
+          )}
+          <p className="px-2 pb-1 text-xs font-semibold text-tinta-2">{teks.semuaRuang}</p>
+          <DaftarRuang ruang={ruangBadan} jalur={jalur} b={b} lipat lencana={lencana} labelLencana={teks.menunggu} />
+        </div>
+        {/* Kaki tetap: bantuan, peta menu, pengaturan, akun. */}
+        <div className="border-t border-garis px-3 py-2" data-testid="kaki-sidebar">
+          <ul className="grid gap-0.5 text-sm">
+            <li><Link href="/panduan" className="flex items-center gap-2 rounded-[var(--radius-isian)] px-2 py-2 text-tinta hover:bg-kertas-2"><LifebuoyIcon size={18} aria-hidden />{teks.bantuan}</Link></li>
+            <li><Link href="/app/menu" aria-current={jalur === "/app/menu" ? "page" : undefined} className={`flex items-center gap-2 rounded-[var(--radius-isian)] px-2 py-2 text-tinta hover:bg-kertas-2 ${jalur === "/app/menu" ? "bg-kertas-2 font-semibold" : ""}`}><ListIcon size={18} aria-hidden />{teks.peta}</Link></li>
+            {pengaturan?.halaman.map((x) => {
+              const aktif = halamanDari(jalur)?.href === x.href;
+              return (
+                <li key={x.href}><Link href={x.href} aria-current={aktif ? "page" : undefined} className={`flex items-center gap-2 rounded-[var(--radius-isian)] px-2 py-2 text-tinta hover:bg-kertas-2 ${aktif ? "bg-kertas-2 font-semibold" : ""}`}>
+                  <GearSixIcon size={18} aria-hidden /><span className="truncate">{x.label[b]}</span></Link></li>);
+            })}
+          </ul>
+          {kaki && <div className="mt-1 flex items-center justify-between gap-2 border-t border-garis px-2 pt-2 text-sm">{kaki}</div>}
+        </div>
       </nav>
 
       {/* 600-1199 px: rail ruang, panel halaman ruang yang dipilih. */}

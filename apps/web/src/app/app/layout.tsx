@@ -73,7 +73,8 @@ async function Navigasi() {
   return <Kerangka ruang={ruang} mati={mati} peran={sesi.peran} bahasa={bahasa} lencana={{ "/app": menunggu ?? 0 }}
     teks={{ navUtama: ambilKamus(bahasa).aplikasi.navUtama, menu: "Menu", tutup: en ? "Close" : "Tutup", semuaMenu: en ? "All menus" : "Semua menu",
       peta: en ? "All menus, with what each does" : "Semua menu dan gunanya", cari: teksCari(bahasa),
-      menunggu: en ? "{n} waiting for you" : "{n} menunggu keputusanmu" }} />;
+      menunggu: en ? "{n} waiting for you" : "{n} menunggu keputusanmu", disematkan: en ? "Pinned" : "Disematkan", semuaRuang: en ? "All spaces" : "Semua ruang",
+      bantuan: en ? "Help and guides" : "Bantuan dan panduan" }} />;
 }
 
 export default function LayoutApp({ children }: LayoutProps<"/app">) {

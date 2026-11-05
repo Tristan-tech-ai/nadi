@@ -47,11 +47,24 @@ test("kerangka: navigasi benar per kelas lebar, axe bersih, tanpa gulir samping,
   // Desktop: Invoice langsung di sidebar.
   await page.setViewportSize({ width: 1440, height: 900 });
   const sidebar = page.getByRole("navigation", { name: "Navigasi utama" });
-  // Ruang lain terlipat: buka Uang dulu.
-  await expect(sidebar.getByRole("link", { name: "Invoice", exact: true })).toBeHidden();
-  await sidebar.locator("summary", { hasText: "Uang" }).click();
-  await sidebar.getByRole("link", { name: "Invoice", exact: true }).click();
+  // U-09: Disematkan (bawaan pemilik memuat Invoice), kaki bantuan/peta/pengaturan, tanpa angka statis di ruang.
+  await expect(sidebar.getByTestId("kaki-sidebar").getByRole("link", { name: "Bantuan dan panduan" })).toBeVisible();
+  await expect(sidebar.getByTestId("kaki-sidebar").getByRole("link", { name: "Usahamu" })).toBeVisible();
+  const ringkasRuang = await sidebar.locator("summary").allInnerTexts();
+  expect(ringkasRuang.filter((t) => /\d/.test(t) && !/menunggu/.test(t)), "tanpa angka jumlah halaman").toEqual([]);
+  await sidebar.getByTestId("disematkan").getByRole("link", { name: "Invoice", exact: true }).click();
   await page.waitForURL((u) => u.pathname === "/app/invoice");
+  // Ruang lain terlipat: Kas dan bank lewat ruang Uang.
+  await page.goto("/app/gaji");
+  await expect(sidebar.getByRole("link", { name: "Kas dan bank", exact: true })).toBeHidden();
+  await sidebar.locator("summary", { hasText: "Uang" }).click();
+  await sidebar.getByRole("link", { name: "Kas dan bank", exact: true }).click();
+  await page.waitForURL((u) => u.pathname === "/app/kas");
+  // Sematkan Kas dan bank dari kepala halaman, lalu lepas lagi.
+  await page.getByRole("button", { name: "Sematkan di samping" }).click();
+  await expect(sidebar.getByTestId("disematkan").getByRole("link", { name: "Kas dan bank", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "Lepas sematan" }).click();
+  await expect(sidebar.getByTestId("disematkan").getByRole("link", { name: "Kas dan bank", exact: true })).toHaveCount(0);
   // Tablet: rail Uang membuka panel berisi Invoice.
   await page.goto("/app");
   await page.setViewportSize({ width: 768, height: 1024 });

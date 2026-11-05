@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { halamanDari, ruangUntuk, RUANG } from "@/lib/ruang";
 import { bacaSesi } from "@/lib/sesi";
+import { TombolSemat } from "@/components/app/tombol-semat";
 
 // U-03 kepala halaman seragam (docs/design/REKONSTRUKSI-APP.md bagian 5): jejak ruang, judul, satu kalimat tujuan, aksi utama,
 // dan tombol "?" yang membuka bantuan halaman ini (guna, halaman lain di ruang yang sama, panduan peran, cari fitur).
@@ -32,7 +33,9 @@ export async function KepalaHalaman({ jalur, judul, ket, aksi, children }: {
       )}
       <div className="flex items-start justify-between gap-3">
         <h1 className="min-w-0 font-judul text-3xl font-extrabold tracking-tight">{judul}</h1>
-        <details className="group relative shrink-0 print:hidden">
+        <div className="flex shrink-0 items-center gap-2 print:hidden">
+        {kini && <TombolSemat href={kini.href} peran={peran} label={en ? ["Pin to sidebar", "Unpin"] : ["Sematkan di samping", "Lepas sematan"]} />}
+        <details className="group relative shrink-0">
           <summary className="inline-flex h-10 min-w-10 cursor-pointer list-none items-center justify-center rounded-full border border-garis px-3 text-sm font-semibold text-tinta-2 hover:bg-kertas-2 hover:text-tinta group-open:bg-kertas-2 group-open:text-tinta">
             <span className="sr-only">{en ? "Help for this page" : "Bantuan halaman ini"}</span><span aria-hidden>?</span>
           </summary>
@@ -51,6 +54,7 @@ export async function KepalaHalaman({ jalur, judul, ket, aksi, children }: {
             </p>
           </div>
         </details>
+        </div>
       </div>
       {(ket ?? kini?.guna[b]) && <p className="mt-1 max-w-2xl text-sm text-tinta-2">{ket ?? kini?.guna[b]}</p>}
       {aksi && <div className="mt-4 flex flex-wrap items-center gap-2">{aksi}</div>}
