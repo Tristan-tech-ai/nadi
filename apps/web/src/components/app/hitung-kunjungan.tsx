@@ -7,6 +7,7 @@ import type { Kamus } from "@/lib/i18n/kamus";
 import { aturPapan, kirimRekap } from "@/app/app/mata/actions";
 import { abuDari, deteksi, formatDurasi, latarDari, latarMedianStabil, OPSI_DETEKSI, OPSI_DETEKSI_PEKA, OPSI_PELACAK, OPSI_PELACAK_MIRING, Pelacak, rekapJam, stabilkan, titikDariKotak, type Bingkai, type Kunjungan, type ZonaV2 } from "@/lib/mata/jejak";
 import { gambarMata } from "@/lib/mata/gambar";
+import { alamatKamera, ALAMAT_JEMBATAN, bukaJembatan, jembatanSah, konfigJembatan, MEREK, type Merek } from "@/lib/mata/jembatan";
 import type { Deteksi } from "@/lib/mata/resep";
 import type { ModelMata } from "@/components/app/layar-mata";
 
@@ -57,6 +58,11 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
   const opsiDeteksi = peka === "tinggi" ? OPSI_DETEKSI_PEKA : OPSI_DETEKSI;
   const pekerja = useRef<Worker | null>(null);
   const adaPintu = zona.some((z) => z.jenis === "pintu");
+  // W-10A jembatan CCTV: isian hanya di memori halaman ini; kata sandi masuk ke berkas unduhan saja.
+  const [merek, setMerek] = useState<Merek>("hikvision");
+  const [kam, setKam] = useState({ alamat: "", pengguna: "", sandi: "", kanal: "1", kecil: true });
+  const [galatKam, setGalatKam] = useState<string | null>(null);
+  const [alamatJembatan, setAlamatJembatan] = useState(ALAMAT_JEMBATAN);
 
   useEffect(() => () => {
     berhenti.current = true;
@@ -206,16 +212,47 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
     await kirim(hasil, asalMs, `berkas-${f.size}-${Math.round(asalMs)}`);
   }
 
+  function unduhKonfig() {
+    const h = alamatKamera({ merek, alamat: kam.alamat, pengguna: kam.pengguna, sandi: kam.sandi, kanal: Number(kam.kanal), kecil: kam.kecil });
+    if (!h.ok) return setGalatKam(t.jembatanGalat[h.galat]);
+    setGalatKam(null);
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([konfigJembatan(h.url)], { type: "text/yaml" }));
+    a.download = "go2rtc.yaml";
+    a.click();
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
   async function dariKamera() {
-    const v = video.current;
-    const c = pratinjau.current;
-    if (!v || !c) return;
     let aliran: MediaStream;
     try {
       aliran = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" }, audio: false });
     } catch {
       return setPesan({ jenis: "galat", teks: t.gagalVideo });
     }
+    await hitungLangsung(aliran, () => aliran.getTracks().forEach((x) => x.stop()), "kamera");
+  }
+
+  /** W-10A: CCTV lewat jembatan go2rtc di komputer ini (WebRTC dari 127.0.0.1). Video tidak lewat server Nadi. */
+  async function dariJembatan() {
+    if (!jembatanSah(alamatJembatan)) return setPesan({ jenis: "galat", teks: t.jembatanAlamatSalah });
+    setPesan(null);
+    let h: Awaited<ReturnType<typeof bukaJembatan>>;
+    try {
+      h = await bukaJembatan(alamatJembatan);
+    } catch {
+      return setPesan({ jenis: "galat", teks: t.jembatanGagal });
+    }
+    await hitungLangsung(h.aliran, () => {
+      h.aliran.getTracks().forEach((x) => x.stop());
+      h.pc.close();
+    }, "jembatan", h.pc);
+  }
+
+  async function hitungLangsung(aliran: MediaStream, tutup: () => void, asal: "kamera" | "jembatan", pc?: RTCPeerConnection) {
+    const v = video.current;
+    const c = pratinjau.current;
+    if (!v || !c) return tutup();
     v.src = "";
     v.srcObject = aliran;
     await v.play();
@@ -225,7 +262,12 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
     berhenti.current = false;
     setJalan(true);
     const asalMs = Date.now();
-    const sesi = `kamera-${asalMs}`;
+    const sesi = `${asal}-${asalMs}`;
+    // Jembatan: kamera yang berhenti mengirim gambar (CCTV mati, rekaman habis) mengakhiri hitungan setelah 8 dtk.
+    let bingkaiTerakhir = -1;
+    let diamSejak = Date.now();
+    let putus = false;
+    aliran.getVideoTracks()[0]?.addEventListener("ended", () => { putus = true; berhenti.current = true; });
     const miring = kamera === "miring" && Boolean(model);
     const p = new Pelacak(zona, miring ? OPSI_PELACAK_MIRING : OPSI_PELACAK);
     let latar: Float32Array | null = null;
@@ -234,6 +276,16 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
     let kirimAkhir = Date.now();
     let ke = 0;
     while (!berhenti.current) {
+      if (asal === "jembatan") {
+        const nb = v.getVideoPlaybackQuality().totalVideoFrames;
+        if (nb !== bingkaiTerakhir) {
+          bingkaiTerakhir = nb;
+          diamSejak = Date.now();
+        } else if (Date.now() - diamSejak > 8000 || (pc && ["failed", "closed"].includes(pc.connectionState))) {
+          putus = true;
+          break;
+        }
+      }
       const b = bingkai(v, c);
       const t0 = (Date.now() - asalMs) / 1000;
       if (!latar) latar = latarDari(b);
@@ -262,9 +314,9 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
     tertunda.push(...akhir);
     semua.push(...akhir);
     setSelesai(semua);
-    aliran.getTracks().forEach((x) => x.stop());
+    tutup();
     setJalan(false);
-    await kirim(tertunda, asalMs, `${sesi}-${ke}`);
+    if (await kirim(tertunda, asalMs, `${sesi}-${ke}`) && putus) setPesan((p) => ({ jenis: "info", teks: `${t.jembatanBerhenti} ${p?.teks ?? ""}`.trim() }));
   }
 
   const r = ringkas(selesai);
@@ -324,6 +376,74 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
               {jalan ? <Tombol type="button" onClick={() => (berhenti.current = true)}>{t.berhenti}</Tombol> : <Tombol type="button" ragam="kedua" onClick={dariKamera}>{t.pakaiKamera}</Tombol>}
             </div>
           )}
+          {papan ? (
+            <details className="mt-4 rounded-[var(--radius-kartu)] border border-garis p-4" data-testid="jembatan">
+              <summary className="cursor-pointer font-semibold">{t.jembatanJudul}</summary>
+              <p className="mt-2 max-w-2xl text-sm text-tinta-2">{t.jembatanKet}</p>
+              <ol className="mt-3 max-w-2xl list-decimal space-y-4 pl-5 text-sm">
+                <li>
+                  {t.jembatanLangkah1}{" "}
+                  <a href="https://github.com/AlexxIT/go2rtc/releases/latest" target="_blank" rel="noopener noreferrer" className="font-semibold text-laut underline underline-offset-4">{t.jembatanUnduhGo2rtc}</a>
+                </li>
+                <li>
+                  {t.jembatanLangkah2}
+                  <div className="mt-2 grid gap-3 sm:grid-cols-2">
+                    <label className="flex flex-col gap-1">
+                      <span className="text-tinta-2">{t.jembatanMerek}</span>
+                      <select value={merek} onChange={(e) => setMerek(e.target.value as Merek)} className="min-h-11 rounded-[var(--radius-input)] border border-garis-kuat bg-kertas px-3" data-testid="jembatan-merek">
+                        {MEREK.map((m) => <option key={m} value={m}>{t.jembatanNamaMerek[m]}</option>)}
+                      </select>
+                    </label>
+                    <label className="flex flex-col gap-1">
+                      <span className="text-tinta-2">{merek === "lengkap" ? t.jembatanRtsp : t.jembatanIp}</span>
+                      <input value={kam.alamat} onChange={(e) => setKam({ ...kam, alamat: e.target.value })} autoComplete="off" spellCheck={false} inputMode={merek === "lengkap" ? "url" : "decimal"} className="min-h-11 rounded-[var(--radius-input)] border border-garis-kuat bg-kertas px-3" data-testid="jembatan-alamat-kamera" />
+                    </label>
+                    {merek !== "lengkap" && merek !== "ezviz" ? (
+                      <label className="flex flex-col gap-1">
+                        <span className="text-tinta-2">{t.jembatanPengguna}</span>
+                        <input value={kam.pengguna} onChange={(e) => setKam({ ...kam, pengguna: e.target.value })} autoComplete="off" className="min-h-11 rounded-[var(--radius-input)] border border-garis-kuat bg-kertas px-3" />
+                      </label>
+                    ) : null}
+                    {merek !== "lengkap" ? (
+                      <label className="flex flex-col gap-1">
+                        <span className="text-tinta-2">{merek === "ezviz" ? t.jembatanSandiEzviz : t.jembatanSandi}</span>
+                        <input type="password" value={kam.sandi} onChange={(e) => setKam({ ...kam, sandi: e.target.value })} autoComplete="new-password" className="min-h-11 rounded-[var(--radius-input)] border border-garis-kuat bg-kertas px-3" />
+                      </label>
+                    ) : null}
+                    {merek === "hikvision" || merek === "dahua" ? (
+                      <label className="flex flex-col gap-1">
+                        <span className="text-tinta-2">{t.jembatanKanal}</span>
+                        <input type="number" min={1} max={64} value={kam.kanal} onChange={(e) => setKam({ ...kam, kanal: e.target.value })} className="min-h-11 rounded-[var(--radius-input)] border border-garis-kuat bg-kertas px-3" />
+                      </label>
+                    ) : null}
+                    {merek === "hikvision" || merek === "dahua" || merek === "tapo" ? (
+                      <label className="flex items-center gap-2 sm:col-span-2">
+                        <input type="checkbox" className="size-4" checked={kam.kecil} onChange={(e) => setKam({ ...kam, kecil: e.target.checked })} />
+                        <span>{t.jembatanKecil}</span>
+                      </label>
+                    ) : null}
+                  </div>
+                  {merek === "tapo" ? <p className="mt-2 text-tinta-2">{t.jembatanTapo}</p> : null}
+                  {merek === "lengkap" ? <p className="mt-2 text-tinta-2">{t.jembatanRtspKet}</p> : null}
+                  <p className="mt-2 text-tinta-2">{t.jembatanSandiKet}</p>
+                  {galatKam ? <p role="alert" className="mt-2 text-cap">{galatKam}</p> : null}
+                  <Tombol type="button" ragam="kedua" className="mt-3" onClick={unduhKonfig} data-testid="jembatan-unduh">{t.jembatanUnduh}</Tombol>
+                </li>
+                <li>{t.jembatanLangkah3}</li>
+                <li>
+                  {t.jembatanLangkah4}
+                  <div className="mt-2 flex flex-wrap items-end gap-3">
+                    <label className="flex flex-col gap-1">
+                      <span className="text-tinta-2">{t.jembatanAlamat}</span>
+                      <input value={alamatJembatan} onChange={(e) => setAlamatJembatan(e.target.value)} spellCheck={false} className="min-h-11 rounded-[var(--radius-input)] border border-garis-kuat bg-kertas px-3 font-mono" data-testid="jembatan-alamat" />
+                    </label>
+                    <Tombol type="button" ragam="kedua" onClick={dariJembatan} disabled={jalan} data-testid="jembatan-mulai">{t.jembatanMulai}</Tombol>
+                  </div>
+                </li>
+              </ol>
+              <p className="mt-4 max-w-2xl text-sm text-tinta-2">{t.jembatanTidakAda}</p>
+            </details>
+          ) : null}
         </>
       )}
       <video ref={video} className="hidden" muted playsInline />
