@@ -59,7 +59,7 @@ export function FormKlaim({ kategori, perjalanan, hari, kunci, teks: t }: { kate
       const mime = mimeBerkas(f.name, f.type);
       if (!mime) return setInfo(t.strukJenis);
       const up = await lemparBerkas(createBrowserSupabase(), { isi: await f.arrayBuffer(), nama: f.name, mime }, { baca: false });
-      if (up.status === "galat" || !up.berkasId) return setInfo(up.status === "galat" ? up.pesan : t.fotoTakTerbaca);
+      if (up.status === "galat" || !up.berkasId) return setInfo("pesan" in up ? up.pesan : t.fotoTakTerbaca);
       setBerkasId(up.berkasId);
       const m = await bacaStrukAksi(up.berkasId);
       if ("galat" in m) return setInfo(m.galat);

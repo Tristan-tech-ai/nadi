@@ -155,10 +155,10 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 
 | ID | Kemampuan Mekari | Bagian | Nadi sekarang | Status | Tugas |
 |---|---|---|---|---|---|
-| EX-01 | Klaim karyawan dengan OCR struk, kategori, saldo per kategori | Expense Claims/*; Expense Mobile/Mobile Home | klaim karyawan /app/klaim: kategori, sisa batas per bulan, foto struk diunggah, teks e-struk diurai tanpa model (korpus 32 struk sintetis) mengisi jumlah, tanggal, kategori (M-18) | SEBAGIAN: baca foto struk dengan model belum | M-18 |
-| EX-02 | Kebijakan pengeluaran (batas per kategori, per tujuan) | Expense Policies/* | batas per orang per kategori per bulan, struk wajib per kategori, tanggal paling lama 60 hari, klaim perjalanan hanya di tanggal perjalanan; ditegakkan database (M-18) | SEBAGIAN: batas per tujuan atau uang harian per kota belum | M-18 |
+| EX-01 | Klaim karyawan dengan OCR struk, kategori, saldo per kategori | Expense Claims/*; Expense Mobile/Mobile Home | klaim karyawan /app/klaim: kategori, sisa batas per bulan, foto struk diunggah, teks e-struk diurai tanpa model (korpus 32 struk sintetis) mengisi jumlah, tanggal, kategori (M-18); foto struk dibaca OCR di HP lalu model bila ragu, mengisi jumlah, tanggal, pemasok (31/32 foto sulit, docs/quality/eval-struk-foto.md) (M-18B) | ADA | M-18, M-18B |
+| EX-02 | Kebijakan pengeluaran (batas per kategori, per tujuan) | Expense Policies/* | batas per orang per kategori per bulan, struk wajib per kategori, tanggal paling lama 60 hari, klaim perjalanan hanya di tanggal perjalanan; ditegakkan database (M-18); uang harian per kota tujuan (M-18B) | SEBAGIAN: batas klaim berbeda per kota tujuan belum | M-18, M-18B |
 | EX-03 | AI Checker kebijakan dan kewajaran klaim | Approval Process/AI Checker | pemeriksa aturan pasti di database (batas, struk, tanggal, perjalanan); tebakan kategori dari kata kunci struk (M-18) | SEBAGIAN: pemeriksa kewajaran berbasis model untuk kategori ragu belum | M-18 |
-| EX-04 | Perjalanan dinas: pengajuan, uang muka, laporan, kebijakan tujuan | Business Trip/*; Expense Mobile/Mobile Trip | perjalanan dinas: pengajuan lewat atasan lalu pemilik, uang muka 1-160, klaim terkait perjalanan, penyelesaian selisih (kurang dibayar lewat slip, lebih menjadi kasbon) (M-18) | SEBAGIAN: kebijakan tujuan dan uang harian belum | M-18 |
+| EX-04 | Perjalanan dinas: pengajuan, uang muka, laporan, kebijakan tujuan | Business Trip/*; Expense Mobile/Mobile Trip | perjalanan dinas: pengajuan lewat atasan lalu pemilik, uang muka 1-160, klaim terkait perjalanan, penyelesaian selisih (kurang dibayar lewat slip, lebih menjadi kasbon) (M-18); tarif uang harian per kota tujuan, klaim uang harian dibuat otomatis saat perjalanan disetujui (M-18B) | ADA | M-18, M-18B |
 | EX-05 | Pembelian: purchasing, vendor, vendor portal, pajak | Purchase Management/*; Expense Mobile/Mobile Purchase | Lempar nota pemasok, /app/beli (PR, PO, penerimaan, tagihan, retur) | SEBAGIAN: portal pemasok dan pajak pembelian (PPN masukan per tagihan) belum | M-04 |
 | EX-06 | Workflow persetujuan klaim/trip/pembelian/vendor | Workflow Setup/*; Approval Process/Approvals | Feed; klaim dan perjalanan dinas lewat rantai atasan | SEBAGIAN: klaim dan perjalanan lewat atasan langsung lalu pemilik (M-11B, M-18); persetujuan pembelian dan vendor belum | M-18 |
 | EX-07 | Kartu korporat virtual/fisik, kartu debit bisnis | Corporate Cards/* | tidak ada | MITRA (bank penerbit/PJP) | - |
@@ -191,8 +191,8 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 
 | Status | Jumlah |
 |---|---|
-| ADA | 28 |
-| SEBAGIAN | 61 |
+| ADA | 30 |
+| SEBAGIAN | 59 |
 | BELUM | 26 |
 | MITRA | 17 |
 | LUAR | 2 |

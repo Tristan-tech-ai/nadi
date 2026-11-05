@@ -173,6 +173,13 @@ Deno.serve(async (req) => {
   if (!berkas) return json({ galat: "Berkas tidak ditemukan" }, 404);
   const sumberUsulan = tokenInternal && sumberPanggil === "lamar" ? "lamar" : "lempar";
 
+  // Struk yang sama difoto ulang: pakai hasil bacaan tersimpan, tanpa token.
+  if (mode === "struk" && !tokenInternal && berkas.status === "dibaca") {
+    const { data: lama } = await admin.from("berkas").select("hasil").eq("id", berkas_id).single();
+    const h = lama?.hasil as { jenis?: string; pemasok: string | null; tanggal: string | null; total: number | null; keyakinan: number } | null;
+    if (h?.jenis === "struk" && h.total) return json({ status: "dibaca", jenis: "struk", hasil: { pemasok: h.pemasok, tanggal: h.tanggal, total: h.total, keyakinan: h.keyakinan }, token: 0, model: [] });
+  }
+
   // Klaim atomik: hanya satu pemanggil yang memproses; berkas selesai tidak diproses ulang.
   const { data: diklaim } = await admin.from("berkas").update({ status: "proses", galat: null, diubah_at: new Date().toISOString() })
     .eq("id", berkas_id).in("status", ["unggah", "antre", "gagal"]).select("id");

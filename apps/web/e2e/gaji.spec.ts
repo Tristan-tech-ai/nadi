@@ -644,3 +644,72 @@ test("klaim: e-struk, batas kategori, disetujui di Feed, dibayar lewat slip", as
     if (pidAwal) await sb.rpc("pindah_perusahaan", { p_perusahaan: pidAwal });
   }
 });
+
+// M-18B: staf memotret struk SPBU yang buram (fixtures/korpus/struk-foto/sulit/struk-01.jpg). OCR di HP kurang yakin, jadi foto
+// diunggah dan dibaca baca-berkas mode struk: jumlah, tanggal, kategori bensin, dan keterangan (nama SPBU) terisi; klaim diajukan
+// dengan struk yang sama (tanpa unggah ulang) dan tidak ada usulan nota dari berkas itu. Ekor byte unik agar bukan berkas yang sama.
+test("klaim: foto struk buram dibaca AI sampai formulir terisi, klaim diajukan dengan struk", async ({ browser }) => {
+  test.setTimeout(180_000);
+  const sb = createClient(E.NEXT_PUBLIC_SUPABASE_URL, E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, { auth: { persistSession: false } });
+  expect((await sb.auth.signInWithPassword({ email: E.E2E_EMAIL_A, password: E.E2E_SANDI })).error).toBeNull();
+  const pidAwal = ((await sb.auth.getClaims()).data?.claims?.app_metadata as { pid?: string } | undefined)?.pid;
+  try {
+    const { data: ada } = await sb.from("perusahaan").select("id").eq("nama", "Uji Klaim E2E").limit(1);
+    let pid = ada?.[0]?.id as string | undefined;
+    if (!pid) {
+      const { data, error } = await sb.rpc("buat_perusahaan", { p_nama: "Uji Klaim E2E", p_industri: "fnb" });
+      expect(error).toBeNull();
+      pid = data as string;
+    } else {
+      expect((await sb.rpc("pindah_perusahaan", { p_perusahaan: pid })).error).toBeNull();
+    }
+    await sb.auth.refreshSession();
+    const tanda = Date.now().toString(36).toUpperCase();
+    const kategori = `Bensin dinas ${tanda}`;
+    expect((await sb.rpc("simpan_kategori_klaim", { p_id: null, p_nama: kategori, p_batas: null, p_akun: "", p_butuh_struk: true, p_aktif: true })).error).toBeNull();
+    const { data: o, error: eO } = await sb.from("orang").insert({ perusahaan_id: pid, nama: `Kurir Foto ${tanda}`, data: {} }).select("id").single();
+    expect(eO).toBeNull();
+    expect((await sb.rpc("buat_akun_staf", { p_orang: o!.id, p_pin: "246813" })).error).toBeNull();
+    const { data: info } = await sb.from("orang").select("id_staf").eq("id", o!.id).single();
+    const { data: usaha } = await sb.from("perusahaan").select("kode").eq("id", pid).single();
+
+    const s = await (await browser.newContext()).newPage();
+    await s.goto("/masuk/staf");
+    await s.getByLabel("Kode usaha").fill(usaha!.kode as string);
+    await s.getByLabel("ID kamu").fill(info!.id_staf as string);
+    await s.getByLabel("PIN").fill("246813");
+    await s.getByRole("button", { name: "Masuk" }).click();
+    await expect(s.getByTestId("peran")).toContainText("staf");
+    await s.goto("/app/klaim");
+    const fm = s.getByRole("form", { name: "Ajukan klaim" });
+    // Tunggu hidrasi: onChange input berkas baru terpasang setelah React aktif.
+    await s.waitForLoadState("networkidle");
+    const foto = readFileSync(join(__dirname, "..", "..", "..", "fixtures", "korpus", "struk-foto", "sulit", "struk-01.jpg"));
+    await s.getByTestId("foto-struk").setInputFiles({ name: "struk-spbu.jpg", mimeType: "image/jpeg", buffer: Buffer.concat([foto, Buffer.from(`e2e-${tanda}`)]) });
+    await expect(fm.getByRole("status")).toContainText("Dibaca Nadi dengan AI", { timeout: 90_000 });
+    await expect(fm.getByLabel("Jumlah (Rp)")).toHaveValue("64800");
+    await expect(fm.getByLabel("Tanggal struk")).toHaveValue("2026-10-04");
+    // Tebakan kategori: kategori bensin pertama di usaha ini (jalan sebelumnya meninggalkan kategori bensin lain).
+    await expect(fm.getByLabel("Kategori").locator("option:checked")).toHaveText(/^Bensin dinas \w+ \(wajib struk\)$/);
+    await fm.getByLabel("Kategori").selectOption({ label: `${kategori} (wajib struk)` });
+    await expect(fm.getByLabel("Untuk apa")).toHaveValue(/SPBU 34\.520\.88/);
+    // Klaim hanya boleh untuk struk 60 hari terakhir; setelah itu tanggal korpus terlalu lama, staf mengganti ke hari ini.
+    const hari = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Makassar" }).format(new Date());
+    if (Date.parse(hari) - Date.parse("2026-10-04") > 55 * 86_400_000) await fm.getByLabel("Tanggal struk").fill(hari);
+    await fm.getByLabel("Untuk apa").fill(`Bensin antar pesanan ${tanda}`);
+    await fm.getByRole("button", { name: "Ajukan klaim" }).click();
+    await expect(s.getByTestId("daftar-klaim").locator(`li[data-keterangan="Bensin antar pesanan ${tanda}"]`)).toContainText("Menunggu");
+    await s.context().close();
+
+    const { data: kl } = await sb.from("klaim").select("jumlah, berkas_id").eq("perusahaan_id", pid).eq("keterangan", `Bensin antar pesanan ${tanda}`).single();
+    expect(kl!.jumlah).toBe(64800);
+    expect(kl!.berkas_id).toBeTruthy();
+    const { data: b } = await sb.from("berkas").select("status, jenis_terdeteksi, token_ai").eq("id", kl!.berkas_id).single();
+    expect(b).toMatchObject({ status: "dibaca", jenis_terdeteksi: "struk" });
+    expect(b!.token_ai).toBeGreaterThan(0);
+    const { count } = await sb.from("usulan").select("id", { count: "exact", head: true }).eq("berkas_id", kl!.berkas_id).neq("aksi", "klaim.setujui");
+    expect(count).toBe(0);
+  } finally {
+    if (pidAwal) await sb.rpc("pindah_perusahaan", { p_perusahaan: pidAwal });
+  }
+});

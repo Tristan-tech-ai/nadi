@@ -29,9 +29,23 @@ Dibuat 5 Nov 2026.
 ## Korpus struk
 - scripts/korpus/struk.py menulis 32 struk sintetis (SPBU, parkir, tol, ojek daring, rumah makan, hotel, alat tulis, paket data) ke fixtures/korpus/struk dengan harapan.json.
 - src/lib/klaim/struk.test.ts mengharuskan total, tanggal, dan kategori masing-masing >= 90%; hasil 32/32 untuk ketiganya.
-- Korpus dibuat sendiri, jadi angka ini menguji aturan terhadap format yang dikenal, bukan struk nyata. Struk nyata dan foto (OCR) adalah tugas M-18B.
+- Korpus dibuat sendiri, jadi angka ini menguji aturan terhadap format yang dikenal, bukan struk nyata.
+
+## Foto struk (M-18B)
+- Tangga: OCR di HP (tesseract.js, 0 token) dipakai bila keyakinan halaman >= 85 dan total terbaca; selain itu foto diunggah dan
+  baca-berkas `mode: "struk"` membaca pemasok, tanggal, total, keyakinan (model ringan, lalu berat bila total kosong atau keyakinan di
+  bawah ambang). Mode ini tidak membuat usulan nota; klaim sendiri yang menjadi usulan. Foto yang sama dibaca ulang memakai hasil
+  tersimpan tanpa token.
+- Eval di docs/quality/eval-struk-foto.md: set normal 32/32 (29 dari OCR, 0 salah); set sulit OCR saja 20/32, tangga 31/32 (96,9%),
+  rata-rata 240 token per foto.
+
+## Uang harian (M-18B)
+- Tarif per kota tujuan (tabel uang_harian, `*` untuk kota lain) diatur pemilik/admin di /app/klaim. Kota dicocokkan dari teks tujuan
+  (nama kota terpanjang yang muncul), lalu `*`.
+- Saat perjalanan diajukan, tarif dan jumlah hari dicatat dan ikut di penjelasan usulan; saat disetujui, Nadi membuat klaim uang harian
+  berstatus disetujui (kategori "Uang harian perjalanan dinas", akun 6-930, jurnal D 6-930 / K 2-160), dibayar lewat slip seperti klaim lain.
+- Tes SQL supabase/tests/klaim_lanjutan.test.sql 16/16.
 
 ## Belum
-- Baca foto struk dengan model (lewat baca-berkas).
-- Uang harian dan batas per kota tujuan.
 - Pemeriksa kewajaran berbasis model untuk kategori ragu.
+- Uang harian berbeda per jabatan (sekarang satu tarif per kota untuk semua orang).

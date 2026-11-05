@@ -41,7 +41,7 @@ export function waktuLog(teks: string): [string, number] | null {
 const jam = (menit: number) => `${String(Math.floor(menit / 60)).padStart(2, "0")}.${String(menit % 60).padStart(2, "0")}`;
 
 export function bacaLogMesin(teks: string): HasilLog | null {
-  const garis = teks.replace(/^﻿/, "").split(/\r?\n/).filter((g) => g.trim() && !g.startsWith("# "));
+  const garis = (teks.charCodeAt(0) === 0xfeff ? teks.slice(1) : teks).split(/\r?\n/).filter((g) => g.trim() && !g.startsWith("# "));
   for (let iJudul = 0; iJudul < Math.min(garis.length, 5); iJudul++) {
     const pemisah = (garis[iJudul].match(/;/g)?.length ?? 0) > (garis[iJudul].match(/,/g)?.length ?? 0) ? ";" : garis[iJudul].includes("\t") ? "\t" : ",";
     const judul = pecah(garis[iJudul], pemisah).map((j) => j.toLowerCase().replace(/[.:]/g, "").trim());
