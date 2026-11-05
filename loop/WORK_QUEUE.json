@@ -3363,8 +3363,10 @@
    "accept": "tes SQL: tiket bernomor, urutan status tidak bisa mundur kecuali batal, invoice dari tiket, isolasi; e2e terima barang sampai diambil + halaman status publik untuk pelanggan",
    "how": "docs/research/kebutuhan-usaha.md urut 2 (bengkel, laundry, penjahit, servis elektronik)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T13:17:51"
+   "status": "done",
+   "created": "2026-11-05T13:17:51",
+   "done": "2026-11-05T13:47:19",
+   "result": "829650b + 8f7c69b: migrasi order_servis md5 333841fb, tes SQL 18/18 (tiket SRV + kode publik, idempoten, status hanya maju, batal butuh alasan, terkunci setelah diambil, riwayat, invoice sekali per tiket + stok oli berkurang, staf menerima tapi tidak menagih, status publik tanpa HP/catatan internal, isolasi/anon); vitest servis 2/2; e2e/servis.spec.ts lulus produksi nadi-swart.vercel.app (terima sampai diambil, invoice Rp120.000, pesan wa.me, /servis/kode semua tahap + tagihan; axe 390/1440 terang/gelap); Lighthouse /app/servis 91/100"
   },
   {
    "id": "W-07C",
@@ -3377,8 +3379,10 @@
    "accept": "tes SQL: aturan komisi persen/nominal per produk atau layanan, dihitung dari penjualan kasir/invoice per orang per periode, masuk slip sebagai komponen, isolasi; e2e satu komisi tampil di slip",
    "how": "docs/research/kebutuhan-usaha.md urut 3 (salon, bengkel, sales)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T13:17:51"
+   "status": "done",
+   "created": "2026-11-05T13:17:51",
+   "done": "2026-11-05T14:08:57",
+   "result": "42f7d93: migrasi komisi md5 52c7be23, tes SQL 9/9 (bawaan 10% + pomade Rp5.000/satuan, kapster 12.000 dari kasir, pemilik 10.000 dari invoice lunas saja, rentang tanggal, aturan mati, staf ditolak, isolasi); vitest susunSlip komisi (bruto PPh 21 naik, BPJS tetap) 12/12; regresi e2e gaji 7/7 lokal; e2e/komisi.spec.ts lulus produksi nadi-swart.vercel.app (kapster jual 2 potong lewat akun staf, aturan 10% di /app/gaji, rekap Rp7.000, slip memuat Komisi penjualan dan layanan Rp7.000; axe 390/1440 terang/gelap)"
   },
   {
    "id": "W-07D",
