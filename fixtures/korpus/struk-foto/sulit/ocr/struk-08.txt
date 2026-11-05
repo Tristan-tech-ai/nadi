@@ -1,0 +1,9 @@
+Bukti pembelian
+
+Paket data 15 GB 20 hari
+Nomor 0812-xxxx-8207
+Tanggal 05 Jan 2026
+Harga Rp30.000
+
+Jumlah dibayar Rp50.000
+Status: Berhasil

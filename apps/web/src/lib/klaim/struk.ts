@@ -2,7 +2,7 @@
 // Aturan pasti dulu: total, tanggal, dan tebakan kategori dari kata kunci. Hasilnya hanya mengisi formulir; staf memeriksa,
 // dan database tetap memeriksa batas dan aturan kategori. Korpus: fixtures/korpus/struk (diuji di struk.test.ts).
 
-export type HasilStruk = { total: number | null; tanggal: string | null; kategori: KelompokStruk | null };
+export type HasilStruk = { total: number | null; tanggal: string | null; kategori: KelompokStruk | null; pemasok: string | null };
 export type KelompokStruk = "bensin" | "parkir" | "tol" | "transport" | "makan" | "hotel" | "atk" | "pulsa";
 
 const BULAN: Record<string, number> = {
@@ -68,10 +68,20 @@ function totalDari(baris: string[]): number | null {
   return null;
 }
 
+/** Pemasok: baris pertama (dari 4 teratas) dengan minimal 3 huruf yang bukan alamat, tanggal, atau label; nama toko dicetak paling atas. */
+function pemasokDari(baris: string[]): string | null {
+  const bukan = /^(jl\.?|jalan|no\.?|tel|telp|npwp|kasir|tanggal|waktu|struk|nota|invoice|kuitansi|receipt)\b/i;
+  for (const b of baris.slice(0, 4)) {
+    const huruf = b.replace(/[^a-z]/gi, "").length;
+    if (huruf >= 3 && !bukan.test(b) && !/\d{1,2}[/.-]\d{1,2}[/.-]\d{2,4}/.test(b)) return b.replace(/\s+/g, " ").slice(0, 80);
+  }
+  return null;
+}
+
 export function bacaStruk(teks: string): HasilStruk {
   const baris = teks.split(/\r?\n/).map((b) => b.trim()).filter(Boolean);
   const kategori = KATA.find(([, re]) => re.test(teks))?.[0] ?? null;
-  return { total: totalDari(baris), tanggal: tanggalDari(teks), kategori };
+  return { total: totalDari(baris), tanggal: tanggalDari(teks), kategori, pemasok: pemasokDari(baris) };
 }
 
 /** Pilih kategori usaha yang namanya cocok dengan kelompok tebakan (misalnya kategori "Bensin dan tol" untuk bensin). */

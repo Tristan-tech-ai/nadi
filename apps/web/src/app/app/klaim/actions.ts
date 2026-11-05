@@ -80,3 +80,24 @@ export async function selesaikanDinas(_: HasilKlaim, f: FormData): Promise<Hasil
   segarkan();
   return { pesan: isiTeks(k.dinasSelesai, { potong: d.dipotong.toLocaleString("id-ID"), kasbon: d.kasbon.toLocaleString("id-ID"), sisa: Number(d.sisa_klaim).toLocaleString("id-ID") }) };
 }
+
+/** M-18B: baca foto struk lewat baca-berkas mode struk (model, dipakai hanya bila OCR di perangkat tidak cukup yakin). Tanpa usulan. */
+export type HasilBacaStruk = { total: number | null; tanggal: string | null; pemasok: string | null; keyakinan: number } | { galat: string };
+export async function bacaStrukAksi(berkasId: string): Promise<HasilBacaStruk> {
+  const k = ambilKamus(await bahasaAplikasi()).klaim;
+  if (!/^[0-9a-f-]{36}$/i.test(berkasId)) return { galat: k.fotoTakTerbaca };
+  const supabase = await createClient();
+  const { data, error } = await supabase.functions.invoke<{ status: string; hasil?: { total: number | null; tanggal: string | null; pemasok: string | null; keyakinan: number } }>("baca-berkas", { body: { berkas_id: berkasId, mode: "struk" } });
+  if (error || !data?.hasil) return { galat: k.fotoTakTerbaca };
+  return data.hasil;
+}
+
+export async function aturUangHarian(_: HasilKlaim, f: FormData): Promise<HasilKlaim> {
+  const k = ambilKamus(await bahasaAplikasi()).klaimPesan;
+  const supabase = await createClient();
+  const nominal = rupiah(f, "nominal");
+  const { error } = await supabase.rpc("atur_uang_harian", { p_kota: t(f, "kota"), p_nominal: nominal > 0 ? nominal : null });
+  if (error) return salah(error);
+  segarkan();
+  return { pesan: nominal > 0 ? isiTeks(k.uangHarianTersimpan, { kota: t(f, "kota"), n: nominal.toLocaleString("id-ID") }) : k.uangHarianMati };
+}

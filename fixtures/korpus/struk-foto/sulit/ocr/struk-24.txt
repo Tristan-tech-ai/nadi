@@ -1,0 +1,9 @@
+Bukti pembelian
+
+Paket data 15 GB 30 hari
+Honor 0812-xxxx-5320
+Tanggal 36 Jun 2026
+Harga Rp30.000
+
+Jumlah dibayar Rp30.000
+Status: Berhasil

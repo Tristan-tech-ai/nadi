@@ -1,0 +1,9 @@
+Bukti pembelian
+
+Paket data 15 G8 30 hari
+Nomor 0812-moxx-6716
+Tanggal 15 Mar 2026
+Harga Rp100.000
+
+Jumlah dibayar Rp100.000
+Status: Berhasil

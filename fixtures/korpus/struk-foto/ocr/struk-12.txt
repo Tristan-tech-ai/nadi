@@ -1,0 +1,10 @@
+Terima kasih sudah memakai Ojek Daring
+Perjalanan kamu pada 5 Februari 2026
+Dari: Jl. Gatot Subroto Timur
+Ke: Kantor Cabang Renon
+Jarak 7 km
+Tarif perjalanan Rp21.000
+Biaya jasa aplikasi Rp2.000
+Diskon -Rp3.000
+Total dibayar Rp20.000
+Metode: Dompet digital

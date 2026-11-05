@@ -1,0 +1,9 @@
+Bukti pembelian
+
+Paket data 15 GB 20 hari
+Nomor 0812-xxx1-6130
+Tanggal 26 Agu 2026
+Harga Rp100.000
+
+Jumlah dibayar Rp100. 000
+Status: Berhasil

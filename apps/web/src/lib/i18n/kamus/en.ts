@@ -2485,6 +2485,8 @@ export const kamusEn: Kamus = {
     putuskanAria: "Decide request", catatanTolak: "Reason (required when declining)", setujui: "Approve", tolak: "Decline", atasNama: "You are covering for {nama}, who is on leave.",
   },
   klaim: {
+    uangHarianBaris: "daily allowance {hari} days",
+    membacaFoto: "Reading the receipt photo...", terbacaFoto: "Read from the photo on this phone, without AI. Check the numbers before submitting.", terbacaAi: "Read by Nadi with AI, {n}% sure. Check the numbers before submitting.", fotoTakTerbaca: "The total in this photo could not be read. Take a closer photo, or type the total.", uangHarianJudul: "Daily allowance for business trips", uangHarianKet: "Rate per day by destination city. When a trip is approved, Nadi creates the daily allowance claim itself. Write * for other cities.", uangHarianAria: "Set daily allowance", uangHarianKota: "Destination city", uangHarianKotaContoh: "for example Surabaya, or *", uangHarianNominal: "Daily allowance (Rp per day, empty = turn off)", uangHarianSimpan: "Save rate", uangHarianLain: "Other cities", uangHarianPerHari: "per day",
     judul: "Expense claims", ket: "Pay back personal money spent for the business: fuel, parking, tolls, meals on duty, business trips. Approved by the direct manager then the owner, paid through payroll or cash.",
     ajukanJudul: "Submit a claim", klaimAria: "Submit a claim", tempel: "Paste e-receipt text (optional)", tempelContoh: "Copy the receipt from an email or app and Nadi fills in amount, date, and category",
     terbaca: "Amount and date filled in from the receipt text. Check before submitting.", tidakTerbaca: "Could not read the amount or date from that text. Fill them in yourself.",
@@ -2503,7 +2505,7 @@ export const kamusEn: Kamus = {
     batasContoh: "500000", akun: "Expense account (optional)", butuhStruk: "Receipt photo required", simpanKategori: "Add category",
     batasPerBulan: "limit Rp{n} per month", tanpaBatas: "no limit", akunLabel: "account",
   },
-  klaimPesan: { hanya: "Only the owner or an admin can do this.", gagal: "Not saved yet. Try again in a moment.", diajukan: "Claim submitted. Your direct manager or the owner will decide.", dinasDiajukan: "Trip requested.", kategoriTersimpan: "Category saved.", dibayar: "Paid Rp{n}.", uangMukaDibayar: "Advance paid and recorded.", dinasSelesai: "Closed: Rp{potong} taken from the advance, Rp{kasbon} became a pay advance, Rp{sisa} of claims will be paid through payroll." },
+  klaimPesan: { uangHarianTersimpan: "Rate for {kota} Rp{n} per day saved.", uangHarianMati: "That city rate is turned off.", hanya: "Only the owner or an admin can do this.", gagal: "Not saved yet. Try again in a moment.", diajukan: "Claim submitted. Your direct manager or the owner will decide.", dinasDiajukan: "Trip requested.", kategoriTersimpan: "Category saved.", dibayar: "Paid Rp{n}.", uangMukaDibayar: "Advance paid and recorded.", dinasSelesai: "Closed: Rp{potong} taken from the advance, Rp{kasbon} became a pay advance, Rp{sisa} of claims will be paid through payroll." },
   kepatuhan: {
     judul: "Compliance calendar", ket: "Deadlines for the next 90 days: tax, BPJS, holiday allowance, contracts, warning letters, and business permits. Reminders reach the owner's Feed 7 days ahead.",
     hanyaPengelola: "Only the owner, an admin, or an accountant opens the compliance calendar.", kosong: "No deadlines in the next 90 days.",

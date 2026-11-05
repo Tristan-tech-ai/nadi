@@ -2486,6 +2486,8 @@ export const kamusId = {
     putuskanAria: "Putuskan pengajuan", catatanTolak: "Alasan (wajib bila menolak)", setujui: "Setujui", tolak: "Tolak", atasNama: "Kamu menggantikan {nama} yang sedang izin atau cuti.",
   },
   klaim: {
+    uangHarianBaris: "uang harian {hari} hari",
+    membacaFoto: "Membaca foto struk...", terbacaFoto: "Dibaca dari foto di HP ini, tanpa AI. Periksa angkanya sebelum mengajukan.", terbacaAi: "Dibaca Nadi dengan AI, yakin {n}%. Periksa angkanya sebelum mengajukan.", fotoTakTerbaca: "Total di foto ini belum terbaca. Foto ulang lebih dekat, atau ketik totalnya.", uangHarianJudul: "Uang harian perjalanan dinas", uangHarianKet: "Tarif per hari menurut kota tujuan. Saat perjalanan disetujui, Nadi membuat klaim uang harian sendiri. Tulis * untuk kota lain.", uangHarianAria: "Atur uang harian", uangHarianKota: "Kota tujuan", uangHarianKotaContoh: "misalnya Surabaya, atau *", uangHarianNominal: "Uang harian (Rp per hari, kosong = matikan)", uangHarianSimpan: "Simpan tarif", uangHarianLain: "Kota lain", uangHarianPerHari: "per hari",
     judul: "Klaim pengeluaran", ket: "Ganti uang pribadi yang terpakai untuk usaha: bensin, parkir, tol, makan saat tugas, perjalanan dinas. Disetujui atasan langsung lalu pemilik, dibayar lewat slip gaji atau kas.",
     ajukanJudul: "Ajukan klaim", klaimAria: "Ajukan klaim", tempel: "Tempel teks e-struk (boleh kosong)", tempelContoh: "Salin isi struk dari email atau aplikasi, Nadi mengisi jumlah, tanggal, dan kategori",
     terbaca: "Jumlah dan tanggal diisi dari teks struk. Periksa sebelum mengajukan.", tidakTerbaca: "Jumlah atau tanggal tidak terbaca dari teks itu. Isi sendiri.",
@@ -2504,7 +2506,7 @@ export const kamusId = {
     batasContoh: "500000", akun: "Akun beban (boleh kosong)", butuhStruk: "Wajib foto struk", simpanKategori: "Tambah kategori",
     batasPerBulan: "batas Rp{n} per bulan", tanpaBatas: "tanpa batas", akunLabel: "akun",
   },
-  klaimPesan: { hanya: "Hanya pemilik atau admin yang bisa melakukan ini.", gagal: "Belum tersimpan. Coba lagi sebentar.", diajukan: "Klaim diajukan. Atasan langsung atau pemilik akan memutuskan.", dinasDiajukan: "Perjalanan diajukan.", kategoriTersimpan: "Kategori tersimpan.", dibayar: "Dibayar Rp{n}.", uangMukaDibayar: "Uang muka dibayar dan tercatat.", dinasSelesai: "Selesai: Rp{potong} dipotong dari uang muka, Rp{kasbon} jadi kasbon, Rp{sisa} klaim masih dibayar lewat slip." },
+  klaimPesan: { uangHarianTersimpan: "Tarif {kota} Rp{n} per hari tersimpan.", uangHarianMati: "Tarif kota itu dimatikan.", hanya: "Hanya pemilik atau admin yang bisa melakukan ini.", gagal: "Belum tersimpan. Coba lagi sebentar.", diajukan: "Klaim diajukan. Atasan langsung atau pemilik akan memutuskan.", dinasDiajukan: "Perjalanan diajukan.", kategoriTersimpan: "Kategori tersimpan.", dibayar: "Dibayar Rp{n}.", uangMukaDibayar: "Uang muka dibayar dan tercatat.", dinasSelesai: "Selesai: Rp{potong} dipotong dari uang muka, Rp{kasbon} jadi kasbon, Rp{sisa} klaim masih dibayar lewat slip." },
   kepatuhan: {
     judul: "Kalender kepatuhan", ket: "Tenggat 90 hari ke depan: pajak, BPJS, THR, kontrak, surat peringatan, dan izin usaha. Pengingat masuk ke Feed pemilik 7 hari sebelumnya.",
     hanyaPengelola: "Hanya pemilik, admin, atau akuntan yang membuka kalender kepatuhan.", kosong: "Belum ada tenggat dalam 90 hari ke depan.",

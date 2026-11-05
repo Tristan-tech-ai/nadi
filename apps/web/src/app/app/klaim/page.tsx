@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { randomUUID } from "node:crypto";
 import { Suspense } from "react";
-import { FormDinas, FormKategori, FormKlaim, TombolBayar, TombolSelesai, TombolUangMuka } from "@/components/app/klaim";
+import { FormDinas, FormKategori, FormKlaim, FormUangHarian, TombolBayar, TombolSelesai, TombolUangMuka } from "@/components/app/klaim";
 import { Cap } from "@/components/ui/cap";
 import { Rupiah } from "@/components/ui/rupiah";
 import { formatTanggalKalender } from "@/lib/format";
@@ -16,7 +16,7 @@ import { zonaUsahaIni } from "@/lib/zona-usaha";
 export const metadata: Metadata = { title: "Klaim pengeluaran" };
 
 type Klaim = { id: string; tanggal: string; jumlah: number; terbayar: number; keterangan: string; status: string; orang: { nama: string } | null; kategori_klaim: { nama: string } | null };
-type Dinas = { id: string; tujuan: string; mulai: string; selesai: string; uang_muka: number; status: string; uang_muka_dibayar: boolean; orang: { nama: string } | null };
+type Dinas = { id: string; tujuan: string; mulai: string; selesai: string; uang_muka: number; status: string; uang_muka_dibayar: boolean; uang_harian_tarif: number; uang_harian_hari: number; orang: { nama: string } | null };
 type Batas = { kategori_id: string; nama: string; batas: number | null; terpakai: number; butuh_struk: boolean };
 const CAP: Record<string, "menunggu" | "diterima" | "ditolak"> = { menunggu: "menunggu", disetujui: "menunggu", dibayar: "diterima", ditolak: "ditolak", selesai: "diterima" };
 
@@ -54,12 +54,14 @@ async function Isi() {
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
   const hari = hariIni(new Date(), await zonaUsahaIni(sesi.perusahaanId));
   const supabase = await createClient();
-  const [{ data: kat }, { data: kl }, { data: dn }, { data: bt }] = await Promise.all([
+  const [{ data: kat }, { data: kl }, { data: dn }, { data: bt }, { data: uh }] = await Promise.all([
     supabase.from("kategori_klaim").select("id, nama, butuh_struk, batas_bulanan, akun").eq("aktif", true).order("nama"),
     supabase.from("klaim").select("id, tanggal, jumlah, terbayar, keterangan, status, orang:orang_id(nama), kategori_klaim(nama)").order("dibuat_at", { ascending: false }).limit(50),
-    supabase.from("perjalanan_dinas").select("id, tujuan, mulai, selesai, uang_muka, status, uang_muka_dibayar, orang:orang_id(nama)").order("mulai", { ascending: false }).limit(20),
+    supabase.from("perjalanan_dinas").select("id, tujuan, mulai, selesai, uang_muka, status, uang_muka_dibayar, uang_harian_tarif, uang_harian_hari, orang:orang_id(nama)").order("mulai", { ascending: false }).limit(20),
     sesi.peran === "staf" ? supabase.rpc("sisa_batas_klaim", { p_tanggal: hari }) : Promise.resolve({ data: [] }),
+    supabase.from("uang_harian").select("kota, nominal").eq("aktif", true).order("kota"),
   ]);
+  const tarif = (uh ?? []) as { kota: string; nominal: number }[];
   const kategori = (kat ?? []) as { id: string; nama: string; butuh_struk: boolean; batas_bulanan: number | null; akun: string }[];
   const klaim = (kl ?? []) as unknown as Klaim[];
   const dinas = (dn ?? []) as unknown as Dinas[];
@@ -105,7 +107,7 @@ async function Isi() {
                   <span className="font-semibold">{d.tujuan}{d.orang ? <>, <span data-pengguna>{d.orang.nama}</span></> : null}</span>
                   <Cap jenis={CAP[d.status] ?? "menunggu"} label={t.statusDinas[d.status as keyof Kamus["klaim"]["statusDinas"]] ?? d.status} />
                 </div>
-                <p className="mt-1 text-tinta-2">{isiTeks(t.rentang, { a: formatTanggalKalender(d.mulai, bahasa), b: formatTanggalKalender(d.selesai, bahasa) })}{d.uang_muka > 0 && <>, {t.uangMuka} <Rupiah nilai={d.uang_muka} bahasa={bahasa} />{d.uang_muka_dibayar ? ` (${t.sudahDibayar})` : ""}</>}</p>
+                <p className="mt-1 text-tinta-2">{isiTeks(t.rentang, { a: formatTanggalKalender(d.mulai, bahasa), b: formatTanggalKalender(d.selesai, bahasa) })}{d.uang_muka > 0 && <>, {t.uangMuka} <Rupiah nilai={d.uang_muka} bahasa={bahasa} />{d.uang_muka_dibayar ? ` (${t.sudahDibayar})` : ""}</>}{d.uang_harian_tarif > 0 && <span data-testid="uang-harian-dinas">, {isiTeks(t.uangHarianBaris, { hari: d.uang_harian_hari })} <Rupiah nilai={d.uang_harian_tarif * d.uang_harian_hari} bahasa={bahasa} /></span>}</p>
                 {d.status === "disetujui" && pengelola && (
                   <div className="mt-2 flex flex-wrap gap-2">
                     {sesi.peran === "pemilik" && d.uang_muka > 0 && !d.uang_muka_dibayar && <TombolUangMuka dinas={d.id} label={`${t.bayarUangMuka}: ${d.tujuan}`} teks={t.bayarUangMuka} />}
@@ -127,6 +129,14 @@ async function Isi() {
             </ul>
           )}
           <FormKategori teks={t} />
+          <h3 className="mt-6 font-semibold">{t.uangHarianJudul}</h3>
+          <p className="mt-1 text-sm text-tinta-2">{t.uangHarianKet}</p>
+          {tarif.length > 0 && (
+            <ul className="mt-2 text-sm" data-testid="daftar-uang-harian">
+              {tarif.map((u) => <li key={u.kota}>{u.kota === "*" ? t.uangHarianLain : u.kota.replace(/\b\w/g, (c) => c.toUpperCase())}: <Rupiah nilai={u.nominal} bahasa={bahasa} /> {t.uangHarianPerHari}</li>)}
+            </ul>
+          )}
+          <FormUangHarian teks={t} />
         </section>
       )}
     </div>

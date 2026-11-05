@@ -10,6 +10,7 @@ import { extractText, getDocumentProxy } from "npm:unpdf@1.9.1";
 import { BIDANG, INSTRUKSI, SKEMA_HASIL, hasilDari, rapikan, usulanDari, usulanLamar, xlsxKeTeks, type Hasil, type Jenis } from "./inti.ts";
 import { bacaCv } from "./cv.ts";
 import { bacaLogMesin } from "./logmesin.ts";
+import { INSTRUKSI_STRUK, SKEMA_STRUK, rapikanStruk } from "./struk.ts";
 import { INSTRUKSI_ATURAN, SKEMA_ATURAN, aturanDari, cocok, jalankan, konsisten, perbaikiTipe, sidik, ujiAturan, type Aturan, type AturanMentah } from "./ekstraktor.ts";
 
 declare const EdgeRuntime: { waitUntil(p: Promise<unknown>): void };
@@ -151,7 +152,7 @@ Deno.serve(async (req) => {
   // Jalur internal: database (pg_net, mis. lamaran tanpa akun) memanggil dengan token dari Vault, bukan JWT pengguna.
   const tokenInternal = req.headers.get("x-nadi-token");
   if (!otorisasi && !tokenInternal) return json({ galat: "Masuk dulu" }, 401);
-  const { berkas_id, sumber: sumberPanggil } = await req.json().catch(() => ({ berkas_id: null, sumber: null }));
+  const { berkas_id, sumber: sumberPanggil, mode } = await req.json().catch(() => ({ berkas_id: null, sumber: null, mode: null }));
   if (typeof berkas_id !== "string") return json({ galat: "berkas_id wajib" }, 400);
 
   const admin = createClient(URL_SUPABASE, kunciEnv("SUPABASE_SECRET_KEYS", "SUPABASE_SERVICE_ROLE_KEY"), { auth: { persistSession: false } });
@@ -186,6 +187,35 @@ Deno.serve(async (req) => {
     const { data: unduh, error: eUnduh } = await admin.storage.from("berkas").download(berkas.jalur);
     if (eUnduh || !unduh) return await gagal("Berkas belum terunggah. Lempar ulang berkasnya.", 409);
     const byte = new Uint8Array(await unduh.arrayBuffer());
+
+    // M-18B mode struk (layar Klaim): baca total/tanggal/pemasok saja, tanpa aturan ekstraktor dan tanpa usulan nota.
+    if (mode === "struk" && !tokenInternal) {
+      if (!berkas.mime.startsWith("image/") && berkas.mime !== "application/pdf") return await gagal("Struk berupa foto atau PDF.", 422);
+      const { data: konf } = await admin.from("konfigurasi").select("nilai").eq("kunci", "model_ai").single();
+      const tangga = konf?.nilai as { ringan: string; berat: string; ambang_naik: number };
+      const isi = isiUntukModel(berkas.mime, byte, berkas.nama_asli ?? "struk", null);
+      const bacaStruk = async (m: string) => {
+        const r = await ai.messages.create({
+          model: m, max_tokens: 2000,
+          system: [{ type: "text", text: INSTRUKSI_STRUK, cache_control: { type: "ephemeral" } }],
+          output_config: { effort: "low", format: { type: "json_schema", schema: SKEMA_STRUK } },
+          messages: [{ role: "user", content: [...isi, { type: "text", text: "Baca struk ini dan isi skemanya." }] }],
+        } as Anthropic.MessageCreateParamsNonStreaming);
+        await catatPemakaian(admin, berkas.perusahaan_id, berkas_id, "baca_struk", m, r.usage);
+        const t = r.content.find((b) => b.type === "text");
+        return { h: r.stop_reason === "end_turn" && t?.type === "text" ? rapikanStruk(JSON.parse(t.text)) : null, token: r.usage.input_tokens + r.usage.output_tokens, m };
+      };
+      const coba = [await bacaStruk(tangga.ringan)];
+      if (!coba[0].h?.total || coba[0].h.keyakinan < tangga.ambang_naik) coba.push(await bacaStruk(tangga.berat));
+      const akhir = coba.at(-1)!.h?.total ? coba.at(-1)! : coba[0];
+      const token = coba.reduce((a, c) => a + c.token, 0);
+      if (!akhir.h?.total) {
+        await admin.from("berkas").update({ token_ai: token }).eq("id", berkas_id);
+        return await gagal("Total di struk ini belum terbaca. Foto ulang lebih dekat, atau ketik totalnya.");
+      }
+      await admin.from("berkas").update({ status: "dibaca", jenis_terdeteksi: "struk", hasil: { jenis: "struk", sumber: "model", ...akhir.h }, token_ai: token, diubah_at: new Date().toISOString() }).eq("id", berkas_id);
+      return json({ status: "dibaca", jenis: "struk", hasil: akhir.h, token, model: coba.map((c) => c.m) });
+    }
     // Foto: pakai teks OCR dari perangkat bila keyakinannya cukup (>= 85, docs/research/ml-browser.md).
     const ocrCukup = berkas.mime.startsWith("image/") && berkas.teks_ocr && Number(berkas.ocr_keyakinan) >= 85;
     const teks = ocrCukup ? (berkas.teks_ocr as string) : await teksBerkas(berkas.mime, byte);
