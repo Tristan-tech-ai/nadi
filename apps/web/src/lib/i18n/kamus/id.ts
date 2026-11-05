@@ -2457,6 +2457,13 @@ export const kamusId = {
     hpRusak: "Nomor WhatsApp diawali 08 atau 62.", alasanKurang: "Tulis alasan batal.", hanya: "Hanya pemilik, admin, atau akuntan yang membuat invoice.",
     gagal: "Belum tersimpan. Coba lagi sebentar.", galatDb: "{pesan}",
   },
+  komisi: {
+    judul: "Komisi {bulan}", ket: "Komisi dihitung dari penjualan kasir orang yang membuka shift dan invoice lunas orang yang menerbitkannya. Masuk slip sebagai pendapatan saat gaji disiapkan.",
+    produk: "Berlaku untuk", semua: "Semua produk dan jasa (bawaan)", persen: "Persen dari nilai penjualan", nominal: "Rupiah per satuan terjual", simpan: "Simpan aturan komisi",
+    aturanJudul: "Aturan komisi", aturanKosong: "Belum ada aturan komisi.", rekapJudul: "Komisi bulan ini", rekapKosong: "Belum ada komisi bulan ini.",
+    rekapBaris: "{nama}: komisi {komisi} dari penjualan {penjualan} ({n} transaksi)", aturanBaris: "{produk}: {persen}% + {nominal} per satuan", matikan: "Isi 0 dan 0 untuk mematikan aturan.",
+  },
+  komisiPesan: { tersimpan: "Aturan komisi tersimpan.", angkaRusak: "Persen 0 sampai 100 dan rupiah bulat.", gagal: "Belum tersimpan. Coba lagi sebentar.", galatDb: "{pesan}" },
   strukPublik: { judul: "Struk {usaha}", tidakAda: "Struk tidak ditemukan.", total: "Total", bayar: "Dibayar", kembalian: "Kembalian", terima: "Terima kasih." },
   barang: {
     tingkatLabel: "Harga grosir (opsional)", tingkatContoh: "10:14.000, 50:13.500", indukLabel: "Varian dari (opsional)", tanpaInduk: "Bukan varian", atributLabel: "Ciri varian", atributContoh: "ukuran: 5 kg, warna: merah", varianDari: "Varian dari {nama}", grosir: "Grosir:", grosirMulai: "mulai {min}", lokasiLabel: "Lokasi rak", simpanLokasi: "Simpan lokasi", laporanJudul: "Stok per gudang",

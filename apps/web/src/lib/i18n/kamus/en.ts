@@ -2456,6 +2456,13 @@ export const kamusEn: Kamus = {
     hpRusak: "WhatsApp numbers start with 08 or 62.", alasanKurang: "Write the reason for cancelling.", hanya: "Only the owner, admin, or accountant can create invoices.",
     gagal: "Not saved yet. Try again in a moment.", galatDb: "{pesan}",
   },
+  komisi: {
+    judul: "Commission {bulan}", ket: "Commission comes from cashier sales of the person who opened the shift and paid invoices of the person who issued them. It enters the payslip as income when payroll is prepared.",
+    produk: "Applies to", semua: "All products and services (default)", persen: "Percent of sales value", nominal: "Rupiah per unit sold", simpan: "Save commission rule",
+    aturanJudul: "Commission rules", aturanKosong: "No commission rules yet.", rekapJudul: "Commission this month", rekapKosong: "No commission this month yet.",
+    rekapBaris: "{nama}: commission {komisi} from sales {penjualan} ({n} transactions)", aturanBaris: "{produk}: {persen}% + {nominal} per unit", matikan: "Enter 0 and 0 to turn a rule off.",
+  },
+  komisiPesan: { tersimpan: "Commission rule saved.", angkaRusak: "Percent from 0 to 100 and whole rupiah.", gagal: "Not saved yet. Try again in a moment.", galatDb: "{pesan}" },
   strukPublik: { judul: "{usaha} receipt", tidakAda: "Receipt not found.", total: "Total", bayar: "Paid", kembalian: "Change", terima: "Thank you." },
   barang: {
     tingkatLabel: "Bulk prices (optional)", tingkatContoh: "10:14,000, 50:13,500", indukLabel: "Variant of (optional)", tanpaInduk: "Not a variant", atributLabel: "Variant traits", atributContoh: "size: 5 kg, color: red", varianDari: "Variant of {nama}", grosir: "Bulk:", grosirMulai: "from {min}", lokasiLabel: "Shelf location", simpanLokasi: "Save location", laporanJudul: "Stock per warehouse",

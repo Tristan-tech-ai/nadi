@@ -15,6 +15,7 @@ import { ambilKamus, isiTeks, type Kamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { sisip } from "@/lib/i18n/sisip";
 import { hariIni } from "@/lib/izin";
+import { BagianKomisi } from "@/app/app/gaji/komisi";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
@@ -177,6 +178,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
         )}
         {!disetujui && <FormLembur orang={(org ?? []) as { id: string; nama: string }[]} awal={`${bulan}-01`} akhir={akhir} teks={f} jenisLembur={t.jenisLembur} />}
       </section>
+      {pengelola && <BagianKomisi bahasa={bahasa} bulan={bulan} namaBulan={namaBulan(bulan, t)} akhir={akhir} />}
       {sesi.peran === "pemilik" && (
         <Suspense fallback={<div className="mt-10 h-40 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
           {/* Cadangan pesangon berisi penjelasan pasal PP 35/2021; di bahasa lain tampil dalam bahasa Indonesia dengan catatan. */}

@@ -116,6 +116,17 @@ describe("insentif beban kerja di slip (F3-05)", () => {
   });
 });
 
+describe("komisi di slip (W-07C)", () => {
+  it("Rp500.000 komisi: komponen pendapatan, PPh 21 sama dengan insentif senilai, iuran BPJS tidak berubah", () => {
+    const tanpa = susunSlip({ pokok: 8_000_000, ptkp: "TK/0" }, ATURAN, 10).komponen;
+    const dengan = susunSlip({ pokok: 8_000_000, ptkp: "TK/0" }, ATURAN, 10, undefined, [], 0, 500_000).komponen;
+    expect(dengan.find((k) => k.kode === "komisi")).toMatchObject({ jenis: "pendapatan", nilai: 500_000 });
+    expect(nilai(dengan, "pph21")).toBe(155_106);
+    for (const kode of ["bpjs_kes_pk", "jkk", "jkm", "jht_pk", "bpjs_kes", "jht"]) expect(nilai(dengan, kode), kode).toBe(nilai(tanpa, kode));
+    expect(nilai(susunSlip({ pokok: 3_000_000 }, ATURAN, 10, undefined, [], 0, 0).komponen, "komisi")).toBeUndefined();
+  });
+});
+
 describe("penggantian biaya (M-18)", () => {
   it("tidak masuk bruto PPh 21", () => {
     const k = [

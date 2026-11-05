@@ -78,10 +78,14 @@ export async function siapkanGaji(_: HasilGaji, form: FormData): Promise<HasilGa
   const gantiDari = new Map<string, number>();
   for (const x of kl ?? []) gantiDari.set(x.orang_id as string, (gantiDari.get(x.orang_id as string) ?? 0) + Number(x.jumlah) - Number(x.terbayar));
 
+  // W-07C: komisi bulan ini per orang dari kasir dan invoice lunas (RPC pemilik/admin; galat = tanpa komisi, slip tetap disusun).
+  const { data: km } = await supabase.rpc("commission_summary", { p_mulai: awal, p_sampai: akhir });
+  const komisiDari = new Map<string, number>(((km ?? []) as { orang: string; komisi: number }[]).map((x) => [x.orang, Number(x.komisi)]));
+
   let ditahan = 0;
   for (const o of digaji) {
     const rw = riwayat.get(o.id);
-    const { komponen, peringatan } = susunSlip(o.g, aturan, bln, rw && rw.bulan === 11 ? rw : undefined, lemburDari.get(o.id), insentifDari.get(o.id) ?? 0);
+    const { komponen, peringatan } = susunSlip(o.g, aturan, bln, rw && rw.bulan === 11 ? rw : undefined, lemburDari.get(o.id), insentifDari.get(o.id) ?? 0, komisiDari.get(o.id) ?? 0);
     const cil = cicilanKasbon(komponen, kasbonDari.get(o.id) ?? []);
     if (cil.komponen) komponen.push(cil.komponen);
     // Peringatan slip ditulis dalam bahasa Indonesia seperti peringatan susunSlip (ditampilkan dengan lang="id").

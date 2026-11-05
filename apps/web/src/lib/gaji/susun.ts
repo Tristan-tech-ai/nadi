@@ -22,9 +22,9 @@ const pakai = <T>(a: PetaAturan, kunci: string): T | null => (a[kunci]?.terverif
 
 /**
  * insentif: bagian kolam insentif beban kerja yang disetujui untuk bulan ini (F3-05, public.kolam_bagian). Pendapatan non-upah
- * (PP 36/2021 Pasal 8 ayat (2) dan Pasal 10): masuk bruto PPh 21, tidak menambah `upah` (dasar BPJS dan lembur).
+ * (PP 36/2021 Pasal 8 ayat (2) dan Pasal 10): masuk bruto PPh 21, tidak menambah `upah` (dasar BPJS dan lembur). komisi: sama, dari aturan komisi.
  */
-export function susunSlip(g: DataGaji, aturan: PetaAturan, bulan: number, riwayat?: Riwayat, lembur: LemburHari[] = [], insentif = 0): { komponen: Komponen[]; peringatan: string[] } {
+export function susunSlip(g: DataGaji, aturan: PetaAturan, bulan: number, riwayat?: Riwayat, lembur: LemburHari[] = [], insentif = 0, komisi = 0): { komponen: Komponen[]; peringatan: string[] } {
   const komponen: Komponen[] = [];
   const peringatan: string[] = [];
   const tambah = (k: Komponen) => {
@@ -58,6 +58,11 @@ export function susunSlip(g: DataGaji, aturan: PetaAturan, bulan: number, riwaya
 
   if (Number.isInteger(insentif) && insentif > 0) {
     tambah({ kode: "insentif_beban", label: "Insentif beban kerja", jenis: "pendapatan", nilai: insentif, sumber: "PP 36/2021 Pasal 8 dan 10" });
+  }
+  // W-07C: komisi penjualan/layanan bulan ini (public.commission_summary). Seperti insentif: masuk bruto PPh 21, tidak menambah `upah`
+  // (dasar BPJS dan lembur); perlakuan dasar BPJS untuk komisi belum diverifikasi ke aturan BPJS.
+  if (Number.isInteger(komisi) && komisi > 0) {
+    tambah({ kode: "komisi", label: "Komisi penjualan dan layanan", jenis: "pendapatan", nilai: komisi, sumber: "aturan komisi usaha" });
   }
 
   // BPJS: masing-masing program hanya dihitung bila aturannya terverifikasi.
