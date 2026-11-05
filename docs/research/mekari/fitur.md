@@ -52,7 +52,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | TA-30 | Reimbursement, cash advance, pinjaman karyawan | Finance/*; Mobile App/Reimbursement; Settings/Finance; API Loans, Reimbursement | kasbon (uang muka upah) dari kas usaha sendiri, jurnal piutang karyawan 1-150, cicilan dibatasi 50% upah (PP 36/2021 Pasal 63 dan 65); cicilan otomatis di slip, sisa berkurang saat gaji disetujui (jurnal 6-100/1-150), /app/gaji/kasbon; reimbursement /app/klaim dibayar lewat slip (penggantian, bukan upah) atau kas (M-18) | SEBAGIAN: pinjaman berbunga atau pihak ketiga tidak dibuat (Nadi tidak meminjamkan uang) | M-18, M-10 |
 | TA-31 | Rekrutmen ATS: lowongan, kandidat, talent pool, asesmen, MBTI, CV parsing, AI scoring, kalender, laporan, job portal | Recruitment/*; For Employee/Recruitment | lowongan, /lamar, baca CV tanpa model, rubrik, wawancara suara + transkrip, uji kerja, IPIP, Bank Talenta, status pelamar, lingkaran rekrut, penjaga bias, jadwal wawancara + .ics + undangan wa.me, laporan rekrutmen (tahap, sumber ?src=, hari sampai terisi, biaya iklan per pelamar), data JobPosting di /lamar | SEBAGIAN: pasang ke job portal MITRA, MBTI tidak dibuat | M-14 |
 | TA-32 | Kinerja: goals KPI/OKR, review (diri, atasan, rekan), kalibrasi, talents/9-box, kompetensi, suksesi, IDP | Performance Management/* | KPI dari papan kerja, kolam bonus, /app/kinerja: tujuan per orang + progres, siklus review diri/atasan/rekan dengan skor per kompetensi, kalibrasi skor akhir + potensi menjadi 9-box, IDP; nilai rahasia (pemilik/admin/atasan langsung) (M-13) | SEBAGIAN: suksesi belum, kompetensi per topi belum (kompetensi per siklus) | M-13 |
-| TA-33 | LMS: materi, tes, progres, sertifikat | LMS/* | Rekam ilmu (SOP rekaman + langkah) | SEBAGIAN: kursus, kuis, sertifikat | M-13B |
+| TA-33 | LMS: materi, tes, progres, sertifikat | LMS/* | /app/kursus: kursus dari langkah Rekam ilmu atau ditulis sendiri, kuis pilihan ganda dinilai server (kunci tanpa hak baca klien), 5 percobaan sehari, progres per orang (diri, atasan, pengelola), sertifikat bernomor SERT /sertifikat/<kode> cetak PDF + verifikasi | ADA (video kursus, jalur belajar per topi, dan tenggat wajib belum) | M-13B |
 | TA-34 | Inbox persetujuan terpusat | Inbox/* | Feed Keputusan | ADA | - |
 | TA-35 | Integrasi (Jurnal, Bluebird, mesin absen, bank, job portal), API, webhook | Integrations/*; API Talenta | satu database (tanpa integrasi), MCP, rencana webhook W-08 | SEBAGIAN | W-08 |
 | TA-36 | Liveness AI dan validasi wajah | Time/Attendance | cek wajah di perangkat, gambar tidak diunggah | ADA | - |
@@ -191,8 +191,8 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 
 | Status | Jumlah |
 |---|---|
-| ADA | 40 |
-| SEBAGIAN | 71 |
+| ADA | 41 |
+| SEBAGIAN | 70 |
 | BELUM | 4 |
 | MITRA | 17 |
 | LUAR | 2 |
