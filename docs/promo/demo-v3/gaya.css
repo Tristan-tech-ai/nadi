@@ -52,3 +52,4 @@ html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; backgro
 .chat-tulis { position: absolute; left: 40px; right: 40px; bottom: 30px; height: 70px; border: 1px solid #DDD5C6; border-radius: 14px; display: flex; align-items: center; padding: 0 24px; color: #A8A196; font-size: 26px; background: #FFFDF8; }
 .chat-jendela { position: absolute; left: 0; right: 0; top: 71px; bottom: 120px; overflow: hidden; }
 .chat-jendela .chat-isi { top: 20px; }
+.perangkat { position: absolute; overflow: hidden; border-radius: 18px; border: 8px solid #1C1B18; background: #F6F2EA; box-shadow: 0 24px 60px rgba(28,27,24,0.18); }

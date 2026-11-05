@@ -68,6 +68,7 @@ def kamera(fx, fy, s, tx=W / 2, ty=H / 2):
 def bangun():
     f = Film()
     G3 = 48.0  # panjang babak 3 MCP (sisipan setelah babak 2)
+    G10 = 12.0  # babak 10 satu kerangka (sisipan sebelum kartu akhir)
     # ---------- Babak 0 kait (0 - 6,5 dtk): nota dipindai, tarik mundur, nota menjadi kartu usulan asli ----------
     NOTA = [("UD Sumber Rejeki", "judul"), ("Jl. Gatot Subroto Barat No. 18, Denpasar", "kecil"), ("-", "garis"),
             ("No: NT-4671", ""), ("Tgl: 13/10/2026", ""), ("-", "garis"),
@@ -316,14 +317,14 @@ def bangun():
     f.add(f'tl.fromTo("#tok4", {{scale: 1.6}}, {{scale: 1, duration: 0.3, ease: "power3.out"}}, {T94 + 0.85:.3f});')
 
     # ---------- Babak 11 kartu akhir (70 - 76 dtk): cap turun, menjadi logo Nadi asli, satu kalimat, URL ----------
-    T11 = 70.0 + G3
+    T11 = 70.0 + G3 + G10
     logo = re.search(r'<svg[^>]*aria-label="Nadi".*?</svg>', open(os.path.join(SUMBER, "app", "feed.html"), encoding="utf8").read(), re.S).group(0)
     logo = re.sub(r'width="\d+" height="\d+"', 'width="220" height="220"', logo, count=1)
     isi11 = (f'<div id="capakhir" class="capbesar" style="left:{W / 2 - 170}px; top:330px">DITERIMA</div>'
              f'<div id="logo11" style="position:absolute; left:{W / 2 - 110}px; top:300px; width:220px; height:220px; opacity:0">{logo}</div>'
              '<div class="kal" id="k11" style="top:600px; opacity:0">Lempar berkasnya. Nadi yang merapikan.</div>'
              '<div class="kal dua" id="u11" style="top:720px; opacity:0">nadi-swart.vercel.app/demo</div>')
-    f.adegan("b11", T11, 76.0 + G3, isi11, z=11)
+    f.adegan("b11", T11, 76.0 + G3 + G10, isi11, z=11)
     f.add(f'tl.fromTo("#capakhir", {{opacity: 0, scale: 2.4, rotation: -14}}, {{opacity: 1, scale: 1, rotation: -7, duration: 0.16, ease: "power3.in"}}, {T11 + 0.3});')
     f.add(f'tl.to("#capakhir", {{opacity: 0, scale: 0.6, rotation: 0, duration: 0.3, ease: TEKAN}}, {T11 + 1.2});')
     f.add(f'tl.fromTo("#logo11", {{opacity: 0, scale: 0.6}}, {{opacity: 1, scale: 1, duration: 0.35, ease: "power3.out"}}, {T11 + 1.3});')
@@ -376,7 +377,28 @@ def bangun():
     f.add(f'tl.to("#td", {{y: -{round(ty - 760)}, duration: 1.0, ease: TEKAN}}, {T3b + 11.0:.3f});')
     f.add(f'tl.fromTo("#n3", {{opacity: 0, y: -20}}, {{opacity: 1, y: 0, duration: 0.3, ease: "power2.out"}}, {T3b + 13.5:.3f});')
 
-    durasi = 76.0 + G3
+    # ---------- Babak 10 satu kerangka di semua layar (70+G3 - 82+G3 dtk) ----------
+    # Tiap ukuran dimuat di iframe selebar aslinya, supaya media query CSS aplikasi bekerja seperti di perangkat (1440 sidebar,
+    # 768 rail, 390 bilah bawah). DOM = /app Toko Bu Sari (scripts/promo-layar.mjs).
+    T10 = 70.0 + G3
+    k10, s10 = f.ketik("k10", "Di laptop dan HP, tempatnya sama.", T10 + 0.2, cps=30)
+    def bingkai(nama, lebar, tinggi, skala, x, y, bid):
+        h = open(os.path.join(SUMBER, "app", f"{nama}.html"), encoding="utf8").read()
+        h = re.sub(r"<body([^>]*)>", r"<body style='margin:0'>", h)
+        doc = f'<!doctype html><html lang="id"><head><link rel="stylesheet" href="assets/app/app.css"></head>{h}</html>'.replace('"', "&quot;")
+        return (f'<div class="perangkat" id="{bid}" style="left:{x}px; top:{y}px; width:{lebar * skala}px; height:{tinggi * skala}px; opacity:0">'
+                f'<iframe srcdoc="{doc}" style="width:{lebar}px; height:{tinggi}px; transform:scale({skala}); transform-origin:0 0; border:0" scrolling="no"></iframe></div>')
+    isi10 = (f'<div class="kal" id="b10t" style="top:480px">{k10}</div>'
+             + bingkai("hari-1440", 1440, 900, 0.62, 70, 190, "d1") + bingkai("hari-768", 768, 1024, 0.6, 1000, 150, "d2")
+             + bingkai("hari-390", 390, 844, 0.9, 1500, 150, "d3"))
+    f.adegan("b10", T10, T10 + G10, isi10, z=10)
+    f.add(f'tl.set("#k10-c", {{opacity: 1}}, {T10 + 0.2});')
+    T10b = s10 + 0.8
+    f.add(f'tl.set("#b10t", {{opacity: 0}}, {T10b:.3f});')
+    for i, d in enumerate(["d1", "d2", "d3"]):
+        f.add(f'tl.fromTo("#{d}", {{opacity: 0, y: 40}}, {{opacity: 1, y: 0, duration: 0.45, ease: MUNDUR}}, {T10b + i * 0.5:.3f});')
+
+    durasi = 76.0 + G3 + G10
     css = open(os.path.join(AKAR, "gaya.css"), encoding="utf8").read()
     html = f"""<!doctype html>
 <html lang="id">
