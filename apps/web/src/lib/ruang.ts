@@ -84,13 +84,13 @@ export const RUANG: Ruang[] = [
     h("/app/mitra", "Mitra", "Partners", "Psikolog, akuntan publik, dan konsultan pajak.", "Psychologists, public accountants, tax consultants.", P, "konsultan psikolog"),
   ] },
   { id: "pengaturan", label: { id: "Pengaturan", en: "Settings" }, halaman: [
-    h("/app/perusahaan", "Usahamu", "Your business", "Data usaha, topi, tempat, aturan kerja.", "Business details, hats, places, work rules.", PA, "pengaturan setting usaha perusahaan"),
+    h("/app/perusahaan", "Usahamu", "Your business", "Data usaha, topi, tempat, aturan kerja.", "Business details, hats, places, work rules.", PA, "pengaturan setting usaha perusahaan absen absensi hadir kehadiran tablet attendance"),
     h("/app/akun/keamanan", "Akun dan keamanan", "Account and security", "2FA, sesi, dan log aktivitas.", "2FA, sessions, and activity log.", SEMUA, "password sandi 2fa keamanan"),
   ] },
 ];
 
-/** Halaman di bawah /app yang sengaja tidak masuk menu (alur sekali jalan atau halaman detail). */
-export const DI_LUAR_MENU = ["/app/mulai", "/app/wawancara/[lamaran]"] as const;
+/** Halaman di bawah /app yang sengaja tidak masuk menu (alur sekali jalan, halaman detail, atau peta menu itu sendiri). */
+export const DI_LUAR_MENU = ["/app/mulai", "/app/wawancara/[lamaran]", "/app/menu"] as const;
 
 export const SEMUA_HALAMAN = RUANG.flatMap((r) => r.halaman.map((x) => ({ ...x, ruang: r.id })));
 

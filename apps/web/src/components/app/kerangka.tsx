@@ -12,16 +12,17 @@ import {
 } from "@phosphor-icons/react";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { halamanDari, type Ruang } from "@/lib/ruang";
+import { DialogCari, type TeksCari } from "@/components/app/cari-fitur";
 
 type Ikon = ComponentType<IconProps>;
 const IKON_RUANG: Record<string, Ikon> = {
   "hari-ini": HouseSimpleIcon, uang: WalletIcon, jual: StorefrontIcon, barang: PackageIcon, orang: UsersThreeIcon,
   tempat: VideoCameraIcon, dokumen: FileTextIcon, otomasi: LightningIcon, pengaturan: GearSixIcon,
 };
-type Teks = { navUtama: string; menu: string; tutup: string; semuaMenu: string };
+type Teks = { navUtama: string; menu: string; tutup: string; semuaMenu: string; peta: string; cari: TeksCari };
 type Butir = { href: string; label: string; Ikon: Ikon };
 
-function bilahBawah(peran: string, b: Bahasa): Butir[] {
+export function bilahBawah(peran: string, b: Bahasa): Butir[] {
   const t = (id: string, en: string) => (b === "en" ? en : id);
   if (peran === "staf") return [
     { href: "/app", label: t("Hari ini", "Today"), Ikon: HouseSimpleIcon }, { href: "/app/kerja", label: t("Kerja", "Work"), Ikon: ClipboardTextIcon },
@@ -108,6 +109,9 @@ export function Kerangka({ ruang, peran, bahasa: b, teks }: { ruang: Ruang[]; pe
       {/* >= 1200 px: sidebar penuh. */}
       <nav aria-label={teks.navUtama} className="kerangka-sidebar fixed bottom-0 left-0 top-[3.25rem] z-10 hidden w-64 overflow-y-auto border-r border-garis bg-kertas px-3 py-4 min-[1200px]:block print:hidden">
         <DaftarRuang ruang={ruang} jalur={jalur} b={b} lipat />
+        <Link href="/app/menu" aria-current={jalur === "/app/menu" ? "page" : undefined} className="mt-3 flex items-center gap-2 rounded-[var(--radius-isian)] border-t border-garis px-2 pt-3 text-sm text-tinta-2 hover:text-tinta">
+          <ListIcon size={18} aria-hidden />{teks.peta}
+        </Link>
       </nav>
 
       {/* 600-1199 px: rail ruang, panel halaman ruang yang dipilih. */}
@@ -122,7 +126,14 @@ export function Kerangka({ ruang, peran, bahasa: b, teks }: { ruang: Ruang[]; pe
                 <Ikon size={22} weight={aktif ? "fill" : "regular"} aria-hidden />{r.label[b]}
               </button>
             </li>);
-        })}</ul>
+        })}
+          <li>
+            <Link href="/app/menu" aria-current={jalur === "/app/menu" ? "page" : undefined}
+              className={`flex min-h-14 w-full flex-col items-center justify-center gap-0.5 px-1 text-center text-[11px] leading-tight ${jalur === "/app/menu" ? "font-semibold text-tinta" : "text-tinta-2"}`}>
+              <ListIcon size={22} aria-hidden />{teks.menu}
+            </Link>
+          </li>
+        </ul>
       </nav>
       {ruangPanel && (
         <div id="panel-ruang" className="fixed bottom-0 left-20 top-[3.25rem] z-20 hidden w-72 overflow-y-auto border-r border-garis bg-kertas p-3 shadow-sm min-[600px]:block min-[1200px]:hidden">
@@ -161,6 +172,7 @@ export function Kerangka({ ruang, peran, bahasa: b, teks }: { ruang: Ruang[]; pe
           <div className="mt-4"><DaftarRuang ruang={ruang} jalur={jalur} b={b} guna onPilih={() => setMenu(false)} /></div>
         </div>
       )}
+      <DialogCari ruang={ruang} peran={peran} bahasa={b} teks={teks.cari} />
     </>
   );
 }

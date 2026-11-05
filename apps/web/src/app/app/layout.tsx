@@ -2,7 +2,9 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { keluar } from "@/app/auth-actions";
 import { Kerangka } from "@/components/app/kerangka";
-import { ruangUntuk } from "@/lib/ruang";
+import { TombolCari } from "@/components/app/cari-fitur";
+import { teksCari } from "@/lib/cari-teks";
+import { ruangSesi } from "@/lib/ruang-sesi";
 import { PemilihBahasaApp } from "@/components/app/pemilih-bahasa-app";
 import { TandaNadi } from "@/components/ui/logo";
 import { ambilKamus } from "@/lib/i18n/kamus";
@@ -32,14 +34,17 @@ async function NamaPerusahaan() {
 }
 
 /** Tautan lompat dan logo dalam bahasa pengguna; cadangannya (bahasa Indonesia, bentuk sama) tampil sampai bahasa terbaca. */
-function TautanKepala({ lompat, beranda, lang }: { lompat: string; beranda: string; lang?: string }) {
+function TautanKepala({ lompat, beranda, cari, lang }: { lompat: string; beranda: string; cari: string; lang?: string }) {
   return (
     <>
       <a href="#isi" className="lompat-isi" lang={lang}>{lompat}</a>
       <header className="sticky top-0 z-10 flex items-center justify-between gap-4 border-b border-garis bg-kertas px-4 py-3 print:hidden">
-        <Link href="/app" aria-label={beranda} lang={lang}>
-          <TandaNadi ukuran={26} />
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link href="/app" aria-label={beranda} lang={lang}>
+            <TandaNadi ukuran={26} />
+          </Link>
+          <TombolCari label={cari} />
+        </div>
         <Suspense fallback={<span className="h-4 w-32 animate-pulse rounded bg-kertas-2" aria-hidden />}>
           <NamaPerusahaan />
         </Suspense>
@@ -51,38 +56,25 @@ function TautanKepala({ lompat, beranda, lang }: { lompat: string; beranda: stri
 async function Kepala() {
   const bahasa = await bahasaAplikasi();
   const t = ambilKamus(bahasa).aplikasi;
-  return <TautanKepala lompat={t.lompat} beranda={t.beranda} lang={bahasa} />;
+  return <TautanKepala lompat={t.lompat} beranda={t.beranda} cari={bahasa === "en" ? "Search" : "Cari"} lang={bahasa} />;
 }
 
 async function Navigasi() {
   const sesi = await bacaSesi();
   if (!sesi?.peran) return null;
-  // Staf: tautan Magang hanya bila dia mentor atau peserta (RLS rencana_magang hanya memperlihatkan rencananya sendiri).
-  let magang = false;
-  let ilmu = false;
-  if (sesi.peran === "staf") {
-    const supabase = await createClient();
-    // F3-07C: tautan Rekam ilmu hanya untuk staf yang sedang berhenti dan punya butir ilmu (RLS serah_butir_baca_ilmu_sendiri).
-    const [{ count }, { count: nIlmu }] = await Promise.all([
-      supabase.from("rencana_magang").select("id", { count: "exact", head: true }),
-      supabase.from("serah_butir").select("id", { count: "exact", head: true }).eq("jenis", "ilmu"),
-    ]);
-    magang = (count ?? 0) > 0;
-    ilmu = (nIlmu ?? 0) > 0;
-  }
   const bahasa = await bahasaAplikasi(sesi.bahasa);
-  const ruang = ruangUntuk(sesi.peran).map((r) => ({ ...r, halaman: r.halaman.filter((x) =>
-    sesi.peran !== "staf" || ((x.href !== "/app/magang" || magang) && (x.href !== "/app/ilmu" || ilmu))) })).filter((r) => r.halaman.length > 0);
+  const ruang = await ruangSesi(sesi.peran);
   const en = bahasa === "en";
   return <Kerangka ruang={ruang} peran={sesi.peran} bahasa={bahasa}
-    teks={{ navUtama: ambilKamus(bahasa).aplikasi.navUtama, menu: "Menu", tutup: en ? "Close" : "Tutup", semuaMenu: en ? "All menus" : "Semua menu" }} />;
+    teks={{ navUtama: ambilKamus(bahasa).aplikasi.navUtama, menu: "Menu", tutup: en ? "Close" : "Tutup", semuaMenu: en ? "All menus" : "Semua menu",
+      peta: en ? "All menus, with what each does" : "Semua menu dan gunanya", cari: teksCari(bahasa) }} />;
 }
 
 export default function LayoutApp({ children }: LayoutProps<"/app">) {
   return (
     <div className="flex min-h-full flex-1 flex-col">
       {/* WCAG 2.4.1: kepala dan navigasi berulang di setiap layar; tautan pertama melompati kepala langsung ke isi. */}
-      <Suspense fallback={<TautanKepala lompat={ambilKamus("id").aplikasi.lompat} beranda={ambilKamus("id").aplikasi.beranda} />}>
+      <Suspense fallback={<TautanKepala lompat={ambilKamus("id").aplikasi.lompat} beranda={ambilKamus("id").aplikasi.beranda} cari="Cari" />}>
         <Kepala />
       </Suspense>
       <div id="isi" tabIndex={-1} className="kerangka-isi flex flex-1 flex-col focus:outline-none min-[600px]:pl-20 min-[1200px]:pl-64 print:pl-0">{children}</div>
