@@ -310,7 +310,22 @@ def bangun():
     f.add(f'tl.fromTo("#sa4", {{opacity: 0, y: 12}}, {{opacity: 1, y: 0, duration: 0.25, ease: "power2.out"}}, {T94 + 0.8:.3f});')
     f.add(f'tl.fromTo("#tok4", {{scale: 1.6}}, {{scale: 1, duration: 0.3, ease: "power3.out"}}, {T94 + 0.85:.3f});')
 
-    durasi = 70.0
+    # ---------- Babak 11 kartu akhir (70 - 76 dtk): cap turun, menjadi logo Nadi asli, satu kalimat, URL ----------
+    T11 = 70.0
+    logo = re.search(r'<svg[^>]*aria-label="Nadi".*?</svg>', open(os.path.join(SUMBER, "app", "feed.html"), encoding="utf8").read(), re.S).group(0)
+    logo = re.sub(r'width="\d+" height="\d+"', 'width="220" height="220"', logo, count=1)
+    isi11 = (f'<div id="capakhir" class="capbesar" style="left:{W / 2 - 170}px; top:330px">DITERIMA</div>'
+             f'<div id="logo11" style="position:absolute; left:{W / 2 - 110}px; top:300px; width:220px; height:220px; opacity:0">{logo}</div>'
+             '<div class="kal" id="k11" style="top:600px; opacity:0">Lempar berkasnya. Nadi yang merapikan.</div>'
+             '<div class="kal dua" id="u11" style="top:720px; opacity:0">nadi-swart.vercel.app/demo</div>')
+    f.adegan("b11", T11, 76.0, isi11, z=11)
+    f.add(f'tl.fromTo("#capakhir", {{opacity: 0, scale: 2.4, rotation: -14}}, {{opacity: 1, scale: 1, rotation: -7, duration: 0.16, ease: "power3.in"}}, {T11 + 0.3});')
+    f.add(f'tl.to("#capakhir", {{opacity: 0, scale: 0.6, rotation: 0, duration: 0.3, ease: TEKAN}}, {T11 + 1.2});')
+    f.add(f'tl.fromTo("#logo11", {{opacity: 0, scale: 0.6}}, {{opacity: 1, scale: 1, duration: 0.35, ease: "power3.out"}}, {T11 + 1.3});')
+    f.add(f'tl.fromTo("#k11", {{opacity: 0, y: 16}}, {{opacity: 1, y: 0, duration: 0.3, ease: "power2.out"}}, {T11 + 1.9});')
+    f.add(f'tl.fromTo("#u11", {{opacity: 0}}, {{opacity: 1, duration: 0.3}}, {T11 + 2.5});')
+
+    durasi = 76.0
     css = open(os.path.join(AKAR, "gaya.css"), encoding="utf8").read()
     html = f"""<!doctype html>
 <html lang="id">

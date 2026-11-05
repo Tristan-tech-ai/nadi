@@ -3,6 +3,7 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
+- TEGURAN TRISTAN 6 Nov 2026: film harus ±4:40 (maks 5:00) dan memuat SEMUA fitur utama (self improvement + pengawas bukan AI, kerja dari AI mereka lewat MCP, dll). Rencana durasi per babak + status ada di docs/promo/demo-v3/CATATAN.md bagian TEGURAN TRISTAN. Film sekarang 76 dtk kerangka. Kerjakan babak BELUM dulu (3 MCP, 6 gaji, 8 otomasi/tanya/Sarapan, 10 kerangka), lalu perpanjang babak 1, 2, 4, 9.
 - CHECKPOINT tick 304: video demo v3 70 dtk (babak 0,1,2,4,5,7,9) dirender dan ditinjau; V-07F done. BERIKUTNYA V-07G (babak 3 MCP: tangkap DOM /app/siapkan/draf lewat apps/web/scripts/promo-dom.mjs di usaha contoh; babak 6 gaji, 8 otomasi/tanya, 10 satu kerangka, 11 kartu akhir logo + cap), lalu V-07H audio, V-14, V-04 footage. Baca CHECKPOINT di docs/promo/demo-v3/CATATAN.md.
 - CHECKPOINT tick 303 (6 Nov 2026 pagi, konteks hampir penuh): video demo v3 58 dtk dirender (babak 0,1,2,4,5,7); V-07A-E done tick ini (bersama V-07A sebelumnya). LANJUT dari bagian CHECKPOINT di docs/promo/demo-v3/CATATAN.md: V-07F belajar format + MCP, V-07G sisa babak + kartu akhir, V-07H audio. Fokus video saja (perintah Tristan).
 - CHECKPOINT tick 303 lanjutan: video demo v3 36 dtk (babak 0 kait, 1 masalah, 2 Lempar, 4 Feed + cap) dirender dan ditinjau; V-07A/B/C done. BERIKUTNYA V-07D invoice + QRIS, V-07E Mata placeholder, V-07F belajar format + MCP, V-07G sisa babak + kartu akhir, V-07H audio. Baca docs/promo/demo-v3/CATATAN.md dulu.

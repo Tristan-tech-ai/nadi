@@ -121,3 +121,24 @@ Status pengerjaan tiap babak dicatat di bawah ini setiap kali ada babak yang sel
 ## CHECKPOINT (baca ini dulu setelah kompaksi)
 Film v3 = 58 dtk: babak 0 kait 0-6,5, 1 masalah 6,5-16, 2 Lempar 16-26, 4 Feed + cap 26-36, 5 tagihan QRIS 36-46, 7 Mata placeholder 46-58. V-07A-E done. SISA: V-07F babak 9 belajar format (struk SPBU ke-1 dibaca model dengan pesan 'Nadi sedang mempelajari format baru, sekali saja', struk ke-4 'tanpa AI, token 0') + babak 3 MCP (chat netral, tulis_draf, layar tinjau draf; DOM perlu ditangkap baru lewat apps/web/scripts/promo-dom.mjs), V-07G babak 6 gaji, 8 otomasi/tanya, 10 satu kerangka, 11 kartu akhir (logo + cap), V-07H audio (V-14 foley nyata, musik 115 BPM, -14 LUFS). Cara kerja: tambah blok babak di buat.py sebelum baris 'durasi = ...', posisi dari ukur.json (tambah TARGET di ukur.mjs bila perlu, jalankan node ukur.mjs), python -I buat.py, npx --yes hyperframes@0.9.8 render -o <scratchpad>/v3.mp4, ambil bingkai besar dengan cv2 ke <scratchpad>/v3_lihat.png lalu Read untuk meninjau.
 - 6 Nov 2026 babak 9 belajar format (58-70 dtk): 'Format yang sama, dibaca tanpa AI.' diketik; struk SPBU 01 (direkonstruksi dari OCR korpus) dipindai pelan, status kamus asli terbacaAi + belajarStruk (kalimat belajar distabilo) dengan pil '600 token' (eval T-01B); struk SPBU 25 dipindai cepat, terbacaAturan + pil '0 token' daun. V-07F done untuk babak 9; babak 3 MCP dipindah ke V-07G (butuh tangkapan DOM layar tinjau draf baru). Rasa: dua kolom kecil (struk ~560 px), pertimbangkan dorong ke pil token. Film kini 70 dtk.
+- 6 Nov 2026 kartu akhir (70-76 dtk) dibangun: cap DITERIMA turun lalu menjadi logo Nadi asli (SVG dari DOM), kalimat, URL. Film sementara 76 dtk.
+
+## TEGURAN TRISTAN 6 Nov 2026 (wajib dipenuhi): "Kenapa hanya segitu aja? Bukannya sudah pernah aku bilang maksimal 5 menit dan semua fitur utama harus masuk demo? (Self improvement, penggunaan AI mcp, kerja dari ai mcp mereka, dll)"
+Kesalahanku: setiap babak kubuat ±10 dtk dan fitur kunci belum masuk. Film 76 dtk sekarang hanyalah kerangka babak; durasi akhir harus ±4:30-4:50 (maks 5:00). Kartu akhir harus tetap paling akhir.
+
+### RENCANA DURASI FINAL (target 4:40, urutan film)
+| # | Babak | Target | Isi wajib | Status |
+|---|---|---|---|---|
+| 0 | Kait | 0:06 | nota dipindai jadi kartu usulan | ada (6,5 dtk) |
+| 1 | Masalah | 0:30 | ketik-sunting kalimat; Excel karyawan berantakan + pelanggan ganda (aset V-04) disorot; kartu fakta harga resmi pesaing bertanggal (docs/bisnis/harga-pesaing.md): otomatis mahal, murah = manual | ada 9,5 dtk, PERPANJANG |
+| 2 | Nadi muncul + Lempar | 0:25 | berkas jatuh, Membaca, Siap ditinjau, banyak jenis berkas | ada 10 dtk, perpanjang |
+| 3 | **Kerja dari AI-mu lewat MCP** | 0:50 | jendela chat netral (tanpa logo pihak ketiga); Excel karyawan + daftar harga + nota dilempar ke chat; AI memanggil tulis_draf; pemilik mengetik revisi ("Budi pindah ke kasir pagi, yang dobel hapus"); ubah_draf; layar tinjau draf Nadi (DOM asli /app/siapkan/draf, tangkap baru): baris ragu ditandai, gaji tidak tercentang otomatis; Terapkan 20 baris; jendela batal 10 menit | BELUM |
+| 4 | Feed + cap | 0:25 | kartu diangkat, Kalau disetujui ke mana data masuk, Lihat rincian sebelum->sesudah, Setujui jadi cap | ada 10 dtk, tambah tujuan + rincian |
+| 5 | Tagihan + QRIS | 0:18 | ada; tambah pengingat jatuh tempo | ada 10 dtk |
+| 6 | Gaji | 0:22 | PPh 21 + BPJS terhitung, Gerbang Gaji menahan satu nama dengan alasan | BELUM (tangkap DOM /app/gaji) |
+| 7 | Mata | 0:35 | footage CCTV asli (placeholder dulu), nomor anonim, masuk/keluar, antrean, peta panas, papan privasi, rekap per jam saja | ada 12 dtk placeholder |
+| 8 | Otomasi + tanya data + Sarapan Data | 0:28 | alur "kalau invoice lunas"; tanya "laba bulan ini berapa?" dijawab dari sumber; Sarapan Data pagi (DOM sarapan sudah ada) | BELUM |
+| 9 | **Belajar sendiri + pengawas bukan AI** | 0:40 | struk ke-1 600 token belajar, ke-4 0 token (ada); TAMBAH: aturan yang ditulis model diperiksa pengawas deterministik (regex berbahaya/skrip ditolak, bayangan 2x lalu aktif, mati bila meleset) dengan teks asli pengawas.ts/DECISIONS T-02; juga tanya data dan pindah data belajar (T-01A/C) | ada 12 dtk, PERPANJANG |
+| 10 | Satu kerangka semua layar | 0:12 | Hari ini di 1440/768/390 | BELUM |
+| 11 | Kartu akhir | 0:08 | ada | ada 6 dtk |
+Total target ≈ 4:39. Setelah gambar lengkap: audio (V-07H, V-14 foley nyata), footage CCTV asli (V-04).
