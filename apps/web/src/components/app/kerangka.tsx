@@ -6,15 +6,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ListIcon, LifebuoyIcon, PushPinSlashIcon, UsersThreeIcon, WalletIcon, XIcon } from "@phosphor-icons/react";
+import { ListIcon, LifebuoyIcon, PushPinIcon, PushPinSlashIcon, UsersThreeIcon, WalletIcon, XIcon } from "@phosphor-icons/react";
 import { IKON_HALAMAN, IKON_RUANG, type Ikon } from "@/components/app/ikon-halaman";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { SEMUA_HALAMAN, halamanDari, type Ruang } from "@/lib/ruang";
-import { PERISTIWA_SEMAT, SEMATAN_BAWAAN, bacaSematan, gantiSematan, sematanDiatur } from "@/lib/sematan";
+import { PERISTIWA_SEMAT, SEMATAN_BAWAAN, bacaSematan, gantiSematan } from "@/lib/sematan";
 import { DialogCari, type TeksCari } from "@/components/app/cari-fitur";
 
 
-type Teks = { navUtama: string; menu: string; tutup: string; semuaMenu: string; peta: string; cari: TeksCari; menunggu: string; disematkan: string; semuaRuang: string; bantuan: string; petunjukSemat: string; lepas: string };
+type Teks = { navUtama: string; menu: string; tutup: string; semuaMenu: string; peta: string; cari: TeksCari; menunggu: string; disematkan: string; semuaRuang: string; bantuan: string; semat: string; lepas: string };
 type Butir = { href: string; label: string; Ikon: Ikon };
 
 export function bilahBawah(peran: string, b: Bahasa): Butir[] {
@@ -44,8 +44,8 @@ function Lencana({ n, label }: { n?: number; label: string }) {
 
 const aktifDi = (jalur: string, href: string) => (href === "/app" ? jalur === "/app" : jalur === href || jalur.startsWith(`${href}/`));
 
-function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, lencana = {}, labelLencana = "", disemat }: { ruang: Ruang[]; jalur: string; b: Bahasa; guna?: boolean; lipat?: boolean; onPilih?: () => void; lencana?: Record<string, number>; labelLencana?: string; disemat?: ReadonlySet<string> }) {
-  const jumlahRuang = (r: Ruang) => r.halaman.reduce((a, x) => a + (lencana[x.href] ?? 0), 0);
+function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, lencana = {}, labelLencana = "", disemat, onSemat, labelSemat = "" }: { ruang: Ruang[]; jalur: string; b: Bahasa; guna?: boolean; lipat?: boolean; onPilih?: () => void; lencana?: Record<string, number>; labelLencana?: string; disemat?: ReadonlySet<string>; onSemat?: (href: string) => void; labelSemat?: string }) {
+  const jumlahRuang = (r: Ruang) => r.halaman.reduce((a, x) => a + (disemat?.has(x.href) ? 0 : lencana[x.href] ?? 0), 0);
   const kini = halamanDari(jalur)?.href;
   const ruangKini = halamanDari(jalur)?.ruang;
   if (lipat) {
@@ -60,9 +60,15 @@ function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, le
                 <Ikon size={18} aria-hidden />{r.label[b]}{r.id !== ruangKini && <Lencana n={jumlahRuang(r)} label={labelLencana} />}
               </summary>
               <ul className="mb-2 ml-6 mt-0.5 grid gap-0.5 border-l border-garis pl-2">{r.halaman.map((x) => (
-                <li key={x.href}>
+                <li key={x.href} className="group/item flex items-center gap-1">
                   <Link href={x.href} aria-current={kini === x.href ? "page" : undefined}
-                    className={`flex items-center gap-2 rounded-[var(--radius-isian)] px-2 py-1.5 text-sm hover:bg-kertas-2 ${kini === x.href ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}><IkonHalaman href={x.href} /><span className="truncate">{x.label[b]}</span>{!disemat?.has(x.href) && <Lencana n={lencana[x.href]} label={labelLencana} />}</Link>
+                    className={`flex min-w-0 flex-1 items-center gap-2 rounded-[var(--radius-isian)] px-2 py-1.5 text-sm hover:bg-kertas-2 ${kini === x.href ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}><IkonHalaman href={x.href} /><span className="truncate">{x.label[b]}</span>{!disemat?.has(x.href) && <Lencana n={lencana[x.href]} label={labelLencana} />}</Link>
+                  {onSemat && !disemat?.has(x.href) && (
+                    <button type="button" title={labelSemat.replace("{x}", x.label[b])} onClick={() => onSemat(x.href)}
+                      className="inline-flex size-8 shrink-0 items-center justify-center rounded-full text-tinta-2 opacity-0 hover:bg-kertas-2 hover:text-tinta focus-visible:opacity-100 group-hover/item:opacity-100">
+                      <PushPinIcon size={16} aria-hidden /><span className="sr-only">{labelSemat.replace("{x}", x.label[b])}</span>
+                    </button>
+                  )}
                 </li>))}</ul>
             </details>
           );
@@ -144,9 +150,8 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana: le
   }, [menu, panel]);
   // U-09 Disematkan: bawaan per peran, diubah dari tombol sematkan di kepala halaman (localStorage per perangkat).
   const [sematan, setSematan] = useState<string[]>(() => SEMATAN_BAWAAN[peran] ?? SEMATAN_BAWAAN.pemilik); // sama di server dan klien, lalu dibaca dari perangkat
-  const [diatur, setDiatur] = useState(true);
   useEffect(() => {
-    const segarkan = () => { setSematan(bacaSematan(peran)); setDiatur(sematanDiatur(peran)); };
+    const segarkan = () => setSematan(bacaSematan(peran));
     segarkan();
     window.addEventListener(PERISTIWA_SEMAT, segarkan);
     return () => window.removeEventListener(PERISTIWA_SEMAT, segarkan);
@@ -167,7 +172,6 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana: le
           {disemat.length > 0 && (
             <>
               <p className="px-2 pb-1 text-xs font-semibold text-tinta-2">{teks.disematkan}</p>
-              {!diatur && <p className="px-2 pb-2 text-xs text-tinta-2" data-testid="petunjuk-semat">{teks.petunjukSemat}</p>}
               <ul className="mb-4 grid gap-0.5" data-testid="disematkan">{disemat.map((x) => {
                 const aktif = halamanDari(jalur)?.href === x.href;
                 return (
@@ -176,7 +180,7 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana: le
                       className={`flex min-w-0 flex-1 items-center gap-2 rounded-[var(--radius-isian)] px-2 py-2 text-sm hover:bg-kertas-2 ${aktif ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}>
                       <IkonHalaman href={x.href} size={18} /><span className="truncate">{x.label[b]}</span><Lencana n={lencana[x.href]} label={teks.menunggu} />
                     </Link>
-                    <button type="button" onClick={() => setSematan(gantiSematan(peran, x.href))}
+                    <button type="button" title={teks.lepas.replace("{x}", x.label[b])} onClick={() => setSematan(gantiSematan(peran, x.href))}
                       className="inline-flex size-8 shrink-0 items-center justify-center rounded-full text-tinta-2 opacity-0 hover:bg-kertas-2 hover:text-tinta focus-visible:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100">
                       <PushPinSlashIcon size={16} aria-hidden /><span className="sr-only">{teks.lepas.replace("{x}", x.label[b])}</span>
                     </button>
@@ -185,7 +189,7 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana: le
             </>
           )}
           <p className="px-2 pb-1 text-xs font-semibold text-tinta-2">{teks.semuaRuang}</p>
-          <DaftarRuang ruang={ruangBadan} jalur={jalur} b={b} lipat lencana={lencana} labelLencana={teks.menunggu} disemat={new Set(disemat.map((x) => x.href))} />
+          <DaftarRuang ruang={ruangBadan} jalur={jalur} b={b} lipat lencana={lencana} labelLencana={teks.menunggu} disemat={new Set(disemat.map((x) => x.href))} onSemat={(h) => setSematan(gantiSematan(peran, h))} labelSemat={teks.semat} />
         </div>
         {/* Kaki tetap: bantuan, peta menu, pengaturan, akun. */}
         <div className="border-t border-garis px-3 py-2" data-testid="kaki-sidebar">

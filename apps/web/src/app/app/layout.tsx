@@ -75,7 +75,7 @@ async function Navigasi() {
       peta: en ? "All menus, with what each does" : "Semua menu dan gunanya", cari: teksCari(bahasa),
       menunggu: en ? "{n} waiting for you" : "{n} menunggu keputusanmu", disematkan: en ? "Pinned" : "Disematkan", semuaRuang: en ? "All spaces" : "Semua ruang",
       bantuan: en ? "Help and guides" : "Bantuan dan panduan",
-      petunjukSemat: en ? "Press Pin on a page title to keep it here." : "Tekan Sematkan di judul halaman untuk menaruhnya di sini.",
+      semat: en ? "Pin {x}" : "Sematkan {x}",
       lepas: en ? "Unpin {x}" : "Lepas {x} dari Disematkan" }} />;
 }
 

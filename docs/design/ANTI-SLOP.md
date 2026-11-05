@@ -48,7 +48,7 @@ Sumber pola: DIRECTION.md, referensi 1 sampai 7.
 - **S52 [M]** Tidak ada `alert()`/`confirm()` bawaan browser.
 - **S53 [T]** Tidak ada interaksi yang hanya bisa lewat hover (HP).
 - **S55 [T]** Dalam satu daftar navigasi, setiap tujuan punya ikon sendiri yang mengenali tujuannya; ikon yang sama untuk dua tujuan berbeda dilarang (Material 3 navigation drawer: ikon dipakai untuk semua butir atau tidak sama sekali, dan harus dikenali).
-- **S56 [T]** Kontrol yang hanya berupa ikon wajib punya label teks tampak, kecuali konvensi umum (tutup, cari, menu). Cara memakai fitur (misalnya menyematkan) harus terbaca tanpa menebak.
+- **S56 [T]** Pakai pola yang sudah dikenal pengguna dari aplikasi sehari-hari, bukan kalimat penjelasan. Contohnya sematkan lewat ikon pin yang muncul saat kursor di atas butir, atau ikon pin di judul. Ikon yang bukan konvensi umum wajib berlabel teks. Ikon konvensi umum (tutup, cari, menu, pin, bintang) cukup diberi tooltip dan label pembaca layar. Jangan menambah teks petunjuk untuk perilaku yang sudah lazim (Tristan 6 Nov 2026).
 - **S57 [T]** Angka atau status yang tampak "hidup" (lencana, hitungan) harus benar-benar mengikuti data tanpa muat ulang, atau menyebut kapan terakhir diperbarui.
 - **S54 [T]** Grafik memakai palet token, bukan warna bawaan pustaka.
 

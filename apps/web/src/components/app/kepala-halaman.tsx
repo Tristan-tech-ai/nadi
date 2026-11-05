@@ -34,7 +34,7 @@ export async function KepalaHalaman({ jalur, judul, ket, aksi, children }: {
       <div className="flex items-start justify-between gap-3">
         <h1 className="min-w-0 font-judul text-3xl font-extrabold tracking-tight">{judul}</h1>
         <div className="flex shrink-0 items-center gap-2 print:hidden">
-        {kini && <TombolSemat href={kini.href} peran={peran} label={en ? ["Pin", "Pinned"] : ["Sematkan", "Disematkan"]} />}
+        {kini && <TombolSemat href={kini.href} peran={peran} label={en ? ["Pin to sidebar", "Pinned to sidebar"] : ["Sematkan di sidebar", "Tersemat di sidebar"]} />}
         <details className="group relative shrink-0">
           <summary className="inline-flex h-10 min-w-10 cursor-pointer list-none items-center justify-center rounded-full border border-garis px-3 text-sm font-semibold text-tinta-2 hover:bg-kertas-2 hover:text-tinta group-open:bg-kertas-2 group-open:text-tinta">
             <span className="sr-only">{en ? "Help for this page" : "Bantuan halaman ini"}</span><span aria-hidden>?</span>
