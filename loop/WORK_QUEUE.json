@@ -3863,8 +3863,10 @@
    "accept": "setiap kartu usulan (Lempar dan Feed) memuat satu baris Kalau disetujui: <akibat konkret> masuk ke <halaman> (tautan), dihitung dari aksi usulan untuk semua aksi yang ada (daftar aksi diambil dari database, tes unit menolak aksi tanpa keterangan tujuan); berkas yang jenisnya tidak dikenali menyebut dengan jujur apa yang terjadi bila disetujui (mis. disimpan di Dokumen tanpa mengubah data lain) dan menawarkan Tolak/Simpan saja; setelah disetujui kartu menampilkan Tersimpan di <halaman> + tautan Buka; e2e: lempar berkas acak, baca tujuan, setujui, ikuti tautan sampai datanya terlihat",
    "how": "pertanyaan Tristan 6 Nov 2026 (tangkapan layar Lempar)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T20:42:29"
+   "status": "done",
+   "created": "2026-11-05T20:42:29",
+   "done": "2026-11-05T21:17:32",
+   "result": "a9b6967; src/lib/tujuan-usulan.ts (41 aksi dari pemicu DB + putuskan_usulan, tes memindai migrasi dan menolak aksi tanpa keterangan, semua href ada di peta ruang), kartu Feed/Lempar menampilkan Kalau disetujui: ... lalu Lihat di <halaman> setelah tersimpan, berkas.tinjau jujur tidak mengubah data lain, label sumber mentah diperbaiki; e2e/tujuan.spec.ts produksi: baca tujuan, setujui, ikuti tautan ke Usahamu; axe 0 serius terang/gelap"
   },
   {
    "id": "U-11",
@@ -3891,8 +3893,24 @@
    "accept": "setiap halaman di peta ruang punya ikon sendiri yang mengenali tujuannya (tes unit menolak ikon ganda di satu daftar Disematkan/ruang), ikon ruang hanya di judul ruang; menyematkan memakai pola umum yang sudah dikenal pengguna tanpa kalimat penjelasan (koreksi Tristan 6 Nov 2026): ikon pin muncul saat kursor/fokus di butir sidebar, ikon pin di judul halaman dengan tooltip dan aria-pressed, butir Disematkan bisa dilepas dengan ikon yang muncul saat hover/fokus; lencana usulan menunggu berubah langsung tanpa muat ulang (Supabase Realtime pada usulan atau penyegaran saat tab kembali aktif, dibaca dari docs resmi) dan diuji e2e: usulan baru masuk -> lencana bertambah dalam 5 dtk; daftar periksa detail (Material ikon/label, NN/g label kontrol dan status sistem) ditulis di bukti dan tangkapan layar 1280/1440/1920 terang/gelap ditinjau butir demi butir",
    "how": "Tristan 6 Nov 2026; memori feedback-detail-ui",
    "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-05T20:49:09",
+   "done": "2026-11-05T21:08:26",
+   "result": "1a89ee6 + c88e9dc; 55 ikon unik per halaman (ikon-halaman.test.ts menolak ganda dan ikon ruang), sematkan pola umum: ikon pin muncul saat hover/fokus di butir sidebar dan ikon pin di judul (tooltip, aria-pressed), lepas sematan saat hover, tanpa teks petunjuk (koreksi Tristan); lencana tidak ganda (judul ruang dan anak tidak menghitung halaman tersemat); lencana usulan live Realtime Postgres Changes (migrasi usulan_realtime, setAuth token sesi): e2e/lencana.spec.ts produksi usulan baru -> lencana +1 lalu kembali tanpa muat ulang; kerangka.spec produksi lulus; tinjauan detail 1280/1440 terang/gelap + keadaan hover"
+  },
+  {
+   "id": "U-13",
+   "fase": "F8",
+   "kind": "build",
+   "priority": 1,
+   "size": "m",
+   "wajib": true,
+   "title": "Rincian usulan: apa yang ditambah, diubah, atau diganti (sebelum -> sesudah) sebelum menyetujui",
+   "accept": "setiap kartu usulan punya Lihat rincian (disclosure, bukan halaman baru) yang menampilkan isi usulan sebagai daftar berlabel bahasa manusia, bukan JSON: baris yang akan DITAMBAH (mis. orang, produk, baris mutasi, tagihan pemasok dengan pemasok/nomor/total/jatuh tempo), nilai yang akan DIUBAH dengan sebelum -> sesudah dari data sekarang (aturan izin, profil usaha, topi orang, jumlah stok opname, nilai KPI), dan yang DILEWATI karena sudah ada; dihitung dari RPC baca-saja milik pengelola (preview_proposal) yang memakai aturan sama dengan pemicu; staf tidak bisa membaca rincian usulan usaha lain (tes SQL isolasi); tes unit pemformat; e2e: usulan onboarding.izin yang mengubah nilai menampilkan sebelum -> sesudah, usulan orang.impor menampilkan orang yang ditambah dan yang dilewati",
+   "how": "Tristan 6 Nov 2026: kasi bisa liat detail apanya yang diubah, diganti, ditambah",
+   "blocked_by": "",
    "status": "ready",
-   "created": "2026-11-05T20:49:09"
+   "created": "2026-11-05T21:17:32"
   }
  ]
 }

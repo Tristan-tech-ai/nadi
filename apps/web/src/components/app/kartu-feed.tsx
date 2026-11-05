@@ -7,6 +7,7 @@ import { Cap, type JenisCap } from "@/components/ui/cap";
 import { KartuUsulan, TEKS_KARTU_ID, type TeksKartu, type Usulan } from "@/components/ui/kartu-usulan";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { Tombol } from "@/components/ui/tombol";
+import { RincianUsulan } from "@/components/app/rincian-usulan";
 
 /** Lama jendela Batalkan sebelum keputusan dikirim (D-12, NN/g: aksi berulang = batalkan yang mencolok, bukan dialog). */
 export const JENDELA_BATAL_MS = 4000;
@@ -120,6 +121,7 @@ export function KartuFeed({ usulanId, usulan, teks = TEKS_KARTU_ID, cap, bahasa 
         teks={teks}
         bahasa={bahasa}
         isiLang={isiLang}
+        rincian={<RincianUsulan usulanId={usulanId} bahasa={bahasa} />}
         aksi={
           <form action={aksi} onSubmit={onSubmit} className="flex w-full flex-col gap-2">
             <input type="hidden" name="usulan" value={usulanId} />

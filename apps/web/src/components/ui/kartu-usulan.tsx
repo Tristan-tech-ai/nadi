@@ -30,7 +30,7 @@ export const TEKS_KARTU_ID: TeksKartu = { setujui: "Setujui", tolak: "Tolak", ba
 
 /** Kartu di Feed Keputusan. Tepi bawahnya sobekan kertas thermal (satu-satunya ornamen bentuk, DIRECTION §1).
  *  `isiLang` menandai judul dan penjelasan yang ditulis dalam bahasa lain dari antarmuka (WCAG 3.1.2). */
-export function KartuUsulan({ usulan, aksi, teks = TEKS_KARTU_ID, bahasa = "id", isiLang }: { usulan: Usulan; aksi?: ReactNode; teks?: TeksKartu; bahasa?: Bahasa; isiLang?: string }) {
+export function KartuUsulan({ usulan, aksi, teks = TEKS_KARTU_ID, bahasa = "id", isiLang, rincian }: { usulan: Usulan; aksi?: ReactNode; teks?: TeksKartu; bahasa?: Bahasa; isiLang?: string; rincian?: ReactNode }) {
   return (
     <article className="kartu-thermal relative bg-kertas-2 px-4 pt-4 pb-6 text-tinta">
       <header className="flex items-start justify-between gap-3">
@@ -58,6 +58,7 @@ export function KartuUsulan({ usulan, aksi, teks = TEKS_KARTU_ID, bahasa = "id",
           <span className="font-semibold">{teks.kalauDisetujui ?? "Kalau disetujui:"}</span> {usulan.tujuan.akibat}
         </p>
       ) : null}
+      {rincian}
       <dl className="mt-3 flex flex-wrap gap-x-4 gap-y-1 text-xs text-tinta-2">
         <div>
           <dt className="sr-only">{teks.sumber}</dt>
