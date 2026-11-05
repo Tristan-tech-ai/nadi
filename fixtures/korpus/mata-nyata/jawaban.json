@@ -1,0 +1,14 @@
+{
+ "sumber": "Pexels video 37706044 'Vibrant indoor market scene from above' oleh Shruthi Pradeep, https://www.pexels.com/video/vibrant-indoor-market-scene-from-above-37706044/ (Pexels License, dibaca 6 Nov 2026)",
+ "olah": "ffmpeg crop=1440:810:0:1750 (lorong bawah, tanpa papan merek), fps=5, scale=160:90, format=gray, rawvideo; 63 bingkai",
+ "lebar": 160, "tinggi": 90, "fps": 5,
+ "zona": [
+  {"id": "pa", "nama": "Ujung atas", "jenis": "pintu", "k": [0, 0, 1, 0.1]},
+  {"id": "pb", "nama": "Ujung bawah", "jenis": "pintu", "k": [0, 0.9, 1, 1]},
+  {"id": "st", "nama": "Stan", "jenis": "kerja", "k": [0.31, 0.1, 0.69, 0.37]},
+  {"id": "dk", "nama": "Area duduk", "jenis": "meja", "k": [0.33, 0.37, 0.67, 0.9]},
+  {"id": "lk", "nama": "Lorong kiri", "jenis": "lorong", "k": [0, 0.1, 0.31, 0.9]},
+  {"id": "lr", "nama": "Lorong kanan", "jenis": "lorong", "k": [0.69, 0.1, 1, 0.9]}
+ ],
+ "hitung_tangan": {"masuk": [2, 3], "keluar": [4, 5], "catatan": "dari lembar kontak 1 dtk: 2 orang lorong kanan keluar bawah, 2 orang lorong kiri masuk atas lalu keluar bawah, 1 orang di pojok kanan atas hanya sebagian pada detik 0; 2 orang duduk diam di area duduk"}
+}

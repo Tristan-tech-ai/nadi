@@ -1,6 +1,6 @@
 // Jalankan satu skenario sintetis lewat detektor + pelacak Mata v2 lalu ukur terhadap jawaban (W-02).
 
-import { cocokkanKunjungan, deteksi, latarDari, OPSI_DETEKSI, OPSI_PELACAK, Pelacak, type Kunjungan, type OpsiDeteksi, type OpsiPelacak } from "./jejak.ts";
+import { cocokkanKunjungan, deteksi, latarDari, OPSI_DETEKSI, OPSI_PELACAK, Pelacak, stabilkan, type Kunjungan, type OpsiDeteksi, type OpsiPelacak } from "./jejak.ts";
 import { renderBingkai, type Skenario } from "./toko-sintetis.ts";
 
 export type HasilUji = {
@@ -23,7 +23,7 @@ export function jalankanSkenario(s: Skenario, opsi: { deteksi?: OpsiDeteksi; pel
   const latar = latarDari(renderBingkai(s, 0));
   const p = new Pelacak(s.zona, opsi.pelacak ?? OPSI_PELACAK);
   const kunjungan: Kunjungan[] = [];
-  for (let i = 1; i < n; i++) kunjungan.push(...p.langkah(i / s.fps, deteksi(latar, renderBingkai(s, i), opsi.deteksi ?? OPSI_DETEKSI)));
+  for (let i = 1; i < n; i++) kunjungan.push(...p.langkah(i / s.fps, deteksi(latar, stabilkan(latar, renderBingkai(s, i)), opsi.deteksi ?? OPSI_DETEKSI)));
   kunjungan.push(...p.selesai());
   kunjungan.sort((a, b) => a.mulai - b.mulai);
   const jawab = s.jawaban;

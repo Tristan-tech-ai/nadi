@@ -21,6 +21,58 @@ export type OpsiDeteksi = {
   luasOrang: number;
 };
 export const OPSI_DETEKSI: OpsiDeteksi = { ambang: 45, luasMin: 0.002, luasOrang: 0.0059 };
+/** Kepekaan tinggi untuk kamera sungguhan berkontras rendah (lampu redup, lantai mengilap). Diukur pada footage CCTV asli
+ *  6 Nov 2026 (kamera atas, lorong mal): bawaan hanya melihat 1 gumpal per bingkai, setelan ini satu jejak per orang. Bawaan tidak
+ *  diubah karena korpus toko ramai turun dari 0,91 ke 0,89 (di bawah kriteria 0,9). */
+export const OPSI_DETEKSI_PEKA: OpsiDeteksi = { ambang: 30, luasMin: 0.001, luasOrang: 0.0055 };
+
+/**
+ * Stabilisasi kecil sebelum beda latar. Kamera yang bergeser pelan (dudukan longgar, angin, getaran) dan eksposur yang berubah
+ * membuat beda latar menyala di semua tepi benda, lalu muncul gumpal palsu dan jejak melompat. Diukur pada footage CCTV asli
+ * 6 Nov 2026: geser 3 px pada lebar 160 dan kecerahan turun 4% dalam 12 dtk. Cari geseran bulat terbaik dalam +-R px menurut
+ * selisih absolut pada kisi jarang (murah, tanpa model), lalu samakan kecerahan rata-rata bingkai dengan latar.
+ */
+export function stabilkan(latar: ArrayLike<number>, b: Bingkai, R = 4): Bingkai {
+  const { lebar: W, tinggi: H, data } = b;
+  // Selisih per piksel dibatasi 40 supaya orang (selisih besar) tidak menentukan geseran; geseran hanya dipakai bila jelas lebih
+  // baik (5%) dari tanpa geser, sehingga toko ramai dari kamera yang diam tidak ikut "dibetulkan".
+  const galat = (dx: number, dy: number) => {
+    let e = 0;
+    for (let y = R; y < H - R; y += 3) for (let x = R; x < W - R; x += 3) e += Math.min(40, Math.abs(data[(y + dy) * W + x + dx] - latar[y * W + x]));
+    return e;
+  };
+  const nol = galat(0, 0);
+  let gx = 0, gy = 0, terbaik = nol;
+  for (let dy = -R; dy <= R; dy++) for (let dx = -R; dx <= R; dx++) {
+    if (!dx && !dy) continue;
+    const e = galat(dx, dy);
+    if (e < terbaik) { terbaik = e; gx = dx; gy = dy; }
+  }
+  if (terbaik > nol * 0.95) { gx = 0; gy = 0; }
+  // Gain kecerahan hanya dari piksel yang mirip latar (lantai), bukan dari orang.
+  let sl = 0, sb = 0;
+  for (let y = R; y < H - R; y += 2) for (let x = R; x < W - R; x += 2) {
+    const v = data[(y + gy) * W + x + gx], l = latar[y * W + x];
+    if (Math.abs(v - l) < 25) { sl += l; sb += v; }
+  }
+  const gain = sb ? sl / sb : 1;
+  const keluar = new Uint8Array(W * H);
+  for (let y = 0; y < H; y++) {
+    const sy = y + gy;
+    for (let x = 0; x < W; x++) {
+      const sx = x + gx;
+      // Piksel yang tergeser masuk dari luar bingkai diisi latar supaya tepi bingkai tidak menjadi gumpal palsu.
+      keluar[y * W + x] = sx < 0 || sy < 0 || sx >= W || sy >= H ? Math.round(latar[y * W + x]) : Math.min(255, Math.round(data[sy * W + sx] * gain));
+    }
+  }
+  return { lebar: W, tinggi: H, data: keluar };
+}
+
+/** Latar median dari contoh yang lebih dulu diselaraskan ke median kasarnya (rekaman dari kamera yang bergeser). */
+export function latarMedianStabil(bingkai: Bingkai[]): Float32Array {
+  const kasar = latarMedian(bingkai);
+  return latarMedian(bingkai.map((b) => stabilkan(kasar, b)));
+}
 
 /**
  * Latar dari median beberapa bingkai yang tersebar waktunya: rekaman sungguhan jarang dimulai dari ruang kosong, dan orang yang

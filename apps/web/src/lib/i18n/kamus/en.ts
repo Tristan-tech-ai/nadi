@@ -2977,6 +2977,7 @@ export const kamusEn: Kamus = {
     hasil: "{n} visits finished", hasilLabel: "Finished visits", lamaRata: "Average time in store", tungguRata: "Average wait", layanRata: "Average at checkout",
     terkirim: "Sent to the business map.", lihatPeta: "See the heat map", sudahTerkirim: "This summary was already sent.",
     kameraJudul: "Camera position", kameraAtas: "On the ceiling, facing down", kameraMiring: "Angled, like a shop CCTV",
+    pekaJudul: "Sensitivity", pekaNormal: "Normal", pekaTinggi: "High, for dim light", hud: "Mata · on this device",
     kameraAtasKet: "Lightest: reads the difference from the empty floor. Suits cameras pointing straight down.",
     kameraMiringKet: "Uses a person detector on this device, 2 frames per second. Heavier, but handles shelves and busy backgrounds.",
     modelGagal: "The person detector could not load on this device. Check the internet connection and try again.",

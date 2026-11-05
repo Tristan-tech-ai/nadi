@@ -2978,6 +2978,7 @@ export const kamusId = {
     hasil: "{n} kunjungan selesai", hasilLabel: "Kunjungan selesai", lamaRata: "Rata-rata di toko", tungguRata: "Rata-rata menunggu", layanRata: "Rata-rata di kasir",
     terkirim: "Terkirim ke Peta Usaha.", lihatPeta: "Lihat peta panas", sudahTerkirim: "Rekap ini sudah pernah terkirim.",
     kameraJudul: "Letak kamera", kameraAtas: "Di langit-langit, menghadap ke bawah", kameraMiring: "Miring, seperti CCTV toko",
+    pekaJudul: "Kepekaan", pekaNormal: "Normal", pekaTinggi: "Tinggi, untuk lampu redup", hud: "Mata · di perangkat ini",
     kameraAtasKet: "Paling ringan: membaca beda terhadap lantai kosong. Cocok untuk kamera tegak lurus ke bawah.",
     kameraMiringKet: "Memakai model pengenal orang di perangkat ini, 2 bingkai per detik. Lebih berat, tetapi tahan rak dan latar yang ramai.",
     modelGagal: "Model pengenal orang gagal dimuat di perangkat ini. Periksa sambungan internet lalu coba lagi.",
