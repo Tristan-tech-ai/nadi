@@ -3249,8 +3249,10 @@
    "accept": "baca-berkas jenis struk mengembalikan total/tanggal/pemasok tanpa membuat usulan nota, eval korpus foto struk sintetis >= 90% total benar, uang harian per kota di kategori diuji SQL, e2e staf foto struk sampai klaim terisi",
    "how": "docs/research/klaim.md bagian Belum; pola eval di docs/quality",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T16:00:00"
+   "status": "done",
+   "created": "2026-11-05T16:00:00",
+   "done": "2026-11-05T08:58:27",
+   "result": "3a5ba1c + f734ad3: migrasi klaim_lanjutan md5 5d15859d, tes SQL 16/16 (uang harian per kota); baca-berkas v17 mode struk tanpa usulan nota, md5 6 berkas sama; eval foto struk normal 32/32, sulit tangga 31/32 (96,9%, 240 token/foto) docs/quality/eval-struk-foto.md; e2e gaji.spec 'foto struk buram' lulus lokal dan produksi nadi-swart.vercel.app"
   },
   {
    "id": "W-02B",
