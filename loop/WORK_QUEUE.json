@@ -3399,6 +3399,20 @@
    "created": "2026-11-05T13:17:51",
    "done": "2026-11-05T14:20:48",
    "result": "37a293e + 8189812: migrasi proyek md5 29c5f4e9 + proyek_daftar md5 9074fcdd, tes SQL 17/17 (RAB beban/pendapatan, realisasi hanya jurnal bertag proyek itu, selisih 6 jt, jam sendiri/oleh pengelola, batas 24 jam dan tanggal, biaya tenaga 11 x 3.460.000/173 = 220.000 hanya pengelola, staf tidak melihat laporan, active_projects, isolasi); e2e/proyek.spec.ts lulus produksi nadi-swart.vercel.app (buat proyek, RAB 10 jt, tagihan pemasok 4 jt dimasukkan ke proyek dari daftar jurnal, laporan Biaya Rp4.000.000 dari Rp10.000.000, jam 7,5; axe 390/1440 terang/gelap); Lighthouse /app/proyek 92/100; fitur.md TA-24"
+  },
+  {
+   "id": "M-13B",
+   "fase": "F2",
+   "kind": "build",
+   "priority": 5,
+   "size": "m",
+   "wajib": true,
+   "title": "LMS dari Rekam ilmu: kursus, kuis, progres, sertifikat PDF",
+   "accept": "tes SQL: kursus dari Rekam ilmu, kuis dinilai server (jawaban tidak terkirim ke klien), lulus >= ambang memberi sertifikat bernomor, progres per orang hanya pemilik/atasan/diri, isolasi; e2e satu kursus sampai sertifikat",
+   "how": "bagian LMS dari M-13 (TA-33) dipisah karena M-13 menutup siklus kinerja dulu",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T14:38:48"
   }
  ]
 }
