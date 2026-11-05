@@ -142,3 +142,12 @@ Kesalahanku: setiap babak kubuat ±10 dtk dan fitur kunci belum masuk. Film 76 d
 | 10 | Satu kerangka semua layar | 0:12 | Hari ini di 1440/768/390 | BELUM |
 | 11 | Kartu akhir | 0:08 | ada | ada 6 dtk |
 Total target ≈ 4:39. Setelah gambar lengkap: audio (V-07H, V-14 foley nyata), footage CCTV asli (V-04).
+
+## URUTAN KERJA DARI TRISTAN (6 Nov 2026, wajib)
+"setelah buat vid, kamu review dan bandingkan dengan video video SaaS penting frame by frame, apakah sudah cukup bagus, apakah motion design sudah sesuai, animation, design, story, dll. Dan setelah video benar benar selesai setelah semua iterasi kamu langsung buat pdf proposal saja dulu dan baru setelah itu tugas yang lain"
+1. Lengkapi semua babak sesuai RENCANA DURASI FINAL (4:40) + audio.
+2. Tinjau berdampingan dengan rujukan bingkai demi bingkai (bedah/*.md, lembar scratchpad bedah/r1..r8): motion, animasi, desain, cerita; tulis REVIEW.md per putaran, perbaiki, ulangi sampai tidak ada masalah besar.
+3. Setelah video final: PP-01 proposal PDF AIWIC (di luar repo) LANGSUNG.
+4. Baru tugas lain (T-01D, W-10A, L-01, L-02, PP-02, dll).
+
+- 6 Nov 2026 babak 3 MCP: DOM asli layar tinjau draf ditangkap (apps/web/scripts/promo-draf.mjs -> film-langsung/assets/app/tinjau-draf.{html,png}; draf 15 baris dari karyawan-berantakan.xlsx di Toko Bu Sari, TIDAK diterapkan; "15 baris dari AI-mu. 10 tercentang, 1 perlu dicek."; baris Budi ganda ditandai Perlu dicek; gaji tidak tercentang). BERIKUTNYA: ukur elemen tinjau-draf (ringkas-draf, baris perlu dicek, terapkan-draf) di ukur.mjs, bangun jendela chat netral + panggilan alat tulis_draf/ubah_draf, lalu layar tinjau, Terapkan, jendela batal; sisipkan babak 3 SETELAH babak 2 (geser waktu babak sesudahnya).
