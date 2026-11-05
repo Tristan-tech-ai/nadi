@@ -3791,8 +3791,10 @@
    "accept": "aturan hasil model hanya berupa DATA deklaratif dalam bahasa aturan tetap (tanpa kode, tanpa SQL, tanpa regex bebas di luar batas panjang dan kompleksitas) yang dijalankan penafsir tetap milik Nadi; pemeriksa deterministik menolak aturan yang tidak lolos skema, yang tidak mereproduksi hasil model pada contohnya, yang mengubah hasil korpus regresi format lama (0 regresi), atau yang terlalu umum (cocok ke contoh format lain); aturan baru berjalan bayangan dulu (hasil dibandingkan dengan model) sebelum aktif, dimatikan otomatis bila beda; setiap aturan punya asal, versi, dan bisa dikembalikan; tes SQL dan unit memuat aturan jahat buatan (skrip, SQL, regex berbahaya, aturan halusinasi) yang semuanya ditolak",
    "how": "REKONSTRUKSI-APP.md bagian 9; docs/quality/injeksi-prompt.md; T-01 bergantung pada ini",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T20:08:55"
+   "status": "done",
+   "created": "2026-11-05T20:08:55",
+   "done": "2026-11-05T22:04:10",
+   "result": "pengawas.ts + pengawas.test.ts, migrasi 20261105101000 md5 b4354529 sama, tes SQL 5/5, Edge Function baca-berkas v18 dideploy (7 berkas), e2e lempar.spec produksi 2/2"
   },
   {
    "id": "W-10",
@@ -3805,8 +3807,10 @@
    "accept": "docs/research/mata-cctv.md dari sumber primer bertanggal, untuk SETIAP jenis perangkat penangkap gambar langsung yang mungkin (kamera HP dan laptop lewat getUserMedia, webcam USB dan capture card HDMI sebagai perangkat UVC, kamera IP/CCTV RTSP dan ONVIF, NVR/DVR yang meneruskan stream, kamera yang hanya lewat cloud mereknya), tabel bisa/tidak dan caranya; kenapa peramban tidak bisa membuka RTSP langsung, spesifikasi ONVIF Profile S (alamat stream), merek CCTV umum di Indonesia yang membuka RTSP/ONVIF dan yang hanya lewat cloud aplikasinya (dari manual resmi), pilihan jembatan lokal gratis berlisensi terbuka (RTSP ke WebRTC di jaringan toko, dicek lisensi dan dokumentasi resminya), kenapa server Nadi TIDAK menarik stream lewat internet (port terbuka = risiko), dan rancangan: video tetap di jaringan toko, Mata v2 menghitung di peramban perangkat yang sama, hanya rekap per jam yang dikirim; kriteria bangun ditulis sebagai tugas W-10A (pasang 1 perintah atau 1 berkas, uji dengan stream RTSP sintetis dari video korpus, e2e)",
    "how": "W-02 Mata v2, docs/research/mata-v2.md (UU PDP Pasal 17)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T20:28:40"
+   "status": "done",
+   "created": "2026-11-05T20:28:40",
+   "done": "2026-11-05T21:50:54",
+   "result": "docs/research/mata-cctv.md: tabel 7 jenis perangkat (HP/laptop, webcam USB, capture card, CCTV RTSP, ONVIF, NVR, kamera cloud-only) dengan cara dan sumber; jembatan go2rtc/MediaMTX (MIT) dari README resmi; rancangan video tetap di jaringan toko; verifikasi per merek dan pembangunan dipindah ke tugas wajib W-10A (kriteria tertulis); LEARN 6 Nov 2026"
   },
   {
    "id": "U-09",
