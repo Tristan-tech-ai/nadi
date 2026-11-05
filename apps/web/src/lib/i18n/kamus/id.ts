@@ -2598,6 +2598,8 @@ export const kamusId = {
     urai: { kosong: "Tulis minimal satu isian.", terlalu_banyak: "Paling banyak 20 isian.", pilihan_kurang: "Baris {baris}: pilihan butuh minimal 2, pisahkan dengan koma.", label_panjang: "Baris {baris}: label 1 sampai 80 huruf." },
   },
   tanya: {
+    tanpaAi: "Dijawab dengan aturan yang sudah dipelajari, tanpa AI.",
+    belajar: "Nadi sedang mempelajari format baru, sekali saja. Pertanyaan seperti ini berikutnya dijawab tanpa AI.",
     judul: "Tanya data", ket: "Tanyakan angka usahamu dengan bahasa sehari-hari. Nadi menjawab dari data yang sama dengan laporannya dan menautkan sumbernya. Tanpa AI, jadi tidak ada tebakan.",
     hanyaPengelola: "Tanya data hanya untuk pemilik, admin, dan akuntan.", label: "Pertanyaanmu", tanya: "Tanya", contoh: "Contoh:",
     contohDaftar: ["Berapa penjualan bulan ini?", "Untung bulan lalu", "Tagihan yang lewat jatuh tempo", "Stok gula pasir", "Hutang ke pemasok"],

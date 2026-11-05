@@ -2597,6 +2597,8 @@ export const kamusEn: Kamus = {
     urai: { kosong: "Write at least one field.", terlalu_banyak: "At most 20 fields.", pilihan_kurang: "Line {baris}: a choice needs at least 2 options, separated by commas.", label_panjang: "Line {baris}: labels are 1 to 80 characters." },
   },
   tanya: {
+    tanpaAi: "Answered with a learned rule, without AI.",
+    belajar: "Nadi is learning a new format, just once. Questions like this are answered without AI next time.",
     judul: "Ask your data", ket: "Ask about your business numbers in everyday words. Nadi answers from the same data as its reports and links the source. No AI, so no guessing.",
     hanyaPengelola: "Asking data is only for the owner, admins, and accountants.", label: "Your question", tanya: "Ask", contoh: "Examples:",
     contohDaftar: ["How much revenue this month?", "Profit last month", "Overdue invoices", "Unpaid invoices", "How many employees"],

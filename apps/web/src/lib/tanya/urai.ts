@@ -2,8 +2,13 @@
 // plus rentang tanggal, tanpa model dan tanpa SQL bebas. Pertanyaan yang meminta pendapat, sebab, atau ramalan ditolak (null)
 // supaya Nadi tidak menjawab dengan angka yang tidak menjawab pertanyaannya.
 
-export type Niat = "pendapatan" | "beban" | "laba" | "kas" | "piutang" | "piutang_lewat" | "hutang" | "invoice_terbit" | "karyawan" | "hadir" | "lembur" | "gaji" | "stok";
-export type Tanya = { niat: Niat; dari: string; sampai: string; cari?: string };
+// T-01A: berkas ini disalin persis ke supabase/functions/pelajari-tanya/urai.ts (tes src/lib/tanya/salinan.test.ts memeriksa sama),
+// supaya pengawas di Edge Function mencoba aturan baru dengan pengurai yang sama dengan aplikasi.
+export const NIAT_DAFTAR = ["pendapatan", "beban", "laba", "kas", "piutang", "piutang_lewat", "hutang", "invoice_terbit", "karyawan", "hadir", "lembur", "gaji", "stok"] as const;
+export type Niat = (typeof NIAT_DAFTAR)[number];
+export type Tanya = { niat: Niat; dari: string; sampai: string; cari?: string; aturan?: string };
+/** Aturan hasil belajar (tanya_aturan berstatus aktif): kata kunci di kalimat menunjuk satu niat tetap. */
+export type AturanTanya = { id?: string; kata: string; niat: Niat };
 
 const BULAN: Record<string, number> = {
   januari: 1, jan: 1, january: 1, februari: 2, feb: 2, february: 2, maret: 3, mar: 3, march: 3, april: 4, apr: 4, mei: 5, may: 5, juni: 6, jun: 6, june: 6,
@@ -68,13 +73,31 @@ export function rentang(t: string, hariIni: string): { dari: string; sampai: str
 
 const KATA_STOK = /\b(stok|stock|persediaan|sisa|inventory|berapa|masih|ada|yang|barang|kita|sekarang|jumlah|tinggal|of|how|many|much|left|is|are|the|di|gudang|toko|saat|ini)\b/g;
 
-/** Kalimat menjadi niat + rentang; null bila tidak bisa dijawab dengan angka. */
-export function uraiTanya(kalimat: string, hariIni: string): Tanya | null {
-  const t = ` ${kalimat.toLowerCase().replace(/[?!.,;:"'()]/g, " ").replace(/\s+/g, " ").trim()} `;
+/** Kalimat huruf kecil tanpa tanda baca, diapit spasi (supaya kata dicocokkan utuh). */
+export const normal = (kalimat: string) => ` ${kalimat.toLowerCase().replace(/[?!.,;:"'()]/g, " ").replace(/\s+/g, " ").trim()} `;
+/** Pertanyaan pendapat, sebab, atau ramalan: tidak dijawab dengan angka dan tidak dipelajari. */
+export const ditolak = (kalimat: string) => DITOLAK.test(normal(kalimat));
+/** Niat bawaan (tanpa aturan belajar); null bila tidak ada kata yang dikenali. */
+export const niatBawaan = (kalimat: string): Niat | null => NIAT.find(([, re]) => re.test(normal(kalimat)))?.[0] ?? null;
+/** Aturan yang katanya muncul utuh di kalimat (yang terpanjang lebih dulu). */
+export const aturanCocok = (kalimat: string, aturan: readonly AturanTanya[]) =>
+  [...aturan].sort((a, b) => b.kata.length - a.kata.length).find((a) => normal(kalimat).includes(` ${a.kata} `)) ?? null;
+
+/** Kalimat menjadi niat + rentang; null bila tidak bisa dijawab dengan angka. Aturan belajar dipakai bila niat bawaan tidak ada. */
+export function uraiTanya(kalimat: string, hariIni: string, aturan: readonly AturanTanya[] = []): Tanya | null {
+  const t = normal(kalimat);
   if (DITOLAK.test(t)) return null;
-  const ketemu = NIAT.find(([, re]) => re.test(t));
-  if (!ketemu) return null;
-  const niat = ketemu[0];
+  const bawaan = niatBawaan(kalimat);
+  const dari = bawaan ? null : aturanCocok(kalimat, aturan);
+  const niat = bawaan ?? dari?.niat;
+  if (!niat) return null;
+  const hasil = bentukTanya(kalimat, hariIni, niat);
+  return hasil && dari ? { ...hasil, aturan: dari.id ?? dari.kata } : hasil;
+}
+
+/** Niat yang sudah diketahui (dari pengurai, aturan, atau model) menjadi pertanyaan lengkap dengan rentang tanggal. */
+export function bentukTanya(kalimat: string, hariIni: string, niat: Niat): Tanya | null {
+  const t = normal(kalimat);
   if (TITIK.includes(niat)) {
     const hasil: Tanya = { niat, dari: hariIni, sampai: hariIni };
     if (niat === "stok") {

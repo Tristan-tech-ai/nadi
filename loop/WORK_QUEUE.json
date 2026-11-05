@@ -3626,7 +3626,7 @@
    "title": "Nadi belajar format: struk foto, pindah data, tanya data, Mata (aturan dulu, model bila tidak kenal, model menulis aturan)",
    "accept": "untuk tiap jalur: format tak dikenal -> model ringan (naik ke menengah/besar bila ragu) -> aturan baru disimpan setelah mereproduksi hasil model pada contohnya dan berjalan bayangan; berkas/kalimat berformat sama berikutnya dibaca tanpa token (eval: token 0 pada percobaan kedua); layar menampilkan 'Nadi sedang mempelajari format baru, sekali saja'; aturan bersama hanya struktur, tanpa data (tes SQL); ID model dari konfigurasi",
    "how": "REKONSTRUKSI-APP.md bagian 9; ekstraktor.ts yang sudah ada",
-   "blocked_by": "T-02",
+   "blocked_by": "T-02,T-01A,T-01B,T-01C,T-01D",
    "status": "ready",
    "created": "2026-11-05T17:30:59"
   },
@@ -3689,8 +3689,10 @@
    "accept": "aset di docs/promo/aset-demo/ dengan lisensi tiap berkas di docs/ASSETS.md (CC0/CC BY atau buatan sendiri), tanpa orang yang dapat dikenali, data sintetis; animasi buatan sendiri mengikuti prinsip animation design yang dipelajari (V-01); tiap aset dipakai minimal di satu adegan storyboard",
    "how": "Wikimedia Commons, Pexels/Pixabay (cek lisensi), atau render sendiri (Blender tidak tersedia: HyperFrames/Python)",
    "blocked_by": "V-01,V-03",
-   "status": "ready",
-   "created": "2026-11-05T20:01:08"
+   "status": "done",
+   "created": "2026-11-05T20:01:08",
+   "done": "2026-11-05T23:37:58",
+   "result": "ef64599 + docs/promo/aset-demo (karyawan-berantakan.xlsx, harga-berantakan.xlsx, pelanggan-ganda.csv, cctv-toko.mp4 1280x720 60 dtk sosok abstrak + jawaban 12 kunjungan, buat.py berbenih), ASSETS; tiap aset dipetakan ke babak storyboard (1, 3, 4, 7)"
   },
   {
    "id": "V-05",
@@ -3719,8 +3721,10 @@
    "accept": "docs/promo/demo-v2/STORYBOARD.md: masalah jelas (aplikasi otomatis mahal, yang murah manual; harga pesaing hanya dari halaman harga resmi bertanggal, tanpa merendahkan), semua fitur utama (Lempar, Feed setujui, invoice + QRIS, gaji, Mata, otomasi, tanya data, belajar format/self-improvement, kerangka adaptif, MCP AI-mu), penjelasan tanpa suara orang, palet, tipografi, transisi unik, branding, gaya tulisan VOICE.md; tiap adegan menyebut sumber DOM asli dan isyarat suara; adegan Mata wajib memperlihatkan pelacakan dengan jelas: setiap orang punya jejak/garis lintasan dan nomor anonim yang mengikuti geraknya, hitungan masuk/keluar bertambah saat jejak melewati pintu, zona antrean/kasir menyala, lalu peta panas terisi (Tristan 6 Nov 2026)",
    "how": "pola dari RUJUKAN.md (V-03), RISET.md, SUARA.md",
    "blocked_by": "V-03,V-04,V-10",
-   "status": "ready",
-   "created": "2026-11-05T20:01:08"
+   "status": "done",
+   "created": "2026-11-05T20:01:08",
+   "done": "2026-11-05T23:37:58",
+   "result": "docs/promo/demo-v2/STORYBOARD.md: 11 babak 4:45, masalah dengan harga resmi bertanggal, 10 fitur wajib dipetakan, DOM asli + isyarat suara per babak, palet/huruf/5 transisi/larangan, Mata jejak bernomor + hitungan + zona + peta panas (prasyarat V-12)"
   },
   {
    "id": "V-07",
@@ -3959,8 +3963,66 @@
    "accept": "hitung-kunjungan.tsx menggambar tiap jejak dengan nomor anonim (1, 2, 3 per sesi, tidak tersimpan) dan garis lintasan 3 dtk terakhir, penghitung masuk/keluar bertambah saat jejak melewati zona pintu, zona kasir/antrean menyala saat terisi, semua hanya di perangkat (tidak ada stream atau nomor jejak yang dikirim); tes unit penghitung pintu; e2e memutar docs/promo/aset-demo/cctv-toko.mp4 di /app/mata dan hitungan masuk = 12 +- 1 sesuai cctv-jawaban.json, tangkapan 1440/390 terang/gelap, axe 0 serius",
    "how": "src/lib/mata/jejak.ts Pelacak (terlihat, kunjungan), docs/promo/demo-v2/STORYBOARD.md babak 7",
    "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-05T23:37:49",
+   "done": "2026-11-05T23:54:33",
+   "result": "6cbfb40; jejak.ts tampil/pintu/zonaTerisi + jejak-tampil.test.ts 4/4 (lib/mata 28/28), hitung-kunjungan.tsx layar 640 px (zona menyala, garis 3 dtk, nomor anonim, Masuk/Keluar); e2e/mata-jejak.spec.ts produksi: masuk 11 keluar 12 kunjungan 11 dari 12, axe 0 serius 390/1440 terang/gelap; aset CCTV diperbaiki (kontras baju, pintu di dalam bingkai)"
+  },
+  {
+   "id": "T-01A",
+   "fase": "T",
+   "kind": "build",
+   "priority": 2,
+   "size": "m",
+   "wajib": false,
+   "title": "Belajar format jalur tanya data: kalimat yang tidak dikenali dipelajari sekali lewat model, aturan kata disimpan bayangan lalu aktif",
+   "accept": "kalimat yang tidak cocok niat bawaan (dan bukan pertanyaan pendapat) dikirim ke Edge Function pelajari-tanya: model ringan (naik ke berat bila ragu, ID dari konfigurasi model_ai) memilih satu dari 13 niat tetap dan kata kunci yang ada di kalimat; pengawas bukan AI memeriksa kata (huruf saja, 1-3 kata, ada di kalimat, bukan kata tolak) dan mencoba ulang pengurai dengan aturan itu (harus menghasilkan niat yang sama) sebelum menyimpan ke tanya_aturan berstatus bayangan; bayangan dibandingkan dengan model sampai cocok 2 kali lalu aktif (constraint database), beda sekali mati; layar menulis 'Nadi sedang mempelajari format baru, sekali saja'; aturan bersama hanya kata dan niat tanpa angka/data (tes SQL); eval e2e: kalimat yang sama setelah aturan aktif dijawab dengan token 0",
+   "how": "src/lib/tanya/urai.ts, supabase/functions/baca-berkas/pengawas.ts (pola), konfigurasi model_ai",
+   "blocked_by": "",
    "status": "ready",
-   "created": "2026-11-05T23:37:49"
+   "created": "2026-11-05T23:55:24"
+  },
+  {
+   "id": "T-01B",
+   "fase": "T",
+   "kind": "build",
+   "priority": 2,
+   "size": "m",
+   "wajib": false,
+   "title": "Belajar format jalur struk foto (klaim): tata letak struk yang dibaca model menjadi aturan bayangan",
+   "accept": "mode struk baca-berkas: setelah model membaca struk dengan teks OCR perangkat, model berat menulis aturan ekstraktor jenis struk (pemasok, tanggal, total) yang diuji pada struk itu dan diperiksa pengawas.ts, disimpan bayangan; struk berikutnya dengan tata letak sama dibandingkan sampai cocok 2 kali lalu dibaca tanpa model (token 0, diuji eval korpus struk-foto); layar Klaim menulis 'Nadi sedang mempelajari format baru, sekali saja' saat aturan pertama dipelajari",
+   "how": "supabase/functions/baca-berkas/index.ts mode struk, ekstraktor.ts, pengawas.ts",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T23:55:24"
+  },
+  {
+   "id": "T-01C",
+   "fase": "T",
+   "kind": "build",
+   "priority": 2,
+   "size": "m",
+   "wajib": false,
+   "title": "Belajar format jalur pindah data: berkas ekspor aplikasi lain yang kolomnya tidak dikenali dipetakan model sekali",
+   "accept": "unggahan /app/pindah yang judul kolomnya tidak cocok format bawaan dikirim ke model ringan yang memetakan judul kolom ke bidang Nadi (struktur saja, tanpa isi baris); pengawas memeriksa pemetaan (judul ada di berkas, bidang dari daftar tetap, tipe sel cocok pada contoh baris) lalu disimpan bayangan per usaha; berkas dengan judul kolom sama berikutnya dipetakan tanpa model setelah cocok 2 kali (token 0, tes); layar menulis 'Nadi sedang mempelajari format baru, sekali saja'",
+   "how": "src/lib/pindah/format.ts, supabase/functions/baca-berkas/pengawas.ts",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T23:55:24"
+  },
+  {
+   "id": "T-01D",
+   "fase": "T",
+   "kind": "build",
+   "priority": 2,
+   "size": "m",
+   "wajib": false,
+   "title": "Belajar format jalur Mata: denah kamera baru diusulkan dari bingkai lalu menjadi aturan zona per kamera",
+   "accept": "untuk kamera baru, model (ringan, berat bila ragu) mengusulkan zona (pintu, kasir, antrean, rak) dari satu bingkai yang dikecilkan dan dikaburkan di perangkat (tanpa orang dapat dikenali); pengawas memeriksa poligon (di dalam 0..1, tidak bertumpuk, ada satu pintu); usulan menjadi draf zona yang disetujui pemilik, disimpan sebagai denah kamera; kamera yang sama berikutnya memakai denah tersimpan tanpa model (token 0); layar menulis 'Nadi sedang mempelajari format baru, sekali saja'",
+   "how": "src/lib/mata/resep.ts, layar-mata.tsx",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-05T23:55:25"
   }
  ]
 }
