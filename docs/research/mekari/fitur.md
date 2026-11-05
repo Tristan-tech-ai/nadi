@@ -116,10 +116,10 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | ID | Kemampuan Mekari | Bagian | Nadi sekarang | Status | Tugas |
 |---|---|---|---|---|---|
 | QO-01 | Kotak masuk omnichannel (WhatsApp API, IG, FB, email, live chat, Telegram, marketplace) | Conversation Management/Multi-channel integration, Inbox & Inquiry Management | Bagikan dari WA ke Nadi, wa.me | MITRA untuk WhatsApp API/Meta/marketplace; BELUM untuk web chat sendiri, Telegram Bot API, email masuk | M-16 |
-| QO-02 | Penugasan chat ke agen, eskalasi, jam operasional, templat, lampiran, log | Conversation Management/*; Customer Support & Ticketing/Inquiry Assignment | tidak ada | BELUM | M-16 |
-| QO-03 | Chatbot AI dan AI agent, ringkas/parafrase chat, produktivitas agen | AI Chatbot & Automation/* | model di Edge Function, tangga kecerdasan | BELUM | M-16 |
-| QO-04 | Tiket, SLA hitung mundur, umpan balik/CSAT, laporan layanan | Customer Support & Ticketing/* | tidak ada | BELUM | M-16 |
-| QO-05 | Basis pengetahuan | Operation & Workflow Automation/Knowledge Base | Rekam ilmu (internal) | BELUM untuk pelanggan | M-16 |
+| QO-02 | Penugasan chat ke agen, eskalasi, jam operasional, templat, lampiran, log | Conversation Management/*; Customer Support & Ticketing/Inquiry Assignment | kotak masuk obrolan web /app/layanan: penugasan ke agen, jam layanan dan pesan di luar jam, balasan, tutup, log pesan (M-16) | SEBAGIAN: eskalasi otomatis, templat balasan, dan lampiran belum | M-16 |
+| QO-03 | Chatbot AI dan AI agent, ringkas/parafrase chat, produktivitas agen | AI Chatbot & Automation/* | jawaban otomatis tanpa model: mencocokkan kata pertanyaan dengan basis pengetahuan dan mengutip artikel apa adanya, selain itu diserahkan ke tim (M-16) | SEBAGIAN: ringkasan/parafrase obrolan dengan model belum (sengaja: jawaban pelanggan tidak dikarang) | M-16 |
+| QO-04 | Tiket, SLA hitung mundur, umpan balik/CSAT, laporan layanan | Customer Support & Ticketing/* | tiket = obrolan dengan status, agen, tenggat SLA balasan pertama, CSAT 1-5 dari pelanggan, laporan layanan bulanan (M-16) | ADA | M-16 |
+| QO-05 | Basis pengetahuan | Operation & Workflow Automation/Knowledge Base | basis pengetahuan pelanggan di /app/layanan, dipakai jawaban otomatis obrolan (M-16) | SEBAGIAN: halaman artikel publik yang bisa dicari belum | M-16 |
 | QO-06 | CRM: kontak, perusahaan, deal pipeline, produk, field, goal, dokumen, catatan, tugas | Sales Management/*; Customer Data Platform/Contact (CRM), Company Module; Operation & Workflow Automation/Task Management, Product Catalog | pelanggan orang/perusahaan (kontak menempel ke perusahaan), deal 6 tahap dengan sales, nilai, perkiraan tutup, catatan dan tugas berjatuh tempo, deal menjadi penawaran M-03 dan menang saat jadi pesanan, /app/pelanggan (M-15) | SEBAGIAN: field kustom dan dokumen per deal belum | M-15 |
 | QO-07 | Live location dan kunjungan sales lapangan | Sales Management/Live Location & Tracking | kunjungan berlokasi dengan izin per kunjungan, dihitung di laporan sales (M-15) | SEBAGIAN: peta lokasi langsung tidak dibuat (lokasi tidak dilacak terus) | M-15 |
 | QO-08 | Laporan sales, report builder | Report Management/* | laporan sales bulanan: corong per tahap, menang, kalah, tingkat menang, per sales menang vs target, kunjungan (M-15) | SEBAGIAN: pembuat laporan bebas (report builder) belum | M-15, M-23 |
@@ -131,7 +131,7 @@ Kolom **Tugas** menunjuk tugas di [rencana.md](rencana.md).
 | QO-14 | Janji temu (appointment) | Qontak Appointment Management/* | tidak ada | BELUM | M-16 |
 | QO-15 | WhatsApp Commerce (katalog dan keranjang di WA) | Qontak Commerce/* | tidak ada | MITRA (WhatsApp API); pengganti: halaman katalog publik + pesan wa.me terisi | M-16 |
 | QO-16 | Conversion API (Meta) | Conversion API Management/* | tidak ada | MITRA (Meta) | - |
-| QO-17 | Kinerja agen, QA scorecard | General & Platform/Agent Performance and Quality Assurance | tidak ada | BELUM | M-16 |
+| QO-17 | Kinerja agen, QA scorecard | General & Platform/Agent Performance and Quality Assurance | laporan per agen: jumlah tiket dan CSAT rata-rata (M-16) | SEBAGIAN: QA scorecard belum | M-16 |
 | QO-18 | Akun, izin pengguna, akun WhatsApp, Meta Business Portfolio, BSUID, pengaturan, Qontak One, notifikasi | General & Platform/*; Qontak One/* | peran tetap, push | SEBAGIAN | M-21 |
 | QO-19 | Paket kasus, video, rilis, konsultan | Video; What's New; General & Platform/Mekari Qontak Consultant | /panduan | ADA / LUAR untuk konsultan | - |
 
@@ -191,9 +191,9 @@ Dihitung oleh `alat/cek_cakupan.py --hitung` dari kolom Status (kata pertama). T
 
 | Status | Jumlah |
 |---|---|
-| ADA | 33 |
-| SEBAGIAN | 65 |
-| BELUM | 17 |
+| ADA | 34 |
+| SEBAGIAN | 69 |
+| BELUM | 12 |
 | MITRA | 17 |
 | LUAR | 2 |
 
