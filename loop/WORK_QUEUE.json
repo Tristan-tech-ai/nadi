@@ -3319,8 +3319,10 @@
    "accept": "tes SQL slot janji temu tidak bentrok dan poin loyalitas dari invoice lunas; e2e pelanggan memesan janji temu dari halaman publik dan pemilik melihatnya; katalog publik membuka wa.me terisi",
    "how": "lanjutan M-16 (QO-13, QO-14, QO-15 pengganti tanpa WhatsApp API, QO-02 templat); halaman publik memakai kunci acak seperti /bantuan; poin dari invoice lunas per pelanggan (customer M-15)",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T10:08:58"
+   "status": "done",
+   "created": "2026-11-05T10:08:58",
+   "done": "2026-11-05T10:36:07",
+   "result": "f08a55a: migrasi janji_katalog_poin md5 e341bc4d, tes SQL 23/23 (15 slot, tumpukan ditolak juga oleh exclusion constraint 23P01, batal membuka slot, katalog hanya produk berharga, poin 25 dari invoice lunas Rp250.000, tukar tidak melebihi sisa); vitest katalog 3/3; e2e janji-katalog + layanan lulus produksi nadi-swart.vercel.app (pesan jadwal publik > kode > slot hilang > wa.me terisi > pemilik tandai datang; axe 390/1440 terang/gelap)"
   }
  ]
 }
