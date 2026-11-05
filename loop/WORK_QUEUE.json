@@ -3263,8 +3263,10 @@
    "accept": "Minimal 2 rekaman CCTV/kamera atas toko atau ruang publik berlisensi bebas (CC0/CC BY/domain publik, lisensi dibaca dari halaman sumber dan dicatat di docs/ASSETS.md) diunduh ke scratchpad (tidak ke repo bila berisi wajah); jumlah orang masuk/keluar dihitung tangan sebagai jawaban; Mata v2 (src/lib/mata/jejak.ts) dijalankan pada rekaman itu, akurasi jumlah dan galat lama dilaporkan jujur di docs/research/mata-v2.md termasuk bila di bawah target; perbaikan kalibrasi (ukuran orang, kamera miring) bila perlu dengan tes; cuplikan yang lisensinya membolehkan dipakai dicatat sebagai calon bahan video promo dengan wajah dikaburkan",
    "how": "Cari dataset/arsip kamera publik dari sumber resmi, baca lisensinya, ffmpeg ke 160 px, skrip eval di scratchpad",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T07:03:55"
+   "status": "done",
+   "created": "2026-11-05T07:03:55",
+   "done": "2026-11-05T07:38:54",
+   "result": "295d96a; 2 rekaman Commons berlisensi bebas (Madero CC BY-SA 4.0 drone tegak lurus, Ezymart domain publik CCTV miring) di scratchpad, dicatat docs/ASSETS.md; hitung tangan 11+10 bingkai; Madero akurasi jumlah orang 86,4% (ambang 45, bawaan baru), Ezymart 40% (beda latar tidak cocok untuk kamera miring -> tugas W-02C); latar median; vitest 14/14; e2e mata-v2 produksi 5/5; docs/research/mata-v2.md bagian W-02B; calon bahan promo hanya Madero"
   },
   {
    "id": "D-28",
@@ -3277,8 +3279,10 @@
    "accept": "Video promo baru <= 60 dtk di docs/promo/ yang tiap fitur diperlihatkan sedang bekerja, bukan diceritakan: Lempar Saja = banyak berkas berbagai jenis (foto nota, PDF, Excel, CSV, slip) berserakan dilempar ke layar Nadi lalu tersusun rapi jadi usulan; Feed = kartu disetujui dengan cap; invoice + QRIS terbit; Mata = rekaman kamera (sintetis atau CCTV berlisensi dari W-02B, wajah dikaburkan) dengan titik orang bergerak dan peta panas yang terisi; Sarapan Data; kartu akhir ke /demo; layar dari aplikasi produksi atau HTML dengan data contoh Nadi, teks >= 20 px, musik berlisensi dicatat di docs/ASSETS.md, -14 LUFS; snapshot ditinjau; DECISIONS mencatat konsep tiap adegan",
    "how": "HyperFrames (skill hyperframes), adegan per fitur dengan demonstrasi langsung, bahan dari scratchpad/d21",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T07:03:55"
+   "status": "done",
+   "created": "2026-11-05T07:03:55",
+   "done": "2026-11-05T08:06:07",
+   "result": "6453603; docs/promo/nadi-promo.mp4 50,2 dtk 1920x1080 -14,1 LUFS TP -1,5; dibuat dari DOM asli produksi (usaha contoh Toko Bu Sari akun uji B diisi lewat layar: 5 berkas korpus dibaca baca-berkas, invoice + QRIS, rekap Mata v2 177 kunjungan dari pelacak pada korpus) lewat apps/web/scripts/promo-siapkan.mjs + promo-dom.mjs; docs/promo/film-langsung (buat.py, ukur.mjs, REVIEW.md, kontak-akhir.png); check 0 galat; lembar kontak ditinjau dua kali; versi judul-dan-panel ditolak Tristan dan dibuang"
   },
   {
    "id": "W-02C",
@@ -3291,8 +3295,10 @@
    "accept": "Layar Hitung kunjungan punya pilihan kamera miring yang memakai deteksi orang model Mata F5-01 (titik kaki kotak orang) sebagai masukan Pelacak, bukan beda latar; diuji pada rekaman Ezymart W-02B (hitungan tangan 10 bingkai) dengan akurasi jumlah orang dilaporkan jujur, target >= 80%; vitest Pelacak dengan titik dari kotak; e2e tetap lulus",
    "how": "Pakai worker mata-worker.js dan jangkar() di resep.ts; skrip eval scratchpad/cctv/eval.ts",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T07:35:53"
+   "status": "done",
+   "created": "2026-11-05T07:35:53",
+   "done": "2026-11-05T07:46:11",
+   "result": "e2da060; pilihan letak kamera di Hitung kunjungan (miring = model RF-DETR nano q8 F5-01 di Web Worker, 2 fps, titikDariKotak, OPSI_PELACAK_MIRING); Ezymart 10 bingkai: model 75% hitungan buta (di bawah target 80%), 85% setelah hitungan tangan diperiksa ulang (bias, dicatat), beda latar 40%; vitest jejak 15/15 termasuk kotak->kunjungan; e2e mata-v2 produksi 5/5 + axe panel; docs/research/mata-v2.md"
   }
  ]
 }
