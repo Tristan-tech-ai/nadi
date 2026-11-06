@@ -1,0 +1,31 @@
+name: Picu deploy setelah batas harian
+# 6 Nov 2026: deploy Vercel (paket Hobby) tertahan batas harian sejak 04.10 UTC; Vercel tidak mencoba ulang sendiri, tetapi
+# setiap push baru men-deploy isi main terbaru. Workflow ini membuat commit kosong pada 7 Nov 2026 pukul 06.00 UTC dan sekali
+# lagi 12.00 UTC sebagai cadangan (dua deploy isi yang sama tidak merugikan), supaya commit yang sudah lulus gerbang terpasang.
+# Tidak mengubah berkas apa pun dan tidak memakai rahasia selain GITHUB_TOKEN. Di luar tanggal itu workflow tidak melakukan apa-apa.
+on:
+  schedule:
+    - cron: "0 6 7 11 *"
+    - cron: "0 12 7 11 *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  picu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Commit kosong untuk memicu deploy
+        run: |
+          hari=$(date -u +%Y-%m-%d)
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$hari" != "2026-11-07" ]; then echo "bukan tanggalnya"; exit 0; fi
+          # Penulis sama dengan commit main supaya Vercel mengenali pemilik tim (Hobby menolak penulis di luar tim).
+          nama=$(git log -1 --format=%an); surel=$(git log -1 --format=%ae)
+          git -c user.name="$nama" -c user.email="$surel" commit --allow-empty -m "Picu deploy setelah batas harian Vercel"
+          git push origin HEAD:main

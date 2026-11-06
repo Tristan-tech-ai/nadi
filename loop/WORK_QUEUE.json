@@ -4579,8 +4579,10 @@
    "accept": "/kamus berisi minimal 40 istilah usaha, pajak, gaji, dan akuntansi (piutang, PPh 21, TER, PTKP, BPJS, THR, QRIS, PKWT, UPMK, faktur pajak, Coretax, HPP, laba rugi, dll.) dengan arti sehari-hari, dasar aturan bila ada (hanya yang sudah terverifikasi), dan tautan ke layar Nadi atau alat gratis yang memakainya; cari tanpa JavaScript; satu halaman per istilah; e2e + axe 390/1440",
    "how": "Data istilah di src/lib/kamus-istilah.ts, dipakai juga di pusat bantuan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-06T10:45:50"
+   "status": "done",
+   "created": "2026-11-06T10:45:50",
+   "done": "2026-11-06T11:27:25",
+   "result": "c308a1f, /kamus 52 istilah, kamus-istilah.test 3/3, e2e produksi kamus istilah lulus (axe 390/1440)"
   },
   {
    "id": "L-07",
@@ -4593,8 +4595,10 @@
    "accept": "/alat/invoice membuat invoice bernomor dengan barang, pajak opsional, QRIS/rekening teks, lalu cetak atau simpan PDF lewat peramban; /alat/slip membuat slip gaji dari kalkulator gaji yang sama; tanpa akun dan tanpa simpan ke server; e2e memeriksa total = jumlah baris dan isi cetak; axe",
    "how": "Komponen klien + gaya cetak; rumus total sama dengan invoice aplikasi",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-06T10:45:50"
+   "status": "done",
+   "created": "2026-11-06T10:45:50",
+   "done": "2026-11-06T11:27:25",
+   "result": "c308a1f+b4c695e, /alat/invoice (totalBaris aplikasi) dan /alat/slip (susunSlip), e2e produksi pembuat invoice dan slip lulus, hanya lembar cetak tampil saat media print"
   },
   {
    "id": "L-08",
@@ -4606,8 +4610,8 @@
    "title": "Pusat bantuan dan alat gratis dalam bahasa Inggris",
    "accept": "/en/bantuan, /en/bantuan/artikel/*, /en/alat dan kalkulatornya memakai teks en (label ruang, guna, artikel tugas en); kaki halaman en menautkan versi en; e2e",
    "how": "Teks2 untuk artikel tugas, HalamanInfo bahasa en",
-   "blocked_by": "",
-   "status": "ready",
+   "blocked_by": "Kode selesai dan e2e lokal lulus (cdd3779/1d46ee9, gate LULUS); deploy Vercel tertahan batas harian Hobby 6 Nov, push berikutnya setelah pulih lalu e2e produksi",
+   "status": "blocked",
    "created": "2026-11-06T10:45:50"
   },
   {
@@ -4621,8 +4625,10 @@
    "accept": "/masuk dan /masuk/staf menampilkan pilihan Masuk sebagai (Pemilik, admin, atau akuntan dengan email; Staf dengan kode usaha + ID + PIN) dengan penanda halaman aktif, dua arah; e2e + axe 390",
    "how": "components/auth/pilih-masuk.tsx",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-06T10:52:30"
+   "status": "done",
+   "created": "2026-11-06T10:52:30",
+   "done": "2026-11-06T11:27:25",
+   "result": "c308a1f, PilihMasuk di /masuk dan /masuk/staf, e2e produksi halaman masuk lulus (aria-current dua arah, axe)"
   },
   {
    "id": "L-10",
@@ -4635,8 +4641,10 @@
    "accept": "Tombol Sambungkan CCTV di samping Pilih berkas video dan Pakai kamera; bila jembatan go2rtc berjalan gambar CCTV tampil dan zona bisa digambar; bila tidak, pesan jelas dan panduan Sambungkan CCTV terbuka; panduan pemasangan tampil walau zona Pintu belum ada; e2e dengan go2rtc lokal",
    "how": "bukaJembatan di layar-mata; details#cctv di hitung-kunjungan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-06T10:52:31"
+   "status": "done",
+   "created": "2026-11-06T10:52:31",
+   "done": "2026-11-06T11:27:25",
+   "result": "c308a1f, tombol Sambungkan CCTV di layar Mata + panduan jembatan tanpa syarat zona, e2e/mata-jembatan produksi dengan go2rtc lokal lulus (pesan belum berjalan, panduan terbuka, gambar CCTV tampil)"
   },
   {
    "id": "L-11",
@@ -4649,8 +4657,10 @@
    "accept": "Pita usaha contoh di tengah atas dengan CTA Buat akun gratis dan Keluar dari usaha contoh, daftar bisa dicoba / butuh akun; kirim form, pilih berkas, seret berkas membuka dialog Buat akun / Masuk / Lanjut melihat-lihat; e2e produksi",
    "how": "components/app/mode-coba.tsx",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-06T10:52:31"
+   "status": "done",
+   "created": "2026-11-06T10:52:31",
+   "done": "2026-11-06T11:27:25",
+   "result": "a948294, pita usaha contoh tengah atas + daftar bisa/butuh akun + dialog-coba, e2e/mode-coba produksi lulus"
   },
   {
    "id": "L-12",
@@ -4662,8 +4672,8 @@
    "title": "Catatan rilis Yang baru (setara release note Mekari)",
    "accept": "/baru berisi perubahan yang sudah di produksi per tanggal dengan tautan ke layar atau artikel bantuan, ditulis dari commit dan DECISIONS yang benar-benar terpasang; tautan kaki halaman; e2e",
    "how": "Data src/lib/rilis.ts",
-   "blocked_by": "",
-   "status": "ready",
+   "blocked_by": "Kode selesai dan e2e lokal lulus (cdd3779/1d46ee9, gate LULUS); deploy Vercel tertahan batas harian Hobby 6 Nov, push berikutnya setelah pulih lalu e2e produksi",
+   "status": "blocked",
    "created": "2026-11-06T10:52:31"
   },
   {
@@ -4676,8 +4686,8 @@
    "title": "Template dokumen kerja gratis (setara dokumen HR Talenta)",
    "accept": "/alat/dokumen berisi minimal 5 templat yang bisa diisi dan dicetak tanpa akun (surat keterangan kerja, surat peringatan, perjanjian kerja waktu tertentu ringkas, formulir izin, berita acara serah terima), isi dari templat surat Nadi yang sudah ada, dasar aturan disebut bila ada; e2e + axe",
    "how": "Pakai templat surat-keluar yang ada",
-   "blocked_by": "",
-   "status": "ready",
+   "blocked_by": "Kode selesai dan e2e lokal lulus (cdd3779/1d46ee9, gate LULUS); deploy Vercel tertahan batas harian Hobby 6 Nov, push berikutnya setelah pulih lalu e2e produksi",
+   "status": "blocked",
    "created": "2026-11-06T10:52:31"
   },
   {
@@ -4721,6 +4731,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-06T11:15:14"
+  },
+  {
+   "id": "L-14",
+   "fase": "L",
+   "kind": "build",
+   "priority": 85,
+   "size": "M",
+   "wajib": true,
+   "title": "Navigasi halaman depan bertingkat setara Mekari",
+   "accept": "Kepala halaman publik punya menu Fitur, Solusi (jenis usaha, peran, integrasi), Sumber belajar (pusat bantuan, panduan, kamus, yang baru, alat gratis), dan Harga; setiap butir bergaris keterangan; bisa dibuka dengan keyboard dan sentuh (details/summary atau tombol aria-expanded), di HP menjadi lembar menu; semua tautan menuju halaman yang ada (tes); axe 0 serius 390/1440; e2e",
+   "how": "kepala-kaki.tsx",
+   "blocked_by": "Kode selesai, e2e lokal 20/20 (bantuan-alat, asap, halaman-publik); deploy Vercel tertahan batas harian, dipasang otomatis oleh .github/workflows/picu-deploy.yml 7 Nov 06.00 UTC",
+   "status": "blocked",
+   "created": "2026-11-06T11:27:34"
   }
  ]
 }

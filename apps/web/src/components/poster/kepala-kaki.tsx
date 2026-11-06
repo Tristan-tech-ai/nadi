@@ -4,6 +4,7 @@ import { IkonFitur } from "@/components/poster/visual-fitur";
 import { TandaNadi } from "@/components/ui/logo";
 import { awalanJalur, type Bahasa } from "@/lib/i18n/bahasa";
 import { ambilKamus } from "@/lib/i18n/kamus";
+import { panelMenu, type PanelMenu } from "@/lib/nav-publik";
 import "./poster.css";
 
 // Kepala permukaan Persuade (docs/design/DESIGN.md bagian 5): empat pilihan (Fitur, Harga, Masuk, Coba usaha contoh). Menu Fitur
@@ -19,17 +20,39 @@ export function LogoPoster({ ukuran = 30 }: { ukuran?: number }) {
   );
 }
 
+/** L-14: satu panel bertingkat (Solusi, Sumber belajar) berisi kelompok tautan berketerangan, seperti menu Mekari. */
+function IsiPanel({ p }: { p: PanelMenu }) {
+  return (
+    <div className="kolom-menu">
+      {p.kelompok.map((k) => (
+        <section key={k.judul} aria-label={k.judul}>
+          <p className="judul-kelompok">{k.judul}</p>
+          <ul>
+            {k.butir.map((x) => <li key={x.href}><Link href={x.href}><b>{x.label}</b><span>{x.ket}</span></Link></li>)}
+            {k.semua ? <li><Link href={k.semua.href} className="semua-menu"><b>{k.semua.label}</b></Link></li> : null}
+          </ul>
+        </section>
+      ))}
+    </div>
+  );
+}
+
 export function KepalaPoster({ bahasa = "id" }: { bahasa?: Bahasa }) {
   const k = ambilKamus(bahasa);
   const n = k.poster.nav;
   const awal = awalanJalur(bahasa);
+  const panel = panelMenu(bahasa, awal);
+  const panah = <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>;
   return (
     <header className="bingkai kepala-poster">
       <Link href={awal || "/"} aria-label={n.beranda} className="logo-poster"><LogoPoster /></Link>
       <nav aria-label={n.utama}>
         <button type="button" className="pemicu-fitur" popoverTarget="menu-fitur" aria-haspopup="true">
-          {n.fitur} <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true" focusable="false"><path d="M3 5l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+          <span className="hanya-lebar">{n.fitur}</span><span className="hanya-hp">Menu</span> {panah}
         </button>
+        {panel.map((p) => (
+          <button key={p.id} type="button" className="pemicu-fitur hanya-lebar" popoverTarget={`menu-${p.id}`} aria-haspopup="true" data-testid={`pemicu-${p.id}`}>{p.label} {panah}</button>
+        ))}
         <Link href={`${awal}/harga`} className="hanya-lebar">{n.harga}</Link>
         <Link href="/masuk" className="hanya-lebar">{n.masuk}</Link>
         <span className="hanya-lebar"><PemilihBahasa bahasa={bahasa} /></span>
@@ -45,6 +68,8 @@ export function KepalaPoster({ bahasa = "id" }: { bahasa?: Bahasa }) {
             </Link>
           ))}
         </div>
+        {/* Di HP satu lembar menu memuat semua panel; di layar lebar panel punya tombolnya sendiri. */}
+        <div className="panel-hp">{panel.map((p) => <section key={p.id} aria-label={p.label}><p className="judul-panel">{p.label}</p><IsiPanel p={p} /></section>)}</div>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 18, alignItems: "center", marginTop: 18, fontWeight: 700 }}>
           <Link href={`${awal}/harga`}>{n.harga}</Link>
           <Link href="/masuk">{n.masuk}</Link>
@@ -52,6 +77,12 @@ export function KepalaPoster({ bahasa = "id" }: { bahasa?: Bahasa }) {
         </div>
         <Link href="/demo" className="tombol-poster ajakan-menu medan-tinta" style={{ background: "var(--poster-tinta)", color: "var(--poster-tinta-tinta)" }}>{n.coba}</Link>
       </div>
+      {panel.map((p) => (
+        <div key={p.id} id={`menu-${p.id}`} popover="auto" className="menu-fitur menu-kelompok" aria-label={p.label} data-testid={`menu-${p.id}`}>
+          <button type="button" className="tutup-menu" popoverTarget={`menu-${p.id}`} popoverTargetAction="hide">{n.tutup}</button>
+          <IsiPanel p={p} />
+        </div>
+      ))}
     </header>
   );
 }

@@ -173,3 +173,34 @@ test("pusat bantuan bahasa Inggris: cari dan artikel", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Cannot sign in or forgot your password");
   await expect(page.locator("html")).toHaveAttribute("lang", /en|id/);
 });
+
+test("navigasi halaman depan: panel Solusi dan Sumber belajar di desktop, satu lembar menu di HP", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+  await page.getByTestId("pemicu-solusi").click();
+  const solusi = page.getByTestId("menu-solusi");
+  await expect(solusi).toBeVisible();
+  await expect(solusi.getByRole("link", { name: /Warung dan toko/ })).toHaveAttribute("href", "/untuk/warung");
+  await page.screenshot({ path: test.info().outputPath("nav-solusi-1440.png") });
+  const axe1 = await new AxeBuilder({ page }).analyze();
+  expect(axe1.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+  await page.keyboard.press("Escape");
+  await page.getByTestId("pemicu-sumber").click();
+  const sumber = page.getByTestId("menu-sumber");
+  await expect(sumber.getByRole("link", { name: /Pusat bantuan/ })).toBeVisible();
+  await page.screenshot({ path: test.info().outputPath("nav-sumber-1440.png") });
+  await sumber.getByRole("link", { name: /Kalkulator THR/ }).click();
+  await page.waitForURL((u) => u.pathname === "/alat/thr");
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+  await page.getByRole("button", { name: "Menu" }).click();
+  const menu = page.locator("#menu-fitur");
+  await expect(menu.getByRole("link", { name: /Kamus istilah/ })).toBeVisible();
+  await expect(menu.getByRole("link", { name: /Pembuat invoice/ })).toBeAttached();
+  await page.screenshot({ path: test.info().outputPath("nav-hp-390.png"), fullPage: false });
+  const axe2 = await new AxeBuilder({ page }).analyze();
+  expect(axe2.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
+});
