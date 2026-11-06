@@ -2,9 +2,10 @@
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { cekIsianDaftar, jalurAman, pesanGalatAuth, type HasilForm } from "@/lib/auth-pesan";
+import { bersihkanKode, cekIsianDaftar, jalurAman, pesanGalatAuth, sudahTerdaftar, type HasilForm } from "@/lib/auth-pesan";
 import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
+import { kodeEmailAktif } from "@/lib/auth/kode-email";
 import { asalTautan } from "@/lib/mcp/http";
 import { createClient } from "@/lib/supabase/server";
 
@@ -18,12 +19,70 @@ export async function masuk(_: HasilForm, form: FormData): Promise<HasilForm> {
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({ email, password: sandi });
   if (error) return { galat: pesanGalatAuth(error.code, await teksAuth()), isian: { email } };
+  return lanjutSetelahMasuk(supabase, jalurAman(teks(form, "next")));
+}
+
+/** Setelah sesi ada: catat, lalu minta kode 2FA dulu bila akun memakainya (M-21: database menutup usaha untuk sesi aal1). */
+async function lanjutSetelahMasuk(supabase: Awaited<ReturnType<typeof createClient>>, next: string): Promise<never> {
   await catatAktivitas(supabase, "masuk");
-  const next = jalurAman(teks(form, "next"));
-  // M-21: akun dengan verifikasi dua langkah wajib memasukkan kode dulu (database menutup usaha untuk sesi aal1).
   const { data: aal } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
   if (aal?.nextLevel === "aal2" && aal.currentLevel !== "aal2") redirect(`/masuk/2fa?next=${encodeURIComponent(next)}`);
   redirect(next);
+}
+
+type JenisKode = "masuk" | "lupa" | "daftar";
+const jenisKode = (f: FormData): JenisKode => (["lupa", "daftar"].includes(teks(f, "jenis")) ? (teks(f, "jenis") as JenisKode) : "masuk");
+
+/**
+ * Kode angka lewat email sebagai cadangan tautan (tautan bisa gagal: dibuka di perangkat lain sehingga PKCE tidak cocok,
+ * atau sudah dibuka pemindai tautan email). Masuk: signInWithOtp tanpa membuat akun baru. Lupa: resetPasswordForEmail
+ * (Supabase tidak membedakan email terdaftar atau tidak). Daftar: kirim ulang email konfirmasi pendaftaran.
+ */
+export async function kirimKode(_: HasilForm, form: FormData): Promise<HasilForm> {
+  const k = await teksAuth();
+  const email = teks(form, "email").toLowerCase();
+  const jenis = jenisKode(form);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return { galat: k.emailSalah, isian: { email } };
+  const supabase = await createClient();
+  const asal = asalTautan(await headers());
+  const next = jalurAman(teks(form, "next"));
+  const { error } = jenis === "lupa"
+    ? await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${asal}/auth/konfirmasi?next=/masuk/sandi-baru` })
+    : jenis === "daftar"
+      ? await supabase.auth.resend({ type: "signup", email, options: { emailRedirectTo: `${asal}/auth/konfirmasi?next=/app/mulai` } })
+      : await supabase.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: `${asal}/auth/konfirmasi?next=${encodeURIComponent(next)}` } });
+  const kode = kodeEmailAktif();
+  if (error?.code === "over_email_send_rate_limit") return { galat: k.kodeTertahan, isian: { email }, kode, waktu: Date.now() };
+  if (error) return { galat: pesanGalatAuth(error.code, k), isian: { email } };
+  const a = ambilKamus(await bahasaAplikasi()).auth;
+  return { info: isiTeks(kode ? a.kodeTerkirim : a.tautanTerkirim, { email }), isian: { email }, kode, waktu: Date.now() };
+}
+
+/** Cocokkan kode dari email. Lupa sandi memakai jenis recovery lalu ke halaman sandi baru; masuk dan daftar memakai jenis email. */
+export async function cocokkanKode(_: HasilForm, form: FormData): Promise<HasilForm> {
+  const k = await teksAuth();
+  const email = teks(form, "email").toLowerCase();
+  const jenis = jenisKode(form);
+  const kode = bersihkanKode(teks(form, "kode"));
+  if (!kode) return { galat: k.kodeFormat, isian: { email } };
+  const supabase = await createClient();
+  const { error } = await supabase.auth.verifyOtp({ email, token: kode, type: jenis === "lupa" ? "recovery" : "email" });
+  if (error) return { galat: pesanGalatAuth(error.code === "otp_expired" || error.status === 403 ? "otp_expired" : error.code, k), isian: { email } };
+  if (jenis === "lupa") redirect("/masuk/sandi-baru");
+  return lanjutSetelahMasuk(supabase, jenis === "daftar" ? "/app/mulai" : jalurAman(teks(form, "next")));
+}
+
+/** Kata sandi baru setelah kode atau tautan atur ulang (sesi recovery). Tanpa sesi: kembali minta kode. */
+export async function aturSandiBaru(_: HasilForm, form: FormData): Promise<HasilForm> {
+  const k = await teksAuth();
+  const sandi = String(form.get("sandi") ?? "");
+  if (sandi.length < 8) return { galat: k.sandiPendek };
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getUser();
+  if (!data.user) return { galat: k.sesiHabis };
+  const { error } = await supabase.auth.updateUser({ password: sandi });
+  if (error) return { galat: pesanGalatAuth(error.code, k) };
+  return lanjutSetelahMasuk(supabase, "/app");
 }
 
 /** Catat aktivitas akun dengan alamat dan perangkat peramban (dari kepala permintaan, bukan alamat server). Gagal diabaikan. */
@@ -74,9 +133,12 @@ export async function daftar(_: HasilForm, form: FormData): Promise<HasilForm> {
   const h = await headers();
   const { data, error } = await supabase.auth.signUp({ email, password: sandi, options: { emailRedirectTo: `${asalTautan(h)}/auth/konfirmasi?next=/app/mulai` } });
   if (error) return { galat: pesanGalatAuth(error.code, k), isian: { email } };
-  // Konfirmasi email mati: sesi langsung ada. Menyala: minta pengguna membuka email.
+  // Konfirmasi email mati: sesi langsung ada. Menyala: minta pengguna membuka email atau mengetik kodenya.
   if (data.session) redirect("/app/mulai");
-  return { info: isiTeks(k.cekEmail, { email }), isian: { email } };
+  // Email sudah terdaftar: Supabase diam-diam tidak mengirim email (log user_repeated_signup), jadi arahkan ke masuk.
+  if (sudahTerdaftar(data.user)) return { galat: k.sudahTerdaftar, isian: { email } };
+  const kode = kodeEmailAktif();
+  return { info: isiTeks(kode ? k.cekEmailKode : k.cekEmail, { email }), isian: { email }, kode, waktu: 1 };
 }
 
 export async function keluar() {

@@ -12,7 +12,8 @@ export const metadata: Metadata = { title: "Masuk ke Nadi" };
 async function FormMasuk({ searchParams, teks }: { searchParams: PageProps<"/masuk">["searchParams"]; teks: Kamus["auth"] }) {
   const sp = await searchParams;
   const next = jalurAman(typeof sp.next === "string" ? sp.next : null);
-  return <><FormAuth aksi={masuk} mode="masuk" next={next} teks={teks} /><MasukGoogle next={next} galat={sp.galat === "google"} teks={teks} /></>;
+  return <>{sp.galat === "tautan" ? <p role="alert" className="mb-4 rounded-[var(--radius-isian)] border border-cap px-3 py-2 text-sm text-cap">{teks.tautanGagal}</p> : null}
+    <FormAuth aksi={masuk} mode="masuk" next={next} teks={teks} /><MasukGoogle next={next} galat={sp.galat === "google"} teks={teks} /></>;
 }
 
 export default function Masuk(props: PageProps<"/masuk">) {

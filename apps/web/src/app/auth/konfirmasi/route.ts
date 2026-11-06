@@ -11,10 +11,11 @@ export async function GET(request: NextRequest) {
   const supabase = await createClient();
   let ok = false;
   if (code) ok = !(await supabase.auth.exchangeCodeForSession(code)).error;
-  else if (tokenHash) ok = !(await supabase.auth.verifyOtp({ token_hash: tokenHash, type: "email" })).error;
+  else if (tokenHash) ok = !(await supabase.auth.verifyOtp({ token_hash: tokenHash, type: url.searchParams.get("type") === "recovery" ? "recovery" : "email" })).error;
   const tujuan = url.clone();
   tujuan.search = "";
   tujuan.pathname = ok ? next : "/masuk";
+  // Tautan gagal (dibuka di perangkat lain, kedaluwarsa, atau sudah dipakai pemindai email): tawarkan kode dari email yang sama.
   if (!ok) tujuan.searchParams.set("galat", "tautan");
   return NextResponse.redirect(tujuan);
 }

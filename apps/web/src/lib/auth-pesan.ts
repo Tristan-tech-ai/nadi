@@ -3,13 +3,27 @@ import { kamusId } from "@/lib/i18n/kamus/id";
 // Pesan galat auth dalam bahasa Nadi (VOICE.md: apa yang terjadi + apa yang bisa dilakukan). Kode dari Supabase Auth.
 // Teks di kamus authPesan; bawaan bahasa Indonesia, mode lain mengoper kamusnya.
 export type TeksAuth = typeof kamusId.authPesan;
-const KODE = ["invalid_credentials", "email_not_confirmed", "user_already_exists", "email_exists", "weak_password", "over_email_send_rate_limit", "over_request_rate_limit", "email_address_invalid", "signup_disabled"] as const;
+const KODE = ["invalid_credentials", "email_not_confirmed", "user_already_exists", "email_exists", "weak_password", "over_email_send_rate_limit", "over_request_rate_limit", "email_address_invalid", "signup_disabled", "otp_expired", "otp_disabled", "same_password"] as const;
 
 export function pesanGalatAuth(kode: string | undefined | null, t: TeksAuth = kamusId.authPesan): string {
   return kode && (KODE as readonly string[]).includes(kode) ? t[kode as (typeof KODE)[number]] : t.umum;
 }
 
-export type HasilForm = { galat?: string; info?: string; isian?: Record<string, string> };
+export type HasilForm = { galat?: string; info?: string; isian?: Record<string, string>; kode?: boolean; waktu?: number };
+
+/** Kode OTP email Supabase: 6 angka bawaan, panjang bisa disetel 6-10. Spasi dan tanda hubung dari salinan email dibuang. */
+export function bersihkanKode(kode: string): string | null {
+  const k = kode.replace(/[\s-]/g, "");
+  return /^\d{6,10}$/.test(k) ? k : null;
+}
+
+/**
+ * signUp untuk email yang sudah terdaftar tidak memberi galat (Supabase menyembunyikannya dan TIDAK mengirim email),
+ * tetapi pengguna yang dikembalikan tidak punya identitas. Itu tanda kita harus mengarahkan ke masuk, bukan "cek email".
+ */
+export function sudahTerdaftar(user: { identities?: unknown[] | null } | null | undefined): boolean {
+  return !!user && Array.isArray(user.identities) && user.identities.length === 0;
+}
 
 /** Validasi ringan sebelum menghubungi server auth. */
 export function cekIsianDaftar(email: string, sandi: string, t: TeksAuth = kamusId.authPesan): string | null {

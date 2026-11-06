@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { cekIsianDaftar, jalurAman, pesanGalatAuth } from "./auth-pesan";
+import { bersihkanKode, cekIsianDaftar, jalurAman, pesanGalatAuth, sudahTerdaftar } from "./auth-pesan";
 
 describe("pesanGalatAuth", () => {
   it("kode dikenal", () => expect(pesanGalatAuth("invalid_credentials")).toMatch(/tidak cocok/));
@@ -33,5 +33,28 @@ describe("pesan auth bahasa Inggris", () => {
     expect(pesanGalatAuth("invalid_credentials", kamusEn.authPesan)).toMatch(/does not match/);
     expect(pesanGalatAuth("zzz", kamusEn.authPesan)).toMatch(/entries are kept/);
     expect(cekIsianDaftar("made", "rahasia123", kamusEn.authPesan)).toMatch(/email/);
+  });
+});
+
+describe("kode email", () => {
+  it("kode 6 angka lolos, spasi dan tanda hubung dari salinan email dibuang", () => {
+    expect(bersihkanKode("123456")).toBe("123456");
+    expect(bersihkanKode(" 123 456 ")).toBe("123456");
+    expect(bersihkanKode("123-456")).toBe("123456");
+    expect(bersihkanKode("12345678")).toBe("12345678");
+  });
+  it("bukan kode ditolak", () => {
+    for (const x of ["", "12345", "abcdef", "12345678901", "1234a6"]) expect(bersihkanKode(x), x).toBeNull();
+  });
+  it("kode salah/kedaluwarsa dan email belum terdaftar punya pesan sendiri", () => {
+    expect(pesanGalatAuth("otp_expired")).toMatch(/kirim ulang/);
+    expect(pesanGalatAuth("otp_disabled")).toMatch(/belum punya akun/);
+    expect(pesanGalatAuth("same_password")).toMatch(/sama/);
+  });
+  it("daftar ulang email terdaftar dikenali dari identitas kosong", () => {
+    expect(sudahTerdaftar({ identities: [] })).toBe(true);
+    expect(sudahTerdaftar({ identities: [{ provider: "email" }] })).toBe(false);
+    expect(sudahTerdaftar({ identities: null })).toBe(false);
+    expect(sudahTerdaftar(null)).toBe(false);
   });
 });
