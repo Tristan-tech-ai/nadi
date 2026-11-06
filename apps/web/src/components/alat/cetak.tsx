@@ -8,7 +8,7 @@ import { totalBaris, type BarisInvoice } from "@/lib/invoice/tagihan";
 // aplikasi. Semua di peramban: tidak ada yang dikirim; Cetak memakai dialog cetak peramban (bisa disimpan PDF).
 const isian = "mt-1 h-11 w-full rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-3 text-base";
 const angka = (s: string) => Math.max(0, Math.round(Number(s.replace(/\D/g, "")) || 0));
-export const CSS_CETAK = "@media print { body * { visibility: hidden !important; } #lembar-cetak, #lembar-cetak * { visibility: visible !important; } #lembar-cetak { position: absolute; inset: 0 auto auto 0; width: 100%; padding: 24px; background: #fff; color: #000; } }";
+export const CSS_CETAK = "@media print { body * { visibility: hidden !important; } #lembar-cetak, #lembar-cetak * { visibility: visible !important; } #lembar-cetak { position: absolute; inset: 0 auto auto 0; width: 100%; padding: 24px; background: var(--kertas); color: var(--tinta); } }";
 
 type Baris = { uraian: string; jumlah: string; harga: string };
 
