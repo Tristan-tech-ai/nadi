@@ -66,6 +66,7 @@ test("mode coba: /demo masuk ke aplikasi sungguhan, semua layar terbuka, perubah
   await expect(dialog).toBeHidden();
   // Lempar: memilih berkas juga membuka dialog.
   await page.goto("/app/lempar");
+  await page.waitForLoadState("networkidle");
   const berkas = page.locator('input[type="file"]').first();
   await berkas.dispatchEvent("click");
   await expect(page.getByTestId("dialog-coba")).toBeVisible();

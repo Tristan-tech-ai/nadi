@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { EyeIcon, VideoCameraIcon } from "@phosphor-icons/react";
 import { Tombol } from "@/components/ui/tombol";
 import { isiTeks } from "@/lib/i18n/isi-teks";
+import { ALAMAT_JEMBATAN, bukaJembatan } from "@/lib/mata/jembatan";
 import type { Kamus } from "@/lib/i18n/kamus";
 import { catatMata, denahKamera, setujuiDenah, simpanZona, usulDenah } from "@/app/app/mata/actions";
 import { langkahStatus, medianAntrean, orangDiZona, statusAwal, type Deteksi, type JenisZona, type Status, type Titik, type Zona } from "@/lib/mata/resep";
@@ -84,6 +85,7 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
     pekerja.current?.terminate();
     const s = video.current?.srcObject as MediaStream | null;
     s?.getTracks().forEach((t) => t.stop());
+    pcCctv.current?.close();
   }, []);
 
   function pilihBerkas(f: File | undefined) {
@@ -150,6 +152,28 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
     setDenahDraf(null);
     setDikenal(true);
     setPesan({ jenis: "info", teks: isiTeks(t.tersimpan, { n: h.zona.length }) });
+  }
+
+  /** CCTV lewat jembatan go2rtc di komputer ini (W-10A), sebagai sumber yang sama dengan kamera: zona bisa digambar di gambar CCTV. */
+  const pcCctv = useRef<RTCPeerConnection | null>(null);
+  async function pakaiCctv() {
+    try {
+      const { aliran, pc } = await bukaJembatan(ALAMAT_JEMBATAN);
+      if (!video.current) return pc.close();
+      pcCctv.current?.close();
+      pcCctv.current = pc;
+      video.current.src = "";
+      video.current.srcObject = aliran;
+      await video.current.play();
+      setSumber("kamera");
+      setPesan({ jenis: "info", teks: t.cctvTersambung });
+      const st = aliran.getVideoTracks()[0]?.getSettings();
+      void kenaliKamera(`cctv:${ALAMAT_JEMBATAN}:${st?.width ?? 0}x${st?.height ?? 0}`);
+    } catch {
+      setPesan({ jenis: "galat", teks: t.cctvBelum });
+      const d = document.getElementById("cctv") as HTMLDetailsElement | null;
+      if (d) { d.open = true; d.scrollIntoView({ behavior: "smooth", block: "start" }); }
+    }
   }
 
   async function pakaiKamera() {
@@ -303,6 +327,7 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
             <input type="file" accept="video/*" className="sr-only" data-testid="pilih-video" onChange={(e) => pilihBerkas(e.target.files?.[0])} />
           </label>
           <Tombol ragam="kedua" onClick={pakaiKamera} disabled={pantau}>{t.pakaiKamera}</Tombol>
+          <Tombol ragam="kedua" onClick={pakaiCctv} disabled={pantau} data-testid="pakai-cctv">{t.pakaiCctv}</Tombol>
           {sumber && sidik && !dikenal && !denahDraf ? (
             <Tombol ragam="kedua" onClick={usulkanDenah} disabled={pantau || belajar} data-testid="usul-denah">{t.usulDenah}</Tombol>
           ) : null}

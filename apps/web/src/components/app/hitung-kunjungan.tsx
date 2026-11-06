@@ -387,8 +387,9 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
               {jalan ? <Tombol type="button" onClick={() => (berhenti.current = true)}>{t.berhenti}</Tombol> : <Tombol type="button" ragam="kedua" onClick={dariKamera}>{t.pakaiKamera}</Tombol>}
             </div>
           )}
-          {papan ? (
-            <details className="mt-4 rounded-[var(--radius-kartu)] border border-garis p-4" data-testid="jembatan">
+        </>
+      )}
+            <details id="cctv" className="mt-4 rounded-[var(--radius-kartu)] border border-garis p-4" data-testid="jembatan">
               <summary className="cursor-pointer font-semibold">{t.jembatanJudul}</summary>
               <p className="mt-2 max-w-2xl text-sm text-tinta-2">{t.jembatanKet}</p>
               <ol className="mt-3 max-w-2xl list-decimal space-y-4 pl-5 text-sm">
@@ -448,15 +449,13 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
                       <span className="text-tinta-2">{t.jembatanAlamat}</span>
                       <input value={alamatJembatan} onChange={(e) => setAlamatJembatan(e.target.value)} spellCheck={false} className="min-h-11 w-64 max-w-full rounded-[var(--radius-input)] border border-garis-kuat bg-kertas px-3 font-mono" data-testid="jembatan-alamat" />
                     </label>
-                    <Tombol type="button" ragam="kedua" onClick={dariJembatan} disabled={jalan} data-testid="jembatan-mulai">{t.jembatanMulai}</Tombol>
+                    <Tombol type="button" ragam="kedua" onClick={dariJembatan} disabled={jalan || !adaPintu || !papan} data-testid="jembatan-mulai">{t.jembatanMulai}</Tombol>
                   </div>
+                  {!adaPintu || !papan ? <p className="mt-2 text-tinta-2" data-testid="jembatan-syarat">{!adaPintu ? t.perluPintu : t.papanBelum}</p> : null}
                 </li>
               </ol>
               <p className="mt-4 max-w-2xl text-sm text-tinta-2">{t.jembatanTidakAda}</p>
             </details>
-          ) : null}
-        </>
-      )}
       <video ref={video} className="hidden" muted playsInline />
       <canvas ref={pratinjau} className="hidden" aria-hidden />
       <figure className={`mt-4 ${jalan || selesai.length > 0 ? "" : "hidden"}`}>

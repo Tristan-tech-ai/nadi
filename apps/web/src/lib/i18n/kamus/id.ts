@@ -17,6 +17,7 @@ export const kamusId = {
   },
   pemilih: { label: "Bahasa", id: "Bahasa Indonesia", en: "English" },
   kaki: {
+    kamusIstilah: "Kamus istilah usaha",
     pusatBantuan: "Pusat bantuan", alatGratis: "Alat gratis (gaji, THR, pesangon)",
     slogan: "Kertas kerja usaha kecil yang mengisi dirinya sendiri.",
     produk: "Produk",
@@ -1067,6 +1068,7 @@ export const kamusId = {
     modelGagal: "Model penglihatan gagal dimuat di perangkat ini. Periksa sambungan internet lalu coba lagi.",
     pilihVideo: "Pilih berkas video",
     pakaiKamera: "Pakai kamera perangkat ini",
+    pakaiCctv: "Sambungkan CCTV", cctvBelum: "Jembatan CCTV belum berjalan di komputer ini. Siapkan sekali lewat panduan Sambungkan CCTV di bawah (unduh go2rtc dan berkas pengaturannya), jalankan, lalu tekan Sambungkan CCTV lagi.", cctvTersambung: "CCTV tersambung lewat jembatan di komputer ini. Gambar zona di atas gambar CCTV, lalu simpan.",
     layarAria: "Cuplikan kamera dengan zona. Klik untuk menambah titik zona.",
     kosong: "Pilih rekaman video dari HP atau pakai kamera tablet yang menghadap ruangan. Gambar diproses di perangkat ini dan langsung dibuang; yang tersimpan hanya status meja dan antrean.",
     zonaBaru: "Zona baru",
@@ -1336,6 +1338,7 @@ export const kamusId = {
     tidakSah: "Paket skill tidak sah: {masalah}",
   },
   auth: {
+    masukSebagai: "Masuk sebagai", pilihPengelola: "Pemilik, admin, atau akuntan", pilihPengelolaKet: "Pakai email", pilihStaf: "Staf", pilihStafKet: "Pakai kode usaha, ID, dan PIN",
     lupaSandi: "Lupa kata sandi?", pakaiKode: "Masuk lewat email tanpa kata sandi",
     kodeJudul: "Masuk lewat email", kodeSub: "Nadi mengirim kode masuk ke emailmu. Tidak perlu kata sandi.", kodeSubTautan: "Nadi mengirim tautan masuk ke emailmu. Tidak perlu kata sandi.",
     lupaJudul: "Atur ulang kata sandi", lupaSub: "Tulis email akunmu. Nadi mengirim email untuk membuat kata sandi baru.",

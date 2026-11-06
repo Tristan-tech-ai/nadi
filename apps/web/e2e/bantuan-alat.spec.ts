@@ -62,6 +62,8 @@ test("alat gratis: gaji bersih dan THR sama dengan hitungan aplikasi", async ({ 
   await expect(page.getByTestId("kartu-alat")).toHaveCount(3);
   await page.goto("/alat/gaji");
   await expect(page.getByTestId("gaji-bersih")).toBeVisible();
+  // Isian dikendalikan React: isi setelah hidrasi, lalu pastikan nilainya (temuan produksi: isian sebelum hidrasi hilang).
+  await page.waitForLoadState("networkidle");
   await page.getByLabel("Gaji pokok sebulan").fill("6.000.000");
   await page.getByLabel("Status pajak (PTKP)").selectOption("K/1");
 
@@ -78,11 +80,28 @@ test("alat gratis: gaji bersih dan THR sama dengan hitungan aplikasi", async ({ 
   await periksa(page, "alat-gaji");
 
   await page.goto("/alat/thr");
-  await page.getByLabel("Mulai bekerja").fill("2026-01-15");
-  await page.getByLabel("Tanggal Hari Raya").fill("2026-07-20");
+  await page.waitForLoadState("networkidle");
+  for (const [label, nilai] of [["Mulai bekerja", "2026-01-15"], ["Tanggal Hari Raya", "2026-07-20"]] as const) {
+    await page.getByLabel(label).fill(nilai);
+    await expect(page.getByLabel(label)).toHaveValue(nilai);
+  }
   await page.getByLabel("Gaji pokok sebulan").fill("3.600.000");
+  await expect(page.getByLabel("Gaji pokok sebulan")).toHaveValue("Rp3.600.000");
   await expect(page.getByTestId("hasil-thr")).toHaveText(formatRupiah(hitungThr({ mulai: "2026-01-15", hariRaya: "2026-07-20", pokok: 3_600_000 }).thr));
   await page.goto("/alat/pesangon");
   await expect(page.getByTestId("kalkulator-pesangon").or(page.getByText("belum diperiksa ke sumber resmi"))).toBeVisible();
   await periksa(page, "alat-pesangon");
+});
+
+test("kamus istilah: daftar, cari tanpa JavaScript, halaman istilah dengan tautan ke Nadi", async ({ page }) => {
+  await page.goto("/kamus");
+  expect(await page.getByTestId("kartu-istilah").count()).toBeGreaterThanOrEqual(40);
+  await periksa(page, "kamus");
+  await page.getByLabel("Cari istilah").fill("karyawan kontrak");
+  await page.getByRole("button", { name: "Cari", exact: true }).click();
+  await page.waitForURL(/q=karyawan/);
+  await page.getByTestId("kartu-istilah").filter({ hasText: "PKWT" }).first().click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("PKWT");
+  await expect(page.getByTestId("tautan-istilah").first()).toHaveAttribute("href", "/alat/pesangon");
+  await periksa(page, "istilah-pkwt");
 });

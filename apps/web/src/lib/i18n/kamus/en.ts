@@ -16,6 +16,7 @@ export const kamusEn: Kamus = {
   },
   pemilih: { label: "Language", id: "Bahasa Indonesia", en: "English" },
   kaki: {
+    kamusIstilah: "Business glossary (Indonesian)",
     pusatBantuan: "Help center (Indonesian)", alatGratis: "Free tools (Indonesian)",
     slogan: "The small-business paperwork that fills itself in.",
     produk: "Product",
@@ -1066,6 +1067,7 @@ export const kamusEn: Kamus = {
     modelGagal: "The vision model could not load on this device. Check the internet connection and try again.",
     pilihVideo: "Pick a video file",
     pakaiKamera: "Use this device's camera",
+    pakaiCctv: "Connect CCTV", cctvBelum: "The CCTV bridge is not running on this computer yet. Set it up once with the Connect CCTV guide below (download go2rtc and its settings file), run it, then press Connect CCTV again.", cctvTersambung: "CCTV connected through the bridge on this computer. Draw zones on the CCTV picture, then save.",
     layarAria: "Camera frame with zones. Click to add a zone point.",
     kosong: "Pick a video recording from your phone or use a tablet camera facing the room. Images are processed on this device and discarded right away; only table and queue status is stored.",
     zonaBaru: "New zone",
@@ -1335,6 +1337,7 @@ export const kamusEn: Kamus = {
     tidakSah: "The skill package is invalid (details in Indonesian): {masalah}",
   },
   auth: {
+    masukSebagai: "Sign in as", pilihPengelola: "Owner, admin, or accountant", pilihPengelolaKet: "With email", pilihStaf: "Staff", pilihStafKet: "With business code, ID, and PIN",
     lupaSandi: "Forgot password?", pakaiKode: "Sign in by email without a password",
     kodeJudul: "Sign in by email", kodeSub: "Nadi sends a sign-in code to your email. No password needed.", kodeSubTautan: "Nadi sends a sign-in link to your email. No password needed.",
     lupaJudul: "Reset your password", lupaSub: "Write your account email. Nadi sends an email to set a new password.",

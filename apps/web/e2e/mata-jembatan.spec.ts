@@ -90,8 +90,16 @@ test("Mata: CCTV RTSP lewat jembatan go2rtc dihitung di peramban", async ({ brow
     const isi = readFileSync(join(dirJembatan, "go2rtc.yaml"), "utf8");
     expect(isi).toContain('mata: "rtsp://127.0.0.1:18554/sumber"');
     expect(isi).not.toMatch(/exec|echo/);
+    // L-10: tombol Sambungkan CCTV di atas Mata. Sebelum jembatan berjalan: pesan jelas dan panduan terbuka.
+    await page.getByTestId("pakai-cctv").click();
+    await expect(page.getByText("Jembatan CCTV belum berjalan")).toBeVisible({ timeout: 15_000 });
+    await expect(j).toHaveAttribute("open", "");
     jalankan(dirJembatan);
     await page.waitForTimeout(1500);
+    // Sesudah berjalan: gambar CCTV tampil di layar Mata sehingga zona bisa digambar di atasnya.
+    await page.getByTestId("pakai-cctv").click();
+    await expect(page.getByTestId("layar-mata")).toBeVisible({ timeout: 15_000 });
+    await expect(page.getByText("CCTV tersambung lewat jembatan")).toBeVisible();
 
     const axe = await new AxeBuilder({ page }).include('[data-testid="hitung-kunjungan"]').analyze();
     expect(axe.violations.filter((v) => ["serious", "critical"].includes(v.impact ?? "")).map((v) => v.id)).toEqual([]);

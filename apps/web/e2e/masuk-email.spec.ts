@@ -41,6 +41,15 @@ test("halaman masuk menawarkan lupa sandi dan masuk lewat email", async ({ page 
     await expect(page.getByTestId("tautan-kode")).toHaveAttribute("href", "/masuk/kode?next=%2Fapp%2Fgaji");
     await axeBersih(page, `masuk-${lebar}`);
   }
+  // Pilihan peran: pengelola (email) atau staf (kode usaha + PIN), dua arah.
+  await page.goto("/masuk");
+  const pilih = page.getByTestId("pilih-masuk");
+  await expect(pilih.getByRole("link", { name: /Pemilik, admin, atau akuntan/ })).toHaveAttribute("aria-current", "page");
+  await pilih.getByRole("link", { name: /Staf/ }).click();
+  await page.waitForURL((u) => u.pathname === "/masuk/staf");
+  await expect(page.getByTestId("pilih-masuk").getByRole("link", { name: /Staf/ })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByLabel("Kode usaha")).toBeVisible();
+  await axeBersih(page, "masuk-staf-390");
   await page.goto("/masuk?galat=tautan");
   await expect(page.getByRole("main").getByRole("alert")).toContainText("Tautan di email sudah tidak berlaku");
 });
