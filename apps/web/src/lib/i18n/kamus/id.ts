@@ -73,6 +73,12 @@ export const kamusId = {
     akhirContoh: "atau buka usaha contoh dulu",
   },
   aplikasi: {
+    cobaJudul: "Ini usaha contoh", cobaKet: "Toko Bu Sari dan semua angkanya karangan. Kamu melihat aplikasi Nadi yang sebenarnya sebagai pemilik, tetapi tidak ada yang disimpan.",
+    cobaBuatAkun: "Buat akun gratis", cobaKeluar: "Keluar dari usaha contoh", cobaApa: "Apa yang bekerja di usaha contoh?",
+    cobaBisaJudul: "Bisa dicoba", cobaBisa: ["Membuka semua layar dan data contoh", "Melihat rincian usulan, laporan, gaji, dan invoice", "Mencari fitur dengan Ctrl K dan Semua menu", "Mengganti bahasa dan menyalin prompt AI"],
+    cobaTidakJudul: "Butuh akun sendiri", cobaTidak: ["Menyetujui, menolak, menambah, atau mengubah data", "Melempar berkas dan foto", "AI yang membaca berkas dan menjawab kalimat baru", "Menyambungkan AI-mu, mengirim tautan, dan mengundang staf"],
+    cobaDialogJudul: "Ini hanya usaha contoh", cobaDialogKet: "Di usaha contoh tidak ada yang disimpan. Buat akun gratis untuk memakai Nadi di usahamu sendiri, atau masuk bila sudah punya akun.",
+    cobaMasuk: "Masuk", cobaLanjut: "Lanjut melihat-lihat",
     modeCoba: "Mode coba", modeCobaKet: "Ini usaha contoh dengan data karangan. Semua layar bisa dibuka; perubahan tidak disimpan dan AI tidak dipakai.", buatAkunCoba: "Buat akun untuk usahamu", keluarCoba: "Keluar dari mode coba", galatCoba: "Mode coba hanya melihat. Buat akun untuk menyimpan perubahan di usahamu sendiri.",
     lompat: "Lompat ke isi",
     beranda: "Beranda aplikasi",

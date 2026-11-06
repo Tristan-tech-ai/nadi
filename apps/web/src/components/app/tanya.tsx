@@ -35,7 +35,7 @@ export function FormTanya({ contoh, bahasa, teks: t }: { contoh: string[]; bahas
   const isian = useRef<HTMLInputElement>(null);
   return (
     <div className="mt-6">
-      <form action={aksi} className="flex flex-wrap items-end gap-2" aria-label={t.judul}>
+      <form action={aksi} className="flex flex-wrap items-end gap-2" aria-label={t.judul} data-coba-boleh>
         <div className="flex min-w-0 flex-1 flex-col gap-1"><label htmlFor={id} className="text-sm text-tinta-2">{t.label}</label>
           <input ref={isian} id={id} name="tanya" required minLength={3} maxLength={200} defaultValue={h?.tanya ?? ""} placeholder={contoh[0]}
             className="h-12 w-full rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas px-3 text-base" /></div>

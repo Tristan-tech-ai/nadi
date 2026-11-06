@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { keluar } from "@/app/auth-actions";
 import { Kerangka } from "@/components/app/kerangka";
+import { PenjagaCoba } from "@/components/app/mode-coba";
 import { TombolCari } from "@/components/app/cari-fitur";
 import { teksCari } from "@/lib/cari-teks";
 import { ruangDanMati } from "@/lib/ruang-sesi";
@@ -26,7 +27,7 @@ async function NamaPerusahaan() {
         {data?.nama ?? t.usahaCadangan}
       </Link>
       <PemilihBahasaApp bahasa={bahasa} />
-      <form action={keluar}>
+      <form action={keluar} data-coba-boleh>
         <button type="submit" lang={bahasa} className="text-sm text-tinta-2 underline-offset-4 hover:underline">{t.keluar}</button>
       </form>
     </div>
@@ -79,17 +80,33 @@ async function Navigasi() {
       lepas: en ? "Unpin {x}" : "Lepas {x} dari Disematkan" }} />;
 }
 
-/** L-03: pita mode coba di setiap layar sesi anonim, supaya jelas kenapa simpan tidak berhasil dan ke mana untuk mulai sungguhan. */
+/**
+ * L-03: pita usaha contoh di setiap layar sesi coba (permintaan Tristan 6 Nov): di tengah atas, menyebut bahwa ini usaha contoh,
+ * dua ajakan (buat akun, keluar), dan daftar yang bekerja dan yang butuh akun. Tindakan yang butuh akun membuka dialog.
+ */
 async function PitaCoba() {
   const sesi = await bacaSesi();
   if (!sesi?.tamu) return null;
   const t = ambilKamus(await bahasaAplikasi(sesi.bahasa)).aplikasi;
   return (
-    <div role="note" data-testid="pita-coba" className="flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-garis bg-kertas-2 px-4 py-2 text-sm min-[600px]:pl-24 min-[1200px]:pl-68 print:hidden">
-      <p><span className="stabilo font-semibold">{t.modeCoba}</span> {t.modeCobaKet}</p>
-      <Link href="/daftar" className="font-semibold underline underline-offset-4">{t.buatAkunCoba}</Link>
-      <form action={keluar}><button type="submit" className="text-tinta-2 underline underline-offset-4">{t.keluarCoba}</button></form>
-    </div>
+    <section aria-labelledby="judul-coba" data-testid="pita-coba" className="border-b border-garis bg-kertas-2 px-4 py-4 min-[600px]:pl-24 min-[1200px]:pl-68 print:hidden">
+      <div className="mx-auto max-w-3xl text-center">
+        <h2 id="judul-coba" className="text-base font-semibold"><span className="stabilo">{t.cobaJudul}</span></h2>
+        <p className="mt-1 text-sm">{t.cobaKet}</p>
+        <div className="mt-3 flex flex-wrap items-center justify-center gap-3">
+          <Link href="/daftar" className="inline-flex h-11 items-center rounded-[var(--radius-isian)] bg-tinta px-5 text-sm font-semibold text-kertas">{t.cobaBuatAkun}</Link>
+          <form action={keluar} data-coba-boleh><button type="submit" className="inline-flex h-11 items-center rounded-[var(--radius-isian)] border border-garis-kuat px-5 text-sm font-semibold">{t.cobaKeluar}</button></form>
+        </div>
+        <details className="mx-auto mt-3 max-w-2xl text-left text-sm">
+          <summary className="cursor-pointer text-center font-semibold underline underline-offset-4">{t.cobaApa}</summary>
+          <div className="mt-3 grid gap-4 sm:grid-cols-2">
+            <div><p className="font-semibold text-daun">{t.cobaBisaJudul}</p><ul className="mt-1 list-disc space-y-1 pl-5">{t.cobaBisa.map((x) => <li key={x}>{x}</li>)}</ul></div>
+            <div><p className="font-semibold text-cap">{t.cobaTidakJudul}</p><ul className="mt-1 list-disc space-y-1 pl-5">{t.cobaTidak.map((x) => <li key={x}>{x}</li>)}</ul></div>
+          </div>
+        </details>
+      </div>
+      <PenjagaCoba teks={t} />
+    </section>
   );
 }
 

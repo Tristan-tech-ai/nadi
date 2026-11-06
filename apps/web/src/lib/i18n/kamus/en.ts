@@ -72,6 +72,12 @@ export const kamusEn: Kamus = {
     akhirContoh: "or open the sample business first",
   },
   aplikasi: {
+    cobaJudul: "This is a sample business", cobaKet: "Toko Bu Sari and all its numbers are made up. You are seeing the real Nadi app as the owner, but nothing is saved.",
+    cobaBuatAkun: "Create a free account", cobaKeluar: "Leave the sample business", cobaApa: "What works in the sample business?",
+    cobaBisaJudul: "You can try", cobaBisa: ["Opening every screen and the sample data", "Viewing proposal details, reports, payroll, and invoices", "Finding features with Ctrl K and All menus", "Switching language and copying the AI prompt"],
+    cobaTidakJudul: "Needs your own account", cobaTidak: ["Approving, rejecting, adding, or changing data", "Dropping files and photos", "AI that reads files and answers new questions", "Connecting your AI, sending links, and inviting staff"],
+    cobaDialogJudul: "This is only a sample business", cobaDialogKet: "Nothing is saved in the sample business. Create a free account to use Nadi for your own business, or sign in if you already have one.",
+    cobaMasuk: "Sign in", cobaLanjut: "Keep looking around",
     modeCoba: "Try mode", modeCobaKet: "This is a sample business with made-up data. Every screen opens; changes are not saved and AI is not used.", buatAkunCoba: "Create an account for your business", keluarCoba: "Leave try mode", galatCoba: "Try mode is view only. Create an account to save changes in your own business.",
     lompat: "Skip to content",
     beranda: "App home",

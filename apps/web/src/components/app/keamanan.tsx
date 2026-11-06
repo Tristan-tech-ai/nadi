@@ -65,7 +65,7 @@ export function DuaLangkah({ teks: t }: { teks: Teks }) {
     <div className="mt-3 text-sm" data-testid="dua-langkah" data-aktif={aktif ? "ya" : aktif === null ? "tidak" : ""}>
       {aktif === undefined ? <div aria-hidden className="h-10 w-64 animate-pulse rounded bg-kertas-2" /> : aktif ? (<>
         <p>{t.duaAktif}</p>
-        <Tombol type="button" ragam="kedua" className="mt-3" disabled={sibuk} onClick={() => void matikan()}>{t.matikan}</Tombol>
+        <Tombol data-perlu-akun type="button" ragam="kedua" className="mt-3" disabled={sibuk} onClick={() => void matikan()}>{t.matikan}</Tombol>
       </>) : baru ? (
         <form action={aktifkan} className="grid max-w-sm gap-3" aria-label={t.aktifkan}>
           <p>{t.pindai}</p>
@@ -77,7 +77,7 @@ export function DuaLangkah({ teks: t }: { teks: Teks }) {
         </form>
       ) : (<>
         <p className="text-tinta-2">{t.duaMati}</p>
-        <Tombol type="button" className="mt-3" disabled={sibuk} onClick={() => void mulai()}>{t.nyalakan}</Tombol>
+        <Tombol data-perlu-akun type="button" className="mt-3" disabled={sibuk} onClick={() => void mulai()}>{t.nyalakan}</Tombol>
       </>)}
       {pesan && <p role={pesan.ok ? "status" : "alert"} className={`mt-2 ${pesan.ok ? "text-daun" : "text-cap"}`}>{pesan.teks}</p>}
     </div>
@@ -89,7 +89,7 @@ export function KeluarLain({ teks: t }: { teks: Teks }) {
   const [sibuk, setSibuk] = useState(false);
   return (
     <div className="mt-3 flex flex-wrap items-center gap-3 text-sm">
-      <Tombol type="button" ragam="kedua" disabled={sibuk} onClick={async () => {
+      <Tombol data-perlu-akun type="button" ragam="kedua" disabled={sibuk} onClick={async () => {
         setSibuk(true);
         const { error } = await createBrowserSupabase().auth.signOut({ scope: "others" });
         if (!error) { await catatAktivitasKeamanan("sesi.cabut"); setSelesai(true); window.location.reload(); }

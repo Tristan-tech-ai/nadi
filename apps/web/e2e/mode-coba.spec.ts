@@ -30,7 +30,11 @@ test("mode coba: /demo masuk ke aplikasi sungguhan, semua layar terbuka, perubah
 
   await tombol.click();
   await page.waitForURL((u) => u.pathname === "/app");
-  await expect(page.getByTestId("pita-coba")).toContainText("perubahan tidak disimpan");
+  const pita = page.getByTestId("pita-coba");
+  await expect(pita.getByRole("heading", { name: "Ini usaha contoh" })).toBeVisible();
+  await expect(pita.getByRole("link", { name: "Buat akun gratis" })).toHaveAttribute("href", "/daftar");
+  await pita.getByText("Apa yang bekerja di usaha contoh?").click();
+  await expect(pita.getByText("Butuh akun sendiri")).toBeVisible();
   await expect(page.getByTestId("nama-perusahaan")).toHaveText("Toko Bu Sari");
   for (const jalur of HALAMAN) {
     const r = await page.goto(jalur);
@@ -52,12 +56,24 @@ test("mode coba: /demo masuk ke aplikasi sungguhan, semua layar terbuka, perubah
   const nama = `Coba Tamu ${Date.now()}`;
   await page.getByLabel("Nama orang").fill(nama);
   await page.getByRole("button", { name: "Tambah orang" }).click();
-  await expect(page.getByRole("main").getByRole("alert")).toBeVisible();
-  await page.reload();
+  // Tindakan yang butuh akun membuka dialog buat akun atau masuk, bukan galat diam-diam.
+  const dialog = page.getByTestId("dialog-coba");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("link", { name: "Buat akun gratis" })).toHaveAttribute("href", "/daftar");
+  await expect(dialog.getByRole("link", { name: "Masuk" })).toHaveAttribute("href", "/masuk");
+  await page.screenshot({ path: test.info().outputPath("dialog-coba.png") });
+  await dialog.getByRole("button", { name: "Lanjut melihat-lihat" }).click();
+  await expect(dialog).toBeHidden();
+  // Lempar: memilih berkas juga membuka dialog.
+  await page.goto("/app/lempar");
+  const berkas = page.locator('input[type="file"]').first();
+  await berkas.dispatchEvent("click");
+  await expect(page.getByTestId("dialog-coba")).toBeVisible();
+  await page.goto("/app/orang");
   await expect(page.getByText(nama)).toHaveCount(0);
 
   // Keluar dari mode coba kembali ke /demo dan sesi hilang.
-  await page.getByTestId("pita-coba").getByRole("button", { name: "Keluar dari mode coba" }).click();
+  await page.getByTestId("pita-coba").getByRole("button", { name: "Keluar dari usaha contoh" }).click();
   await page.waitForURL((u) => u.pathname === "/demo");
   await page.goto("/app");
   await page.waitForURL((u) => u.pathname === "/masuk");
