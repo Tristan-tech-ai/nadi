@@ -68,6 +68,8 @@ export function KakiPoster({ bahasa = "id" }: { bahasa?: Bahasa }) {
           <nav aria-label={kk.produk} style={{ display: "grid", gap: 10, alignContent: "start" }}>
             <b>{kk.produk}</b>
             {k.fitur.slice(0, 5).map((f) => <Link key={f.slug} href={`${awal}/fitur/${f.slug}`}>{f.nama}</Link>)}
+            <Link href={`${awal}/untuk`}>{kk.untuk}</Link>
+            <Link href={`${awal}/integrasi`}>{kk.integrasi}</Link>
             <Link href="/demo">{kk.contohMakanan}</Link>
             <Link href="/demo/toko">{kk.contohToko}</Link>
           </nav>

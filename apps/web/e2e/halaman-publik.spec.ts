@@ -1,13 +1,16 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
+import { JENIS_USAHA } from "../src/components/landing/untuk-usaha";
+import { MODUL } from "../src/lib/fitur-usaha";
 
 // L-01: halaman publik. Setiap halaman punya satu tujuan (ajakan ke /demo atau /daftar), ilustrasi tidak lepas dari bingkainya
 // (temuan L-01: .gambar-baca tanpa position relative membuat gambar harga/panduan melayang menutupi judul), fitur yang tampil di
 // film demo memutar rekaman layar Nadi asli, dan semuanya lolos axe tanpa gulir samping di 390/1440 terang/gelap.
 const FITUR = ["lempar", "feed", "absen", "gaji", "tagihan", "jadwal", "mata", "rekrut", "pajak"];
 const KLIP = ["lempar", "feed", "tagihan", "gaji", "mata"];
-const INFO = ["/harga", "/panduan", "/keamanan", "/tentang"];
-const HALAMAN = ["/", "/en", ...FITUR.map((f) => `/fitur/${f}`), ...INFO, "/en/harga", "/en/keamanan"];
+// L-02: halaman per jenis usaha dan integrasi ikut aturan yang sama.
+const INFO = ["/harga", "/panduan", "/keamanan", "/tentang", "/untuk", ...JENIS_USAHA.map((j) => `/untuk/${j.slug}`), "/integrasi"];
+const HALAMAN = ["/", "/en", ...FITUR.map((f) => `/fitur/${f}`), ...INFO, "/en/harga", "/en/keamanan", "/en/untuk/bengkel", "/en/integrasi"];
 
 test.beforeEach(({ page }, info) => {
   void page;
@@ -81,4 +84,23 @@ test("rekaman layar asli: film di landing, potongan per fitur, gerak dikurangi t
   await q.waitForTimeout(2500);
   expect(await k2.evaluate((v: HTMLVideoElement) => v.paused && v.currentTime === 0)).toBe(true);
   await diam.close();
+});
+
+test("jenis usaha: menu yang tampil sama dengan modul paket di aplikasi, semua jenis terdaftar, integrasi jujur", async ({ page }) => {
+  test.setTimeout(120_000);
+  await page.goto("/untuk");
+  await expect(page.getByTestId("daftar-jenis").locator("li")).toHaveCount(JENIS_USAHA.length);
+  for (const j of JENIS_USAHA) {
+    await page.goto(`/untuk/${j.slug}`);
+    await expect(page.locator("h1")).toHaveText(j.judul.id);
+    await expect(page.getByTestId("hari-kerja").locator("li")).toHaveCount(3);
+    const tampil = await page.getByTestId("modul-nyala").locator("li").evaluateAll((li) => li.map((x) => x.getAttribute("data-kode")));
+    expect(tampil, j.slug).toEqual(MODUL.filter((m) => m.paket.includes(j.paket)).map((m) => m.kode));
+    for (const f of j.fitur) await expect(page.locator(`a[href="/fitur/${f}"]`).first(), `${j.slug} ${f}`).toBeVisible();
+  }
+  await page.goto("/integrasi");
+  await expect(page.getByTestId("belum-sambung").locator("li")).toHaveCount(3);
+  await page.goto("/");
+  await expect(page.locator('footer a[href="/untuk"]')).toBeVisible();
+  await expect(page.locator('footer a[href="/integrasi"]')).toBeVisible();
 });

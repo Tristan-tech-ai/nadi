@@ -20,6 +20,8 @@ export const kamusId = {
     slogan: "Kertas kerja usaha kecil yang mengisi dirinya sendiri.",
     produk: "Produk",
     contohMakanan: "Usaha contoh (makanan)",
+    untuk: "Untuk jenis usahamu",
+    integrasi: "Integrasi",
     contohToko: "Usaha contoh (toko)",
     panduan: "Panduan per peran",
     harga: "Harga",

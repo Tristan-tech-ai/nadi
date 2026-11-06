@@ -19,6 +19,8 @@ export const kamusEn: Kamus = {
     slogan: "The small-business paperwork that fills itself in.",
     produk: "Product",
     contohMakanan: "Sample business (food)",
+    untuk: "For your kind of business",
+    integrasi: "Integrations",
     contohToko: "Sample business (shop)",
     panduan: "Guide by role",
     harga: "Pricing",
