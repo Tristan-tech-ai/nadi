@@ -50,5 +50,5 @@ export const FAQ: { tanya: string; jawab: string }[] = [
 
 export const SEDANG_DIBUAT: string[] = [
   "Pesanan Shopee dan TikTok Shop masuk sendiri (sekarang lewat Pintu data dari n8n, Make, atau Zapier)",
-  "Tanda tangan elektronik tersertifikasi lewat mitra berizin (sekarang Nadi membuat yang tidak tersertifikasi dan menyebutnya)",
+  "Tanda tangan elektronik tersertifikasi lewat mitra PSrE resmi (sekarang Nadi membuat yang tidak tersertifikasi dan menyebutnya)",
 ];
