@@ -3627,8 +3627,10 @@
    "accept": "untuk tiap jalur: format tak dikenal -> model ringan (naik ke menengah/besar bila ragu) -> aturan baru disimpan setelah mereproduksi hasil model pada contohnya dan berjalan bayangan; berkas/kalimat berformat sama berikutnya dibaca tanpa token (eval: token 0 pada percobaan kedua); layar menampilkan 'Nadi sedang mempelajari format baru, sekali saja'; aturan bersama hanya struktur, tanpa data (tes SQL); ID model dari konfigurasi",
    "how": "REKONSTRUKSI-APP.md bagian 9; ekstraktor.ts yang sudah ada",
    "blocked_by": "T-02,T-01A,T-01B,T-01C,T-01D",
-   "status": "ready",
-   "created": "2026-11-05T17:30:59"
+   "status": "done",
+   "created": "2026-11-05T17:30:59",
+   "done": "2026-11-06T06:16:58",
+   "result": "T-01A tanya, T-01B struk foto, T-01C pindah data, T-01D denah Mata semuanya done dengan e2e produksi token 0 pada kali berikutnya; T-02 pengawas bukan AI done"
   },
   {
    "id": "V-01",
@@ -3988,8 +3990,10 @@
    "accept": "docs/research/mata-cctv.md bagian merek terisi dari manual resmi (Hikvision, Dahua, EZVIZ, Imou, Xiaomi, Tapo: RTSP/ONVIF atau hanya cloud, dengan URL dan tanggal); Mata punya pilihan sumber Kamera jembatan: halaman memberi berkas konfigurasi go2rtc berisi alamat kamera yang diketik pemilik (tanpa kata sandi tersimpan di Nadi), membuka WebRTC dari localhost, lalu menghitung seperti kamera biasa; uji otomatis dengan stream RTSP sintetis dari video korpus fixtures lewat go2rtc lokal (lisensi MIT dicatat ASSETS) dan e2e Mata menghitung kunjungan >= 90% seperti korpus; tidak ada stream yang dikirim ke server Nadi",
    "how": "docs/research/mata-cctv.md, W-02 Mata v2",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T21:49:46"
+   "status": "done",
+   "created": "2026-11-05T21:49:46",
+   "done": "2026-11-06T07:00:30",
+   "result": "f24bfc7 + f6bb8ae + eebaf0a: src/lib/mata/jembatan.ts (go2rtc.yaml di peramban, modul api/rtsp/webrtc, API 127.0.0.1 hanya /api/webrtc, tanpa STUN), merek dari manual resmi di docs/research/mata-cctv.md (Hikvision, Dahua, EZVIZ, Tapo; Xiaomi C300 tidak; Imou belum terverifikasi), LatarHidup latar median bergulir; jembatan.test 11/11, jejak-hidup.test 5/5; e2e/mata-jembatan.spec.ts produksi 5/5 kunjungan (kamera RTSP sintetis korpus pendek lewat go2rtc v1.9.15), permintaan keluar terbesar 991 bita; ASSETS go2rtc MIT"
   },
   {
    "id": "V-12",
@@ -4074,9 +4078,11 @@
    "accept": "untuk kamera baru, model (ringan, berat bila ragu) mengusulkan zona (pintu, kasir, antrean, rak) dari satu bingkai yang dikecilkan dan dikaburkan di perangkat (tanpa orang dapat dikenali); pengawas memeriksa poligon (di dalam 0..1, tidak bertumpuk, ada satu pintu); usulan menjadi draf zona yang disetujui pemilik, disimpan sebagai denah kamera; kamera yang sama berikutnya memakai denah tersimpan tanpa model (token 0); layar menulis 'Nadi sedang mempelajari format baru, sekali saja'",
    "how": "src/lib/mata/resep.ts, layar-mata.tsx",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-05T23:55:25",
-   "catatan": "wajib dibetulkan 6 Nov 2026: saat ditambah, argumen wajib ditulis \"wajib\" bukan \"1\" sehingga tercatat tidak wajib; maksudnya wajib (V-12 perintah Tristan, T-01A-D pecahan T-01 wajib)"
+   "catatan": "wajib dibetulkan 6 Nov 2026: saat ditambah, argumen wajib ditulis \"wajib\" bukan \"1\" sehingga tercatat tidak wajib; maksudnya wajib (V-12 perintah Tristan, T-01A-D pecahan T-01 wajib)",
+   "done": "2026-11-06T06:16:58",
+   "result": "a709ef1 + 826d6c2: migrasi vision_camera_layout md5 f8b29691 sama repo; supabase/tests/vision_camera_layout.test.sql 15/15; src/lib/mata/denah.test.ts 7/7 (salinan identik); Edge Function usul-denah v1; e2e/mata-denah.spec.ts produksi: usul pertama 2 baris pemakaian_ai, kamera sama kedua 0 (token 0); advisors: hanya WARN authenticated security definer (peran dicek di dalam)"
   },
   {
    "id": "V-13",
