@@ -64,7 +64,7 @@ export function HalamanUntuk({ slug, bahasa }: { slug: string; bahasa: Bahasa })
         </ul>
       </Bagian>
       <Bagian judul={T.fitur[bahasa]}>
-        <ul className="flex flex-wrap gap-x-6 gap-y-2">
+        <ul className="flex flex-wrap gap-x-6 gap-y-2" data-testid="fitur-jenis">
           {j.fitur.map((s) => {
             const f = k.fitur.find((x) => x.slug === s)!;
             return <li key={s}><Link href={`${awal}/fitur/${s}`} className={TAUTAN}>{f.nama}</Link></li>;

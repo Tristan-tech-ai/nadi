@@ -96,7 +96,7 @@ test("jenis usaha: menu yang tampil sama dengan modul paket di aplikasi, semua j
     await expect(page.getByTestId("hari-kerja").locator("li")).toHaveCount(3);
     const tampil = await page.getByTestId("modul-nyala").locator("li").evaluateAll((li) => li.map((x) => x.getAttribute("data-kode")));
     expect(tampil, j.slug).toEqual(MODUL.filter((m) => m.paket.includes(j.paket)).map((m) => m.kode));
-    for (const f of j.fitur) await expect(page.locator(`a[href="/fitur/${f}"]`).first(), `${j.slug} ${f}`).toBeVisible();
+    for (const f of j.fitur) await expect(page.getByTestId("fitur-jenis").locator(`a[href="/fitur/${f}"]`), `${j.slug} ${f}`).toBeVisible();
   }
   await page.goto("/integrasi");
   await expect(page.getByTestId("belum-sambung").locator("li")).toHaveCount(3);
