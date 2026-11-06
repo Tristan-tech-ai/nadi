@@ -4485,8 +4485,10 @@
    "accept": "cues.json dari timeline, efek rekaman CC0 dari pustaka skill (tanpa bunyi sintetis), musik berlisensi jelas dicatat, sound_pass.py: beat grid diperiksa, potongan besar di ketukan, -16 LUFS dan true peak < -4 dBFS diukur pada MP4 akhir (stereo dan mono), 5 titik waktu untuk didengar Tristan, CREDITS dan ASSETS",
    "how": "skill sound-effects",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-06T08:05:51"
+   "status": "done",
+   "created": "2026-11-06T08:05:51",
+   "done": "2026-11-06T08:55:20",
+   "result": "docs/promo/demo-v4/cues.json (105 cue dari beat sheet), sound_pass.py skill pada final_silent.mp4: efek rekaman CC0 (Freesound, Kenney; lisensi dicek di halaman sumber 6 Nov 2026), musik Rafael Krux CC BY 4.0 diulang sekali di batas birama, beat grid digeser 83 ms (librosa terkunci off-beat), MP4 akhir -16,4 LUFS true peak -4,7 dBFS stereo dan mono, 5 titik dengar 11,4/46,3/88,2/93,2/157,8, SOUND.md + CREDITS.txt, ASSETS; tanpa bunyi ketik (lisensi Mixkit tidak bisa dicek)"
   },
   {
    "id": "V-24",
@@ -4499,8 +4501,10 @@
    "accept": "render final 60 fps motion blur, REVIEW.md mencocokkan setiap beat cerita Tristan dengan bingkai film, menggantikan docs/promo/nadi-demo.mp4 dan potongan apps/web/public/video, catat yang belum",
    "how": "render.mjs skill",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-06T08:05:52"
+   "status": "done",
+   "created": "2026-11-06T08:05:52",
+   "done": "2026-11-06T08:55:20",
+   "result": "docs/promo/nadi-demo.mp4 v4 (204 dtk, 1920x1080 60 fps, motion blur 4 subframe, audio -16,4 LUFS), potongan apps/web/public/video dari film v4 (potong.py: lempar, feed, tagihan, gaji, mata + film web 1280x720), docs/promo/demo-v4/REVIEW.md: setiap beat cerita Tristan dicocokkan ke detik film, yang belum dicatat"
   }
  ]
 }

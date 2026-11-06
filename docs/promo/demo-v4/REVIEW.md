@@ -29,7 +29,7 @@ Film: `docs/promo/nadi-demo.mp4`, 204 dtk, 1920×1080 60 fps dengan motion blur 
 
 - **Efek:** 105 cue dari beat sheet, semuanya rekaman nyata CC0 (Freesound dan Kenney, lisensi dicek di halaman sumber 6 Nov 2026).
 - **Musik:** Rafael Krux, CC BY 4.0. Bagian tengahnya diulang sekali di batas birama.
-- **Kenyaringan:** diukur pada MP4 akhir dan dicatat di `SOUND.md`. Target -16 LUFS, true peak < -4 dBFS.
+- **Kenyaringan:** diukur pada MP4 akhir (`docs/promo/nadi-demo.mp4`): -16,4 LUFS terintegrasi, true peak -4,7 dBFS; hasil campuran mono sama (-16,4 LUFS, -4,7 dBFS). Rincian di `SOUND.md`, kredit di `CREDITS.txt`.
 - **Beat grid:** librosa terkunci di off-beat, jadi grid digeser 83 ms.
 - **Galat potongan terhadap ketukan:** sebagian besar di bawah 135 ms. Yang terbesar: 11,4 dtk (kalimat menerobos kamera), 46,3 (cap DITERIMA), 157,8 (ke peta panas), 88,2, dan 93,2.
 - **Lima titik untuk didengar Tristan dengan headphone:** 11,4 · 46,3 · 88,2 · 93,2 · 157,8.
