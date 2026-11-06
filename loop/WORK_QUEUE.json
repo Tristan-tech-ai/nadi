@@ -3780,8 +3780,10 @@
    "accept": "halaman publik (landing, /fitur/*, /panduan, /harga, /keamanan, /tentang, bantuan) memakai bahasa visual dan pembelajaran video (palet, tipografi, gerak, ilustrasi, tangkapan UI asli) dengan satu tujuan per halaman: orang paham masalahnya, melihat fitur bekerja, lalu mencoba /demo atau mendaftar; gerak mengikuti DIRECTION.md + skill animasi (prefers-reduced-motion); tangkapan layar 390/1440 terang/gelap ditinjau butir demi butir (memori feedback-detail-ui), axe 0 serius, Lighthouse >= 90; dikerjakan segera setelah V-07 selagi pedoman skill video masih dibaca",
    "how": "skill animate/emil-design-eng/impeccable; DIRECTION.md",
    "blocked_by": "V-07",
-   "status": "ready",
-   "created": "2026-11-05T20:01:08"
+   "status": "done",
+   "created": "2026-11-05T20:01:08",
+   "done": "2026-11-06T07:31:00",
+   "result": "d95ffab + 29e1ea2: bug produksi .gambar-baca (ilustrasi harga/panduan melayang menutupi judul) diperbaiki; film demo utuh di landing + potongan rekaman layar asli di /fitur/lempar, feed, tagihan, gaji, mata (diputar hanya saat terlihat, tidak saat prefers-reduced-motion, kontrol selalu ada); ajakan akhir di semua halaman pendukung; isi Sedang dibuat dan keamanan dikoreksi (T-01D, CCTV jembatan); e2e/halaman-publik.spec.ts produksi 2/2 (17 halaman x 390/1440 x terang/gelap: ilustrasi di bingkai, axe 0 serius, tanpa gulir samping; merah di produksi lama: 4 bingkai lepas); Lighthouse mobile / 98, /harga 100, /fitur/lempar 100, a11y 100, CLS 0"
   },
   {
    "id": "L-02",
@@ -3794,8 +3796,10 @@
    "accept": "docs/research/mekari/HALAMAN.md: peta halaman publik Mekari (landing, halaman fitur per modul, solusi per industri/peran, harga, integrasi, keamanan, pusat bantuan, studi kasus, sumber belajar) dengan URL + tanggal dilihat; daftar halaman Nadi yang kurang; halaman yang kurang dibuat (bukan salinan, isi Nadi sendiri) dengan e2e dan Lighthouse",
    "how": "docs/research/mekari/*, ekstensi peramban Chrome",
    "blocked_by": "V-07",
-   "status": "ready",
-   "created": "2026-11-05T20:01:08"
+   "status": "done",
+   "created": "2026-11-05T20:01:08",
+   "done": "2026-11-06T07:51:43",
+   "result": "43947451 + 7a04093: docs/research/mekari/HALAMAN.md (peta 345 halaman dari sitemap resmi Mekari 6 Nov 2026, susunan solusi/industri/integrasi, keputusan per jenis halaman); dibuat /untuk + 10 /untuk/<jenis> dan /integrasi (id + en), menu bawaan dari MODUL aplikasi; e2e/halaman-publik.spec.ts 3/3 di build gate lokal (36 halaman x 390/1440 x terang/gelap, modul tampil = MODUL per paket); Lighthouse mobile /untuk, /untuk/warung, /integrasi 100/100/100/100 CLS 0; deploy produksi tertahan batas deploy harian Vercel Hobby (status GitHub: rate limited, retry in 24 hours), terbit pada push berikutnya setelah pulih"
   },
   {
    "id": "V-10",
