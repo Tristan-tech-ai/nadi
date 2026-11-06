@@ -17,6 +17,7 @@ export const kamusId = {
   },
   pemilih: { label: "Bahasa", id: "Bahasa Indonesia", en: "English" },
   kaki: {
+    yangBaru: "Yang baru",
     kamusIstilah: "Kamus istilah usaha",
     pusatBantuan: "Pusat bantuan", alatGratis: "Alat gratis (gaji, THR, pesangon)",
     slogan: "Kertas kerja usaha kecil yang mengisi dirinya sendiri.",

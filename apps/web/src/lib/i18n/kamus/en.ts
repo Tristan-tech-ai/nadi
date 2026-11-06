@@ -16,6 +16,7 @@ export const kamusEn: Kamus = {
   },
   pemilih: { label: "Language", id: "Bahasa Indonesia", en: "English" },
   kaki: {
+    yangBaru: "What is new (Indonesian)",
     kamusIstilah: "Business glossary (Indonesian)",
     pusatBantuan: "Help center (Indonesian)", alatGratis: "Free tools (Indonesian)",
     slogan: "The small-business paperwork that fills itself in.",

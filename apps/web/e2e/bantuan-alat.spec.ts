@@ -6,6 +6,7 @@ import { formatRupiah } from "../src/lib/format";
 import { susunSlip, type PetaAturan } from "../src/lib/gaji/susun";
 import { hitungThr } from "../src/lib/gaji/thr";
 import { totalBaris } from "../src/lib/invoice/tagihan";
+import { susunSurat } from "../src/lib/surat/kalimat";
 
 // L-04 pusat bantuan dan L-05 alat gratis (halaman depan setara Mekari, tanpa login). Hasil kalkulator dibandingkan dengan
 // fungsi aplikasi yang sama dan aturan dari database yang sama, jadi angka publik tidak bisa diam-diam berbeda dari aplikasi.
@@ -60,7 +61,7 @@ test("pusat bantuan: kategori, cari tanpa JavaScript, artikel tugas dan artikel 
 test("alat gratis: gaji bersih dan THR sama dengan hitungan aplikasi", async ({ page }) => {
   test.skip(!E.NEXT_PUBLIC_SUPABASE_URL, "butuh .env.local");
   await page.goto("/alat");
-  await expect(page.getByTestId("kartu-alat")).toHaveCount(5);
+  await expect(page.getByTestId("kartu-alat")).toHaveCount(6);
   await page.goto("/alat/gaji");
   await expect(page.getByTestId("gaji-bersih")).toBeVisible();
   // Isian dikendalikan React: isi setelah hidrasi, lalu pastikan nilainya (temuan produksi: isian sebelum hidrasi hilang).
@@ -130,4 +131,32 @@ test("pembuat invoice dan slip gaji: total sama dengan rumus invoice aplikasi, l
   await expect(page.getByTestId("slip-cetak")).toContainText("Komang Ayu");
   await expect(page.getByTestId("gaji-bersih")).toBeVisible();
   await periksa(page, "alat-slip");
+});
+
+test("yang baru: catatan rilis bertanggal dengan tautan yang terbuka", async ({ page }) => {
+  await page.goto("/baru");
+  const butir = page.getByTestId("butir-rilis");
+  expect(await butir.count()).toBeGreaterThanOrEqual(8);
+  await periksa(page, "baru");
+  await butir.first().getByRole("link").click();
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  // Kaki halaman publik menautkan halaman depan baru.
+  for (const h of ["/bantuan", "/alat", "/kamus", "/baru"]) await expect(page.locator(`footer a[href="${h}"]`).first()).toBeAttached();
+});
+
+test("templat dokumen: kalimat surat sama dengan Surat keluar aplikasi, enam jenis bisa dipilih", async ({ page }) => {
+  await page.goto("/alat/dokumen");
+  await page.waitForLoadState("networkidle");
+  const f = page.getByTestId("pembuat-dokumen");
+  await f.getByLabel("Nama usaha").fill("Bengkel Maju");
+  await f.getByLabel("Nama karyawan").fill("Gede Wira");
+  await f.getByLabel("Mulai bekerja").fill("2024-03-01");
+  const harap = susunSurat("keterangan_kerja", { usaha: "Bengkel Maju", nama: "Gede Wira", mulai: "2024-03-01" });
+  await expect(page.getByTestId("pratinjau-dokumen")).toContainText(harap.isi[0]);
+  expect(await f.getByLabel("Jenis dokumen").locator("option").count()).toBe(6);
+  await f.getByLabel("Jenis dokumen").selectOption({ label: "Surat peringatan" });
+  await f.getByLabel("Pelanggaran").fill("terlambat masuk lima kali dalam sebulan");
+  await expect(page.getByTestId("pratinjau-dokumen")).toContainText("Surat peringatan pertama");
+  await expect(page.getByTestId("pratinjau-dokumen")).toContainText("terlambat masuk lima kali");
+  await periksa(page, "alat-dokumen");
 });

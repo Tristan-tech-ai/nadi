@@ -82,6 +82,7 @@ export function KakiPoster({ bahasa = "id" }: { bahasa?: Bahasa }) {
             <Link href="/bantuan">{kk.pusatBantuan}</Link>
             <Link href="/alat">{kk.alatGratis}</Link>
             <Link href="/kamus">{kk.kamusIstilah}</Link>
+            <Link href="/baru">{kk.yangBaru}</Link>
           </nav>
           <nav aria-label={kk.keamanan} style={{ display: "grid", gap: 10, alignContent: "start" }}>
             <b>Nadi</b>
