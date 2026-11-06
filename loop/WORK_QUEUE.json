@@ -4505,6 +4505,20 @@
    "created": "2026-11-06T08:05:52",
    "done": "2026-11-06T08:55:20",
    "result": "docs/promo/nadi-demo.mp4 v4 (204 dtk, 1920x1080 60 fps, motion blur 4 subframe, audio -16,4 LUFS), potongan apps/web/public/video dari film v4 (potong.py: lempar, feed, tagihan, gaji, mata + film web 1280x720), docs/promo/demo-v4/REVIEW.md: setiap beat cerita Tristan dicocokkan ke detik film, yang belum dicatat"
+  },
+  {
+   "id": "Q-42",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 60,
+   "size": "S",
+   "wajib": false,
+   "title": "Tambah orang di /app/orang lambat (sekitar 20 dtk, usaha uji A 28+ orang)",
+   "accept": "Waktu dari klik Tambah orang sampai baris tampil diukur sebelum dan sesudah di produksi; sesudah <= 3 dtk untuk usaha 50 orang; e2e auth staf kembali ke batas waktu bawaan 10 dtk",
+   "how": "Ukur bagian lambat (insert orang + pemicu, revalidatePath halaman berat, render daftar); perbaiki yang terbesar",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-06T09:52:55"
   }
  ]
 }

@@ -80,7 +80,7 @@ test("pemilik B tidak melihat usaha A", async ({ page }) => {
   await masukSebagai(page, E.E2E_EMAIL_B);
   await pastikanUsaha(page, "Toko Uji B", "Toko, grosir, minimarket");
   await page.goto("/app/perusahaan");
-  await expect(page.getByRole("main").getByText("Toko Uji B")).toBeVisible();
+  await expect(page.getByRole("main").locator("[data-pengguna]", { hasText: "Toko Uji B" })).toBeVisible();
   await expect(page.getByRole("main").getByText("Warung Uji A")).toHaveCount(0);
 });
 
@@ -122,7 +122,8 @@ test("pemilik membuat akun staf; staf masuk tanpa email dan ditolak di halaman p
   await page.getByLabel("Nama orang").fill(nama);
   await page.getByRole("button", { name: "Tambah" }).click();
   const baris = page.getByRole("listitem").filter({ hasText: nama });
-  await expect(baris).toBeVisible();
+  // Tambah orang di usaha uji A (28+ orang uji) butuh sampai 20 dtk di produksi: tugas Q-42 mengukur dan memperbaikinya.
+  await expect(baris).toBeVisible({ timeout: 30_000 });
   await baris.getByPlaceholder("PIN 6 angka").fill("246810");
   await baris.getByRole("button", { name: "Buat akun staf" }).click();
   await expect(baris.getByTestId("info-akun")).toContainText(`kode ${kode}`);
@@ -146,7 +147,9 @@ test("pemilik melihat Feed (keadaan kosong), navigasi bawah, dan share target me
   await expect(page.getByTestId("feed-kosong").or(page.getByTestId("kartu-diputuskan")).or(page.locator("[data-testid^=kartu]")).first()).toBeVisible();
   // U-01: navigasi utama menandai Hari ini (bilah bawah) atau Feed keputusan (sidebar/rail) sebagai halaman aktif.
   const nav = page.getByRole("navigation", { name: "Navigasi utama" });
-  await expect(nav.locator("a[aria-current=page]")).toHaveAttribute("href", "/app");
+  // Sidebar U-09: Feed bisa tampil di Disematkan dan di ruangnya; semua penanda halaman aktif harus menunjuk /app.
+  for (const a of await nav.locator("a[aria-current=page]").all()) await expect(a).toHaveAttribute("href", "/app");
+  await expect(nav.locator("a[aria-current=page]").first()).toBeVisible();
   const res = await page.request.post("/app/lempar/terima", { multipart: { berkas: { name: "nota.png", mimeType: "image/png", buffer: Buffer.from("89504e47", "hex") } }, maxRedirects: 0 });
   expect(res.status()).toBe(303);
   expect(res.headers()["location"]).toMatch(/\/app\/lempar\?berkas=[0-9a-f-]{36}$/);
