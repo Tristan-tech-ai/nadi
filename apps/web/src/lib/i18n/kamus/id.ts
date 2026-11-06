@@ -1737,7 +1737,7 @@ export const kamusId = {
   },
   poster: {
     "filmJudul": "Lihat Nadi bekerja",
-    "filmKet": "Film 4 menit 38 detik dari layar Nadi sungguhan, dengan data contoh.",
+    "filmKet": "Film 3 menit 24 detik dari layar Nadi asli, dengan data contoh.",
     "filmKredit": "Musik: Inspiring Advertising, Rafael Krux (filmmusic.io), CC BY 4.0. Rekaman CCTV: Shruthi Pradeep, Pexels.",
     "metaJudul": "Nadi: lempar notanya, Nadi yang merapikan",
     "metaDeskripsi": "Foto nota, surat dokter, atau slip gaji. Nadi membacanya dan menyiapkan catatan yang tinggal kamu setujui dari HP.",
@@ -1857,7 +1857,7 @@ export const kamusId = {
     "akhirContoh": "atau coba usaha contoh dulu",
     "sedangDibuat": "Sedang dibuat"
   },
-  halamanFitur: {"dipakai": "Dipakai untuk", "masalah": "Masalah yang dibereskan", "tanpaNadi": "Tanpa Nadi", "langkah": "Tiga langkah", "janji": "Yang tidak dilakukan AI", "pintu": "Coba atau lanjut", "masuk": "Berkas masuk", "menunggu": "Menunggu keputusanmu", "berikutnya": "Fitur berikutnya", "ya": "Ya", "tidak": "Tidak", "lihat": "Di layar Nadi", "klipKet": "Rekaman layar Nadi sungguhan dengan data contoh, tanpa suara."},
+  halamanFitur: {"dipakai": "Dipakai untuk", "masalah": "Masalah yang dibereskan", "tanpaNadi": "Tanpa Nadi", "langkah": "Tiga langkah", "janji": "Yang tidak dilakukan AI", "pintu": "Coba atau lanjut", "masuk": "Berkas masuk", "menunggu": "Menunggu keputusanmu", "berikutnya": "Fitur berikutnya", "ya": "Ya", "tidak": "Tidak", "lihat": "Di layar Nadi", "klipKet": "Layar Nadi asli dengan data contoh, tanpa suara."},
   fitur: [
     {
       "slug": "lempar",

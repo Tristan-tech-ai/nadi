@@ -1736,7 +1736,7 @@ export const kamusEn: Kamus = {
   },
   poster: {
     "filmJudul": "Watch Nadi work",
-    "filmKet": "A 4 minute 38 second film of Nadi's real screens, with sample data.",
+    "filmKet": "A 3 minute 24 second film of Nadi's real screens, with sample data.",
     "filmKredit": "Music: Inspiring Advertising, Rafael Krux (filmmusic.io), CC BY 4.0. CCTV footage: Shruthi Pradeep, Pexels.",
     "metaJudul": "Nadi: drop in the receipt, Nadi sorts it out",
     "metaDeskripsi": "Snap a receipt, a doctor's note, or a payslip. Nadi reads it and prepares a record you approve from your phone.",
@@ -1856,7 +1856,7 @@ export const kamusEn: Kamus = {
     "akhirContoh": "or try the sample business first",
     "sedangDibuat": "In progress"
   },
-  halamanFitur: {"dipakai": "Used for", "masalah": "Problems it fixes", "tanpaNadi": "Without Nadi", "langkah": "Three steps", "janji": "What the AI never does", "pintu": "Try it or keep going", "masuk": "File received", "menunggu": "Waiting for you", "berikutnya": "Next feature", "ya": "Yes", "tidak": "No", "lihat": "On Nadi's screen", "klipKet": "A real recording of Nadi's screen with sample data, no sound."},
+  halamanFitur: {"dipakai": "Used for", "masalah": "Problems it fixes", "tanpaNadi": "Without Nadi", "langkah": "Three steps", "janji": "What the AI never does", "pintu": "Try it or keep going", "masuk": "File received", "menunggu": "Waiting for you", "berikutnya": "Next feature", "ya": "Yes", "tidak": "No", "lihat": "On Nadi's screen", "klipKet": "Nadi's real screens with sample data, no sound."},
   fitur: [
     {
       "slug": "lempar",
