@@ -6,6 +6,6 @@ export const metadata: Metadata = {
   description: "Lihat Feed Keputusan Nadi di usaha contoh: warung makan dan toko grosir dengan data karangan.",
 };
 
-export default function DemoWarung() {
-  return <HalamanDemo kunci="fnb" />;
+export default function DemoWarung({ searchParams }: PageProps<"/demo">) {
+  return <HalamanDemo kunci="fnb" galat={searchParams.then((sp) => (typeof sp.galat === "string" ? sp.galat : undefined))} />;
 }

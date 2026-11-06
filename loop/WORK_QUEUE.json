@@ -4519,6 +4519,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-06T09:52:55"
+  },
+  {
+   "id": "L-03",
+   "fase": "L",
+   "kind": "build",
+   "priority": 90,
+   "size": "M",
+   "wajib": true,
+   "title": "C:/Program Files/Git/demo langsung masuk UI aplikasi asli (usaha contoh, baca saja)",
+   "accept": "Klik Buka usaha contoh di /demo membuka /app Toko Bu Sari sebagai pemilik tanpa daftar; 12 halaman utama terbuka tanpa galat dengan pita Mode coba; tambah orang ditolak dan tidak tersimpan; tidak ada tulis/unggah/AI dari sesi coba (tes SQL); keluar kembali ke /demo; e2e/mode-coba.spec.ts lulus di produksi",
+   "how": "Sesi anonim Supabase + pre-request baca saja (migrasi usaha_tamu)",
+   "blocked_by": "Butuh Tristan menyalakan Allow anonymous sign-ins (setelan autentikasi, UNTUK-TRISTAN 6 Nov); kode + migrasi + tes SQL 17/17 sudah di produksi",
+   "status": "blocked",
+   "created": "2026-11-06T10:19:28"
   }
  ]
 }

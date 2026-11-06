@@ -71,6 +71,7 @@ export const kamusEn: Kamus = {
     akhirContoh: "or open the sample business first",
   },
   aplikasi: {
+    modeCoba: "Try mode", modeCobaKet: "This is a sample business with made-up data. Every screen opens; changes are not saved and AI is not used.", buatAkunCoba: "Create an account for your business", keluarCoba: "Leave try mode", galatCoba: "Try mode is view only. Create an account to save changes in your own business.",
     lompat: "Skip to content",
     beranda: "App home",
     navUtama: "Main navigation",

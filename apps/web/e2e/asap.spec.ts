@@ -163,12 +163,12 @@ test("coba usaha contoh dari landing: Feed demo tampil < 3 dtk, baca-saja, axe b
   const feed = page.getByTestId("feed-demo").filter({ visible: true });
   await expect(feed.locator("article")).toHaveCount(4);
   expect(Date.now() - mulai).toBeLessThan(3000);
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Warung Makan Bu Ratna (contoh)");
+  await expect(page.getByRole("heading", { level: 2, name: "Warung Makan Bu Ratna (contoh)" })).toBeVisible();
   const kartu = feed.locator("article", { hasText: "Catat izin sakit Komang Ayu" });
   await kartu.getByRole("button", { name: "Setujui" }).click();
   await expect(kartu.getByTestId("hasil-demo")).toContainText("tidak disimpan");
   await page.getByRole("link", { name: "Toko grosir" }).click();
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Toko Grosir Sinar Jaya (contoh)");
+  await expect(page.getByRole("heading", { level: 2, name: "Toko Grosir Sinar Jaya (contoh)" })).toBeVisible();
   await expect(feed.locator("article")).toHaveCount(3);
   for (const [lebar, tinggi] of [[390, 844], [1440, 900]]) {
     for (const skema of ["light", "dark"] as const) {

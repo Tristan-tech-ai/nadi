@@ -72,6 +72,7 @@ export const kamusId = {
     akhirContoh: "atau buka usaha contoh dulu",
   },
   aplikasi: {
+    modeCoba: "Mode coba", modeCobaKet: "Ini usaha contoh dengan data karangan. Semua layar bisa dibuka; perubahan tidak disimpan dan AI tidak dipakai.", buatAkunCoba: "Buat akun untuk usahamu", keluarCoba: "Keluar dari mode coba", galatCoba: "Mode coba hanya melihat. Buat akun untuk menyimpan perubahan di usahamu sendiri.",
     lompat: "Lompat ke isi",
     beranda: "Beranda aplikasi",
     navUtama: "Navigasi utama",

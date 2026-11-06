@@ -143,9 +143,23 @@ export async function daftar(_: HasilForm, form: FormData): Promise<HasilForm> {
 
 export async function keluar() {
   const supabase = await createClient();
-  await catatAktivitas(supabase, "keluar");
+  const { data } = await supabase.auth.getClaims();
+  const tamu = data?.claims?.is_anonymous === true;
+  if (!tamu) await catatAktivitas(supabase, "keluar");
   await supabase.auth.signOut();
-  redirect("/masuk");
+  redirect(tamu ? "/demo" : "/masuk");
+}
+
+/**
+ * L-03: buka usaha contoh di aplikasi sungguhan lewat sesi anonim Supabase (baca saja, ditegakkan database). Yang sudah masuk
+ * dengan akun sendiri langsung ke aplikasinya; sesi akunnya tidak diganti diam-diam.
+ */
+export async function masukCoba() {
+  const supabase = await createClient();
+  const { data } = await supabase.auth.getClaims();
+  if (data?.claims?.sub) redirect("/app");
+  const { error } = await supabase.auth.signInAnonymously();
+  redirect(error ? "/demo?galat=coba" : "/app");
 }
 
 /** U-07: masuk/daftar dengan Google (alur PKCE @supabase/ssr). Verifier disimpan di kuki oleh klien server, lalu /auth/konfirmasi menukar kodenya. */

@@ -11,6 +11,8 @@ import { Rupiah } from "@/components/ui/rupiah";
 import type { Alur } from "@/lib/alur/alur";
 import { formatAngka } from "@/lib/format";
 import { anonRpc } from "@/lib/mcp/http";
+import { masukCoba } from "@/app/auth-actions";
+import { cobaAktif } from "@/lib/auth/tamu";
 
 type Demo = {
   usaha: { nama: string };
@@ -42,20 +44,24 @@ async function ambilDemo(kunci: "fnb" | "toko") {
   }
 }
 
-export function HalamanDemo({ kunci }: { kunci: "fnb" | "toko" }) {
+export function HalamanDemo({ kunci, galat }: { kunci: "fnb" | "toko"; galat?: Promise<string | undefined> }) {
   return (
     <main className="mx-auto w-full max-w-2xl px-5 pt-6 pb-16">
       <div className="flex items-center justify-between">
         <Link href="/" aria-label="Beranda Nadi"><LogoNadi /></Link>
         <Link href="/masuk" className="text-sm font-semibold underline-offset-4 hover:underline">Masuk</Link>
       </div>
-      <section aria-label="Tentang usaha contoh" className="mt-6 rounded-[var(--radius-kartu)] border border-garis p-4">
-        <p>Kamu sedang melihat <span className="stabilo">usaha contoh</span>. Semua nama dan angka karangan; tombol di sini tidak menyimpan apa pun.</p>
-        <Link href="/daftar" className="mt-3 inline-flex h-11 items-center rounded-[var(--radius-isian)] border border-garis-kuat px-5 text-sm font-semibold transition-[background-color] duration-150 hover:bg-kertas-2">
-          Buat akun untuk usahamu
-        </Link>
+      <section aria-labelledby="judul-coba" className="mt-6 rounded-[var(--radius-kartu)] border border-garis p-5" data-testid="coba-aplikasi">
+        <h1 id="judul-coba" className="font-judul text-3xl font-extrabold tracking-tight">Coba Nadi tanpa daftar</h1>
+        <p className="mt-2">Masuk ke aplikasi Nadi yang sebenarnya, di <span className="stabilo">usaha contoh Toko Bu Sari</span>. Semua nama dan angka karangan.
+          Semua layar bisa dibuka sebagai pemilik; perubahan tidak disimpan dan AI tidak dipakai.</p>
+        <Suspense fallback={<div className="mt-4 h-12 w-56 animate-pulse rounded-[var(--radius-isian)] bg-kertas-2" aria-hidden />}>
+          <TombolCoba galat={galat} />
+        </Suspense>
+        <Link href="/daftar" className="mt-4 inline-block text-sm font-semibold underline underline-offset-4">Buat akun untuk usahamu</Link>
       </section>
-      <nav aria-label="Pilih usaha contoh" className="mt-6 flex gap-2">
+      <p className="mt-8 text-sm text-tinta-2">Atau lihat sekilas tanpa masuk:</p>
+      <nav aria-label="Pilih usaha contoh" className="mt-3 flex gap-2">
         {PILIHAN.map((p) => (
           <Link key={p.kunci} href={p.href} aria-current={p.kunci === kunci ? "page" : undefined}
             className="rounded-full border border-garis px-4 py-2 text-sm font-semibold aria-[current=page]:border-tinta aria-[current=page]:bg-tinta aria-[current=page]:text-kertas">
@@ -71,6 +77,19 @@ export function HalamanDemo({ kunci }: { kunci: "fnb" | "toko" }) {
 }
 
 
+/** Tombol masuk mode coba; bila masuk anonim belum dinyalakan di Supabase, Nadi berkata jujur, bukan tombol yang gagal. */
+async function TombolCoba({ galat }: { galat?: Promise<string | undefined> }) {
+  const [aktif, g] = await Promise.all([cobaAktif(), galat]);
+  return <>
+    {g === "coba" ? <p role="alert" className="mt-4 rounded-[var(--radius-isian)] border border-cap px-3 py-2 text-sm text-cap">Usaha contoh belum bisa dibuka. Coba lagi sebentar, atau lihat sekilas di bawah.</p> : null}
+    {aktif ? (
+      <form action={masukCoba} className="mt-4">
+        <button type="submit" className="inline-flex h-12 items-center rounded-[var(--radius-isian)] bg-tinta px-5 font-semibold text-kertas transition-[background-color] duration-150 hover:bg-tinta/90">Buka usaha contoh</button>
+      </form>
+    ) : <p className="mt-4 text-sm text-tinta-2" data-testid="coba-belum">Mode coba sedang disiapkan. Sementara itu lihat sekilas di bawah, atau buat akun gratis.</p>}
+  </>;
+}
+
 async function IsiDemo({ kunci }: { kunci: "fnb" | "toko" }) {
   const d = await ambilDemo(kunci);
   return (
@@ -79,7 +98,7 @@ async function IsiDemo({ kunci }: { kunci: "fnb" | "toko" }) {
           <p role="alert" className="mt-8 text-tinta-2">Usaha contoh sedang tidak bisa dibuka. Coba lagi sebentar.</p>
         ) : (
           <>
-            <h1 className="mt-8 font-judul text-3xl font-extrabold tracking-tight">{d.usaha.nama}</h1>
+            <h2 className="mt-8 font-judul text-2xl font-extrabold tracking-tight">{d.usaha.nama}</h2>
             <dl className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
               <div className="rounded-[var(--radius-kartu)] bg-kertas-2 p-4">
                 <dt className="text-sm text-tinta-2">Belanja 7 hari</dt>

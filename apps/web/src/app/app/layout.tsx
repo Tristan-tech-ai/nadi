@@ -79,6 +79,20 @@ async function Navigasi() {
       lepas: en ? "Unpin {x}" : "Lepas {x} dari Disematkan" }} />;
 }
 
+/** L-03: pita mode coba di setiap layar sesi anonim, supaya jelas kenapa simpan tidak berhasil dan ke mana untuk mulai sungguhan. */
+async function PitaCoba() {
+  const sesi = await bacaSesi();
+  if (!sesi?.tamu) return null;
+  const t = ambilKamus(await bahasaAplikasi(sesi.bahasa)).aplikasi;
+  return (
+    <div role="note" data-testid="pita-coba" className="flex flex-wrap items-center gap-x-4 gap-y-1 border-b border-garis bg-kertas-2 px-4 py-2 text-sm min-[600px]:pl-24 min-[1200px]:pl-68 print:hidden">
+      <p><span className="stabilo font-semibold">{t.modeCoba}</span> {t.modeCobaKet}</p>
+      <Link href="/daftar" className="font-semibold underline underline-offset-4">{t.buatAkunCoba}</Link>
+      <form action={keluar}><button type="submit" className="text-tinta-2 underline underline-offset-4">{t.keluarCoba}</button></form>
+    </div>
+  );
+}
+
 export default function LayoutApp({ children }: LayoutProps<"/app">) {
   return (
     <div className="flex min-h-full flex-1 flex-col">
@@ -86,6 +100,7 @@ export default function LayoutApp({ children }: LayoutProps<"/app">) {
       <Suspense fallback={<TautanKepala lompat={ambilKamus("id").aplikasi.lompat} beranda={ambilKamus("id").aplikasi.beranda} cari="Cari" />}>
         <Kepala />
       </Suspense>
+      <Suspense fallback={null}><PitaCoba /></Suspense>
       <div id="isi" tabIndex={-1} className="kerangka-isi flex flex-1 flex-col focus:outline-none min-[600px]:pl-20 min-[1200px]:pl-64 print:pl-0">{children}</div>
       <Suspense fallback={<div className="h-14 border-t border-garis" aria-hidden />}>
         <Navigasi />
