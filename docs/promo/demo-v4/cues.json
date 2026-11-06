@@ -1,0 +1,528 @@
+[
+ {
+  "t": 2.5,
+  "type": "movement",
+  "desc": "berkas merenggang"
+ },
+ {
+  "t": 5.0,
+  "type": "hover_or_small_ui",
+  "desc": "kata 1"
+ },
+ {
+  "t": 6.2,
+  "type": "hover_or_small_ui",
+  "desc": "kata 2"
+ },
+ {
+  "t": 7.4,
+  "type": "hover_or_small_ui",
+  "desc": "kata 3"
+ },
+ {
+  "t": 8.5,
+  "type": "build_up",
+  "desc": "riser ke terowongan",
+  "dur": 3.4
+ },
+ {
+  "t": 11.4,
+  "type": "scene_cut",
+  "desc": "kalimat menerobos kamera"
+ },
+ {
+  "t": 12.2,
+  "type": "movement",
+  "desc": "masuk terowongan"
+ },
+ {
+  "t": 15.0,
+  "type": "movement",
+  "desc": "terowongan makin cepat"
+ },
+ {
+  "t": 17.9,
+  "type": "reveal",
+  "desc": "keluar ke lapangan kunyit"
+ },
+ {
+  "t": 18.9,
+  "type": "appear",
+  "desc": "Mulai Rp0"
+ },
+ {
+  "t": 22.2,
+  "type": "scene_cut",
+  "desc": "tarik mundur ke koin"
+ },
+ {
+  "t": 24.4,
+  "type": "movement",
+  "desc": "koin dilempar"
+ },
+ {
+  "t": 28.6,
+  "type": "reveal",
+  "desc": "koin masuk kotak Lempar"
+ },
+ {
+  "t": 29.7,
+  "type": "appear",
+  "desc": "berkas 1 jatuh"
+ },
+ {
+  "t": 30.06,
+  "type": "appear",
+  "desc": "berkas 2 jatuh"
+ },
+ {
+  "t": 30.42,
+  "type": "appear",
+  "desc": "berkas 3 jatuh"
+ },
+ {
+  "t": 30.78,
+  "type": "appear",
+  "desc": "berkas 4 jatuh"
+ },
+ {
+  "t": 31.14,
+  "type": "appear",
+  "desc": "berkas 5 jatuh"
+ },
+ {
+  "t": 31.5,
+  "type": "appear",
+  "desc": "berkas 6 jatuh"
+ },
+ {
+  "t": 31.86,
+  "type": "appear",
+  "desc": "berkas 7 jatuh"
+ },
+ {
+  "t": 32.22,
+  "type": "appear",
+  "desc": "berkas 8 jatuh"
+ },
+ {
+  "t": 32.58,
+  "type": "appear",
+  "desc": "berkas 9 jatuh"
+ },
+ {
+  "t": 34.2,
+  "type": "hover_or_small_ui",
+  "desc": "memuat"
+ },
+ {
+  "t": 35.7,
+  "type": "success",
+  "desc": "selesai dibaca"
+ },
+ {
+  "t": 36.2,
+  "type": "hover_or_small_ui",
+  "desc": "siap disetujui 1"
+ },
+ {
+  "t": 36.62,
+  "type": "hover_or_small_ui",
+  "desc": "siap disetujui 2"
+ },
+ {
+  "t": 37.04,
+  "type": "hover_or_small_ui",
+  "desc": "siap disetujui 3"
+ },
+ {
+  "t": 37.46,
+  "type": "hover_or_small_ui",
+  "desc": "siap disetujui 4"
+ },
+ {
+  "t": 37.88,
+  "type": "hover_or_small_ui",
+  "desc": "siap disetujui 5"
+ },
+ {
+  "t": 38.6,
+  "type": "scene_cut",
+  "desc": "kalimat tahu dulu"
+ },
+ {
+  "t": 41.45,
+  "type": "hover_or_small_ui",
+  "desc": "sorot kalau disetujui"
+ },
+ {
+  "t": 42.4,
+  "type": "click",
+  "desc": "lihat rincian"
+ },
+ {
+  "t": 43.5,
+  "type": "appear",
+  "desc": "akan ditambah"
+ },
+ {
+  "t": 46.15,
+  "type": "click",
+  "desc": "setujui"
+ },
+ {
+  "t": 46.3,
+  "type": "reveal",
+  "desc": "cap diterima"
+ },
+ {
+  "t": 48.6,
+  "type": "movement",
+  "desc": "koin melompat"
+ },
+ {
+  "t": 50.0,
+  "type": "movement",
+  "desc": "koin menggelinding"
+ },
+ {
+  "t": 56.0,
+  "type": "scene_cut",
+  "desc": "ke obrolan"
+ },
+ {
+  "t": 56.6,
+  "type": "appear",
+  "desc": "pesan obrolan"
+ },
+ {
+  "t": 59.4,
+  "type": "appear",
+  "desc": "pesan obrolan"
+ },
+ {
+  "t": 61.8,
+  "type": "appear",
+  "desc": "pesan obrolan"
+ },
+ {
+  "t": 65.0,
+  "type": "appear",
+  "desc": "pesan obrolan"
+ },
+ {
+  "t": 69.0,
+  "type": "appear",
+  "desc": "pesan obrolan"
+ },
+ {
+  "t": 61.2,
+  "type": "success",
+  "desc": "alat Nadi selesai"
+ },
+ {
+  "t": 68.5,
+  "type": "success",
+  "desc": "alat Nadi selesai"
+ },
+ {
+  "t": 74.4,
+  "type": "scene_cut",
+  "desc": "ke tinjau draf"
+ },
+ {
+  "t": 75.0,
+  "type": "hover_or_small_ui",
+  "desc": "baris 1"
+ },
+ {
+  "t": 75.78,
+  "type": "hover_or_small_ui",
+  "desc": "baris 2"
+ },
+ {
+  "t": 76.56,
+  "type": "hover_or_small_ui",
+  "desc": "baris 3"
+ },
+ {
+  "t": 77.34,
+  "type": "hover_or_small_ui",
+  "desc": "baris 4"
+ },
+ {
+  "t": 78.12,
+  "type": "hover_or_small_ui",
+  "desc": "baris 5"
+ },
+ {
+  "t": 78.9,
+  "type": "hover_or_small_ui",
+  "desc": "baris 6"
+ },
+ {
+  "t": 79.68,
+  "type": "hover_or_small_ui",
+  "desc": "baris 7"
+ },
+ {
+  "t": 80.46,
+  "type": "hover_or_small_ui",
+  "desc": "baris 8"
+ },
+ {
+  "t": 84.65,
+  "type": "click",
+  "desc": "terapkan"
+ },
+ {
+  "t": 85.0,
+  "type": "success",
+  "desc": "diterapkan"
+ },
+ {
+  "t": 88.2,
+  "type": "scene_cut",
+  "desc": "kalimat kamu memutuskan"
+ },
+ {
+  "t": 91.0,
+  "type": "scene_cut",
+  "desc": "kalimat tagih"
+ },
+ {
+  "t": 93.2,
+  "type": "scene_cut",
+  "desc": "ke tagihan publik"
+ },
+ {
+  "t": 96.4,
+  "type": "movement",
+  "desc": "koin terbang ke QRIS"
+ },
+ {
+  "t": 98.3,
+  "type": "success",
+  "desc": "cocok dengan mutasi"
+ },
+ {
+  "t": 99.0,
+  "type": "reveal",
+  "desc": "cap lunas"
+ },
+ {
+  "t": 104.0,
+  "type": "scene_cut",
+  "desc": "kalimat gaji"
+ },
+ {
+  "t": 106.4,
+  "type": "scene_cut",
+  "desc": "ke draf gaji"
+ },
+ {
+  "t": 108.7,
+  "type": "error_or_tech",
+  "desc": "ditahan"
+ },
+ {
+  "t": 114.0,
+  "type": "scene_cut",
+  "desc": "kalimat janggal"
+ },
+ {
+  "t": 116.6,
+  "type": "scene_cut",
+  "desc": "ke alur"
+ },
+ {
+  "t": 122.05,
+  "type": "click",
+  "desc": "buat alur"
+ },
+ {
+  "t": 122.4,
+  "type": "success",
+  "desc": "alur aktif"
+ },
+ {
+  "t": 123.6,
+  "type": "scene_cut",
+  "desc": "ke diagram"
+ },
+ {
+  "t": 125.15,
+  "type": "reveal",
+  "desc": "invoice 1 lunas"
+ },
+ {
+  "t": 125.75,
+  "type": "appear",
+  "desc": "kerja 1 masuk"
+ },
+ {
+  "t": 126.85,
+  "type": "success",
+  "desc": "invoice 2 lunas"
+ },
+ {
+  "t": 127.45,
+  "type": "appear",
+  "desc": "kerja 2 masuk"
+ },
+ {
+  "t": 128.55,
+  "type": "success",
+  "desc": "invoice 3 lunas"
+ },
+ {
+  "t": 129.15,
+  "type": "appear",
+  "desc": "kerja 3 masuk"
+ },
+ {
+  "t": 131.0,
+  "type": "scene_cut",
+  "desc": "kalimat tanya"
+ },
+ {
+  "t": 133.4,
+  "type": "scene_cut",
+  "desc": "ke tanya data"
+ },
+ {
+  "t": 135.05,
+  "type": "click",
+  "desc": "tanya"
+ },
+ {
+  "t": 135.3,
+  "type": "appear",
+  "desc": "jawaban"
+ },
+ {
+  "t": 139.0,
+  "type": "movement",
+  "desc": "koin di denah"
+ },
+ {
+  "t": 140.4,
+  "type": "movement",
+  "desc": "kamera menunduk"
+ },
+ {
+  "t": 150.6,
+  "type": "error_or_tech",
+  "desc": "gambar menjadi kotak-kotak"
+ },
+ {
+  "t": 152.2,
+  "type": "appear",
+  "desc": "angka masuk"
+ },
+ {
+  "t": 152.32,
+  "type": "appear",
+  "desc": "angka keluar"
+ },
+ {
+  "t": 155.4,
+  "type": "scene_cut",
+  "desc": "kalimat lorong"
+ },
+ {
+  "t": 157.8,
+  "type": "scene_cut",
+  "desc": "ke peta panas"
+ },
+ {
+  "t": 163.0,
+  "type": "scene_cut",
+  "desc": "ke pemindai"
+ },
+ {
+  "t": 164.6,
+  "type": "error_or_tech",
+  "desc": "format belum dikenal"
+ },
+ {
+  "t": 166.4,
+  "type": "movement",
+  "desc": "koin menjadi lensa"
+ },
+ {
+  "t": 168.4,
+  "type": "hover_or_small_ui",
+  "desc": "bagian 1 menyala"
+ },
+ {
+  "t": 169.8,
+  "type": "hover_or_small_ui",
+  "desc": "bagian 2 menyala"
+ },
+ {
+  "t": 171.2,
+  "type": "hover_or_small_ui",
+  "desc": "bagian 3 menyala"
+ },
+ {
+  "t": 173.8,
+  "type": "movement",
+  "desc": "pemindai baru terbentuk"
+ },
+ {
+  "t": 176.5,
+  "type": "click",
+  "desc": "centang 1"
+ },
+ {
+  "t": 177.3,
+  "type": "click",
+  "desc": "centang 2"
+ },
+ {
+  "t": 178.1,
+  "type": "click",
+  "desc": "centang 3"
+ },
+ {
+  "t": 180.6,
+  "type": "success",
+  "desc": "struk terbaca"
+ },
+ {
+  "t": 183.2,
+  "type": "success",
+  "desc": "struk terbaca"
+ },
+ {
+  "t": 184.6,
+  "type": "success",
+  "desc": "struk terbaca"
+ },
+ {
+  "t": 181.2,
+  "type": "appear",
+  "desc": "biaya AI Rp0"
+ },
+ {
+  "t": 188.0,
+  "type": "scene_cut",
+  "desc": "ke perangkat"
+ },
+ {
+  "t": 195.2,
+  "type": "movement",
+  "desc": "lemparan terakhir"
+ },
+ {
+  "t": 197.6,
+  "type": "reveal",
+  "desc": "koin mendarat menjadi logo"
+ },
+ {
+  "t": 198.6,
+  "type": "appear",
+  "desc": "kalimat penutup"
+ }
+]

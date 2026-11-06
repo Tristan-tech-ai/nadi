@@ -1,0 +1,57 @@
+/* Film demo v4. Warna Nadi (DIRECTION.md): kertas #F6F2EA, tinta #1C1B18, kunyit #E9A825, cap #B4372A, daun #23704A, laut #2D5B86. */
+:root { --kertas: #F6F2EA; --kertas2: #EFE9DD; --tinta: #1C1B18; --tinta2: #5B574F; --garis: #DDD5C6; --kunyit: #E9A825; --cap: #B4372A; --daun: #23704A; --laut: #2D5B86; --malam: #121110; }
+html, body { margin: 0; background: #0d0d0c; }
+#panggung { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--malam); font-family: "Jakarta", sans-serif; color: var(--tinta); transform-origin: 0 0; }
+#panggung * { box-sizing: border-box; }
+.lapis { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden; visibility: hidden; }
+.titik { position: absolute; left: 0; top: 0; will-change: transform, opacity; }
+.nowrap { white-space: nowrap; }
+.dunia { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-style: preserve-3d; transform-origin: 0 0; }
+
+/* Kalimat layar: kecil, membesar lewat kamera (explainer-default). */
+.kalimat { position: absolute; left: 0; top: 0; white-space: nowrap; font-weight: 600; letter-spacing: -0.01em; }
+.kata { display: inline-block; will-change: transform, opacity; }
+.sorot { position: absolute; z-index: -1; background: var(--kunyit); border-radius: 4px; transform-origin: 0 50%; }
+
+/* Berkas berserakan babak A. */
+.berkas { position: absolute; left: 0; top: 0; width: 230px; height: 290px; border-radius: 14px; background: #FFFDF8; box-shadow: 0 2px 0 rgba(0,0,0,.08), 0 18px 40px rgba(0,0,0,.28); overflow: hidden; backface-visibility: hidden; }
+.berkas .pra { position: absolute; left: 0; top: 0; width: 230px; height: 214px; overflow: hidden; background: #fff; border-bottom: 1px solid #ECE6DA; }
+.berkas .pra img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.berkas .kaki { position: absolute; left: 14px; right: 14px; bottom: 16px; display: flex; gap: 10px; align-items: center; }
+.berkas .lencana { flex: none; font-weight: 800; font-size: 13px; color: #fff; padding: 4px 8px; border-radius: 6px; letter-spacing: .02em; }
+.berkas .nama { font-size: 14px; font-weight: 600; color: var(--tinta2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.berkas .lipat { position: absolute; right: 0; top: 0; width: 34px; height: 34px; background: linear-gradient(225deg, var(--malam) 50%, #E6DFD2 50%); } /* slop-ok: lipatan sudut kertas */
+.isi-grid { position: absolute; inset: 18px; display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 22px; gap: 3px; }
+.isi-grid i { background: #E3EFE7; border-radius: 2px; }
+.isi-grid i.k { background: #1E7145; opacity: .8; }
+.isi-baris { position: absolute; inset: 22px 18px; display: grid; gap: 11px; align-content: start; }
+.isi-baris i { height: 9px; border-radius: 5px; background: #E4DED2; }
+.isi-chat { position: absolute; inset: 16px; display: grid; gap: 8px; align-content: start; }
+.isi-chat i { height: 26px; border-radius: 13px; background: #E7F4EA; width: 70%; }
+.isi-chat i.kanan { justify-self: end; background: #DDEBF7; width: 60%; }
+.isi-struk { position: absolute; left: 52px; right: 52px; top: 14px; bottom: 0; background: #FAF8F2; box-shadow: 0 0 0 1px #E8E2D6; display: grid; gap: 8px; align-content: start; padding: 14px 10px; transform: rotate(-3deg); }
+.isi-struk i { height: 6px; background: #CFC7B8; border-radius: 3px; }
+
+/* Terowongan harga babak B. */
+.terowongan { position: absolute; left: 960px; top: 540px; width: 0; height: 0; transform-style: preserve-3d; }
+.harga { position: absolute; left: 0; top: 0; width: 720px; height: 400px; border-radius: 20px; background: #1F1D1A; border: 1px solid #3A3631; color: #ECE7DD; padding: 40px 46px; display: grid; align-content: space-between; backface-visibility: hidden; }
+.harga .jenis { font-size: 30px; font-weight: 600; color: #A8A196; }
+.harga .rp { font-size: 76px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
+.harga .satuan { font-size: 28px; color: #A8A196; }
+.cincin { position: absolute; left: 0; top: 0; width: 1500px; height: 900px; border: 2px solid rgba(233,168,37,.16); border-radius: 26px; }
+.kecil-sumber { position: absolute; left: 96px; bottom: 64px; font-size: 20px; color: #8E877B; white-space: nowrap; }
+
+/* Lapangan kunyit dan koin. */
+.lapangan { position: absolute; inset: 0; background: var(--kunyit); }
+.koin { position: absolute; left: 0; top: 0; width: 520px; height: 520px; border-radius: 50%; transform-style: preserve-3d; }
+.koin .muka, .koin .balik { position: absolute; inset: 0; border-radius: 50%; backface-visibility: hidden; overflow: hidden; }
+.koin canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.koin .balik { transform: rotateY(180deg); }
+
+/* Area Lempar dan riak. */
+.riak { position: absolute; left: 0; top: 0; border: 7px solid var(--kunyit); border-radius: 50%; box-shadow: 0 0 0 3px rgba(28,27,24,.18), inset 0 0 0 3px rgba(255,253,248,.8); }
+
+/* Pratinjau (tanpa ?render). */
+#kendali { position: fixed; left: 12px; bottom: 12px; display: flex; gap: 10px; align-items: center; font: 14px sans-serif; color: #ddd; z-index: 10; }
+#kendali input { width: 60vw; }
+body.render #kendali { display: none; }
