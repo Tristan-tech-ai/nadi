@@ -42,6 +42,8 @@ test("mode coba: /demo masuk ke aplikasi sungguhan, semua layar terbuka, perubah
   for (const lebar of [390, 1440]) {
     await page.setViewportSize({ width: lebar, height: 900 });
     await page.goto("/app");
+    await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
+    await page.waitForLoadState("networkidle");
     await page.screenshot({ path: test.info().outputPath(`coba-app-${lebar}.png`) });
   }
 
