@@ -185,7 +185,13 @@ const ALAT = [["hari-1440", 1440, 900, 0.62, 520, 560, 26], ["hari-768", 768, 10
 const alatK = ALAT.map(([nama, w, h, s, x, y, r]) => {
   const bingkai = el("div", "titik", camK); bingkai.style.cssText += `;width:${w * s + 28}px;height:${h * s + 28}px;border-radius:${r}px;background:#1C1B18;padding:14px;box-shadow:0 30px 80px rgba(28,27,24,.18)`;
   const layar = el("div", "", bingkai); layar.style.cssText = `width:${w * s}px;height:${h * s}px;overflow:hidden;border-radius:${r - 10}px;background:#F6F2EA;position:relative`;
-  const f = pasang(nama, layar); f.style.transform = `scale(${s})`; f.style.visibility = "inherit";
+  // Tiap perangkat = iframe selebar layar perangkat itu, supaya CSS aplikasi membaca lebar 768/390 dan tata letaknya benar-benar
+  // tablet/HP (potongan di div biasa ikut lebar panggung 1920 sehingga tampil desktop; teguran Tristan 6 Nov 2026).
+  const fr = el("iframe", "", layar); fr.setAttribute("width", w); fr.setAttribute("height", h); fr.setAttribute("scrolling", "no");
+  fr.style.cssText = `border:0;width:${w}px;height:${h}px;transform:scale(${s});transform-origin:0 0;display:block`;
+  const isi = document.getElementById("f-" + nama).content.firstElementChild.outerHTML;
+  SIAP.push(new Promise((ok) => { fr.addEventListener("load", ok, { once: true }); setTimeout(ok, 8000); }));
+  fr.srcdoc = `<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=${w}">${document.getElementById("css-app").outerHTML}</head><body style="margin:0;background:#F6F2EA;overflow:hidden">${isi}</body></html>`;
   return { bingkai, x, y };
 });
 const kalK = kalimat(camK, "Di laptop dan HP, tempatnya sama.", 46, "#1C1B18", 650);

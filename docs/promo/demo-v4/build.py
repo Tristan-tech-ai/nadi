@@ -70,7 +70,7 @@ def main():
 <style>
 @font-face {{ font-family: "Jakarta"; src: url(data:font/woff2;base64,{font}) format("woff2"); font-weight: 200 800; font-style: normal; }}
 </style>
-<style>{css_app}</style>
+<style id="css-app">{css_app}</style>
 <style>{css}</style>
 </head><body>
 <div id="panggung"></div>
