@@ -5,6 +5,7 @@ import { hitungPesangon, teksMasaKerja, type AturanKompensasi, type AturanPesang
 import { susunSlip, type PetaAturan, type RisikoJkk } from "@/lib/gaji/susun";
 import { hitungThr } from "@/lib/gaji/thr";
 import { formatRupiah, formatTanggalKalender } from "@/lib/format";
+import { CSS_CETAK } from "@/components/alat/cetak";
 
 // L-05 alat tanpa login: rumus yang SAMA dengan aplikasi (susunSlip, hitungThr, hitungPesangon) dengan aturan bertanggal yang
 // sama, dihitung di peramban. Tidak ada yang dikirim atau disimpan.
@@ -53,7 +54,9 @@ function DaftarKomponen({ judul, isi, jumlah }: { judul: string; isi: Komp[]; ju
   );
 }
 
-export function KalkulatorGaji({ aturan, bulanIni }: { aturan: PetaAturan; bulanIni: number }) {
+export function KalkulatorGaji({ aturan, bulanIni, slip = false }: { aturan: PetaAturan; bulanIni: number; slip?: boolean }) {
+  const [namaOrang, setNamaOrang] = useState("Rina Lestari");
+  const [namaUsaha, setNamaUsaha] = useState("Toko Sari Jaya");
   const [pokok, setPokok] = useState("4500000");
   const [tunjangan, setTunjangan] = useState("");
   const [ptkp, setPtkp] = useState("TK/0");
@@ -73,7 +76,12 @@ export function KalkulatorGaji({ aturan, bulanIni }: { aturan: PetaAturan; bulan
   }, [pokok, tunjangan, ptkp, risiko, lembur, aturan, bulan]);
   return (
     <div className="grid gap-8 md:grid-cols-2" data-testid="kalkulator-gaji">
+      {slip ? <style>{CSS_CETAK}</style> : null}
       <form className="grid content-start gap-4" onSubmit={(e) => e.preventDefault()} aria-label="Isian gaji">
+        {slip ? <>
+          <Isian id="nama-usaha" label="Nama usaha"><input id="nama-usaha" value={namaUsaha} onChange={(e) => setNamaUsaha(e.target.value)} className={isian} /></Isian>
+          <Isian id="nama-orang" label="Nama karyawan"><input id="nama-orang" value={namaOrang} onChange={(e) => setNamaOrang(e.target.value)} className={isian} /></Isian>
+        </> : null}
         <Rupiah id="pokok" label="Gaji pokok sebulan" nilai={pokok} ubah={setPokok} />
         <Rupiah id="tunjangan" label="Tunjangan tetap sebulan" nilai={tunjangan} ubah={setTunjangan} ket="Tunjangan yang dibayar sama setiap bulan, tidak tergantung kehadiran." />
         <Isian id="ptkp" label="Status pajak (PTKP)" ket="TK = belum kawin, K = kawin; angka = tanggungan.">
@@ -86,7 +94,8 @@ export function KalkulatorGaji({ aturan, bulanIni }: { aturan: PetaAturan; bulan
           <input id="lembur" type="number" min={0} max={4} value={lembur} onChange={(e) => setLembur(e.target.value)} className={isian} />
         </Isian>
       </form>
-      <div className="grid content-start gap-6" aria-live="polite">
+      <div className="grid content-start gap-6" aria-live="polite" id={slip ? "lembar-cetak" : undefined} data-testid={slip ? "slip-cetak" : undefined}>
+        {slip ? <header><p className="text-lg font-bold">Slip gaji</p><p className="text-sm">{namaUsaha}, bulan ke-{bulan}</p><p className="font-semibold">{namaOrang}</p></header> : null}
         <p className="rounded-[var(--radius-kartu)] bg-kertas-2 p-4">
           <span className="block text-sm text-tinta-2">Gaji bersih yang diterima</span>
           <span className="font-judul text-3xl font-extrabold tabular-nums" data-testid="gaji-bersih">{rp(hasil.bruto - hasil.potongan)}</span>
@@ -96,6 +105,7 @@ export function KalkulatorGaji({ aturan, bulanIni }: { aturan: PetaAturan; bulan
         <DaftarKomponen judul="Dibayar usaha di luar gaji" isi={hasil.usaha} jumlah={hasil.biayaUsaha - hasil.bruto} />
         <p className="text-[15px]">Biaya usaha untuk orang ini: <b className="tabular-nums">{rp(hasil.biayaUsaha)}</b> sebulan.</p>
         <Peringatan isi={hasil.peringatan} />
+        {slip ? <button type="button" onClick={() => window.print()} className="h-12 justify-self-start rounded-[var(--radius-isian)] bg-tinta px-5 font-semibold text-kertas print:hidden">Cetak atau simpan PDF</button> : null}
       </div>
     </div>
   );

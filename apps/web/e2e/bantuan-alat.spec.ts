@@ -5,6 +5,7 @@ import { expect, test, type Page } from "@playwright/test";
 import { formatRupiah } from "../src/lib/format";
 import { susunSlip, type PetaAturan } from "../src/lib/gaji/susun";
 import { hitungThr } from "../src/lib/gaji/thr";
+import { totalBaris } from "../src/lib/invoice/tagihan";
 
 // L-04 pusat bantuan dan L-05 alat gratis (halaman depan setara Mekari, tanpa login). Hasil kalkulator dibandingkan dengan
 // fungsi aplikasi yang sama dan aturan dari database yang sama, jadi angka publik tidak bisa diam-diam berbeda dari aplikasi.
@@ -59,7 +60,7 @@ test("pusat bantuan: kategori, cari tanpa JavaScript, artikel tugas dan artikel 
 test("alat gratis: gaji bersih dan THR sama dengan hitungan aplikasi", async ({ page }) => {
   test.skip(!E.NEXT_PUBLIC_SUPABASE_URL, "butuh .env.local");
   await page.goto("/alat");
-  await expect(page.getByTestId("kartu-alat")).toHaveCount(3);
+  await expect(page.getByTestId("kartu-alat")).toHaveCount(5);
   await page.goto("/alat/gaji");
   await expect(page.getByTestId("gaji-bersih")).toBeVisible();
   // Isian dikendalikan React: isi setelah hidrasi, lalu pastikan nilainya (temuan produksi: isian sebelum hidrasi hilang).
@@ -104,4 +105,29 @@ test("kamus istilah: daftar, cari tanpa JavaScript, halaman istilah dengan tauta
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("PKWT");
   await expect(page.getByTestId("tautan-istilah").first()).toHaveAttribute("href", "/alat/pesangon");
   await periksa(page, "istilah-pkwt");
+});
+
+test("pembuat invoice dan slip gaji: total sama dengan rumus invoice aplikasi, lembar cetak saja yang tercetak", async ({ page }) => {
+  await page.goto("/alat/invoice");
+  await page.waitForLoadState("networkidle");
+  const p = page.getByTestId("pembuat-invoice");
+  await p.getByLabel("Ditagihkan kepada").fill("Bu Made Katering");
+  await p.getByRole("button", { name: "Tambah baris" }).click();
+  const b2 = p.getByTestId("baris-invoice").nth(1);
+  await b2.getByLabel("Uraian").fill("Es teh");
+  await b2.getByLabel("Jumlah").fill("15");
+  await b2.getByLabel("Harga").fill("5000");
+  await expect(page.getByTestId("total-invoice")).toHaveText(formatRupiah(totalBaris([{ uraian: "a", jumlah: 20, harga: 25000 }, { uraian: "b", jumlah: 15, harga: 5000 }])));
+  await periksa(page, "alat-invoice");
+  await page.emulateMedia({ media: "print" });
+  await expect(page.locator("#lembar-cetak")).toBeVisible();
+  await expect(page.getByRole("button", { name: "Tambah baris" })).toBeHidden();
+  await page.emulateMedia({ media: "screen" });
+
+  await page.goto("/alat/slip");
+  await page.waitForLoadState("networkidle");
+  await page.getByLabel("Nama karyawan").fill("Komang Ayu");
+  await expect(page.getByTestId("slip-cetak")).toContainText("Komang Ayu");
+  await expect(page.getByTestId("gaji-bersih")).toBeVisible();
+  await periksa(page, "alat-slip");
 });

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
+import { PembuatInvoice } from "@/components/alat/cetak";
 import { KalkulatorGaji, KalkulatorPesangon, KalkulatorThr } from "@/components/alat/kalkulator";
 import { HalamanInfo } from "@/components/landing/halaman-info";
 import { aturanPublik } from "@/lib/alat/aturan";
@@ -10,6 +11,8 @@ import { hariIni } from "@/lib/izin";
 export const ALAT = [
   { slug: "gaji", judul: "Kalkulator gaji bersih", ringkas: "Gaji pokok dan tunjangan jadi gaji bersih: PPh 21 (TER), BPJS, lembur, dan biaya usaha.", kunci: ["pph21.ter", "pph21.kategori", "bpjs.kesehatan", "bpjs.jht", "bpjs.jp", "bpjs.jkk.pemberi_kerja", "bpjs.jkm.pemberi_kerja", "lembur.pp35"] },
   { slug: "thr", judul: "Kalkulator THR", ringkas: "THR keagamaan menurut masa kerja, dan batas tanggal bayarnya.", kunci: [] },
+  { slug: "slip", judul: "Slip gaji online", ringkas: "Slip gaji satu karyawan dari hitungan gaji yang sama, siap dicetak atau disimpan PDF.", kunci: ["pph21.ter", "pph21.kategori", "bpjs.kesehatan", "bpjs.jht", "bpjs.jp", "bpjs.jkk.pemberi_kerja", "bpjs.jkm.pemberi_kerja", "lembur.pp35"] },
+  { slug: "invoice", judul: "Pembuat invoice", ringkas: "Invoice bernomor dengan barang dan jasa, total otomatis, siap dicetak atau disimpan PDF.", kunci: [] },
   { slug: "pesangon", judul: "Kalkulator pesangon", ringkas: "Uang pesangon dan penghargaan masa kerja, atau kompensasi karyawan kontrak.", kunci: ["pesangon.pp35", "kompensasi.pkwt"] },
 ] as const;
 export type SlugAlat = (typeof ALAT)[number]["slug"];
@@ -18,6 +21,8 @@ const ZONA = "Asia/Jakarta";
 const DASAR: Record<SlugAlat, string> = {
   gaji: "PPh 21 memakai tarif efektif (TER) PP 58/2023 dan PMK 168/2023; BPJS menurut tarif resmi masing-masing program; lembur PP 35/2021 Pasal 31. Hanya aturan yang sudah diperiksa ke teks resmi yang dipakai; yang belum disebut di bawah hasil.",
   thr: "Permenaker 6/2016: berhak setelah 1 bulan masa kerja; 12 bulan atau lebih = 1 bulan upah; kurang dari itu proporsional; dibayar paling lambat 7 hari sebelum Hari Raya. Upah = gaji pokok + tunjangan tetap.",
+  slip: "Komponen dan potongan sama dengan Kalkulator gaji bersih: PPh 21 TER (PP 58/2023, PMK 168/2023), BPJS, dan lembur PP 35/2021.",
+  invoice: "Total = jumlah x harga setiap baris, dibulatkan ke rupiah, sama dengan invoice di aplikasi Nadi. Belum memuat PPN; bila usahamu PKP, buat faktur pajak lewat Coretax.",
   pesangon: "PP 35/2021 Pasal 40 (pesangon dan penghargaan masa kerja) dan Pasal 15 sampai 17 (kompensasi PKWT), dengan upah pokok + tunjangan tetap. Angka sungguhan tergantung alasan berhenti.",
 };
 
@@ -31,6 +36,8 @@ async function Isi({ slug }: { slug: SlugAlat }) {
   return (
     <>
       {slug === "gaji" ? <KalkulatorGaji aturan={aturan} bulanIni={Number(hari.slice(5, 7))} /> : null}
+      {slug === "slip" ? <KalkulatorGaji aturan={aturan} bulanIni={Number(hari.slice(5, 7))} slip /> : null}
+      {slug === "invoice" ? <PembuatInvoice hariIni={hari} /> : null}
       {slug === "thr" ? <KalkulatorThr hariIni={hari} /> : null}
       {slug === "pesangon" ? <KalkulatorPesangon aturan={pakai<AturanPesangon>("pesangon.pp35")} kompensasi={pakai<AturanKompensasi>("kompensasi.pkwt")} hariIni={hari} /> : null}
       {dipakai.length ? (
@@ -50,14 +57,14 @@ export function HalamanAlat({ slug }: { slug: SlugAlat }) {
       <nav aria-label="Jejak" className="mb-6 text-[15px] text-tinta-2"><Link href="/alat" className="underline underline-offset-4">Alat gratis</Link> / {alat.judul}</nav>
       <Suspense fallback={<div className="h-96 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}><Isi slug={slug} /></Suspense>
       <p className="mt-8 text-[15px]">{DASAR[slug]}</p>
-      <p className="mt-4 text-[15px]">Hasil ini perkiraan untuk bulan biasa. Di Nadi, hitungan yang sama berjalan untuk semua karyawan sekaligus, lengkap dengan slip, Desember yang disetahunkan, dan Gerbang Gaji. <Link href="/demo" className="underline underline-offset-4">Coba Nadi tanpa daftar</Link>.</p>
+      {slug === "invoice" ? <p className="mt-4 text-[15px]">Di Nadi, invoice bernomor otomatis, punya tautan untuk pelanggan, QRIS, pengingat, dan dicocokkan dengan mutasi bank. <Link href="/demo" className="underline underline-offset-4">Coba Nadi tanpa daftar</Link>.</p> : <p className="mt-4 text-[15px]">Hasil ini perkiraan untuk bulan biasa. Di Nadi, hitungan yang sama berjalan untuk semua karyawan sekaligus, lengkap dengan slip, Desember yang disetahunkan, dan Gerbang Gaji. <Link href="/demo" className="underline underline-offset-4">Coba Nadi tanpa daftar</Link>.</p>}
     </HalamanInfo>
   );
 }
 
 export function IndeksAlat() {
   return (
-    <HalamanInfo judul="Alat gratis" pengantar="Hitung gaji, THR, dan pesangon tanpa akun, dengan rumus dan aturan yang sama dengan aplikasi Nadi." warna="daun">
+    <HalamanInfo judul="Alat gratis" pengantar="Hitung gaji, THR, dan pesangon, buat slip gaji dan invoice, tanpa akun, dengan rumus dan aturan yang sama dengan aplikasi Nadi." warna="daun">
       <ul className="grid gap-3">
         {ALAT.map((a) => (
           <li key={a.slug}>
