@@ -19,5 +19,5 @@ describe("catatan rilis", () => {
       expect(ada(x.tautan.href), `${x.judul} -> ${x.tautan.href}`).toBe(true);
     }
   });
-  it("tanpa tanda pisah panjang", () => expect(JSON.stringify(RILIS)).not.toMatch(/[–—]/));
+  it("tanpa tanda pisah panjang", () => expect(JSON.stringify(RILIS)).not.toMatch(/[\u2013\u2014]/));
 });

@@ -2,6 +2,7 @@
 // (1) satu artikel per halaman di peta ruang (src/lib/ruang.ts: guna, siapa yang bisa memakai, letaknya di menu, halaman terkait);
 // (2) artikel tugas yang ditulis tangan untuk hal yang paling sering ditanyakan, masing-masing menyebut layar dan tombol yang ada.
 import { RUANG, type Halaman, type Peran } from "@/lib/ruang";
+import { KATEGORI_EN, TUGAS_EN } from "./artikel-en";
 
 export type Langkah = string;
 export type ArtikelTugas = { slug: string; kategori: string; judul: string; ringkas: string; langkah: Langkah[]; catatan?: string; tautan: { href: string; label: string }[]; cari: string };
@@ -137,11 +138,32 @@ export function kategori() {
   ];
 }
 
-export const artikel = (slug: string) => SEMUA_ARTIKEL.find((a) => a.slug === slug) ?? null;
-export const siapa = (p: readonly Peran[]) => p.map((x) => PERAN_LABEL[x]).join(", ");
+/** L-08: artikel dalam bahasa yang diminta. Artikel layar memakai label dan guna en dari peta ruang; artikel tugas dari artikel-en.ts. */
+export function artikelUntuk(bahasa: "id" | "en"): Artikel[] {
+  if (bahasa === "id") return SEMUA_ARTIKEL;
+  const ruangEn = new Map(RUANG.map((r) => [r.id, r.label.en]));
+  return SEMUA_ARTIKEL.map((a) => {
+    if (a.jenis === "halaman") return { ...a, judul: a.halaman.label.en, ringkas: a.halaman.guna.en, ruang: ruangEn.get(a.kategori) ?? a.ruang };
+    const e = TUGAS_EN[a.slug];
+    return e ? { ...a, judul: e.judul, ringkas: e.ringkas, langkah: e.langkah, catatan: e.catatan, tautan: a.tautan.map((t, i) => ({ ...t, label: e.tautan[i] ?? t.label })) } : a;
+  });
+}
+
+export function kategoriUntuk(bahasa: "id" | "en") {
+  if (bahasa === "id") return kategori();
+  return [
+    { id: "mulai", ...KATEGORI_EN.mulai },
+    ...RUANG.map((r) => ({ id: r.id, label: r.label.en, ket: r.halaman.slice(0, 3).map((h) => h.label.en).join(", ") + (r.halaman.length > 3 ? ", and more" : "") + "." })),
+    { id: "ai", ...KATEGORI_EN.ai }, { id: "aman", ...KATEGORI_EN.aman },
+  ];
+}
+
+export const artikel = (slug: string, bahasa: "id" | "en" = "id") => artikelUntuk(bahasa).find((a) => a.slug === slug) ?? null;
+const PERAN_EN: Record<Peran, string> = { pemilik: "owner", admin: "admin", akuntan: "accountant", staf: "staff" };
+export const siapa = (p: readonly Peran[], bahasa: "id" | "en" = "id") => p.map((x) => (bahasa === "en" ? PERAN_EN : PERAN_LABEL)[x]).join(", ");
 
 /** Cari tanpa model: setiap kata harus muncul di judul, ringkasan, langkah, atau kata cari; judul diberi bobot lebih. */
-export function cariArtikel(q: string): Artikel[] {
+export function cariArtikel(q: string, bahasa: "id" | "en" = "id"): Artikel[] {
   const kata = q.toLowerCase().normalize("NFKD").replace(/[^\p{L}\p{N}\s]/gu, " ").split(/\s+/).filter((k) => k.length > 1);
   if (!kata.length) return [];
   const skor = (a: Artikel) => {
@@ -153,5 +175,5 @@ export function cariArtikel(q: string): Artikel[] {
     }
     return s + (a.jenis === "tugas" ? 0.5 : 0);
   };
-  return SEMUA_ARTIKEL.map((a) => [a, skor(a)] as const).filter(([, s]) => s > 0).sort((x, y) => y[1] - x[1]).map(([a]) => a);
+  return artikelUntuk(bahasa).map((a) => [a, skor(a)] as const).filter(([, s]) => s > 0).sort((x, y) => y[1] - x[1]).map(([a]) => a);
 }

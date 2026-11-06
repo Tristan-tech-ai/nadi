@@ -18,7 +18,7 @@ export const kamusEn: Kamus = {
   kaki: {
     yangBaru: "What is new (Indonesian)",
     kamusIstilah: "Business glossary (Indonesian)",
-    pusatBantuan: "Help center (Indonesian)", alatGratis: "Free tools (Indonesian)",
+    pusatBantuan: "Help center", alatGratis: "Free tools (Indonesian)",
     slogan: "The small-business paperwork that fills itself in.",
     produk: "Product",
     contohMakanan: "Sample business (food)",

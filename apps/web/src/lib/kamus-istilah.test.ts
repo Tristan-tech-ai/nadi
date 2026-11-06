@@ -17,7 +17,7 @@ describe("kamus istilah", () => {
   });
   it("tanpa tanda pisah panjang, kata terlarang, atau angka persen tarif", () => {
     const s = JSON.stringify(ISTILAH);
-    expect(s).not.toMatch(/[–—]/);
+    expect(s).not.toMatch(/[\u2013\u2014]/);
     expect(s.toLowerCase()).not.toMatch(/silakan|revolusioner|inovatif/);
     expect(s).not.toMatch(/\d+(,\d+)?\s?%/);
   });

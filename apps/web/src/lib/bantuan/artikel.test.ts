@@ -2,7 +2,8 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { RUANG } from "@/lib/ruang";
-import { ARTIKEL_HALAMAN, cariArtikel, kategori, SEMUA_ARTIKEL, TUGAS } from "./artikel";
+import { ARTIKEL_HALAMAN, artikelUntuk, cariArtikel, kategori, kategoriUntuk, SEMUA_ARTIKEL, TUGAS } from "./artikel";
+import { TUGAS_EN } from "./artikel-en";
 
 const APP = join(__dirname, "..", "..", "app");
 // Jalur publik atau /app yang benar-benar punya page.tsx (termasuk alat L-05).
@@ -29,7 +30,7 @@ describe("pusat bantuan", () => {
   });
   it("teks tanpa tanda pisah panjang dan kata terlarang", () => {
     const semua = JSON.stringify(TUGAS);
-    expect(semua).not.toMatch(/[–—]/);
+    expect(semua).not.toMatch(/[\u2013\u2014]/);
     expect(semua.toLowerCase()).not.toMatch(/silakan|revolusioner|inovatif|seamless/);
   });
   it("cari: kata sehari-hari menemukan artikel yang tepat", () => {
@@ -39,5 +40,21 @@ describe("pusat bantuan", () => {
     expect(cariArtikel("qris").some((a) => a.slug === "invoice-qris")).toBe(true);
     expect(cariArtikel("zzzqqq")).toEqual([]);
     expect(cariArtikel("  ")).toEqual([]);
+  });
+  it("versi Inggris: setiap artikel tugas diterjemahkan lengkap, kategori dan cari jalan", () => {
+    for (const t of TUGAS) {
+      const e = TUGAS_EN[t.slug];
+      expect(e, t.slug).toBeTruthy();
+      expect(e.langkah.length, t.slug).toBe(t.langkah.length);
+      expect(e.tautan.length, t.slug).toBe(t.tautan.length);
+      expect(Boolean(e.catatan), t.slug).toBe(Boolean(t.catatan));
+    }
+    expect(JSON.stringify(TUGAS_EN)).not.toMatch(/[\u2013\u2014]/);
+    const en = artikelUntuk("en");
+    expect(en.length).toBe(SEMUA_ARTIKEL.length);
+    const kat = new Set(kategoriUntuk("en").map((k) => k.id));
+    for (const a of en) expect(kat.has(a.kategori), a.slug).toBe(true);
+    expect(cariArtikel("forgot password", "en")[0]?.slug).toBe("tidak-bisa-masuk");
+    expect(cariArtikel("payroll", "en").some((a) => a.slug === "gaji")).toBe(true);
   });
 });

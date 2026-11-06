@@ -28,7 +28,7 @@ describe("prompt lengkap sambungan MCP", () => {
       expect(p).toMatch(/NIK/);
       expect(p).toMatch(bahasa === "en" ? /never ticked automatically/ : /tidak pernah tercentang otomatis/);
       expect(p).toMatch(bahasa === "en" ? /Nadi password/ : /kata sandi Nadi/);
-      expect(p).not.toMatch(/[–—]/);
+      expect(p).not.toMatch(/[\u2013\u2014]/);
     });
   }
   it("petunjuk aplikasi tersedia di kedua kamus", () => {

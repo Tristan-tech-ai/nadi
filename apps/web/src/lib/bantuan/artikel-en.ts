@@ -1,0 +1,39 @@
+// L-08: English text for the hand-written help articles (src/lib/bantuan/artikel.ts). Screen articles use the English labels
+// already in the route map (src/lib/ruang.ts). Button names stay as they appear in the app, which is in Indonesian by default.
+export const KATEGORI_EN: Record<string, { label: string; ket: string }> = {
+  mulai: { label: "Getting started and accounts", ket: "Sign up, sign in, forgotten passwords, and staff accounts." },
+  ai: { label: "AI and connections", ket: "Connecting your AI through MCP and setting up your business from documents." },
+  aman: { label: "Security and data", ket: "Who can see what, and what AI reads." },
+};
+
+export const TUGAS_EN: Record<string, { judul: string; ringkas: string; langkah: string[]; catatan?: string; tautan: string[] }> = {
+  "tidak-bisa-masuk": { judul: "Cannot sign in or forgot your password", ringkas: "Reset your password, or sign in by email without one.",
+    langkah: ["Open Sign in, then choose Lupa kata sandi? (Forgot password?) next to the password field.", "Write your account email and choose Kirim email. Open the email from Nadi on the same phone or computer and tap its link.", "Set a new password (at least 8 characters). Once saved you are signed in.", "Prefer not to remember a password? Choose Masuk lewat email tanpa kata sandi (Sign in by email) on the Sign in page."],
+    catatan: "Email not arriving? Check the Spam or Promotions folder. You can resend after 60 seconds. If sign up says the email already has an account, the account exists: sign in instead of signing up again.", tautan: ["Reset password", "Sign in by email"] },
+  "buat-akun": { judul: "Creating an account and setting up your business", ringkas: "From sign up to a business ready to use.",
+    langkah: ["Open Sign up, write your email and password, then choose Buat akun.", "Open the email from Nadi and tap its link to activate the account.", "Name your business and choose its type. Nadi turns on the menus that similar businesses use; you can change them later in Usahamu.", "Choose Isi sendiri (fill it in yourself), or Siapkan dengan AI-mu if your employee list and work rules are in documents."], tautan: ["Create an account"] },
+  "masuk-staf": { judul: "Staff sign in without email", ringkas: "Business code, staff ID, and PIN from the owner.",
+    langkah: ["The owner or admin opens Orang (People), fills a 6 digit PIN on that person's row, then chooses Buat akun staf.", "Nadi shows the business code (6 letters) and staff ID (for example S001). Give both and the PIN to the staff member.", "The staff member opens Staff sign in and fills the business code, ID, and PIN."],
+    catatan: "5 wrong PINs within 15 minutes lock the staff account for 15 minutes. The owner can change the PIN from the People page.", tautan: ["Staff sign in"] },
+  "lempar-dan-setujui": { judul: "Drop a file and approve its proposal", ringkas: "Files become proposals; nothing is saved before you approve.",
+    langkah: ["Open Lempar berkas (Drop files) and drop a receipt photo, payslip, bank statement, or spreadsheet.", "Nadi reads the file and puts a proposal in the Decision feed, with its source and how sure it is.", "On the proposal card, read Kalau disetujui (if approved) to see the effect, and Lihat rincian to see what is added or changed.", "Choose Setujui (approve) or Tolak (reject). After approving, follow the Lihat di link to open the data."], tautan: ["Drop files", "Decision feed"] },
+  "invoice-qris": { judul: "Creating an invoice with QRIS", ringkas: "A numbered invoice that can be paid by QRIS or bank transfer.",
+    langkah: ["Open Invoice and set the business payment method once: a static QRIS or a bank account.", "Choose a customer, fill the goods or services, then issue the invoice.", "Copy the invoice link and send it yourself by WhatsApp. The customer sees the invoice and QRIS without an account.", "When money arrives, match it with the bank statement in Cash and bank; the invoice becomes paid."],
+    catatan: "Nadi does not message customers on your behalf.", tautan: ["Invoices"] },
+  "gaji-bulanan": { judul: "Preparing monthly payroll", ringkas: "Base salary, income tax (PPh 21), social security (BPJS), then payslips.",
+    langkah: ["Fill each person's base salary and tax status (for example TK/0) on the People page.", "Open Payroll, choose the month, then prepare the payroll draft.", "The payroll gate holds people with something odd (for example no attendance) and shows why. Check, then decide.", "Approve the payroll; a payslip is issued for each person."],
+    catatan: "Nadi calculates but does not move money. You still make the transfers. A quick calculation without an account is in Free tools.", tautan: ["Payroll", "Take-home pay calculator"] },
+  "sambung-ai": { judul: "Connecting your AI (MCP)", ringkas: "Your AI prepares a draft; you apply it.",
+    langkah: ["Open Siapkan dengan AI (Set up with AI), section Sambungkan AI-mu.", "Choose Salin prompt lengkap untuk AI-mu and paste it in your AI chat. The prompt has Nadi's server address, how to install it, the tools allowed, and the limits.", "Approve the connection on the Nadi approval page that opens.", "Give your AI your business documents. The AI writes one draft; check it on the draft review screen, then choose Terapkan (apply). You have 10 minutes to undo."],
+    catatan: "The AI cannot apply drafts, approve, or move money. Revoke the connection any time in Usahamu.", tautan: ["Set up with AI"] },
+  "tanpa-mcp": { judul: "Setting up with a regular AI chat", ringkas: "For AI chats without MCP, including free ones.",
+    langkah: ["In Set up with AI, choose Salin prompt and paste it in your AI chat with your employee list or work rules.", "The AI answers with one block starting NADI ONBOARDING 1. Read and fix it if needed.", "Paste the block back in Nadi. Nadi turns it into one draft you can change before applying."], tautan: ["Set up with AI"] },
+  "mode-coba": { judul: "Trying Nadi without signing up", ringkas: "Open the real app in a sample business.",
+    langkah: ["Open the Try Nadi page and choose Buka usaha contoh (Open the sample business).", "You enter the Nadi app in the sample business Toko Bu Sari as the owner. All names and numbers are made up.", "Open any screen. Changes are not saved and AI is not used.", "Choose Keluar dari usaha contoh (leave) in the top bar, or Buat akun gratis (create a free account)."], tautan: ["Try Nadi"] },
+  "dua-langkah": { judul: "Turning on two-step verification", ringkas: "A code from an authenticator app at every sign in.",
+    langkah: ["Open Akun dan keamanan (Account and security).", "Choose to turn on two-step verification, then scan the code with an authenticator app on your phone.", "Type the 6 digit code shown to confirm.", "On the same page you can see signed-in devices and sign them out."], tautan: ["Account and security"] },
+  "data-dan-ai": { judul: "What AI reads and who sees your data", ringkas: "Each business is separate; AI reads as little as possible.",
+    langkah: ["Each business's data is separated in the database; people from another business cannot open it.", "Dropped files are read by AI only when Nadi does not know the format yet. Known formats are read without AI.", "Mata counts people on your device. Faces are not stored; only the numbers are sent.", "Salaries are visible only to the owner, and staff see only their own data."], tautan: ["Security", "Privacy"] },
+  "pindah-aplikasi": { judul: "Moving from another app", ringkas: "Bring your accounts, contacts, employees, and products.",
+    langkah: ["Export data from your old app to Excel or CSV.", "Open Pindah dari aplikasi lain (Move from another app) and choose the file.", "Nadi recognises the columns and prepares one proposal. Data that already exists is skipped.", "Approve the proposal. All your data can be downloaded again from the same page."], tautan: ["Move from another app"] },
+};

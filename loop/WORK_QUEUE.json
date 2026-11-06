@@ -4707,6 +4707,20 @@
    "blocked_by": "Menunggu Tristan memasang SMTP sendiri di Supabase (UNTUK-TRISTAN 6 Nov)",
    "status": "blocked",
    "created": "2026-11-06T10:52:31"
+  },
+  {
+   "id": "L-08B",
+   "fase": "L",
+   "kind": "build",
+   "priority": 40,
+   "size": "S",
+   "wajib": false,
+   "title": "Alat gratis dalam bahasa Inggris",
+   "accept": "/en/alat dan kalkulatornya dengan label en; angka sama dengan versi id (e2e)",
+   "how": "Teks kalkulator lewat kamus",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-06T11:15:14"
   }
  ]
 }

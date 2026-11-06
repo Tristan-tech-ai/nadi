@@ -160,3 +160,16 @@ test("templat dokumen: kalimat surat sama dengan Surat keluar aplikasi, enam jen
   await expect(page.getByTestId("pratinjau-dokumen")).toContainText("terlambat masuk lima kali");
   await periksa(page, "alat-dokumen");
 });
+
+test("pusat bantuan bahasa Inggris: cari dan artikel", async ({ page }) => {
+  await page.goto("/en/bantuan");
+  await expect(page.getByRole("heading", { level: 1, name: "Help center" })).toBeVisible();
+  await periksa(page, "bantuan-en");
+  await page.getByLabel("Search help").fill("forgot password");
+  await page.getByRole("button", { name: "Search", exact: true }).click();
+  await page.waitForURL(/\/en\/bantuan\?q=forgot/);
+  await page.getByTestId("hasil-artikel").first().click();
+  await expect(page).toHaveURL(/\/en\/bantuan\/artikel\/tidak-bisa-masuk/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Cannot sign in or forgot your password");
+  await expect(page.locator("html")).toHaveAttribute("lang", /en|id/);
+});
