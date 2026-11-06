@@ -4530,9 +4530,39 @@
    "title": "C:/Program Files/Git/demo langsung masuk UI aplikasi asli (usaha contoh, baca saja)",
    "accept": "Klik Buka usaha contoh di /demo membuka /app Toko Bu Sari sebagai pemilik tanpa daftar; 12 halaman utama terbuka tanpa galat dengan pita Mode coba; tambah orang ditolak dan tidak tersimpan; tidak ada tulis/unggah/AI dari sesi coba (tes SQL); keluar kembali ke /demo; e2e/mode-coba.spec.ts lulus di produksi",
    "how": "Sesi anonim Supabase + pre-request baca saja (migrasi usaha_tamu)",
-   "blocked_by": "Butuh Tristan menyalakan Allow anonymous sign-ins (setelan autentikasi, UNTUK-TRISTAN 6 Nov); kode + migrasi + tes SQL 17/17 sudah di produksi",
-   "status": "blocked",
-   "created": "2026-11-06T10:19:28"
+   "blocked_by": "Butuh Tristan menyalakan Allow anonymous sign-ins (setelan autentikasi, UNTUK-TRISTAN 6 Nov); kode, migrasi usaha_tamu, tes SQL 17/17 sudah di produksi",
+   "status": "done",
+   "created": "2026-11-06T10:19:28",
+   "done": "2026-11-06T10:29:47",
+   "result": "commit 2cae605+f5d65cb, migrasi usaha_tamu + usaha_tamu_perusahaan (md5 sama berkas repo), tes SQL usaha_tamu 17/17, e2e/mode-coba.spec.ts produksi lulus jalur penuh (12 halaman, tambah orang ditolak, keluar ke /demo), anonymous_users menyala oleh Tristan 6 Nov"
+  },
+  {
+   "id": "L-04",
+   "fase": "L",
+   "kind": "build",
+   "priority": 85,
+   "size": "M",
+   "wajib": true,
+   "title": "Pusat bantuan lengkap setara pusat bantuan Mekari",
+   "accept": "/bantuan publik dengan cari tanpa JavaScript, minimal 10 kategori, satu artikel untuk setiap layar di peta ruang, minimal 10 artikel tugas berlangkah dengan tautan yang ada, artikel terkait, tautan dari kaki halaman; axe 0 serius 390/1440 terang gelap; e2e produksi lulus",
+   "how": "Artikel diturunkan dari src/lib/ruang.ts + artikel tugas",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-06T10:35:47"
+  },
+  {
+   "id": "L-05",
+   "fase": "L",
+   "kind": "build",
+   "priority": 85,
+   "size": "M",
+   "wajib": true,
+   "title": "Alat yang bisa dicoba tanpa login seperti Mekari",
+   "accept": "/alat dengan minimal 3 kalkulator (gaji bersih PPh21+BPJS+lembur, THR, pesangon) memakai fungsi dan aturan bertanggal yang sama dengan aplikasi, tanpa akun dan tanpa simpan; e2e membandingkan angka halaman dengan fungsi aplikasi; axe 0 serius; e2e produksi lulus",
+   "how": "Komponen klien dengan susunSlip, hitungThr, hitungPesangon; aturan dari aturan_bertanggal anon",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-06T10:35:47"
   }
  ]
 }

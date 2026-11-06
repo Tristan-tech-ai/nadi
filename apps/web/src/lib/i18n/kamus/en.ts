@@ -16,6 +16,7 @@ export const kamusEn: Kamus = {
   },
   pemilih: { label: "Language", id: "Bahasa Indonesia", en: "English" },
   kaki: {
+    pusatBantuan: "Help center (Indonesian)", alatGratis: "Free tools (Indonesian)",
     slogan: "The small-business paperwork that fills itself in.",
     produk: "Product",
     contohMakanan: "Sample business (food)",

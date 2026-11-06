@@ -184,3 +184,8 @@ Hal yang dipelajari dari sumber primer, dengan URL dan tanggal akses. Tulis sebe
 - https://supabase.com/docs/guides/auth/auth-email-templates (dibaca 6 Nov 2026): variabel Token, TokenHash, RedirectTo; tautan ke endpoint server dengan token_hash lalu verifyOtp({token_hash, type}); pemindai tautan email bisa memakai tautan lebih dulu, kode adalah cadangannya.
 - Dashboard Supabase (dicek lewat Chrome 6 Nov 2026): templat hanya bisa diubah setelah custom SMTP; RATE_LIMIT_EMAIL_SENT bawaan 2 per jam, SMTP_MAX_FREQUENCY 60 dtk.
 - Log auth (query_logs auth_logs): daftar ulang email terdaftar = user_repeated_signup tanpa email; signUp mengembalikan pengguna tanpa identitas.
+
+## 6 Nov 2026: halaman depan Mekari (L-04, L-05)
+- https://mekari.com/customer-service/ (dibaca 6 Nov 2026): pusat bantuan di https://help-center.mekari.com/hc/id, buku panduan, blog dan catatan rilis per produk, live chat, WhatsApp.
+- Sitemap resmi https://www.talenta.co/page-sitemap*.xml, https://www.jurnal.id/page-sitemap*.xml, https://klikpajak.id/page-sitemap*.xml (6 Nov 2026): alat gratis /tool-gratis/ (kalkulator-pph21, kalkulator-gaji-bersih, kalkulator-lembur, kalkulator-thr, kalkulator-pesangon, kalkulator-bonus, kalkulator-roi, daftar-umr, slip-gaji-online, shift-generator, dokumen-hr, kamus-hr), jurnal.id invoice-generator, ai-invoice-generator, bill-of-material-generator, kalkulator-landed-cost-online, download-template-laporan, klikpajak.id kalkulator-pph-21, kalkulator-pph-badan, cek-validasi-npwp.
+- Next 16 docs lokal 01-getting-started/08-caching.md: nilai per permintaan (tanggal hari ini) di halaman Cache Components memakai await connection() di dalam Suspense.
