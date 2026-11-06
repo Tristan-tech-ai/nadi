@@ -6,7 +6,8 @@ import type { Bahasa } from "@/lib/i18n/bahasa";
 import { ambilKamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { hariIni } from "@/lib/izin";
-import { resourceMcp } from "@/lib/mcp/http";
+import { asalTautan, resourceMcp } from "@/lib/mcp/http";
+import { petunjukApp, promptSambung } from "@/lib/mcp/prompt-sambung";
 import { CONTOH_TEKS_NADI, PROMPT_ONBOARDING } from "@/lib/onboarding/prompt";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
@@ -25,6 +26,7 @@ async function Isi() {
   }
   const [h, zona] = [await headers(), await zonaUsahaIni(sesi.perusahaanId)];
   const alamat = resourceMcp(h);
+  const prompt = promptSambung({ alamat, asal: asalTautan(h), bahasa, app: petunjukApp(t) });
   const cursor = `cursor://anysphere.cursor-deeplink/mcp/install?name=nadi&config=${encodeURIComponent(Buffer.from(JSON.stringify({ url: alamat })).toString("base64"))}`;
   return (
     <div lang={bahasa}>
@@ -63,6 +65,14 @@ async function Isi() {
         <p className="mt-1 text-sm text-tinta-2">{t.sambungKet}</p>
         <p className="mt-2 flex flex-wrap items-center gap-3 text-sm"><span className="break-all font-mono" data-testid="alamat-mcp">{alamat}</span>
           <TombolSalinTeks teks={alamat} label={t.salinAlamat} labelSudah={t.tersalin} /></p>
+        <div className="mt-4 rounded-[var(--radius-kartu)] border border-garis p-4" data-testid="prompt-lengkap">
+          <p className="text-sm">{t.promptLengkapKet}</p>
+          <div className="mt-3"><TombolSalinTeks teks={prompt} label={t.salinPromptLengkap} labelSudah={t.tersalin} /></div>
+          <details className="mt-3 text-sm">
+            <summary className="cursor-pointer text-tinta-2 underline underline-offset-4">{t.lihatPromptLengkap}</summary>
+            <pre className="mt-2 overflow-x-auto whitespace-pre-wrap rounded-[var(--radius-kartu)] bg-kertas-2 p-3 font-mono text-xs" tabIndex={0} data-testid="isi-prompt-lengkap">{prompt}</pre>
+          </details>
+        </div>
         <ul className="mt-4 divide-y divide-garis border-y border-garis text-sm">
           <li className="py-3"><p className="font-semibold">{t.app1}</p><p className="text-tinta-2">{t.app1Ket}</p></li>
           <li className="py-3"><p className="font-semibold">Cursor</p><p className="text-tinta-2">{t.app2Ket}</p>

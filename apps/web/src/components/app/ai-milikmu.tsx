@@ -4,7 +4,9 @@ import { formatTanggal } from "@/lib/format";
 import { ambilKamus, isiTeks } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { sisip } from "@/lib/i18n/sisip";
-import { resourceMcp } from "@/lib/mcp/http";
+import { TombolSalinTeks } from "@/components/app/siapkan";
+import { asalTautan, resourceMcp } from "@/lib/mcp/http";
+import { petunjukApp, promptSambung } from "@/lib/mcp/prompt-sambung";
 import { createClient } from "@/lib/supabase/server";
 import { zonaSesi } from "@/lib/zona-usaha";
 
@@ -36,16 +38,23 @@ export async function AiMilikmu() {
     else if (t.dipakai_at && (!ada.dipakai_at || t.dipakai_at > ada.dipakai_at)) ada.dipakai_at = t.dipakai_at;
   }
   const daftar = [...perKlien.values()];
-  const alamat = resourceMcp(await headers());
+  const h = await headers();
+  const alamat = resourceMcp(h);
   const zona = await zonaSesi();
   const bahasa = await bahasaAplikasi();
   const t = ambilKamus(bahasa).aiMilikmu;
+  const ts = ambilKamus(bahasa).siapkan;
+  const prompt = promptSambung({ alamat, asal: asalTautan(h), bahasa, app: petunjukApp(ts) });
   return (
     <section className="mt-10 border-t border-garis pt-6" aria-labelledby="judul-ai-milikmu" data-testid="ai-milikmu" lang={bahasa}>
       <h2 id="judul-ai-milikmu" className="text-lg font-semibold">{t.judul}</h2>
       <p className="mt-1 text-sm text-tinta-2">
         {sisip(t.ket, { alamat: <span className="break-all font-mono text-tinta">{alamat}</span> })}
       </p>
+      <div className="mt-3 flex flex-wrap items-center gap-3" data-testid="prompt-lengkap-usahamu">
+        <TombolSalinTeks teks={prompt} label={ts.salinPromptLengkap} labelSudah={ts.tersalin} />
+        <span className="text-sm text-tinta-2">{ts.promptLengkapKet}</span>
+      </div>
       <p className="mt-2 text-sm text-tinta-2">
         <a href="/app/skill" download className="font-semibold text-laut underline underline-offset-4" data-testid="unduh-skill">{t.unduh}</a>. {t.unduhKet}
       </p>
