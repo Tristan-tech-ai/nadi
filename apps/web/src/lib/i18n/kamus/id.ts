@@ -58,7 +58,7 @@ export const kamusId = {
       { judul: "Terpisah per usaha.", isi: "Database memeriksa setiap baris sebelum dibaca, dan pemisahannya diuji pada setiap perubahan." },
       { judul: "AI tidak memutuskan uang.", isi: "AI membaca dan mengusulkan; persetujuan, gaji, dan pelunasan selalu lewat tombolmu." },
       { judul: "NIK tidak disimpan utuh.", isi: "Hanya sidik acak dan 4 digit akhirnya." },
-      { judul: "Kamera dan suara diproses di perangkat.", isi: "Mata dan transkrip wawancara berjalan di HP atau laptopmu; gambar kamera tidak diunggah." },
+      { judul: "Kamera dan suara diproses di perangkat.", isi: "Mata dan transkrip wawancara berjalan di HP atau laptopmu. Rekaman tidak diunggah, kecuali satu gambar kecil yang dikaburkan saat kamu minta usulan denah kamera." },
       { judul: "Kunci AI tidak pernah ada di HP.", isi: "Semua panggilan AI lewat server di Singapura." },
       { judul: "Semua bisa ditelusuri.", isi: "Setiap keputusan otomatis tercatat dengan alasannya dan bisa dibatalkan." },
     ],
@@ -109,7 +109,7 @@ export const kamusId = {
       { judul: "Data setiap usaha terpisah", isi: ["Database memeriksa setiap baris sebelum dibaca atau diubah (row level security): baris hanya terlihat oleh anggota usaha pemiliknya, sesuai perannya. Pemisahan ini diuji otomatis pada setiap perubahan database, termasuk percobaan membaca data usaha lain.", "Staf hanya melihat data dirinya: absen, izin, dan slip gajinya sendiri. Akuntan bisa melihat dan mengekspor, tetapi tidak bisa menyetujui gaji atau usulan."] },
       { judul: "Tempat dan jalur data", isi: ["Database dan berkas disimpan di pusat data Singapura. Semua API menerima koneksi HTTPS saja (TLS 1.2 atau 1.3).", "Kunci rahasia (kunci AI, kunci pemberitahuan) disimpan terenkripsi di brankas database atau sebagai rahasia server. Kunci itu tidak pernah ada di HP, browser, atau kode."] },
       { judul: "AI tidak memutuskan uang", isi: ["AI membaca berkas dan menyusun usulan. Data baru tercatat setelah pemilik atau admin menyetujui. Gaji, pelunasan tagihan, dan perubahan data orang selalu lewat tombol manusia.", "Yang berjalan otomatis hanya aturan yang dipasang pemilik sendiri, seperti izin sakit sampai batas hari tertentu. Setiap keputusan otomatis tercatat dengan alasannya dan bisa dibatalkan. Keluaran AI diperlakukan sebagai masukan yang tidak tepercaya: AI tidak bisa menyembunyikan apa pun dari pemilik atau menghapus data."] },
-      { judul: "Data pribadi diperkecil", isi: ["NIK tidak disimpan utuh: hanya sidik acak dan 4 digit akhirnya. Nomor rekening dan NIK dibandingkan lewat sidik untuk menemukan data ganda di Gerbang Gaji, tanpa membuka nilai aslinya.", "Mata (kamera meja) dan transkrip wawancara berjalan di HP atau laptop pengguna. Gambar kamera tidak diunggah; yang dikirim hanya status meja dan panjang antrean."] },
+      { judul: "Data pribadi diperkecil", isi: ["NIK tidak disimpan utuh: hanya sidik acak dan 4 digit akhirnya. Nomor rekening dan NIK dibandingkan lewat sidik untuk menemukan data ganda di Gerbang Gaji, tanpa membuka nilai aslinya.", "Mata dan transkrip wawancara berjalan di HP atau laptop pengguna. CCTV dibaca lewat jembatan di komputer toko, jadi videonya tidak keluar dari jaringan toko. Yang dikirim hanya rekap per jam: jumlah kunjungan dan menit per zona.", "Untuk kamera baru, pemilik bisa meminta usulan denah. Satu bingkai dikecilkan ke 320 piksel dan dikaburkan di perangkat, lalu dibaca AI sekali. Bingkai itu tidak disimpan."] },
       { judul: "Masuk dan tautan", isi: ["PIN staf terkunci 15 menit setelah 5 kali salah. Kode absen QR berganti tiap 15 detik dan hanya bisa dipakai sekali per orang untuk jenis absen yang sama.", "Tautan slip gaji dan tablet absen membawa token di bagian URL yang tidak terkirim ke server. Token itu berlaku terbatas dan bisa dicabut. Asisten AI yang kamu sambungkan lewat MCP hanya mendapat izin untuk satu usaha dan bisa dicabut kapan saja."] },
       { judul: "Yang belum dilakukan", isi: ["Belum ada audit keamanan dari pihak luar dan belum ada sertifikasi. Cadangan mingguan ke penyimpanan terpisah sedang dibuat. Alamat resmi untuk melaporkan celah keamanan sedang disiapkan."] },
     ],
@@ -1734,6 +1734,9 @@ export const kamusId = {
     gagal: "Nadi gagal menyimpan. Coba lagi sebentar; isianmu tidak hilang.",
   },
   poster: {
+    "filmJudul": "Lihat Nadi bekerja",
+    "filmKet": "Film 4 menit 38 detik dari layar Nadi sungguhan, dengan data contoh.",
+    "filmKredit": "Musik: Inspiring Advertising, Rafael Krux (filmmusic.io), CC BY 4.0. Rekaman CCTV: Shruthi Pradeep, Pexels.",
     "metaJudul": "Nadi: lempar notanya, Nadi yang merapikan",
     "metaDeskripsi": "Foto nota, surat dokter, atau slip gaji. Nadi membacanya dan menyiapkan catatan yang tinggal kamu setujui dari HP.",
     "nav": {
@@ -1852,7 +1855,7 @@ export const kamusId = {
     "akhirContoh": "atau coba usaha contoh dulu",
     "sedangDibuat": "Sedang dibuat"
   },
-  halamanFitur: {"dipakai": "Dipakai untuk", "masalah": "Masalah yang dibereskan", "tanpaNadi": "Tanpa Nadi", "langkah": "Tiga langkah", "janji": "Yang tidak dilakukan AI", "pintu": "Coba atau lanjut", "masuk": "Berkas masuk", "menunggu": "Menunggu keputusanmu", "berikutnya": "Fitur berikutnya", "ya": "Ya", "tidak": "Tidak"},
+  halamanFitur: {"dipakai": "Dipakai untuk", "masalah": "Masalah yang dibereskan", "tanpaNadi": "Tanpa Nadi", "langkah": "Tiga langkah", "janji": "Yang tidak dilakukan AI", "pintu": "Coba atau lanjut", "masuk": "Berkas masuk", "menunggu": "Menunggu keputusanmu", "berikutnya": "Fitur berikutnya", "ya": "Ya", "tidak": "Tidak", "lihat": "Di layar Nadi", "klipKet": "Rekaman layar Nadi sungguhan dengan data contoh, tanpa suara."},
   fitur: [
     {
       "slug": "lempar",

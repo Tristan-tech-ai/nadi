@@ -57,7 +57,7 @@ export const kamusEn: Kamus = {
       { judul: "Separate per business.", isi: "The database checks every row before it is read, and the separation is tested on every change." },
       { judul: "AI does not decide about money.", isi: "AI reads and suggests; approvals, payroll, and payments always go through your button." },
       { judul: "ID numbers are not stored in full.", isi: "Only a random fingerprint and the last 4 digits of the NIK." },
-      { judul: "Camera and voice stay on the device.", isi: "Mata and interview transcripts run on your phone or laptop; camera images are not uploaded." },
+      { judul: "Camera and voice stay on the device.", isi: "Mata and interview transcripts run on your phone or laptop. Recordings are not uploaded, except one small blurred image when you ask for a camera layout suggestion." },
       { judul: "AI keys never sit on a phone or browser.", isi: "Every AI call goes through a server in Singapore." },
       { judul: "Everything can be traced.", isi: "Every automatic decision is logged with its reason and can be undone." },
     ],
@@ -108,7 +108,7 @@ export const kamusEn: Kamus = {
       { judul: "Each business's data is separate", isi: ["The database checks every row before it is read or changed (row level security). A row is visible only to members of the business that owns it, according to their role. This separation is tested automatically on every database change, including attempts to read another business's data.", "Staff only see their own data: their attendance, leave, and payslips. Accountants can view and export, but cannot approve payroll or suggestions."] },
       { judul: "Where data lives and how it travels", isi: ["The database and files are stored in a data center in Singapore. Every API accepts HTTPS connections only (TLS 1.2 or 1.3).", "Secret keys (AI keys, notification keys) are kept encrypted in the database vault or as server secrets. They never sit on a phone, in the browser, or in the code."] },
       { judul: "AI does not decide about money", isi: ["AI reads files and prepares suggestions. New data is recorded after the owner or an admin approves. Payroll, settling invoices, and changes to people's records always go through a human button.", "Only rules the owner sets up run automatically, such as sick leave up to a certain number of days. Every automatic decision is logged with its reason and can be undone. AI output is treated as untrusted input: AI cannot hide anything from the owner or delete data."] },
-      { judul: "Personal data kept to a minimum", isi: ["ID numbers (NIK) are not stored in full: only a random fingerprint and the last 4 digits. Bank account numbers and ID numbers are compared by fingerprint to find duplicates in the Payroll Gate, without revealing the real values.", "Mata (the table camera) and interview transcripts run on the user's phone or laptop. Camera images are not uploaded; only table status and queue length are sent."] },
+      { judul: "Personal data kept to a minimum", isi: ["ID numbers (NIK) are not stored in full: only a random fingerprint and the last 4 digits. Bank account numbers and ID numbers are compared by fingerprint to find duplicates in the Payroll Gate, without revealing the real values.", "Mata and interview transcripts run on the user's phone or laptop. CCTV is read through a bridge on the shop computer, so the video never leaves the shop network. Only hourly summaries are sent: visit counts and minutes per zone.", "For a new camera, the owner can ask for a layout suggestion. One frame is shrunk to 320 pixels and blurred on the device, then read once by AI. That frame is not stored."] },
       { judul: "Sign-in and links", isi: ["A staff PIN locks for 15 minutes after 5 wrong tries. The attendance QR code changes every 15 seconds and can be used only once per person for the same kind of check-in.", "Payslip and attendance tablet links carry a token in the part of the URL that is never sent to the server. The token expires and can be revoked. An AI assistant you connect through MCP gets access to one business only and can be disconnected at any time."] },
       { judul: "What is not done yet", isi: ["There has been no outside security audit and no certification yet. Weekly backups to separate storage are being built. An official address for reporting security issues is being set up."] },
     ],
@@ -1733,6 +1733,9 @@ export const kamusEn: Kamus = {
     gagal: "Nadi could not save it. Try again shortly; your entries are kept.",
   },
   poster: {
+    "filmJudul": "Watch Nadi work",
+    "filmKet": "A 4 minute 38 second film of Nadi's real screens, with sample data.",
+    "filmKredit": "Music: Inspiring Advertising, Rafael Krux (filmmusic.io), CC BY 4.0. CCTV footage: Shruthi Pradeep, Pexels.",
     "metaJudul": "Nadi: drop in the receipt, Nadi sorts it out",
     "metaDeskripsi": "Snap a receipt, a doctor's note, or a payslip. Nadi reads it and prepares a record you approve from your phone.",
     "nav": {
@@ -1851,7 +1854,7 @@ export const kamusEn: Kamus = {
     "akhirContoh": "or try the sample business first",
     "sedangDibuat": "In progress"
   },
-  halamanFitur: {"dipakai": "Used for", "masalah": "Problems it fixes", "tanpaNadi": "Without Nadi", "langkah": "Three steps", "janji": "What the AI never does", "pintu": "Try it or keep going", "masuk": "File received", "menunggu": "Waiting for you", "berikutnya": "Next feature", "ya": "Yes", "tidak": "No"},
+  halamanFitur: {"dipakai": "Used for", "masalah": "Problems it fixes", "tanpaNadi": "Without Nadi", "langkah": "Three steps", "janji": "What the AI never does", "pintu": "Try it or keep going", "masuk": "File received", "menunggu": "Waiting for you", "berikutnya": "Next feature", "ya": "Yes", "tidak": "No", "lihat": "On Nadi's screen", "klipKet": "A real recording of Nadi's screen with sample data, no sound."},
   fitur: [
     {
       "slug": "lempar",
@@ -3082,8 +3085,8 @@ export const kamusEn: Kamus = {
       { tanya: "What if the internet goes down?", jawab: "Nadi can be installed on a phone like an app. When the signal drops, an offline page appears and what you typed is not lost." },
     ],
     sedangDibuat: [
-      "English for the rest of the app",
-      "CCTV cameras through a small box at the business (today Mata uses a phone or laptop camera)",
+      "Shopee and TikTok Shop orders flowing in on their own (today they arrive through the data door from n8n, Make, or Zapier)",
+      "Certified electronic signatures through a licensed partner (today Nadi makes uncertified ones and says so)",
     ],
   },
 };

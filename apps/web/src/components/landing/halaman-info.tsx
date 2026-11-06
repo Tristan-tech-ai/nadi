@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { KakiPoster, KepalaPoster } from "@/components/poster/kepala-kaki";
 import { VisualFitur } from "@/components/poster/visual-fitur";
@@ -14,6 +15,7 @@ export type WarnaHalaman = "kunyit" | "laut" | "daun" | "cap" | "tulang";
  */
 export function HalamanInfo({ judul, pengantar, draf, children, bahasa = "id", warna = "kunyit" }:
   { judul: string; pengantar?: string; draf?: string; children: ReactNode; bahasa?: Bahasa; warna?: WarnaHalaman }) {
+  const p = ambilKamus(bahasa).poster;
   return (
     <div lang={bahasa} className="poster medan-lembar">
       <main id="isi">
@@ -32,6 +34,16 @@ export function HalamanInfo({ judul, pengantar, draf, children, bahasa = "id", w
           )}
           {children}
         </div>
+        {/* L-01: satu tujuan per halaman. Setiap halaman pendukung berakhir di ajakan yang sama dengan landing. */}
+        <section className="medan-cap" aria-labelledby="judul-ajakan" data-testid="ajakan-akhir">
+          <div className="bingkai" style={{ paddingBlock: "clamp(64px, 8vw, 112px)", display: "grid", gap: 24, justifyItems: "start" }}>
+            <h2 id="judul-ajakan" className="papan papan-besar">{p.akhirJudul}</h2>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "14px 24px", alignItems: "center" }}>
+              <Link href="/demo" className="tombol-poster">{p.nav.coba}</Link>
+              <Link href="/daftar" className="tautan-poster">{p.akhirTombol}</Link>
+            </div>
+          </div>
+        </section>
       </main>
       <KakiPoster bahasa={bahasa} />
     </div>

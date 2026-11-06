@@ -49,6 +49,6 @@ export const FAQ: { tanya: string; jawab: string }[] = [
 ];
 
 export const SEDANG_DIBUAT: string[] = [
-  "Tampilan bahasa Inggris",
-  "Kamera CCTV lewat kotak kecil di tempat usaha (sekarang Mata memakai kamera HP atau laptop)",
+  "Pesanan Shopee dan TikTok Shop masuk sendiri (sekarang lewat Pintu data dari n8n, Make, atau Zapier)",
+  "Tanda tangan elektronik tersertifikasi lewat mitra berizin (sekarang Nadi membuat yang tidak tersertifikasi dan menyebutnya)",
 ];

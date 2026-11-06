@@ -22,7 +22,7 @@ describe("isi landing", () => {
     for (const t of semuaTeks) expect(t).not.toMatch(terlarang);
   });
   it("tidak ada fitur yang sudah jadi masih ditulis sedang dibuat", () => {
-    const sudah = /absen|gaji|topi|invoice|jadwal|izin/i;
+    const sudah = /absen|gaji|topi|invoice|jadwal|izin|cctv|bahasa inggris/i;
     for (const s of SEDANG_DIBUAT) expect(s).not.toMatch(sudah);
   });
 });

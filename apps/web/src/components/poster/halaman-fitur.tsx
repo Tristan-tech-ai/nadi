@@ -3,6 +3,7 @@ import type { Usulan } from "@/components/ui/kartu-usulan";
 import { KakiPoster, KepalaPoster } from "@/components/poster/kepala-kaki";
 import { Cap } from "@/components/poster/ilustrasi";
 import { VisualFitur } from "@/components/poster/visual-fitur";
+import { KlipNadi } from "@/components/poster/klip-nadi";
 import { awalanJalur, type Bahasa } from "@/lib/i18n/bahasa";
 import { ambilKamus } from "@/lib/i18n/kamus";
 
@@ -11,6 +12,8 @@ import { ambilKamus } from "@/lib/i18n/kamus";
 const MEDAN: Record<string, string> = { kunyit: "medan-kunyit", laut: "medan-laut", daun: "medan-daun", cap: "medan-cap", tinta: "medan-tinta", tulang: "medan-tulang" };
 const URUT_MASALAH = ["medan-tinta", "medan-cap", "medan-kunyit"];
 const URUT_LANGKAH = ["medan-kunyit", "medan-cap", "medan-daun"];
+// L-01: fitur yang tampil bekerja di film demo punya potongan rekaman layarnya sendiri (public/video/<nama>.mp4).
+export const KLIP_FITUR: Record<string, string> = { lempar: "lempar", feed: "feed", tagihan: "tagihan", gaji: "gaji", mata: "mata" };
 
 export function HalamanFitur({ slug, bahasa }: { slug: string; bahasa: Bahasa }) {
   const k = ambilKamus(bahasa);
@@ -59,6 +62,15 @@ export function HalamanFitur({ slug, bahasa }: { slug: string; bahasa: Bahasa })
           ))}
         </ul>
       </section>
+
+      {KLIP_FITUR[slug] ? (
+        <section className="medan-tinta" aria-labelledby="judul-klip">
+          <div className="bingkai" style={{ paddingBlock: "clamp(72px, 10vw, 140px)", display: "grid", gap: 32 }}>
+            <h2 id="judul-klip" className="papan papan-besar">{teksHalaman.lihat}</h2>
+            <KlipNadi nama={KLIP_FITUR[slug]} label={`${teksHalaman.lihat}: ${f.nama}`} ket={teksHalaman.klipKet} />
+          </div>
+        </section>
+      ) : null}
 
       <section className="medan-tulang" aria-labelledby="judul-langkah">
         <div className="bingkai" style={{ paddingBlock: "clamp(72px, 10vw, 140px)", display: "grid", gap: 36 }}>

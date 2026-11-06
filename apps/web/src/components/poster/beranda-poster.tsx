@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FilmNadi } from "@/components/poster/klip-nadi";
 import { Banding } from "@/components/poster/banding";
 import { CobaSendiri } from "@/components/poster/coba-sendiri";
 import { ChatWa, ExcelAbsen, Ktp, Kuitansi, Mutasi, Nota, Ponsel, SlipGaji, SuratDokter } from "@/components/poster/ilustrasi";
@@ -120,6 +121,14 @@ export function BerandaPoster({ bahasa }: { bahasa: Bahasa }) {
       {/* 4. Sebelum dan sesudah, digeser pengunjung. */}
       <section aria-label={p.bandingJudul}>
         <Banding teks={{ label: p.bandingJudul, tanpa: p.tanpa, dengan: p.dengan, tanpaKet: p.tanpaKet, denganKet: p.denganKet, kartu: p.kartuHp, diterima: p.capDiterima, chat: p.kacau.chat1, feed, teksKartu: k.kartu, bahasa }} />
+      </section>
+
+      {/* L-01: film demo utuh, layar Nadi sungguhan. Diputar pengunjung sendiri. */}
+      <section className="medan-tinta" aria-labelledby="judul-film">
+        <div className="bingkai" style={{ paddingBlock: "clamp(72px, 10vw, 140px)", display: "grid", gap: 32 }}>
+          <h2 id="judul-film" className="papan papan-besar">{p.filmJudul}</h2>
+          <FilmNadi label={p.filmJudul} ket={p.filmKet} kredit={p.filmKredit} />
+        </div>
       </section>
 
       {/* 5. Sembilan pintu fitur. */}

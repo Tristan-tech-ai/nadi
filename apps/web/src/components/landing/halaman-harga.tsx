@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Bagian, GambarBaca, HalamanInfo } from "@/components/landing/halaman-info";
 import { Rupiah } from "@/components/ui/rupiah";
 import { formatAngka } from "@/lib/format";
@@ -9,7 +8,6 @@ import { DISKON_TAHUNAN_BULAN, PAKET, hargaBulanan } from "@/lib/paket";
 const CONTOH_ORANG = [5, 10, 20, 40];
 // Yang mulai terasa di tiap paket, digambar dengan potongan antarmuka yang sama dengan landing.
 const GAMBAR_PAKET = { gratis: "nota", usaha: "feed", tumbuh: "gaji", perusahaan: "mata" } as const;
-const tautan = "font-semibold text-tinta underline underline-offset-4";
 
 /** Halaman harga dua bahasa (D-15, I-03): /harga dan /en/harga. */
 export function HalamanHarga({ bahasa }: { bahasa: Bahasa }) {
@@ -82,12 +80,6 @@ export function HalamanHarga({ bahasa }: { bahasa: Bahasa }) {
 
       <Bagian judul={k.orangJudul}><p>{k.orangIsi}</p></Bagian>
       <Bagian judul={k.kuotaJudul}><p>{k.kuotaIsi}</p></Bagian>
-      <Bagian judul={k.mulaiJudul}>
-        <p>
-          {k.mulaiAwal} <Link href="/demo" className={tautan}>{k.mulaiContoh}</Link> {k.mulaiTengah}{" "}
-          <Link href="/daftar" className={tautan}>{k.mulaiAkun}</Link> {k.mulaiAkhir}
-        </p>
-      </Bagian>
     </HalamanInfo>
   );
 }

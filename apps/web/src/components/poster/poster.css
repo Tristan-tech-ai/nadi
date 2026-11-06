@@ -333,8 +333,14 @@
 .bagian-baca { padding-block: 36px; }
 .bagian-baca + .bagian-baca { padding-top: 52px; }
 .baca-dua { display: grid; gap: 28px; }
-.gambar-baca { display: grid; place-items: center; min-height: 260px; padding: 28px; border-radius: 10px; background: var(--poster-tulang); color: var(--poster-tulang-tinta); }
-@media (min-width: 1100px) { .gambar-baca { justify-items: end; padding-inline: 0 0; background: none; } }
+/* L-01 potongan rekaman layar Nadi. */
+.klip-nadi { display: grid; gap: 12px; margin: 0; }
+.klip-nadi video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; border-radius: 10px; background: var(--poster-lembar); }
+.klip-nadi figcaption { font-size: 14px; max-width: 66ch; }
+.kredit-film { display: block; margin-top: 4px; opacity: 0.85; }
+/* Visual poster diposisikan absolut di dalam wadahnya (seperti .visual-fitur); tanpa position relative ia lepas ke halaman (temuan L-01). */
+.gambar-baca { position: relative; overflow: hidden; container-type: inline-size; aspect-ratio: 4 / 3; width: 100%; max-width: 520px; justify-self: center; border-radius: 10px; background: var(--poster-tulang); color: var(--poster-tulang-tinta); }
+@media (min-width: 1100px) { .gambar-baca { justify-self: end; } }
 @media (min-width: 1100px) { .baca-dua { grid-template-columns: minmax(0, 66ch) minmax(320px, 1fr); align-items: center; gap: 56px; } }
 .catatan-draf { border-left: 4px solid var(--poster-cap); padding-left: 16px; margin-bottom: 36px; }
 .isi-baca table { font-size: 16px; }
