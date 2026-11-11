@@ -1,0 +1,58 @@
+{
+  "untuk": "Toko online, kafe, agensi media sosial, dan usaha yang rutin memposting di Instagram, TikTok, atau WhatsApp.",
+  "contoh": "Promo menu baru dijadwalkan Jumat 18.00 di Instagram: Dewi menulis naskah, mengirim draf untuk review, pemilik menyetujui, lalu tautan postingan dicatat saat tayang.",
+  "isi_contoh": [
+    { "koleksi": "konten", "data": { "judul": "Promo menu baru Jumat", "kanal": "instagram", "format": "carousel", "jadwal": "2026-11-21T18:00:00+08:00", "penulis": "@", "naskah": "Tiga menu baru, diskon 10% untuk pembelian sebelum 20.00.", "tautan_draf": "https://drive.example.org/promo-jumat" } },
+    { "koleksi": "konten", "data": { "judul": "Video di balik dapur", "kanal": "tiktok", "format": "video", "jadwal": "2026-11-23T12:00:00+08:00", "penulis": "@" } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "kalender-konten", "nama": "Kalender konten", "ikon": "kalender", "ruang": "jual", "versi": "1.0.0",
+    "deskripsi": "Rencana posting per kanal dari ide, ditulis, review, terjadwal, sampai tayang. Revisi wajib beralasan dan tautan postingan tercatat.",
+    "koleksi": [
+      {
+        "kode": "konten", "nama": "Konten", "judul": "judul",
+        "bidang": [
+          { "kode": "judul", "label": "Judul konten", "tipe": "teks", "wajib": true },
+          { "kode": "kanal", "label": "Kanal", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "instagram", "label": "Instagram" }, { "kode": "tiktok", "label": "TikTok" }, { "kode": "facebook", "label": "Facebook" }, { "kode": "youtube", "label": "YouTube" }, { "kode": "whatsapp", "label": "Status WhatsApp" }, { "kode": "situs", "label": "Situs atau blog" }] },
+          { "kode": "format", "label": "Format", "tipe": "pilihan", "pilihan": [{ "kode": "foto", "label": "Foto" }, { "kode": "carousel", "label": "Carousel" }, { "kode": "video", "label": "Video" }, { "kode": "story", "label": "Story" }, { "kode": "artikel", "label": "Artikel" }] },
+          { "kode": "jadwal", "label": "Jadwal tayang", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "penulis", "label": "Penulis", "tipe": "orang", "penugasan": true },
+          { "kode": "desainer", "label": "Desainer", "tipe": "orang", "penugasan": true },
+          { "kode": "klien", "label": "Klien", "tipe": "pelanggan", "petunjuk": "Isi bila konten ini untuk klien agensi." },
+          { "kode": "naskah", "label": "Naskah atau caption", "tipe": "teks_panjang" },
+          { "kode": "tautan_draf", "label": "Tautan draf", "tipe": "tautan" },
+          { "kode": "catatan_revisi", "label": "Catatan revisi", "tipe": "teks_panjang" },
+          { "kode": "tautan_tayang", "label": "Tautan postingan", "tipe": "tautan" }
+        ],
+        "status": {
+          "awal": "ide",
+          "daftar": [{ "kode": "ide", "label": "Ide" }, { "kode": "tulis", "label": "Ditulis", "warna": "laut" }, { "kode": "review", "label": "Review", "warna": "kunyit" }, { "kode": "terjadwal", "label": "Terjadwal", "warna": "laut" }, { "kode": "tayang", "label": "Tayang", "akhir": true, "warna": "daun" }, { "kode": "batal", "label": "Batal", "akhir": true, "warna": "cap" }],
+          "transisi": [
+            { "dari": ["ide"], "ke": "tulis", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Mulai tulis" },
+            { "dari": ["tulis"], "ke": "review", "peran": ["ditugaskan", "pemilik", "admin"], "wajib_isi": ["tautan_draf"], "label": "Kirim untuk review" },
+            { "dari": ["review"], "ke": "tulis", "peran": ["pemilik", "admin"], "wajib_isi": ["catatan_revisi"], "label": "Minta revisi" },
+            { "dari": ["review"], "ke": "terjadwal", "peran": ["pemilik", "admin"], "label": "Setujui dan jadwalkan" },
+            { "dari": ["terjadwal"], "ke": "tayang", "peran": ["ditugaskan", "pemilik", "admin"], "wajib_isi": ["tautan_tayang"], "label": "Tandai tayang" },
+            { "dari": ["ide", "tulis", "review", "terjadwal"], "ke": "batal", "peran": ["pemilik", "admin"], "label": "Batalkan" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "kalender", "tanggal": "jadwal" },
+          { "jenis": "papan", "kolom_kartu": ["kanal", "jadwal", "penulis"] },
+          { "jenis": "daftar", "kolom": ["judul", "kanal", "format", "jadwal", "penulis"], "urut": { "bidang": "jadwal", "arah": "naik" }, "saring": ["kanal", "status", "klien"] },
+          { "jenis": "formulir", "bidang": ["judul", "kanal", "format", "jadwal", "penulis", "desainer", "klien", "naskah", "tautan_draf"] },
+          { "jenis": "rincian", "bidang": ["judul", "kanal", "format", "jadwal", "penulis", "desainer", "klien", "naskah", "tautan_draf", "catatan_revisi", "tautan_tayang"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "milik_sendiri" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "minta-review", "pemicu": { "jenis": "status", "koleksi": "konten", "ke": "review" }, "aksi": { "jenis": "kartu", "judul": "Konten {judul} menunggu review", "kepada": "pengelola" } },
+      { "kode": "besok-tayang", "pemicu": { "jenis": "tenggat", "koleksi": "konten", "bidang": "jadwal", "hari_sebelum": 1 }, "aksi": { "jenis": "pengingat", "judul": "Besok tayang: {judul}", "kepada": "ditugaskan" } }
+    ],
+    "laporan": [
+      { "kode": "konten-per-kanal", "judul": "Konten per kanal", "koleksi": "konten", "kelompok": "kanal", "hitung": "jumlah" },
+      { "kode": "konten-per-status", "judul": "Konten per status", "koleksi": "konten", "kelompok": "status", "hitung": "jumlah" }
+    ]
+  }
+}

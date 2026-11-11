@@ -1,0 +1,55 @@
+{
+  "untuk": "Usaha dengan beberapa staf yang membeli bahan, perlengkapan, atau jasa dan ingin setiap pembelian disetujui dulu.",
+  "contoh": "Kepala dapur mengajukan 20 kg tepung Rp300.000 untuk Senin: pemilik menyetujui, admin menandai dipesan ke pemasok, lalu pemohon menandai barang diterima. Tagihan pemasoknya tetap dicatat lewat Lempar.",
+  "isi_contoh": [
+    { "koleksi": "permintaan", "data": { "barang": "Tepung terigu protein tinggi", "kategori": "bahan", "jumlah": 20, "satuan": "kg", "perkiraan": 300000, "alasan": "Stok tinggal 5 kg, cukup untuk dua hari produksi.", "pemasok": "Toko Bahan Kue Sinar", "dibutuhkan": "2026-11-23" } },
+    { "koleksi": "permintaan", "data": { "barang": "Printer label kasir", "kategori": "aset", "jumlah": 1, "satuan": "unit", "perkiraan": 1250000, "alasan": "Printer lama rusak dan tidak bisa diperbaiki.", "tautan": "https://toko.example.org/printer-label" } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "permintaan-pembelian", "nama": "Permintaan pembelian", "ikon": "struk", "ruang": "uang", "versi": "1.0.0",
+    "deskripsi": "Staf mengajukan pembelian dengan alasan dan perkiraan biaya; pemilik atau admin menyetujui atau menolak beralasan, lalu pesanan dan penerimaan barang tercatat.",
+    "koleksi": [
+      {
+        "kode": "permintaan", "nama": "Permintaan", "judul": "barang",
+        "bidang": [
+          { "kode": "barang", "label": "Barang atau jasa", "tipe": "teks", "wajib": true },
+          { "kode": "kategori", "label": "Kategori", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "operasional", "label": "Operasional" }, { "kode": "bahan", "label": "Bahan baku" }, { "kode": "aset", "label": "Aset dan peralatan" }, { "kode": "jasa", "label": "Jasa" }] },
+          { "kode": "jumlah", "label": "Jumlah", "tipe": "angka", "wajib": true, "min": 1 },
+          { "kode": "satuan", "label": "Satuan", "tipe": "teks" },
+          { "kode": "perkiraan", "label": "Perkiraan biaya total", "tipe": "rupiah", "wajib": true, "min": 0 },
+          { "kode": "alasan", "label": "Alasan", "tipe": "teks_panjang", "wajib": true },
+          { "kode": "pemasok", "label": "Pemasok", "tipe": "teks" },
+          { "kode": "tautan", "label": "Tautan penawaran", "tipe": "tautan" },
+          { "kode": "dibutuhkan", "label": "Dibutuhkan paling lambat", "tipe": "tanggal" },
+          { "kode": "catatan_putusan", "label": "Catatan keputusan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "diajukan",
+          "daftar": [{ "kode": "diajukan", "label": "Diajukan" }, { "kode": "disetujui", "label": "Disetujui", "warna": "laut" }, { "kode": "dipesan", "label": "Dipesan", "warna": "kunyit" }, { "kode": "diterima", "label": "Barang diterima", "akhir": true, "warna": "daun" }, { "kode": "ditolak", "label": "Ditolak", "akhir": true, "warna": "cap" }],
+          "transisi": [
+            { "dari": ["diajukan"], "ke": "disetujui", "peran": ["pemilik", "admin"], "label": "Setujui" },
+            { "dari": ["diajukan"], "ke": "ditolak", "peran": ["pemilik", "admin"], "wajib_isi": ["catatan_putusan"], "label": "Tolak" },
+            { "dari": ["disetujui"], "ke": "dipesan", "peran": ["pemilik", "admin", "akuntan"], "wajib_isi": ["pemasok"], "label": "Tandai dipesan" },
+            { "dari": ["dipesan"], "ke": "diterima", "peran": ["pembuat", "pemilik", "admin", "akuntan"], "label": "Barang diterima" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["barang", "kategori", "perkiraan", "dibutuhkan"], "urut": { "bidang": "dibutuhkan", "arah": "naik" }, "saring": ["kategori", "status"] },
+          { "jenis": "papan", "kolom_kartu": ["kategori", "perkiraan", "dibutuhkan"] },
+          { "jenis": "formulir", "bidang": ["barang", "kategori", "jumlah", "satuan", "perkiraan", "alasan", "pemasok", "tautan", "dibutuhkan"] },
+          { "jenis": "rincian", "bidang": ["barang", "kategori", "jumlah", "satuan", "perkiraan", "alasan", "pemasok", "tautan", "dibutuhkan", "catatan_putusan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "tulis", "staf": "milik_sendiri" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "minta-beli", "pemicu": { "jenis": "buat", "koleksi": "permintaan" }, "aksi": { "jenis": "kartu", "judul": "Permintaan beli: {barang}", "kepada": "pengelola" } },
+      { "kode": "beli-disetujui", "pemicu": { "jenis": "status", "koleksi": "permintaan", "ke": "disetujui" }, "aksi": { "jenis": "pengingat", "judul": "Permintaanmu disetujui: {barang}", "kepada": "pembuat" } },
+      { "kode": "beli-ditolak", "pemicu": { "jenis": "status", "koleksi": "permintaan", "ke": "ditolak" }, "aksi": { "jenis": "pengingat", "judul": "Permintaanmu ditolak: {barang}. Lihat catatan keputusannya.", "kepada": "pembuat" } }
+    ],
+    "laporan": [
+      { "kode": "biaya-per-kategori", "judul": "Perkiraan biaya per kategori", "koleksi": "permintaan", "kelompok": "kategori", "hitung": { "total": "perkiraan" } },
+      { "kode": "permintaan-per-status", "judul": "Permintaan per status", "koleksi": "permintaan", "kelompok": "status", "hitung": "jumlah" }
+    ]
+  }
+}

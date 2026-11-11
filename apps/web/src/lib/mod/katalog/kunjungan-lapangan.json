@@ -1,0 +1,56 @@
+{
+  "untuk": "Sales lapangan, teknisi servis, distributor, dan petugas penagihan yang berkunjung ke pelanggan setiap hari.",
+  "contoh": "Teknisi dijadwalkan servis AC di rumah pelanggan Kamis 10.00: menandai tiba, menulis hasil dan tautan foto, lalu nilai order tambahan memberi kartu ke pemilik.",
+  "isi_contoh": [
+    { "koleksi": "kunjungan", "data": { "tujuan": "Servis AC rutin", "pelanggan": "@", "alamat": "Jl. Sunset Road 18, Kuta", "petugas": "@", "jadwal": "2026-11-20T10:00:00+08:00", "jenis": "servis" } },
+    { "koleksi": "kunjungan", "data": { "tujuan": "Tawarkan paket perawatan tahunan", "petugas": "@", "jadwal": "2026-11-21T13:30:00+08:00", "jenis": "penjualan" } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "kunjungan-lapangan", "nama": "Kunjungan lapangan", "ikon": "peta", "ruang": "jual", "versi": "1.0.0",
+    "deskripsi": "Jadwal kunjungan ke pelanggan untuk penjualan, servis, survei, atau penagihan: jam tiba, hasil, tautan foto, dan nilai order dari kunjungan.",
+    "koleksi": [
+      {
+        "kode": "kunjungan", "nama": "Kunjungan", "judul": "tujuan",
+        "bidang": [
+          { "kode": "tujuan", "label": "Tujuan kunjungan", "tipe": "teks", "wajib": true },
+          { "kode": "pelanggan", "label": "Pelanggan", "tipe": "pelanggan" },
+          { "kode": "alamat", "label": "Alamat", "tipe": "teks" },
+          { "kode": "petugas", "label": "Petugas", "tipe": "orang", "wajib": true, "penugasan": true },
+          { "kode": "jadwal", "label": "Jadwal", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "jenis", "label": "Jenis", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "penjualan", "label": "Penjualan" }, { "kode": "servis", "label": "Servis atau perawatan" }, { "kode": "survei", "label": "Survei lokasi" }, { "kode": "penagihan", "label": "Penagihan" }] },
+          { "kode": "tiba", "label": "Tiba di lokasi", "tipe": "tanggal_jam" },
+          { "kode": "hasil", "label": "Hasil kunjungan", "tipe": "teks_panjang" },
+          { "kode": "tautan_foto", "label": "Tautan foto", "tipe": "tautan" },
+          { "kode": "nilai_order", "label": "Nilai order", "tipe": "rupiah", "min": 0 },
+          { "kode": "tindak_lanjut", "label": "Tindak lanjut", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "terjadwal",
+          "daftar": [{ "kode": "terjadwal", "label": "Terjadwal" }, { "kode": "di_lokasi", "label": "Di lokasi", "warna": "laut" }, { "kode": "ulang", "label": "Dijadwal ulang", "warna": "kunyit" }, { "kode": "selesai", "label": "Selesai", "akhir": true, "warna": "daun" }, { "kode": "batal", "label": "Batal", "akhir": true, "warna": "cap" }],
+          "transisi": [
+            { "dari": ["terjadwal", "ulang"], "ke": "di_lokasi", "peran": ["ditugaskan", "pemilik", "admin"], "wajib_isi": ["tiba"], "label": "Tiba di lokasi" },
+            { "dari": ["di_lokasi"], "ke": "selesai", "peran": ["ditugaskan", "pemilik", "admin"], "wajib_isi": ["hasil"], "label": "Selesai" },
+            { "dari": ["terjadwal"], "ke": "ulang", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Jadwal ulang" },
+            { "dari": ["terjadwal", "ulang"], "ke": "batal", "peran": ["pemilik", "admin"], "label": "Batalkan" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "kalender", "tanggal": "jadwal" },
+          { "jenis": "papan", "kolom_kartu": ["pelanggan", "petugas", "jadwal"] },
+          { "jenis": "daftar", "kolom": ["tujuan", "pelanggan", "petugas", "jadwal", "jenis"], "urut": { "bidang": "jadwal", "arah": "naik" }, "saring": ["jenis", "petugas", "status"] },
+          { "jenis": "formulir", "bidang": ["tujuan", "pelanggan", "alamat", "petugas", "jadwal", "jenis"] },
+          { "jenis": "rincian", "bidang": ["tujuan", "pelanggan", "alamat", "petugas", "jadwal", "jenis", "tiba", "hasil", "tautan_foto", "nilai_order", "tindak_lanjut"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "milik_sendiri" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "besok-kunjungan", "pemicu": { "jenis": "tenggat", "koleksi": "kunjungan", "bidang": "jadwal", "hari_sebelum": 1 }, "aksi": { "jenis": "pengingat", "judul": "Besok kunjungan: {tujuan}", "kepada": "ditugaskan" } },
+      { "kode": "order-kunjungan", "pemicu": { "jenis": "status", "koleksi": "kunjungan", "ke": "selesai" }, "syarat": [{ "bidang": "nilai_order", "op": "lebih", "nilai": 0 }], "aksi": { "jenis": "kartu", "judul": "Ada order dari kunjungan: {tujuan}", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "kunjungan-per-jenis", "judul": "Kunjungan per jenis", "koleksi": "kunjungan", "kelompok": "jenis", "hitung": "jumlah" },
+      { "kode": "order-per-petugas", "judul": "Nilai order per petugas", "koleksi": "kunjungan", "kelompok": "petugas", "hitung": { "total": "nilai_order" } }
+    ]
+  }
+}

@@ -2,12 +2,16 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { RUANG } from "@/lib/ruang";
-import { ARTIKEL_HALAMAN, artikelUntuk, cariArtikel, kategori, kategoriUntuk, SEMUA_ARTIKEL, TUGAS } from "./artikel";
+import { KATALOG_RESMI } from "@/lib/mod/katalog";
+import { ARTIKEL_HALAMAN, ARTIKEL_PAKET, artikelUntuk, cariArtikel, kategori, kategoriUntuk, SEMUA_ARTIKEL, TUGAS } from "./artikel";
 import { TUGAS_EN } from "./artikel-en";
 
 const APP = join(__dirname, "..", "..", "app");
 // Jalur publik atau /app yang benar-benar punya page.tsx (termasuk alat L-05).
 const adaHalaman = (href: string) => existsSync(join(APP, ...href.split("?")[0].split("/").filter(Boolean), "page.tsx"));
+// Halaman rincian paket resmi memakai segmen dinamis [kode] dan hanya menerima kode di katalog.
+const adaRincianPaket = (href: string) => /^\/app\/tambah-fitur\/[a-z0-9-]+$/.test(href) && existsSync(join(APP, "app", "tambah-fitur", "[kode]", "page.tsx"))
+  && KATALOG_RESMI.some((p) => href.endsWith(`/${p.manifest.kode}`));
 
 describe("pusat bantuan", () => {
   it("setiap layar di peta ruang punya artikel", () => {
@@ -27,6 +31,20 @@ describe("pusat bantuan", () => {
       expect(t.langkah.length, t.slug).toBeGreaterThanOrEqual(3);
       for (const l of t.tautan) expect(adaHalaman(l.href), `${t.slug} -> ${l.href}`).toBe(true);
     }
+  });
+  it("X-14: setiap paket resmi punya artikel berlangkah dengan tautan yang ada, dalam dua bahasa", () => {
+    expect(ARTIKEL_PAKET.map((a) => a.slug)).toEqual(KATALOG_RESMI.map((p) => `paket-${p.manifest.kode}`));
+    for (const a of ARTIKEL_PAKET) {
+      expect(a.kategori).toBe("tambahan");
+      expect(a.langkah.length, a.slug).toBeGreaterThanOrEqual(3);
+      for (const l of a.tautan) expect(adaHalaman(l.href) || adaRincianPaket(l.href), `${a.slug} -> ${l.href}`).toBe(true);
+      const en = artikelUntuk("en").find((x) => x.slug === a.slug)!;
+      expect(en.jenis === "tugas" && en.langkah.length).toBe(a.langkah.length);
+      expect(en.judul).not.toBe(a.judul);
+    }
+    expect(JSON.stringify(ARTIKEL_PAKET)).not.toMatch(/[–—]/);
+    expect(cariArtikel("kendaraan")[0]?.slug).toBe("paket-armada");
+    expect(cariArtikel("tiket helpdesk")[0]?.slug).toBe("paket-helpdesk-internal");
   });
   it("teks tanpa tanda pisah panjang dan kata terlarang", () => {
     const semua = JSON.stringify(TUGAS);

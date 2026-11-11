@@ -1,0 +1,55 @@
+{
+  "untuk": "Kantor, sekolah, klinik, dan usaha dengan beberapa cabang yang butuh satu tempat untuk melaporkan masalah komputer, fasilitas, atau akun.",
+  "contoh": "Printer kasir cabang Denpasar macet: staf membuat tiket prioritas tinggi, pemilik mendapat kartu, petugas IT menangani, menulis solusinya, dan pelapor diberi tahu saat selesai.",
+  "isi_contoh": [
+    { "koleksi": "tiket", "data": { "judul": "Printer kasir macet", "kategori": "it", "prioritas": "tinggi", "uraian": "Printer struk di kasir 2 berhenti mencetak sejak pagi. Lampu merah berkedip.", "lokasi": "Cabang Denpasar", "petugas": "@" } },
+    { "koleksi": "tiket", "data": { "judul": "AC ruang rapat bocor", "kategori": "fasilitas", "prioritas": "sedang", "uraian": "Air menetes dari AC ke meja rapat." } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "helpdesk-internal", "nama": "Helpdesk internal", "ikon": "headset", "ruang": "orang", "versi": "1.0.0",
+    "deskripsi": "Tiket masalah komputer, fasilitas, dan akses aplikasi dengan prioritas, petugas, tenggat, dan solusi yang wajib ditulis sebelum tiket selesai.",
+    "koleksi": [
+      {
+        "kode": "tiket", "nama": "Tiket", "judul": "judul",
+        "bidang": [
+          { "kode": "judul", "label": "Masalah", "tipe": "teks", "wajib": true },
+          { "kode": "kategori", "label": "Kategori", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "it", "label": "Komputer dan jaringan" }, { "kode": "fasilitas", "label": "Fasilitas kantor" }, { "kode": "akses", "label": "Akun dan akses aplikasi" }, { "kode": "perlengkapan", "label": "Perlengkapan kerja" }, { "kode": "lain", "label": "Lainnya" }] },
+          { "kode": "prioritas", "label": "Prioritas", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "rendah", "label": "Rendah", "warna": "abu" }, { "kode": "sedang", "label": "Sedang", "warna": "kunyit" }, { "kode": "tinggi", "label": "Tinggi", "warna": "cap" }] },
+          { "kode": "uraian", "label": "Uraian", "tipe": "teks_panjang", "wajib": true, "petunjuk": "Apa yang terjadi, sejak kapan, dan apa yang sudah dicoba." },
+          { "kode": "lokasi", "label": "Lokasi", "tipe": "teks" },
+          { "kode": "tautan_bukti", "label": "Tautan foto atau tangkapan layar", "tipe": "tautan" },
+          { "kode": "petugas", "label": "Petugas", "tipe": "orang", "penugasan": true },
+          { "kode": "tenggat", "label": "Target selesai", "tipe": "tanggal_jam" },
+          { "kode": "solusi", "label": "Solusi", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "baru",
+          "daftar": [{ "kode": "baru", "label": "Baru" }, { "kode": "ditangani", "label": "Ditangani", "warna": "laut" }, { "kode": "tunggu", "label": "Menunggu pelapor", "warna": "kunyit" }, { "kode": "selesai", "label": "Selesai", "akhir": true, "warna": "daun" }, { "kode": "batal", "label": "Batal", "akhir": true, "warna": "abu" }],
+          "transisi": [
+            { "dari": ["baru"], "ke": "ditangani", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Tangani" },
+            { "dari": ["ditangani"], "ke": "tunggu", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Tanya pelapor" },
+            { "dari": ["tunggu"], "ke": "ditangani", "peran": ["pembuat", "ditugaskan", "pemilik", "admin"], "label": "Sudah dijawab" },
+            { "dari": ["ditangani"], "ke": "selesai", "peran": ["ditugaskan", "pemilik", "admin"], "wajib_isi": ["solusi"], "label": "Selesaikan" },
+            { "dari": ["baru", "tunggu"], "ke": "batal", "peran": ["pembuat", "pemilik", "admin"], "label": "Batalkan" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "papan", "kolom_kartu": ["kategori", "prioritas", "petugas"] },
+          { "jenis": "daftar", "kolom": ["judul", "kategori", "prioritas", "petugas", "tenggat"], "saring": ["kategori", "prioritas", "status", "petugas"] },
+          { "jenis": "formulir", "bidang": ["judul", "kategori", "prioritas", "uraian", "lokasi", "tautan_bukti", "petugas", "tenggat"] },
+          { "jenis": "rincian", "bidang": ["judul", "kategori", "prioritas", "uraian", "lokasi", "tautan_bukti", "petugas", "tenggat", "solusi"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "milik_sendiri", "staf": "milik_sendiri" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "tiket-mendesak", "pemicu": { "jenis": "buat", "koleksi": "tiket" }, "syarat": [{ "bidang": "prioritas", "op": "sama", "nilai": "tinggi" }], "aksi": { "jenis": "kartu", "judul": "Tiket prioritas tinggi: {judul}", "kepada": "pengelola" } },
+      { "kode": "tiket-selesai", "pemicu": { "jenis": "status", "koleksi": "tiket", "ke": "selesai" }, "aksi": { "jenis": "pengingat", "judul": "Tiketmu selesai: {judul}", "kepada": "pembuat" } },
+      { "kode": "tiket-tenggat", "pemicu": { "jenis": "tenggat", "koleksi": "tiket", "bidang": "tenggat", "hari_sebelum": 0 }, "aksi": { "jenis": "pengingat", "judul": "Hari ini target selesai tiket: {judul}", "kepada": "ditugaskan" } }
+    ],
+    "laporan": [
+      { "kode": "tiket-per-kategori", "judul": "Tiket per kategori", "koleksi": "tiket", "kelompok": "kategori", "hitung": "jumlah" },
+      { "kode": "tiket-per-status", "judul": "Tiket per status", "koleksi": "tiket", "kelompok": "status", "hitung": "jumlah" }
+    ]
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "untuk": "Kantor, agensi, konsultan, dan tim penjualan yang sering rapat dengan klien atau berkunjung ke lokasi.",
+  "contoh": "Rapat klien hotel 14.00: ringkasan dan keputusan dicatat, dua tindak lanjut ditugaskan ke Sari dan Budi dengan tenggat, Nadi mengingatkan sehari sebelumnya.",
+  "isi_contoh": [
+    { "koleksi": "catatan", "data": { "judul": "Rapat awal katalog hotel", "jenis": "rapat_klien", "waktu": "2026-11-20T14:00:00+08:00", "klien": "@", "tempat": "Kantor klien, Kuta", "peserta": ["@"], "ringkasan": "Klien ingin katalog 24 halaman, foto kamar baru, terbit sebelum Desember.", "keputusan": "Pakai foto lama untuk lobi, foto kamar diambil ulang minggu depan.", "durasi": 60 } },
+    { "koleksi": "tindak", "data": { "judul": "Kirim jadwal foto kamar", "rapat": "@", "pj": "@", "tenggat": "2026-11-22", "catatan": "Konfirmasi dua tanggal ke bagian marketing hotel." } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "log-rapat", "nama": "Log rapat dan kunjungan", "ikon": "obrolan", "ruang": "dokumen", "versi": "1.0.0",
+    "deskripsi": "Catatan rapat internal, rapat klien, dan kunjungan: ringkasan, keputusan, peserta, lalu tindak lanjut yang ditugaskan dengan tenggat.",
+    "koleksi": [
+      {
+        "kode": "catatan", "nama": "Rapat dan kunjungan", "judul": "judul",
+        "bidang": [
+          { "kode": "judul", "label": "Judul", "tipe": "teks", "wajib": true },
+          { "kode": "jenis", "label": "Jenis", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "rapat_internal", "label": "Rapat internal" }, { "kode": "rapat_klien", "label": "Rapat klien", "warna": "laut" }, { "kode": "kunjungan", "label": "Kunjungan", "warna": "kunyit" }, { "kode": "telepon", "label": "Telepon atau video" }] },
+          { "kode": "waktu", "label": "Waktu", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "klien", "label": "Klien", "tipe": "pelanggan" },
+          { "kode": "tempat", "label": "Tempat", "tipe": "teks" },
+          { "kode": "peserta", "label": "Peserta", "tipe": "orang", "banyak": true },
+          { "kode": "ringkasan", "label": "Ringkasan", "tipe": "teks_panjang", "wajib": true },
+          { "kode": "keputusan", "label": "Keputusan", "tipe": "teks_panjang" },
+          { "kode": "durasi", "label": "Durasi (menit)", "tipe": "angka", "min": 0, "max": 1440 }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["waktu", "judul", "jenis", "klien"], "urut": { "bidang": "waktu", "arah": "turun" }, "saring": ["jenis", "klien"] },
+          { "jenis": "kalender", "tanggal": "waktu" },
+          { "jenis": "formulir", "bidang": ["judul", "jenis", "waktu", "klien", "tempat", "peserta", "ringkasan", "keputusan", "durasi"] },
+          { "jenis": "rincian", "bidang": ["judul", "jenis", "waktu", "klien", "tempat", "peserta", "ringkasan", "keputusan", "durasi"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "tulis" }
+      },
+      {
+        "kode": "tindak", "nama": "Tindak lanjut", "judul": "judul",
+        "bidang": [
+          { "kode": "judul", "label": "Yang dikerjakan", "tipe": "teks", "wajib": true },
+          { "kode": "rapat", "label": "Dari rapat", "tipe": "rujukan", "koleksi": "catatan", "wajib": true },
+          { "kode": "pj", "label": "Penanggung jawab", "tipe": "orang", "wajib": true, "penugasan": true },
+          { "kode": "tenggat", "label": "Tenggat", "tipe": "tanggal" },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "terbuka",
+          "daftar": [{ "kode": "terbuka", "label": "Terbuka" }, { "kode": "jalan", "label": "Dikerjakan", "warna": "laut" }, { "kode": "selesai", "label": "Selesai", "akhir": true, "warna": "daun" }, { "kode": "batal", "label": "Batal", "akhir": true, "warna": "cap" }],
+          "transisi": [
+            { "dari": ["terbuka"], "ke": "jalan", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Mulai kerjakan" },
+            { "dari": ["terbuka", "jalan"], "ke": "selesai", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Selesai" },
+            { "dari": ["terbuka", "jalan"], "ke": "batal", "peran": ["pemilik", "admin"], "label": "Batalkan" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "papan", "kolom_kartu": ["rapat", "pj", "tenggat"] },
+          { "jenis": "daftar", "kolom": ["judul", "rapat", "pj", "tenggat"], "urut": { "bidang": "tenggat", "arah": "naik" }, "saring": ["status", "pj"] },
+          { "jenis": "kalender", "tanggal": "tenggat" },
+          { "jenis": "formulir", "bidang": ["judul", "rapat", "pj", "tenggat", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "milik_sendiri" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "tindak-baru", "pemicu": { "jenis": "buat", "koleksi": "tindak" }, "aksi": { "jenis": "pengingat", "judul": "Tindak lanjut baru untukmu: {judul}", "kepada": "ditugaskan" } },
+      { "kode": "ingat-tindak", "pemicu": { "jenis": "tenggat", "koleksi": "tindak", "bidang": "tenggat", "hari_sebelum": 1 }, "aksi": { "jenis": "pengingat", "judul": "Besok tenggat tindak lanjut: {judul}", "kepada": "ditugaskan" } }
+    ],
+    "laporan": [
+      { "kode": "rapat-per-jenis", "judul": "Rapat per jenis", "koleksi": "catatan", "kelompok": "jenis", "hitung": "jumlah" },
+      { "kode": "tindak-per-status", "judul": "Tindak lanjut per status", "koleksi": "tindak", "kelompok": "status", "hitung": "jumlah" }
+    ]
+  }
+}

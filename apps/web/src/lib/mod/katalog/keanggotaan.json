@@ -1,0 +1,71 @@
+{
+  "untuk": "Gym, studio yoga, kursus, koperasi, komunitas, dan usaha langganan yang mencatat anggota, masa berlaku, dan kehadiran.",
+  "contoh": "Anggota paket 3 bulan berakhir 15 Desember: pemilik diingatkan seminggu sebelumnya, status menjadi Berakhir bila tidak diperpanjang, dan setiap kedatangan tercatat di Kehadiran.",
+  "isi_contoh": [
+    { "koleksi": "anggota", "data": { "nama": "Komang Ayu", "telepon": "0813 5555 1212", "nomor": "GYM-0142", "paket": "tiga_bulan", "mulai": "2026-09-15", "berakhir": "2026-12-15", "iuran": 750000 } },
+    { "koleksi": "hadir", "data": { "kegiatan": "Latihan pagi", "anggota": "@", "waktu": "2026-11-19T06:30:00+08:00", "petugas": "@" } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "keanggotaan", "nama": "Keanggotaan", "ikon": "kartu-id", "ruang": "jual", "versi": "1.0.0",
+    "deskripsi": "Daftar anggota dengan paket, masa berlaku, dan iuran; pengingat sebelum masa berakhir; perpanjangan yang wajib mengisi tanggal baru; dan catatan kehadiran.",
+    "koleksi": [
+      {
+        "kode": "anggota", "nama": "Anggota", "judul": "nama",
+        "bidang": [
+          { "kode": "nama", "label": "Nama", "tipe": "teks", "wajib": true },
+          { "kode": "telepon", "label": "Telepon", "tipe": "telepon", "wajib": true },
+          { "kode": "pelanggan", "label": "Data pelanggan", "tipe": "pelanggan", "petunjuk": "Hubungkan bila anggota juga ditagih lewat invoice Nadi." },
+          { "kode": "nomor", "label": "Nomor anggota", "tipe": "teks" },
+          { "kode": "paket", "label": "Paket", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "bulanan", "label": "Bulanan" }, { "kode": "tiga_bulan", "label": "3 bulan" }, { "kode": "tahunan", "label": "Tahunan" }, { "kode": "kunjungan", "label": "Per kunjungan" }] },
+          { "kode": "mulai", "label": "Mulai", "tipe": "tanggal", "wajib": true },
+          { "kode": "berakhir", "label": "Berakhir", "tipe": "tanggal", "wajib": true },
+          { "kode": "iuran", "label": "Iuran per periode", "tipe": "rupiah", "min": 0 },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" },
+          { "kode": "sisa_hari", "label": "Sisa hari", "tipe": "rumus", "rumus": "MAKS(0, HARI_ANTARA(HARI_INI(), {berakhir}))" }
+        ],
+        "status": {
+          "awal": "aktif",
+          "daftar": [{ "kode": "aktif", "label": "Aktif", "warna": "daun" }, { "kode": "beku", "label": "Dibekukan", "warna": "kunyit" }, { "kode": "habis", "label": "Berakhir", "warna": "abu" }, { "kode": "berhenti", "label": "Berhenti", "akhir": true, "warna": "cap" }],
+          "transisi": [
+            { "dari": ["aktif"], "ke": "beku", "peran": ["pemilik", "admin"], "label": "Bekukan" },
+            { "dari": ["beku"], "ke": "aktif", "peran": ["pemilik", "admin"], "label": "Aktifkan lagi" },
+            { "dari": ["aktif", "beku"], "ke": "habis", "peran": ["pemilik", "admin", "staf"], "label": "Tandai berakhir" },
+            { "dari": ["habis"], "ke": "aktif", "peran": ["pemilik", "admin", "staf"], "wajib_isi": ["berakhir"], "label": "Perpanjang" },
+            { "dari": ["aktif", "beku", "habis"], "ke": "berhenti", "peran": ["pemilik", "admin"], "label": "Berhenti" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["nama", "nomor", "paket", "berakhir", "sisa_hari"], "urut": { "bidang": "berakhir", "arah": "naik" }, "saring": ["paket", "status"] },
+          { "jenis": "papan", "kolom_kartu": ["paket", "berakhir"] },
+          { "jenis": "kalender", "tanggal": "berakhir" },
+          { "jenis": "formulir", "bidang": ["nama", "telepon", "pelanggan", "nomor", "paket", "mulai", "berakhir", "iuran", "catatan"] },
+          { "jenis": "rincian", "bidang": ["nama", "telepon", "pelanggan", "nomor", "paket", "mulai", "berakhir", "sisa_hari", "iuran", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "tulis" }
+      },
+      {
+        "kode": "hadir", "nama": "Kehadiran", "judul": "kegiatan",
+        "bidang": [
+          { "kode": "kegiatan", "label": "Kegiatan", "tipe": "teks", "wajib": true },
+          { "kode": "anggota", "label": "Anggota", "tipe": "rujukan", "koleksi": "anggota", "wajib": true },
+          { "kode": "waktu", "label": "Waktu datang", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "petugas", "label": "Dicatat oleh", "tipe": "orang" }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["waktu", "kegiatan", "anggota", "petugas"], "urut": { "bidang": "waktu", "arah": "turun" }, "saring": ["anggota"] },
+          { "jenis": "kalender", "tanggal": "waktu" },
+          { "jenis": "formulir", "bidang": ["kegiatan", "anggota", "waktu", "petugas"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "tulis" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "segera-berakhir", "pemicu": { "jenis": "tenggat", "koleksi": "anggota", "bidang": "berakhir", "hari_sebelum": 7 }, "aksi": { "jenis": "kartu", "judul": "Keanggotaan {nama} berakhir minggu depan", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "anggota-per-paket", "judul": "Anggota per paket", "koleksi": "anggota", "kelompok": "paket", "hitung": "jumlah" },
+      { "kode": "iuran-per-paket", "judul": "Iuran per paket", "koleksi": "anggota", "kelompok": "paket", "hitung": { "total": "iuran" } },
+      { "kode": "anggota-per-status", "judul": "Anggota per status", "koleksi": "anggota", "kelompok": "status", "hitung": "jumlah" }
+    ]
+  }
+}

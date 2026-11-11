@@ -1,0 +1,97 @@
+{
+  "untuk": "Event organizer, wedding organizer, komunitas, sekolah, dan usaha yang mengadakan acara, pameran, atau pelatihan.",
+  "contoh": "Bazar akhir tahun 13 Desember: PIC dan anggaran tercatat, persiapan dibagi ke tim dengan tenggat dan biaya, daftar tamu dicentang saat hadir, dan pemilik diingatkan tiga hari sebelumnya.",
+  "isi_contoh": [
+    { "koleksi": "acara", "data": { "nama": "Bazar akhir tahun", "jenis": "pameran", "mulai": "2026-12-13T10:00:00+08:00", "selesai": "2026-12-13T21:00:00+08:00", "tempat": "Lapangan Renon", "pic": "@", "anggaran": 15000000, "peserta_target": 400 } },
+    { "koleksi": "persiapan", "data": { "tugas": "Sewa tenda dan kursi", "acara": "@", "pj": "@", "tenggat": "2026-12-05", "biaya": 3500000 } },
+    { "koleksi": "tamu", "data": { "nama": "Ibu Kadek Wulan", "acara": "@", "telepon": "0812 3456 7890", "instansi": "Komunitas UMKM Renon", "kategori": "vip", "hadir": false } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "event-acara", "nama": "Event dan acara", "ikon": "megafon", "ruang": "jual", "versi": "1.0.0",
+    "deskripsi": "Acara dengan PIC, jadwal, tempat, dan anggaran; daftar persiapan yang dibagi ke tim dengan tenggat dan biaya; serta daftar tamu yang dicentang saat hadir.",
+    "koleksi": [
+      {
+        "kode": "acara", "nama": "Acara", "judul": "nama",
+        "bidang": [
+          { "kode": "nama", "label": "Nama acara", "tipe": "teks", "wajib": true },
+          { "kode": "jenis", "label": "Jenis", "tipe": "pilihan", "pilihan": [{ "kode": "internal", "label": "Acara internal" }, { "kode": "klien", "label": "Acara klien" }, { "kode": "pameran", "label": "Pameran atau bazar" }, { "kode": "pelatihan", "label": "Pelatihan" }] },
+          { "kode": "mulai", "label": "Mulai", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "selesai", "label": "Selesai", "tipe": "tanggal_jam" },
+          { "kode": "tempat", "label": "Tempat", "tipe": "teks" },
+          { "kode": "klien", "label": "Klien", "tipe": "pelanggan" },
+          { "kode": "pic", "label": "PIC", "tipe": "orang", "wajib": true, "penugasan": true },
+          { "kode": "anggaran", "label": "Anggaran", "tipe": "rupiah", "min": 0 },
+          { "kode": "peserta_target", "label": "Target peserta", "tipe": "angka", "min": 0 },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "rencana",
+          "daftar": [{ "kode": "rencana", "label": "Rencana" }, { "kode": "siap", "label": "Siap", "warna": "laut" }, { "kode": "berlangsung", "label": "Berlangsung", "warna": "kunyit" }, { "kode": "selesai", "label": "Selesai", "akhir": true, "warna": "daun" }, { "kode": "batal", "label": "Batal", "akhir": true, "warna": "cap" }],
+          "transisi": [
+            { "dari": ["rencana"], "ke": "siap", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Tandai siap" },
+            { "dari": ["siap"], "ke": "berlangsung", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Mulai acara" },
+            { "dari": ["berlangsung"], "ke": "selesai", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Selesai" },
+            { "dari": ["rencana", "siap"], "ke": "batal", "peran": ["pemilik", "admin"], "label": "Batalkan" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "kalender", "tanggal": "mulai" },
+          { "jenis": "daftar", "kolom": ["nama", "jenis", "mulai", "tempat", "pic"], "urut": { "bidang": "mulai", "arah": "naik" }, "saring": ["jenis", "status"] },
+          { "jenis": "papan", "kolom_kartu": ["mulai", "tempat", "pic"] },
+          { "jenis": "formulir", "bidang": ["nama", "jenis", "mulai", "selesai", "tempat", "klien", "pic", "anggaran", "peserta_target", "catatan"] },
+          { "jenis": "rincian", "bidang": ["nama", "jenis", "mulai", "selesai", "tempat", "klien", "pic", "anggaran", "peserta_target", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "lihat" }
+      },
+      {
+        "kode": "persiapan", "nama": "Persiapan", "judul": "tugas",
+        "bidang": [
+          { "kode": "tugas", "label": "Persiapan", "tipe": "teks", "wajib": true },
+          { "kode": "acara", "label": "Acara", "tipe": "rujukan", "koleksi": "acara", "wajib": true },
+          { "kode": "pj", "label": "Penanggung jawab", "tipe": "orang", "penugasan": true },
+          { "kode": "tenggat", "label": "Tenggat", "tipe": "tanggal" },
+          { "kode": "biaya", "label": "Biaya", "tipe": "rupiah", "min": 0 },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "belum",
+          "daftar": [{ "kode": "belum", "label": "Belum" }, { "kode": "jalan", "label": "Dikerjakan", "warna": "laut" }, { "kode": "beres", "label": "Beres", "akhir": true, "warna": "daun" }],
+          "transisi": [
+            { "dari": ["belum"], "ke": "jalan", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Mulai" },
+            { "dari": ["belum", "jalan"], "ke": "beres", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Beres" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "papan", "kolom_kartu": ["acara", "pj", "tenggat"] },
+          { "jenis": "daftar", "kolom": ["tugas", "acara", "pj", "tenggat", "biaya"], "urut": { "bidang": "tenggat", "arah": "naik" }, "saring": ["acara", "status", "pj"] },
+          { "jenis": "formulir", "bidang": ["tugas", "acara", "pj", "tenggat", "biaya", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "milik_sendiri" }
+      },
+      {
+        "kode": "tamu", "nama": "Tamu dan peserta", "judul": "nama",
+        "bidang": [
+          { "kode": "nama", "label": "Nama", "tipe": "teks", "wajib": true },
+          { "kode": "acara", "label": "Acara", "tipe": "rujukan", "koleksi": "acara", "wajib": true },
+          { "kode": "telepon", "label": "Telepon", "tipe": "telepon" },
+          { "kode": "instansi", "label": "Instansi", "tipe": "teks" },
+          { "kode": "kategori", "label": "Kategori", "tipe": "pilihan", "pilihan": [{ "kode": "undangan", "label": "Undangan" }, { "kode": "peserta", "label": "Peserta" }, { "kode": "vip", "label": "VIP", "warna": "kunyit" }, { "kode": "vendor", "label": "Vendor" }] },
+          { "kode": "hadir", "label": "Sudah hadir", "tipe": "centang" }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["nama", "acara", "instansi", "kategori", "hadir"], "urut": { "bidang": "nama", "arah": "naik" }, "saring": ["acara", "kategori", "hadir"] },
+          { "jenis": "formulir", "bidang": ["nama", "acara", "telepon", "instansi", "kategori", "hadir"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "tulis" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "tiga-hari-lagi", "pemicu": { "jenis": "tenggat", "koleksi": "acara", "bidang": "mulai", "hari_sebelum": 3 }, "aksi": { "jenis": "kartu", "judul": "Tiga hari lagi: {nama}", "kepada": "pengelola" } },
+      { "kode": "ingat-persiapan", "pemicu": { "jenis": "tenggat", "koleksi": "persiapan", "bidang": "tenggat", "hari_sebelum": 1 }, "aksi": { "jenis": "pengingat", "judul": "Besok tenggat persiapan: {tugas}", "kepada": "ditugaskan" } }
+    ],
+    "laporan": [
+      { "kode": "biaya-per-acara", "judul": "Biaya persiapan per acara", "koleksi": "persiapan", "kelompok": "acara", "hitung": { "total": "biaya" } },
+      { "kode": "tamu-per-kategori", "judul": "Tamu per kategori", "koleksi": "tamu", "kelompok": "kategori", "hitung": "jumlah" }
+    ]
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "untuk": "Kantor, sekolah, studio, dan usaha penyewaan yang meminjamkan alat, kamera, proyektor, atau ruang rapat ke tim.",
+  "contoh": "Budi meminjam kamera dan ruang studio Sabtu 09.00 sampai 15.00: pemilik menyetujui, Budi menandai diambil, lalu mengembalikan dengan kondisi tercatat. Pengembalian rusak memberi kartu ke pemilik.",
+  "isi_contoh": [
+    { "koleksi": "barang", "data": { "nama": "Kamera mirrorless 1", "jenis": "alat", "kode": "KAM-01", "lokasi": "Lemari studio", "kondisi": "baik" } },
+    { "koleksi": "pinjam", "data": { "keperluan": "Foto produk katalog", "barang": "@", "peminjam": "@", "mulai": "2026-11-22T09:00:00+08:00", "selesai": "2026-11-22T15:00:00+08:00" } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "peminjaman", "nama": "Peminjaman alat dan ruang", "ikon": "kunci", "ruang": "tempat", "versi": "1.0.0",
+    "deskripsi": "Daftar alat dan ruang beserta kondisinya, permintaan pinjam dengan persetujuan, jadwal di kalender, dan pengembalian yang mencatat kondisi.",
+    "koleksi": [
+      {
+        "kode": "barang", "nama": "Alat dan ruang", "judul": "nama",
+        "bidang": [
+          { "kode": "nama", "label": "Nama", "tipe": "teks", "wajib": true },
+          { "kode": "jenis", "label": "Jenis", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "alat", "label": "Alat" }, { "kode": "ruang", "label": "Ruang" }] },
+          { "kode": "kode", "label": "Kode inventaris", "tipe": "teks" },
+          { "kode": "lokasi", "label": "Lokasi simpan", "tipe": "teks" },
+          { "kode": "kondisi", "label": "Kondisi", "tipe": "pilihan", "pilihan": [{ "kode": "baik", "label": "Baik", "warna": "daun" }, { "kode": "cek", "label": "Perlu dicek", "warna": "kunyit" }, { "kode": "rusak", "label": "Rusak", "warna": "cap" }] },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["nama", "jenis", "kode", "lokasi", "kondisi"], "urut": { "bidang": "nama", "arah": "naik" }, "saring": ["jenis", "kondisi"] },
+          { "jenis": "formulir", "bidang": ["nama", "jenis", "kode", "lokasi", "kondisi", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "lihat" }
+      },
+      {
+        "kode": "pinjam", "nama": "Peminjaman", "judul": "keperluan",
+        "bidang": [
+          { "kode": "keperluan", "label": "Keperluan", "tipe": "teks", "wajib": true },
+          { "kode": "barang", "label": "Alat atau ruang", "tipe": "rujukan", "koleksi": "barang", "wajib": true },
+          { "kode": "peminjam", "label": "Peminjam", "tipe": "orang", "wajib": true, "penugasan": true },
+          { "kode": "mulai", "label": "Mulai", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "selesai", "label": "Batas kembali", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "dikembalikan", "label": "Dikembalikan pada", "tipe": "tanggal_jam" },
+          { "kode": "kondisi_kembali", "label": "Kondisi saat kembali", "tipe": "pilihan", "pilihan": [{ "kode": "baik", "label": "Baik", "warna": "daun" }, { "kode": "rusak", "label": "Rusak", "warna": "cap" }, { "kode": "hilang", "label": "Hilang", "warna": "cap" }] },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "diajukan",
+          "daftar": [{ "kode": "diajukan", "label": "Diajukan" }, { "kode": "disetujui", "label": "Disetujui", "warna": "laut" }, { "kode": "dipinjam", "label": "Dipinjam", "warna": "kunyit" }, { "kode": "kembali", "label": "Dikembalikan", "akhir": true, "warna": "daun" }, { "kode": "ditolak", "label": "Ditolak", "akhir": true, "warna": "cap" }],
+          "transisi": [
+            { "dari": ["diajukan"], "ke": "disetujui", "peran": ["pemilik", "admin"], "label": "Setujui" },
+            { "dari": ["diajukan"], "ke": "ditolak", "peran": ["pemilik", "admin"], "wajib_isi": ["catatan"], "label": "Tolak" },
+            { "dari": ["disetujui"], "ke": "dipinjam", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Ambil" },
+            { "dari": ["dipinjam"], "ke": "kembali", "peran": ["ditugaskan", "pemilik", "admin"], "wajib_isi": ["dikembalikan", "kondisi_kembali"], "label": "Kembalikan" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "kalender", "tanggal": "mulai" },
+          { "jenis": "papan", "kolom_kartu": ["barang", "peminjam", "mulai"] },
+          { "jenis": "daftar", "kolom": ["keperluan", "barang", "peminjam", "mulai", "selesai"], "urut": { "bidang": "mulai", "arah": "turun" }, "saring": ["barang", "status", "peminjam"] },
+          { "jenis": "formulir", "bidang": ["keperluan", "barang", "peminjam", "mulai", "selesai"] },
+          { "jenis": "rincian", "bidang": ["keperluan", "barang", "peminjam", "mulai", "selesai", "dikembalikan", "kondisi_kembali", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "milik_sendiri" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "minta-pinjam", "pemicu": { "jenis": "buat", "koleksi": "pinjam" }, "aksi": { "jenis": "kartu", "judul": "Permintaan pinjam: {keperluan}", "kepada": "pengelola" } },
+      { "kode": "batas-kembali", "pemicu": { "jenis": "tenggat", "koleksi": "pinjam", "bidang": "selesai", "hari_sebelum": 0 }, "aksi": { "jenis": "pengingat", "judul": "Hari ini batas kembali: {keperluan}", "kepada": "ditugaskan" } },
+      { "kode": "kembali-rusak", "pemicu": { "jenis": "status", "koleksi": "pinjam", "ke": "kembali" }, "syarat": [{ "bidang": "kondisi_kembali", "op": "beda", "nilai": "baik" }], "aksi": { "jenis": "kartu", "judul": "Dikembalikan tidak dalam kondisi baik: {keperluan}", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "pinjam-per-barang", "judul": "Peminjaman per alat atau ruang", "koleksi": "pinjam", "kelompok": "barang", "hitung": "jumlah" },
+      { "kode": "barang-per-kondisi", "judul": "Alat dan ruang per kondisi", "koleksi": "barang", "kelompok": "kondisi", "hitung": "jumlah" }
+    ]
+  }
+}

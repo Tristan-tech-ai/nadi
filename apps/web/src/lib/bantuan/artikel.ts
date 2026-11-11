@@ -2,6 +2,8 @@
 // (1) satu artikel per halaman di peta ruang (src/lib/ruang.ts: guna, siapa yang bisa memakai, letaknya di menu, halaman terkait);
 // (2) artikel tugas yang ditulis tangan untuk hal yang paling sering ditanyakan, masing-masing menyebut layar dan tombol yang ada.
 import { RUANG, type Halaman, type Peran } from "@/lib/ruang";
+import { KATALOG_RESMI } from "@/lib/mod/katalog";
+import type { Koleksi, Manifest } from "@/lib/mod/skema";
 import { KATEGORI_EN, TUGAS_EN } from "./artikel-en";
 
 export type Langkah = string;
@@ -125,8 +127,44 @@ export const ARTIKEL_HALAMAN: ArtikelHalaman[] = RUANG.flatMap((r) =>
   r.halaman.map((h) => ({ slug: slugHalaman(h.href), kategori: r.id, judul: h.label.id, ringkas: h.guna.id, halaman: h, ruang: r.label.id })),
 );
 
+// X-14: satu artikel per paket resmi, diturunkan dari manifest yang sama dengan yang dipasang (isian wajib, alur status,
+// pengingat), jadi panduannya tidak bisa melenceng dari paketnya. Tautan ke halaman rincian paket di Tambah fitur.
+const wajibDari = (k: Koleksi) => k.bidang.filter((b) => b.wajib).map((b) => b.label.toLowerCase());
+const daftarKata = (x: string[], dan: string) => (x.length <= 1 ? x.join("") : `${x.slice(0, -1).join(", ")} ${dan} ${x[x.length - 1]}`);
+function langkahPaket(m: Manifest, en: boolean): string[] {
+  const l = en
+    ? [`Open Add features, find ${m.nama} under Official packs, and choose Lihat rincian to see every field, the status flow, and who can fill it in.`,
+       `Choose Pasang. Nadi checks the pack with the same checker used for AI-made features, then ${m.nama} appears under Add-on features.`]
+    : [`Buka Tambah fitur, cari ${m.nama} di Paket resmi, lalu pilih Lihat rincian untuk melihat setiap isian, alur status, dan siapa yang bisa mengisi.`,
+       `Pilih Pasang. Nadi memeriksa paketnya dengan pemeriksa yang sama untuk fitur buatan AI, lalu ${m.nama} muncul di Fitur tambahan.`];
+  for (const k of m.koleksi) {
+    const w = wajibDari(k);
+    l.push(en ? `In ${k.nama}, choose Tambah ${k.nama.toLowerCase()} and fill in ${w.length ? daftarKata(w, "and") : "what you need"}${w.length ? " (required)" : ""}.`
+      : `Di bagian ${k.nama}, pilih Tambah ${k.nama.toLowerCase()} lalu isi ${w.length ? daftarKata(w, "dan") : "yang perlu"}${w.length ? " (wajib)" : ""}.`);
+    const t = k.status?.transisi.filter((x) => x.label) ?? [];
+    if (k.status && t.length) l.push(en ? `Move ${k.nama.toLowerCase()} along its status with the buttons ${daftarKata(t.map((x) => x.label!), "and")}; buttons that need extra fields open them first.`
+      : `Pindahkan ${k.nama.toLowerCase()} lewat tombol ${daftarKata(t.map((x) => x.label!), "dan")}; tombol yang wajib mengisi sesuatu membuka isiannya dulu.`);
+  }
+  return l;
+}
+function catatanPaket(m: Manifest, en: boolean) {
+  const o = (m.otomasi ?? []).map((x) => x.aksi.judul.replace(/\{([a-z_0-9]+)\}/g, "...")).slice(0, 3);
+  const lepas = en ? "Removing the pack only hides it from the menu; its records stay and come back when you install it again." : "Melepas paket hanya menyembunyikannya dari menu; catatannya tetap tersimpan dan tampil lagi saat dipasang kembali.";
+  return o.length ? `${en ? "Automatic reminders and cards" : "Pengingat dan kartu otomatis"}: ${o.join("; ")}. ${lepas}` : lepas;
+}
+export const ARTIKEL_PAKET: ArtikelTugas[] = KATALOG_RESMI.map(({ manifest: m, untuk }) => ({
+  slug: `paket-${m.kode}`, kategori: "tambahan", judul: `Paket ${m.nama}`, ringkas: m.deskripsi, langkah: langkahPaket(m, false),
+  catatan: `Cocok untuk: ${untuk} ${catatanPaket(m, false)}`,
+  tautan: [{ href: `/app/tambah-fitur/${m.kode}`, label: `Rincian ${m.nama}` }, { href: "/app/tambah-fitur", label: "Tambah fitur" }],
+  cari: `paket fitur tambahan mod ${m.nama.toLowerCase()} ${m.koleksi.map((k) => k.nama.toLowerCase()).join(" ")} ${m.koleksi.flatMap((k) => k.bidang.map((b) => b.label.toLowerCase())).join(" ")}`,
+}));
+const PAKET_EN: Record<string, { judul: string; ringkas: string; langkah: string[]; catatan: string; tautan: string[] }> = Object.fromEntries(KATALOG_RESMI.map(({ manifest: m }) => [`paket-${m.kode}`, {
+  judul: `${m.nama} pack`, ringkas: m.deskripsi, langkah: langkahPaket(m, true), catatan: catatanPaket(m, true), tautan: [`${m.nama} details`, "Add features"],
+}]));
+
 export const SEMUA_ARTIKEL: Artikel[] = [
   ...TUGAS.map((t) => ({ jenis: "tugas" as const, ...t })),
+  ...ARTIKEL_PAKET.map((t) => ({ jenis: "tugas" as const, ...t })),
   ...ARTIKEL_HALAMAN.map((a) => ({ jenis: "halaman" as const, ...a })),
 ];
 
@@ -144,7 +182,7 @@ export function artikelUntuk(bahasa: "id" | "en"): Artikel[] {
   const ruangEn = new Map(RUANG.map((r) => [r.id, r.label.en]));
   return SEMUA_ARTIKEL.map((a) => {
     if (a.jenis === "halaman") return { ...a, judul: a.halaman.label.en, ringkas: a.halaman.guna.en, ruang: ruangEn.get(a.kategori) ?? a.ruang };
-    const e = TUGAS_EN[a.slug];
+    const e = TUGAS_EN[a.slug] ?? PAKET_EN[a.slug];
     return e ? { ...a, judul: e.judul, ringkas: e.ringkas, langkah: e.langkah, catatan: e.catatan, tautan: a.tautan.map((t, i) => ({ ...t, label: e.tautan[i] ?? t.label })) } : a;
   });
 }

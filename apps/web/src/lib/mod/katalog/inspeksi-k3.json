@@ -1,0 +1,84 @@
+{
+  "untuk": "Dapur, gudang, bengkel, konveksi, dan kontraktor yang memeriksa keselamatan kerja secara rutin dan mencatat kejadian.",
+  "contoh": "Inspeksi gudang setiap Senin: pemeriksa mencentang enam butir, temuan APAR kedaluwarsa memberi kartu ke pemilik sampai ditutup dengan tindakan perbaikan. Daftar periksa ini umum; sesuaikan dengan aturan K3 usahamu.",
+  "isi_contoh": [
+    { "koleksi": "inspeksi", "data": { "judul": "Inspeksi gudang mingguan", "area": "gudang", "tanggal": "2026-11-23", "pemeriksa": "@", "apar": true, "jalur": true, "p3k": false, "listrik": true, "apd": true, "kebersihan": true, "temuan": "Kotak P3K kehabisan plester dan kasa." } },
+    { "koleksi": "insiden", "data": { "judul": "Hampir terpeleset di dapur", "waktu": "2026-11-19T11:20:00+08:00", "area": "dapur", "jenis": "nyaris", "kronologi": "Lantai dekat bak cuci basah setelah pel, belum ada papan peringatan." } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "inspeksi-k3", "nama": "Inspeksi dan checklist K3", "ikon": "perisai", "ruang": "tempat", "versi": "1.0.0",
+    "deskripsi": "Jadwal inspeksi keselamatan per area dengan daftar periksa, temuan yang wajib ditutup dengan tindakan, dan laporan kecelakaan atau nyaris celaka.",
+    "koleksi": [
+      {
+        "kode": "inspeksi", "nama": "Inspeksi", "judul": "judul",
+        "bidang": [
+          { "kode": "judul", "label": "Inspeksi", "tipe": "teks", "wajib": true },
+          { "kode": "area", "label": "Area", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "gudang", "label": "Gudang" }, { "kode": "dapur", "label": "Dapur" }, { "kode": "produksi", "label": "Area produksi" }, { "kode": "kantor", "label": "Kantor" }, { "kode": "kendaraan", "label": "Kendaraan" }, { "kode": "lain", "label": "Lainnya" }] },
+          { "kode": "tanggal", "label": "Tanggal", "tipe": "tanggal", "wajib": true },
+          { "kode": "pemeriksa", "label": "Pemeriksa", "tipe": "orang", "wajib": true, "penugasan": true },
+          { "kode": "apar", "label": "APAR ada dan belum kedaluwarsa", "tipe": "centang" },
+          { "kode": "jalur", "label": "Jalur evakuasi tidak terhalang", "tipe": "centang" },
+          { "kode": "p3k", "label": "Kotak P3K lengkap", "tipe": "centang" },
+          { "kode": "listrik", "label": "Kabel dan stopkontak aman", "tipe": "centang" },
+          { "kode": "apd", "label": "Alat pelindung diri dipakai", "tipe": "centang" },
+          { "kode": "kebersihan", "label": "Lantai bersih dan tidak licin", "tipe": "centang" },
+          { "kode": "temuan", "label": "Temuan", "tipe": "teks_panjang" },
+          { "kode": "tautan_foto", "label": "Tautan foto", "tipe": "tautan" },
+          { "kode": "tindakan", "label": "Tindakan perbaikan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "terjadwal",
+          "daftar": [{ "kode": "terjadwal", "label": "Terjadwal" }, { "kode": "aman", "label": "Selesai, aman", "akhir": true, "warna": "daun" }, { "kode": "temuan", "label": "Ada temuan", "warna": "kunyit" }, { "kode": "ditutup", "label": "Temuan ditutup", "akhir": true, "warna": "daun" }],
+          "transisi": [
+            { "dari": ["terjadwal"], "ke": "aman", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Selesai, semua aman" },
+            { "dari": ["terjadwal"], "ke": "temuan", "peran": ["ditugaskan", "pemilik", "admin"], "wajib_isi": ["temuan"], "label": "Catat temuan" },
+            { "dari": ["temuan"], "ke": "ditutup", "peran": ["pemilik", "admin"], "wajib_isi": ["tindakan"], "label": "Tutup temuan" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "kalender", "tanggal": "tanggal" },
+          { "jenis": "papan", "kolom_kartu": ["area", "pemeriksa", "tanggal"] },
+          { "jenis": "daftar", "kolom": ["tanggal", "judul", "area", "pemeriksa"], "urut": { "bidang": "tanggal", "arah": "turun" }, "saring": ["area", "status"] },
+          { "jenis": "formulir", "bidang": ["judul", "area", "tanggal", "pemeriksa", "apar", "jalur", "p3k", "listrik", "apd", "kebersihan", "temuan", "tautan_foto"] },
+          { "jenis": "rincian", "bidang": ["judul", "area", "tanggal", "pemeriksa", "apar", "jalur", "p3k", "listrik", "apd", "kebersihan", "temuan", "tautan_foto", "tindakan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "milik_sendiri" }
+      },
+      {
+        "kode": "insiden", "nama": "Kejadian dan nyaris celaka", "judul": "judul",
+        "bidang": [
+          { "kode": "judul", "label": "Kejadian", "tipe": "teks", "wajib": true },
+          { "kode": "waktu", "label": "Waktu", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "area", "label": "Area", "tipe": "pilihan", "pilihan": [{ "kode": "gudang", "label": "Gudang" }, { "kode": "dapur", "label": "Dapur" }, { "kode": "produksi", "label": "Area produksi" }, { "kode": "kantor", "label": "Kantor" }, { "kode": "kendaraan", "label": "Kendaraan" }, { "kode": "lain", "label": "Lainnya" }] },
+          { "kode": "jenis", "label": "Jenis", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "nyaris", "label": "Nyaris celaka", "warna": "kunyit" }, { "kode": "ringan", "label": "Cedera ringan", "warna": "kunyit" }, { "kode": "berat", "label": "Cedera berat", "warna": "cap" }, { "kode": "kerusakan", "label": "Kerusakan barang" }] },
+          { "kode": "korban", "label": "Orang yang terlibat", "tipe": "orang", "banyak": true },
+          { "kode": "kronologi", "label": "Kronologi", "tipe": "teks_panjang", "wajib": true },
+          { "kode": "tindakan", "label": "Tindakan pencegahan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "dilaporkan",
+          "daftar": [{ "kode": "dilaporkan", "label": "Dilaporkan" }, { "kode": "ditelusuri", "label": "Ditelusuri", "warna": "laut" }, { "kode": "ditutup", "label": "Ditutup", "akhir": true, "warna": "daun" }],
+          "transisi": [
+            { "dari": ["dilaporkan"], "ke": "ditelusuri", "peran": ["pemilik", "admin"], "label": "Telusuri" },
+            { "dari": ["dilaporkan", "ditelusuri"], "ke": "ditutup", "peran": ["pemilik", "admin"], "wajib_isi": ["tindakan"], "label": "Tutup dengan tindakan" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["waktu", "judul", "area", "jenis"], "urut": { "bidang": "waktu", "arah": "turun" }, "saring": ["jenis", "area", "status"] },
+          { "jenis": "formulir", "bidang": ["judul", "waktu", "area", "jenis", "korban", "kronologi"] },
+          { "jenis": "rincian", "bidang": ["judul", "waktu", "area", "jenis", "korban", "kronologi", "tindakan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "tulis" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "besok-inspeksi", "pemicu": { "jenis": "tenggat", "koleksi": "inspeksi", "bidang": "tanggal", "hari_sebelum": 1 }, "aksi": { "jenis": "pengingat", "judul": "Besok inspeksi K3: {judul}", "kepada": "ditugaskan" } },
+      { "kode": "ada-temuan", "pemicu": { "jenis": "status", "koleksi": "inspeksi", "ke": "temuan" }, "aksi": { "jenis": "kartu", "judul": "Temuan K3 perlu ditutup: {judul}", "kepada": "pengelola" } },
+      { "kode": "lapor-insiden", "pemicu": { "jenis": "buat", "koleksi": "insiden" }, "aksi": { "jenis": "kartu", "judul": "Laporan kejadian K3: {judul}", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "inspeksi-per-area", "judul": "Inspeksi per area", "koleksi": "inspeksi", "kelompok": "area", "hitung": "jumlah" },
+      { "kode": "kejadian-per-jenis", "judul": "Kejadian per jenis", "koleksi": "insiden", "kelompok": "jenis", "hitung": "jumlah" }
+    ]
+  }
+}

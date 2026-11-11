@@ -1,0 +1,83 @@
+{
+  "untuk": "Usaha pengiriman, katering, distributor, dan kontraktor yang punya motor, mobil, atau truk operasional.",
+  "contoh": "Pikap DK 1234 AB: jatuh tempo pajak tahunan diingatkan dua minggu sebelumnya, servis berkala dan BBM tercatat dengan biayanya, dan setiap pemakaian mencatat pengemudi serta jarak tempuh.",
+  "isi_contoh": [
+    { "koleksi": "kendaraan", "data": { "nama": "Pikap pengiriman", "nopol": "DK 1234 AB", "jenis": "pikap", "tahun": 2021, "pajak_tahunan": "2026-12-15", "stnk": "2027-12-15", "pengemudi": "@", "km_terakhir": 48250, "kondisi": "baik" } },
+    { "koleksi": "servis", "data": { "uraian": "Ganti oli dan filter", "kendaraan": "@", "tanggal": "2026-11-18", "jenis": "servis", "biaya": 450000, "km": 48000, "bengkel": "Bengkel Jaya Motor" } },
+    { "koleksi": "pakai", "data": { "keperluan": "Antar pesanan katering Nusa Dua", "kendaraan": "@", "pengemudi": "@", "berangkat": "2026-11-19T07:30:00+08:00", "km_awal": 48100, "km_akhir": 48162 } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "armada", "nama": "Armada dan kendaraan", "ikon": "truk", "ruang": "barang", "versi": "1.0.0",
+    "deskripsi": "Daftar kendaraan dengan jatuh tempo pajak, STNK, dan KIR, catatan servis, BBM, dan biayanya, serta pemakaian harian dengan pengemudi dan jarak tempuh.",
+    "koleksi": [
+      {
+        "kode": "kendaraan", "nama": "Kendaraan", "judul": "nama",
+        "bidang": [
+          { "kode": "nama", "label": "Nama kendaraan", "tipe": "teks", "wajib": true },
+          { "kode": "nopol", "label": "Nomor polisi", "tipe": "teks", "wajib": true },
+          { "kode": "jenis", "label": "Jenis", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "motor", "label": "Motor" }, { "kode": "mobil", "label": "Mobil" }, { "kode": "pikap", "label": "Pikap" }, { "kode": "truk", "label": "Truk" }] },
+          { "kode": "tahun", "label": "Tahun", "tipe": "angka", "min": 1950, "max": 2100 },
+          { "kode": "pajak_tahunan", "label": "Jatuh tempo pajak tahunan", "tipe": "tanggal" },
+          { "kode": "stnk", "label": "Jatuh tempo STNK lima tahunan", "tipe": "tanggal" },
+          { "kode": "kir", "label": "Jatuh tempo uji KIR", "tipe": "tanggal", "petunjuk": "Untuk kendaraan angkutan barang yang wajib uji berkala." },
+          { "kode": "pengemudi", "label": "Pengemudi tetap", "tipe": "orang", "penugasan": true },
+          { "kode": "km_terakhir", "label": "Kilometer terakhir", "tipe": "angka", "min": 0 },
+          { "kode": "kondisi", "label": "Kondisi", "tipe": "pilihan", "pilihan": [{ "kode": "baik", "label": "Baik", "warna": "daun" }, { "kode": "servis", "label": "Perlu servis", "warna": "kunyit" }, { "kode": "rusak", "label": "Rusak", "warna": "cap" }] }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["nama", "nopol", "jenis", "pengemudi", "pajak_tahunan", "kondisi"], "urut": { "bidang": "pajak_tahunan", "arah": "naik" }, "saring": ["jenis", "kondisi"] },
+          { "jenis": "kalender", "tanggal": "pajak_tahunan" },
+          { "jenis": "formulir", "bidang": ["nama", "nopol", "jenis", "tahun", "pajak_tahunan", "stnk", "kir", "pengemudi", "km_terakhir", "kondisi"] },
+          { "jenis": "rincian", "bidang": ["nama", "nopol", "jenis", "tahun", "pajak_tahunan", "stnk", "kir", "pengemudi", "km_terakhir", "kondisi"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "lihat" }
+      },
+      {
+        "kode": "servis", "nama": "Servis dan biaya", "judul": "uraian",
+        "bidang": [
+          { "kode": "uraian", "label": "Uraian", "tipe": "teks", "wajib": true },
+          { "kode": "kendaraan", "label": "Kendaraan", "tipe": "rujukan", "koleksi": "kendaraan", "wajib": true },
+          { "kode": "tanggal", "label": "Tanggal", "tipe": "tanggal", "wajib": true },
+          { "kode": "jenis", "label": "Jenis biaya", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "servis", "label": "Servis berkala" }, { "kode": "perbaikan", "label": "Perbaikan" }, { "kode": "bbm", "label": "BBM" }, { "kode": "surat", "label": "Pajak dan surat" }, { "kode": "lain", "label": "Lainnya" }] },
+          { "kode": "biaya", "label": "Biaya", "tipe": "rupiah", "wajib": true, "min": 0 },
+          { "kode": "km", "label": "Kilometer saat itu", "tipe": "angka", "min": 0 },
+          { "kode": "bengkel", "label": "Bengkel atau tempat", "tipe": "teks" },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["tanggal", "uraian", "kendaraan", "jenis", "biaya"], "urut": { "bidang": "tanggal", "arah": "turun" }, "saring": ["kendaraan", "jenis"] },
+          { "jenis": "formulir", "bidang": ["uraian", "kendaraan", "tanggal", "jenis", "biaya", "km", "bengkel", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "tulis", "staf": "tulis" }
+      },
+      {
+        "kode": "pakai", "nama": "Pemakaian", "judul": "keperluan",
+        "bidang": [
+          { "kode": "keperluan", "label": "Keperluan", "tipe": "teks", "wajib": true },
+          { "kode": "kendaraan", "label": "Kendaraan", "tipe": "rujukan", "koleksi": "kendaraan", "wajib": true },
+          { "kode": "pengemudi", "label": "Pengemudi", "tipe": "orang", "wajib": true, "penugasan": true },
+          { "kode": "berangkat", "label": "Berangkat", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "kembali", "label": "Kembali", "tipe": "tanggal_jam" },
+          { "kode": "km_awal", "label": "Kilometer awal", "tipe": "angka", "min": 0 },
+          { "kode": "km_akhir", "label": "Kilometer akhir", "tipe": "angka", "min": 0 },
+          { "kode": "jarak", "label": "Jarak (km)", "tipe": "rumus", "rumus": "JIKA(KOSONG({km_akhir}), 0, MAKS(0, {km_akhir} - {km_awal}))" }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["berangkat", "keperluan", "kendaraan", "pengemudi", "jarak"], "urut": { "bidang": "berangkat", "arah": "turun" }, "saring": ["kendaraan", "pengemudi"] },
+          { "jenis": "kalender", "tanggal": "berangkat" },
+          { "jenis": "formulir", "bidang": ["keperluan", "kendaraan", "pengemudi", "berangkat", "kembali", "km_awal", "km_akhir"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "milik_sendiri" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "ingat-pajak", "pemicu": { "jenis": "tenggat", "koleksi": "kendaraan", "bidang": "pajak_tahunan", "hari_sebelum": 14 }, "aksi": { "jenis": "kartu", "judul": "Pajak tahunan {nama} jatuh tempo dua minggu lagi", "kepada": "pengelola" } },
+      { "kode": "ingat-stnk", "pemicu": { "jenis": "tenggat", "koleksi": "kendaraan", "bidang": "stnk", "hari_sebelum": 30 }, "aksi": { "jenis": "kartu", "judul": "STNK {nama} habis bulan depan", "kepada": "pengelola" } },
+      { "kode": "ingat-kir", "pemicu": { "jenis": "tenggat", "koleksi": "kendaraan", "bidang": "kir", "hari_sebelum": 14 }, "aksi": { "jenis": "kartu", "judul": "Uji KIR {nama} jatuh tempo dua minggu lagi", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "biaya-per-kendaraan", "judul": "Biaya per kendaraan", "koleksi": "servis", "kelompok": "kendaraan", "hitung": { "total": "biaya" } },
+      { "kode": "biaya-per-jenis", "judul": "Biaya per jenis", "koleksi": "servis", "kelompok": "jenis", "hitung": { "total": "biaya" } }
+    ]
+  }
+}

@@ -4,7 +4,8 @@
 
 export type Peran = "pemilik" | "admin" | "akuntan" | "staf";
 export type Teks2 = { id: string; en: string };
-export type Halaman = { href: string; label: Teks2; guna: Teks2; peran: readonly Peran[]; cari?: string };
+/** ikon: nama ikon mod (IKON_MOD) untuk halaman dinamis Fitur tambahan; halaman tetap memakai IKON_HALAMAN menurut href. */
+export type Halaman = { href: string; label: Teks2; guna: Teks2; peran: readonly Peran[]; cari?: string; ikon?: string };
 export type Ruang = { id: string; label: Teks2; halaman: Halaman[] };
 
 const P = ["pemilik", "admin"] as const;
@@ -83,6 +84,12 @@ export const RUANG: Ruang[] = [
     h("/app/pindah", "Pindah dari aplikasi lain", "Move from another app", "Bawa data dari aplikasi lama dan unduh semua data.", "Bring data from your old app and download all data.", P, "migrasi impor ekspor jurnal excel"),
     h("/app/mitra", "Mitra", "Partners", "Psikolog, akuntan publik, dan konsultan pajak.", "Psychologists, public accountants, tax consultants.", P, "konsultan psikolog"),
   ] },
+  // X-06: ruang Fitur tambahan. Di sidebar, ruang ini juga memuat halaman modul opsional yang menyala dan setiap mod aktif
+  // (disusun src/lib/ruang-sesi.ts); di peta ini hanya halaman tetapnya.
+  { id: "tambahan", label: { id: "Fitur tambahan", en: "Add-on features" }, halaman: [
+    h("/app/mod", "Semua fitur tambahan", "All add-on features", "Fitur khusus usahamu yang dibuat sendiri atau lewat AI-mu, dijalankan Nadi.", "Features built for your business by you or your AI, run by Nadi.", SEMUA, "mod tambahan khusus custom fitur"),
+    h("/app/tambah-fitur", "Tambah fitur", "Add features", "Pasang modul dan paket resmi, buat fitur dengan AI-mu atau sendiri.", "Install modules and official packs, build features with your AI or yourself.", P, "tambah fitur pasang paket modul mod plugin ekstensi"),
+  ] },
   { id: "pengaturan", label: { id: "Pengaturan", en: "Settings" }, halaman: [
     h("/app/perusahaan", "Usahamu", "Your business", "Data usaha, topi, tempat, aturan kerja.", "Business details, hats, places, work rules.", PA, "pengaturan setting usaha perusahaan absen absensi hadir kehadiran tablet attendance"),
     h("/app/akun/keamanan", "Akun dan keamanan", "Account and security", "2FA, sesi, dan log aktivitas.", "2FA, sessions, and activity log.", SEMUA, "password sandi 2fa keamanan"),
@@ -90,7 +97,7 @@ export const RUANG: Ruang[] = [
 ];
 
 /** Halaman di bawah /app yang sengaja tidak masuk menu (alur sekali jalan, halaman detail, atau peta menu itu sendiri). */
-export const DI_LUAR_MENU = ["/app/mulai", "/app/mulai/lanjut", "/app/wawancara/[lamaran]", "/app/menu", "/app/siapkan/draf/[id]"] as const;
+export const DI_LUAR_MENU = ["/app/mulai", "/app/mulai/lanjut", "/app/wawancara/[lamaran]", "/app/menu", "/app/siapkan/draf/[id]", "/app/mod/[slug]", "/app/tambah-fitur/[kode]"] as const;
 
 export const SEMUA_HALAMAN = RUANG.flatMap((r) => r.halaman.map((x) => ({ ...x, ruang: r.id })));
 
