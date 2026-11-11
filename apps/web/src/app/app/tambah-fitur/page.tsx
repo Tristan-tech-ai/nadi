@@ -130,6 +130,7 @@ async function Isi() {
       <section id="sendiri" aria-labelledby="judul-sendiri" className="mt-10 scroll-mt-20">
         <h2 id="judul-sendiri" className="text-lg font-semibold">Buat sendiri</h2>
         <p className="mt-1 text-sm text-tinta-2">Impor berkas fitur dari usaha lain, atau tempel isi fitur (manifest JSON). Nadi memeriksanya dengan aturan yang sama dengan buatan AI, lalu menyimpannya sebagai draf.</p>
+        <p className="mt-2 text-sm"><Link href="/app/tambah-fitur/buat" className="font-semibold underline underline-offset-4">Susun lewat formulir, tanpa menulis JSON</Link></p>
         <div className="mt-3"><FormManifest /></div>
       </section>
 
