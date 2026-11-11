@@ -24,13 +24,13 @@ begin
 
   -- Dua invoice dibaca model (2.000 dan 3.000 token), tiga dibaca aturan; satu nota model 600 token; usaha B punya data sendiri.
   insert into public.berkas (perusahaan_id, jalur, mime, status, jenis_terdeteksi, hasil, token_ai) values
-    (pa, 'x/1', 'application/pdf', 'usulan', 'invoice', '{"sumber":"model"}', 2000),
-    (pa, 'x/2', 'application/pdf', 'selesai', 'invoice', '{"sumber":"model"}', 3000),
-    (pa, 'x/3', 'application/pdf', 'usulan', 'invoice', '{"sumber":"aturan"}', 0),
-    (pa, 'x/4', 'application/pdf', 'usulan', 'invoice', '{"sumber":"aturan"}', 0),
-    (pa, 'x/5', 'application/pdf', 'usulan', 'invoice', '{"sumber":"aturan"}', 0),
-    (pa, 'x/6', 'image/png', 'usulan', 'nota', '{}', 600),
-    (pb, 'y/1', 'application/pdf', 'usulan', 'invoice', '{"sumber":"aturan"}', 0);
+    (pa, pa || '/x/1', 'application/pdf', 'usulan', 'invoice', '{"sumber":"model"}', 2000),
+    (pa, pa || '/x/2', 'application/pdf', 'selesai', 'invoice', '{"sumber":"model"}', 3000),
+    (pa, pa || '/x/3', 'application/pdf', 'usulan', 'invoice', '{"sumber":"aturan"}', 0),
+    (pa, pa || '/x/4', 'application/pdf', 'usulan', 'invoice', '{"sumber":"aturan"}', 0),
+    (pa, pa || '/x/5', 'application/pdf', 'usulan', 'invoice', '{"sumber":"aturan"}', 0),
+    (pa, pa || '/x/6', 'image/png', 'usulan', 'nota', '{}', 600),
+    (pb, pb || '/y/1', 'application/pdf', 'usulan', 'invoice', '{"sumber":"aturan"}', 0);
   insert into public.pemakaian_ai (perusahaan_id, tugas, model, token_masuk, token_keluar, token_cache_baca) values
     (pa, 'baca_berkas', 'm', 4000, 1600, 900), (pa, 'tulis_aturan', 'm', 1500, 500, 0), (pb, 'baca_berkas', 'm', 99999, 0, 0);
 

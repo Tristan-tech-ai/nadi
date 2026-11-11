@@ -9,12 +9,13 @@ begin
   r := app.ukur_kuota();
   insert into _t values ('ukuran nyata di bawah 80%: tanpa peringatan', not exists (select 1 from app.peringatan_platform), r::text);
   insert into _t values ('baris harian tercatat sekali per tanggal', (select count(*) = 1 from app.kuota_harian where tanggal = (now() at time zone 'Asia/Makassar')::date), null);
-  r := app.ukur_kuota(10000000, 1000000);
+  -- batas penyimpanan dipilih di bawah pemakaian nyata; database baru (lokal) tanpa berkas memakai batas 1 byte
+  r := app.ukur_kuota(10000000, least(1000000, greatest((r ->> 'storage_byte')::bigint, 1)));
   select count(*) into n from app.peringatan_platform;
-  insert into _t values ('batas kecil (merah sengaja): dua peringatan', n = 2, (select string_agg(pesan, ' | ') from app.peringatan_platform));
+  insert into _t values ('batas kecil (merah sengaja): peringatan database (+ penyimpanan bila ada berkas)',
+    n = 1 + (case when (r ->> 'storage_byte')::bigint > 0 then 1 else 0 end), (select string_agg(pesan, ' | ') from app.peringatan_platform));
   perform app.ukur_kuota(10000000, 1000000);
-  select count(*) into n from app.peringatan_platform;
-  insert into _t values ('peringatan tidak berulang di hari yang sama', n = 2, n::text);
+  insert into _t values ('peringatan tidak berulang di hari yang sama', (select count(*) from app.peringatan_platform) = n, n::text);
   insert into _t values ('jadwal cron terpasang', exists (select 1 from cron.job where jobname = 'nadi-kuota' and schedule = '15 17 * * *'), null);
   set local role authenticated;
   begin

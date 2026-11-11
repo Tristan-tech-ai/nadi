@@ -6,7 +6,8 @@ do $$
 declare v uuid; n_aktif int; n_mati int;
 begin
   select count(*) filter (where status = 'aktif'), count(*) filter (where status = 'mati') into n_aktif, n_mati from public.ekstraktor where versi = 0;
-  insert into _t values ('aturan lama tetap (19 aktif, 2 mati)', n_aktif = 19 and n_mati = 2, n_aktif || '/' || n_mati);
+  -- angka 19/2 adalah aturan bawaan produksi saat migrasi; database baru (Supabase lokal) tidak punya aturan versi 0
+  insert into _t values ('aturan lama tetap (produksi 19 aktif, 2 mati; database baru 0)', (n_aktif = 19 and n_mati = 2) or (n_aktif + n_mati = 0 and not exists (select 1 from public.ekstraktor where versi = 0)), n_aktif || '/' || n_mati);
   insert into public.ekstraktor (perusahaan_id, sidik_tata_letak, jenis_berkas, aturan) values (null, 'uji-t02-' || gen_random_uuid(), 'nota', '{"bentuk":"teks","jenis":"nota","jangkar":["A","B"],"bidang":{}}') returning id into v;
   insert into _t values ('aturan baru mulai bayangan dan tidak aktif', (select status = 'bayangan' and not aktif and versi = 1 from public.ekstraktor where id = v), null);
   begin

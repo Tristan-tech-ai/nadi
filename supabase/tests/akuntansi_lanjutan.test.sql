@@ -206,8 +206,10 @@ begin
     perform pg_temp.cek('orang lain tidak melihat jadwal berulang dan jurnal antarusaha A',
       (select count(*) from public.recurring_journal) = 0 and (select count(*) from public.intercompany_journal) = 0);
     -- ensure_chart (migrasi 20261105076100_bagan_siap): bagan bawaan terpasang sekali, staf ditolak.
+    -- dipanggil di pernyataan sendiri: subquery dalam pernyataan yang sama memakai snapshot sebelum bagan dipasang
+    n := public.ensure_chart();
     perform pg_temp.cek('ensure_chart: bagan ada setelah dipanggil, panggilan kedua 0',
-      public.ensure_chart() >= 0 and (select count(*) from public.akun where perusahaan_id = pb) >= 17 and public.ensure_chart() = 0);
+      n >= 0 and (select count(*) from public.akun where perusahaan_id = pb) >= 17 and public.ensure_chart() = 0);
     perform set_config('request.jwt.claims', ks, true);
     begin perform public.ensure_chart(); perform pg_temp.cek('ensure_chart staf ditolak', false);
     exception when sqlstate '42501' then perform pg_temp.cek('ensure_chart staf ditolak', true); end;

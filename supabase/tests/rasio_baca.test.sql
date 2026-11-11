@@ -41,7 +41,8 @@ begin
     semua := r -> 'semua';
     perform pg_temp.cek('baris semua menjumlah semua jenis', (semua ->> 'aturan')::int = (select sum((x ->> 'aturan')::int) from jsonb_array_elements(r -> 'jenis') x)
       and (semua ->> 'model')::int = (select sum((x ->> 'model')::int) from jsonb_array_elements(r -> 'jenis') x), semua::text);
-    perform pg_temp.cek('urut token terbanyak dulu', (select bool_and(a >= b) from (select (x ->> 'token')::bigint a, lead((x ->> 'token')::bigint) over (order by o) b from jsonb_array_elements(r -> 'jenis') with ordinality t(x, o)) q where b is not null), r::text);
+    -- daftar satu jenis (database kosong) sudah urut, jadi tanpa pasangan dianggap lulus
+    perform pg_temp.cek('urut token terbanyak dulu', (select coalesce(bool_and(a >= b), true) from (select (x ->> 'token')::bigint a, lead((x ->> 'token')::bigint) over (order by o) b from jsonb_array_elements(r -> 'jenis') with ordinality t(x, o)) q where b is not null), r::text);
 
     execute 'set local role authenticated';
     begin perform app.rasio_baca(7); perform pg_temp.cek('authenticated ditolak', false);

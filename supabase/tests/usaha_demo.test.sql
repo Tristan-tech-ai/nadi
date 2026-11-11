@@ -51,7 +51,7 @@ begin
   select max(dibuat_at) into t1 from public.usulan where perusahaan_id = v_pid;
   select count(*) into k1 from public.kejadian where perusahaan_id = v_pid;
   perform pg_temp.cek('penyegaran menggeser waktu 2 hari', abs(extract(epoch from (t1 - t0)) - 172800) < 5, (t1 - t0)::text);
-  perform pg_temp.cek('penyegaran tidak menambah atau menghapus kejadian', k0 = k1 and k0 = 34, k0 || ' ' || k1);
+  perform pg_temp.cek('penyegaran tidak menambah atau menghapus kejadian', k0 = k1 and k0 > 0, k0 || ' ' || k1);  -- jumlah awal 34 bertambah oleh migrasi demo berikutnya (132 di produksi 11 Nov 2026); yang diuji adalah tetapnya
   perform pg_temp.cek('jadwal penyegaran terdaftar', exists (select 1 from cron.job where jobname = 'nadi-demo-segar'));
 end $$;
 

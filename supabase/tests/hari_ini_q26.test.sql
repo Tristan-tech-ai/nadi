@@ -15,20 +15,24 @@ select pg_temp.cek('tidak ada fungsi public/app memakai current_date selain daft
   count(*) = 0, string_agg(p.oid::regprocedure::text, ', '))
   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
  where n.nspname in ('public', 'app') and p.prosrc ~* 'current_date'
-   and p.oid::regprocedure::text not in ('app.isi_demo()', 'demo_lihat(text)');
+   and p.oid::regprocedure::text not in ('app.isi_demo()', 'demo_lihat(text)',
+     -- X-21: prefilter cron lintas usaha (dihitung per usaha dengan app.hari_ini), alasannya di komentar fungsi
+     'analis_bahan()', 'app.run_recurring_all()', 'app.issue_recurring_invoices_all()');
 
 select pg_temp.cek('tidak ada fungsi public/app memakai pola tanggal UTC setara (now()::date, localtimestamp, current_timestamp::date, date_trunc hari/minggu/bulan atas now()) selain daftar putih',
   count(*) = 0, string_agg(p.oid::regprocedure::text, ', '))
   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
  where n.nspname in ('public', 'app')
    and p.prosrc ~* 'now\(\)\s*::\s*date|localtimestamp|current_timestamp\s*::\s*date|date_trunc\(\s*''(day|week|month)''\s*,\s*now\(\)\s*\)'
-   and p.oid::regprocedure::text not in ('app.isi_demo()', 'demo_lihat(text)');
+   and p.oid::regprocedure::text not in ('app.isi_demo()', 'demo_lihat(text)', 'app.isi_belanja_demo()', 'app.isi_alur_demo()');
 
-select pg_temp.cek('daftar putih (isi_demo, demo_lihat) diberi komentar bahwa tanggal UTC di situ sengaja (Q-26)',
-  count(*) = 2 and bool_and(coalesce(obj_description(p.oid, 'pg_proc'), '') ilike '%sengaja%Q-26%'),
+select pg_temp.cek('daftar putih (isi_demo, demo_lihat, prefilter cron, pengisi demo) diberi komentar bahwa tanggal UTC di situ sengaja (Q-26)',
+  count(*) = 7 and bool_and(coalesce(obj_description(p.oid, 'pg_proc'), '') ilike '%sengaja%Q-26%'),
   string_agg(p.proname || ': ' || coalesce(obj_description(p.oid, 'pg_proc'), '-'), ' | '))
   from pg_proc p
- where p.oid in (to_regprocedure('app.isi_demo()'), to_regprocedure('public.demo_lihat(text)'));
+ where p.oid in (to_regprocedure('app.isi_demo()'), to_regprocedure('public.demo_lihat(text)'), to_regprocedure('public.analis_bahan()'),
+   to_regprocedure('app.run_recurring_all()'), to_regprocedure('app.issue_recurring_invoices_all()'), to_regprocedure('app.isi_belanja_demo()'),
+   to_regprocedure('app.isi_alur_demo()'));
 
 select pg_temp.cek('fungsi ' || f || ' memanggil app.hari_ini dan tidak memakai current_date',
   p.oid is not null and p.prosrc ~ 'app\.hari_ini\(' and p.prosrc !~* 'current_date', coalesce(p.oid::regprocedure::text, 'tidak ada'))

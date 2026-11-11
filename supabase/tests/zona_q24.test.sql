@@ -16,12 +16,12 @@ select pg_temp.cek('tidak ada fungsi public/app memakai Asia/Makassar di luar co
   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
  where n.nspname in ('public', 'app')
    and regexp_replace(p.prosrc, 'coalesce\(\s*(\w+\.)?zona_waktu\s*,\s*''Asia/Makassar''\s*\)', '', 'gi') like '%Asia/Makassar%'
-   and p.oid::regprocedure::text not in ('app.isi_demo()', 'app.ukur_kuota(bigint,bigint)');
+   and p.oid::regprocedure::text not in ('app.isi_demo()', 'app.ukur_kuota(bigint,bigint)', 'app.zona_sah(text,text)');
 
-select pg_temp.cek('daftar putih (isi_demo, ukur_kuota) diberi komentar bahwa WITA di situ sengaja',
-  count(*) = 2 and bool_and(coalesce(obj_description(p.oid, 'pg_proc'), '') ilike '%sengaja%'), string_agg(p.proname || ': ' || coalesce(obj_description(p.oid, 'pg_proc'), '-'), ' | '))
+select pg_temp.cek('daftar putih (isi_demo, ukur_kuota, zona_sah) diberi komentar bahwa WITA di situ sengaja',
+  count(*) = 3 and bool_and(coalesce(obj_description(p.oid, 'pg_proc'), '') ilike '%sengaja%'), string_agg(p.proname || ': ' || coalesce(obj_description(p.oid, 'pg_proc'), '-'), ' | '))
   from pg_proc p join pg_namespace n on n.oid = p.pronamespace
- where n.nspname = 'app' and p.proname in ('isi_demo', 'ukur_kuota');
+ where n.nspname = 'app' and p.proname in ('isi_demo', 'ukur_kuota', 'zona_sah');
 
 select pg_temp.cek('tidak ada fungsi public/app memakai jam +08 tetap selain definisi app.tanggal_aman (usang)',
   count(*) = 0, string_agg(p.oid::regprocedure::text, ', '))
@@ -66,8 +66,11 @@ select pg_temp.cek('data lama: tidak ada kejadian dari usulan diterima yang masi
    and exists (select 1 from public.usulan u where u.perusahaan_id = e.perusahaan_id and u.status = 'diterima' and u.sumber = e.sumber
                  and (u.payload -> 'bidang' = e.data or coalesce(u.payload -> 'bidang' -> 'baris', '[]') @> jsonb_build_array(e.data)));
 
+-- Database yang dibuat setelah Q-24 (Supabase lokal) tidak punya data lama untuk dikoreksi: 0 baris sah bila tidak ada usaha
+-- yang dibuat sebelum 1 Nov 2026. Di produksi koreksi wajib ada dan setiap barisnya menyimpan nilai sebelumnya.
 select pg_temp.cek('data lama: cadangan koreksi tersimpan di audit_log untuk setiap kejadian yang dikoreksi',
-  count(*) > 0 and bool_and(a.sebelum ? 'terjadi_at' and a.baris_id = (a.sebelum ->> 'id')::uuid), count(*)::text)
+  (count(*) > 0 and bool_and(a.sebelum ? 'terjadi_at' and a.baris_id = (a.sebelum ->> 'id')::uuid))
+  or (count(*) = 0 and not exists (select 1 from public.perusahaan where dibuat_at < '2026-11-01')), count(*)::text)
   from public.audit_log a where a.tabel = 'kejadian' and a.aksi = 'koreksi_zona_q24';
 
 -- Bagian 2: perilaku.

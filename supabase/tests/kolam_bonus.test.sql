@@ -116,9 +116,10 @@ begin
          from jsonb_array_elements(r -> 'bagian') b), r ->> 'bagian');
     v_rp := case when v_min = o_sari then 333334 else 333333 end;
     select b into e from jsonb_array_elements(r -> 'bagian') b where (b ->> 'orang_id')::uuid = o_sari;
+    -- alasan memakai app.angka_id satu desimal sejak sinyal_beban (4 Nov 2026), sama dengan produksi
     perform pg_temp.cek('Sari: 3 poin dari 3 kerja, 33,3%, alasan dari kerja nyata, batas bulan zona usaha',
       (e ->> 'poin')::numeric = 3 and (e ->> 'kerja_n')::int = 3 and (e ->> 'persen')::numeric = 33.3
-      and e ->> 'alasan' = 'Sari Kolam: 3 poin dari 3 kerja, 33,3% kolam' and jsonb_array_length(e -> 'kerja_ids') = 3
+      and e ->> 'alasan' = 'Sari Kolam: 3,0 poin dari 3 kerja, 33,3% kolam' and jsonb_array_length(e -> 'kerja_ids') = 3
       and exists (select 1 from jsonb_array_elements_text(e -> 'kerja_ids') i join public.kerja k on k.id = i::uuid where k.judul = 'Tutup kas akhir bulan')
       and not exists (select 1 from jsonb_array_elements_text(e -> 'kerja_ids') i join public.kerja k on k.id = i::uuid where k.judul in ('Kas Agustus', 'Kas Oktober', 'Stok opname batal')), e::text);
     select b into e from jsonb_array_elements(r -> 'bagian') b where (b ->> 'orang_id')::uuid = o_budi;

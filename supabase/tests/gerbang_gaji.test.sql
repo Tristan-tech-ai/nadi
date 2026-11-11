@@ -63,13 +63,13 @@ begin
   perform set_config('request.jwt.claims', kb, true);
   -- Karyawan nyata pembanding.
   insert into public.orang (perusahaan_id, nama, telepon, data) values (pb, 'Ani Nyata', '0812-3456-7890', '{"mulai": "2024-01-10"}') returning id into nyata;
-  insert into public.orang_rahasia (orang_id, perusahaan_id, gaji, nik_hash, rekening_hash) values (nyata, pb, '{"pokok": 4000000}', md5('nik-ani'), md5('rek-ani'));
+  insert into public.orang_rahasia (orang_id, perusahaan_id, gaji, nik_hash, rekening) values (nyata, pb, '{"pokok": 4000000}', md5('nik-ani'), '1234567890');
   -- S1: tanpa tanda hidup.
   insert into public.orang (perusahaan_id, nama, data) values (pb, 'S1 Hantu', '{"mulai": "2025-01-05"}') returning id into s;
   insert into public.orang_rahasia (orang_id, perusahaan_id, gaji) values (s, pb, '{"pokok": 3800000}');
-  -- S2: rekening sama dengan Ani.
+  -- S2: rekening sama dengan Ani (sejak M-10B rekening_hash diisi trigger dari nomor rekening, jadi tes memakai nomor).
   insert into public.orang (perusahaan_id, nama, data) values (pb, 'S2 Rekening', '{"mulai": "2025-01-05"}') returning id into s;
-  insert into public.orang_rahasia (orang_id, perusahaan_id, gaji, rekening_hash) values (s, pb, '{"pokok": 3800000}', md5('rek-ani'));
+  insert into public.orang_rahasia (orang_id, perusahaan_id, gaji, rekening) values (s, pb, '{"pokok": 3800000}', '1234567890');
   -- S3: HP sama dengan Ani (format berbeda).
   insert into public.orang (perusahaan_id, nama, telepon, data) values (pb, 'S3 Telepon', '+62 812 3456 7890', '{"mulai": "2025-01-05"}') returning id into s;
   insert into public.orang_rahasia (orang_id, perusahaan_id, gaji) values (s, pb, '{"pokok": 3800000}');

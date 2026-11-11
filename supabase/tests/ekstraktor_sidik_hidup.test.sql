@@ -1,4 +1,6 @@
 -- T-01B: sidik tata letak boleh dipakai ulang setelah aturannya mati, tetapi tetap unik di antara aturan hidup.
+-- Diakhiri raise exception seperti tes lain supaya semua perubahan dibatalkan (sebelumnya diakhiri select, sehingga
+-- dijalankan di luar transaksi yang dibatalkan, baris uji tertinggal).
 create temp table _t (n int, ok boolean, ket text) on commit drop;
 do $$
 declare p uuid; a jsonb := '{"bentuk":"teks","jenis":"struk","jangkar":["SPBU","Total Harga"],"bidang":{"total":{"pola":"Total Harga\\s*:\\s*Rp\\.?\\s*([\\d.]+)","tipe":"rupiah"}}}';
@@ -23,4 +25,4 @@ begin
   exception when unique_violation then insert into _t values (4, true, 'aturan hidup tetap unik setelah pelajari ulang');
   end;
 end $$;
-select 'HASIL_TES ' || count(*) filter (where ok) || ' | gagal=' || coalesce(json_agg(n) filter (where not ok)::text, '[]') from _t;
+do $$ begin raise exception '%', (select 'HASIL_TES ' || count(*) filter (where ok) || ' | gagal=' || coalesce(json_agg(n) filter (where not ok)::text, '[]') from _t); end $$;

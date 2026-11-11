@@ -5,8 +5,8 @@ import { expect, test } from "@playwright/test";
 const HALAMAN: [string, RegExp][] = [
   ["/", /Nadi yang merapikan/],
   ["/en", /Nadi sorts it out/],
-  ["/demo", /contoh/],
-  ["/demo/toko", /contoh/],
+  ["/demo", /Coba Nadi/],
+  ["/demo/toko", /Coba Nadi/],
   ["/harga", /Harga/],
   ["/keamanan", /Keamanan data/],
   ["/privasi", /Kebijakan privasi/],
