@@ -32,14 +32,13 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Pasang Chromium
         working-directory: apps/web
-        # Perintah dari docs resmi Playwright CI (install --with-deps). Diulang sampai 3 kali dengan jeda karena apt di runner
-        # pernah gagal sesaat ("Temporary failure resolving archive.ubuntu.com", run 43036733698); itu bukan kegagalan uji.
+        # Perintah dari docs resmi Playwright (playwright.dev/docs/browsers): install-deps memasang dependensi sistem lewat apt,
+        # install mengunduh browser. Di image runner Ubuntu terbaru apt gagal resolve server arsip berulang kali (run 43036733698
+        # dan 43043389302 macet sampai batas 20 menit), jadi apt dibatasi 4 menit dan bila gagal browser tetap diunduh; image
+        # runner sudah membawa pustaka sistem Chrome sehingga uji tetap bisa jalan, dan bila tidak, langkah Uji asap gagal jujur.
         run: |
-          for i in 1 2 3; do
-            pnpm exec playwright install --with-deps chromium && exit 0
-            echo "Pasang Chromium gagal (percobaan $i), ulang dalam 30 detik"; sleep 30
-          done
-          exit 1
+          timeout 240 pnpm exec playwright install-deps chromium || echo "install-deps tidak selesai (apt runner), lanjut tanpa"
+          pnpm exec playwright install chromium
       - name: Uji asap
         id: uji
         working-directory: apps/web
