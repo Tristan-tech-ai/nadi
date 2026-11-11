@@ -183,3 +183,4 @@ kerja_review
 proyek_operasional
 divisi
 indeks_fk_x
+indeks_aktif_x
