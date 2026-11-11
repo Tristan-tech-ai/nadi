@@ -11,6 +11,7 @@ import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
+import { ProyekOperasional } from "@/app/app/proyek/ops";
 
 export const metadata: Metadata = { title: "Proyek" };
 
@@ -65,6 +66,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/proyek">["s
   return (
     <div lang={bahasa}>{judul}
       <section className="mt-6" aria-labelledby="baru"><h2 id="baru" className="sr-only">{t.proyekBaru}</h2><FormProyekBaru teks={t} /></section>
+      {sesi.peran !== "akuntan" && <ProyekOperasional />}
       {proyek.length === 0 ? <p data-langkah='#baru' className="mt-6 text-sm text-tinta-2">{t.kosong}</p> : (<>
         <nav className="mt-6 flex flex-wrap gap-2 text-sm" aria-label={t.pilih}>
           {proyek.map((p) => <a key={p.id} href={`/app/proyek?p=${p.id}`} aria-current={p.id === dipilih?.id ? "page" : undefined}
