@@ -28,6 +28,11 @@ WATCH_PID = os.path.join(L, ".watchdog.pid")
 HAPUS_DATA = re.compile(r"\bdrop\s+(table|schema|database|extension|materialized\s+view|owned)\b|\bdrop\s+column\b|\btruncate\b"
                         r"|\bdelete\s+from\b|\bdrop\b[^;]*\bcascade\b|\bupdate\s+\S+\s+set\b(?![^;]*\bwhere\b)", re.I)
 ELISITASI_LOG = os.path.join(L, ".elisitasi.log")
+TES_SQL = os.path.join(REPO, "supabase", "tests")
+# Pengecualian yang disetujui Tristan (12 Nov 2026, "ya aku setuju"): fungsi pembersih data terjadwal boleh memuat
+# `delete from ... where ...` di BADAN FUNGSI bila badan itu memuat `-- hapus-ok: <alasan>` dan sudah ada tes SQL yang menyebut fungsinya.
+FUNGSI = re.compile(r"create\s+(?:or\s+replace\s+)?function\s+([\w.\"]+)\s*\((?:[^()]|\([^()]*\))*\).*?\bas\s+(\$[A-Za-z_]*\$)(.*?)\2", re.I | re.S)
+TANDA_HAPUS = re.compile(r"--\s*hapus-ok:\s*(\S.{9,})")
 SQL_TOOLS = re.compile(r"(apply_migration|execute_sql)$")
 TANYA = {"AskUserQuestion"}
 BERBAYAR = re.compile(r"(Supabase__create_project|Supabase__create_branch|Vercel__buy_domain|Vercel__create_or_transfer_domain|Vercel__get_purchase_quote)$")
@@ -52,16 +57,52 @@ def tanpa_komentar(sql):
     return re.sub(r"'(?:[^']|'')*'", "''", sql)  # isi string literal (mis. pesan galat) bukan perintah
 
 
+def ada_tes(nama):
+    """Ada berkas supabase/tests/*.sql yang menyebut nama fungsi (tanpa skema)."""
+    pendek = nama.replace('"', "").split(".")[-1].lower()
+    try:
+        for f in os.listdir(TES_SQL):
+            if f.endswith(".sql") and re.search(r"\b" + re.escape(pendek) + r"\b", open(os.path.join(TES_SQL, f), encoding="utf-8").read().lower()):
+                return True
+    except Exception:
+        pass
+    return False
+
+
+def buang_fungsi_pembersih(sql):
+    """Mengganti badan fungsi pembersih yang sah dengan teks netral. Mengembalikan (sql, alasan_tolak_atau_None)."""
+    for m in list(FUNGSI.finditer(sql)):
+        nama, badan = m.group(1), m.group(3)
+        if not TANDA_HAPUS.search(badan):
+            continue
+        bersih = tanpa_komentar(badan)
+        for perintah in bersih.split(";"):
+            if re.search(r"\bdelete\s+from\b", perintah, re.I) and not re.search(r"\bwhere\b", perintah, re.I):
+                return sql, f"PENJAGA MACET: fungsi {nama} bertanda hapus-ok, tetapi ada delete tanpa where. Batasi baris yang dihapus (misalnya umur data)."
+        sisa = re.sub(r"\bdelete\s+from\b", " ", bersih, flags=re.I)
+        lain = HAPUS_DATA.search(sisa)
+        if lain:
+            return sql, f"PENJAGA MACET: fungsi {nama} bertanda hapus-ok hanya boleh memuat delete ber-where; '{lain.group(0)}' tetap ditolak."
+        if not ada_tes(nama):
+            return sql, f"PENJAGA MACET: fungsi pembersih {nama} bertanda hapus-ok belum punya tes di supabase/tests yang menyebut namanya. Tulis tesnya dulu, lalu catat di loop/DECISIONS.md."
+        sql = sql[:m.start(3)] + " /* badan fungsi pembersih bertanda, sudah dicek */ " + sql[m.end(3):]
+    return sql, None
+
+
 def masalah(tool, inp):
     """None bila boleh; teks alasan bila harus ditolak agar loop tidak menunggu manusia."""
     if SQL_TOOLS.search(tool):
-        q = tanpa_komentar(str(inp.get("query", "")))
+        mentah, alasan = buang_fungsi_pembersih(str(inp.get("query", "")))
+        if alasan:
+            return alasan
+        q = tanpa_komentar(mentah)
         m = HAPUS_DATA.search(q)
         if m:
             return (f"PENJAGA MACET: SQL memuat '{m.group(0)}', yang bisa menghapus data (penjaga: tidak ada SQL yang menghapus data tanpa cadangan). "
                     "Pakai jalan lain: kolom status/arsip (bukan delete), ALTER TABLE ... ADD (bukan drop column), retensi lewat pg_partman/pg_cron "
                     "di dalam fungsi. DROP objek tanpa data (policy, function, trigger, index, view) boleh. Bila benar-benar harus menghapus data, "
-                    "ekspor cadangan dulu, tulis ke loop/UNTUK-TRISTAN.md, lalu kerjakan tugas lain.")
+                    "ekspor cadangan dulu, tulis ke loop/UNTUK-TRISTAN.md, lalu kerjakan tugas lain. Pengecualian: fungsi pembersih terjadwal boleh "
+                    "memuat delete ber-where di badan fungsinya bila badan itu bertanda '-- hapus-ok: alasan' dan sudah ada tes SQL yang menyebut fungsinya.")
     if tool in TANYA:
         return "PENJAGA MACET: loop tidak bertanya kepada Tristan (perintah tetap 2). Putuskan sendiri, catat di loop/DECISIONS.md; hal yang butuh Tristan ke loop/UNTUK-TRISTAN.md."
     if BERBAYAR.search(tool):
@@ -150,6 +191,20 @@ def selftest():
     case("kata drop di komentar boleh", masalah(A, {"query": "-- jangan drop apa pun\ncreate table t (id int);"}), None)
     case("kata drop di string boleh", masalah(A, {"query": "raise exception 'tidak boleh drop';"}), None)
     case("kolom bernama dropship boleh", masalah(A, {"query": "alter table t add column dropship boolean;"}), None)
+    global TES_SQL
+    TES_SQL = tempfile.mkdtemp()
+    with open(os.path.join(TES_SQL, "bersih.test.sql"), "w", encoding="utf-8") as f:
+        f.write("select app.bersihkan_log_lama();")
+    F = "create or replace function app.{n}() returns void language plpgsql security definer set search_path = '' as $$\nbegin\n{t}\n  {d};\nend;\n$$;"
+    tanda = "  -- hapus-ok: retensi log 90 hari sesuai kebijakan privasi"
+    case("fungsi pembersih bertanda + tes boleh", masalah(A, {"query": F.format(n="bersihkan_log_lama", t=tanda, d="delete from public.log where dibuat < now() - interval '90 days'")}), None)
+    case("fungsi bertanda tanpa tes ditolak", "belum punya tes" in str(masalah(A, {"query": F.format(n="hapus_tanpa_tes", t=tanda, d="delete from public.log where a = 1")})), True)
+    case("fungsi tanpa tanda ditolak", masalah(A, {"query": F.format(n="bersihkan_log_lama", t="", d="delete from public.log where a = 1")}) is not None, True)
+    case("tanda tanpa where ditolak", "tanpa where" in str(masalah(A, {"query": F.format(n="bersihkan_log_lama", t=tanda, d="delete from public.log")})), True)
+    case("truncate di fungsi bertanda ditolak", masalah(A, {"query": F.format(n="bersihkan_log_lama", t=tanda, d="truncate public.log")}) is not None, True)
+    case("alasan terlalu pendek ditolak", masalah(A, {"query": F.format(n="bersihkan_log_lama", t="  -- hapus-ok: lama", d="delete from public.log where a = 1")}) is not None, True)
+    case("delete langsung tetap ditolak walau ada tanda", masalah(A, {"query": tanda + "\ndelete from public.log where a = 1;"}) is not None, True)
+    case("delete di luar fungsi bertanda ditolak", masalah(A, {"query": F.format(n="bersihkan_log_lama", t=tanda, d="delete from public.log where a = 1") + "\ndelete from public.lain where b = 2;"}) is not None, True)
     case("AskUserQuestion ditolak", masalah("AskUserQuestion", {}) is not None, True)
     case("create_project berbayar ditolak", masalah("mcp__x_Supabase__create_project", {}) is not None, True)
     case("vercel login ditolak", masalah("Bash", {"command": "vercel login"}) is not None, True)
