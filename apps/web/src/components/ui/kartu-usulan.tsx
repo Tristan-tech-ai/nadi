@@ -7,6 +7,8 @@ import { Rupiah } from "./rupiah";
 import { Tombol } from "./tombol";
 
 export type Usulan = {
+  /** Kode aksi usulan (mis. kerja.review) untuk kartu yang butuh tombol khusus. */
+  aksi?: string;
   judul: string;
   penjelasan: string;
   sumber: string;

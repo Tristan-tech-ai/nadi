@@ -30,6 +30,8 @@ const PETA: Record<string, Isi> = {
   "izin.setujui": { akibat: t("Izin disetujui dan tercatat.", "The leave is approved and recorded."), href: "/app/izin", tempat: TEMPAT.izin },
   "lembur.ajukan": { akibat: t("Lembur dicatat dan ikut dihitung di slip gaji bulan ini.", "Overtime is recorded and counted in this month's payslip."), href: "/app/gaji", tempat: TEMPAT.gaji },
   "shift.tukar": { akibat: t("Jadwal kedua orang ditukar.", "The two people's shifts are swapped."), href: "/app/jadwal", tempat: TEMPAT.jadwal },
+  "kerja.review": { akibat: t("Hasil diterima dan kerja selesai. Untuk minta revisi, tulis alasannya di kartu ini.", "The result is accepted and the task is done. To ask for a revision, write the reason on this card."), href: "/app/kerja", tempat: TEMPAT.kerja },
+  "kerja.tenggat": { akibat: t("Tenggat kerja digeser ke tanggal baru; tenggat awal tetap tercatat untuk KPI.", "The deadline moves to the new date; the original deadline stays recorded for KPI."), href: "/app/kerja", tempat: TEMPAT.kerja },
   "kpi.banding": { akibat: t("Nilai KPI orang itu dikoreksi sesuai bandingnya.", "The KPI score is corrected as appealed."), href: "/app/kerja", tempat: TEMPAT.kerja },
   "klaim.setujui": { akibat: t("Klaim disetujui dan menjadi utang ke karyawan, dibayar lewat slip atau kas.", "The claim becomes owed to the employee, paid via payslip or cash."), href: "/app/klaim", tempat: TEMPAT.klaim },
   "dinas.setujui": { akibat: t("Perjalanan dinas disetujui; uang harian dibuat sebagai klaim.", "The business trip is approved; daily allowance becomes a claim."), href: "/app/klaim", tempat: TEMPAT.klaim },

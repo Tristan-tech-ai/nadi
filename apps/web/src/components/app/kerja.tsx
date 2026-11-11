@@ -9,7 +9,8 @@ import type { Bahasa } from "@/lib/i18n/bahasa";
 import { isiTeks } from "@/lib/i18n/isi-teks";
 import type { Kamus } from "@/lib/i18n/kamus";
 import { sisip } from "@/lib/i18n/sisip";
-import { formatPoin, pilihStaf, teksSelesai, type KerjaPapan } from "@/lib/kerja/poin";
+import { formatPoin, pilihStaf, teksSelesai, teksTim, type KerjaPapan } from "@/lib/kerja/poin";
+import { AjukanGeser, ChecklistKerja, KirimHasil, type Butir } from "@/components/app/kerja-tim";
 
 type TK = Kamus["kerja"];
 
@@ -170,7 +171,7 @@ function TombolStatus({ kerja, aksi, children, ragam, kirim, sibuk }: {
 }
 
 /** Layar staf: satu kerja aktif dengan tombol besar, 5 kerja berikutnya, dan yang selesai hari ini (DIRECTION §4). */
-export function PapanStaf({ daftar, teks: t, bahasa = "id" }: { daftar: KerjaTampil[]; teks: TK; bahasa?: Bahasa }) {
+export function PapanStaf({ daftar, teks: t, bahasa = "id", butir = {} }: { daftar: KerjaTampil[]; teks: TK; bahasa?: Bahasa; butir?: Record<string, Butir[]> }) {
   const [h, kirim, sibuk] = useActionState<HasilKerja, FormData>(ubahStatus, null);
   const luring = useOffline();
   const { aktif, berikutnya, selesai } = pilihStaf(daftar) as { aktif: KerjaTampil | null; berikutnya: KerjaTampil[]; selesai: KerjaTampil[] };
@@ -195,6 +196,12 @@ export function PapanStaf({ daftar, teks: t, bahasa = "id" }: { daftar: KerjaTam
               {aktif.tenggatTeks ? isiTeks(t.tenggat, { t: aktif.tenggatTeks }) : t.tanpaTenggat}
               {aktif.estimasi && isiTeks(t.sekitar, { poin: formatPoin(aktif.estimasi.poin, bahasa), n: Math.round(aktif.estimasi.menit) })}
             </p>
+            {teksTim(aktif.tim, bahasa === "en" ? "en" : "id") && <p className="mt-1 text-sm" data-testid="tim-kerja"><span className="text-tinta-2">{bahasa === "en" ? "Team: " : "Tim: "}</span><span data-pengguna>{teksTim(aktif.tim, bahasa === "en" ? "en" : "id")}</span></p>}
+            {aktif.hasil?.status === "revisi" && aktif.status === "jalan" && <p className="mt-2 rounded-[var(--radius-isian)] border border-cap p-2 text-sm" data-testid="alasan-revisi"><span className="font-semibold">{bahasa === "en" ? "Revision requested: " : "Diminta revisi: "}</span><span data-pengguna>{aktif.hasil.alasan}</span></p>}
+            {aktif.status === "review" && <p className="mt-2 text-sm font-semibold" data-testid="menunggu-review">{bahasa === "en" ? "Waiting for review." : "Menunggu ditinjau pemilik atau kepala divisi."}</p>}
+            <div className="mt-3"><ChecklistKerja kerja={aktif.id} judul={aktif.judul} butir={butir[aktif.id] ?? []} en={bahasa === "en"} /></div>
+            {aktif.status === "jalan" && <div className="mt-4"><KirimHasil kerja={aktif.id} en={bahasa === "en"} /></div>}
+            {aktif.tenggat && aktif.status !== "review" && <div className="mt-3"><AjukanGeser kerja={aktif.id} en={bahasa === "en"} /></div>}
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               {aktif.status === "baru" && <TombolStatus kerja={aktif.id} aksi="mulai" ragam="utama" kirim={kirim} sibuk={sibuk}>{t.aksiMulai}</TombolStatus>}
               {aktif.status === "jalan" && (

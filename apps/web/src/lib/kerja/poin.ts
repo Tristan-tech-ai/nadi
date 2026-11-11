@@ -1,8 +1,8 @@
 // Poin Beban dan papan kerja (F3-01, docs/research/poin-beban.md). Fungsi murni; pembulatan dan teks menit sama dengan
 // app.poin_dari_menit dan app.teks_menit di migrasi papan_kerja.
-export const STATUS_KERJA = ["baru", "jalan", "tunggu", "selesai"] as const;
+export const STATUS_KERJA = ["baru", "jalan", "tunggu", "review", "selesai"] as const;
 export type StatusKerja = (typeof STATUS_KERJA)[number];
-export const LABEL_STATUS: Record<StatusKerja, string> = { baru: "Baru", jalan: "Jalan", tunggu: "Tunggu", selesai: "Selesai" };
+export const LABEL_STATUS: Record<StatusKerja, string> = { baru: "Baru", jalan: "Jalan", tunggu: "Tunggu", review: "Review", selesai: "Selesai" };
 
 export type Estimasi = {
   menit: number;
@@ -30,7 +30,19 @@ export type KerjaPapan = {
   topi: { id: string; nama: string } | null;
   pelaksana: { id: string; nama: string } | null;
   saya: boolean;
+  /** X-10: anggota tim dengan porsi (PIC lebih dulu) dan progres checklist. */
+  tim?: { id: string; nama: string | null; porsi: number; pic: boolean }[];
+  butir?: { selesai: number; total: number };
+  /** X-11: tenggat awal (baseline) dan hasil terakhir yang dikirim. */
+  tenggat_awal?: string | null;
+  hasil?: { status: "menunggu" | "diterima" | "revisi"; tautan: string | null; catatan: string | null; alasan: string | null } | null;
 };
+
+/** "Sari 60% (PIC), Budi 40%" untuk kerja bertim; null bila satu pelaksana. */
+export function teksTim(tim: KerjaPapan["tim"], bahasa: "id" | "en" = "id"): string | null {
+  if (!tim || tim.length < 2) return null;
+  return tim.map((x) => `${x.nama ?? (bahasa === "en" ? "someone" : "seseorang")} ${x.porsi}%${x.pic ? " (PIC)" : ""}`).join(", ");
+}
 
 export const MENIT_PER_POIN = 15;
 
@@ -111,12 +123,12 @@ export function formatTenggat(iso: string, sekarang: Date, zona: string, bahasa:
 }
 
 export function ringkasStatus(daftar: KerjaPapan[]): Record<StatusKerja, number> {
-  const r: Record<StatusKerja, number> = { baru: 0, jalan: 0, tunggu: 0, selesai: 0 };
+  const r: Record<StatusKerja, number> = { baru: 0, jalan: 0, tunggu: 0, review: 0, selesai: 0 };
   for (const k of daftar) if (k.status in r) r[k.status] += 1;
   return r;
 }
 
-const URUT: Record<StatusKerja, number> = { jalan: 0, tunggu: 1, baru: 2, selesai: 3 };
+const URUT: Record<StatusKerja, number> = { jalan: 0, tunggu: 1, review: 2, baru: 3, selesai: 4 };
 
 /** Layar staf: satu kerja aktif (jalan, lalu tunggu, lalu baru dengan tenggat terdekat), 5 berikutnya, dan yang selesai hari ini. */
 export function pilihStaf(daftar: KerjaPapan[]): { aktif: KerjaPapan | null; berikutnya: KerjaPapan[]; selesai: KerjaPapan[] } {

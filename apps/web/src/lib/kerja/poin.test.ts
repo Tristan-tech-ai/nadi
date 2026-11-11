@@ -91,7 +91,7 @@ describe("papan", () => {
     kerja("e", "baru"), kerja("f", "baru"), kerja("g", "baru"), kerja("h", "baru"), kerja("i", "baru"), kerja("j", "baru"),
   ];
   it("ringkasan jumlah per status", () => {
-    expect(ringkasStatus(daftar)).toEqual({ baru: 7, jalan: 1, tunggu: 1, selesai: 1 });
+    expect(ringkasStatus(daftar)).toEqual({ baru: 7, jalan: 1, tunggu: 1, review: 0, selesai: 1 }); // X-11 menambah review
   });
   it("staf: kerja jalan didahulukan, lalu tunggu, lalu baru; berikutnya paling banyak 5", () => {
     const s = pilihStaf(daftar);
@@ -119,5 +119,15 @@ describe("teks kerja bahasa Inggris", () => {
     expect(teksPoin(null, "en")).toBe("Points not estimated yet; fill in manually");
     expect(formatTenggat("2026-11-05T02:30:00Z", new Date("2026-11-04T02:00:00Z"), "Asia/Makassar", "en")).toBe("Tomorrow, 10:30");
     expect(formatTenggat("2026-11-05T02:30:00Z", new Date("2026-11-04T02:00:00Z"), "Asia/Makassar")).toBe("Besok, 10.30");
+  });
+});
+
+describe("teksTim (X-10)", () => {
+  it("satu pelaksana: null; tim: PIC dulu dengan porsi", async () => {
+    const { teksTim } = await import("./poin");
+    expect(teksTim(undefined)).toBeNull();
+    expect(teksTim([{ id: "a", nama: "Sari", porsi: 100, pic: true }])).toBeNull();
+    expect(teksTim([{ id: "a", nama: "Sari", porsi: 60, pic: true }, { id: "b", nama: "Budi", porsi: 40, pic: false }])).toBe("Sari 60% (PIC), Budi 40%");
+    expect(teksTim([{ id: "a", nama: null, porsi: 50, pic: true }, { id: "b", nama: "Budi", porsi: 50, pic: false }], "en")).toBe("someone 50% (PIC), Budi 50%");
   });
 });

@@ -2,6 +2,7 @@
 
 import { startTransition, useActionState, useEffect, useRef, useState, type FormEvent } from "react";
 import { putuskan, type HasilPutusan } from "@/app/app/actions";
+import { MintaRevisi } from "@/components/app/kerja-tim";
 import { useCatatPutusan } from "@/components/app/halaman-feed";
 import { Cap, type JenisCap } from "@/components/ui/cap";
 import { KartuUsulan, TEKS_KARTU_ID, type TeksKartu, type Usulan } from "@/components/ui/kartu-usulan";
@@ -123,18 +124,24 @@ export function KartuFeed({ usulanId, usulan, teks = TEKS_KARTU_ID, cap, bahasa 
         isiLang={isiLang}
         rincian={<RincianUsulan usulanId={usulanId} bahasa={bahasa} />}
         aksi={
+          <div className="flex w-full flex-col gap-2">
           <form action={aksi} onSubmit={onSubmit} className="flex w-full flex-col gap-2">
             <input type="hidden" name="usulan" value={usulanId} />
             <div className="flex gap-2">
               <Tombol type="submit" name="keputusan" value="setuju" ukuran="besar" className="flex-1" data-aksi="setuju" disabled={sibuk}>
                 {teks.setujui}
               </Tombol>
-              <Tombol type="submit" name="keputusan" value="tolak" ukuran="besar" ragam="kedua" disabled={sibuk}>
-                {teks.tolak}
-              </Tombol>
+              {usulan.aksi !== "kerja.review" && (
+                <Tombol type="submit" name="keputusan" value="tolak" ukuran="besar" ragam="kedua" disabled={sibuk}>
+                  {teks.tolak}
+                </Tombol>
+              )}
             </div>
             {hasil.galat ? <p role="alert" className="text-sm text-cap">{hasil.galat}</p> : null}
           </form>
+          {/* X-11: formulir revisi di luar formulir keputusan (formulir tidak boleh bersarang) */}
+          {usulan.aksi === "kerja.review" && <MintaRevisi usulan={usulanId} en={bahasa === "en"} />}
+          </div>
         }
       />
     </div>
