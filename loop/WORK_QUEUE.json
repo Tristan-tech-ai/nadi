@@ -5092,9 +5092,11 @@
    "accept": "pusat bantuan punya artikel Tambah fitur, Mod, Buat dengan AI-mu; kamus istilah mod; prompt salin untuk AI pengguna diuji menyebut alat yang ada; PDF ringkas hasil di luar repo dikirim ke Tristan",
    "how": "pola artikel bantuan L-04",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-11-11T16:53:47",
-   "started": "2026-11-11T22:50:17"
+   "started": "2026-11-11T22:50:17",
+   "done": "2026-11-11T23:19:36",
+   "result": "commit 448549d; produksi https://nadi-swart.vercel.app/bantuan/artikel/menambah-fitur 200 (+buat-fitur-sendiri, fitur-dengan-ai), /kamus 4 istilah baru; prompt-mod.test.ts 2/2; CI 43056673221 hijau; e2e produksi asap+bantuan 27 lulus; PDF proposal/nadi-fitur-tambahan.pdf dikirim lewat SendUserFile"
   },
   {
    "id": "FIX-ASAP-2",
@@ -5157,8 +5159,11 @@
    "accept": "C:/Users/Tristan/Downloads/project-pkl/project-team-management berisi admin-app dan team-app (Laravel 13, satu repo git lokal tanpa jejak asisten) yang berbagi satu MySQL 8 hasil impor SQL; migrate users hanya di admin-app; InitialWorkspaceSeeder + DemoWorkspaceSeeder (local saja) persis isi dokumen bagian 10; login tiap role; Company/Client/divisi/jabatan/user CRUD dengan Yajra server-side; 9 menu dari tabel menu sesuai izin; Policy menolak URL langsung (403); Debugbar --dev hanya saat APP_DEBUG=true; tes fitur lulus",
    "how": "ikuti urutan instalasi 2.3 dan konfigurasi 2.4 dokumen; Docker untuk MySQL dan PHP bila perlu",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T18:49:25"
+   "status": "done",
+   "created": "2026-11-11T18:49:25",
+   "started": "2026-11-12T05:49:34",
+   "done": "2026-11-12T05:49:34",
+   "result": "project-team-management commit 4d17d80; impor SQL lewat phpMyAdmin 62 query, 40 tabel, roles 3/permissions 39/role_permissions 77/menu 9+23; seeder dokumen bagian 10 idempoten; login tiap role, menu 9/23 super, 8/20 manager, 6/10 member, member URL admin 403, Yajra CRUD master data, Debugbar hanya dev (docs/bukti/debugbar.txt: production 0 baris, /_debugbar/open 404); php artisan test admin 40/40, team 31/31"
   },
   {
    "id": "LV-02",
@@ -5171,8 +5176,11 @@
    "accept": "buat project dari template membuat semua task + subtask dalam satu transaksi (rollback bila gagal, dibuktikan tes); klasifikasi one_time/recurring/ongoing; project_periods per periode untuk recurring tanpa menutup induk; anggota unik project tidak ganda walau di beberapa divisi; progress project = task utama selesai / task utama non-deleted (tanpa subtask); tes fitur lulus di kedua app",
    "how": "bagian 03, 08.1, 08.5 dokumen",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T18:49:25"
+   "status": "done",
+   "created": "2026-11-11T18:49:25",
+   "started": "2026-11-12T05:49:34",
+   "done": "2026-11-12T05:49:34",
+   "result": "project-team-management commit 4d17d80; tests/Domain/ProjectTemplateTest 8/8 di kedua app (template + subtask satu transaksi, gagal di tengah rollback, divisi dari company project, anggota unik lintas divisi, recurring periode baru tanpa menutup induk, progress tanpa subtask); e2e-alur.mjs: pratinjau 5 task lalu project dari template 3 divisi"
   },
   {
    "id": "LV-03",
@@ -5185,8 +5193,11 @@
    "accept": "Kanban empat kolom (Antrian, Dikerjakan, Review, Selesai) dengan SortableJS drag-drop di desktop dan dropdown status di HP, rollback kartu saat API gagal; Quick Add task; task >= 2 assignee dan PIC termasuk assignee; subtask checklist satu tingkat dicentang tanpa membuka halaman edit; submission link/file, revisi beralasan, diterima menjadi done; logika status identik di admin-app dan team-app dengan tes yang sama",
    "how": "bagian 08.2, 08.3, 09.4 dokumen",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T18:49:25"
+   "status": "done",
+   "created": "2026-11-11T18:49:25",
+   "started": "2026-11-12T05:49:34",
+   "done": "2026-11-12T05:49:34",
+   "result": "project-team-management commit 4d17d80; TaskWorkflowTest 7/7 identik di kedua app (dua pelaksana + PIC assignee, tidak bisa lewati Review, revisi wajib alasan, terima = done + completed_at/by, buka kembali, checklist satu tingkat); e2e-alur.mjs 13/13 dua kali: seret SortableJS tersimpan, seret ke Selesai ditolak API lalu kartu kembali, dropdown status HP 390, checklist tanpa halaman edit, kirim hasil, revisi, terima"
   },
   {
    "id": "LV-04",
@@ -5199,8 +5210,11 @@
    "accept": "activity rapat/kunjungan/revisi/hambatan dengan peserta aktual dan dampak; schedule_change_request (target lama, usulan, alasan, activity) perlu persetujuan dan baseline tetap terbaca; FullCalendar memisahkan deadline, publikasi, kegiatan, dan selesai aktual; timeline project; tes fitur lulus",
    "how": "bagian 08.4, 08.6 dokumen",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T18:49:25"
+   "status": "done",
+   "created": "2026-11-11T18:49:25",
+   "started": "2026-11-12T05:49:34",
+   "done": "2026-11-12T05:49:34",
+   "result": "project-team-management commit 4d17d80; ScheduleMetricsTest (hanya approved ubah due_at, baseline tetap, applied_at, tolak wajib alasan, rapat tidak menggeser deadline) + KalenderTest (mode jadwal/publikasi/selesai/aktivitas terpisah, bukan updated_at, scope) di kedua app; e2e: aktivitas berpeserta + pengajuan deadline disetujui, timeline project, FullCalendar 6.1.22 mode Jadwal 5 kejadian dan Selesai aktual"
   },
   {
    "id": "LV-05",
@@ -5213,8 +5227,11 @@
    "accept": "dashboard KPI sesuai query dokumen dan membedakan anggota unik vs jumlah penugasan; monitoring per divisi dan orang; overdue terdeteksi; export; DataTables dengan 500+ data uji tetap server-side (dibuktikan request); tanpa N+1 utama di project-list dan task-list (Debugbar query count tercatat); halaman galat ramah",
    "how": "bagian 05, 07.1, 09.5 dokumen",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T18:49:25"
+   "status": "done",
+   "created": "2026-11-11T18:49:25",
+   "started": "2026-11-12T05:49:34",
+   "done": "2026-11-12T05:49:34",
+   "result": "project-team-management commit 4d17d80; KPI + monitoring project/divisi/anggota (anggota unik vs penugasan diuji), overdue dinamis, export CSV aman rumus (tes), 520 task server-side 25 baris per halaman (tes), tanpa N+1 1 vs 30 project (tes), Debugbar: daftar project 11+12 query, task 9+12, board 23, overview 19 (docs/bukti/performa.md), halaman galat 403/404/419/429/500/503 ramah (tes)"
   },
   {
    "id": "LV-06",
@@ -5267,7 +5284,7 @@
    "wajib": true,
    "title": "Laravel video demo rekaman sungguhan alur tugas",
    "accept": "video MP4 rekaman layar aplikasi Admin dan Tim yang benar-benar berjalan (bukan animasi atau rekonstruksi UI) memperlihatkan 8 skenario 11.3, dengan teks penjelas per langkah; durasi dan isi dicek ulang dengan menonton potongan bingkai",
-   "how": "Playwright recordVideo atau perekam layar pada browser sungguhan; sunting dengan ffmpeg",
+   "how": "Playwright recordVideo atau perekam layar pada browser sungguhan; sunting dengan ffmpeg Tristan 12 Nov 2026: \"untuk proyek laravel juga nanti buatkan video nya\". Rekam dengan cursorcam (langkah JSON dari docs/alat/e2e-alur.mjs) + caption/audio cara devrel-video seperti UAT-02A, dari build produksi lokal (APP_DEBUG=false agar Debugbar tidak terekam).",
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-11T18:49:25"

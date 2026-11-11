@@ -338,3 +338,5 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 11 Nov 2026 | Iterasi 2: X-15, X-17 done; Q-44 di produksi; CI diperbaiki (payroll LF, lxml) dan uji asap tahan DNS apt; dijawab pertanyaan Tristan soal penjaga delete (usulan menunggu izin) |
 | 11 Nov 2026 | Iterasi 2 selesai: X-15, X-17, FIX-CI-1, Q-44, X-19, FIX-ASAP-2 done; main e92da81, CI dan uji asap hijau lagi, issue #2 ditutup |
 | 11 Nov 2026 23.15 | iterasi 3 | done X-16 (pembangun formulir), X-18 (laporan kerja/proyek/mod), LV-00 (RISET.md proyek Laravel), UAT-02A (skill video dipilih + klip uji 15 dtk); X-20 menunggu kirim PDF setelah push; reset DB 182 migrasi, SQL 141/141, e2e lokal 3/3, gate LULUS |
+| 11 Nov 2026 23.25 | iterasi 3 selesai | X-16, X-18, X-20, LV-00, UAT-02A done; main c8f6b01, CI hijau, deploy terpasang, e2e produksi 27 lulus, PDF fitur tambahan dikirim; wajib 266/284 |
+| 12 Nov 2026 | iterasi 4 | LV-01..LV-05 done: proyek Laravel dua app (git lokal 4d17d80), tes admin 40 + tim 31, e2e peramban 13/13; penjaga delete bertanda disetujui Tristan dan dipasang (selftest 29/29); reset DB Nadi 182 migrasi + SQL 141/141; wajib 271/284 |
