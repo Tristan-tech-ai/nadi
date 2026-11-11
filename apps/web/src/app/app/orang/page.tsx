@@ -13,6 +13,7 @@ import { KartuLowongan } from "@/components/app/lowongan";
 import { LingkaranRekrut } from "@/components/app/lingkaran-rekrut";
 import { FormAkunStaf, FormTambahOrang } from "./form-orang";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
+import { FormDivisi } from "@/components/app/divisi";
 
 export const metadata: Metadata = { title: "Orang" };
 
@@ -57,8 +58,8 @@ async function Isi() {
         {sisip(t.kodeUsaha, { kode: <span className="font-mono font-semibold text-tinta" data-testid="kode-usaha">{usaha?.kode}</span> })}
       </p>
       <FormTambahOrang teks={t} />
-      {/* Nama bank untuk berkas transfer gaji: CIMB Niaga (inhouse) + daftar SKN resmi CIMB Niaga (lib/gaji/bank-skn.json). */}
-      <datalist id="daftar-bank">{["CIMB NIAGA", ...BANK_SKN].map((b) => <option key={b} value={b} />)}</datalist>
+      {/* Nama bank untuk berkas transfer gaji: CIMB Niaga (inhouse) + daftar SKN resmi CIMB Niaga (lib/gaji/bank-skn.json; satu nama bisa punya dua kode BIC, mis. BANK HIBANK INDONESIA, jadi isian dibuat unik). */}
+      <datalist id="daftar-bank">{[...new Set(["CIMB NIAGA", ...BANK_SKN])].map((b) => <option key={b} value={b} />)}</datalist>
       {orang?.length ? (
         <ul id="daftar-orang" className="mt-6 divide-y divide-garis border-y border-garis">
           {orang.map((o) => (
@@ -77,10 +78,49 @@ async function Isi() {
       ) : (
         <p className="mt-6 text-tinta-2">{t.kosong}</p>
       )}
+      <Suspense fallback={<div className="mt-10 h-24 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+        <BagianDivisi orang={(orang ?? []).map((o) => ({ id: o.id as string, nama: o.nama as string }))} />
+      </Suspense>
       <KartuLowongan />
       <Suspense fallback={<div className="mt-10 h-32 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <LingkaranRekrut />
       </Suspense>
+    </section>
+  );
+}
+
+/** X-13 divisi: kepala divisi otomatis menjadi penyetuju izin anggota (setelah atasan langsung) dan peninjau hasil kerja mereka. */
+async function BagianDivisi({ orang }: { orang: { id: string; nama: string }[] }) {
+  const supabase = await createClient();
+  const [{ data: divisi }, { data: anggota }] = await Promise.all([
+    supabase.from("divisi").select("id, nama, kepala_id").order("nama"),
+    supabase.from("divisi_anggota").select("divisi_id, orang_id").is("keluar_at", null),
+  ]);
+  const nama = new Map(orang.map((o) => [o.id, o.nama]));
+  const daftar = (divisi ?? []) as { id: string; nama: string; kepala_id: string | null }[];
+  const anggotaDari = (d: string) => ((anggota ?? []) as { divisi_id: string; orang_id: string }[]).filter((a) => a.divisi_id === d).map((a) => a.orang_id);
+  return (
+    <section className="mt-10" aria-labelledby="judul-divisi" data-testid="divisi">
+      <h2 id="judul-divisi" className="text-lg font-semibold">Divisi</h2>
+      <p className="mt-1 text-sm text-tinta-2">Kepala divisi menyetujui izin anggotanya bila mereka belum punya atasan langsung, lalu meninjau hasil kerja anggota. Kepala divisi tetap tidak melihat gaji.</p>
+      {daftar.length === 0 ? <p className="mt-3 text-sm text-tinta-2">Belum ada divisi. Buat divisi pertama, misalnya Desain atau Gudang.</p> : (
+        <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm" data-testid="daftar-divisi">
+          {daftar.map((d) => {
+            const isi = anggotaDari(d.id);
+            return (
+              <li key={d.id} className="py-3" data-divisi={d.nama}>
+                <p><span className="font-semibold" data-pengguna>{d.nama}</span> <span className="text-tinta-2">kepala <span data-pengguna>{d.kepala_id ? nama.get(d.kepala_id) ?? "-" : "belum ada"}</span>, {isi.length} anggota{isi.length ? ": " : ""}<span data-pengguna>{isi.map((o) => nama.get(o) ?? "-").join(", ")}</span></span></p>
+                <details className="mt-2"><summary className="cursor-pointer text-tinta-2 underline underline-offset-4">Ubah divisi {d.nama}</summary>
+                  <div className="mt-2"><FormDivisi orang={orang} awal={{ id: d.id, nama: d.nama, kepala: d.kepala_id, anggota: isi }} /></div></details>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+      <details className="mt-3 rounded-[var(--radius-kartu)] border border-garis p-4" data-testid="buat-divisi" open={daftar.length === 0}>
+        <summary className="cursor-pointer font-semibold">Buat divisi</summary>
+        <div className="mt-3"><FormDivisi orang={orang} /></div>
+      </details>
     </section>
   );
 }

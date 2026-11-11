@@ -14,7 +14,7 @@ export const metadata: Metadata = { title: "Akun dan keamanan" };
 
 type Log = { id: string; user_id: string; kind: string; ip: string | null; user_agent: string | null; at: string };
 type SesiPerangkat = { id: string; aktif: string | null; perangkat: string | null; ip: string | null; ini: boolean; aal: string | null };
-const IZIN = ["stok.lihat", "stok.ubah"];
+const IZIN = ["stok.lihat", "stok.ubah", "kerja.kelola", "proyek.kelola"];
 
 /** Ringkas user agent jadi "Chrome di Windows" tanpa pustaka. */
 function perangkat(ua: string | null, cadangan: string) {

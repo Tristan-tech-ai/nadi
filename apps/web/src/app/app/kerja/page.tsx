@@ -6,6 +6,8 @@ import { IlustrasiPapan } from "@/components/ilustrasi";
 import { BebanMingguIni, BebanSayaIni } from "@/components/app/beban";
 import { CerminKpi, KembaliKeTabel, KerangkaKpi, KpiMingguIni, KpiTanpaOrang } from "@/components/app/kpi";
 import { PapanStaf, TambahKerja, UbahPoin, type KerjaTampil } from "@/components/app/kerja";
+import { DaftarReviewKelola, type ReviewKelola } from "@/components/app/divisi";
+import { AturTim, ChecklistKerja, type Butir } from "@/components/app/kerja-tim";
 import { InsentifSaya, IsianKolam, KerangkaKolam, KolamBonus, KolamDisetujui, type KolamTersimpan } from "@/components/app/kolam";
 import { KerangkaPeta, PetaOrganisasi } from "@/components/app/peta";
 import { bacaPengecualian, bulanKolam, rupiahIsian, type HitungKolam, type KolamSaya } from "@/lib/gaji/kolam";
@@ -16,7 +18,7 @@ import { formatJam } from "@/lib/format";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { ambilKamus, isiTeks, type Kamus } from "@/lib/i18n/kamus";
 import { bahasaAplikasi } from "@/lib/i18n/server";
-import { bacaKolom, formatTenggat, ringkasStatus, STATUS_KERJA, teksPoin, teksSelesai, type KerjaPapan, type StatusKerja } from "@/lib/kerja/poin";
+import { bacaKolom, formatTenggat, ringkasStatus, STATUS_KERJA, teksPoin, teksSelesai, teksTim, type KerjaPapan, type StatusKerja } from "@/lib/kerja/poin";
 import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
@@ -24,7 +26,8 @@ import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Kerja" };
 
-function KartuKerja({ k, pengelola, t, bahasa }: { k: KerjaTampil; pengelola: boolean; t: Kamus["kerja"]; bahasa: Bahasa }) {
+function KartuKerja({ k, pengelola, t, bahasa, orang = [], butir = [] }: { k: KerjaTampil; pengelola: boolean; t: Kamus["kerja"]; bahasa: Bahasa; orang?: { id: string; nama: string }[]; butir?: Butir[] }) {
+  const tim = teksTim(k.tim, bahasa === "en" ? "en" : "id");
   return (
     <li className="py-3 lg:px-3" data-testid="kartu-kerja" data-judul={k.judul}>
       <p className="font-semibold" data-pengguna>{k.judul}</p>
@@ -45,7 +48,18 @@ function KartuKerja({ k, pengelola, t, bahasa }: { k: KerjaTampil; pengelola: bo
       {k.status === "selesai" && <p className="mt-1 text-sm font-semibold" data-testid="durasi-nyata">{teksSelesai(k.aktual_menit, k.estimasi?.menit ?? null, bahasa)}</p>}
       <p className={`mt-1 text-sm ${k.estimasi ? "" : "text-cap"}`} data-testid="poin-kerja">{teksPoin(k.estimasi, bahasa)}</p>
       {k.estimasi && <p className="mt-0.5 text-xs text-tinta-2" data-testid="alasan-poin" lang={bahasa === "id" ? undefined : "id"}>{k.estimasi.alasan}</p>}
+      {tim && <p className="mt-1 text-sm" data-testid="tim-kerja"><span className="text-tinta-2">{bahasa === "en" ? "Team: " : "Tim: "}</span><span data-pengguna>{tim}</span></p>}
+      {(k.butir?.total ?? 0) > 0 && <p className="mt-0.5 text-xs text-tinta-2" data-testid="progres-butir">{bahasa === "en" ? "Checklist" : "Checklist"} {k.butir!.selesai}/{k.butir!.total}</p>}
       {pengelola && <UbahPoin kerja={k.id} judul={k.judul} poin={k.estimasi?.poin ?? null} teks={t} bahasa={bahasa} />}
+      {k.status !== "selesai" && (
+        <details className="mt-2" data-testid="tim-checklist">
+          <summary className="cursor-pointer text-sm font-semibold">{bahasa === "en" ? "Team and checklist" : "Tim dan checklist"}</summary>
+          <div className="mt-2 grid gap-4">
+            {pengelola && <AturTim kerja={k.id} judul={k.judul} orang={orang} awal={(k.tim ?? []).map((x) => ({ id: x.id, porsi: x.porsi, pic: x.pic }))} en={bahasa === "en"} />}
+            <ChecklistKerja kerja={k.id} judul={k.judul} butir={butir} en={bahasa === "en"} />
+          </div>
+        </details>
+      )}
     </li>
   );
 }
@@ -228,25 +242,37 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
     mulaiTeks: k.mulai_at ? formatJam(new Date(k.mulai_at), zona, false) : null,
   }));
 
+  // X-10 checklist: butir untuk kerja yang tampil (RLS: pengelola semua, staf hanya kerja timnya).
+  const { data: dataButir } = daftar.length
+    ? await supabase.from("kerja_butir").select("id, kerja_id, judul, selesai").in("kerja_id", daftar.map((k) => k.id)).eq("batal", false).order("urutan")
+    : { data: [] };
+  const butirPer: Record<string, Butir[]> = {};
+  for (const b of (dataButir ?? []) as (Butir & { kerja_id: string })[]) (butirPer[b.kerja_id] ??= []).push({ id: b.id, judul: b.judul, selesai: b.selesai });
+
   if (sesi.peran === "staf") {
-    const { data: saya } = await supabase.rpc("beban_saya", { p_mulai: null });
+    const [{ data: saya }, { data: review }] = await Promise.all([supabase.rpc("beban_saya", { p_mulai: null }), supabase.rpc("daftar_review_kelola")]);
+    const tinjau = (review ?? []) as ReviewKelola[];
     return (
       <>
         {kepala}
         {tab}
         {saya && <BebanSayaIni data={saya as BebanSaya} bahasa={bahasa} />}
-        <PapanStaf daftar={daftar} teks={t} bahasa={bahasa} />
+        {tinjau.length > 0 && <DaftarReviewKelola daftar={tinjau} />}
+        {/* X-13: kepala divisi/koordinator ikut membaca kerja anggota lewat RLS; papan pribadi tetap hanya kerjanya sendiri. */}
+        <PapanStaf daftar={daftar.filter((k) => k.saya)} teks={t} bahasa={bahasa} butir={butirPer} />
       </>
     );
   }
 
   const jumlah = ringkasStatus(daftar);
   let tambah = null;
+  let daftarOrang: { id: string; nama: string }[] = [];
   if (pengelola) {
     const [{ data: topi }, { data: orang }] = await Promise.all([
       supabase.from("topi").select("id, nama").eq("aktif", true).order("nama"),
       supabase.from("orang").select("id, nama").eq("status", "aktif").order("nama"),
     ]);
+    daftarOrang = (orang ?? []) as { id: string; nama: string }[];
     tambah = <TambahKerja topi={(topi ?? []) as { id: string; nama: string }[]} orang={(orang ?? []) as { id: string; nama: string }[]} teks={t} bahasa={bahasa} />;
   }
 
@@ -297,7 +323,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
               ))}
             </ul>
           </nav>
-          <div className="mt-4 lg:mt-6 lg:grid lg:grid-cols-4 lg:divide-x lg:divide-garis lg:border-y lg:border-garis">
+          <div className="mt-4 lg:mt-6 lg:grid lg:grid-cols-5 lg:divide-x lg:divide-garis lg:border-y lg:border-garis">
             {STATUS_KERJA.map((s: StatusKerja) => {
               const isi = daftar.filter((k) => k.status === s);
               return (
@@ -306,7 +332,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
                     {t.status[s]}{s === "selesai" ? t.selesaiHariIni : ""} <span className="angka text-tinta-2">({isi.length})</span>
                   </h2>
                   {isi.length ? (
-                    <ul className="divide-y divide-garis">{isi.map((k) => <KartuKerja key={k.id} k={k} pengelola={pengelola} t={t} bahasa={bahasa} />)}</ul>
+                    <ul className="divide-y divide-garis">{isi.map((k) => <KartuKerja key={k.id} k={k} pengelola={pengelola} t={t} bahasa={bahasa} orang={daftarOrang} butir={butirPer[k.id] ?? []} />)}</ul>
                   ) : (
                     <p className="py-3 text-sm text-tinta-2 lg:px-3">{t.tidakAda}</p>
                   )}

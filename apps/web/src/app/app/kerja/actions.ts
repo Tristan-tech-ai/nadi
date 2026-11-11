@@ -227,3 +227,93 @@ export async function batalkanKolam(_: HasilKerja, form: FormData): Promise<Hasi
   revalidatePath("/app/gaji");
   return { pesan: k.t.kolamBatal };
 }
+
+/**
+ * X-10 tim kerja: daftar pelaksana dengan porsi (jumlah 100) dan satu PIC. Isian: orang_<i>, porsi_<i>, pic (orang_id).
+ * Database (atur_pelaksana_kerja) memeriksa ulang semuanya; di sini hanya disusun dan dihitung jumlahnya untuk pesan cepat.
+ */
+export async function aturTim(_: HasilKerja, form: FormData): Promise<HasilKerja> {
+  const k = await teksKerja();
+  const kerja = teks(form, "kerja");
+  if (!ID_SAH.test(kerja)) return { galat: k.t.gagal };
+  const pic = teks(form, "pic");
+  const daftar: { orang_id: string; porsi: number; pic: boolean }[] = [];
+  for (let i = 0; i < 10; i++) {
+    const orang = teks(form, `orang_${i}`);
+    if (!orang) continue;
+    if (!ID_SAH.test(orang)) return { galat: k.t.gagal };
+    const porsi = Number(teks(form, `porsi_${i}`));
+    daftar.push({ orang_id: orang, porsi: Number.isFinite(porsi) ? porsi : 0, pic: orang === pic });
+  }
+  const jumlah = daftar.reduce((a, x) => a + x.porsi, 0);
+  if (!daftar.length) return { galat: k.bahasa === "en" ? "Pick at least one person." : "Pilih minimal satu orang." };
+  if (jumlah !== 100) return { galat: k.bahasa === "en" ? `Shares must add up to 100% (now ${jumlah}%).` : `Jumlah porsi harus 100% (sekarang ${jumlah}%).` };
+  if (!daftar.some((x) => x.pic)) return { galat: k.bahasa === "en" ? "Choose one person in charge (PIC)." : "Pilih satu PIC." };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("atur_pelaksana_kerja", { p_kerja: kerja, p_daftar: daftar });
+  if (error) return { galat: galatDb(error, "pemilikAdmin", k) };
+  revalidatePath("/app/kerja");
+  return { pesan: k.bahasa === "en" ? "Team saved." : "Tim tersimpan.", id: kerja };
+}
+
+/** Checklist kerja: tambah butir atau centang/lepas centang (pengelola atau pelaksana kerja itu; database yang memutuskan). */
+export async function aturButir(_: HasilKerja, form: FormData): Promise<HasilKerja> {
+  const k = await teksKerja();
+  const supabase = await createClient();
+  const aksi = teks(form, "aksi");
+  const { error } = aksi === "tambah"
+    ? await supabase.rpc("tambah_butir_kerja", { p_kerja: teks(form, "kerja"), p_judul: teks(form, "judul") })
+    : aksi === "centang" && ID_SAH.test(teks(form, "butir"))
+      ? await supabase.rpc("centang_butir_kerja", { p_butir: teks(form, "butir"), p_selesai: teks(form, "selesai") === "ya" })
+      : { error: { code: "22023", message: k.t.gagal } };
+  if (error) return { galat: error.code === "P0429" ? error.message : galatDb(error, "pemilikAdmin", k) };
+  revalidatePath("/app/kerja");
+  return { pesan: aksi === "tambah" ? (k.bahasa === "en" ? "Item added." : "Butir ditambah.") : (k.bahasa === "en" ? "Saved." : "Tersimpan.") };
+}
+
+/** X-11: pelaksana mengirim hasil (tautan https dan/atau catatan); kerja masuk review dan menjadi kartu Feed. */
+export async function kirimHasil(_: HasilKerja, form: FormData): Promise<HasilKerja> {
+  const k = await teksKerja();
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("kirim_hasil_kerja", { p_kerja: teks(form, "kerja"), p_tautan: teks(form, "tautan") || null, p_catatan: teks(form, "catatan") || null });
+  if (error) return { galat: galatDb(error, "pemilikAdmin", k) };
+  revalidatePath("/app/kerja");
+  return { pesan: k.bahasa === "en" ? "Result sent for review." : "Hasil terkirim untuk direview." };
+}
+
+/** X-11: ajukan geser tenggat (baseline tetap); jadi kartu Feed untuk pemilik/admin. */
+export async function ajukanGeserTenggat(_: HasilKerja, form: FormData): Promise<HasilKerja> {
+  const k = await teksKerja();
+  const sesi = await wajibPerusahaan();
+  const supabase = await createClient();
+  const iso = waktuLokalKeIso(teks(form, "tenggat"), await zonaUsaha(supabase, sesi.perusahaanId));
+  if (!iso) return { galat: k.bahasa === "en" ? "Pick a valid new deadline." : "Pilih tenggat baru yang sah." };
+  const { error } = await supabase.rpc("ajukan_geser_tenggat", { p_kerja: teks(form, "kerja"), p_tenggat: iso, p_alasan: teks(form, "alasan") });
+  if (error) return { galat: galatDb(error, "pemilikAdmin", k) };
+  revalidatePath("/app/kerja");
+  return { pesan: k.bahasa === "en" ? "Request sent to the owner." : "Pengajuan terkirim ke pemilik." };
+}
+
+/** X-11: minta revisi dari kartu Feed, wajib beralasan. */
+export async function mintaRevisi(_: HasilKerja, form: FormData): Promise<HasilKerja> {
+  const k = await teksKerja();
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("minta_revisi_kerja", { p_usulan: teks(form, "usulan"), p_alasan: teks(form, "alasan") });
+  if (error) return { galat: galatDb(error, "pemilikAdmin", k) };
+  revalidatePath("/app");
+  revalidatePath("/app/kerja");
+  return { pesan: k.bahasa === "en" ? "Revision requested." : "Revisi diminta." };
+}
+
+// X-13 kepala divisi atau pemegang izin kerja.kelola menerima hasil kerja (Feed tetap untuk pemilik/admin).
+export async function terimaHasil(_: HasilKerja, form: FormData): Promise<HasilKerja> {
+  const k = await teksKerja();
+  const usulan = teks(form, "usulan");
+  if (!ID_SAH.test(usulan)) return { galat: k.t.gagal };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("terima_hasil_kerja", { p_usulan: usulan });
+  if (error) return { galat: galatDb(error, "pemilikAdmin", k) };
+  revalidatePath("/app");
+  revalidatePath("/app/kerja");
+  return { pesan: k.bahasa === "en" ? "Result accepted. The work is done." : "Hasil diterima. Kerja selesai." };
+}
