@@ -1,0 +1,72 @@
+{
+  "untuk": "Kontraktor, renovasi rumah, interior, dan instalasi listrik atau air yang melapor progres harian dan meminta material ke kantor.",
+  "contoh": "Mandor mengisi laporan harian proyek Renovasi Villa Canggu: cuaca hujan, 8 pekerja, progres 45%, kendala material belum tiba. Permintaan 40 sak semen disetujui kantor, dikirim, lalu ditandai diterima di lokasi.",
+  "isi_contoh": [
+    { "koleksi": "harian", "data": { "judul": "Laporan Kamis", "proyek": "@", "tanggal": "2026-11-19", "pelapor": "@", "cuaca": "hujan", "pekerja": 8, "progres": 45, "pekerjaan": "Pengecoran lantai dua bagian timur.", "kendala": "Besi beton kurang 20 batang." } },
+    { "koleksi": "material", "data": { "material": "Semen 50 kg", "proyek": "@", "jumlah": 40, "satuan": "sak", "dibutuhkan": "2026-11-21", "pemohon": "@" } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "laporan-proyek", "nama": "Laporan harian proyek", "ikon": "kotak-alat", "ruang": "jual", "versi": "1.0.0",
+    "deskripsi": "Laporan harian lapangan per proyek (cuaca, jumlah pekerja, progres, pekerjaan, kendala, foto) dan permintaan material dari lokasi ke kantor sampai diterima.",
+    "koleksi": [
+      {
+        "kode": "harian", "nama": "Laporan harian", "judul": "judul",
+        "bidang": [
+          { "kode": "judul", "label": "Judul laporan", "tipe": "teks", "wajib": true },
+          { "kode": "proyek", "label": "Proyek", "tipe": "proyek", "wajib": true },
+          { "kode": "tanggal", "label": "Tanggal", "tipe": "tanggal", "wajib": true },
+          { "kode": "pelapor", "label": "Pelapor", "tipe": "orang", "wajib": true, "penugasan": true },
+          { "kode": "cuaca", "label": "Cuaca", "tipe": "pilihan", "pilihan": [{ "kode": "cerah", "label": "Cerah" }, { "kode": "berawan", "label": "Berawan" }, { "kode": "hujan", "label": "Hujan", "warna": "laut" }] },
+          { "kode": "pekerja", "label": "Jumlah pekerja", "tipe": "angka", "min": 0, "max": 1000 },
+          { "kode": "progres", "label": "Progres (%)", "tipe": "angka", "min": 0, "max": 100 },
+          { "kode": "pekerjaan", "label": "Pekerjaan hari ini", "tipe": "teks_panjang", "wajib": true },
+          { "kode": "kendala", "label": "Kendala", "tipe": "teks_panjang" },
+          { "kode": "foto", "label": "Tautan foto", "tipe": "tautan" }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["tanggal", "judul", "proyek", "progres", "pelapor"], "urut": { "bidang": "tanggal", "arah": "turun" }, "saring": ["proyek", "cuaca"] },
+          { "jenis": "kalender", "tanggal": "tanggal" },
+          { "jenis": "formulir", "bidang": ["judul", "proyek", "tanggal", "pelapor", "cuaca", "pekerja", "progres", "pekerjaan", "kendala", "foto"] },
+          { "jenis": "rincian", "bidang": ["judul", "proyek", "tanggal", "pelapor", "cuaca", "pekerja", "progres", "pekerjaan", "kendala", "foto"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "milik_sendiri" }
+      },
+      {
+        "kode": "material", "nama": "Permintaan material", "judul": "material",
+        "bidang": [
+          { "kode": "material", "label": "Material", "tipe": "teks", "wajib": true },
+          { "kode": "proyek", "label": "Proyek", "tipe": "proyek", "wajib": true },
+          { "kode": "jumlah", "label": "Jumlah", "tipe": "angka", "wajib": true, "min": 0 },
+          { "kode": "satuan", "label": "Satuan", "tipe": "teks" },
+          { "kode": "dibutuhkan", "label": "Dibutuhkan paling lambat", "tipe": "tanggal", "wajib": true },
+          { "kode": "pemohon", "label": "Pemohon", "tipe": "orang", "penugasan": true },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "diajukan",
+          "daftar": [{ "kode": "diajukan", "label": "Diajukan" }, { "kode": "disetujui", "label": "Disetujui", "warna": "laut" }, { "kode": "dikirim", "label": "Dikirim", "warna": "kunyit" }, { "kode": "diterima", "label": "Diterima di lokasi", "akhir": true, "warna": "daun" }, { "kode": "ditolak", "label": "Ditolak", "akhir": true, "warna": "cap" }],
+          "transisi": [
+            { "dari": ["diajukan"], "ke": "disetujui", "peran": ["pemilik", "admin"], "label": "Setujui" },
+            { "dari": ["diajukan"], "ke": "ditolak", "peran": ["pemilik", "admin"], "wajib_isi": ["catatan"], "label": "Tolak" },
+            { "dari": ["disetujui"], "ke": "dikirim", "peran": ["pemilik", "admin", "akuntan"], "label": "Tandai dikirim" },
+            { "dari": ["dikirim"], "ke": "diterima", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Terima di lokasi" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "papan", "kolom_kartu": ["proyek", "jumlah", "dibutuhkan"] },
+          { "jenis": "daftar", "kolom": ["material", "proyek", "jumlah", "satuan", "dibutuhkan"], "urut": { "bidang": "dibutuhkan", "arah": "naik" }, "saring": ["proyek", "status"] },
+          { "jenis": "formulir", "bidang": ["material", "proyek", "jumlah", "satuan", "dibutuhkan", "pemohon", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "tulis", "staf": "milik_sendiri" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "minta-material", "pemicu": { "jenis": "buat", "koleksi": "material" }, "aksi": { "jenis": "kartu", "judul": "Permintaan material: {material}", "kepada": "pengelola" } },
+      { "kode": "material-besok", "pemicu": { "jenis": "tenggat", "koleksi": "material", "bidang": "dibutuhkan", "hari_sebelum": 1 }, "aksi": { "jenis": "pengingat", "judul": "Besok material dibutuhkan di lokasi: {material}", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "laporan-per-proyek", "judul": "Laporan harian per proyek", "koleksi": "harian", "kelompok": "proyek", "hitung": "jumlah" },
+      { "kode": "material-per-status", "judul": "Permintaan material per status", "koleksi": "material", "kelompok": "status", "hitung": "jumlah" }
+    ]
+  }
+}

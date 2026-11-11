@@ -1,0 +1,84 @@
+{
+  "untuk": "Bimbel, kursus bahasa, kursus musik, sekolah nonformal, dan pelatihan yang punya kelas rutin, siswa, dan presensi.",
+  "contoh": "Kelas Bahasa Inggris A setiap Senin dan Rabu 16.00: pengajar mencatat presensi tiap pertemuan, siswa yang tiga kali alpa terlihat di laporan. SPP bulanan ditagih lewat tagihan berulang Nadi.",
+  "isi_contoh": [
+    { "koleksi": "kelas", "data": { "nama": "Bahasa Inggris A", "pengajar": "@", "hari": ["senin", "rabu"], "jam": "16.00 sampai 17.30", "ruang": "Ruang 2", "kuota": 12 } },
+    { "koleksi": "siswa", "data": { "nama": "Putu Arya", "kelas": "@", "wali": "Ibu Made Sari", "telepon_wali": "0812 3333 4444", "mulai": "2026-07-15" } },
+    { "koleksi": "presensi", "data": { "pertemuan": "Pertemuan 12", "kelas": "@", "siswa": "@", "tanggal": "2026-11-18", "hadir": "hadir" } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "kursus-sekolah", "nama": "Kelas dan presensi siswa", "ikon": "topi-wisuda", "ruang": "orang", "versi": "1.0.0",
+    "deskripsi": "Kelas dengan pengajar, hari, jam, dan kuota; daftar siswa dengan wali dan status; presensi per pertemuan dengan laporan kehadiran per kelas.",
+    "koleksi": [
+      {
+        "kode": "kelas", "nama": "Kelas", "judul": "nama",
+        "bidang": [
+          { "kode": "nama", "label": "Nama kelas", "tipe": "teks", "wajib": true },
+          { "kode": "pengajar", "label": "Pengajar", "tipe": "orang", "wajib": true, "penugasan": true },
+          { "kode": "hari", "label": "Hari", "tipe": "pilihan_banyak", "pilihan": [{ "kode": "senin", "label": "Senin" }, { "kode": "selasa", "label": "Selasa" }, { "kode": "rabu", "label": "Rabu" }, { "kode": "kamis", "label": "Kamis" }, { "kode": "jumat", "label": "Jumat" }, { "kode": "sabtu", "label": "Sabtu" }, { "kode": "minggu", "label": "Minggu" }] },
+          { "kode": "jam", "label": "Jam", "tipe": "teks" },
+          { "kode": "ruang", "label": "Ruang", "tipe": "teks" },
+          { "kode": "kuota", "label": "Kuota siswa", "tipe": "angka", "min": 1, "max": 500 }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["nama", "pengajar", "hari", "jam", "ruang"], "urut": { "bidang": "nama", "arah": "naik" }, "saring": ["pengajar"] },
+          { "jenis": "formulir", "bidang": ["nama", "pengajar", "hari", "jam", "ruang", "kuota"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "lihat" }
+      },
+      {
+        "kode": "siswa", "nama": "Siswa", "judul": "nama",
+        "bidang": [
+          { "kode": "nama", "label": "Nama siswa", "tipe": "teks", "wajib": true },
+          { "kode": "kelas", "label": "Kelas", "tipe": "rujukan", "koleksi": "kelas", "wajib": true },
+          { "kode": "wali", "label": "Nama wali", "tipe": "teks" },
+          { "kode": "telepon_wali", "label": "Telepon wali", "tipe": "telepon" },
+          { "kode": "pelanggan", "label": "Data penagihan", "tipe": "pelanggan", "petunjuk": "Hubungkan bila SPP ditagih lewat invoice Nadi." },
+          { "kode": "mulai", "label": "Mulai belajar", "tipe": "tanggal", "wajib": true },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "aktif",
+          "daftar": [{ "kode": "aktif", "label": "Aktif", "warna": "daun" }, { "kode": "cuti", "label": "Cuti", "warna": "kunyit" }, { "kode": "lulus", "label": "Lulus", "akhir": true, "warna": "laut" }, { "kode": "keluar", "label": "Keluar", "akhir": true, "warna": "abu" }],
+          "transisi": [
+            { "dari": ["aktif"], "ke": "cuti", "peran": ["pemilik", "admin"], "label": "Cutikan" },
+            { "dari": ["cuti"], "ke": "aktif", "peran": ["pemilik", "admin"], "label": "Aktifkan lagi" },
+            { "dari": ["aktif"], "ke": "lulus", "peran": ["pemilik", "admin"], "label": "Luluskan" },
+            { "dari": ["aktif", "cuti"], "ke": "keluar", "peran": ["pemilik", "admin"], "wajib_isi": ["catatan"], "label": "Keluar" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["nama", "kelas", "wali", "telepon_wali", "mulai"], "urut": { "bidang": "nama", "arah": "naik" }, "saring": ["kelas", "status"] },
+          { "jenis": "formulir", "bidang": ["nama", "kelas", "wali", "telepon_wali", "pelanggan", "mulai", "catatan"] },
+          { "jenis": "rincian", "bidang": ["nama", "kelas", "wali", "telepon_wali", "pelanggan", "mulai", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "lihat" }
+      },
+      {
+        "kode": "presensi", "nama": "Presensi", "judul": "pertemuan",
+        "bidang": [
+          { "kode": "pertemuan", "label": "Pertemuan", "tipe": "teks", "wajib": true },
+          { "kode": "kelas", "label": "Kelas", "tipe": "rujukan", "koleksi": "kelas", "wajib": true },
+          { "kode": "siswa", "label": "Siswa", "tipe": "rujukan", "koleksi": "siswa", "wajib": true },
+          { "kode": "tanggal", "label": "Tanggal", "tipe": "tanggal", "wajib": true },
+          { "kode": "hadir", "label": "Kehadiran", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "hadir", "label": "Hadir", "warna": "daun" }, { "kode": "izin", "label": "Izin", "warna": "laut" }, { "kode": "sakit", "label": "Sakit", "warna": "kunyit" }, { "kode": "alpa", "label": "Tanpa keterangan", "warna": "cap" }] },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks" }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["tanggal", "pertemuan", "kelas", "siswa", "hadir"], "urut": { "bidang": "tanggal", "arah": "turun" }, "saring": ["kelas", "siswa", "hadir"] },
+          { "jenis": "kalender", "tanggal": "tanggal" },
+          { "jenis": "formulir", "bidang": ["pertemuan", "kelas", "siswa", "tanggal", "hadir", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "tulis" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "alpa", "pemicu": { "jenis": "buat", "koleksi": "presensi" }, "syarat": [{ "bidang": "hadir", "op": "sama", "nilai": "alpa" }], "aksi": { "jenis": "kartu", "judul": "Siswa tidak hadir tanpa keterangan di {pertemuan}", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "hadir-per-kelas", "judul": "Kehadiran per kelas", "koleksi": "presensi", "kelompok": "kelas", "hitung": "jumlah" },
+      { "kode": "presensi-per-jenis", "judul": "Presensi per keterangan", "koleksi": "presensi", "kelompok": "hadir", "hitung": "jumlah" },
+      { "kode": "siswa-per-status", "judul": "Siswa per status", "koleksi": "siswa", "kelompok": "status", "hitung": "jumlah" }
+    ]
+  }
+}

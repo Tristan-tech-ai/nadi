@@ -1,0 +1,58 @@
+{
+  "untuk": "Percetakan, digital printing, sablon, dan konveksi kecil yang menerima order dengan desain, proof ke pelanggan, lalu cetak.",
+  "contoh": "Order 500 brosur A5 art paper untuk Hotel Kuta: desainer mengunggah tautan desain, proof dikirim ke pelanggan, revisi warna dicatat, lalu dicetak dan diambil. Uang muka dan pelunasan lewat invoice Nadi.",
+  "isi_contoh": [
+    { "koleksi": "order", "data": { "judul": "Brosur promo Desember", "pelanggan": "@", "jenis": "brosur", "bahan": "Art paper 150 gsm", "ukuran": "A5", "jumlah": 500, "harga": 1250000, "tenggat": "2026-11-25T17:00:00+08:00", "desainer": "@" } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "order-cetak", "nama": "Order cetak dan proof", "ikon": "struk", "ruang": "jual", "versi": "1.0.0",
+    "deskripsi": "Order cetak dengan jenis, bahan, ukuran, jumlah, dan harga; alur desain, proof ke pelanggan, revisi beralasan, cetak, sampai diambil.",
+    "koleksi": [
+      {
+        "kode": "order", "nama": "Order", "judul": "judul",
+        "bidang": [
+          { "kode": "judul", "label": "Nama order", "tipe": "teks", "wajib": true },
+          { "kode": "pelanggan", "label": "Pelanggan", "tipe": "pelanggan", "wajib": true },
+          { "kode": "jenis", "label": "Jenis cetakan", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "kartu_nama", "label": "Kartu nama" }, { "kode": "brosur", "label": "Brosur" }, { "kode": "spanduk", "label": "Spanduk" }, { "kode": "stiker", "label": "Stiker" }, { "kode": "undangan", "label": "Undangan" }, { "kode": "kaos", "label": "Kaos sablon" }, { "kode": "lain", "label": "Lainnya" }] },
+          { "kode": "bahan", "label": "Bahan", "tipe": "teks" },
+          { "kode": "ukuran", "label": "Ukuran", "tipe": "teks" },
+          { "kode": "jumlah", "label": "Jumlah", "tipe": "angka", "wajib": true, "min": 1 },
+          { "kode": "harga", "label": "Harga total", "tipe": "rupiah", "min": 0 },
+          { "kode": "tenggat", "label": "Janji selesai", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "desainer", "label": "Desainer", "tipe": "orang", "penugasan": true },
+          { "kode": "tautan_desain", "label": "Tautan desain", "tipe": "tautan" },
+          { "kode": "catatan_revisi", "label": "Catatan revisi", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "masuk",
+          "daftar": [{ "kode": "masuk", "label": "Order masuk" }, { "kode": "desain", "label": "Desain", "warna": "laut" }, { "kode": "proof", "label": "Proof ke pelanggan", "warna": "kunyit" }, { "kode": "cetak", "label": "Dicetak", "warna": "laut" }, { "kode": "siap", "label": "Siap diambil", "warna": "daun" }, { "kode": "diambil", "label": "Diambil", "akhir": true, "warna": "daun" }, { "kode": "batal", "label": "Batal", "akhir": true, "warna": "cap" }],
+          "transisi": [
+            { "dari": ["masuk"], "ke": "desain", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Mulai desain" },
+            { "dari": ["desain"], "ke": "proof", "peran": ["ditugaskan", "pemilik", "admin"], "wajib_isi": ["tautan_desain"], "label": "Kirim proof" },
+            { "dari": ["proof"], "ke": "desain", "peran": ["ditugaskan", "pemilik", "admin"], "wajib_isi": ["catatan_revisi"], "label": "Pelanggan minta revisi" },
+            { "dari": ["proof"], "ke": "cetak", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Proof disetujui, cetak" },
+            { "dari": ["cetak"], "ke": "siap", "peran": ["ditugaskan", "pemilik", "admin", "staf"], "label": "Siap diambil" },
+            { "dari": ["siap"], "ke": "diambil", "peran": ["pemilik", "admin", "staf"], "label": "Diambil pelanggan" },
+            { "dari": ["masuk", "desain", "proof"], "ke": "batal", "peran": ["pemilik", "admin"], "label": "Batalkan" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "papan", "kolom_kartu": ["pelanggan", "jenis", "tenggat"] },
+          { "jenis": "daftar", "kolom": ["judul", "pelanggan", "jenis", "jumlah", "tenggat"], "urut": { "bidang": "tenggat", "arah": "naik" }, "saring": ["jenis", "status", "desainer"] },
+          { "jenis": "kalender", "tanggal": "tenggat" },
+          { "jenis": "formulir", "bidang": ["judul", "pelanggan", "jenis", "bahan", "ukuran", "jumlah", "harga", "tenggat", "desainer"] },
+          { "jenis": "rincian", "bidang": ["judul", "pelanggan", "jenis", "bahan", "ukuran", "jumlah", "harga", "tenggat", "desainer", "tautan_desain", "catatan_revisi"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "tulis" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "besok-janji", "pemicu": { "jenis": "tenggat", "koleksi": "order", "bidang": "tenggat", "hari_sebelum": 1 }, "aksi": { "jenis": "pengingat", "judul": "Besok janji selesai: {judul}", "kepada": "ditugaskan" } },
+      { "kode": "siap-ambil", "pemicu": { "jenis": "status", "koleksi": "order", "ke": "siap" }, "aksi": { "jenis": "kartu", "judul": "Order {judul} siap diambil, kabari pelanggan", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "order-per-jenis", "judul": "Order per jenis cetakan", "koleksi": "order", "kelompok": "jenis", "hitung": "jumlah" },
+      { "kode": "nilai-per-status", "judul": "Nilai order per status", "koleksi": "order", "kelompok": "status", "hitung": { "total": "harga" } }
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "untuk": "Katering, nasi kotak, kue pesanan, dan dapur rumahan yang menerima pesanan acara dengan jadwal antar dan uang muka.",
+  "contoh": "Pesanan 150 nasi kotak untuk syukuran kantor Jumat 11.30: uang muka 50% tercatat, sisa tagihan terhitung, dapur memasak, kurir mengantar, lalu pesanan selesai. Bahan baku tetap dicatat di stok dan produksi Nadi.",
+  "isi_contoh": [
+    { "koleksi": "pesanan", "data": { "acara": "Syukuran kantor", "pelanggan": "@", "antar": "2026-11-21T11:30:00+08:00", "alamat": "Jl. Teuku Umar 88, Denpasar", "porsi": 150, "menu": "Nasi, ayam betutu, sayur urab, sambal matah, kerupuk.", "harga_porsi": 35000, "uang_muka": 2625000, "pic": "@" } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "katering-pesanan", "nama": "Pesanan katering", "ikon": "kalender-cek", "ruang": "jual", "versi": "1.0.0",
+    "deskripsi": "Pesanan acara dengan jadwal antar, alamat, porsi, menu, dan uang muka; total dan sisa tagihan terhitung otomatis; alur dipesan, dimasak, diantar, selesai.",
+    "koleksi": [
+      {
+        "kode": "pesanan", "nama": "Pesanan", "judul": "acara",
+        "bidang": [
+          { "kode": "acara", "label": "Acara", "tipe": "teks", "wajib": true },
+          { "kode": "pelanggan", "label": "Pelanggan", "tipe": "pelanggan", "wajib": true },
+          { "kode": "antar", "label": "Waktu antar", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "alamat", "label": "Alamat antar", "tipe": "teks_panjang" },
+          { "kode": "porsi", "label": "Jumlah porsi", "tipe": "angka", "wajib": true, "min": 1 },
+          { "kode": "menu", "label": "Menu", "tipe": "teks_panjang", "wajib": true },
+          { "kode": "harga_porsi", "label": "Harga per porsi", "tipe": "rupiah", "wajib": true, "min": 0 },
+          { "kode": "uang_muka", "label": "Uang muka diterima", "tipe": "rupiah", "min": 0 },
+          { "kode": "total", "label": "Total", "tipe": "rumus", "rumus": "{porsi} * {harga_porsi}" },
+          { "kode": "sisa", "label": "Sisa tagihan", "tipe": "rumus", "rumus": "MAKS(0, {porsi} * {harga_porsi} - JIKA(KOSONG({uang_muka}), 0, {uang_muka}))" },
+          { "kode": "pic", "label": "Penanggung jawab", "tipe": "orang", "penugasan": true },
+          { "kode": "kurir", "label": "Kurir", "tipe": "orang", "penugasan": true },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "dipesan",
+          "daftar": [{ "kode": "dipesan", "label": "Dipesan" }, { "kode": "dimasak", "label": "Dimasak", "warna": "kunyit" }, { "kode": "diantar", "label": "Diantar", "warna": "laut" }, { "kode": "selesai", "label": "Selesai", "akhir": true, "warna": "daun" }, { "kode": "batal", "label": "Batal", "akhir": true, "warna": "cap" }],
+          "transisi": [
+            { "dari": ["dipesan"], "ke": "dimasak", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Mulai masak" },
+            { "dari": ["dimasak"], "ke": "diantar", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Berangkat antar" },
+            { "dari": ["diantar"], "ke": "selesai", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Sudah diterima" },
+            { "dari": ["dipesan"], "ke": "batal", "peran": ["pemilik", "admin"], "wajib_isi": ["catatan"], "label": "Batalkan" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "kalender", "tanggal": "antar" },
+          { "jenis": "papan", "kolom_kartu": ["pelanggan", "antar", "porsi"] },
+          { "jenis": "daftar", "kolom": ["antar", "acara", "pelanggan", "porsi", "total", "sisa"], "urut": { "bidang": "antar", "arah": "naik" }, "saring": ["status", "pic"] },
+          { "jenis": "formulir", "bidang": ["acara", "pelanggan", "antar", "alamat", "porsi", "menu", "harga_porsi", "uang_muka", "pic", "kurir", "catatan"] },
+          { "jenis": "rincian", "bidang": ["acara", "pelanggan", "antar", "alamat", "porsi", "menu", "harga_porsi", "uang_muka", "total", "sisa", "pic", "kurir", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "milik_sendiri" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "besok-antar", "pemicu": { "jenis": "tenggat", "koleksi": "pesanan", "bidang": "antar", "hari_sebelum": 1 }, "aksi": { "jenis": "pengingat", "judul": "Besok antar pesanan: {acara}", "kepada": "ditugaskan" } },
+      { "kode": "pesanan-baru", "pemicu": { "jenis": "buat", "koleksi": "pesanan" }, "aksi": { "jenis": "kartu", "judul": "Pesanan katering baru: {acara}", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "pesanan-per-status", "judul": "Pesanan per status", "koleksi": "pesanan", "kelompok": "status", "hitung": "jumlah" },
+      { "kode": "uang-muka-per-status", "judul": "Uang muka per status", "koleksi": "pesanan", "kelompok": "status", "hitung": { "total": "uang_muka" } }
+    ]
+  }
+}

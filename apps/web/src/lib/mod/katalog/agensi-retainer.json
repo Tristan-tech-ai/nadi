@@ -1,0 +1,76 @@
+{
+  "untuk": "Agensi digital, konsultan, jasa pembukuan, dan pengelola media sosial yang punya klien bulanan dengan laporan rutin.",
+  "contoh": "Klien Hotel Kuta berlangganan paket media sosial Rp6.000.000 per bulan: laporan Oktober disusun PIC, ditinjau pemilik, lalu dikirim. Kontrak yang habis bulan depan muncul sebagai kartu. Tagihan bulanannya lewat tagihan berulang Nadi.",
+  "isi_contoh": [
+    { "koleksi": "kontrak", "data": { "nama": "Media sosial Hotel Kuta", "klien": "@", "paket": "12 konten per bulan dan laporan", "nilai": 6000000, "mulai": "2026-06-01", "berakhir": "2026-12-31", "pic": "@" } },
+    { "koleksi": "laporan", "data": { "judul": "Laporan Oktober", "kontrak": "@", "periode": "2026-10-31", "penyusun": "@", "ringkasan": "Jangkauan naik 18%, tiga konten video paling banyak disimpan." } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "agensi-retainer", "nama": "Klien bulanan dan laporan", "ikon": "tas-kerja", "ruang": "jual", "versi": "1.0.0",
+    "deskripsi": "Kontrak klien bulanan dengan paket, nilai, masa berlaku, dan PIC; laporan rutin per klien dari disusun, ditinjau, sampai dikirim, dengan pengingat kontrak habis.",
+    "koleksi": [
+      {
+        "kode": "kontrak", "nama": "Kontrak klien", "judul": "nama",
+        "bidang": [
+          { "kode": "nama", "label": "Nama kontrak", "tipe": "teks", "wajib": true },
+          { "kode": "klien", "label": "Klien", "tipe": "pelanggan", "wajib": true },
+          { "kode": "paket", "label": "Isi paket", "tipe": "teks_panjang" },
+          { "kode": "nilai", "label": "Nilai per bulan", "tipe": "rupiah", "wajib": true, "min": 0 },
+          { "kode": "mulai", "label": "Mulai", "tipe": "tanggal", "wajib": true },
+          { "kode": "berakhir", "label": "Berakhir", "tipe": "tanggal" },
+          { "kode": "pic", "label": "PIC", "tipe": "orang", "wajib": true, "penugasan": true }
+        ],
+        "status": {
+          "awal": "aktif",
+          "daftar": [{ "kode": "aktif", "label": "Aktif", "warna": "daun" }, { "kode": "jeda", "label": "Dijeda", "warna": "kunyit" }, { "kode": "selesai", "label": "Selesai", "akhir": true, "warna": "abu" }],
+          "transisi": [
+            { "dari": ["aktif"], "ke": "jeda", "peran": ["pemilik", "admin"], "label": "Jeda" },
+            { "dari": ["jeda"], "ke": "aktif", "peran": ["pemilik", "admin"], "label": "Lanjutkan" },
+            { "dari": ["aktif", "jeda"], "ke": "selesai", "peran": ["pemilik", "admin"], "wajib_isi": ["berakhir"], "label": "Akhiri kontrak" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["nama", "klien", "nilai", "berakhir", "pic"], "urut": { "bidang": "berakhir", "arah": "naik" }, "saring": ["status", "pic"] },
+          { "jenis": "formulir", "bidang": ["nama", "klien", "paket", "nilai", "mulai", "berakhir", "pic"] },
+          { "jenis": "rincian", "bidang": ["nama", "klien", "paket", "nilai", "mulai", "berakhir", "pic"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "lihat" }
+      },
+      {
+        "kode": "laporan", "nama": "Laporan klien", "judul": "judul",
+        "bidang": [
+          { "kode": "judul", "label": "Judul laporan", "tipe": "teks", "wajib": true },
+          { "kode": "kontrak", "label": "Kontrak", "tipe": "rujukan", "koleksi": "kontrak", "wajib": true },
+          { "kode": "periode", "label": "Akhir periode", "tipe": "tanggal", "wajib": true },
+          { "kode": "penyusun", "label": "Penyusun", "tipe": "orang", "wajib": true, "penugasan": true },
+          { "kode": "ringkasan", "label": "Ringkasan", "tipe": "teks_panjang" },
+          { "kode": "tautan", "label": "Tautan laporan", "tipe": "tautan" },
+          { "kode": "catatan_review", "label": "Catatan tinjauan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "disusun",
+          "daftar": [{ "kode": "disusun", "label": "Disusun" }, { "kode": "ditinjau", "label": "Ditinjau", "warna": "kunyit" }, { "kode": "dikirim", "label": "Dikirim ke klien", "akhir": true, "warna": "daun" }],
+          "transisi": [
+            { "dari": ["disusun"], "ke": "ditinjau", "peran": ["ditugaskan", "pemilik", "admin"], "wajib_isi": ["tautan"], "label": "Kirim untuk ditinjau" },
+            { "dari": ["ditinjau"], "ke": "disusun", "peran": ["pemilik", "admin"], "wajib_isi": ["catatan_review"], "label": "Minta perbaikan" },
+            { "dari": ["ditinjau"], "ke": "dikirim", "peran": ["pemilik", "admin"], "label": "Tandai terkirim" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "papan", "kolom_kartu": ["kontrak", "periode", "penyusun"] },
+          { "jenis": "daftar", "kolom": ["judul", "kontrak", "periode", "penyusun"], "urut": { "bidang": "periode", "arah": "turun" }, "saring": ["kontrak", "status"] },
+          { "jenis": "formulir", "bidang": ["judul", "kontrak", "periode", "penyusun", "ringkasan", "tautan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "milik_sendiri" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "kontrak-habis", "pemicu": { "jenis": "tenggat", "koleksi": "kontrak", "bidang": "berakhir", "hari_sebelum": 30 }, "aksi": { "jenis": "kartu", "judul": "Kontrak {nama} habis bulan depan, tawarkan perpanjangan", "kepada": "pengelola" } },
+      { "kode": "laporan-tinjau", "pemicu": { "jenis": "status", "koleksi": "laporan", "ke": "ditinjau" }, "aksi": { "jenis": "kartu", "judul": "Laporan {judul} menunggu tinjauan", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "nilai-per-status", "judul": "Nilai kontrak bulanan per status", "koleksi": "kontrak", "kelompok": "status", "hitung": { "total": "nilai" } },
+      { "kode": "laporan-per-kontrak", "judul": "Laporan per kontrak", "koleksi": "laporan", "kelompok": "kontrak", "hitung": "jumlah" }
+    ]
+  }
+}

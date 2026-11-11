@@ -1,0 +1,72 @@
+{
+  "untuk": "Rental motor, mobil, kamera, alat pesta, alat outdoor, dan alat berat yang menyewakan unit ke pelanggan.",
+  "contoh": "Motor matic DK 4455 AC disewa wisatawan tiga hari dengan deposit Rp500.000; saat kembali, keterlambatan satu hari dicatat sebagai denda dan kondisi unit diperiksa. Pembayaran sewa lewat invoice atau kasir Nadi.",
+  "isi_contoh": [
+    { "koleksi": "unit", "data": { "nama": "Motor matic 125", "kode": "DK 4455 AC", "jenis": "motor", "tarif": 90000, "kondisi": "siap" } },
+    { "koleksi": "sewa", "data": { "keperluan": "Sewa harian wisata", "unit": "@", "pelanggan": "@", "mulai": "2026-11-20T09:00:00+08:00", "selesai": "2026-11-23T09:00:00+08:00", "hari": 3, "tarif": 90000, "deposit": 500000 } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "rental-unit", "nama": "Rental unit", "ikon": "kunci", "ruang": "jual", "versi": "1.0.0",
+    "deskripsi": "Daftar unit sewa dengan tarif harian dan kondisi; sewa ke pelanggan dengan jadwal, deposit, biaya sewa terhitung, pengembalian, denda, dan kondisi saat kembali.",
+    "koleksi": [
+      {
+        "kode": "unit", "nama": "Unit", "judul": "nama",
+        "bidang": [
+          { "kode": "nama", "label": "Nama unit", "tipe": "teks", "wajib": true },
+          { "kode": "kode", "label": "Kode atau nomor polisi", "tipe": "teks", "wajib": true },
+          { "kode": "jenis", "label": "Jenis", "tipe": "pilihan", "pilihan": [{ "kode": "motor", "label": "Motor" }, { "kode": "mobil", "label": "Mobil" }, { "kode": "kamera", "label": "Kamera dan audio" }, { "kode": "alat", "label": "Alat dan perlengkapan" }, { "kode": "lain", "label": "Lainnya" }] },
+          { "kode": "tarif", "label": "Tarif per hari", "tipe": "rupiah", "wajib": true, "min": 0 },
+          { "kode": "kondisi", "label": "Kondisi", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "siap", "label": "Siap disewa", "warna": "daun" }, { "kode": "disewa", "label": "Sedang disewa", "warna": "laut" }, { "kode": "servis", "label": "Servis", "warna": "kunyit" }] },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["nama", "kode", "jenis", "tarif", "kondisi"], "urut": { "bidang": "nama", "arah": "naik" }, "saring": ["jenis", "kondisi"] },
+          { "jenis": "formulir", "bidang": ["nama", "kode", "jenis", "tarif", "kondisi", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "tulis" }
+      },
+      {
+        "kode": "sewa", "nama": "Sewa", "judul": "keperluan",
+        "bidang": [
+          { "kode": "keperluan", "label": "Keperluan", "tipe": "teks", "wajib": true },
+          { "kode": "unit", "label": "Unit", "tipe": "rujukan", "koleksi": "unit", "wajib": true },
+          { "kode": "pelanggan", "label": "Pelanggan", "tipe": "pelanggan", "wajib": true },
+          { "kode": "mulai", "label": "Mulai", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "selesai", "label": "Rencana kembali", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "hari", "label": "Lama sewa (hari)", "tipe": "angka", "wajib": true, "min": 1, "max": 365 },
+          { "kode": "tarif", "label": "Tarif per hari", "tipe": "rupiah", "wajib": true, "min": 0, "petunjuk": "Tarif yang disepakati untuk sewa ini (lihat tarif unit)." },
+          { "kode": "deposit", "label": "Deposit", "tipe": "rupiah", "min": 0 },
+          { "kode": "kembali", "label": "Dikembalikan pada", "tipe": "tanggal_jam" },
+          { "kode": "denda", "label": "Denda", "tipe": "rupiah", "min": 0 },
+          { "kode": "kondisi_kembali", "label": "Kondisi saat kembali", "tipe": "pilihan", "pilihan": [{ "kode": "baik", "label": "Baik", "warna": "daun" }, { "kode": "lecet", "label": "Lecet ringan", "warna": "kunyit" }, { "kode": "rusak", "label": "Rusak", "warna": "cap" }] },
+          { "kode": "biaya", "label": "Biaya sewa", "tipe": "rumus", "rumus": "{hari} * {tarif} + JIKA(KOSONG({denda}), 0, {denda})" }
+        ],
+        "status": {
+          "awal": "dipesan",
+          "daftar": [{ "kode": "dipesan", "label": "Dipesan" }, { "kode": "keluar", "label": "Dibawa pelanggan", "warna": "laut" }, { "kode": "kembali", "label": "Kembali", "akhir": true, "warna": "daun" }, { "kode": "batal", "label": "Batal", "akhir": true, "warna": "cap" }],
+          "transisi": [
+            { "dari": ["dipesan"], "ke": "keluar", "peran": ["pemilik", "admin", "staf"], "label": "Serahkan unit" },
+            { "dari": ["keluar"], "ke": "kembali", "peran": ["pemilik", "admin", "staf"], "wajib_isi": ["kembali", "kondisi_kembali"], "label": "Terima kembali" },
+            { "dari": ["dipesan"], "ke": "batal", "peran": ["pemilik", "admin"], "label": "Batalkan" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "kalender", "tanggal": "mulai" },
+          { "jenis": "papan", "kolom_kartu": ["unit", "pelanggan", "selesai"] },
+          { "jenis": "daftar", "kolom": ["keperluan", "unit", "pelanggan", "mulai", "selesai", "biaya"], "urut": { "bidang": "mulai", "arah": "turun" }, "saring": ["unit", "status"] },
+          { "jenis": "formulir", "bidang": ["keperluan", "unit", "pelanggan", "mulai", "selesai", "hari", "tarif", "deposit"] },
+          { "jenis": "rincian", "bidang": ["keperluan", "unit", "pelanggan", "mulai", "selesai", "hari", "tarif", "deposit", "kembali", "denda", "kondisi_kembali", "biaya"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "tulis" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "hari-kembali", "pemicu": { "jenis": "tenggat", "koleksi": "sewa", "bidang": "selesai", "hari_sebelum": 0 }, "aksi": { "jenis": "kartu", "judul": "Hari ini unit kembali: {keperluan}", "kepada": "pengelola" } },
+      { "kode": "kembali-rusak", "pemicu": { "jenis": "status", "koleksi": "sewa", "ke": "kembali" }, "syarat": [{ "bidang": "kondisi_kembali", "op": "sama", "nilai": "rusak" }], "aksi": { "jenis": "kartu", "judul": "Unit kembali rusak: {keperluan}", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "sewa-per-unit", "judul": "Sewa per unit", "koleksi": "sewa", "kelompok": "unit", "hitung": "jumlah" },
+      { "kode": "denda-per-unit", "judul": "Denda per unit", "koleksi": "sewa", "kelompok": "unit", "hitung": { "total": "denda" } }
+    ]
+  }
+}

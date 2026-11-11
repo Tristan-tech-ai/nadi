@@ -1,0 +1,92 @@
+{
+  "untuk": "Kos, kontrakan, guesthouse, dan pengelola properti sewa yang mencatat kamar, penghuni, dan perbaikan.",
+  "contoh": "Kamar 12 terisi sejak Agustus dengan deposit Rp1.000.000; keluhan AC bocor ditugaskan ke teknisi, biaya perbaikan dicatat, lalu selesai. Sewa bulanan ditagih lewat tagihan berulang Nadi.",
+  "isi_contoh": [
+    { "koleksi": "kamar", "data": { "nomor": "Kamar 12", "tipe": "ac", "lantai": 2, "harga": 1800000, "kondisi": "terisi" } },
+    { "koleksi": "penghuni", "data": { "nama": "Gede Pratama", "kamar": "@", "telepon": "0813 2222 9090", "mulai": "2026-08-01", "deposit": 1000000 } },
+    { "koleksi": "perbaikan", "data": { "judul": "AC bocor", "kamar": "@", "kategori": "ac", "prioritas": "sedang", "petugas": "@", "uraian": "Air menetes dari unit indoor sejak semalam." } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "kos-properti", "nama": "Kamar, penghuni, dan perbaikan", "ikon": "rumah", "ruang": "tempat", "versi": "1.0.0",
+    "deskripsi": "Daftar kamar dengan tipe, harga, dan kondisi; penghuni dengan masa sewa dan deposit; serta keluhan perbaikan per kamar dengan petugas dan biayanya.",
+    "koleksi": [
+      {
+        "kode": "kamar", "nama": "Kamar", "judul": "nomor",
+        "bidang": [
+          { "kode": "nomor", "label": "Nomor atau nama kamar", "tipe": "teks", "wajib": true },
+          { "kode": "tipe", "label": "Tipe", "tipe": "pilihan", "pilihan": [{ "kode": "standar", "label": "Standar" }, { "kode": "ac", "label": "Dengan AC" }, { "kode": "keluarga", "label": "Keluarga" }, { "kode": "studio", "label": "Studio" }] },
+          { "kode": "lantai", "label": "Lantai", "tipe": "angka", "min": 0, "max": 100 },
+          { "kode": "harga", "label": "Harga sewa per bulan", "tipe": "rupiah", "min": 0 },
+          { "kode": "kondisi", "label": "Kondisi", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "kosong", "label": "Kosong", "warna": "daun" }, { "kode": "terisi", "label": "Terisi", "warna": "laut" }, { "kode": "perbaikan", "label": "Dalam perbaikan", "warna": "kunyit" }] },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["nomor", "tipe", "lantai", "harga", "kondisi"], "urut": { "bidang": "nomor", "arah": "naik" }, "saring": ["tipe", "kondisi"] },
+          { "jenis": "formulir", "bidang": ["nomor", "tipe", "lantai", "harga", "kondisi", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "lihat" }
+      },
+      {
+        "kode": "penghuni", "nama": "Penghuni", "judul": "nama",
+        "bidang": [
+          { "kode": "nama", "label": "Nama penghuni", "tipe": "teks", "wajib": true },
+          { "kode": "kamar", "label": "Kamar", "tipe": "rujukan", "koleksi": "kamar", "wajib": true },
+          { "kode": "telepon", "label": "Telepon", "tipe": "telepon" },
+          { "kode": "pelanggan", "label": "Data penagihan", "tipe": "pelanggan", "petunjuk": "Hubungkan supaya sewa bisa ditagih dengan tagihan berulang Nadi." },
+          { "kode": "mulai", "label": "Mulai sewa", "tipe": "tanggal", "wajib": true },
+          { "kode": "berakhir", "label": "Akhir sewa", "tipe": "tanggal" },
+          { "kode": "deposit", "label": "Deposit", "tipe": "rupiah", "min": 0 },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "aktif",
+          "daftar": [{ "kode": "aktif", "label": "Menghuni", "warna": "daun" }, { "kode": "pamit", "label": "Akan keluar", "warna": "kunyit" }, { "kode": "keluar", "label": "Sudah keluar", "akhir": true, "warna": "abu" }],
+          "transisi": [
+            { "dari": ["aktif"], "ke": "pamit", "peran": ["pemilik", "admin"], "wajib_isi": ["berakhir"], "label": "Catat rencana keluar" },
+            { "dari": ["aktif", "pamit"], "ke": "keluar", "peran": ["pemilik", "admin"], "wajib_isi": ["berakhir"], "label": "Tandai keluar" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["nama", "kamar", "telepon", "mulai", "berakhir"], "urut": { "bidang": "nama", "arah": "naik" }, "saring": ["kamar", "status"] },
+          { "jenis": "formulir", "bidang": ["nama", "kamar", "telepon", "pelanggan", "mulai", "berakhir", "deposit", "catatan"] },
+          { "jenis": "rincian", "bidang": ["nama", "kamar", "telepon", "pelanggan", "mulai", "berakhir", "deposit", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "lihat" }
+      },
+      {
+        "kode": "perbaikan", "nama": "Perbaikan", "judul": "judul",
+        "bidang": [
+          { "kode": "judul", "label": "Masalah", "tipe": "teks", "wajib": true },
+          { "kode": "kamar", "label": "Kamar", "tipe": "rujukan", "koleksi": "kamar", "wajib": true },
+          { "kode": "kategori", "label": "Kategori", "tipe": "pilihan", "pilihan": [{ "kode": "air", "label": "Air" }, { "kode": "listrik", "label": "Listrik" }, { "kode": "ac", "label": "AC" }, { "kode": "kebersihan", "label": "Kebersihan" }, { "kode": "lain", "label": "Lainnya" }] },
+          { "kode": "prioritas", "label": "Prioritas", "tipe": "pilihan", "pilihan": [{ "kode": "rendah", "label": "Rendah" }, { "kode": "sedang", "label": "Sedang", "warna": "kunyit" }, { "kode": "tinggi", "label": "Tinggi", "warna": "cap" }] },
+          { "kode": "uraian", "label": "Uraian", "tipe": "teks_panjang" },
+          { "kode": "petugas", "label": "Petugas", "tipe": "orang", "penugasan": true },
+          { "kode": "biaya", "label": "Biaya perbaikan", "tipe": "rupiah", "min": 0 }
+        ],
+        "status": {
+          "awal": "baru",
+          "daftar": [{ "kode": "baru", "label": "Baru" }, { "kode": "dikerjakan", "label": "Dikerjakan", "warna": "laut" }, { "kode": "selesai", "label": "Selesai", "akhir": true, "warna": "daun" }],
+          "transisi": [
+            { "dari": ["baru"], "ke": "dikerjakan", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Kerjakan" },
+            { "dari": ["baru", "dikerjakan"], "ke": "selesai", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Selesai" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "papan", "kolom_kartu": ["kamar", "kategori", "petugas"] },
+          { "jenis": "daftar", "kolom": ["judul", "kamar", "kategori", "prioritas", "petugas", "biaya"], "saring": ["kamar", "kategori", "status"] },
+          { "jenis": "formulir", "bidang": ["judul", "kamar", "kategori", "prioritas", "uraian", "petugas", "biaya"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "milik_sendiri" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "perbaikan-mendesak", "pemicu": { "jenis": "buat", "koleksi": "perbaikan" }, "syarat": [{ "bidang": "prioritas", "op": "sama", "nilai": "tinggi" }], "aksi": { "jenis": "kartu", "judul": "Perbaikan mendesak: {judul}", "kepada": "pengelola" } },
+      { "kode": "sewa-berakhir", "pemicu": { "jenis": "tenggat", "koleksi": "penghuni", "bidang": "berakhir", "hari_sebelum": 14 }, "aksi": { "jenis": "kartu", "judul": "Sewa {nama} berakhir dua minggu lagi", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "kamar-per-kondisi", "judul": "Kamar per kondisi", "koleksi": "kamar", "kelompok": "kondisi", "hitung": "jumlah" },
+      { "kode": "biaya-per-kamar", "judul": "Biaya perbaikan per kamar", "koleksi": "perbaikan", "kelompok": "kamar", "hitung": { "total": "biaya" } }
+    ]
+  }
+}

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { KATALOG_RESMI } from "./katalog";
+import { KATALOG_RESMI, SARAN_PAKET, saranPaket } from "./katalog";
 import { periksaManifest } from "./pengawas";
 import type { Bidang } from "./skema";
 
@@ -26,11 +26,29 @@ function cekNilai(b: Bidang, v: unknown): string | null {
 }
 
 describe("katalog paket resmi", () => {
-  it("11 paket (proyek agensi + 10 gelombang 1) dengan kode unik", () => {
+  it("21 paket (proyek agensi + gelombang 1 + gelombang 2) dengan kode unik", () => {
     const kode = KATALOG_RESMI.map((p) => p.manifest.kode);
     expect(kode).toEqual(["proyek-agensi", "log-rapat", "kalender-konten", "helpdesk-internal", "peminjaman", "kunjungan-lapangan",
-      "permintaan-pembelian", "armada", "inspeksi-k3", "event-acara", "keanggotaan"]);
+      "permintaan-pembelian", "armada", "inspeksi-k3", "event-acara", "keanggotaan",
+      "kursus-sekolah", "klinik-operasional", "laporan-proyek", "kos-properti", "koperasi", "order-cetak", "rental-unit", "katering-pesanan",
+      "agensi-retainer", "distributor-retur"]);
     expect(new Set(kode).size).toBe(kode.length);
+    expect(kode.length).toBeLessThanOrEqual(40); // batas mod per usaha: semua paket resmi tetap bisa dipasang bersamaan
+  });
+
+  it("X-15 saran paket: setiap jenis usaha di halaman Mulai punya 2 sampai 4 saran yang ada di katalog", () => {
+    const JENIS = ["fnb", "toko", "kantor", "bengkel", "klinik", "konstruksi", "logistik", "hotel", "salon", "laundry", "produksi", "pertanian", "pendidikan", "lainnya"];
+    for (const j of JENIS) {
+      const s = saranPaket(j);
+      expect(s.length, j).toBeGreaterThanOrEqual(2);
+      expect(s.length, j).toBeLessThanOrEqual(4);
+      expect(s.length, j).toBe(SARAN_PAKET[j].length);
+    }
+    expect(Object.keys(SARAN_PAKET).sort()).toEqual([...JENIS].sort());
+    expect(saranPaket("tidak-dikenal").map((p) => p.manifest.kode)).toEqual(SARAN_PAKET.lainnya);
+    expect(saranPaket("pendidikan")[0].manifest.kode).toBe("kursus-sekolah");
+    // setiap paket gelombang 2 disarankan untuk minimal satu jenis usaha
+    for (const p of KATALOG_RESMI.slice(11)) expect(Object.values(SARAN_PAKET).some((v) => v.includes(p.manifest.kode)), p.manifest.kode).toBe(true);
   });
 
   for (const p of KATALOG_RESMI) {

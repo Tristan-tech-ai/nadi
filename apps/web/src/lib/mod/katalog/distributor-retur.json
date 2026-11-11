@@ -1,0 +1,67 @@
+{
+  "untuk": "Grosir, distributor, dan sales kanvas yang melayani banyak toko dengan jadwal kunjungan dan retur barang.",
+  "contoh": "Toko Sumber Rejeki dikunjungi sales setiap Selasa; retur 12 botol yang kedaluwarsa diajukan, diterima gudang, lalu diganti barang baru. Pesanan dan tagihan toko tetap lewat penjualan dan invoice Nadi.",
+  "isi_contoh": [
+    { "koleksi": "outlet", "data": { "nama": "Toko Sumber Rejeki", "pelanggan": "@", "wilayah": "Denpasar Barat", "hari": "selasa", "sales": "@" } },
+    { "koleksi": "retur", "data": { "judul": "Retur minuman kedaluwarsa", "outlet": "@", "produk": "@", "jumlah": 12, "alasan": "kedaluwarsa", "tanggal": "2026-11-18" } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "distributor-retur", "nama": "Outlet dan retur barang", "ikon": "paket", "ruang": "barang", "versi": "1.0.0",
+    "deskripsi": "Daftar outlet atau toko langganan dengan wilayah, hari kunjungan, dan sales; retur barang per outlet dengan alasan, jumlah, dan alur diajukan, diterima gudang, diganti atau ditolak.",
+    "koleksi": [
+      {
+        "kode": "outlet", "nama": "Outlet", "judul": "nama",
+        "bidang": [
+          { "kode": "nama", "label": "Nama outlet", "tipe": "teks", "wajib": true },
+          { "kode": "pelanggan", "label": "Data pelanggan", "tipe": "pelanggan" },
+          { "kode": "wilayah", "label": "Wilayah", "tipe": "teks" },
+          { "kode": "hari", "label": "Hari kunjungan", "tipe": "pilihan", "pilihan": [{ "kode": "senin", "label": "Senin" }, { "kode": "selasa", "label": "Selasa" }, { "kode": "rabu", "label": "Rabu" }, { "kode": "kamis", "label": "Kamis" }, { "kode": "jumat", "label": "Jumat" }, { "kode": "sabtu", "label": "Sabtu" }] },
+          { "kode": "sales", "label": "Sales", "tipe": "orang", "penugasan": true },
+          { "kode": "telepon", "label": "Telepon", "tipe": "telepon" },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["nama", "wilayah", "hari", "sales"], "urut": { "bidang": "nama", "arah": "naik" }, "saring": ["hari", "sales"] },
+          { "jenis": "formulir", "bidang": ["nama", "pelanggan", "wilayah", "hari", "sales", "telepon", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "milik_sendiri" }
+      },
+      {
+        "kode": "retur", "nama": "Retur barang", "judul": "judul",
+        "bidang": [
+          { "kode": "judul", "label": "Judul retur", "tipe": "teks", "wajib": true },
+          { "kode": "outlet", "label": "Outlet", "tipe": "rujukan", "koleksi": "outlet", "wajib": true },
+          { "kode": "produk", "label": "Produk", "tipe": "produk", "wajib": true },
+          { "kode": "jumlah", "label": "Jumlah", "tipe": "angka", "wajib": true, "min": 1 },
+          { "kode": "alasan", "label": "Alasan", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "rusak", "label": "Rusak" }, { "kode": "kedaluwarsa", "label": "Kedaluwarsa" }, { "kode": "salah_kirim", "label": "Salah kirim" }, { "kode": "tidak_laku", "label": "Tidak laku" }] },
+          { "kode": "tanggal", "label": "Tanggal", "tipe": "tanggal", "wajib": true },
+          { "kode": "pengaju", "label": "Diajukan oleh", "tipe": "orang", "penugasan": true },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "diajukan",
+          "daftar": [{ "kode": "diajukan", "label": "Diajukan" }, { "kode": "diterima", "label": "Diterima gudang", "warna": "laut" }, { "kode": "diganti", "label": "Diganti", "akhir": true, "warna": "daun" }, { "kode": "ditolak", "label": "Ditolak", "akhir": true, "warna": "cap" }],
+          "transisi": [
+            { "dari": ["diajukan"], "ke": "diterima", "peran": ["pemilik", "admin"], "label": "Terima di gudang" },
+            { "dari": ["diajukan"], "ke": "ditolak", "peran": ["pemilik", "admin"], "wajib_isi": ["catatan"], "label": "Tolak" },
+            { "dari": ["diterima"], "ke": "diganti", "peran": ["pemilik", "admin", "ditugaskan"], "label": "Sudah diganti" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "papan", "kolom_kartu": ["outlet", "produk", "jumlah"] },
+          { "jenis": "daftar", "kolom": ["tanggal", "judul", "outlet", "produk", "jumlah", "alasan"], "urut": { "bidang": "tanggal", "arah": "turun" }, "saring": ["outlet", "alasan", "status"] },
+          { "jenis": "formulir", "bidang": ["judul", "outlet", "produk", "jumlah", "alasan", "tanggal", "pengaju", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "milik_sendiri" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "retur-baru", "pemicu": { "jenis": "buat", "koleksi": "retur" }, "aksi": { "jenis": "kartu", "judul": "Retur baru: {judul}", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "retur-per-alasan", "judul": "Retur per alasan", "koleksi": "retur", "kelompok": "alasan", "hitung": "jumlah" },
+      { "kode": "retur-per-outlet", "judul": "Retur per outlet", "koleksi": "retur", "kelompok": "outlet", "hitung": "jumlah" },
+      { "kode": "retur-per-produk", "judul": "Retur per produk", "koleksi": "retur", "kelompok": "produk", "hitung": "jumlah" }
+    ]
+  }
+}

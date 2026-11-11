@@ -3,7 +3,7 @@ import { mkdirSync } from "node:fs";
 import AxeBuilder from "@axe-core/playwright";
 import { createClient } from "@supabase/supabase-js";
 import { expect, test, type Page } from "@playwright/test";
-import { KATALOG_RESMI } from "../src/lib/mod/katalog";
+import { KATALOG_RESMI, SARAN_PAKET } from "../src/lib/mod/katalog";
 
 // X-14 katalog paket resmi, LOKAL saja: pemilik membuka rincian paket Armada di Tambah fitur lalu memasangnya dari halaman itu;
 // sepuluh paket lain dipasang lewat RPC yang sama dengan tombol Pasang (draf sumber resmi lalu terapkan); isi contoh setiap
@@ -36,7 +36,7 @@ async function periksa(page: Page, nama: string, layar = false) {
   await page.emulateMedia({ colorScheme: "light" });
 }
 
-test("katalog resmi: 11 paket terpasang dengan isi contoh dan tampil", async ({ page }) => {
+test("katalog resmi: 21 paket terpasang dengan isi contoh dan tampil, saran paket per jenis usaha", async ({ page }) => {
   test.setTimeout(420_000);
   const email = `katalog-${Date.now()}-${randomBytes(3).toString("hex")}@uji.local`;
   const sandi = randomBytes(18).toString("base64url");
@@ -49,6 +49,10 @@ test("katalog resmi: 11 paket terpasang dengan isi contoh dan tampil", async ({ 
   expect(orang.error, orang.error?.message).toBeNull();
   const pelanggan = await sb.rpc("save_customer", { p_id: null, p_nama: "Hotel Uji Kuta", p_jenis: "perusahaan", p_induk: null, p_hp: "081234567890", p_email: null, p_kota: "Badung", p_segmen: null });
   expect(pelanggan.error, pelanggan.error?.message).toBeNull();
+  const proyek = await sb.rpc("buat_proyek", { p: { nama: "Renovasi Villa Uji", tipe: "sekali" } });
+  expect(proyek.error, proyek.error?.message).toBeNull();
+  const produk = await sb.rpc("simpan_produk", { p: { kode: "MNM-01", nama: "Minuman botol uji", harga_jual: 8000 } });
+  expect(produk.error, produk.error?.message).toBeNull();
 
   const galat: string[] = [];
   page.on("console", (m) => { if (m.type() === "error") galat.push(m.text().slice(0, 300)); });
@@ -60,6 +64,15 @@ test("katalog resmi: 11 paket terpasang dengan isi contoh dan tampil", async ({ 
   await page.getByRole("button", { name: "Masuk", exact: true }).click();
   await page.waitForURL((u) => u.pathname === "/app/tambah-fitur", { timeout: 60_000 });
   await expect(page.locator("[data-paket]")).toHaveCount(KATALOG_RESMI.length, { timeout: 60_000 });
+  // X-15: usaha jenis kantor melihat saran paketnya lebih dulu dengan lencana.
+  const saranKantor = SARAN_PAKET.kantor;
+  await expect(page.locator("[data-paket]").first()).toHaveAttribute("data-paket", saranKantor[0]);
+  await expect(page.getByTestId("lencana-disarankan")).toHaveCount(saranKantor.length);
+  await page.goto("/app/mulai/lanjut");
+  await expect(page.getByTestId("saran-paket").locator("[data-saran]")).toHaveCount(saranKantor.length, { timeout: 30_000 });
+  await expect(page.getByTestId("saran-paket").locator("[data-saran]").first()).toHaveAttribute("data-saran", saranKantor[0]);
+  await periksa(page, "mulai-saran", true);
+  await page.goto("/app/tambah-fitur");
 
   // Rincian dan pasang dari halaman paket.
   await page.getByRole("link", { name: "Lihat rincian Armada dan kendaraan" }).click();
@@ -88,7 +101,8 @@ test("katalog resmi: 11 paket terpasang dengan isi contoh dan tampil", async ({ 
       const k = p.manifest.koleksi.find((x) => x.kode === c.koleksi)!;
       const data = Object.fromEntries(Object.entries(c.data).map(([kunci, v]) => {
         const b = k.bidang.find((x) => x.kode === kunci)!;
-        const ganti = (x: unknown) => (x !== "@" ? x : b.tipe === "orang" ? orang.data!.id : b.tipe === "pelanggan" ? pelanggan.data : b.tipe === "rujukan" ? terakhir[b.koleksi!] : x);
+        const ganti = (x: unknown) => (x !== "@" ? x : b.tipe === "orang" ? orang.data!.id : b.tipe === "pelanggan" ? pelanggan.data
+          : b.tipe === "proyek" ? (proyek.data as { id: string }).id : b.tipe === "produk" ? produk.data : b.tipe === "rujukan" ? terakhir[b.koleksi!] : x);
         return [kunci, Array.isArray(v) ? v.map(ganti) : ganti(v)];
       }));
       const r = await sb.rpc("mod_catatan_simpan", { p_mod: modId, p_koleksi: c.koleksi, p_data: data });

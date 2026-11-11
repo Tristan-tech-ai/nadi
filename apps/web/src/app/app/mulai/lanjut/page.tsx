@@ -5,7 +5,9 @@ import { PencilSimpleLineIcon, SparkleIcon } from "@phosphor-icons/react/dist/ss
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { bahasaAplikasi } from "@/lib/i18n/server";
+import { saranPaket } from "@/lib/mod/katalog";
 import { wajibPerusahaan } from "@/lib/sesi";
+import { createClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = { title: "Isi data awal" };
 
@@ -16,6 +18,10 @@ async function Isi() {
   const b: Bahasa = await bahasaAplikasi(sesi.bahasa);
   const en = b === "en";
   const kartu = "flex min-h-40 flex-col gap-2 rounded-[var(--radius-kartu)] border border-garis p-5 hover:bg-kertas-2";
+  // X-15: paket resmi yang biasa dipakai jenis usaha ini; dipasang dari halaman rinciannya, tidak otomatis.
+  const { data: usaha } = await (await createClient()).from("perusahaan").select("industri").eq("id", sesi.perusahaanId).maybeSingle();
+  const saran = saranPaket((usaha?.industri as string | null) ?? null);
+  const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
   return (
     <div lang={b}>
       <KepalaHalaman jalur="/app/mulai" judul={en ? "Fill in your first data" : "Isi data awal usahamu"}
@@ -32,6 +38,20 @@ async function Isi() {
           <span className="text-sm text-tinta-2">{en ? "Give your files to ChatGPT, Gemini, or another AI. It writes a draft; you check it here and apply once." : "Lempar berkasmu ke ChatGPT, Gemini, atau AI lain. AI menulis draf, kamu periksa di sini lalu terapkan sekali."}</span>
         </Link>
       </div>
+      {pengelola && saran.length > 0 && (
+        <section className="mt-10" aria-labelledby="judul-saran-paket" data-testid="saran-paket">
+          <h2 id="judul-saran-paket" className="text-lg font-semibold">{en ? "Add-on features often used by businesses like yours" : "Fitur tambahan yang biasa dipakai usaha sepertimu"}</h2>
+          <p className="mt-1 text-sm text-tinta-2">{en ? "Optional. Open one to see what it contains, then install it if it fits." : "Tidak wajib. Buka untuk melihat isinya, lalu pasang bila cocok."}</p>
+          <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm">
+            {saran.map((p) => (
+              <li key={p.manifest.kode} className="py-3" data-saran={p.manifest.kode}>
+                <Link href={`/app/tambah-fitur/${p.manifest.kode}`} className="font-semibold underline underline-offset-4">{p.manifest.nama}</Link>
+                <p className="mt-0.5 text-tinta-2">{p.manifest.deskripsi}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       <p className="mt-6 text-sm"><Link href="/app" className="underline underline-offset-4">{en ? "Skip for now, open Today" : "Lewati dulu, buka Hari ini"}</Link></p>
     </div>
   );

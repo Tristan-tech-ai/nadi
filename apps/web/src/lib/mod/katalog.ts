@@ -13,6 +13,16 @@ import kunjungan from "./katalog/kunjungan-lapangan.json";
 import logRapat from "./katalog/log-rapat.json";
 import peminjaman from "./katalog/peminjaman.json";
 import pembelian from "./katalog/permintaan-pembelian.json";
+import agensiRetainer from "./katalog/agensi-retainer.json";
+import distributor from "./katalog/distributor-retur.json";
+import katering from "./katalog/katering-pesanan.json";
+import klinik from "./katalog/klinik-operasional.json";
+import koperasi from "./katalog/koperasi.json";
+import kos from "./katalog/kos-properti.json";
+import kursus from "./katalog/kursus-sekolah.json";
+import laporanProyek from "./katalog/laporan-proyek.json";
+import orderCetak from "./katalog/order-cetak.json";
+import rental from "./katalog/rental-unit.json";
 
 export type IsiContoh = { koleksi: string; data: Record<string, unknown> };
 export type PaketResmi = { manifest: Manifest; untuk: string; contoh: string; isi_contoh: IsiContoh[] };
@@ -31,6 +41,29 @@ export const KATALOG_RESMI: readonly PaketResmi[] = [
     ],
   },
   ...[logRapat, kalenderKonten, helpdesk, peminjaman, kunjungan, pembelian, armada, inspeksi, eventAcara, keanggotaan].map(dariBerkas),
+  // X-15 gelombang 2: per jenis usaha di /untuk dan docs/research/kebutuhan-usaha.md.
+  ...[kursus, klinik, laporanProyek, kos, koperasi, orderCetak, rental, katering, agensiRetainer, distributor].map(dariBerkas),
 ];
+
+/** X-15 saran paket per jenis usaha (kode perusahaan.industri dari halaman Mulai). Urutan = paling cocok dulu, maksimal 4. */
+export const SARAN_PAKET: Readonly<Record<string, readonly string[]>> = {
+  toko: ["kalender-konten", "keanggotaan", "permintaan-pembelian", "distributor-retur"],
+  fnb: ["katering-pesanan", "kalender-konten", "inspeksi-k3", "permintaan-pembelian"],
+  kantor: ["proyek-agensi", "agensi-retainer", "log-rapat", "helpdesk-internal"],
+  bengkel: ["armada", "rental-unit", "permintaan-pembelian", "inspeksi-k3"],
+  klinik: ["klinik-operasional", "helpdesk-internal", "peminjaman", "kalender-konten"],
+  konstruksi: ["laporan-proyek", "armada", "inspeksi-k3", "permintaan-pembelian"],
+  logistik: ["armada", "distributor-retur", "kunjungan-lapangan", "rental-unit"],
+  hotel: ["kos-properti", "event-acara", "helpdesk-internal", "kalender-konten"],
+  salon: ["keanggotaan", "kalender-konten", "permintaan-pembelian"],
+  laundry: ["kalender-konten", "permintaan-pembelian", "keanggotaan"],
+  produksi: ["order-cetak", "inspeksi-k3", "permintaan-pembelian", "distributor-retur"],
+  pertanian: ["armada", "permintaan-pembelian", "inspeksi-k3", "koperasi"],
+  pendidikan: ["kursus-sekolah", "event-acara", "peminjaman", "kalender-konten"],
+  lainnya: ["log-rapat", "koperasi", "event-acara", "kalender-konten"],
+};
+
+export const saranPaket = (industri: string | null | undefined): PaketResmi[] =>
+  (SARAN_PAKET[industri ?? ""] ?? SARAN_PAKET.lainnya).map(paketResmi).filter((p): p is PaketResmi => p !== null);
 
 export const paketResmi = (kode: string) => KATALOG_RESMI.find((p) => p.manifest.kode === kode) ?? null;

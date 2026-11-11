@@ -1,0 +1,83 @@
+{
+  "untuk": "Klinik, praktik dokter gigi, klinik kecantikan, dan apotek yang mengatur jadwal praktik, kebersihan alat, dan keluhan layanan.",
+  "contoh": "Jadwal praktik drg. Wayan Selasa dan Kamis sore di Ruang 1, sterilisasi alat dicatat setiap siklus autoklaf, keluhan antrean panjang ditangani sampai selesai. Paket ini tidak menyimpan rekam medis atau data kesehatan pasien.",
+  "isi_contoh": [
+    { "koleksi": "praktik", "data": { "judul": "Praktik gigi sore", "dokter": "@", "hari": ["selasa", "kamis"], "jam": "16.00 sampai 20.00", "ruang": "Ruang 1" } },
+    { "koleksi": "sterilisasi", "data": { "alat": "Set alat dasar 1 sampai 6", "waktu": "2026-11-19T08:15:00+08:00", "petugas": "@", "metode": "autoklaf", "indikator": true, "hasil": "lulus" } },
+    { "koleksi": "keluhan", "data": { "judul": "Antrean sore terlalu lama", "waktu": "2026-11-18T19:40:00+08:00", "kanal": "langsung", "isi": "Pasien menunggu lebih dari satu jam tanpa kabar." } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "klinik-operasional", "nama": "Operasional klinik", "ikon": "salib-medis", "ruang": "tempat", "versi": "1.0.0",
+    "deskripsi": "Jadwal praktik per dokter dan ruang, catatan sterilisasi alat per siklus, dan keluhan layanan sampai selesai. Tanpa rekam medis dan tanpa data kesehatan pasien.",
+    "koleksi": [
+      {
+        "kode": "praktik", "nama": "Jadwal praktik", "judul": "judul",
+        "bidang": [
+          { "kode": "judul", "label": "Nama jadwal", "tipe": "teks", "wajib": true },
+          { "kode": "dokter", "label": "Dokter atau terapis", "tipe": "orang", "wajib": true, "penugasan": true },
+          { "kode": "hari", "label": "Hari", "tipe": "pilihan_banyak", "wajib": true, "pilihan": [{ "kode": "senin", "label": "Senin" }, { "kode": "selasa", "label": "Selasa" }, { "kode": "rabu", "label": "Rabu" }, { "kode": "kamis", "label": "Kamis" }, { "kode": "jumat", "label": "Jumat" }, { "kode": "sabtu", "label": "Sabtu" }, { "kode": "minggu", "label": "Minggu" }] },
+          { "kode": "jam", "label": "Jam praktik", "tipe": "teks", "wajib": true },
+          { "kode": "ruang", "label": "Ruang", "tipe": "teks" },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["judul", "dokter", "hari", "jam", "ruang"], "urut": { "bidang": "judul", "arah": "naik" }, "saring": ["dokter"] },
+          { "jenis": "formulir", "bidang": ["judul", "dokter", "hari", "jam", "ruang", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "lihat" }
+      },
+      {
+        "kode": "sterilisasi", "nama": "Sterilisasi alat", "judul": "alat",
+        "bidang": [
+          { "kode": "alat", "label": "Alat atau set", "tipe": "teks", "wajib": true },
+          { "kode": "waktu", "label": "Waktu", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "petugas", "label": "Petugas", "tipe": "orang", "wajib": true, "penugasan": true },
+          { "kode": "metode", "label": "Metode", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "autoklaf", "label": "Autoklaf" }, { "kode": "kimia", "label": "Larutan kimia" }, { "kode": "panas_kering", "label": "Panas kering" }, { "kode": "lain", "label": "Lainnya" }] },
+          { "kode": "indikator", "label": "Indikator berubah warna", "tipe": "centang" },
+          { "kode": "hasil", "label": "Hasil", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "lulus", "label": "Lulus", "warna": "daun" }, { "kode": "ulang", "label": "Harus diulang", "warna": "cap" }] },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks" }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["waktu", "alat", "metode", "petugas", "hasil"], "urut": { "bidang": "waktu", "arah": "turun" }, "saring": ["metode", "hasil"] },
+          { "jenis": "kalender", "tanggal": "waktu" },
+          { "jenis": "formulir", "bidang": ["alat", "waktu", "petugas", "metode", "indikator", "hasil", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "tulis" }
+      },
+      {
+        "kode": "keluhan", "nama": "Keluhan layanan", "judul": "judul",
+        "bidang": [
+          { "kode": "judul", "label": "Keluhan", "tipe": "teks", "wajib": true },
+          { "kode": "waktu", "label": "Waktu", "tipe": "tanggal_jam", "wajib": true },
+          { "kode": "kanal", "label": "Diterima lewat", "tipe": "pilihan", "pilihan": [{ "kode": "langsung", "label": "Langsung" }, { "kode": "whatsapp", "label": "WhatsApp" }, { "kode": "telepon", "label": "Telepon" }, { "kode": "ulasan", "label": "Ulasan daring" }] },
+          { "kode": "isi", "label": "Uraian", "tipe": "teks_panjang", "wajib": true, "petunjuk": "Tulis layanannya saja; jangan menulis diagnosis atau data kesehatan pasien." },
+          { "kode": "petugas", "label": "Ditangani oleh", "tipe": "orang", "penugasan": true },
+          { "kode": "tindakan", "label": "Tindakan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "baru",
+          "daftar": [{ "kode": "baru", "label": "Baru" }, { "kode": "ditangani", "label": "Ditangani", "warna": "laut" }, { "kode": "selesai", "label": "Selesai", "akhir": true, "warna": "daun" }],
+          "transisi": [
+            { "dari": ["baru"], "ke": "ditangani", "peran": ["ditugaskan", "pemilik", "admin"], "label": "Tangani" },
+            { "dari": ["baru", "ditangani"], "ke": "selesai", "peran": ["ditugaskan", "pemilik", "admin"], "wajib_isi": ["tindakan"], "label": "Selesaikan" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "papan", "kolom_kartu": ["kanal", "waktu", "petugas"] },
+          { "jenis": "daftar", "kolom": ["waktu", "judul", "kanal", "petugas"], "urut": { "bidang": "waktu", "arah": "turun" }, "saring": ["kanal", "status"] },
+          { "jenis": "formulir", "bidang": ["judul", "waktu", "kanal", "isi", "petugas"] },
+          { "jenis": "rincian", "bidang": ["judul", "waktu", "kanal", "isi", "petugas", "tindakan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "lihat", "staf": "tulis" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "steril-ulang", "pemicu": { "jenis": "buat", "koleksi": "sterilisasi" }, "syarat": [{ "bidang": "hasil", "op": "sama", "nilai": "ulang" }], "aksi": { "jenis": "kartu", "judul": "Sterilisasi harus diulang: {alat}", "kepada": "pengelola" } },
+      { "kode": "keluhan-baru", "pemicu": { "jenis": "buat", "koleksi": "keluhan" }, "aksi": { "jenis": "kartu", "judul": "Keluhan layanan: {judul}", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "steril-per-hasil", "judul": "Sterilisasi per hasil", "koleksi": "sterilisasi", "kelompok": "hasil", "hitung": "jumlah" },
+      { "kode": "keluhan-per-kanal", "judul": "Keluhan per kanal", "koleksi": "keluhan", "kelompok": "kanal", "hitung": "jumlah" }
+    ]
+  }
+}

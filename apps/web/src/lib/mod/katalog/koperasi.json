@@ -1,0 +1,87 @@
+{
+  "untuk": "Koperasi karyawan, koperasi desa, arisan terkelola, dan paguyuban yang mencatat anggota, simpanan, dan pengajuan pinjaman.",
+  "contoh": "Anggota baru membayar simpanan pokok dan wajib bulan November; pengajuan pinjaman Rp5.000.000 tenor 10 bulan disetujui pengurus. Paket ini hanya mencatat; besaran jasa atau bunga mengikuti AD/ART koperasimu dan tidak dihitung otomatis.",
+  "isi_contoh": [
+    { "koleksi": "anggota", "data": { "nama": "Ketut Suardana", "nomor": "KOP-0087", "telepon": "0812 7777 1010", "bergabung": "2026-11-01" } },
+    { "koleksi": "simpanan", "data": { "keterangan": "Simpanan wajib November", "anggota": "@", "jenis": "wajib", "tanggal": "2026-11-05", "jumlah": 50000 } },
+    { "koleksi": "pinjaman", "data": { "keperluan": "Biaya sekolah anak", "anggota": "@", "jumlah": 5000000, "tenor": 10, "diajukan": "2026-11-10" } }
+  ],
+  "manifest": {
+    "skema": 1, "kode": "koperasi", "nama": "Koperasi simpan dan pinjam", "ikon": "koin", "ruang": "uang", "versi": "1.0.0",
+    "deskripsi": "Anggota koperasi, catatan simpanan pokok, wajib, dan sukarela, serta pengajuan pinjaman dengan persetujuan pengurus. Mencatat saja; jasa atau bunga mengikuti AD/ART dan tidak dihitung otomatis.",
+    "koleksi": [
+      {
+        "kode": "anggota", "nama": "Anggota", "judul": "nama",
+        "bidang": [
+          { "kode": "nama", "label": "Nama anggota", "tipe": "teks", "wajib": true },
+          { "kode": "nomor", "label": "Nomor anggota", "tipe": "teks", "wajib": true },
+          { "kode": "telepon", "label": "Telepon", "tipe": "telepon" },
+          { "kode": "orang", "label": "Karyawan terkait", "tipe": "orang", "petunjuk": "Isi bila anggota juga karyawan usaha ini." },
+          { "kode": "bergabung", "label": "Tanggal bergabung", "tipe": "tanggal", "wajib": true },
+          { "kode": "catatan", "label": "Catatan", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "aktif",
+          "daftar": [{ "kode": "aktif", "label": "Aktif", "warna": "daun" }, { "kode": "keluar", "label": "Keluar", "akhir": true, "warna": "abu" }],
+          "transisi": [{ "dari": ["aktif"], "ke": "keluar", "peran": ["pemilik", "admin"], "wajib_isi": ["catatan"], "label": "Keluar dari koperasi" }]
+        },
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["nomor", "nama", "telepon", "bergabung"], "urut": { "bidang": "nomor", "arah": "naik" }, "saring": ["status"] },
+          { "jenis": "formulir", "bidang": ["nama", "nomor", "telepon", "orang", "bergabung", "catatan"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "tulis", "staf": "lihat" }
+      },
+      {
+        "kode": "simpanan", "nama": "Simpanan", "judul": "keterangan",
+        "bidang": [
+          { "kode": "keterangan", "label": "Keterangan", "tipe": "teks", "wajib": true },
+          { "kode": "anggota", "label": "Anggota", "tipe": "rujukan", "koleksi": "anggota", "wajib": true },
+          { "kode": "jenis", "label": "Jenis simpanan", "tipe": "pilihan", "wajib": true, "pilihan": [{ "kode": "pokok", "label": "Pokok" }, { "kode": "wajib", "label": "Wajib" }, { "kode": "sukarela", "label": "Sukarela" }, { "kode": "ambil", "label": "Penarikan" }] },
+          { "kode": "tanggal", "label": "Tanggal", "tipe": "tanggal", "wajib": true },
+          { "kode": "jumlah", "label": "Jumlah", "tipe": "rupiah", "wajib": true, "min": 0 }
+        ],
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["tanggal", "anggota", "jenis", "jumlah", "keterangan"], "urut": { "bidang": "tanggal", "arah": "turun" }, "saring": ["anggota", "jenis"] },
+          { "jenis": "formulir", "bidang": ["keterangan", "anggota", "jenis", "tanggal", "jumlah"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "tulis", "staf": "tidak" }
+      },
+      {
+        "kode": "pinjaman", "nama": "Pengajuan pinjaman", "judul": "keperluan",
+        "bidang": [
+          { "kode": "keperluan", "label": "Keperluan", "tipe": "teks", "wajib": true },
+          { "kode": "anggota", "label": "Anggota", "tipe": "rujukan", "koleksi": "anggota", "wajib": true },
+          { "kode": "jumlah", "label": "Jumlah pinjaman", "tipe": "rupiah", "wajib": true, "min": 0 },
+          { "kode": "tenor", "label": "Tenor (bulan)", "tipe": "angka", "wajib": true, "min": 1, "max": 120 },
+          { "kode": "diajukan", "label": "Tanggal pengajuan", "tipe": "tanggal", "wajib": true },
+          { "kode": "cicilan", "label": "Cicilan pokok per bulan", "tipe": "rumus", "rumus": "BULAT({jumlah} / {tenor}, 0)" },
+          { "kode": "catatan_pengurus", "label": "Catatan pengurus", "tipe": "teks_panjang" }
+        ],
+        "status": {
+          "awal": "diajukan",
+          "daftar": [{ "kode": "diajukan", "label": "Diajukan" }, { "kode": "disetujui", "label": "Disetujui", "warna": "laut" }, { "kode": "ditolak", "label": "Ditolak", "akhir": true, "warna": "cap" }, { "kode": "lunas", "label": "Lunas", "akhir": true, "warna": "daun" }],
+          "transisi": [
+            { "dari": ["diajukan"], "ke": "disetujui", "peran": ["pemilik", "admin"], "label": "Setujui" },
+            { "dari": ["diajukan"], "ke": "ditolak", "peran": ["pemilik", "admin"], "wajib_isi": ["catatan_pengurus"], "label": "Tolak" },
+            { "dari": ["disetujui"], "ke": "lunas", "peran": ["pemilik", "admin", "akuntan"], "label": "Tandai lunas" }
+          ]
+        },
+        "tampilan": [
+          { "jenis": "daftar", "kolom": ["diajukan", "anggota", "jumlah", "tenor", "cicilan"], "urut": { "bidang": "diajukan", "arah": "turun" }, "saring": ["anggota", "status"] },
+          { "jenis": "papan", "kolom_kartu": ["anggota", "jumlah", "tenor"] },
+          { "jenis": "formulir", "bidang": ["keperluan", "anggota", "jumlah", "tenor", "diajukan"] },
+          { "jenis": "rincian", "bidang": ["keperluan", "anggota", "jumlah", "tenor", "cicilan", "diajukan", "catatan_pengurus"] }
+        ],
+        "akses": { "pemilik": "kelola", "admin": "kelola", "akuntan": "tulis", "staf": "tidak" }
+      }
+    ],
+    "otomasi": [
+      { "kode": "ajuan-pinjaman", "pemicu": { "jenis": "buat", "koleksi": "pinjaman" }, "aksi": { "jenis": "kartu", "judul": "Pengajuan pinjaman: {keperluan}", "kepada": "pengelola" } }
+    ],
+    "laporan": [
+      { "kode": "simpanan-per-jenis", "judul": "Simpanan per jenis", "koleksi": "simpanan", "kelompok": "jenis", "hitung": { "total": "jumlah" } },
+      { "kode": "simpanan-per-anggota", "judul": "Simpanan per anggota", "koleksi": "simpanan", "kelompok": "anggota", "hitung": { "total": "jumlah" } },
+      { "kode": "pinjaman-per-status", "judul": "Pinjaman per status", "koleksi": "pinjaman", "kelompok": "status", "hitung": { "total": "jumlah" } }
+    ]
+  }
+}
