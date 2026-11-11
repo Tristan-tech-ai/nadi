@@ -5024,8 +5024,11 @@
    "accept": "pemilik bisa membuat mod dari formulir visual (koleksi, bidang, status, tampilan) tanpa menulis JSON; hasilnya draf yang lolos pengawas; e2e lokal membuat mod 3 bidang lalu memakainya",
    "how": "komponen formulir Nadi",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T16:53:47"
+   "status": "done",
+   "created": "2026-11-11T16:53:47",
+   "started": "2026-11-11T22:40:32",
+   "done": "2026-11-11T22:45:52",
+   "result": "src/lib/mod/pembangun.ts + pembangun.test.ts 6/6; components/app/pembangun-mod.tsx; src/app/app/tambah-fitur/buat/page.tsx; e2e/pembangun-mod.spec.ts lokal 1/1 (susun 3 isian teks/orang/tanggal + status, draf lolos, terapkan, catat piket, axe 0 serius, tanpa gulir samping 390/1440 terang gelap, tanpa galat konsol)"
   },
   {
    "id": "X-17",
@@ -5055,8 +5058,11 @@
    "accept": "pembuat laporan punya sumber kerja, proyek, dan koleksi mod (daftar putih kolom dari manifest, CSV aman dari injeksi rumus); Wawasan menampilkan ringkasan mod aktif; tes",
    "how": "pola src/lib/wawasan/laporan.ts",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T16:53:47"
+   "status": "done",
+   "created": "2026-11-11T16:53:47",
+   "started": "2026-11-11T22:45:59",
+   "done": "2026-11-11T22:50:03",
+   "result": "src/lib/wawasan/laporan.ts (sumber kerja, proyek, sumberMod) + ambil.ts (mod_record diratakan, nama orang/pelanggan, judul rujukan) + wawasan/page.tsx (ringkasan fitur tambahan) + ekspor/route.ts; laporan.test.ts 10/10; e2e/laporan-mod.spec.ts lokal 1/1 (axe 0 serius)"
   },
   {
    "id": "X-19",
@@ -5086,8 +5092,9 @@
    "accept": "pusat bantuan punya artikel Tambah fitur, Mod, Buat dengan AI-mu; kamus istilah mod; prompt salin untuk AI pengguna diuji menyebut alat yang ada; PDF ringkas hasil di luar repo dikirim ke Tristan",
    "how": "pola artikel bantuan L-04",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T16:53:47"
+   "status": "running",
+   "created": "2026-11-11T16:53:47",
+   "started": "2026-11-11T22:50:17"
   },
   {
    "id": "FIX-ASAP-2",
@@ -5100,9 +5107,11 @@
    "accept": "penyebab ditemukan dan diperbaiki; uji asap produksi (workflow asap.yml) lulus lagi; issue #2 ditutup dengan tautan run yang lulus",
    "how": "Spek uji asap sudah di main (ef337db) dan lulus terhadap produksi dari lokal 11 Nov (30 lulus bersama bantuan-alat dan halaman-publik). Run workflow_dispatch 43036733698 gagal di langkah Pasang Chromium: 'Temporary failure resolving archive.ubuntu.com' saat apt memasang font (--with-deps). Langkah: baca docs Playwright CI resmi (install-deps, cache), ubah .github/workflows/asap.yml agar tahan DNS apt sesaat (ulang apt dengan jeda, atau pasang chromium tanpa --with-deps bila dependensi runner sudah ada), commit, push bersama iterasi, jalankan gh workflow run asap.yml, lalu tutup issue #2 dengan tautan run yang lulus.",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-11-11T16:53:48",
-   "started": "2026-11-11T21:29:34"
+   "started": "2026-11-11T21:29:34",
+   "done": "2026-11-11T22:28:44",
+   "result": "workflow asap.yml run 43047827769 lulus (pasang Chromium + uji asap success) di main e92da81; issue #2 ditutup dengan tautan run; CI run 43047800181 success"
   },
   {
    "id": "X-21",
@@ -5131,8 +5140,11 @@
    "accept": "docs/research di C:/Users/Tristan/Downloads/project-pkl/project-team-management/docs/RISET.md memuat ringkasan SEMUA bagian 01-11 Petunjuk_Teknis_Project_Team_Management_Laravel.docx dan 31 tabel + 3 role + 39 permission + 9 menu dari project_team_management_laravel.sql; versi dan cara pasang dari sumber resmi bertanggal (laravel.com/docs/13.x, yajrabox 13, laraveldebugbar.com, Bootstrap 5.3, SortableJS, FullCalendar); alat lokal dicek (PHP 8.3+, Composer, MySQL 8 lewat Docker, Node); skill desain yang dipakai dipilih setelah membaca isi skill yang tersedia (frontend-design, impeccable, design-taste-frontend, emil-design-eng, design:design-system) dan alasannya dicatat",
    "how": "baca docx lengkap (python zipfile) dan SQL; Read SKILL.md tiap skill desain; catat di DECISIONS Nadi dan docs proyek",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T18:49:25"
+   "status": "done",
+   "created": "2026-11-11T18:49:25",
+   "started": "2026-11-11T23:00:34",
+   "done": "2026-11-11T23:00:34",
+   "result": "project-team-management/docs/RISET.md (11 bagian, 31 tabel, 3 role 39/27/11, 39 permission, 9+23 menu, versi resmi bertanggal, alat lokal PHP 8.4.16/Composer 2.9.5/Node 24/MySQL 8.4.13 Docker, skill desain dipilih); LEARN + DECISIONS LV-00"
   },
   {
    "id": "LV-01",
@@ -5327,8 +5339,11 @@
    "accept": "README dan skill yang relevan di repositori kumpulan skill video milik zhuyansen di GitHub (alamat lengkap di memori lokal project-video-demo-v2) dibaca dari sumber primer (bukan ingatan): daftar skill, cara pasang, cara pakai, batasan; dipilih skill untuk rekaman layar + penyuntingan + caption + audio; dicoba sekali pada klip uji pendek dari aplikasi Nadi yang berjalan; catatan URL + tanggal di loop/LEARN.md dan pilihan di loop/DECISIONS.md",
    "how": "baca repo, pasang skill yang dipilih, uji klip 15 detik",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T20:34:43"
+   "status": "done",
+   "created": "2026-11-11T20:34:43",
+   "started": "2026-11-11T23:07:23",
+   "done": "2026-11-11T23:07:23",
+   "result": "kumpulan skill video zhuyansen dibaca dari sumber (README 736 baris, uji 16 skill); dipilih cursorcam (rekam) + devrel-video skill-video-studio (caption SRT, musik, master -16 LUFS, QA); klip uji proposal/video-v2/uji/uji-klip-15dtk.mp4 15,0 dtk 1920x1080 60fps -15,3 LUFS; 4 temuan untuk UAT-02; LEARN + DECISIONS"
   },
   {
    "id": "Q-44",
