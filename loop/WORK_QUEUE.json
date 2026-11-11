@@ -5069,8 +5069,11 @@
    "accept": "docs/quality/ancaman-mod.md (STRIDE per komponen) dan setiap ancaman punya tes atau batas; batas per usaha (mod, catatan, perubahan per jam, ukuran) ditegakkan database dan diuji merah sengaja sekali",
    "how": "tes SQL",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T16:53:47"
+   "status": "done",
+   "created": "2026-11-11T16:53:47",
+   "started": "2026-11-11T22:21:10",
+   "done": "2026-11-11T22:21:10",
+   "result": "docs/quality/ancaman-mod.md (STRIDE A1-A19, setiap bukti diverifikasi ada); supabase/tests/mod_batas.test.sql 11/11 lokal dan produksi (ambang manifest 64 KB, catatan 32 KB, 60 draf/jam, 20.000 catatan/koleksi, penjagaan database saat pengawas dilewati); merah sekali dengan ambang digeser (P0429)"
   },
   {
    "id": "X-20",
@@ -5338,8 +5341,11 @@
    "accept": "tes SQL statis gagal bila ada fungsi atau kebijakan di public/app yang membaca kerja_pelaksana tanpa lepas_at atau divisi_anggota tanpa keluar_at (dibuat merah sekali dengan fungsi contoh); indeks parsial baris aktif (kerja_pelaksana orang_id where lepas_at is null, divisi_anggota orang_id where keluar_at is null) lewat migrasi; lulus lokal dan produksi",
    "how": "pola supabase/tests/klaim_fungsi_q23.test.sql; migrasi kecil, jalur mode commit akhir iterasi",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T21:28:35"
+   "status": "done",
+   "created": "2026-11-11T21:28:35",
+   "started": "2026-11-11T22:07:29",
+   "done": "2026-11-11T22:07:29",
+   "result": "f352dbf: supabase/tests/penanda_keluar.test.sql (merah dengan fungsi contoh, lalu 5/5 lokal dan produksi), migrasi indeks_aktif_x di produksi sidik 0f097409 sama dengan berkas; reset lokal 182 migrasi + 140/140 tes SQL"
   },
   {
    "id": "FIX-CI-1",
@@ -5352,9 +5358,11 @@
    "accept": "tes unit baru membaca contoh resmi dengan akhir baris LF dan CRLF (merah sebelum perbaikan di Windows); periksaPayroll menerima keduanya (dan BOM UTF-8); langkah efaktur di CI tidak lagi galat karena lxml (dipasang di workflow atau dilewati dengan jujur); workflow CI lulus di push berikutnya",
    "how": "src/lib/gaji/transfer.ts baris split; .github/workflows/ci.yml",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-11-11T21:31:03",
-   "started": "2026-11-11T21:31:03"
+   "started": "2026-11-11T21:31:03",
+   "done": "2026-11-11T22:07:29",
+   "result": "825ce60: periksaPayroll menerima LF/CRLF/BOM (tes baru merah dulu di Windows, lalu lulus), ci.yml memasang lxml==6.1.3; workflow CI run 43042915159 di push 2f960f6 completed success (merah sejak 6 Nov)"
   }
  ]
 }
