@@ -189,3 +189,12 @@ Hal yang dipelajari dari sumber primer, dengan URL dan tanggal akses. Tulis sebe
 - https://mekari.com/customer-service/ (dibaca 6 Nov 2026): pusat bantuan di https://help-center.mekari.com/hc/id, buku panduan, blog dan catatan rilis per produk, live chat, WhatsApp.
 - Sitemap resmi https://www.talenta.co/page-sitemap*.xml, https://www.jurnal.id/page-sitemap*.xml, https://klikpajak.id/page-sitemap*.xml (6 Nov 2026): alat gratis /tool-gratis/ (kalkulator-pph21, kalkulator-gaji-bersih, kalkulator-lembur, kalkulator-thr, kalkulator-pesangon, kalkulator-bonus, kalkulator-roi, daftar-umr, slip-gaji-online, shift-generator, dokumen-hr, kamus-hr), jurnal.id invoice-generator, ai-invoice-generator, bill-of-material-generator, kalkulator-landed-cost-online, download-template-laporan, klikpajak.id kalkulator-pph-21, kalkulator-pph-badan, cek-validasi-npwp.
 - Next 16 docs lokal 01-getting-started/08-caching.md: nilai per permintaan (tanggal hari ini) di halaman Cache Components memakai await connection() di dalam Suspense.
+
+## 11 Nov 2026: ekstensi aman (Nadi Mod), X-01
+- MCP Security Best Practices 2025-11-25 https://modelcontextprotocol.io/specification/2025-11-25/basic/security_best_practices : tanpa token passthrough, verifikasi setiap permintaan, scope minimal, blokir IP privat untuk SSRF.
+- OWASP LLM01:2025 https://genai.owasp.org/llmrisk/llm01-prompt-injection/ : persetujuan manusia untuk tindakan berisiko, tandai konten eksternal, validasi keluaran deterministik.
+- Odoo 18 module manifest + security https://www.odoo.com/documentation/18.0/developer/reference/backend/module.html , .../security.html : manifest berversi, hak akses aditif, record rule per baris.
+- Shopify checkout UI extensions https://shopify.dev/docs/api/checkout-ui-extensions : sandbox Web Worker, komponen tetap.
+- Airtable field types https://support.airtable.com/docs/supported-field-types-in-airtable-overview : 28 tipe, 4 tipe hitung.
+- Supabase RLS + RLS performance (search_docs 11 Nov 2026): (select fn()) initPlan, indeks kolom kebijakan, security definer jangan di skema terekspos tanpa cek peran.
+- Supabase CLI 3.1.0 (npx supabase@latest --version, 11 Nov 2026) untuk Supabase lokal; create_project ditolak penjaga loop (alat yang bisa menagih).

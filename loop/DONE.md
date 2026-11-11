@@ -17,6 +17,7 @@ Loop berhenti hanya saat `python -I loop/done_check.py` menulis `loop/DONE_OK`. 
    - asisten AI pelanggan terhubung lewat MCP dan membuat usulan.
 3. Gerbang kualitas lulus di HEAD, semua commit ter-push, produksi menjawab 200.
 4. Tidak ada tugas `fix` terbuka.
+5. Dua proyek siap UAT (Tristan 11 Nov 2026): Nadi dan project-team-management (Laravel, persis Petunjuk Teknis + SQL) selesai 100%, masing-masing punya dokumentasi UAT dengan bukti dan video demo rekaman aplikasi yang benar-benar berjalan (tugas LV-00..LV-10, UAT-01, UAT-02).
 
 Ambang kualitas yang berlaku untuk setiap fitur, bukan hanya di akhir:
 - **Uji**: tes unit untuk logika, tes SQL untuk setiap tabel atau fungsi baru (termasuk isolasi tenant), e2e untuk alur utama.

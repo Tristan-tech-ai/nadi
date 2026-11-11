@@ -216,6 +216,9 @@ def git(*args):
         return ""
 
 
+TANPA_COMMIT = os.path.join(L, "TANPA_COMMIT")
+
+
 def repo_problems():
     msgs = []
     head = git("rev-parse", "HEAD")
@@ -223,6 +226,14 @@ def repo_problems():
         g = json.load(open(GATE, encoding="utf-8"))
     except Exception:
         g = {}
+    # Mode TANPA_COMMIT (Tristan 11 Nov 2026, juri sedang menilai repo dan produksi): tidak ada commit dan push.
+    # Gerbang tetap wajib: gate.sh lulus pada working tree dalam 60 menit terakhir.
+    if os.path.exists(TANPA_COMMIT):
+        if not (g.get("ok") and fresh(GATE, GATE_RED_MIN)) and not fresh(GATE_RED, GATE_RED_MIN):
+            msgs.append("GERBANG (tanpa commit): `bash loop/gate.sh` belum lulus pada working tree dalam 60 menit terakhir. Jalankan dan perbaiki sampai LULUS.")
+        if not fresh(STATE, STATE_MIN):
+            msgs.append("PENJAGA: loop/STATE.md tidak diperbarui dalam 30 menit. Tulis keadaan sekarang, tugas berikutnya, dan pemblokir sebelum menjadwalkan.")
+        return msgs
     dirty = [l for l in git("status", "--porcelain", "--", "apps", "packages", "supabase", "scripts").splitlines() if l.strip()]
     gate_bad = (not g.get("ok")) or g.get("head") != head or g.get("kode_belum_commit", 1) != 0 or dirty
     if gate_bad and not fresh(GATE_RED, GATE_RED_MIN):
