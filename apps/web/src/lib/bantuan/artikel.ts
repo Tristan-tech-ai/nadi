@@ -119,6 +119,34 @@ export const TUGAS: ArtikelTugas[] = [
       "Setujui usulannya. Semua datamu juga bisa diunduh kembali dari halaman yang sama.",
     ],
     tautan: [{ href: "/app/pindah", label: "Pindah dari aplikasi lain" }], cari: "migrasi impor jurnal accurate excel csv pindah" },
+  { slug: "menambah-fitur", kategori: "tambahan", judul: "Menambah fitur untuk usahamu", ringkas: "Nyalakan modul bawaan atau pasang paket resmi tanpa mengulang dari awal.",
+    langkah: [
+      "Buka Tambah fitur di ruang Fitur tambahan.",
+      "Di Modul bawaan, nyalakan modul yang dipakai usahamu, misalnya kasir atau janji temu.",
+      "Di Paket resmi, paket yang cocok untuk jenis usahamu tampil paling atas dengan tanda Cocok untuk usahamu. Pilih Lihat rincian untuk melihat isian, alur status, dan siapa yang bisa mengisi.",
+      "Pilih Pasang. Paket muncul di Fitur tambahan dan siap diisi.",
+    ],
+    catatan: "Melepas paket hanya menyembunyikannya dari menu; catatannya tetap tersimpan dan tampil lagi saat dipasang kembali.",
+    tautan: [{ href: "/app/tambah-fitur", label: "Tambah fitur" }], cari: "tambah fitur paket resmi modul pasang plugin ekstensi" },
+  { slug: "buat-fitur-sendiri", kategori: "tambahan", judul: "Membuat fitur sendiri tanpa kode", ringkas: "Susun bagian dan isian lewat formulir, atau impor berkas fitur dari usaha lain.",
+    langkah: [
+      "Buka Tambah fitur, lalu pilih Susun lewat formulir, tanpa menulis JSON.",
+      "Tulis nama fitur, nama bagian, dan isiannya. Isian Teks pendek pertama menjadi judul catatan.",
+      "Bila perlu alur, tulis tahap status dipisah koma, misalnya Belum, Dikerjakan, Selesai.",
+      "Pilih Periksa dan simpan draf. Nadi memeriksanya; draf yang lolos diterapkan dari daftar draf di Tambah fitur.",
+      "Punya berkas fitur dari usaha lain? Pilih berkasnya di bagian Buat sendiri; berkas itu juga menjadi draf yang kamu periksa dulu.",
+    ],
+    catatan: "Setiap fitur punya riwayat versi. Bila perubahan salah, buka Versi dan berkas lalu pilih Kembalikan ke versi sebelumnya.",
+    tautan: [{ href: "/app/tambah-fitur/buat", label: "Susun fitur" }, { href: "/app/tambah-fitur", label: "Tambah fitur" }], cari: "buat fitur sendiri formulir manifest json impor berkas versi kembalikan" },
+  { slug: "fitur-dengan-ai", kategori: "ai", judul: "Membuat fitur dengan AI-mu", ringkas: "AI-mu menyusun draf fitur lewat MCP; kamu yang menerapkan.",
+    langkah: [
+      "Sambungkan AI-mu ke Nadi lewat MCP dari halaman Siapkan usaha.",
+      "Di Tambah fitur, bagian Buat dengan AI-mu, pilih Salin prompt untuk AI-mu lalu tempel ke AI-mu bersama kebutuhanmu, misalnya dokumen alur kerja tim.",
+      "AI-mu membaca aturan fitur, menguji susunannya, dan menulis draf. AI tidak bisa menerapkan, mematikan, atau mengubah fitur yang sudah aktif.",
+      "Draf muncul di Tambah fitur. Periksa alasannya bila ada, lalu pilih Terapkan.",
+    ],
+    catatan: "Setiap draf dari AI diperiksa pemeriksa Nadi yang bukan AI. Isi catatan yang dibaca AI ditandai sebagai data, bukan perintah.",
+    tautan: [{ href: "/app/tambah-fitur", label: "Tambah fitur" }, { href: "/app/siapkan", label: "Siapkan usaha" }], cari: "ai mcp chatgpt gemini buat fitur draf otomatis" },
 ];
 
 const slugHalaman = (href: string) => (href === "/app" ? "feed-keputusan" : href.replace(/^\/app\//, "").replace(/\//g, "-"));

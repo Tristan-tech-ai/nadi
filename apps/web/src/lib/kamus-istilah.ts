@@ -60,6 +60,10 @@ export const ISTILAH: Istilah[] = [
   t("lempar", "Lempar", "Istilah Nadi untuk mengirim berkas apa saja (foto nota, Excel, PDF) supaya dibaca dan dijadikan usulan.", [["/app/lempar", "Lempar berkas"]], undefined, "unggah upload"),
   t("mcp", "MCP", "Model Context Protocol: standar terbuka agar aplikasi AI seperti ChatGPT atau Gemini bisa memakai alat dari aplikasi lain, misalnya Nadi.", [["/app/siapkan", "Siapkan dengan AI"]], undefined, "model context protocol ai konektor"),
   t("ocr", "OCR", "Membaca teks dari gambar, misalnya foto struk. Di Nadi, OCR berjalan di HP.", [["/app/klaim", "Klaim pengeluaran"]], undefined, "baca teks foto"),
+  t("fitur-tambahan", "Fitur tambahan", "Fitur di luar menu inti yang dipasang sesuai kebutuhan usahamu: paket resmi, buatan sendiri, atau disusun AI-mu.", [["/app/tambah-fitur", "Tambah fitur"], ["/app/mod", "Fitur tambahan"]], undefined, "mod plugin ekstensi add-on"),
+  t("paket-resmi", "Paket resmi", "Fitur tambahan siap pakai yang disusun dan diuji tim Nadi untuk kebutuhan umum, misalnya log rapat atau armada kendaraan.", [["/app/tambah-fitur", "Tambah fitur"]], undefined, "paket katalog template"),
+  t("manifest-fitur", "Manifest fitur", "Susunan sebuah fitur tambahan dalam bentuk data: bagian, isian, alur status, tampilan, dan siapa yang boleh mengisi. Nadi menjalankannya tanpa kode dari luar.", [["/app/tambah-fitur/buat", "Susun fitur"]], undefined, "json manifest skema mod"),
+  t("draf-fitur", "Draf fitur", "Fitur yang sudah disusun tetapi belum aktif. Draf diperiksa pemeriksa Nadi dan baru dipakai setelah pemilik atau admin menerapkannya.", [["/app/tambah-fitur", "Tambah fitur"]], undefined, "draft terapkan apply"),
 ];
 
 export const istilah = (slug: string) => ISTILAH.find((i) => i.slug === slug) ?? null;
