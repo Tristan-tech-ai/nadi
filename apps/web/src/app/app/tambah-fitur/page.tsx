@@ -6,10 +6,11 @@ import { FiturDipakai } from "@/components/app/fitur-dipakai";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
 import { TombolSalinTeks } from "@/components/app/siapkan";
 import { Pratinjau } from "@/components/app/pratinjau-mod";
-import { FormManifest, TombolAturMod, TombolPasang, TombolTerapkan } from "@/components/app/tambah-fitur";
+import { FormManifest, RiwayatVersi, TombolAturMod, TombolPasang, TombolTerapkan } from "@/components/app/tambah-fitur";
+import { formatTanggalKalender } from "@/lib/format";
 import { bahasaAplikasi } from "@/lib/i18n/server";
 import { asalTautan, resourceMcp } from "@/lib/mcp/http";
-import { KATALOG_RESMI } from "@/lib/mod/katalog";
+import { KATALOG_RESMI, SARAN_PAKET } from "@/lib/mod/katalog";
 import { promptMod } from "@/lib/mod/prompt-mod";
 import { fiturUsaha } from "@/lib/ruang-sesi";
 import { wajibPerusahaan } from "@/lib/sesi";
@@ -19,6 +20,11 @@ import { createClient } from "@/lib/supabase/server";
 // pratinjau, (3) dibuat AI milik pemilik lewat MCP (draf saja), (4) dibuat sendiri. Semua jalan berakhir di draf yang
 // diperiksa pengawas bukan AI dan hanya aktif setelah pemilik/admin menerapkan. Melepas fitur tidak menghapus datanya.
 export const metadata: Metadata = { title: "Tambah fitur" };
+
+// X-15: paket yang disarankan untuk jenis usaha ini tampil lebih dulu, sisanya menurut urutan katalog.
+function urutPaket<T extends { manifest: { kode: string } }>(daftar: readonly T[], saran: readonly string[]): T[] {
+  return [...daftar].sort((a, b) => (saran.includes(a.manifest.kode) ? saran.indexOf(a.manifest.kode) : 99) - (saran.includes(b.manifest.kode) ? saran.indexOf(b.manifest.kode) : 99));
+}
 
 const SUMBER: Record<string, string> = { resmi: "Paket resmi", ai: "AI milikmu", sendiri: "Buatan sendiri", impor: "Impor" };
 
@@ -35,13 +41,17 @@ async function Isi() {
   }
   const supabase = await createClient();
   const h = await headers();
-  const [nyala, { data: usaha }, { data: mod }, { data: draf }, { data: token }] = await Promise.all([
+  const [nyala, { data: usaha }, { data: mod }, { data: draf }, { data: token }, { data: versiMod }] = await Promise.all([
     fiturUsaha(sesi.perusahaanId),
     supabase.from("perusahaan").select("industri").eq("id", sesi.perusahaanId).maybeSingle(),
     supabase.from("mod").select("id, kode, nama, status, sumber, versi_aktif").neq("status", "draf").order("nama"),
     supabase.rpc("mod_draf_daftar"),
     supabase.from("mcp_token").select("nama_klien, dipakai_at").eq("jenis", "akses").is("dicabut_at", null).gt("kedaluwarsa_at", new Date().toISOString()).limit(20),
+    supabase.from("mod_versi").select("mod_id, versi, diterapkan_at").order("versi", { ascending: false }).limit(1000),
   ]);
+  // X-17 riwayat versi per fitur (RLS mod_versi: pemilik/admin).
+  const versiDari = (modId: string) => ((versiMod ?? []) as { mod_id: string; versi: number; diterapkan_at: string }[])
+    .filter((v) => v.mod_id === modId).map((v) => ({ versi: v.versi, at: formatTanggalKalender(v.diterapkan_at.slice(0, 10)) }));
   const terpasang = new Map((mod ?? []).map((m) => [m.kode as string, m]));
   const drafList = (draf ?? []) as { id: string; kode: string; nama: string; sumber: string; status: string; versi_aktif: number | null; alasan: string[] }[];
   const klien = [...new Set((token ?? []).map((t) => t.nama_klien as string))];
@@ -77,13 +87,14 @@ async function Isi() {
         <h2 id="judul-paket" className="text-lg font-semibold">Paket resmi</h2>
         <p className="mt-1 text-sm text-tinta-2">Fitur siap pakai yang disusun dan diuji tim Nadi. Melepas paket hanya menyembunyikannya; catatannya tetap tersimpan.</p>
         <ul className="mt-3 grid gap-3">
-          {KATALOG_RESMI.map(({ manifest: m, untuk, contoh }) => {
+          {urutPaket(KATALOG_RESMI, SARAN_PAKET[(usaha?.industri as string | null) ?? ""] ?? []).map(({ manifest: m, untuk, contoh }) => {
             const ada = terpasang.get(m.kode);
+            const disarankan = (SARAN_PAKET[(usaha?.industri as string | null) ?? ""] ?? []).includes(m.kode);
             return (
               <li key={m.kode} className="rounded-[var(--radius-kartu)] border border-garis p-4" data-paket={m.kode} data-terpasang={ada?.status ?? "belum"}>
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <p className="font-semibold">{m.nama}</p>
+                    <p className="font-semibold">{m.nama}{disarankan && <span className="ml-2 rounded-full border border-garis-kuat px-2 py-0.5 text-xs font-semibold" data-testid="lencana-disarankan">Cocok untuk usahamu</span>}</p>
                     <p className="text-sm text-tinta-2">{m.deskripsi}</p>
                     <p className="mt-1 text-sm">Cocok untuk: {untuk}</p>
                   </div>
@@ -99,6 +110,7 @@ async function Isi() {
                   <Pratinjau m={m} />
                 </details>
                 <Link href={`/app/tambah-fitur/${m.kode}`} className="mt-2 inline-block text-sm font-semibold underline underline-offset-4">Lihat rincian {m.nama}</Link>
+                {ada && <RiwayatVersi id={ada.id as string} kode={m.kode} nama={m.nama} aktif={(ada.versi_aktif as number | null) ?? null} versi={versiDari(ada.id as string)} />}
               </li>
             );
           })}
@@ -117,7 +129,7 @@ async function Isi() {
 
       <section id="sendiri" aria-labelledby="judul-sendiri" className="mt-10 scroll-mt-20">
         <h2 id="judul-sendiri" className="text-lg font-semibold">Buat sendiri</h2>
-        <p className="mt-1 text-sm text-tinta-2">Tempel isi fitur (manifest JSON). Nadi memeriksanya dengan aturan yang sama dengan buatan AI, lalu menyimpannya sebagai draf.</p>
+        <p className="mt-1 text-sm text-tinta-2">Impor berkas fitur dari usaha lain, atau tempel isi fitur (manifest JSON). Nadi memeriksanya dengan aturan yang sama dengan buatan AI, lalu menyimpannya sebagai draf.</p>
         <div className="mt-3"><FormManifest /></div>
       </section>
 
@@ -126,12 +138,15 @@ async function Isi() {
           <h2 id="judul-milikmu" className="text-lg font-semibold">Fitur buatanmu</h2>
           <ul className="mt-2 divide-y divide-garis border-y border-garis text-sm">
             {(mod ?? []).filter((m) => !KATALOG_RESMI.some((p) => p.manifest.kode === m.kode)).map((m) => (
-              <li key={m.id as string} className="flex flex-wrap items-center justify-between gap-3 py-3" data-mod={m.kode}>
-                <span><span className="font-semibold" data-pengguna>{m.nama}</span> <span className="text-tinta-2">({SUMBER[m.sumber as string] ?? m.sumber}, versi {m.versi_aktif}, {m.status === "aktif" ? "aktif" : "dilepas"})</span></span>
-                <span className="flex flex-wrap items-center gap-2">
-                  {m.status === "aktif" && <Link href={`/app/mod/${m.kode}`} className="font-semibold underline underline-offset-4">Buka</Link>}
-                  <TombolAturMod id={m.id as string} aksi={m.status === "aktif" ? "matikan" : "nyalakan"} nama={m.nama as string} />
-                </span>
+              <li key={m.id as string} className="py-3" data-mod={m.kode}>
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <span><span className="font-semibold" data-pengguna>{m.nama}</span> <span className="text-tinta-2">({SUMBER[m.sumber as string] ?? m.sumber}, versi {m.versi_aktif}, {m.status === "aktif" ? "aktif" : "dilepas"})</span></span>
+                  <span className="flex flex-wrap items-center gap-2">
+                    {m.status === "aktif" && <Link href={`/app/mod/${m.kode}`} className="font-semibold underline underline-offset-4">Buka</Link>}
+                    <TombolAturMod id={m.id as string} aksi={m.status === "aktif" ? "matikan" : "nyalakan"} nama={m.nama as string} />
+                  </span>
+                </div>
+                <RiwayatVersi id={m.id as string} kode={m.kode as string} nama={m.nama as string} aktif={(m.versi_aktif as number | null) ?? null} versi={versiDari(m.id as string)} />
               </li>
             ))}
           </ul>

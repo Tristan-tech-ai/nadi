@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useId } from "react";
-import { aturMod, pasangPaket, simpanManifest, terapkanDraf, type HasilTambah } from "@/app/app/tambah-fitur/actions";
+import { aturMod, kembalikanVersi, pasangPaket, simpanManifest, terapkanDraf, type HasilTambah } from "@/app/app/tambah-fitur/actions";
 import { Tombol } from "@/components/ui/tombol";
 
 // X-06: tombol dan formulir halaman Tambah fitur. Hasil dari server tampil sebagai teks (status atau galat + alasan pengawas).
@@ -35,13 +35,36 @@ export const TombolAturMod = ({ id, aksi, nama }: { id: string; aksi: "matikan" 
 export const TombolTerapkan = ({ id, nama }: { id: string; nama: string }) =>
   <SatuTombol aksi={terapkanDraf} isian={{ id }} label="Terapkan" ragam="utama" nama={`Terapkan ${nama}`} />;
 
+/** X-17 riwayat versi satu fitur: setiap versi yang pernah diterapkan, dengan tombol kembalikan untuk versi selain yang aktif. */
+export function RiwayatVersi({ id, kode, nama, aktif, versi }: { id: string; kode: string; nama: string; aktif: number | null; versi: { versi: number; at: string }[] }) {
+  return (
+    <details className="mt-2 text-sm" data-testid={`riwayat-${kode}`}>
+      <summary className="cursor-pointer font-semibold">Versi dan berkas</summary>
+      <div className="mt-2 grid gap-2">
+        <a href={`/app/tambah-fitur/ekspor?kode=${kode}`} className="w-fit underline underline-offset-4" download>Unduh berkas fitur {nama}</a>
+        <p className="text-tinta-2">Berkas hanya berisi susunan fitur, tanpa catatan dan tanpa data usaha. Bisa diimpor di usaha lain lewat Buat sendiri.</p>
+        <ul className="divide-y divide-garis border-y border-garis">
+          {versi.map((v) => (
+            <li key={v.versi} className="flex flex-wrap items-center justify-between gap-2 py-2" data-versi={v.versi}>
+              <span>Versi {v.versi} <span className="text-tinta-2">diterapkan {v.at}</span>{v.versi === aktif && <span className="ml-2 font-semibold">(aktif)</span>}</span>
+              {v.versi !== aktif && <SatuTombol aksi={kembalikanVersi} isian={{ id, versi: String(v.versi) }} label={`Kembalikan ke versi ${v.versi}`} nama={`Kembalikan ${nama} ke versi ${v.versi}`} />}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </details>
+  );
+}
+
 export function FormManifest() {
   const [h, kirim, sibuk] = useActionState<HasilTambah, FormData>(simpanManifest, null);
   const id = useId();
   return (
     <form action={kirim} className="grid gap-3" aria-label="Simpan fitur buatan sendiri">
-      <label htmlFor={id} className="text-sm text-tinta-2">Isi fitur (manifest JSON)</label>
-      <textarea id={id} name="manifest" required rows={10} maxLength={65536} spellCheck={false}
+      <label htmlFor={`${id}-b`} className="text-sm text-tinta-2">Impor berkas fitur (.json dari Unduh berkas fitur di usaha lain)</label>
+      <input id={`${id}-b`} name="berkas" type="file" accept=".json,application/json" className="text-sm" />
+      <label htmlFor={id} className="text-sm text-tinta-2">Atau tempel isi fitur (manifest JSON)</label>
+      <textarea id={id} name="manifest" rows={10} maxLength={65536} spellCheck={false}
         className="w-full rounded-[var(--radius-isian)] border border-garis-kuat bg-kertas p-2 font-mono text-sm" placeholder='{"skema": 1, "kode": "...", ...}' />
       <div className="flex flex-wrap items-center gap-3">
         <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? "Memeriksa..." : "Periksa dan simpan draf"}</Tombol>

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { paketResmi } from "@/lib/mod/katalog";
+import { bacaBerkasMod } from "@/lib/mod/berkas";
 import { periksaManifest } from "@/lib/mod/pengawas";
 import { createClient } from "@/lib/supabase/server";
 
@@ -45,25 +46,38 @@ export async function aturMod(_: HasilTambah, form: FormData): Promise<HasilTamb
   return { pesan: aksi === "matikan" ? "Dilepas dari menu. Datanya tetap tersimpan dan kembali saat dipasang lagi." : "Dipasang lagi." };
 }
 
-/** Buat sendiri: manifest JSON diperiksa pengawas yang sama dengan buatan AI; tetap disimpan sebagai draf beserta alasannya. */
+/** Buat sendiri atau impor berkas (X-17): manifest diperiksa pengawas yang sama dengan buatan AI; tetap disimpan sebagai draf
+ * beserta alasannya. Berkas impor boleh bungkus nadi-mod dari Unduh berkas fitur atau manifest polos. */
 export async function simpanManifest(_: HasilTambah, form: FormData): Promise<HasilTambah> {
-  const teks = String(form.get("manifest") ?? "");
-  if (teks.length > 65_536) return { galat: "Isi fitur maksimal 64 KB." };
-  let m: unknown;
-  try {
-    m = JSON.parse(teks);
-  } catch {
-    return { galat: "Isi bukan JSON yang sah. Periksa tanda kutip dan koma." };
-  }
+  const berkas = form.get("berkas");
+  const dariBerkas = berkas instanceof File && berkas.size > 0;
+  if (dariBerkas && berkas.size > 70_000) return { galat: "Berkas fitur maksimal 64 KB." };
+  const teks = dariBerkas ? await berkas.text() : String(form.get("manifest") ?? "");
+  if (!dariBerkas && teks.length > 65_536) return { galat: "Isi fitur maksimal 64 KB." };
+  if (!teks.trim()) return { galat: "Tempel isi fitur atau pilih berkas fitur dulu." };
+  const baca = bacaBerkasMod(teks);
+  if ("galat" in baca) return { galat: baca.galat };
+  const m = baca.manifest;
   const alasan = periksaManifest(m);
-  if (typeof m !== "object" || m === null || Array.isArray(m)) return { galat: "Isi fitur harus berupa objek JSON.", alasan };
   const supabase = await createClient();
-  const { error } = await supabase.rpc("mod_draf_simpan", { p_manifest: m, p_sumber: "sendiri", p_alasan: alasan });
+  const { error } = await supabase.rpc("mod_draf_simpan", { p_manifest: m, p_sumber: dariBerkas ? "impor" : "sendiri", p_alasan: alasan });
   if (error) return galatDb(error);
   segarkan();
   return alasan.length
     ? { galat: "Draf tersimpan, tetapi belum bisa diterapkan. Perbaiki dulu:", alasan }
     : { pesan: "Draf lolos pemeriksaan dan menunggu kamu terapkan di bawah." };
+}
+
+/** X-17: kembalikan fitur ke versi yang pernah diterapkan (catatan tidak berubah; isian yang tidak ada di versi itu disembunyikan). */
+export async function kembalikanVersi(_: HasilTambah, form: FormData): Promise<HasilTambah> {
+  const id = String(form.get("id") ?? "");
+  const versi = Number(form.get("versi"));
+  if (!UUID.test(id) || !Number.isInteger(versi) || versi < 1) return { galat: "Versi tidak ditemukan." };
+  const supabase = await createClient();
+  const { error } = await supabase.rpc("mod_atur", { p_mod: id, p_aksi: "rollback", p_versi: versi });
+  if (error) return galatDb(error);
+  segarkan();
+  return { pesan: `Dikembalikan ke versi ${versi}.` };
 }
 
 export async function terapkanDraf(_: HasilTambah, form: FormData): Promise<HasilTambah> {
