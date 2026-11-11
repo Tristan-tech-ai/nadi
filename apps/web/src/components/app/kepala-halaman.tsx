@@ -10,8 +10,10 @@ import { tampilkanMulai } from "@/app/app/mulai-actions";
 // dan tombol "?" yang membuka bantuan halaman ini (guna, halaman lain di ruang yang sama, panduan peran, cari fitur).
 // Judul tetap dari kamus halaman (sudah diterjemahkan dan dipakai tes); kalimat tujuan bawaan dari peta ruang.
 // Dipanggil di dalam <Suspense> halaman (membaca sesi). Tes statis src/lib/kepala-halaman.test.ts menolak halaman /app tanpa komponen ini.
-export async function KepalaHalaman({ jalur, judul, ket, aksi, children }: {
+export async function KepalaHalaman({ jalur, judul, ket, aksi, children, labelJejak }: {
   jalur: string; judul: ReactNode; ket?: ReactNode; aksi?: ReactNode; children?: ReactNode;
+  /** Label halaman di jejak untuk halaman dinamis (mis. nama fitur tambahan); bawaan label peta ruang. */
+  labelJejak?: ReactNode;
 }) {
   const sesi = await bacaSesi();
   const b = await bahasaAplikasi(sesi?.bahasa ?? null);
@@ -28,7 +30,7 @@ export async function KepalaHalaman({ jalur, judul, ket, aksi, children }: {
           <ol className="flex flex-wrap items-center gap-1">
             <li><Link href={`/app/menu#menu-${ruang.id}`} className="underline-offset-4 hover:text-tinta hover:underline">{ruang.label[b]}</Link></li>
             <li aria-hidden>/</li>
-            <li aria-current="page" className="text-tinta">{kini.label[b]}</li>
+            <li aria-current="page" className="text-tinta">{labelJejak ?? kini.label[b]}</li>
           </ol>
         </nav>
       )}

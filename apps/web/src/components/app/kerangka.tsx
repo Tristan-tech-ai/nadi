@@ -6,8 +6,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ListIcon, LifebuoyIcon, PushPinIcon, PushPinSlashIcon, UsersThreeIcon, WalletIcon, XIcon } from "@phosphor-icons/react";
-import { IKON_HALAMAN, IKON_RUANG, type Ikon } from "@/components/app/ikon-halaman";
+import { ListIcon, LifebuoyIcon, PuzzlePieceIcon, PushPinIcon, PushPinSlashIcon, UsersThreeIcon, WalletIcon, XIcon } from "@phosphor-icons/react";
+import { IKON_HALAMAN, IKON_MOD_KOMPONEN, IKON_RUANG, type Ikon } from "@/components/app/ikon-halaman";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { SEMUA_HALAMAN, halamanDari, type Ruang } from "@/lib/ruang";
 import { PERISTIWA_SEMAT, SEMATAN_BAWAAN, bacaSematan, gantiSematan } from "@/lib/sematan";
@@ -30,9 +30,16 @@ export function bilahBawah(peran: string, b: Bahasa): Butir[] {
     { href: "/app/invoice", label: t("Uang", "Money"), Ikon: WalletIcon }, { href: "/app/orang", label: t("Orang", "People"), Ikon: UsersThreeIcon }];
 }
 
-function IkonHalaman({ href, size = 16 }: { href: string; size?: number }) {
-  const I = IKON_HALAMAN[href] ?? ListIcon;
+function IkonHalaman({ href, ikon, size = 16 }: { href: string; ikon?: string; size?: number }) {
+  const I = (ikon ? IKON_MOD_KOMPONEN[ikon] ?? PuzzlePieceIcon : undefined) ?? IKON_HALAMAN[href] ?? (href.startsWith("/app/mod/") ? PuzzlePieceIcon : ListIcon);
   return <I size={size} aria-hidden className="shrink-0" />;
+}
+
+/** Halaman aktif dari daftar ruang yang benar-benar tampil (termasuk halaman dinamis Fitur tambahan): awalan terpanjang. */
+function cocokDi(ruang: Ruang[], jalur: string): { href: string; ruang: string } | undefined {
+  const semua = ruang.flatMap((r) => r.halaman.map((x) => ({ href: x.href, ruang: r.id })))
+    .filter((x) => (x.href === "/app" ? jalur === "/app" : jalur === x.href || jalur.startsWith(`${x.href}/`)));
+  return semua.sort((a, b) => b.href.length - a.href.length)[0];
 }
 
 /** Lencana hanya untuk hal yang bisa ditindak (mis. usulan menunggu), tidak tampil bila nol (NN/g, indikator bersifat kondisional). */
@@ -46,8 +53,8 @@ const aktifDi = (jalur: string, href: string) => (href === "/app" ? jalur === "/
 
 function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, lencana = {}, labelLencana = "", disemat, onSemat, labelSemat = "" }: { ruang: Ruang[]; jalur: string; b: Bahasa; guna?: boolean; lipat?: boolean; onPilih?: () => void; lencana?: Record<string, number>; labelLencana?: string; disemat?: ReadonlySet<string>; onSemat?: (href: string) => void; labelSemat?: string }) {
   const jumlahRuang = (r: Ruang) => r.halaman.reduce((a, x) => a + (disemat?.has(x.href) ? 0 : lencana[x.href] ?? 0), 0);
-  const kini = halamanDari(jalur)?.href;
-  const ruangKini = halamanDari(jalur)?.ruang;
+  const kini = cocokDi(ruang, jalur)?.href ?? halamanDari(jalur)?.href;
+  const ruangKini = cocokDi(ruang, jalur)?.ruang ?? halamanDari(jalur)?.ruang;
   if (lipat) {
     // Sidebar: hanya ruang yang sedang dibuka terlipat terbuka; ruang lain cukup satu baris yang bisa diketuk.
     return (
@@ -62,8 +69,8 @@ function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, le
               <ul className="mb-2 ml-6 mt-0.5 grid gap-0.5 border-l border-garis pl-2">{r.halaman.map((x) => (
                 <li key={x.href} className="group/item flex items-center gap-1">
                   <Link href={x.href} aria-current={kini === x.href ? "page" : undefined}
-                    className={`flex min-w-0 flex-1 items-center gap-2 rounded-[var(--radius-isian)] px-2 py-1.5 text-sm hover:bg-kertas-2 ${kini === x.href ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}><IkonHalaman href={x.href} /><span className="truncate">{x.label[b]}</span>{!disemat?.has(x.href) && <Lencana n={lencana[x.href]} label={labelLencana} />}</Link>
-                  {onSemat && !disemat?.has(x.href) && (
+                    className={`flex min-w-0 flex-1 items-center gap-2 rounded-[var(--radius-isian)] px-2 py-1.5 text-sm hover:bg-kertas-2 ${kini === x.href ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}><IkonHalaman href={x.href} ikon={x.ikon} /><span className="truncate" data-pengguna={x.ikon !== undefined || x.href.startsWith("/app/mod/") ? "" : undefined}>{x.label[b]}</span>{!disemat?.has(x.href) && <Lencana n={lencana[x.href]} label={labelLencana} />}</Link>
+                  {onSemat && !disemat?.has(x.href) && !x.href.startsWith("/app/mod/") && (
                     <button type="button" title={labelSemat.replace("{x}", x.label[b])} onClick={() => onSemat(x.href)}
                       className="inline-flex size-8 shrink-0 items-center justify-center rounded-full text-tinta-2 opacity-0 hover:bg-kertas-2 hover:text-tinta focus-visible:opacity-100 group-hover/item:opacity-100">
                       <PushPinIcon size={16} aria-hidden /><span className="sr-only">{labelSemat.replace("{x}", x.label[b])}</span>
@@ -89,7 +96,7 @@ function DaftarRuang({ ruang, jalur, b, guna = false, lipat = false, onPilih, le
               <li key={x.href}>
                 <Link href={x.href} onClick={onPilih} aria-current={kini === x.href ? "page" : undefined}
                   className={`block rounded-[var(--radius-isian)] px-2 py-2 text-sm hover:bg-kertas-2 ${kini === x.href ? "bg-kertas-2 font-semibold text-tinta" : "text-tinta"}`}>
-                  <span className="flex items-center gap-2"><IkonHalaman href={x.href} />{x.label[b]}<Lencana n={lencana[x.href]} label={labelLencana} /></span>{guna && <span className="block text-xs font-normal text-tinta-2">{x.guna[b]}</span>}
+                  <span className="flex items-center gap-2"><IkonHalaman href={x.href} ikon={x.ikon} />{x.label[b]}<Lencana n={lencana[x.href]} label={labelLencana} /></span>{guna && <span className="block text-xs font-normal text-tinta-2">{x.guna[b]}</span>}
                 </Link>
               </li>))}</ul>
           </section>
@@ -137,7 +144,7 @@ export function Kerangka({ ruang, mati = [], peran, bahasa: b, teks, lencana: le
   const [menu, setMenu] = useState(false);
   const [panel, setPanel] = useState<string | null>(null);
   const tutupMenu = useRef<HTMLButtonElement>(null);
-  const ruangKini = halamanDari(jalur)?.ruang;
+  const ruangKini = cocokDi(ruang, jalur)?.ruang ?? halamanDari(jalur)?.ruang;
   // Pindah halaman menutup lembar dan panel (disetel saat render, pola React untuk state yang bergantung pada nilai lain); Escape juga menutup.
   const [jalurTerakhir, setJalurTerakhir] = useState(jalur);
   if (jalurTerakhir !== jalur) { setJalurTerakhir(jalur); setMenu(false); setPanel(null); }

@@ -5,9 +5,10 @@ import {
   CalculatorIcon, CalendarCheckIcon, CalendarIcon, CalendarXIcon, CashRegisterIcon, ChartLineUpIcon, ChartPieSliceIcon, ChatCircleTextIcon,
   ClipboardTextIcon, CoinsIcon, CubeIcon, EnvelopeSimpleIcon, EyeIcon, FactoryIcon, FileTextIcon, FlowArrowIcon, GearSixIcon, GiftIcon,
   GraduationCapIcon, HandbagIcon, HandCoinsIcon, HandshakeIcon, HeadsetIcon, IdentificationCardIcon, KanbanIcon, LightbulbIcon, LightningIcon,
-  ListChecksIcon, LockKeyIcon, MapTrifoldIcon, MegaphoneIcon, MoneyIcon, PackageIcon, PaperPlaneRightIcon, PaperPlaneTiltIcon, ReceiptIcon,
+  ListChecksIcon, LockKeyIcon, MapTrifoldIcon, MegaphoneIcon, MoneyIcon, PackageIcon, PaperPlaneRightIcon, PaperPlaneTiltIcon, PuzzlePieceIcon, ReceiptIcon,
   ScalesIcon, ShieldCheckIcon, ShoppingCartIcon, SignatureIcon, SparkleIcon, StampIcon, StorefrontIcon, StudentIcon, SunHorizonIcon, TargetIcon,
   ToolboxIcon, TrayIcon, UserListIcon, UserPlusIcon, UsersThreeIcon, VideoCameraIcon, WalletIcon, WrenchIcon, type IconProps,
+  FirstAidIcon, FolderIcon, HouseIcon, KeyIcon, PlusSquareIcon, SquaresFourIcon, TruckIcon,
 } from "@phosphor-icons/react";
 import type { ComponentType } from "react";
 
@@ -15,7 +16,7 @@ export type Ikon = ComponentType<IconProps>;
 
 export const IKON_RUANG: Record<string, Ikon> = {
   "hari-ini": SunHorizonIcon, uang: WalletIcon, jual: StorefrontIcon, barang: PackageIcon, orang: UsersThreeIcon,
-  tempat: VideoCameraIcon, dokumen: FileTextIcon, otomasi: LightningIcon, pengaturan: GearSixIcon,
+  tempat: VideoCameraIcon, dokumen: FileTextIcon, otomasi: LightningIcon, tambahan: SquaresFourIcon, pengaturan: GearSixIcon,
 };
 
 export const IKON_HALAMAN: Record<string, Ikon> = {
@@ -32,6 +33,17 @@ export const IKON_HALAMAN: Record<string, Ikon> = {
   "/app/survei": ListChecksIcon, "/app/serah-terima": ArrowsLeftRightIcon, "/app/ilmu": LightbulbIcon,
   "/app/mata": EyeIcon, "/app/peta-usaha": MapTrifoldIcon,
   "/app/surat": EnvelopeSimpleIcon, "/app/surat-keluar": PaperPlaneRightIcon, "/app/tanda-tangan": SignatureIcon, "/app/kepatuhan": ShieldCheckIcon,
-  "/app/alur": FlowArrowIcon, "/app/siapkan": SparkleIcon, "/app/pindah": ArrowsClockwiseIcon, "/app/mitra": HandshakeIcon,
+  "/app/mod": PuzzlePieceIcon, "/app/tambah-fitur": PlusSquareIcon, "/app/alur": FlowArrowIcon, "/app/siapkan": SparkleIcon, "/app/pindah": ArrowsClockwiseIcon, "/app/mitra": HandshakeIcon,
   "/app/perusahaan": BuildingsIcon, "/app/akun/keamanan": LockKeyIcon,
+};
+
+// X-06: ikon yang boleh dipilih mod (IKON_MOD di src/lib/mod/skema.ts) ke ikon Phosphor yang sudah dimuat aplikasi.
+export const IKON_MOD_KOMPONEN: Record<string, Ikon> = {
+  kanban: KanbanIcon, kalender: CalendarIcon, "kalender-cek": CalendarCheckIcon, "daftar-cek": ListChecksIcon, "papan-klip": ClipboardTextIcon,
+  map: FolderIcon, dokumen: FileTextIcon, "tas-kerja": BriefcaseIcon, gedung: BuildingsIcon, toko: StorefrontIcon, kubus: CubeIcon,
+  paket: PackageIcon, truk: TruckIcon, "kunci-pas": WrenchIcon, "kotak-alat": ToolboxIcon, "orang-tiga": UsersThreeIcon, "kartu-id": IdentificationCardIcon,
+  "topi-wisuda": GraduationCapIcon, megafon: MegaphoneIcon, obrolan: ChatCircleTextIcon, headset: HeadsetIcon, "kamera-video": VideoCameraIcon,
+  target: TargetIcon, "bola-lampu": LightbulbIcon, petir: LightningIcon, perisai: ShieldCheckIcon, stempel: StampIcon, "tanda-tangan": SignatureIcon,
+  struk: ReceiptIcon, dompet: WalletIcon, koin: CoinsIcon, grafik: ChartLineUpIcon, peta: MapTrifoldIcon, hadiah: GiftIcon, pesawat: AirplaneTiltIcon,
+  jangkar: AnchorIcon, mata: EyeIcon, "salib-medis": FirstAidIcon, rumah: HouseIcon, kunci: KeyIcon,
 };

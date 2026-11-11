@@ -1,6 +1,7 @@
 import "server-only";
 import { createClient } from "@/lib/supabase/server";
 import { halamanTersembunyi, modulNyala } from "@/lib/fitur-usaha";
+import { susunTambahan, type ModRingkas } from "@/lib/ruang-tambahan";
 import { ruangUntuk, type Ruang } from "@/lib/ruang";
 
 /** Modul fitur yang menyala untuk usaha ini (U-06): bawaan paket usaha ditimpa pilihan pemilik di pengaturan.fitur. */
@@ -35,8 +36,17 @@ export async function ruangDanMati(peran: string, perusahaanId?: string | null):
   const sembunyi = halamanTersembunyi(nyala);
   const dasar = ruangUntuk(peran).map((r) => ({ ...r, halaman: r.halaman.filter((x) =>
     peran !== "staf" || ((x.href !== "/app/magang" || magang) && (x.href !== "/app/ilmu" || ilmu))) }));
+  const tampil = dasar.map((r) => ({ ...r, halaman: r.halaman.filter((x) => !sembunyi.has(x.href)) }));
   return {
-    ruang: dasar.map((r) => ({ ...r, halaman: r.halaman.filter((x) => !sembunyi.has(x.href)) })).filter((r) => r.halaman.length > 0),
+    ruang: susunTambahan(tampil, await modAktif(perusahaanId)),
     mati: dasar.map((r) => ({ ...r, halaman: r.halaman.filter((x) => sembunyi.has(x.href)) })).filter((r) => r.halaman.length > 0),
   };
+}
+
+/** Mod aktif usaha ini: hanya kode, nama, ikon, deskripsi (manifest lengkap tidak dibaca di setiap halaman). */
+async function modAktif(perusahaanId?: string | null): Promise<ModRingkas[]> {
+  if (!perusahaanId) return [];
+  const supabase = await createClient();
+  const { data } = await supabase.from("mod").select("kode, nama, ikon:manifest->>ikon, deskripsi:manifest->>deskripsi").eq("status", "aktif").order("nama").limit(40);
+  return (data ?? []) as ModRingkas[];
 }

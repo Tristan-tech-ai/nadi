@@ -38,7 +38,9 @@ export function DialogCari({ ruang, mati = [], peran, bahasa: b, teks }: { ruang
   const hrefMati = useMemo(() => new Set(mati.flatMap((r) => r.halaman.map((x) => x.href))), [mati]);
   const boleh = useMemo(() => new Set([...ruang.flatMap((r) => r.halaman.map((x) => x.href)), ...hrefMati]), [ruang, hrefMati]);
   const namaRuang = useMemo(() => Object.fromEntries([...mati, ...ruang].map((r) => [r.id, r.label[b]])), [ruang, mati, b]);
-  const hasil = useMemo(() => cariFitur(kata, peran, b, 8, boleh), [kata, peran, b, boleh]);
+  // X-06: mod aktif (halaman dinamis di ruang Fitur tambahan) ikut dicari.
+  const ekstra = useMemo(() => ruang.flatMap((r) => r.halaman.filter((x) => x.href.startsWith("/app/mod/")).map((x) => ({ ...x, ruang: r.id }))), [ruang]);
+  const hasil = useMemo(() => cariFitur(kata, peran, b, 8, boleh, ekstra), [kata, peran, b, boleh, ekstra]);
 
   useEffect(() => {
     const bukaDialog = () => { pemicu.current = document.activeElement; setKata(""); setSorot(0); setBuka(true); };

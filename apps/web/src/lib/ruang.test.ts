@@ -22,8 +22,8 @@ describe("peta ruang", () => {
     expect(new Set(href).size).toBe(href.length);
     for (const x of SEMUA_HALAMAN) for (const t of [x.label, x.guna]) expect(t.id.length * t.en.length, x.href).toBeGreaterThan(0);
   });
-  it("9 ruang; staf tidak melihat ruang Uang selain klaim", () => {
-    expect(RUANG).toHaveLength(9);
+  it("10 ruang (X-06 menambah Fitur tambahan); staf tidak melihat ruang Uang selain klaim", () => {
+    expect(RUANG).toHaveLength(10);
     const staf = ruangUntuk("staf");
     expect(staf.find((r) => r.id === "uang")?.halaman.map((x) => x.href)).toEqual(["/app/klaim"]);
     expect(staf.some((r) => r.id === "barang")).toBe(false);
