@@ -14,6 +14,18 @@ describe("berkas payroll CIMB Niaga OCTO Biz (M-10B)", () => {
     expect(b).toMatchObject({ ok: true, total: 80000, baris: 8 });
   });
 
+  it("akhir baris LF, CRLF, dan BOM UTF-8 sama-sama diterima (CI Linux membaca LF, Excel Windows menulis CRLF)", () => {
+    for (const [jalur, nama] of [["inhouse", "payroll-inhouse.csv"], ["skn", "payroll-skn.csv"]] as const) {
+      const lf = resmi(nama).replace(/\r\n/g, "\n");
+      const crlf = lf.replace(/\n/g, "\r\n");
+      for (const isi of [lf, crlf, "﻿" + crlf, lf.replace(/\n$/, "")]) {
+        const h = periksaPayroll(jalur, isi);
+        expect(h.galat, `${nama} ${JSON.stringify(isi.slice(-4))}`).toEqual([]);
+        expect(h).toMatchObject({ ok: true, total: 80000, baris: 8 });
+      }
+    }
+  });
+
   it("susunan Nadi sama dengan urutan kolom contoh resmi", () => {
     const csv = berkasPayroll("inhouse", { rekening: "8001213123456", nama: "Terlalu Manis", tanggal: "2025-06-24", keterangan: "Payroll Inhouse" }, [
       { rekening: "800153423700", nama: "Terlalu Manis", jumlah: 100000, keterangan: "Payroll inhouse1" },

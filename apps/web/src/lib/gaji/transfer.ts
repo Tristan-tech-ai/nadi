@@ -68,7 +68,8 @@ export type HasilPeriksa = { ok: boolean; galat: string[]; peringatan: string[];
 export function periksaPayroll(jalur: Jalur, csv: string): HasilPeriksa {
   const galat: string[] = [];
   const peringatan: string[] = [];
-  const baris = csv.replace(/\r\n$/, "").split(/\r?\n/).map((l) => l.split(","));
+  // Akhir baris LF (Linux/Mac) dan CRLF (Excel Windows) sama-sama sah; BOM UTF-8 di awal berkas dibuang.
+  const baris = csv.replace(/^﻿/, "").replace(/(\r?\n)+$/, "").split(/\r?\n/).map((l) => l.split(","));
   const [h, ...d] = baris;
   if (!h || h.length < 7 || h.length > 8) return { ok: false, galat: ["Header harus 7 atau 8 kolom."], peringatan, total: 0, baris: 0 };
   if (!/^\d{1,20}$/.test(h[0])) galat.push("Header: rekening sumber harus angka (maks 20).");
