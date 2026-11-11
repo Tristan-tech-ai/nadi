@@ -5007,8 +5007,11 @@
    "accept": "10 paket lagi untuk jenis usaha di /untuk dan riset kebutuhan-usaha.md (sekolah/kursus, klinik, kontraktor, properti/kos, koperasi, percetakan, rental, katering pesanan, agensi, distributor); onboarding /app/mulai menyarankan paket sesuai jenis usaha; tes",
    "how": "sama dengan X-14",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T16:53:47"
+   "status": "done",
+   "created": "2026-11-11T16:53:47",
+   "started": "2026-11-11T21:41:46",
+   "done": "2026-11-11T21:41:47",
+   "result": "apps/web/src/lib/mod/katalog/{kursus-sekolah,klinik-operasional,laporan-proyek,kos-properti,koperasi,order-cetak,rental-unit,katering-pesanan,agensi-retainer,distributor-retur}.json + SARAN_PAKET/saranPaket di katalog.ts; katalog.test.ts + artikel bantuan 72/72; saran di /app/mulai/lanjut dan urutan berlencana di /app/tambah-fitur; e2e/katalog-resmi.spec.ts lokal 1/1 (21 paket terpasang dengan isi contoh, tangkapan test-results/katalog-layar 390/1440 terang gelap, axe 0 serius, tanpa galat konsol)"
   },
   {
    "id": "X-16",
@@ -5035,8 +5038,11 @@
    "accept": "mod bisa diekspor tanpa data menjadi berkas dan diimpor di usaha lain (lewat pengawas, jadi draf); riwayat versi + rollback satu klik; tes",
    "how": "mod_versi",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T16:53:47"
+   "status": "done",
+   "created": "2026-11-11T16:53:47",
+   "started": "2026-11-11T21:45:57",
+   "done": "2026-11-11T21:45:57",
+   "result": "apps/web/src/lib/mod/berkas.ts + berkas.test.ts 4/4; route src/app/app/tambah-fitur/ekspor/route.ts; impor berkas di simpanManifest (sumber impor) + kembalikanVersi; RiwayatVersi di Tambah fitur; e2e/mod-versi.spec.ts lokal 1/1 (kembalikan v2 ke v1, unduh tanpa UUID, impor di usaha lain jadi draf lalu aktif, berkas rusak ditolak, axe 0 serius), mod.spec + tambah-fitur.spec tetap lulus"
   },
   {
    "id": "X-18",
@@ -5084,15 +5090,16 @@
    "id": "FIX-ASAP-2",
    "fase": "H",
    "kind": "fix",
-   "priority": 1,
+   "priority": 0,
    "size": "s",
    "wajib": true,
    "title": "Perbaiki: Uji asap produksi gagal 2026-11-07",
    "accept": "penyebab ditemukan dan diperbaiki; uji asap produksi (workflow asap.yml) lulus lagi; issue #2 ditutup dengan tautan run yang lulus",
-   "how": "Uji asap produksi gagal pada 2026-11-07T02:28:57Z.\n\nRun: https://github.com/Tristan-tech-ai/nadi/actions/runs/42329377797\n\n```\n    Error: expect(locator).toHaveText(expected) failed\n      30 |       expect(r?.status(), jalur).toBe(200);\n    > 31 |       await expect(page.getByRole(\"heading\", { level: 1 }).first()).toHaveText(judul);\n      32 |       expect(galat, `galat JS di ${jalur}`).toEqual([]);\n    Error: expect(locator).toHaveText(expected) failed\n      30 |       expect(r?.status(), jalur).toBe(200);\n    > 31 |       await expect(page.getByRole(\"heading\", { level: 1 }).first()).toHaveTe",
-   "blocked_by": "Penyebab: ekspektasi uji basi (judul /demo sekarang 'Coba Nadi tanpa daftar' sejak L-03), produksi sehat. Perbaikan di working tree apps/web/e2e/asap-produksi.spec.ts lulus 19/19 terhadap https://nadi-swart.vercel.app 11 Nov 2026. Tunggu mode commit (loop/TANPA_COMMIT) untuk push + tutup issue #2.",
-   "status": "blocked",
-   "created": "2026-11-11T16:53:48"
+   "how": "Spek uji asap sudah di main (ef337db) dan lulus terhadap produksi dari lokal 11 Nov (30 lulus bersama bantuan-alat dan halaman-publik). Run workflow_dispatch 43036733698 gagal di langkah Pasang Chromium: 'Temporary failure resolving archive.ubuntu.com' saat apt memasang font (--with-deps). Langkah: baca docs Playwright CI resmi (install-deps, cache), ubah .github/workflows/asap.yml agar tahan DNS apt sesaat (ulang apt dengan jeda, atau pasang chromium tanpa --with-deps bila dependensi runner sudah ada), commit, push bersama iterasi, jalankan gh workflow run asap.yml, lalu tutup issue #2 dengan tautan run yang lulus.",
+   "blocked_by": "",
+   "status": "running",
+   "created": "2026-11-11T16:53:48",
+   "started": "2026-11-11T21:29:34"
   },
   {
    "id": "X-21",
@@ -5319,6 +5326,35 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-11T20:34:43"
+  },
+  {
+   "id": "Q-44",
+   "fase": "Q",
+   "kind": "test",
+   "priority": 1,
+   "size": "s",
+   "wajib": true,
+   "title": "Jaga penanda keluar (lepas_at, keluar_at): tes statis + indeks baris aktif",
+   "accept": "tes SQL statis gagal bila ada fungsi atau kebijakan di public/app yang membaca kerja_pelaksana tanpa lepas_at atau divisi_anggota tanpa keluar_at (dibuat merah sekali dengan fungsi contoh); indeks parsial baris aktif (kerja_pelaksana orang_id where lepas_at is null, divisi_anggota orang_id where keluar_at is null) lewat migrasi; lulus lokal dan produksi",
+   "how": "pola supabase/tests/klaim_fungsi_q23.test.sql; migrasi kecil, jalur mode commit akhir iterasi",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-11T21:28:35"
+  },
+  {
+   "id": "FIX-CI-1",
+   "fase": "H",
+   "kind": "fix",
+   "priority": 0,
+   "size": "s",
+   "wajib": true,
+   "title": "CI merah sejak 6 Nov: pemeriksa payroll menolak CSV berakhiran LF, lxml tidak ada di runner",
+   "accept": "tes unit baru membaca contoh resmi dengan akhir baris LF dan CRLF (merah sebelum perbaikan di Windows); periksaPayroll menerima keduanya (dan BOM UTF-8); langkah efaktur di CI tidak lagi galat karena lxml (dipasang di workflow atau dilewati dengan jujur); workflow CI lulus di push berikutnya",
+   "how": "src/lib/gaji/transfer.ts baris split; .github/workflows/ci.yml",
+   "blocked_by": "",
+   "status": "running",
+   "created": "2026-11-11T21:31:03",
+   "started": "2026-11-11T21:31:03"
   }
  ]
 }
