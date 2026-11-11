@@ -32,7 +32,14 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Pasang Chromium
         working-directory: apps/web
-        run: pnpm exec playwright install --with-deps chromium
+        # Perintah dari docs resmi Playwright CI (install --with-deps). Diulang sampai 3 kali dengan jeda karena apt di runner
+        # pernah gagal sesaat ("Temporary failure resolving archive.ubuntu.com", run 43036733698); itu bukan kegagalan uji.
+        run: |
+          for i in 1 2 3; do
+            pnpm exec playwright install --with-deps chromium && exit 0
+            echo "Pasang Chromium gagal (percobaan $i), ulang dalam 30 detik"; sleep 30
+          done
+          exit 1
       - name: Uji asap
         id: uji
         working-directory: apps/web
