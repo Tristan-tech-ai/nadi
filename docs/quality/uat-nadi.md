@@ -241,3 +241,26 @@ Tes produksi yang perlu masuk akun dijalankan dengan akun uji sintetis. Mulai it
 Angka gagal untuk `auth.spec.ts` dan `mulai.spec.ts` berasal dari jalan pertama yang paralel; jalan ulangnya lulus kecuali audit keadaan kosong yang temuannya diperbaiki (lihat Temuan).
 
 Tes yang dilewati adalah tes untuk proyek lain (misalnya HP atau rantai pindah usaha) atau yang butuh perangkat khusus (kamera dengan wajah, lokasi), bukan kegagalan.
+
+## Perubahan setelah UAT (sejak 821bec6, sampai 12 Nov 2026 18.20 WITA)
+
+UAT di atas dijalankan terhadap produksi pada commit 821bec6. Setelah itu ada 15 commit yang menyentuh `apps/web` atau `supabase`. Setiap baris di bawah menyebut bukti yang benar-benar dijalankan; uji produksi yang butuh masuk akun tidak dijalankan loop (aturan keamanan), jadi kolom Produksi hanya berisi pemeriksaan tanpa masuk atau CI.
+
+| Commit | Perubahan | Bukti lokal | Produksi |
+|---|---|---|---|
+| b3085bc | Dokumen UAT; keadaan kosong Fitur tambahan dengan langkah pertama; rantai tes pindah-mulai | `tambah-fitur.spec.ts` lulus | temuan /app/mod menunggu uji ulang bermasuk |
+| c40145a | Alat gratis bahasa Inggris (/en/alat) | `src/lib/alat/teks.test.ts` 5/5 | `bantuan-alat.spec.ts` 9/9 ke produksi tanpa masuk |
+| d1a44b7 | Kalkulator alat gratis memakai isian sebelum hidrasi (Q-43) | e2e Q-43 merah dulu lalu hijau | lulus di produksi |
+| ffe4b11 | Halaman Orang hanya merender orang aktif (Q-42) | e2e divisi lokal | ukuran waktu produksi menunggu uji bermasuk |
+| ab40b00 | Tes navigasi halaman depan menunggu animasi berhingga sebelum axe (sebelumnya gagal 2 dari 3 di produksi karena waktu) | perubahan tes saja, aplikasi tidak berubah | tidak dijalankan ulang terpisah |
+| 907e995 | Koordinator kerja dengan peran kustom `kerja.kelola` (X-13B) | `kelola_kerja_saya.test.sql` 12/12, `koordinator-kerja.spec.ts` | tes SQL 12/12 di produksi (transaksi dibatalkan) |
+| 8245545 | Isian jeda di layar Alur (M-20B) | `alur_jeda.test.sql` 23/23, `alur-jeda.spec.ts` | tes SQL 23/23 di produksi |
+| 867333b | Tanya data: rentang tanggal bebas dan pertanyaan gabungan (M-22B) | `gabungan.test.ts`, `tanya-gabungan.spec.ts` | Edge Function pelajari-tanya versi 2 (D-FN-TANYA): tanpa token 401, token palsu 403 |
+| e66b663 | Mata: label jenis zona, zona Pintu langsung dikenali, hasil hitung selalu tampil (Q-45 sampai Q-47) | `label.test.ts` 3/3, `mata-zona-lokal.spec.ts` | CI hijau, daftar zona tampil benar di rekaman produksi |
+| 63521c7 | Isian fitur tambahan yang daftarnya kosong menautkan ke halamannya (Q-48) | `mod-pilihan-kosong.spec.ts` | CI hijau |
+| 025d59d | Porsi tim tidak berubah menjadi 0 saat diketik ulang (Q-50) | `kerja-porsi.spec.ts` merah dulu lalu hijau | CI hijau, produksi 200 |
+| 5a4fcfb, 0836cc0 | Film halaman depan dan klip fitur diganti video demo v4b (L-VID) | `halaman-publik` e2e | `/video/nadi-demo.mp4` 200, 18.332.304 byte |
+| c384d16 | Pesan belajar format jujur: AI dipakai sampai pola cocok dua kali lagi (Q-51) | `belajar.test.ts` merah dulu 2/3 lalu 3/3 | CI hijau |
+| 5087b03 | Catatan UU 27/2026 di setiap hitungan ketenagakerjaan (Q-52) | `uu-ketenagakerjaan.test.ts` 3/3, `uu-baru.spec.ts` | catatan tampil di /alat/pesangon, /alat/gaji, /en/alat/pesangon, /kamus/pesangon; tidak di /alat/thr |
+
+Uji asap produksi otomatis (GitHub Actions `asap.yml`, run 43191207176, 12 Nov 2026): 19 lulus, 1 dilewati (tes merah sengaja), 0 gagal.
