@@ -3,11 +3,12 @@ import { Suspense } from "react";
 import { FormLamar } from "@/components/lamar/form-lamar";
 import { LogoNadi } from "@/components/ui/logo";
 import { kodeSah } from "@/lib/lamar";
+import { asalSitus } from "@/lib/situs";
 import { jobPosting, type LowonganPublik } from "@/lib/rekrut/job-posting";
 import { createClient } from "@/lib/supabase/server";
 
 type Lowongan = LowonganPublik & { pertanyaan?: unknown };
-const ASAL = "https://nadi-swart.vercel.app";
+const ASAL = asalSitus();
 const hariIni = () => new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jakarta" }).format(new Date());
 
 async function ambil(kode: string) {

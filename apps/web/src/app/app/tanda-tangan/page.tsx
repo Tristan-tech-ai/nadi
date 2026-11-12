@@ -10,6 +10,7 @@ import { bahasaAplikasi } from "@/lib/i18n/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { createClient } from "@/lib/supabase/server";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
+import { asalSitus } from "@/lib/situs";
 
 export const metadata: Metadata = { title: "Dokumen dan tanda tangan" };
 
@@ -28,7 +29,8 @@ async function Isi() {
     return <div lang={bahasa}><KepalaHalaman jalur="/app/tanda-tangan" judul={t.judul} ket={t.hanya} /></div>;
   }
   const h = await headers();
-  const asal = `${h.get("x-forwarded-proto") ?? "https"}://${h.get("x-forwarded-host") ?? h.get("host") ?? "nadi-swart.vercel.app"}`;
+  const tuan = h.get("x-forwarded-host") ?? h.get("host");
+  const asal = tuan ? `${h.get("x-forwarded-proto") ?? "https"}://${tuan}` : asalSitus();
   const supabase = await createClient();
   const [dd, ss, tp, pg] = await Promise.all([
     supabase.from("sign_document").select("id, kode, judul, jenis, nilai, status, berakhir, dibuat_at").order("dibuat_at", { ascending: false }).limit(50),
