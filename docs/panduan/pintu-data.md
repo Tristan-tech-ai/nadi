@@ -10,7 +10,7 @@ Setiap kiriman menjadi **satu usulan** di Feed. Tidak ada yang tercatat sampai p
 4. Token yang tidak dipakai lagi dicabut di bagian yang sama. Kiriman dengan token itu langsung ditolak.
 
 ## 2. Bentuk kiriman
-- Alamat: `https://nadi-swart.vercel.app/api/pintu`, metode `POST`.
+- Alamat: `https://nadiusaha.my.id/api/pintu`, metode `POST`.
 - Header: `Authorization: Bearer nmi_...`.
 - Header pilihan: `Idempotency-Key` (kiriman ulang dengan kunci sama tidak menggandakan usulan; tanpa header ini, isi yang sama persis juga dianggap sama), `X-Nadi-Asal` (nama aplikasi pengirim, tampil di usulan).
 - Isi JSON: `{"jenis": "penjualan", "baris": [ ... ]}`. CSV juga bisa: `Content-Type: text/csv` dan `?jenis=penjualan` di alamat, judul kolom sama dengan nama bidang.

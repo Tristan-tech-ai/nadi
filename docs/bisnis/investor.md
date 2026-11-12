@@ -2,7 +2,7 @@
 
 Isi tabel dibaca dari halaman resmi masing-masing pada 4 Nov 2026. Tabel ini bukan rekomendasi investasi.
 
-Mendaftar, mengirim deck, atau menghubungi investor adalah tindakan atas nama Tristan (loop/UNTUK-TRISTAN.md). Bahan yang dipakai: docs/bisnis/pitch-deck.pptx, video docs/promo/nadi-promo.mp4, dan demo nadi-swart.vercel.app/demo.
+Mendaftar, mengirim deck, atau menghubungi investor adalah tindakan atas nama Tristan (loop/UNTUK-TRISTAN.md). Bahan yang dipakai: docs/bisnis/pitch-deck.pptx, video docs/promo/nadi-promo.mp4, dan demo nadiusaha.my.id/demo.
 
 **Prinsip urutan** (docs/bisnis/modal.md): jalur Hemat dulu, yaitu 100 usaha dan data churn/konversi nyata. Program tanpa ekuitas dan program pemerintah didahulukan. Investor ekuitas didekati setelah ada angka retensi.
 

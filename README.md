@@ -3,8 +3,8 @@
 **Sistem saraf untuk usaha: platform operasional berbasis AI untuk UMKM Indonesia.**
 Lempar berkas apa saja (foto nota, PDF tagihan, Excel karyawan, CSV mutasi bank, foto struk). Nadi membaca dan merapikannya, lalu menyiapkan usulan. Data baru berubah setelah pemilik menyetujui.
 
-- Aplikasi: https://nadi-swart.vercel.app
-- Demo tanpa daftar (usaha contoh baca-saja, data karangan): https://nadi-swart.vercel.app/demo dan https://nadi-swart.vercel.app/demo/toko
+- Aplikasi: https://nadiusaha.my.id (alamat lama https://nadi-swart.vercel.app tetap jalan; halaman publiknya dialihkan ke domain ini)
+- Demo tanpa daftar (usaha contoh baca-saja, data karangan): https://nadiusaha.my.id/demo dan https://nadiusaha.my.id/demo/toko
 - Video demo 4:38: [`docs/promo/nadi-demo.mp4`](docs/promo/nadi-demo.mp4)
 
 ## Masalah dan pengguna

@@ -4,9 +4,9 @@
 
 Pemilik cukup memotret atau melempar nota, slip, KTP, CV, surat dokter, Excel, atau mutasi bank. Nadi membaca isinya dan menyiapkan usulan berbukti. Pemilik tinggal menyetujui atau menolak dari HP.
 
-- **Coba tanpa daftar:** https://nadi-swart.vercel.app/demo
+- **Coba tanpa daftar:** https://nadiusaha.my.id/demo
 - **Video 46 detik:** docs/promo/nadi-promo.mp4
-- **Panduan per peran:** https://nadi-swart.vercel.app/panduan
+- **Panduan per peran:** https://nadiusaha.my.id/panduan
 
 ## Masalah
 Usaha kecil membayar beberapa aplikasi terpisah dan tetap mengetik ulang angka dari kertas.

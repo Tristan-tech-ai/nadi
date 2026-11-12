@@ -6,7 +6,7 @@ import { tangani, type Rpc } from "@/lib/mcp/protokol";
 import { periksaSkill, zipSkill } from "./paket";
 import { BERKAS_REFERENSI, kontenSkill, skillUmum, uriSkill, type BahasaSkill } from "./umum";
 
-const MCP = "https://nadi-swart.vercel.app/api/mcp";
+const MCP = "https://nadiusaha.my.id/api/mcp";
 const BAHASA: BahasaSkill[] = ["id", "en"];
 // Salinan berkas di docs/skill/{nadi,nadi-en} diperiksa gerbang tulisan (scripts/cek-tulisan.py). SKILL_TULIS=1 menulis ulang.
 const DOCS = join(__dirname, "..", "..", "..", "..", "..", "docs", "skill");

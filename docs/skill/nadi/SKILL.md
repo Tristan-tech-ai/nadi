@@ -12,7 +12,7 @@ Nadi adalah aplikasi kerja untuk usaha kecil dan menengah di Indonesia. Pemilik 
 Skill ini menjelaskan cara asisten AI membantu pengguna Nadi tanpa menebak data.
 
 ## Menyambung
-- Server MCP: https://nadi-swart.vercel.app/api/mcp (OAuth). Pengguna memberi izin sekali dan memilih usahanya.
+- Server MCP: https://nadiusaha.my.id/api/mcp (OAuth). Pengguna memberi izin sekali dan memilih usahanya.
 - Cakupan `nadi.baca` untuk membaca. Cakupan `nadi.usul` untuk mengajukan usulan.
 - Mulai dengan alat `siapa_saya`: usaha, peran pengguna, izin token, dan jumlah usulan menunggu.
 

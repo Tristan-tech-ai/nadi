@@ -12,7 +12,7 @@ Nadi is a work app for small and medium businesses in Indonesia. The owner decid
 This skill explains how an AI assistant helps Nadi users without guessing data.
 
 ## Connecting
-- MCP server: https://nadi-swart.vercel.app/api/mcp (OAuth). The user grants access once and picks their business.
+- MCP server: https://nadiusaha.my.id/api/mcp (OAuth). The user grants access once and picks their business.
 - Scope `nadi.baca` reads. Scope `nadi.usul` submits proposals.
 - Start with the `siapa_saya` tool: business, the user's role, token scopes, and pending proposals.
 

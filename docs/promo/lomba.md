@@ -37,7 +37,7 @@ Fokus hanya ke lomba dan program yang **terbuka untuk umum**. Lomba khusus pelaj
 ## Bahan pendaftaran yang disiapkan loop (diperbarui 4 Nov 2026)
 | Bahan | Dipakai di | Status |
 |---|---|---|
-| Tautan demo publik https://nadi-swart.vercel.app/demo | APINDO, Dicoding (tautan proyek), BI-OJK | ada |
+| Tautan demo publik https://nadiusaha.my.id/demo | APINDO, Dicoding (tautan proyek), BI-OJK | ada |
 | Video demo MP4 <= 7 menit: docs/promo/demo-apindo.mp4 (promo 46 dtk + rekaman satu hari di produksi) | APINDO | ada |
 | Video promo 46 dtk docs/promo/nadi-promo.mp4, teaser 15 dtk, 4 potongan fitur docs/promo/fitur/ | APINDO (pembuka), konten | ada |
 | Project Brief / pitch deck: docs/bisnis/pitch-deck.pptx dan pitch-deck.pdf (11 slide) | Dicoding, BI-OJK, investor | ada |
