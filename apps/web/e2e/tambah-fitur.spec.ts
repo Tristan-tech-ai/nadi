@@ -64,6 +64,13 @@ test("tambah fitur: paket resmi, lepas dan pasang lagi tanpa kehilangan data, mo
   await expect(sidebar(page).getByRole("link", { name: "Proyek", exact: true })).toBeVisible();
   await expect(sidebar(page).getByRole("link", { name: "Kasir" })).toHaveCount(0);
 
+  // UAT-01: sebelum ada fitur tambahan, /app/mod memberi satu langkah pertama ke Tambah fitur (audit keadaan kosong).
+  await page.goto("/app/mod");
+  const kosong = page.getByTestId("mod-kosong");
+  await expect(kosong).toContainText("Belum ada fitur tambahan yang aktif.");
+  await kosong.getByRole("link", { name: "Tambah fitur" }).click();
+  await page.waitForURL((u) => u.pathname === "/app/tambah-fitur");
+
   // Paket resmi: pratinjau lalu pasang.
   const paket = page.locator("[data-paket=proyek-agensi]");
   await paket.getByText("Pratinjau isi").click();

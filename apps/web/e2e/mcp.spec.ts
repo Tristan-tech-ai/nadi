@@ -115,7 +115,12 @@ test("asisten AI menyambung lewat OAuth + CIMD, membaca, dan mengajukan usulan y
   const disc = await (await panggil("server/discover")).json();
   expect(disc.result).toMatchObject({ resultType: "complete", supportedVersions: expect.arrayContaining(["2026-07-28"]) });
   const daftar = await (await panggil("tools/list")).json();
-  expect(daftar.result.tools.map((x: { name: string }) => x.name)).toEqual(["siapa_saya", "daftar_orang", "daftar_usulan", "ringkasan_ai", "buat_usulan", "usul_onboarding"]);
+  expect(daftar.result.tools.map((x: { name: string }) => x.name)).toEqual([
+    "siapa_saya", "daftar_orang", "daftar_usulan", "ringkasan_ai", "buat_usulan", "usul_onboarding",
+    // U-04 draf onboarding dan X-07 alat fitur tambahan (tanpa alat terapkan/matikan/rollback).
+    "tulis_draf", "baca_draf", "ubah_draf",
+    "mod_skema", "mod_katalog", "mod_uji", "mod_draf_tulis", "mod_draf_baca", "mod_draf_ubah", "mod_data_baca", "mod_data_tulis",
+  ]);
   const siapa = await (await panggil("tools/call", { name: "siapa_saya", arguments: {} }, "siapa_saya")).json();
   expect(siapa.result.structuredContent).toMatchObject({ peran: "pemilik", klien: "Asisten Uji" });
 

@@ -23,7 +23,7 @@ const NAMA_USAHA = "Uji Mulai E2E";
 test.describe.configure({ mode: "serial" });
 test.beforeEach(({ page }, info) => {
   void page;
-  test.skip(info.project.name !== "desktop" || !E.E2E_SANDI || !E.NEXT_PUBLIC_SUPABASE_URL || !E.E2E_EMAIL_A, "sekali (desktop), butuh .env.local dan .env.e2e.local");
+  test.skip(info.project.name !== "pindah-mulai" || !E.E2E_SANDI || !E.NEXT_PUBLIC_SUPABASE_URL || !E.E2E_EMAIL_A, "sekali (rantai pindah-mulai), butuh .env.local dan .env.e2e.local");
 });
 
 async function siapkan(): Promise<{ sb: SupabaseClient; pid: string; awal?: string }> {
@@ -87,7 +87,8 @@ test("pengguna baru mengerjakan 3 langkah Mulai di Nadi; daftar ditutup, dipangg
     await page.waitForURL((u) => u.pathname === "/app/orang");
     await page.getByLabel("Nama orang").fill(`Sari Mulai ${tag}`);
     await page.getByRole("button", { name: "Tambah orang" }).click();
-    await expect(page.getByText(`Sari Mulai ${tag}`)).toBeVisible();
+    // Nama orang juga muncul di pilihan Kepala divisi dan anggota divisi (X-13): periksa di daftar orang.
+    await expect(page.locator("#daftar-orang").getByText(`Sari Mulai ${tag}`)).toBeVisible();
 
     // Langkah 2: tambah barang.
     await page.goto("/app");

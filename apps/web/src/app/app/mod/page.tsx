@@ -20,9 +20,20 @@ async function Isi() {
     <>
       <KepalaHalaman jalur="/app/mod" judul="Fitur tambahan" ket="Fitur khusus usahamu. Nadi yang menjalankan dan memeriksanya; datanya tetap milik usahamu." />
       {daftar.length === 0 ? (
-        <p className="mt-6 text-sm text-tinta-2">
-          Belum ada fitur tambahan yang aktif. Fitur tambahan disusun pemilik (sendiri atau lewat AI miliknya yang tersambung ke Nadi), diperiksa Nadi, lalu diterapkan pemilik.
-        </p>
+        // UAT-01: keadaan kosong menyebut gunanya dan memberi satu langkah pertama (audit keadaan kosong di e2e/mulai.spec.ts).
+        <div className="mt-6 rounded-[var(--radius-kartu)] bg-kertas-2 p-4 text-sm" data-testid="mod-kosong">
+          <p>Belum ada fitur tambahan yang aktif.</p>
+          <p className="mt-1 text-tinta-2">
+            Fitur tambahan mencatat hal khusus usahamu, misalnya kunjungan klien atau peminjaman alat. Pasang paket resmi atau susun sendiri; Nadi memeriksanya sebelum diterapkan.
+          </p>
+          {sesi.peran === "pemilik" || sesi.peran === "admin" ? (
+            <Link href="/app/tambah-fitur" className="mt-3 inline-flex h-10 items-center rounded-[var(--radius-isian)] border border-garis-kuat px-4 font-semibold hover:bg-kertas">
+              Tambah fitur
+            </Link>
+          ) : (
+            <p className="mt-1 text-tinta-2">Minta pemilik usahamu memasang fitur yang kamu butuhkan.</p>
+          )}
+        </div>
       ) : (
         <ul className="mt-6 grid gap-3 sm:grid-cols-2" data-testid="daftar-mod">
           {daftar.map((m) => {

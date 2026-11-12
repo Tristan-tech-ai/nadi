@@ -120,7 +120,7 @@ test("pemilik membuat akun staf; staf masuk tanpa email dan ditolak di halaman p
   const kode = (await page.getByTestId("kode-usaha").textContent())!.trim();
   const nama = `Staf Uji ${Date.now()}`;
   await page.getByLabel("Nama orang").fill(nama);
-  await page.getByRole("button", { name: "Tambah" }).click();
+  await page.getByRole("button", { name: "Tambah orang", exact: true }).click();
   const baris = page.getByRole("listitem").filter({ hasText: nama });
   // Tambah orang di usaha uji A (28+ orang uji) butuh sampai 20 dtk di produksi: tugas Q-42 mengukur dan memperbaikinya.
   await expect(baris).toBeVisible({ timeout: 30_000 });
