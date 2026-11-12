@@ -52,7 +52,9 @@ function UsulanPelaksana({ hasil, sibuk, pelaksana, pilih, t, isiLang }: { hasil
 }
 
 /** Tombol utama "Tambah kerja" membuka lembar bawah: judul, topi, pelaksana opsional (dengan usulan), tenggat. */
-export function TambahKerja({ topi, orang, teks: t, bahasa = "id" }: { topi: Opsi[]; orang: Opsi[]; teks: TK; bahasa?: Bahasa }) {
+// X-13B: koordinator (peran kustom kerja.kelola) memakai formulir yang sama tanpa usulan pelaksana adil, karena usulan membaca beban
+// semua orang dan tetap khusus pemilik/admin.
+export function TambahKerja({ topi, orang, teks: t, bahasa = "id", bolehUsulan = true }: { topi: Opsi[]; orang: Opsi[]; teks: TK; bahasa?: Bahasa; bolehUsulan?: boolean }) {
   const isiLang = bahasa === "id" ? undefined : "id";
   const lembar = useRef<HTMLDialogElement>(null);
   const [versi, setVersi] = useState(0);
@@ -63,7 +65,7 @@ export function TambahKerja({ topi, orang, teks: t, bahasa = "id" }: { topi: Ops
   const gantiTopi = (id: string) => {
     topiTerakhir.current = id;
     setUsulan(null);
-    if (!id) return;
+    if (!id || !bolehUsulan) return;
     mulaiCari(async () => {
       const r = await usulkanPelaksana(id);
       if (topiTerakhir.current === id) setUsulan(r);
