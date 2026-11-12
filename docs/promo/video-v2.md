@@ -44,3 +44,13 @@ Rekaman aplikasi 272,6 dari 282,6 dtk (96%).
 - Obrolan dengan AI milik pengguna lewat MCP belum direkam: menambah konektor kustom di akun aplikasi AI Tristan ditolak penjaga asisten, jadi menunggu Tristan menambah konektornya sendiri (UAT-02B).
 - Dua penunjuk tampak di beberapa bingkai: alat kendali peramban sudah menggambar penunjuknya sendiri, dan penunjuk tambahan yang disuntikkan untuk rekaman ikut tampil. Rekaman berikutnya tanpa penunjuk suntikan.
 - Cacat aplikasi menjadi tugas: Q-45 label jenis zona selalu Rak, Q-46 Hitung kunjungan baru mengenali zona Pintu setelah muat ulang, Q-47 hasil hitung kosong tanpa kalimat bila belum ada kunjungan lengkap, Q-48 isian Pelanggan wajib buntu saat daftar pelanggan kosong, Q-49 usulan denah AI memberi jenis lorong untuk zona bernama Pintu.
+
+## v3 (UAT-02C, 12 Nov 2026): direkam ulang dan disusun dengan motion design
+
+Masukan Tristan untuk v2: tanda klik oranye, penunjuk dobel, kamera diam, musik sintetis jelek, tampilan datar. Perubahan v3:
+
+- Rekaman: cursorcam 1.1.0 di produksi dengan login yang dimasukkan Tristan sendiri (cookie, bukan sandi). Kursor halus dan zoom per klik, tanpa riak, tanpa bilah browser, di atas latar kertas buatan sendiri. Usaha baru Dapur Pandan dibuat lewat onboarding. Setiap babak dibuka dengan pindah usaha (dipotong) karena cookie tersimpan membuka usaha lama.
+- Penyusunan: HyperFrames 0.9.37 dengan aturan motionmaxxing (ide milik merek, demo fisik, potong saat bergerak, tanpa label pojok atau layout slide, kartu penutup paling lama 1,4 dtk). Pembuka berupa berkas nyata (nota, foto struk, Excel, baris mutasi) jatuh ke meja kertas. Caption tercetak di secarik nota thermal bertepi sobek (bentuk logo Nadi), muncul kata per kata, dengan stabilo kunyit pada satu kata kunci. Sambungan antarbabak memakai sapuan nota thermal. Tiga cap: DITERIMA di Feed, TERBIT saat invoice, AKTIF saat fitur buatan sendiri diterapkan. Penutup: tanda Nadi dan cap alamat.
+- Suara: lima jenis efek turunan CC0 (klik, ketik, kertas/lempar, transisi, cap, notifikasi), ditaruh dari waktu langkah cursorcam yang dipetakan, bukan ditebak. Lagu "Podcast Interview Background Music" HitsLab (Pixabay, pilihan Tristan) diturunkan 14 dB tepat sebelum cap pertama dan 7 dB di cap lain, lalu disambung ke ujung aslinya. Dua versi: dengan lagu (-16 LUFS) dan efek saja (tingkat efek sama).
+- Ditolak: merekam pratinjau Envato Elements, karena lisensinya mewajibkan langganan aktif (Envato Elements License, revisi 6 Okt 2026).
+- Cacat aplikasi baru dari rekaman: Q-50, isian porsi tim dan pilihan orang rapuh saat diketik ulang.
