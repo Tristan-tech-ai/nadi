@@ -3,6 +3,7 @@
 Diperbarui setiap tick. Satu sumber kebenaran untuk melanjutkan setelah kompaksi.
 
 ## Sekarang
+- CHECKPOINT 12 Nov 22.40: isian formulir tahap 2 ditulis di proposal/isian-tahap-2.md (teks bersih tanpa simbol; perbandingan dengan proposal/isian-google-form.md tahap 1); tag v2.0-final dibuat di 161c5de dan dipush. Menunggu: staging (Tristan buat nadi-staging + PAT), hasil UAT-CLOUD run 43240291948. Lanjut L-15.
 - CHECKPOINT 12 Nov 22.20: Tristan pilih STAGING. pkl dan Tristan-tech-web's Project sudah INACTIVE (tidak perlu jeda). create_project diblokir penjaga macet; Tristan diminta buat nadi-staging + PAT di proposal/alat-staging/supabase-pat.txt. loop/staging.py (migrasi via Management API, tolak ref produksi) siap. UAT-CLOUD run 43240291948 masih berjalan. Lanjut L-15 sambil menunggu.
 - CHECKPOINT 12 Nov 22.10: DEFINISI UAT 100% (Tristan): semua kemungkinan fitur x peran, ratusan pengguna satu usaha dan banyak usaha, cloud efisien. Tugas baru UAT-MATRIKS (ready), UAT-BEBAN (blocked: pilih staging/produksi ringan), UAT-EFISIEN; UAT-PDF menunggu semuanya. UAT-CLOUD CI run 43240291948 berjalan (watch brfy0n616). L-15 sedang dibaca (katalog 21 paket, nav kepala-kaki.tsx, HalamanInfo).
 - CHECKPOINT 12 Nov 21.50: SEMUA LOKAL DIMATIKAN (dev 3100, supabase stop dengan cadangan, Docker Desktop stop). UAT harus cloud: UAT-CLOUD blocked menunggu Tristan `gh secret set -f apps/web/.env.e2e.local`. Berikutnya L-15 (halaman publik Fitur tambahan), lalu deploy bersama.
