@@ -160,8 +160,8 @@ test("lembur 4 jam hari kerja menambah Rp150.000 ke slip", async ({ page }) => {
     await expect(page.getByTestId("lembur-kosong")).toBeVisible();
     await page.getByRole("button", { name: "Siapkan gaji bulan ini" }).click();
     const slip = page.getByTestId("daftar-slip").getByRole("listitem").filter({ hasText: nama });
-    // Tanpa lembur: 3.460.000 - BPJS Kes 34.600 - JHT 69.200 = 3.356.200 (bruto PPh di bawah batas TER A 0%).
-    await expect(slip).toContainText("Rp3.356.200");
+    // Tanpa lembur: 3.460.000 - BPJS Kes 34.600 - JHT 69.200 - JP 34.600 = 3.321.600 (bruto PPh di bawah batas TER A 0%).
+    await expect(slip).toContainText("Rp3.321.600");
 
     const form = page.getByRole("form", { name: "Catat lembur" });
     await form.getByLabel("Orang").selectOption({ label: nama });
@@ -176,7 +176,7 @@ test("lembur 4 jam hari kerja menambah Rp150.000 ke slip", async ({ page }) => {
     await expect(daftar.getByRole("listitem").filter({ hasText: nama })).toContainText("4 jam, hari kerja");
 
     await page.getByRole("button", { name: "Hitung ulang draf" }).click();
-    await expect(slip).toContainText("Rp3.506.200");
+    await expect(slip).toContainText("Rp3.471.600");
     await slip.getByText("Rincian").click();
     await expect(slip.getByText("Lembur 4 jam")).toBeVisible();
     await expect(slip).toContainText("Rp150.000");

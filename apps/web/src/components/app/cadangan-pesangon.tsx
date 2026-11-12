@@ -127,7 +127,7 @@ export async function CadanganPesangon() {
       </details>
       <details className="mt-2 text-sm">
         <summary className="cursor-pointer text-tinta-2">Dari mana angka ini?</summary>
-        <div className="mt-2 space-y-2 text-tinta-2">
+        <div className="mt-2 space-y-2 text-tinta-2 [overflow-wrap:anywhere]">
           <p>Uang pesangon (UU 27/2026 Pasal 232 ayat (2)): 1 bulan upah untuk masa kerja kurang dari 1 tahun, bertambah 1 bulan tiap tahun, paling banyak 9 bulan sejak 8 tahun.</p>
           <p>Uang penghargaan masa kerja (Pasal 232 ayat (3)): 2 bulan sejak 3 tahun, 3 bulan sejak 6 tahun, dan seterusnya sampai 10 bulan sejak 24 tahun.</p>
           <p>Upah yang dipakai adalah gaji pokok ditambah tunjangan tetap (Pasal 234), bukan lembur atau tunjangan tidak tetap.</p>

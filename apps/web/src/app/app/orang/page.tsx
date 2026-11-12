@@ -16,6 +16,7 @@ import { KepalaHalaman } from "@/components/app/kepala-halaman";
 import { FormDivisi } from "@/components/app/divisi";
 import { FormCabutAdmin, FormTambahAdmin } from "@/components/app/admin-usaha";
 import { TEKS_ADMIN } from "@/components/app/admin-teks";
+import { TEKS_DIVISI } from "@/components/app/divisi-teks";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 
 export const metadata: Metadata = { title: "Orang" };
@@ -93,7 +94,7 @@ async function Isi() {
         </details>
       ) : null}
       <Suspense fallback={<div className="mt-10 h-24 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
-        <BagianDivisi orang={(orang ?? []).map((o) => ({ id: o.id as string, nama: o.nama as string }))} />
+        <BagianDivisi bahasa={bahasa} orang={(orang ?? []).map((o) => ({ id: o.id as string, nama: o.nama as string }))} />
       </Suspense>
       {sesi.peran === "pemilik" && (
         <Suspense fallback={<div className="mt-10 h-24 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
@@ -134,7 +135,8 @@ async function BagianAdmin({ bahasa }: { bahasa: Bahasa }) {
 }
 
 /** X-13 divisi: kepala divisi otomatis menjadi penyetuju izin anggota (setelah atasan langsung) dan peninjau hasil kerja mereka. */
-async function BagianDivisi({ orang }: { orang: { id: string; nama: string }[] }) {
+async function BagianDivisi({ orang, bahasa }: { orang: { id: string; nama: string }[]; bahasa: Bahasa }) {
+  const t = TEKS_DIVISI[bahasa];
   const supabase = await createClient();
   const [{ data: divisi }, { data: anggota }] = await Promise.all([
     supabase.from("divisi").select("id, nama, kepala_id").order("nama"),
@@ -145,25 +147,25 @@ async function BagianDivisi({ orang }: { orang: { id: string; nama: string }[] }
   const anggotaDari = (d: string) => ((anggota ?? []) as { divisi_id: string; orang_id: string }[]).filter((a) => a.divisi_id === d).map((a) => a.orang_id);
   return (
     <section className="mt-10" aria-labelledby="judul-divisi" data-testid="divisi">
-      <h2 id="judul-divisi" className="text-lg font-semibold">Divisi</h2>
-      <p className="mt-1 text-sm text-tinta-2">Kepala divisi menyetujui izin anggotanya bila mereka belum punya atasan langsung, lalu meninjau hasil kerja anggota. Kepala divisi tetap tidak melihat gaji.</p>
-      {daftar.length === 0 ? <p className="mt-3 text-sm text-tinta-2">Belum ada divisi. Buat divisi pertama, misalnya Desain atau Gudang.</p> : (
+      <h2 id="judul-divisi" className="text-lg font-semibold">{t.judul}</h2>
+      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
+      {daftar.length === 0 ? <p className="mt-3 text-sm text-tinta-2">{t.kosong}</p> : (
         <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm" data-testid="daftar-divisi">
           {daftar.map((d) => {
             const isi = anggotaDari(d.id);
             return (
               <li key={d.id} className="py-3" data-divisi={d.nama}>
-                <p><span className="font-semibold" data-pengguna>{d.nama}</span> <span className="text-tinta-2">kepala <span data-pengguna>{d.kepala_id ? nama.get(d.kepala_id) ?? "-" : "belum ada"}</span>, {isi.length} anggota{isi.length ? ": " : ""}<span data-pengguna>{isi.map((o) => nama.get(o) ?? "-").join(", ")}</span></span></p>
-                <details className="mt-2"><summary className="cursor-pointer text-tinta-2 underline underline-offset-4">Ubah divisi {d.nama}</summary>
-                  <div className="mt-2"><FormDivisi orang={orang} awal={{ id: d.id, nama: d.nama, kepala: d.kepala_id, anggota: isi }} /></div></details>
+                <p><span className="font-semibold" data-pengguna>{d.nama}</span> <span className="text-tinta-2">{t.kepala} <span data-pengguna>{d.kepala_id ? nama.get(d.kepala_id) ?? "-" : t.belumKepala}</span>, {isi.length} {t.anggota}{isi.length ? ": " : ""}<span data-pengguna>{isi.map((o) => nama.get(o) ?? "-").join(", ")}</span></span></p>
+                <details className="mt-2"><summary className="cursor-pointer text-tinta-2 underline underline-offset-4">{t.ubah} <span data-pengguna>{d.nama}</span></summary>
+                  <div className="mt-2"><FormDivisi orang={orang} teks={t} awal={{ id: d.id, nama: d.nama, kepala: d.kepala_id, anggota: isi }} /></div></details>
               </li>
             );
           })}
         </ul>
       )}
       <details className="mt-3 rounded-[var(--radius-kartu)] border border-garis p-4" data-testid="buat-divisi" open={daftar.length === 0}>
-        <summary className="cursor-pointer font-semibold">Buat divisi</summary>
-        <div className="mt-3"><FormDivisi orang={orang} /></div>
+        <summary className="cursor-pointer font-semibold">{t.buat}</summary>
+        <div className="mt-3"><FormDivisi orang={orang} teks={t} /></div>
       </details>
     </section>
   );

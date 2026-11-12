@@ -5,6 +5,7 @@ import { simpanDivisi, type HasilDivisi } from "@/app/app/orang/divisi-actions";
 import { terimaHasil, type HasilKerja } from "@/app/app/kerja/actions";
 import { MintaRevisi } from "@/components/app/kerja-tim";
 import { Tombol } from "@/components/ui/tombol";
+import { TEKS_DIVISI, type TeksDivisi } from "@/components/app/divisi-teks";
 
 // X-13 divisi (halaman Orang) dan review kerja anggota untuk kepala divisi (halaman Kerja).
 type Opsi = { id: string; nama: string };
@@ -15,27 +16,27 @@ function Pesan({ h }: { h: HasilDivisi | HasilKerja }) {
   return "galat" in h ? <p role="alert" className="w-full text-sm text-cap">{h.galat}</p> : <p role="status" className="w-full text-sm text-daun">{h.pesan}</p>;
 }
 
-export function FormDivisi({ orang, awal }: { orang: Opsi[]; awal?: { id: string; nama: string; kepala: string | null; anggota: string[] } }) {
+export function FormDivisi({ orang, awal, teks: t = TEKS_DIVISI.id }: { orang: Opsi[]; awal?: { id: string; nama: string; kepala: string | null; anggota: string[] }; teks?: TeksDivisi }) {
   const [h, kirim, sibuk] = useActionState<HasilDivisi, FormData>(simpanDivisi, null);
   const id = useId();
-  const label = awal ? `Ubah divisi ${awal.nama}` : "Buat divisi";
+  const label = awal ? `${t.ubah} ${awal.nama}` : t.buat;
   return (
     <form action={kirim} className="grid gap-3 text-sm sm:grid-cols-2" aria-label={label} key={!awal && h && "pesan" in h ? h.pesan : "f"}>
       {awal && <input type="hidden" name="id" value={awal.id} />}
-      <div className="flex min-w-0 flex-col gap-1"><label htmlFor={`${id}-n`} className="text-tinta-2">Nama divisi</label>
+      <div className="flex min-w-0 flex-col gap-1"><label htmlFor={`${id}-n`} className="text-tinta-2">{t.nama}</label>
         <input id={`${id}-n`} name="nama" required minLength={2} maxLength={60} defaultValue={awal?.nama} className={isian} /></div>
-      <div className="flex min-w-0 flex-col gap-1"><label htmlFor={`${id}-k`} className="text-tinta-2">Kepala divisi</label>
+      <div className="flex min-w-0 flex-col gap-1"><label htmlFor={`${id}-k`} className="text-tinta-2">{t.kepalaLabel}</label>
         <select id={`${id}-k`} name="kepala" defaultValue={awal?.kepala ?? ""} className={isian}>
-          <option value="">Belum ada kepala</option>{orang.map((o) => <option key={o.id} value={o.id}>{o.nama}</option>)}
+          <option value="">{t.tanpaKepala}</option>{orang.map((o) => <option key={o.id} value={o.id} data-pengguna>{o.nama}</option>)}
         </select></div>
-      <fieldset className="sm:col-span-2"><legend className="text-tinta-2">Anggota</legend>
+      <fieldset className="sm:col-span-2"><legend className="text-tinta-2">{t.anggotaLabel}</legend>
         <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1">{orang.map((o) => (
           <label key={o.id} className="inline-flex min-h-8 items-center gap-2">
             <input type="checkbox" name="anggota" value={o.id} defaultChecked={awal?.anggota.includes(o.id)} className="size-4" /><span data-pengguna>{o.nama}</span>
           </label>))}</div>
       </fieldset>
       <div className="flex flex-wrap items-center gap-3 sm:col-span-2">
-        <Tombol type="submit" ragam={awal ? "kedua" : "utama"} disabled={sibuk}>{awal ? "Simpan divisi" : "Buat divisi"}</Tombol><Pesan h={h} />
+        <Tombol type="submit" ragam={awal ? "kedua" : "utama"} disabled={sibuk}>{awal ? t.simpan : t.buat}</Tombol><Pesan h={h} />
       </div>
     </form>
   );
