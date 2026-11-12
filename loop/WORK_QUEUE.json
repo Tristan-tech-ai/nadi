@@ -4610,9 +4610,10 @@
    "title": "Pusat bantuan dan alat gratis dalam bahasa Inggris",
    "accept": "/en/bantuan, /en/bantuan/artikel/*, /en/alat dan kalkulatornya memakai teks en (label ruang, guna, artikel tugas en); kaki halaman en menautkan versi en; e2e",
    "how": "Teks2 untuk artikel tugas, HalamanInfo bahasa en",
-   "blocked_by": "Kode selesai dan e2e lokal lulus (cdd3779/1d46ee9, gate LULUS); deploy Vercel tertahan batas harian Hobby 6 Nov, push berikutnya setelah pulih lalu e2e produksi",
-   "status": "blocked",
-   "created": "2026-11-06T10:45:50"
+   "blocked_by": "",
+   "status": "running",
+   "created": "2026-11-06T10:45:50",
+   "started": "2026-11-12T08:28:29"
   },
   {
    "id": "L-09",
@@ -4672,9 +4673,11 @@
    "title": "Catatan rilis Yang baru (setara release note Mekari)",
    "accept": "/baru berisi perubahan yang sudah di produksi per tanggal dengan tautan ke layar atau artikel bantuan, ditulis dari commit dan DECISIONS yang benar-benar terpasang; tautan kaki halaman; e2e",
    "how": "Data src/lib/rilis.ts",
-   "blocked_by": "Kode selesai dan e2e lokal lulus (cdd3779/1d46ee9, gate LULUS); deploy Vercel tertahan batas harian Hobby 6 Nov, push berikutnya setelah pulih lalu e2e produksi",
-   "status": "blocked",
-   "created": "2026-11-06T10:52:31"
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-06T10:52:31",
+   "done": "2026-11-12T08:18:14",
+   "result": "produksi 12 Nov 2026: e2e bantuan-alat.spec.ts 8/8 + halaman-publik.spec.ts 3/3 lulus terhadap https://nadi-swart.vercel.app (laporan UAT-01 hasil-2.json/hasil-2b.json), commit 1d46ee9/cdd3779 ada di origin/main; /baru 200 catatan rilis bertanggal, tautan terbuka (tes 'yang baru')"
   },
   {
    "id": "L-13",
@@ -4686,9 +4689,11 @@
    "title": "Template dokumen kerja gratis (setara dokumen HR Talenta)",
    "accept": "/alat/dokumen berisi minimal 5 templat yang bisa diisi dan dicetak tanpa akun (surat keterangan kerja, surat peringatan, perjanjian kerja waktu tertentu ringkas, formulir izin, berita acara serah terima), isi dari templat surat Nadi yang sudah ada, dasar aturan disebut bila ada; e2e + axe",
    "how": "Pakai templat surat-keluar yang ada",
-   "blocked_by": "Kode selesai dan e2e lokal lulus (cdd3779/1d46ee9, gate LULUS); deploy Vercel tertahan batas harian Hobby 6 Nov, push berikutnya setelah pulih lalu e2e produksi",
-   "status": "blocked",
-   "created": "2026-11-06T10:52:31"
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-06T10:52:31",
+   "done": "2026-11-12T08:18:14",
+   "result": "produksi 12 Nov 2026: e2e bantuan-alat.spec.ts 8/8 + halaman-publik.spec.ts 3/3 lulus terhadap https://nadi-swart.vercel.app (laporan UAT-01 hasil-2.json/hasil-2b.json), commit 1d46ee9/cdd3779 ada di origin/main; /alat/dokumen 200, enam templat sama dengan Surat keluar (tes 'templat dokumen')"
   },
   {
    "id": "Q-43",
@@ -4742,9 +4747,11 @@
    "title": "Navigasi halaman depan bertingkat setara Mekari",
    "accept": "Kepala halaman publik punya menu Fitur, Solusi (jenis usaha, peran, integrasi), Sumber belajar (pusat bantuan, panduan, kamus, yang baru, alat gratis), dan Harga; setiap butir bergaris keterangan; bisa dibuka dengan keyboard dan sentuh (details/summary atau tombol aria-expanded), di HP menjadi lembar menu; semua tautan menuju halaman yang ada (tes); axe 0 serius 390/1440; e2e",
    "how": "kepala-kaki.tsx",
-   "blocked_by": "Kode selesai, e2e lokal 20/20 (bantuan-alat, asap, halaman-publik); deploy Vercel tertahan batas harian, dipasang otomatis oleh .github/workflows/picu-deploy.yml 7 Nov 06.00 UTC",
-   "status": "blocked",
-   "created": "2026-11-06T11:27:34"
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-06T11:27:34",
+   "done": "2026-11-12T08:18:14",
+   "result": "produksi 12 Nov 2026: e2e bantuan-alat.spec.ts 8/8 + halaman-publik.spec.ts 3/3 lulus terhadap https://nadi-swart.vercel.app (laporan UAT-01 hasil-2.json/hasil-2b.json), commit 1d46ee9/cdd3779 ada di origin/main; navigasi bertingkat panel Solusi dan Sumber belajar di desktop, lembar menu di HP (tes 'navigasi halaman depan'), axe dan tanpa gulir samping (halaman-publik)"
   },
   {
    "id": "X-00",
@@ -5327,8 +5334,9 @@
    "accept": "dokumen UAT Nadi (PDF) berisi checklist penerimaan per area (masuk, Lempar, Feed, uang, orang, gaji, jual, barang, Mata, dokumen, otomasi, MCP, mod/Tambah fitur, mode coba, bantuan) untuk pemilik, admin, akuntan, staf, dengan langkah, kriteria, status, dan bukti tangkapan layar/keluaran e2e dari aplikasi yang berjalan; skenario DONE-01 termasuk; temuan dan perbaikan dicatat",
    "how": "susun dari e2e yang ada + jalankan ulang di lokal/produksi",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T18:49:25"
+   "status": "running",
+   "created": "2026-11-11T18:49:25",
+   "started": "2026-11-12T07:40:17"
   },
   {
    "id": "UAT-02",
@@ -5340,8 +5348,8 @@
    "title": "Nadi video demo v2: rekaman layar asli, satu alur studi kasus nyata, maksimal 5 menit",
    "accept": "(Tristan 11 Nov 2026) MP4 paling lama 5 menit; minimal 50% durasi rekaman layar Nadi yang benar-benar berjalan (bukan animasi atau rekonstruksi DOM); SATU alur berurutan tanpa loncat dengan satu studi kasus usaha: masuk/daftar, onboarding sampai selesai, lalu fitur lain berurutan (Lempar berkas nyata: Excel karyawan, foto struk nyata, mutasi bank; Feed setujui; invoice + QRIS; gaji; kerja tim/proyek), Mata dengan banyak jenis sumber kamera (kamera HP/laptop, berkas video, CCTV lewat jembatan) memakai footage CCTV nyata, lalu Fitur tambahan: pasang paket resmi, dan bila tidak ada yang cocok buat sendiri atau lewat AI dengan MCP; bahan nyata berlisensi bebas atau dibuat sendiri, tanpa data pribadi orang nyata, dicatat di docs/ASSETS.md; caption/teks penjelas per langkah; video lama (docs/promo/nadi-demo.mp4) ditonton dulu dan kekurangannya ditulis, v2 harus jelas lebih baik; dibuat dengan skill dari repositori kumpulan skill video milik zhuyansen di GitHub yang sudah dipelajari (UAT-02A); ditonton penuh, bingkai dan audio diperiksa (loudness), durasi dicek ffprobe",
    "how": "rekam aplikasi lokal/produksi dengan Playwright recordVideo per langkah alur (data sintetis Toko/usaha studi kasus), sunting dengan skill video terpilih + ffmpeg",
-   "blocked_by": "",
-   "status": "ready",
+   "blocked_by": "Butuh rekaman aplikasi Nadi yang sudah masuk akun: aturan keamanan asisten melarang mengetik kata sandi (termasuk akun uji) di situs produksi, dan di Supabase lokal Lempar tidak bisa membaca berkas karena kunci model AI hanya ada sebagai secret produksi (tidak boleh dibaca). Menunggu Tristan masuk sendiri di Chrome ke nadi-swart.vercel.app (atau menunjuk lingkungan uji ber-host staging) lalu menulis 'sudah masuk'; loop lalu merekam layar Chrome itu (ffmpeg gdigrab) sambil menjalankan alur lewat Chrome milik Tristan, dan menyunting dengan pipeline project-team-management/docs/video (UNTUK-TRISTAN 12 Nov)",
+   "status": "blocked",
    "created": "2026-11-11T18:49:26"
   },
   {
