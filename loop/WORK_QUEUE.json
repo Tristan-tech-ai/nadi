@@ -5882,6 +5882,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-12T19:01:17"
+  },
+  {
+   "id": "AUTH-GIS",
+   "fase": "build",
+   "kind": "build",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Masuk dengan Google memakai tombol resmi Google Identity Services + signInWithIdToken sehingga layar Google menyebut domain Nadi, bukan supabase.co",
+   "accept": "Baca docs Supabase signInWithIdToken (Google) dan docs Google Identity Services terbaru, catat di LEARN; tombol GIS di /masuk dan /daftar (id dan en) dengan nonce acak yang di-hash (SHA-256) dan diverifikasi Supabase; skrip accounts.google.com/gsi/client dimuat hanya saat halaman masuk/daftar dibuka; alur redirect lama tetap sebagai cadangan bila skrip gagal atau diblokir; layar pilih akun Google menampilkan nadiusaha.my.id (dibuktikan tangkapan layar oleh Tristan); tes unit nonce; e2e lokal tombol tampil 390/1440 terang gelap axe; Lighthouse /masuk tetap >= 90; tidak ada sandi/akun dibuat oleh loop",
+   "how": "Supabase auth signInWithIdToken provider google token nonce; client ID 644230089259-7s29623tfn52n0dc54i2frtffqtfopaf",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T19:08:07"
   }
  ]
 }
