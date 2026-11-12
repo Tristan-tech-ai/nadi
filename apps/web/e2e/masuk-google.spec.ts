@@ -2,7 +2,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 // U-07: Masuk dengan Google di /masuk dan /daftar. Bila penyedia Google belum dinyalakan di Supabase, halaman berkata jujur;
-// bila sudah, tombol membawa ke Supabase authorize dengan redirect_to ke /auth/konfirmasi (Google sendiri tidak dibuka di tes).
+// bila sudah, tombol resmi Google (GIS) menukar kartu ID lewat signInWithIdToken dengan nonce; Google sendiri tidak dibuka di tes.
 test("masuk dengan Google: tombol atau penjelasan jujur, rute balik aman", async ({ page }, info) => {
   test.skip(info.project.name !== "desktop", "sekali");
   for (const [jalur, lebar] of [["/masuk?next=/app/gaji", 390], ["/daftar", 1440]] as const) {
@@ -22,15 +22,31 @@ test("masuk dengan Google: tombol atau penjelasan jujur, rute balik aman", async
       await expect(blok).toContainText("belum dinyalakan");
       await expect(blok.getByRole("button")).toHaveCount(0);
     } else {
-      // Jangan sampai ke Google: hentikan di Supabase authorize dan periksa tujuan baliknya.
-      await page.route(/accounts\.google\.com/, (r) => r.abort());
-      const [req] = await Promise.all([
-        page.waitForRequest((r) => r.url().includes("/auth/v1/authorize")),
-        blok.getByRole("button", { name: "Masuk dengan Google" }).click(),
+      // AUTH-GIS: tombol resmi Google. Skrip Google diganti tiruan yang mencatat opsi initialize, menggambar tombol, dan
+      // mengembalikan kartu ID palsu; Supabase harus menolaknya dan halaman menampilkan pesan, tanpa pengalihan ke supabase.co.
+      await page.route("https://accounts.google.com/gsi/client", (r) => r.fulfill({ contentType: "text/javascript", body: `
+        window.google = { accounts: { id: {
+          initialize(o) { window.__gis = o; },
+          renderButton(el, o) { window.__gisTombol = o; const b = document.createElement("button"); b.type = "button";
+            b.textContent = "Tombol Google tiruan"; b.onclick = () => window.__gis.callback({ credential: "palsu.palsu.palsu" }); el.appendChild(b); },
+        } } };` }));
+      await page.reload();
+      const tombol = page.getByTestId("tombol-google-resmi");
+      await expect(tombol).toHaveAttribute("data-keadaan", "siap");
+      const opsi = await page.evaluate(() => (window as unknown as { __gis: { client_id: string; nonce: string; use_fedcm_for_button: boolean } }).__gis);
+      expect(opsi.client_id).toMatch(/\.apps\.googleusercontent\.com$/);
+      expect(opsi.nonce).toMatch(/^[0-9a-f]{64}$/);
+      expect(opsi.use_fedcm_for_button).toBe(true);
+      let keSupabaseAuthorize = false;
+      page.on("request", (r) => { if (r.url().includes("/auth/v1/authorize")) keSupabaseAuthorize = true; });
+      const [tukar] = await Promise.all([
+        page.waitForRequest((r) => r.url().includes("/auth/v1/token") && r.url().includes("id_token")),
+        tombol.getByRole("button", { name: "Tombol Google tiruan" }).click(),
       ]);
-      const u = new URL(req.url());
-      expect(u.searchParams.get("provider")).toBe("google");
-      expect(decodeURIComponent(u.searchParams.get("redirect_to") ?? "")).toMatch(/\/auth\/konfirmasi\?next=\/app/);
+      expect(tukar.postDataJSON()).toMatchObject({ provider: "google", id_token: "palsu.palsu.palsu" });
+      expect((tukar.postDataJSON() as { nonce?: string }).nonce).not.toBe(opsi.nonce);
+      await expect(tombol.getByRole("alert")).toBeVisible();
+      expect(keSupabaseAuthorize).toBe(false);
     }
   }
   // Rute balik: kode palsu tidak memberi sesi dan kembali ke /masuk dengan pesan.

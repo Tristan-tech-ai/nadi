@@ -162,15 +162,15 @@ export async function masukCoba() {
   redirect(error ? "/demo?galat=coba" : "/app");
 }
 
-/** U-07: masuk/daftar dengan Google (alur PKCE @supabase/ssr). Verifier disimpan di kuki oleh klien server, lalu /auth/konfirmasi menukar kodenya. */
-export async function masukGoogle(form: FormData) {
-  const next = jalurAman(teks(form, "next") || null, "/app");
+/**
+ * AUTH-GIS: dipanggil peramban setelah kartu ID Google ditukar ke sesi lewat signInWithIdToken (tombol resmi Google, tanpa
+ * pengalihan ke supabase.co). Sesi dibaca ulang di server; tanpa sesi kembali ke /masuk dengan pesan, selain itu jalur yang
+ * sama dengan masuk lewat email (catatan aktivitas, kode 2FA bila akun memakainya).
+ */
+export async function selesaiGoogle(nextMentah: string) {
+  const next = jalurAman(nextMentah || null, "/app");
   const supabase = await createClient();
-  const h = await headers();
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: { redirectTo: `${asalTautan(h)}/auth/konfirmasi?next=${encodeURIComponent(next)}` },
-  });
-  if (error || !data.url) redirect(`/masuk?galat=google&next=${encodeURIComponent(next)}`);
-  redirect(data.url);
+  const { data } = await supabase.auth.getClaims();
+  if (!data?.claims?.sub) redirect(`/masuk?galat=google&next=${encodeURIComponent(next)}`);
+  return lanjutSetelahMasuk(supabase, next);
 }
