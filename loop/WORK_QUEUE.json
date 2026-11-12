@@ -5989,9 +5989,65 @@
    "title": "UAT Nadi diulang di cloud (https://nadiusaha.my.id) lewat CI dengan secret akun uji, bukan lokal",
    "accept": "Workflow GitHub Actions uat-produksi.yml (workflow_dispatch) menjalankan e2e bermasuk + publik ke E2E_BASE_URL=https://nadiusaha.my.id memakai secret E2E_* yang dipasang Tristan (asisten tidak membaca/mengetik sandi); spec yang hanya bisa lokal (uji wajah, CIMD lokal, migrasi lokal) dilewati dengan alasan; hasil JSON dirangkum ke docs/quality/uat-nadi.md bagian Uji ulang di domain baru; kegagalan nyata diperbaiki lalu diulang; Supabase lokal tidak dipakai sebagai bukti UAT",
    "how": "gh workflow run uat-produksi.yml; urai laporan JSON seperti UAT-01",
-   "blocked_by": "menunggu Tristan memasang secret akun uji (UNTUK-TRISTAN 12 Nov: gh secret set -f apps/web/.env.e2e.local)",
-   "status": "blocked",
+   "blocked_by": "",
+   "status": "ready",
    "created": "2026-11-12T21:50:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "UAT-PDF",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Satu PDF UAT lengkap (Nadi di cloud + PTM) untuk pembina",
+   "accept": "Satu berkas PDF A4 bernomor halaman di luar repo (proposal/), berisi: ringkasan, lingkungan uji (https://nadiusaha.my.id, commit, tanggal, CI run), daftar kriteria per area dan peran dengan status dari laporan JSON UAT-CLOUD (bukan tulisan tangan), temuan dan perbaikan, tangkapan layar asli dari run cloud, bagian PTM (status UAT dari docs/UAT.pdf + uji online), lampiran cara mencoba; sumber markdown di repo (docs/quality/uat-nadi.md) diperbarui dari hasil yang sama",
+   "how": "urai laporan uat-produksi.json dari artifact run CI, Playwright cetak PDF seperti LV-08",
+   "blocked_by": "menunggu UAT-CLOUD, UAT-MATRIKS, UAT-BEBAN, UAT-EFISIEN; PDF menyebut UAT 100% hanya bila ketiganya lulus (definisi Tristan 12 Nov)",
+   "status": "blocked",
+   "created": "2026-11-12T22:00:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "UAT-MATRIKS",
+   "priority": 1,
+   "size": "l",
+   "wajib": false,
+   "title": "Matriks UAT semua kemungkinan Nadi: setiap layar dan aksi x peran (pemilik, admin, akuntan, staf, peran kustom, pengunjung, pelanggan) x keadaan (kosong, berisi, galat, tanpa izin, luring) x perangkat (390/1440) x bahasa (id/en)",
+   "accept": "docs/quality/matriks-uat.md dibangkitkan skrip dari daftar rute app/ + kamus + spec e2e (bukan tulisan tangan): setiap sel menunjuk tes yang membuktikannya atau ditandai BELUM; jumlah sel BELUM menjadi tugas tambahan; tidak ada rute yang tidak terpetakan; tes skrip gagal bila ada rute baru tanpa baris",
+   "how": "",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T22:10:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "UAT-BEBAN",
+   "priority": 1,
+   "size": "l",
+   "wajib": false,
+   "title": "Uji beban ratusan pengguna: 300 pengguna serentak dalam SATU usaha dan 300 pengguna tersebar di 50 usaha, di lingkungan cloud yang sama arsitekturnya dengan produksi",
+   "accept": "Skrip k6 (sumber terbuka) di repo dijalankan dari GitHub Actions ke lingkungan uji ber-host staging (bukan produksi, karena perlu ratusan akun uji): skenario campuran (buka Feed, lempar berkas kecil tanpa AI, setujui usulan, absen staf, catat penjualan kasir, laporan) 10 menit; ambang: galat < 0,5%, p95 halaman < 1,5 dtk, p95 RPC < 500 ms, tidak ada respons berisi data usaha lain (pemeriksaan isolasi di setiap respons), tidak ada deadlock atau koneksi habis; laporan angka + grafik di docs/quality/beban.md",
+   "how": "",
+   "blocked_by": "menunggu Tristan memilih lingkungan uji beban (UNTUK-TRISTAN 12 Nov: staging terpisah)",
+   "status": "blocked",
+   "created": "2026-11-12T22:10:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "UAT-EFISIEN",
+   "priority": 1,
+   "size": "l",
+   "wajib": false,
+   "title": "Pemakaian cloud efisien: biaya dan sumber daya per 100 pengguna aktif terukur dan di bawah batas paket gratis",
+   "accept": "Diukur dari uji beban dan produksi: kueri SQL per layar (pg_stat_statements, tanpa N+1), indeks untuk kueri terlambat (get_advisors performa bersih), panggilan fungsi Vercel dan durasinya per sesi, egress Supabase dan Vercel per pengguna, CPU/RAM/koneksi database saat beban; perbaikan untuk yang boros; tabel perkiraan kapasitas paket gratis vs berbayar di docs/quality/efisiensi.md",
+   "how": "",
+   "blocked_by": "menyusul UAT-BEBAN",
+   "status": "blocked",
+   "created": "2026-11-12T22:10:00"
   }
  ]
 }
