@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 import { Suspense } from "react";
 import { FormJam, FormProyekBaru, FormRab, TombolTandai } from "@/components/app/proyek";
 import { formatRupiah, formatTanggalKalender } from "@/lib/format";
@@ -33,7 +34,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/proyek">["s
   const dipilih = proyek.find((p) => p.id === sp.p) ?? proyek[0];
   const rp = (n: number) => formatRupiah(n, { bahasa });
   const angka = new Intl.NumberFormat(bahasa === "en" ? "en-GB" : "id-ID", { maximumFractionDigits: 2 });
-  const judul = <><KepalaHalaman jalur="/app/proyek" judul={t.judul} ket={pengelola ? t.ket : t.hanyaJam} /></>;
+  const judul = <><KepalaHalaman jalur="/app/proyek" judul={t.judul} ket={pengelola ? t.ket : t.hanyaJam} /><CatatanUuBaru dasar="PP 35/2021 Pasal 31 (perkiraan biaya jam kerja)" bahasa={bahasa} /></>;
 
   if (!pengelola) {
     const { data: jamSaya } = await supabase.from("project_time").select("id, tanggal, jam, catatan, dimension_id").order("tanggal", { ascending: false }).limit(30);

@@ -1,6 +1,8 @@
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join, relative } from "node:path";
 import { describe, expect, it } from "vitest";
+import { kamusEn } from "@/lib/i18n/kamus/en";
+import { kamusId } from "@/lib/i18n/kamus/id";
 import { DASAR_TERDAMPAK, perluCatatan } from "./uu-ketenagakerjaan";
 
 // Q-52: setiap layar yang menyebut dasar aturan yang dicabut atau terdampak UU 27/2026 wajib memasang CatatanUuBaru.
@@ -44,5 +46,37 @@ describe("catatan UU 27/2026", () => {
 
   it("layar yang memakai teks kamus berdasar terdampak juga memasang catatan", () => {
     for (const r of LEWAT_KAMUS) expect(readFileSync(join(SRC, r), "utf8"), r).toContain("CatatanUuBaru");
+  });
+});
+
+// Q-56: bagian kamus (kunci tingkat atas) yang teksnya menyebut dasar terdampak, dan layar yang menampilkan teks itu.
+// Bagian baru yang menyebut dasar terdampak membuat tes gagal sampai layarnya dipetakan dan memasang CatatanUuBaru.
+const LAYAR_BAGIAN: Record<string, string[]> = {
+  gaji: ["app/app/gaji/page.tsx"],
+  kolam: ["app/app/gaji/page.tsx", "app/app/kerja/page.tsx"],
+  aturanKerja: ["app/app/perusahaan/page.tsx"],
+  serahTerima: ["app/app/serah-terima/page.tsx"],
+  serahPesan: ["app/app/serah-terima/page.tsx"],
+  hakBerhenti: ["app/app/serah-terima/page.tsx"],
+  proyek: ["app/app/proyek/page.tsx"],
+  kasbon: ["app/app/gaji/kasbon/page.tsx", "app/app/gaji/page.tsx"],
+  hr: ["app/app/orang/kerja/page.tsx"],
+  panduanHalaman: ["components/landing/halaman-panduan.tsx"],
+  fitur: ["components/poster/halaman-fitur.tsx"],
+  // isi.hari (cerita satu hari, en menyebut PP 35/2021) tidak ditampilkan di layar mana pun; beranda hanya memakai isi.faq dan isi.sedangDibuat.
+  isi: [],
+};
+
+describe("catatan UU 27/2026 untuk teks kamus (Q-56)", () => {
+  const bagian = new Set<string>();
+  for (const k of [kamusId, kamusEn]) for (const [nama, isi] of Object.entries(k)) if (DASAR_TERDAMPAK.test(JSON.stringify(isi))) bagian.add(nama);
+
+  it("setiap bagian kamus id dan en yang menyebut dasar terdampak sudah dipetakan ke layarnya", () => {
+    expect([...bagian].filter((b) => !LAYAR_BAGIAN[b])).toEqual([]);
+    expect(bagian.size).toBeGreaterThan(5);
+  });
+
+  it("setiap layar itu memasang CatatanUuBaru", () => {
+    for (const b of bagian) for (const r of LAYAR_BAGIAN[b] ?? []) expect(readFileSync(join(SRC, r), "utf8"), `${b} -> ${r}`).toContain("CatatanUuBaru");
   });
 });

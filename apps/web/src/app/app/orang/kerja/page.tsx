@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 import { randomUUID } from "node:crypto";
 import { Suspense } from "react";
 import { CentangPeriksa, FormBidang, FormBuatDokumen, FormDelegasi, FormMulaiPeriksa, FormNilai, FormProfil, FormSp, FormTemplat, TombolTerbitkanSp } from "@/components/app/hr";
@@ -80,6 +81,7 @@ async function Isi() {
   return (
     <div lang={bahasa}>
       <KepalaHalaman jalur="/app/orang/kerja" judul={t.judul} ket={t.ket} />
+      <CatatanUuBaru dasar="PP 35/2021 Pasal 52 (surat peringatan)" bahasa={bahasa} />
 
       <section className="mt-8" aria-labelledby="judul-bagan" data-testid="bagan">
         <h2 id="judul-bagan" className={judul}>{t.baganJudul}</h2>

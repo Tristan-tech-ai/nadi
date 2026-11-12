@@ -29,6 +29,9 @@ test("catatan UU 27/2026 di alat pesangon, gaji, dan kamus; tidak di THR", async
     ["/alat/gaji", "alat-gaji", "mencabut UU 13/2003"],
     ["/en/alat/pesangon", "alat-pesangon-en", "Law 27/2026 on Labour Protection has applied since 28 Oct 2026"],
     ["/kamus/pesangon", "kamus-pesangon", "Hitungan di sini masih memakai aturan sebelumnya"],
+    // Q-56: teks kamus berdasar terdampak di halaman publik lain (panduan, halaman fitur Jadwal shift).
+    ["/panduan", "panduan", "Hitungan di sini masih memakai aturan sebelumnya"],
+    ["/fitur/jadwal", "fitur-jadwal", "UU 27/2026 tentang Pelindungan Ketenagakerjaan"],
   ] as const) {
     await page.goto(jalur);
     const catatan = page.getByTestId("catatan-uu-baru");

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 import { GambarBaca, HalamanInfo } from "@/components/landing/halaman-info";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { ambilKamus } from "@/lib/i18n/kamus";
@@ -16,6 +17,7 @@ export function HalamanPanduan({ bahasa }: { bahasa: Bahasa }) {
           <a key={p.id} href={`#${p.id}`} className="rounded-full border border-garis px-4 py-2 text-sm font-semibold hover:bg-kertas-2">{p.nama}</a>
         ))}
       </nav>
+      <CatatanUuBaru dasar={JSON.stringify(k.peran)} bahasa={bahasa} />
       {k.peran.map((p) => (
         <section key={p.id} id={p.id} aria-labelledby={`judul-${p.id}`} className="bagian-baca masuk scroll-mt-6" data-testid="panduan-peran">
           <div className="baca-dua">

@@ -20,7 +20,7 @@ export function CatatanUuBaru({ dasar, bahasa = "id", hari = UU_BARU.berlaku }: 
   if (!perluCatatan(dasar, hari)) return null;
   const t = TEKS[bahasa] ?? TEKS.id;
   return (
-    <div role="note" lang={bahasa} className="my-6 max-w-2xl rounded-[var(--radius-kartu)] border border-garis bg-kertas-2 p-4 text-sm" data-testid="catatan-uu-baru">
+    <div role="note" lang={bahasa} className="my-6 max-w-2xl rounded-[var(--radius-kartu)] border border-garis bg-kertas-2 p-4 text-sm text-tinta" data-testid="catatan-uu-baru">
       <p className="font-semibold">{t.judul}</p>
       <p className="mt-1 text-tinta-2">{t.isi}</p>
       <a href={UU_BARU.sumber} target="_blank" rel="noopener noreferrer" className="mt-2 inline-block font-semibold text-laut underline underline-offset-4">{t.tautan}</a>

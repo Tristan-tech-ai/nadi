@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 import type { Usulan } from "@/components/ui/kartu-usulan";
 import { KakiPoster, KepalaPoster } from "@/components/poster/kepala-kaki";
 import { Cap } from "@/components/poster/ilustrasi";
@@ -90,6 +91,7 @@ export function HalamanFitur({ slug, bahasa }: { slug: string; bahasa: Bahasa })
               </li>
             ))}
           </ol>
+          <CatatanUuBaru dasar={JSON.stringify(f)} bahasa={bahasa} />
         </div>
       </section>
 
