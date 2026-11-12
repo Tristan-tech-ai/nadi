@@ -20,6 +20,21 @@ const berlangganan = () => () => {};
  * ini (/masuk dan /daftar). Kartu ID dari Google ditukar ke sesi Supabase dengan nonce yang sama; langkah sesudahnya
  * (catatan aktivitas, kode 2FA) memakai jalur server yang sama dengan masuk lewat email.
  */
+/** Garis fokus terlihat untuk iframe tombol resmi Google (WCAG 2.4.7): gaya CSS lewat selektor tidak terbaca pada iframe itu,
+ * jadi garis dipasang langsung saat iframe menerima fokus dan dilepas saat fokus pindah. */
+function pasangFokus(el: HTMLElement) {
+  const pasang = (f: HTMLIFrameElement) => {
+    if (f.dataset.fokus) return;
+    f.dataset.fokus = "1";
+    f.addEventListener("focus", () => { f.style.outline = "2px solid var(--tinta)"; f.style.outlineOffset = "2px"; });
+    f.addEventListener("blur", () => { f.style.outline = ""; f.style.outlineOffset = ""; });
+  };
+  el.querySelectorAll("iframe").forEach(pasang);
+  const o = new MutationObserver(() => el.querySelectorAll("iframe").forEach(pasang));
+  o.observe(el, { childList: true, subtree: true });
+  window.setTimeout(() => o.disconnect(), 30_000);
+}
+
 export function TombolGoogle({ clientId, mode, bahasa, next, teks: t }: { clientId: string; mode: ModeGoogle; bahasa: "id" | "en"; next: string; teks: Kamus["auth"] }) {
   const wadah = useRef<HTMLDivElement>(null);
   const [keadaan, setKeadaan] = useState<"muat" | "siap" | "gagal" | "masuk">("muat");
@@ -48,6 +63,7 @@ export function TombolGoogle({ clientId, mode, bahasa, next, teks: t }: { client
       },
     });
     id.renderButton(wadah.current, opsiTombol(mode, bahasa, wadah.current.clientWidth || 400));
+    pasangFokus(wadah.current);
     setKeadaan("siap");
   }
 
@@ -56,7 +72,7 @@ export function TombolGoogle({ clientId, mode, bahasa, next, teks: t }: { client
     <div className="mt-3" data-testid="tombol-google-resmi" data-keadaan={keadaan}>
       <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" onReady={() => { void siapkan(); }} onError={() => setKeadaan("gagal")} />
       {galat && <p role="alert" className="mb-3 text-sm text-cap">{t.googleGagal}</p>}
-      <div ref={wadah} className="flex min-h-11 w-full justify-center [&_iframe:focus]:outline-2! [&_iframe:focus]:outline-offset-2! [&_iframe:focus]:outline-tinta! [&_iframe:focus]:outline-solid!" aria-busy={keadaan === "muat" || keadaan === "masuk"} />
+      <div ref={wadah} className="flex min-h-11 w-full justify-center" aria-busy={keadaan === "muat" || keadaan === "masuk"} />
       {keadaan === "muat" && <p className="text-center text-sm text-tinta-2">{t.googleMuat}</p>}
       {keadaan === "masuk" && <p role="status" className="mt-2 text-center text-sm text-tinta-2">{t.sebentar}</p>}
       {keadaan === "gagal" && <p role="alert" className="text-sm text-cap">{t.googleSkripGagal}</p>}

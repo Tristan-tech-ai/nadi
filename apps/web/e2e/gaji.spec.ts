@@ -425,7 +425,7 @@ test("cadangan pesangon: perkiraan skenario dasar, rentang, saran sisihan, berta
     await expect(rincian.getByRole("listitem").filter({ hasText: nama })).toContainText("5 bulan pesangon + 2 bulan penghargaan");
     await expect(rincian.getByRole("listitem").filter({ hasText: tanpaMulai })).toContainText("Tanggal mulai kerja belum diisi");
     await kartu.getByText("Dari mana angka ini?").click();
-    await expect(kartu).toContainText("Pasal 157 UU 13/2003");
+    await expect(kartu).toContainText("gaji pokok ditambah tunjangan tetap (Pasal 234)");
     await kartu.scrollIntoViewIfNeeded();
     await periksaUi(page, "pesangon");
   } finally {
