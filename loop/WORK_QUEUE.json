@@ -6177,9 +6177,11 @@
    "title": "Kebijakan privasi dicocokkan pasal per pasal dengan UU 27/2022 (PDP)",
    "accept": "Pasal hak subjek data, dasar pemrosesan, pemberitahuan kegagalan pelindungan 3 x 24 jam, transfer data ke luar negeri (server Singapura), prosesor data, retensi dicocokkan dari teks resmi; kalimat \"pasal-pasalnya belum dicocokkan\" hilang karena sudah benar-benar dicocokkan; perubahan fitur yang diwajibkan undang-undang dibuat dengan tes",
    "how": "",
-   "blocked_by": "menunggu izin Tristan mengunduh PDF resmi UU 27/2022 Pelindungan Data Pribadi dari JDIH BPK",
-   "status": "blocked",
-   "created": "2026-11-13T00:20:00"
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-13T00:20:00",
+   "done": "2026-11-13T00:45:00",
+   "result": "PDF resmi UU 27/2022 (JDIH BPK Download/224884, 2.977.828 byte) dibaca; /privasi id dan en dicocokkan Pasal 5-14, 20, 30, 32, 40, 41, 43, 46, 51, 56 (docs/research/uu-pdp-cocok.md); cek-tulisan LOLOS; e2e asap + halaman-publik lokal 12 lulus; alamat kontak tetap di KONTAK-01"
   },
   {
    "fase": "R",
@@ -6191,7 +6193,7 @@
    "title": "Alamat kontak resmi Nadi di /privasi, /keamanan, /tentang menggantikan \"sedang disiapkan\"",
    "accept": "Alamat di domain Nadi yang benar-benar menerima email (penerusan Hostinger ke kotak masuk Tristan), diuji kirim dan terima, dipasang di tiga halaman dan kamus en; tidak ada lagi teks \"alamat resminya sedang disiapkan\"",
    "how": "",
-   "blocked_by": "menunggu izin Tristan memasang penerusan email kontak@nadiusaha.my.id (aturan penerusan email butuh persetujuan pemilik)",
+   "blocked_by": "Tristan memilih tujuan ifys4251 (13 Nov), tetapi penerusan Hostinger butuh paket email berbayar (mail_orders kosong); pilihan: tampilkan alamat Gmail langsung (butuh persetujuan publik) atau terima lewat Resend inbound",
    "status": "blocked",
    "created": "2026-11-13T00:20:00"
   }
