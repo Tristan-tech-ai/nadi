@@ -6134,8 +6134,9 @@
    "accept": "RPC jadikan_admin/cabut_admin khusus pemilik dengan tes SQL (isolasi usaha, bukan pemilik ditolak, pemilik tidak bisa mencabut dirinya); undang admin lewat email akun Nadi seperti akuntan; tombol di Orang dengan konfirmasi; e2e cloud; panduan peran admin diperbarui",
    "how": "",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-12T23:05:00"
+   "status": "running",
+   "created": "2026-11-12T23:05:00",
+   "result": "BELUM DONE: tunggu e2e cloud run 43267444570 (admin-usaha.spec). Sudah: migrasi 20261113002000_admin_usaha.sql produksi, tes SQL 17/17 produksi, bagian Admin usaha di /app/orang, artikel bantuan tambah-admin id/en, deploy dpl_9DScGAEp2GhgM1pRQr4NRcPma4DD READY, commit ab41927"
   },
   {
    "fase": "deploy",
@@ -6147,7 +6148,7 @@
    "title": "Akun demo juri lengkap (pemilik, admin, akuntan, dua staf) di satu usaha berisi data sintetis lengkap",
    "accept": "Tristan membuat akun lewat aplikasi (asisten dilarang membuat akun di produksi) memakai alias nadiusaha.my.id+...@gmail.com supaya email pribadi tidak terbuka; loop mengisi data sintetis lengkap ke usaha juri lewat RPC aplikasi sebagai pemilik (orang, topi, produk, stok, invoice, penjualan, kas, usulan di Feed, jadwal, izin, kerja tim, proyek, satu fitur tambahan dari katalog), menjadikan admin lewat ADMIN-01, lalu menulis isian lewat proposal/alat-pengumpulan/buat_isian_tahap2.py dari akun-juri.txt tanpa mencetak sandi; setiap akun diuji masuk lewat CI",
    "how": "",
-   "blocked_by": "menunggu Tristan membuat akun juri (UNTUK-TRISTAN 12 Nov) dan ADMIN-01",
+   "blocked_by": "menunggu Tristan membuat akun juri (UNTUK-TRISTAN 12 Nov); admin kini bisa ditambah pemilik juri sendiri di Orang > Admin usaha (ADMIN-01)",
    "status": "blocked",
    "created": "2026-11-12T23:05:00"
   },
