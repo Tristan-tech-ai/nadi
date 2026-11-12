@@ -16,6 +16,7 @@ import { KepalaHalaman } from "@/components/app/kepala-halaman";
 import { FormDivisi } from "@/components/app/divisi";
 
 export const metadata: Metadata = { title: "Orang" };
+const LEPAS_TAMPIL = 30;
 
 type PakaiTopi = { porsi: number; selesai: string | null; topi: { nama: string } | null };
 
@@ -47,9 +48,12 @@ async function Isi() {
     );
   }
   const supabase = await createClient();
-  const [{ data: orang }, { data: usaha }] = await Promise.all([
-    supabase.from("orang").select("id, nama, id_staf, user_id, data, pakai_topi(porsi, selesai, topi(nama)), orang_rahasia(gaji, bank, rekening, atas_nama)").order("dibuat_at", { ascending: true }),
+  // Q-42: hanya orang aktif yang membawa formulir akun dan gaji. Dulu semua baris orang (termasuk nonaktif dan kandidat)
+  // dirender dengan formulirnya, jadi setiap Tambah orang di usaha 500 orang mengirim ulang halaman 3 MB (6,5 dtk lokal, sekitar 20 dtk produksi).
+  const [{ data: orang }, { data: usaha }, { data: lepas, count: jumlahLepas }] = await Promise.all([
+    supabase.from("orang").select("id, nama, id_staf, user_id, data, pakai_topi(porsi, selesai, topi(nama)), orang_rahasia(gaji, bank, rekening, atas_nama)").eq("status", "aktif").order("dibuat_at", { ascending: true }),
     supabase.from("perusahaan").select("kode").eq("id", sesi.perusahaanId).maybeSingle(),
+    supabase.from("orang").select("id, nama", { count: "exact" }).in("status", ["nonaktif", "keluar"]).order("dibuat_at", { ascending: false }).limit(LEPAS_TAMPIL),
   ]);
   return (
     <section className="mx-auto w-full max-w-2xl px-5 py-10" lang={bahasa}>
@@ -78,6 +82,13 @@ async function Isi() {
       ) : (
         <p className="mt-6 text-tinta-2">{t.kosong}</p>
       )}
+      {jumlahLepas ? (
+        <details className="mt-4 text-sm" data-testid="orang-tidak-aktif">
+          <summary className="cursor-pointer text-tinta-2 underline underline-offset-4">{sisip(t.tidakAktif, { n: jumlahLepas })}</summary>
+          <p className="mt-2 text-tinta-2">{t.tidakAktifKet}</p>
+          <p className="mt-2" data-pengguna>{(lepas ?? []).map((o) => o.nama).join(", ")}{jumlahLepas > LEPAS_TAMPIL ? ` ${t.danLainnya.replace("{n}", String(jumlahLepas - LEPAS_TAMPIL))}` : ""}</p>
+        </details>
+      ) : null}
       <Suspense fallback={<div className="mt-10 h-24 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <BagianDivisi orang={(orang ?? []).map((o) => ({ id: o.id as string, nama: o.nama as string }))} />
       </Suspense>

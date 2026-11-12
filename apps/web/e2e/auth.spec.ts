@@ -122,8 +122,8 @@ test("pemilik membuat akun staf; staf masuk tanpa email dan ditolak di halaman p
   await page.getByLabel("Nama orang").fill(nama);
   await page.getByRole("button", { name: "Tambah orang", exact: true }).click();
   const baris = page.getByRole("listitem").filter({ hasText: nama });
-  // Tambah orang di usaha uji A (28+ orang uji) butuh sampai 20 dtk di produksi: tugas Q-42 mengukur dan memperbaikinya.
-  await expect(baris).toBeVisible({ timeout: 30_000 });
+  // Q-42: halaman Orang kini hanya merender orang aktif, jadi batas waktu bawaan cukup.
+  await expect(baris).toBeVisible();
   await baris.getByPlaceholder("PIN 6 angka").fill("246810");
   await baris.getByRole("button", { name: "Buat akun staf" }).click();
   await expect(baris.getByTestId("info-akun")).toContainText(`kode ${kode}`);

@@ -43,7 +43,7 @@ test("divisi: pemilik membuat divisi, kepala divisi meninjau hasil kerja anggota
   const usaha = await sb.rpc("buat_perusahaan", { p_nama: "Agensi Divisi", p_industri: "kantor" });
   expect(usaha.error, usaha.error?.message).toBeNull();
   await sb.auth.refreshSession();
-  const orang = await sb.from("orang").insert([{ perusahaan_id: usaha.data, nama: "Sari Desain", jenis: ["karyawan"] }, { perusahaan_id: usaha.data, nama: "Raka Kepala", jenis: ["karyawan"] }]).select("id, nama");
+  const orang = await sb.from("orang").insert([{ perusahaan_id: usaha.data, nama: "Sari Desain", jenis: ["karyawan"], status: "aktif" }, { perusahaan_id: usaha.data, nama: "Raka Kepala", jenis: ["karyawan"], status: "aktif" }, { perusahaan_id: usaha.data, nama: "Dodi Lama", jenis: ["karyawan"], status: "nonaktif" }]).select("id, nama");
   expect(orang.error, orang.error?.message).toBeNull();
   const sari = orang.data!.find((o) => o.nama === "Sari Desain")!.id as string;
   const raka = orang.data!.find((o) => o.nama === "Raka Kepala")!.id as string;
@@ -63,6 +63,10 @@ test("divisi: pemilik membuat divisi, kepala divisi meninjau hasil kerja anggota
   await page.waitForURL((u) => u.pathname === "/app/orang", { timeout: 60_000 });
   const bagian = page.getByTestId("divisi");
   await expect(bagian).toContainText("Belum ada divisi", { timeout: 60_000 });
+  // Q-42: orang nonaktif tidak membawa formulir di daftar utama dan tidak bisa dipilih untuk divisi; tetap terlihat di bagian terlipat.
+  await expect(page.locator("#daftar-orang").getByText("Dodi Lama")).toHaveCount(0);
+  await expect(page.getByTestId("orang-tidak-aktif")).toContainText("Sudah tidak aktif (1 orang)");
+  await expect(bagian.getByRole("group", { name: "Anggota" }).getByLabel("Dodi Lama")).toHaveCount(0);
   const form = bagian.getByRole("form", { name: "Buat divisi" });
   await form.getByLabel("Nama divisi").fill("Desain");
   await form.getByLabel("Kepala divisi").selectOption({ label: "Raka Kepala" });
