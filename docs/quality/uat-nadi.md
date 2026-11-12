@@ -264,3 +264,21 @@ UAT di atas dijalankan terhadap produksi pada commit 821bec6. Setelah itu ada 15
 | 5087b03 | Catatan UU 27/2026 di setiap hitungan ketenagakerjaan (Q-52) | `uu-ketenagakerjaan.test.ts` 3/3, `uu-baru.spec.ts` | catatan tampil di /alat/pesangon, /alat/gaji, /en/alat/pesangon, /kamus/pesangon; tidak di /alat/thr |
 
 Uji asap produksi otomatis (GitHub Actions `asap.yml`, run 43191207176, 12 Nov 2026): 19 lulus, 1 dilewati (tes merah sengaja), 0 gagal.
+
+## UAT cloud di https://nadiusaha.my.id (CI GitHub Actions, akun uji dari secret)
+
+Jalan pertama, run 43240291948 (12 Nov 2026, 51 berkas, 47,7 menit): 175 lulus, 16 gagal, 226 dilewati (versi HP dari tes
+yang hanya untuk desktop), 17 tidak berjalan karena bergantung pada tes yang gagal. Pemilahan 16 yang gagal:
+
+| Tes | Sebab | Tindakan |
+|---|---|---|
+| aksesibilitas /masuk dan /daftar | iframe tombol resmi Google tanpa garis fokus terlihat | **bug nyata**, diperbaiki (garis fokus di wadah tombol) |
+| asap /en/fitur/mata | judul en 3 baris di 390 px | **bug nyata**, judul dipendekkan |
+| faktur-pajak (2 tes) | lxml tidak terpasang di workflow UAT | lingkungan CI, workflow diperbaiki |
+| audit-kejelasan (2 tes) | folder test-results tidak ada saat output diarahkan ke folder lain | tes diperbaiki |
+| bahasa /en/keamanan | tes menghitung 6 judul, halaman kini punya judul ajakan penutup | tes basi, diperbarui |
+| skill | angka 13 digit dari nama topi buatan tes lain (Date.now), bukan data pribadi; dicek lewat SQL | tes diperbaiki |
+| buku-lanjut, ilustrasi, lamar, rubrik, mata-denah, tanya-belajar, rekam-ilmu, wawancara | perlu cuplikan halaman dari CI | dijalankan ulang terpisah untuk diagnosis |
+
+Jalan kedua untuk aturan UU 27/2026, run 43256791821 (pesangon-uu27, gaji, hak-berhenti, serah-terima, proyek, bantuan-alat,
+pesangon-kontrak, jadwal): hasil ditulis setelah selesai.

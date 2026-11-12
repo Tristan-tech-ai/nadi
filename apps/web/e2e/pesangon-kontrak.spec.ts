@@ -4,8 +4,8 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 
-// F4-09B: kartu cadangan pesangon menghitung uang kompensasi PKWT (PP 35/2021 Pasal 16) untuk karyawan kontrak, dan iuran dana
-// pensiun pengusaha (Pasal 58) yang diisi pemilik per orang mengurangi kekurangan orang itu.
+// F4-09B: kartu cadangan pesangon menghitung uang kompensasi PKWT (UU 27/2026 Pasal 88, PP 35/2021 Pasal 16) untuk karyawan kontrak, dan iuran dana
+// pensiun pengusaha (UU 27/2026 Pasal 248) yang diisi pemilik per orang mengurangi kekurangan orang itu.
 function bacaEnv(nama: string): Record<string, string> {
   try {
     return Object.fromEntries(readFileSync(join(__dirname, "..", nama), "utf8").split("\n").filter((l) => l.includes("=")).map((l) => [l.slice(0, l.indexOf("=")), l.slice(l.indexOf("=") + 1).trim()]));
@@ -78,7 +78,7 @@ test("cadangan pesangon: kompensasi PKWT dan iuran dana pensiun", async ({ page 
     await expect(rincian.getByRole("listitem").filter({ hasText: tetap }).getByTestId("tertutup-pensiun")).toContainText("Rp5.000.000");
     await expect(kartu.getByTestId("total-tertutup-pensiun")).toBeVisible();
     await kartu.getByText("Dari mana angka ini?").click();
-    await expect(kartu).toContainText("Pasal 58 ayat (1)");
+    await expect(kartu).toContainText("Pasal 248 ayat (1)");
     // Warung Uji A punya ratusan karyawan sisa uji: foto dua baris yang diuji dan ringkasan kartu; axe tetap memeriksa seluruh halaman.
     await periksa(page, "pesangon-tetap", rincian.getByRole("listitem").filter({ hasText: tetap }));
     await periksa(page, "pesangon-kontrak", bk);
