@@ -4516,8 +4516,8 @@
    "title": "Tambah orang di /app/orang lambat (sekitar 20 dtk, usaha uji A 28+ orang)",
    "accept": "Waktu dari klik Tambah orang sampai baris tampil diukur sebelum dan sesudah di produksi; sesudah <= 3 dtk untuk usaha 50 orang; e2e auth staf kembali ke batas waktu bawaan 10 dtk",
    "how": "Ukur bagian lambat (insert orang + pemicu, revalidatePath halaman berat, render daftar); perbaiki yang terbesar",
-   "blocked_by": "",
-   "status": "running",
+   "blocked_by": "Perbaikan terpasang ffe4b11 (halaman Orang hanya orang aktif): diukur lokal usaha 500 orang, median 6,5 dtk -> 0,17 dtk, aksi 552 KB -> 108 KB, HTML 3,3 MB -> 520 KB; e2e divisi lokal lulus. Sisa kriteria (ukur di produksi + auth.spec batas 10 dtk di produksi) butuh tes bermasuk di produksi, yang tidak lagi dijalankan loop (aturan keamanan kata sandi); menunggu CI bermasuk atau Tristan menjalankan auth.spec",
+   "status": "blocked",
    "created": "2026-11-06T09:52:55",
    "started": "2026-11-12T09:02:26"
   },
@@ -4709,9 +4709,11 @@
    "accept": "Isian yang diisi sebelum JavaScript selesai tetap dipakai setelah hidrasi (temuan e2e produksi THR); e2e mengisi segera setelah goto tanpa menunggu networkidle",
    "how": "Baca nilai DOM awal saat hidrasi atau isian tak terkendali",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-11-06T10:52:31",
-   "started": "2026-11-12T09:02:26"
+   "started": "2026-11-12T09:02:26",
+   "done": "2026-11-12T09:20:04",
+   "result": "d1a44b7: useIsianSebelumHidrasi di kalkulator gaji/slip/THR/pesangon (React 19.3 tidak menimpa DOM saat hidrasi, state diambil dari DOM sekali setelah hidrasi); e2e Q-43 menahan JS chunk sampai isian terisi tanpa menunggu networkidle: merah sebelum perbaikan (Rp3.500.000 bukan Rp1.800.000), lulus lokal dan di produksi https://nadi-swart.vercel.app (CI 43139070103/43140240203 hijau)"
   },
   {
    "id": "W-11",
@@ -5372,8 +5374,9 @@
    "accept": "staf/akuntan dengan izin kustom kerja.kelola melihat formulir Tambah kerja dan papan pengelola di /app/kerja (nama rekan lewat app.nama_rekan, bukan RLS orang); staf tanpa izin tidak melihatnya; e2e lokal",
    "how": "baca izin dari anggota.custom_role(permissions) sesi; RPC daftar nama rekan definer",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T20:15:47"
+   "status": "running",
+   "created": "2026-11-11T20:15:47",
+   "started": "2026-11-12T09:31:25"
   },
   {
    "id": "UAT-02A",
