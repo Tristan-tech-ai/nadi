@@ -1772,8 +1772,8 @@ export const kamusId = {
   },
   poster: {
     "filmJudul": "Lihat Nadi bekerja",
-    "filmKet": "Film 3 menit 24 detik dari layar Nadi asli, dengan data contoh.",
-    "filmKredit": "Musik: Inspiring Advertising, Rafael Krux (filmmusic.io), CC BY 4.0. Rekaman CCTV: Shruthi Pradeep, Pexels.",
+    "filmKet": "Film 4 menit 57 detik: satu hari di usaha katering, dari layar Nadi asli dengan data contoh.",
+    "filmKredit": "Musik: Podcast Interview Background Music, HitsLab (Pixabay). Rekaman kamera atas: Shruthi Pradeep, Pexels. Foto staf di animasi absen: Byrle 3gp dan Jeffrey van der Heijden, Pexels.",
     "metaJudul": "Nadi: lempar notanya, Nadi yang merapikan",
     "metaDeskripsi": "Foto nota, surat dokter, atau slip gaji. Nadi membacanya dan menyiapkan catatan yang tinggal kamu setujui dari HP.",
     "nav": {

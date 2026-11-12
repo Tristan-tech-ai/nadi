@@ -1771,8 +1771,8 @@ export const kamusEn: Kamus = {
   },
   poster: {
     "filmJudul": "Watch Nadi work",
-    "filmKet": "A 3 minute 24 second film of Nadi's real screens, with sample data.",
-    "filmKredit": "Music: Inspiring Advertising, Rafael Krux (filmmusic.io), CC BY 4.0. CCTV footage: Shruthi Pradeep, Pexels.",
+    "filmKet": "A 4 minute 57 second film: one day at a catering business, from Nadi's real screens with sample data.",
+    "filmKredit": "Music: Podcast Interview Background Music, HitsLab (Pixabay). Overhead camera footage: Shruthi Pradeep, Pexels. Staff photos in the attendance animation: Byrle 3gp and Jeffrey van der Heijden, Pexels.",
     "metaJudul": "Nadi: drop in the receipt, Nadi sorts it out",
     "metaDeskripsi": "Snap a receipt, a doctor's note, or a payslip. Nadi reads it and prepares a record you approve from your phone.",
     "nav": {
