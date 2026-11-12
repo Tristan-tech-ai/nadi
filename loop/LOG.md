@@ -348,3 +348,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 12 Nov 2026 | iterasi 9 | M-20B alur berjeda: tes SQL 23/23 lokal dan produksi, isian jeda di layar Alur, e2e lokal jeda 0 dan 2 jam lalu dimatikan; UAT-02 tetap menunggu Tristan masuk |
 | 12 Nov 2026 | iterasi 10 | M-22B Tanya data rentang bebas + pertanyaan gabungan (tes unit, e2e lokal); tugas baru D-FN-TANYA deploy ulang pelajari-tanya |
 | 12 Nov 2026 | iterasi 11 | UAT-02 video v2 terkirim (282,6 dtk, 96% rekaman produksi); Q-45 label zona, Q-46 zona Pintu tanpa muat ulang, Q-47 hasil hitung kosong berkalimat, Q-48 pilihan inti kosong bertautan; Q-49 dibatalkan (klaim salah); UAT-02B dan UAT-02C menunggu Tristan |
+| 12 Nov 2026 | iterasi 11 | UAT-02C video v3 dua versi terkirim (cursorcam + HyperFrames + motionmaxxing, lagu HitsLab); Q-50 porsi tim diperbaiki lokal (e2e kerja-porsi merah lalu hijau) |

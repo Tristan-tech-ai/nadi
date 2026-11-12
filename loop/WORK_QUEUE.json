@@ -5465,10 +5465,12 @@
    "accept": "daftar zona di layar Mata menampilkan label sesuai z.jenis untuk keenam jenis (meja, antrean, kasir, pintu, lorong, kerja) dari kamus id/en; tes unit fungsi label (merah dulu dengan perilaku lama: pintu tampil Rak); e2e lokal Mata menambah zona Pintu dan melihat label Pintu",
    "how": "components/app/layar-mata.tsx baris label z.jenis; kamus mata id/en",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-11-12T12:30:00",
    "asal": "temuan rekaman UAT-02 di produksi (Dapur Sanur)",
-   "started": "2026-11-12T11:10:31"
+   "started": "2026-11-12T11:51:16",
+   "done": "2026-11-12T11:51:17",
+   "result": "e66b663: src/lib/mata/label.ts + label.test.ts 3/3 (merah dulu 0/3), e2e/mata-zona-lokal.spec.ts lokal lulus; produksi 89b9944 (CI 43154524534 hijau) menampilkan Pintu/Lorong/Rak di daftar zona (still cursorcam s7-mata 12 Nov 11.43)"
   },
   {
    "id": "Q-46",
@@ -5481,9 +5483,12 @@
    "accept": "setelah Simpan zona berisi zona jenis pintu, bagian Hitung kunjungan langsung menampilkan papan informasi dan tombol hitung (tanpa reload); e2e lokal: gambar zona Pintu, simpan, tombol Hitung dari berkas video muncul tanpa reload",
    "how": "zona dibagi lewat state induk atau router.refresh setelah simpanZona; components/app/hitung-kunjungan.tsx menerima zona terbaru",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-12T12:30:00",
-   "asal": "temuan rekaman UAT-02 di produksi (Dapur Sanur)"
+   "asal": "temuan rekaman UAT-02 di produksi (Dapur Sanur)",
+   "started": "2026-11-12T11:51:16",
+   "done": "2026-11-12T11:51:17",
+   "result": "e66b663: layar-mata.tsx router.refresh setelah 3 titik simpan zona; e2e/mata-zona-lokal.spec.ts: zona Pintu baru dikenali Hitung kunjungan tanpa reload (lokal lulus); CI 43154524534 hijau, deploy 89b9944"
   },
   {
    "id": "Q-47",
@@ -5496,9 +5501,12 @@
    "accept": "setelah video selesai dihitung, layar menampilkan ringkasan: jumlah masuk, keluar, kunjungan lengkap (boleh 0) dan kalimat yang menjelaskan bila belum ada orang yang masuk lalu keluar; tidak ada keadaan kosong tanpa teks; tes komponen atau e2e lokal dengan video pendek (keluar 2, kunjungan 0)",
    "how": "components/app/hitung-kunjungan.tsx: blok kunjungan-pintu dan layar disembunyikan saat jalan=false dan selesai=[]",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-12T12:30:00",
-   "asal": "temuan rekaman UAT-02 di produksi (Dapur Sanur)"
+   "asal": "temuan rekaman UAT-02 di produksi (Dapur Sanur)",
+   "started": "2026-11-12T11:51:16",
+   "done": "2026-11-12T11:51:17",
+   "result": "e66b663: hitung-kunjungan.tsx state dihitung, layar + hitungan pintu + kalimat belumLengkap id/en; e2e/mata-zona-lokal.spec.ts rekaman 1,2 dtk menampilkan kunjungan-kosong (lokal lulus, axe 0 serius, 390/1440 terang gelap); CI hijau"
   },
   {
    "id": "Q-48",
@@ -5511,9 +5519,12 @@
    "accept": "formulir catatan mod dengan isian pelanggan wajib menampilkan tautan Tambah pelanggan (ke layar pelanggan, kembali ke formulir) dan kalimat bila daftar kosong; nama pelanggan dari invoice yang sudah terbit bisa dipilih atau dijelaskan kenapa tidak; e2e lokal paket Pesanan katering di usaha tanpa pelanggan",
    "how": "komponen formulir mod (isian jenis pelanggan); cek apakah buat_invoice membuat baris customer",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-12T12:30:00",
-   "asal": "temuan rekaman UAT-02 di produksi (Dapur Sanur)"
+   "asal": "temuan rekaman UAT-02 di produksi (Dapur Sanur)",
+   "started": "2026-11-12T11:51:16",
+   "done": "2026-11-12T11:51:17",
+   "result": "63521c7: mod.tsx KOSONG_INTI kalimat + tautan untuk orang/pelanggan/produk/proyek; e2e/mod-pilihan-kosong.spec.ts lokal lulus (Pesanan katering tanpa pelanggan, tautan /app/pelanggan, axe 0 serius, 390/1440 terang gelap); CI hijau"
   },
   {
    "id": "Q-49",
@@ -5557,8 +5568,26 @@
    "accept": "rekaman produksi dengan cursorcam 1.1.0 memakai --profile nadi yang dimasukkan Tristan sendiri; satu usaha baru dari onboarding sampai fitur tambahan (alur sama dengan UAT-02); tanpa penunjuk atau riak suntikan; kamera halus; paling lama 5 menit, minimal 50% rekaman; dibandingkan berdampingan dengan proposal/ptm-demo.mp4 dan stills diperiksa; caption, musik -16 LUFS; docs/promo/video-v2.md diperbarui; terkirim",
    "how": "skill cursorcam (langkah JSON per babak, inspect --profile nadi, run --detach, stills), susun dengan pita caption seperti susun.py Laravel",
    "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-12T13:30:00",
+   "started": "2026-11-12T12:13:18",
+   "done": "2026-11-12T12:13:18",
+   "result": "proposal/nadi-demo-v3-musik.mp4 + nadi-demo-v3-efek.mp4 (283,9 dtk, 1920x1080 30fps, -16,1 LUFS versi lagu), rekaman cursorcam produksi --profile nadi usaha Dapur Pandan 10 klip, HyperFrames 0.9.37 film/index.html check ok, look.py G0 PASS G2 PASS G3 diperbaiki (potong ekor), salinan kirim 28,9 MiB dan 25,2 MiB terkirim; docs/promo/video-v2.md bagian v3, docs/ASSETS.md 3 baris (lagu HitsLab Pixabay, latar kertas, rekaman)"
+  },
+  {
+   "id": "Q-50",
+   "fase": "Q",
+   "kind": "fix",
+   "priority": 25,
+   "size": "s",
+   "wajib": true,
+   "title": "Kerja tim: isian porsi dan pilihan orang tidak rusak saat diketik ulang",
+   "accept": "isian porsi angka tidak menyisakan 0 di depan saat dikosongkan lalu diketik (mis. 060), Tambah orang tidak mengosongkan pilihan orang baris pertama, porsi baris baru diisi sisa sampai 100%; tes komponen atau e2e lokal mengetik ulang porsi dan memilih orang (merah dulu); terbukti di produksi",
+   "how": "components/app/kerja-tim.tsx: simpan porsi sebagai teks saat diketik, angka saat kirim; awal tim dari pelaksana kerja",
+   "blocked_by": "",
    "status": "ready",
-   "created": "2026-11-12T13:30:00"
+   "created": "2026-11-12T11:55:00",
+   "asal": "temuan rekaman cursorcam UAT-02C (failure.jpg s6b/s6c)"
   }
  ]
 }
