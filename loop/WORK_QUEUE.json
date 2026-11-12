@@ -5854,6 +5854,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-12T18:15:23"
+  },
+  {
+   "id": "D-DOMAIN",
+   "fase": "deploy",
+   "kind": "deploy",
+   "priority": 3,
+   "size": "s",
+   "wajib": false,
+   "title": "Nadi di domain nadiusaha.my.id: DNS, Vercel, Supabase, Google, tautan",
+   "accept": "Setelah domain terdaftar: DNS Hostinger A @ ke IP Vercel yang direkomendasikan API + CNAME www, domain dan www (redirect 308) di proyek Vercel nadi, misconfigured=false dan sertifikat aktif, https://nadiusaha.my.id/ 200 dan /masuk 200, Site URL Supabase domain baru, branding Google dan berkas pengumpulan memakai domain baru, nadi-swart.vercel.app tetap jalan",
+   "how": "Hostinger connector DNS, vercel api /v10/projects/nadi/domains, Chrome Supabase/Google",
+   "blocked_by": "menunggu Tristan menyelesaikan pendaftaran domain di hPanel (data pemilik + KTP)",
+   "status": "blocked",
+   "created": "2026-11-12T18:28:10"
   }
  ]
 }
