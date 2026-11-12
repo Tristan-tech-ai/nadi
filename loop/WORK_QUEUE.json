@@ -5654,9 +5654,11 @@
    "accept": "video lama proposal/ptm-demo.mp4 ditonton penuh dan kekurangannya dicatat; video baru <= 5 menit, >= 50% rekaman aplikasi Laravel yang berjalan (instalasi bersih ptm-bersih), alur per peran (super admin, manager, member) dengan jam/POV, momen sorot dibangun ulang dari teks asli, motion design (orbit, pita, kedalaman, konfeti) seperti v4, lagu HitsLab yang sama + efek CC0, -16 LUFS, look.py G0 G2 G3, terkirim",
    "how": "rekaman cursorcam dari ptm-bersih (admin :8101, tim :8102), skrip pemotong/komposisi v4 (scratchpad uat02) disesuaikan, HyperFrames film baru di project-team-management/docs/video/v2",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-12T13:50:00",
-   "asal": "Tristan 12 Nov 13.49"
+   "asal": "Tristan 12 Nov 13.49",
+   "done": "2026-11-12T14:42:38",
+   "result": "proposal/ptm-demo-v2-kirim.mp4 228,97 dtk (3:49) 1920x1080: video lama ditonton (lembar bingkai 8 dtk) dan kekurangannya dicatat di proposal/ptm-v2/CATATAN.md; 10 rekaman instalasi bersih dirender ulang tanpa bilah/riak, film HyperFrames: hook orbit, cincin merek, dua app (tangkapan asli), tiga peran, cara kerja, studi kasus, 10 bab hari+POV (Manager Radit, Member Putri di HP), 7 momen sorot dari teks asli; rekaman 63%; lagu HitsLab + efek CC0 -16,1 LUFS; look.py G0 G2 G3 PASS; terkirim; docs/video/ptm-demo.mp4 diganti di repo lokal b0fc59f dan publik 764bd86"
   },
   {
    "id": "UAT-01R",
@@ -5669,9 +5671,11 @@
    "accept": "repo publik di akun GitHub Tristan berisi kode admin-app + team-app + docker compose + docs; tanpa .env, sandi, kunci, atau berkas konfigurasi agen (dipindai sebelum push: gitleaks/grep pola rahasia, jejak asisten); README: ringkasan, fitur per role, tangkapan layar, prasyarat, langkah pasang dari nol (docker compose, composer, npm, migrate, impor SQL, seeder), menjalankan dua app, akun demo dari seeder (sandi lewat .env contoh, bukan ditulis), menjalankan tes, video demo; dipasang ulang dari klon repo publik ke folder baru dan lulus tes; tautan dikirim ke Tristan",
    "how": "gh repo create (izin Tristan 12 Nov: jadikan publik), git history lokal 8beb73e tanpa jejak; pemeriksaan rahasia sebelum push",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-12T14:05:00",
-   "asal": "Tristan 12 Nov 14.03"
+   "asal": "Tristan 12 Nov 14.03",
+   "done": "2026-11-12T14:17:53",
+   "result": "https://github.com/Tristan-tech-ai/project-team-management PUBLIC (main 7c68b0a): README publik (fitur per peran, tangkapan layar, pasang dari nol, akun demo, struktur, uji); dipindai: tanpa .env/sandi/kunci, tanpa jejak asisten; dokumen petunjuk teknis PKL tidak disertakan dan dihapus dari riwayat salinan publik (filter-branch, 0 objek); klon dari GitHub dipasang (composer, npm build) dan tes admin 41/41 + tim 31/31 lulus; temuan: tes butuh build aset Vite, README diperbaiki"
   },
   {
    "id": "L-VID",
@@ -5684,9 +5688,27 @@
    "accept": "semua tempat video di halaman publik Nadi (cari elemen video/poster/tautan berkas video) memakai potongan dari video v4 yang dipilih Tristan (atau v4b bila belum memilih), ukuran web kecil (H.264, faststart, <= target ukuran halaman), poster, Lighthouse mobile performa >= 90 tetap, e2e halaman publik lulus, produksi diperiksa dari luar",
    "how": "grep apps/web/public dan komponen landing untuk .mp4/poster; potong teaser dari v4; ganti berkas; uji",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-12T14:05:00",
-   "asal": "Tristan 12 Nov 14.04"
+   "asal": "Tristan 12 Nov 14.04",
+   "done": "2026-11-12T14:17:53",
+   "result": "5a4fcfb (CI 43173125506 hijau): public/video nadi-demo.mp4 diganti v4b (297,5 dtk 1280x720, 18,3 MB, poster logo+tagline) dan klip fitur lempar/feed/gaji/mata/tagihan dari rekaman cursorcam v4 (960x540 tanpa suara, poster), teks filmKet + filmKredit id/en; e2e halaman-publik rekaman layar asli lulus lokal; produksi: /video/nadi-demo.mp4 200 video/mp4 18349799 byte, /video/mata.mp4 828502 byte, landing memuat Film 4 menit 57 detik"
+  },
+  {
+   "id": "UAT-01O",
+   "fase": "UAT",
+   "kind": "build",
+   "priority": 6,
+   "size": "l",
+   "wajib": true,
+   "title": "project-team-management online dan bisa dicoba: Admin + Tim di Vercel (vercel-php), database Supabase Postgres, unggahan di Supabase Storage, akun demo, reset harian",
+   "accept": "dua URL Vercel publik (admin dan tim) hidup; schema 31 tabel + users diporting ke Postgres lewat migrasi Laravel (MySQL tetap didukung dan tetap jalur utama lokal); tes admin dan tim lulus di MySQL dan di Postgres; unggahan hasil task tersimpan di Supabase Storage (S3) bukan disk; akun demo super admin/manager/member dengan sandi demo tertulis di README; reset data demo terjadwal harian; tanpa rahasia di repo (env di Vercel); uji dari luar: login tiap peran, alur buat project dari template, Kanban, kirim hasil dari HP, review; README publik diperbarui dengan tautan demo",
+   "how": "proyek Supabase baru gratis (org masih muat 1 aktif; konfirmasi biaya 0), vercel-php runtime (baca dokumentasi resmi vercel-community/php dan Laravel deployment dulu), dua proyek Vercel dari repo publik, env lewat Vercel MCP tanpa mencetak rahasia; pilihan B (TiDB MySQL) bila Tristan memilih",
+   "blocked_by": "",
+   "status": "cancelled",
+   "created": "2026-11-12T14:25:00",
+   "asal": "Tristan 12 Nov 14.24",
+   "batal": "Tristan 12 Nov 14.30: cukup di GitHub, tidak perlu online. Catatan: Supabase (Postgres) melanggar petunjuk teknis (MySQL bersama, impor SQL via phpMyAdmin); bila kelak online, pakai server kantor/VPS dengan docker compose repo."
   }
  ]
 }
