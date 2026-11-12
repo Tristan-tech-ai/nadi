@@ -5772,8 +5772,24 @@
    "accept": "Setelan Ignored Build Step proyek Vercel nadi (tim tristan-tech-ais-projects) memakai perintah dari docs resmi Vercel (dicatat di LEARN) yang keluar 0 bila diff HEAD^..HEAD tidak menyentuh apps/web, supabase, packages, package.json, pnpm-lock.yaml, atau vercel.json; dibuktikan dengan satu push loop-saja yang deploynya CANCELED/tidak dibangun dan satu push kode yang tetap READY; perintah diuji lokal dengan git diff pada dua commit contoh",
    "how": "vercel api PATCH /v9/projects/nadi commandForIgnoringBuildStep; docs vercel.com/docs/project-configuration/git-settings#ignored-build-step",
    "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-12T17:24:28",
+   "done": "2026-11-12T17:40:21",
+   "result": "Ignored Build Step proyek Vercel nadi (PATCH /v9/projects/nadi, root apps/web): [ -n \"$VERCEL_GIT_PREVIOUS_SHA\" ] && git diff --quiet \"$VERCEL_GIT_PREVIOUS_SHA\" HEAD -- . ../../package.json ../../pnpm-lock.yaml ../../pnpm-workspace.yaml (docs vercel-json ignoreCommand + system env VERCEL_GIT_PREVIOUS_SHA, LEARN 12 Nov). Uji lokal: tanpa perubahan kode 0, ada perubahan kode 1, SHA kosong 1. Push loop-saja 98603c4: dpl_DhLR8jVospGZJ2YjGBPANT92vnTo CANCELED, log Vercel 'canceled because the Ignored Build Step command returned exit code 0', produksi tetap melayani deploy Q-52 (/alat/pesangon 200 dengan catatan). Sisi push kode dibuktikan uji lokal kode 1; cek READY pada push kode berikutnya dicatat di STATE"
+  },
+  {
+   "id": "UAT-01S",
+   "fase": "UAT",
+   "kind": "test",
+   "priority": 5,
+   "size": "s",
+   "wajib": false,
+   "title": "Hasil uji PTM terhadap database online dicatat di docs/bukti/uji/UJI.md (repo lokal + publik)",
+   "accept": "UJI.md kedua repo PTM punya bagian Uji versi online 12 Nov 2026: tes Laravel ke TiDB ptm_test (admin 41/41, tim 31/31), asap 3 peran ke database online gagal 0, alur e2e 15/15 ke database online lewat app lokal, cek luar ptm-admin/ptm-team (/up, /masuk 200, form https, cookie secure, tanpa jejak debug), dan baris uji langsung di URL online berstatus menunggu sampai uji_ptm uat-live dijalankan Tristan; tanpa sandi; publik dipush",
+   "how": "proposal/alat-pengumpulan/uji_ptm.py; bukti scratchpad bukti-ptm-live-db",
+   "blocked_by": "",
    "status": "ready",
-   "created": "2026-11-12T17:24:28"
+   "created": "2026-11-12T17:40:33"
   }
  ]
 }
