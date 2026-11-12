@@ -5,7 +5,6 @@ import { useRef, useState, useSyncExternalStore } from "react";
 import { selesaiGoogle } from "@/app/auth-actions";
 import { browserDalamAplikasi, buatNonce, opsiInisialisasi, opsiTombol, type ModeGoogle } from "@/lib/auth/google-gis";
 import type { Kamus } from "@/lib/i18n/kamus";
-import { createBrowserSupabase } from "@/lib/supabase/browser";
 
 type IdGoogle = {
   initialize: (o: Record<string, unknown> & { callback: (r: { credential?: string }) => void }) => void;
@@ -38,6 +37,8 @@ export function TombolGoogle({ clientId, mode, bahasa, next, teks: t }: { client
         if (!r.credential) return setGalat(true);
         setKeadaan("masuk");
         setGalat(false);
+        // Pustaka Supabase peramban baru diunduh saat kartu ID datang, supaya /masuk tetap ringan (anggaran JS H-04).
+        const { createBrowserSupabase } = await import("@/lib/supabase/browser");
         const { error } = await createBrowserSupabase().auth.signInWithIdToken({ provider: "google", token: r.credential, nonce });
         if (error) {
           setKeadaan("siap");
