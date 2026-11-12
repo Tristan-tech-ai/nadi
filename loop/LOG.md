@@ -356,3 +356,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 12 Nov 2026 16.40 Permintaan Tristan: berkas pengumpulan PKL proposal/pengumpulan-pkl.md (PTM + Nadi, tautan, akun demo, UAT); uji asap produksi Nadi 19 lulus; PTM alur 15/15 ke database online; uji langsung di URL online PTM menunggu Tristan; M-24B ditunda di stash.
 - 12 Nov 2026 17.20 D-FN-TANYA done; R-UUPK2 menemukan UU 27/2026 terbit (berlaku 28 Okt 2026, mencabut UU 13/2003), diblokir menunggu izin unduh PDF; tambah Q-52 dan UAT-01Q.
 - 12 Nov 2026 17.45 Q-52 done: catatan UU 27/2026 di 8 layar hitungan ketenagakerjaan, catatan basi di Cadangan pesangon diperbaiki.
+- 12 Nov 2026 17.55 D-IGNORE: Ignored Build Step nadi dipasang, diuji lokal 3 kasus; push loop-saja sebagai bukti.
