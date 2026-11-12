@@ -25,7 +25,7 @@ export default function PusatBantuan(props: PageProps<"/en/bantuan">) {
       <p className="mt-4 text-[15px] text-tinta-2">
         Prefer steps by role? Open the <Link href="/en/panduan" className="underline underline-offset-4">Guide</Link>.
         Want to see it working? <Link href="/demo" className="underline underline-offset-4">Try Nadi without signing up</Link>.
-        Free payroll, THR, and invoice tools (in Indonesian) are at <Link href="/alat" className="underline underline-offset-4">Alat gratis</Link>.
+        Free take-home pay, THR, severance, and invoice tools are at <Link href="/en/alat" className="underline underline-offset-4">Free tools</Link>.
       </p>
       <DaftarKategori bahasa="en" />
     </HalamanInfo>

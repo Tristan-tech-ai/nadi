@@ -95,6 +95,56 @@ test("alat gratis: gaji bersih dan THR sama dengan hitungan aplikasi", async ({ 
   await periksa(page, "alat-pesangon");
 });
 
+test("alat gratis bahasa Inggris (L-08): teks en, angka sama dengan rumus aplikasi, tautan versi en", async ({ page }) => {
+  test.skip(!E.NEXT_PUBLIC_SUPABASE_URL, "butuh .env.local");
+  await page.goto("/en/alat");
+  await expect(page.getByRole("heading", { level: 1, name: "Free tools" })).toBeVisible();
+  await expect(page.getByTestId("kartu-alat")).toHaveCount(6);
+  await expect(page.getByTestId("kartu-alat").first()).toContainText("Take-home pay calculator");
+  await expect(page.getByTestId("kartu-alat").first()).toHaveAttribute("href", "/en/alat/gaji");
+
+  await page.goto("/en/alat/gaji");
+  await page.waitForLoadState("networkidle");
+  await page.getByLabel("Monthly base salary").fill("6.000.000");
+  await page.getByLabel("Tax status (PTKP)").selectOption("K/1");
+  const hari = new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Jakarta" }).format(new Date());
+  const r = await fetch(`${E.NEXT_PUBLIC_SUPABASE_URL}/rest/v1/aturan_bertanggal?select=kunci,nilai,terverifikasi,berlaku_dari&berlaku_dari=lte.${hari}&order=berlaku_dari.desc`,
+    { headers: { apikey: E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY, Authorization: `Bearer ${E.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}` } });
+  const aturan: PetaAturan = {};
+  for (const a of (await r.json()) as { kunci: string; nilai: unknown; terverifikasi: boolean }[]) if (!aturan[a.kunci]) aturan[a.kunci] = { nilai: a.nilai, terverifikasi: a.terverifikasi };
+  const s = susunSlip({ pokok: 6_000_000, tunjangan_tetap: 0, ptkp: "K/1", risiko_jkk: "sangat_rendah" }, aturan, Math.min(11, Number(hari.slice(5, 7))));
+  const bersih = s.komponen.filter((k) => k.jenis === "pendapatan").reduce((a, k) => a + k.nilai, 0) - s.komponen.filter((k) => k.jenis === "potongan").reduce((a, k) => a + k.nilai, 0);
+  await expect(page.getByTestId("gaji-bersih")).toHaveText(formatRupiah(bersih));
+  const kalkulator = page.getByTestId("kalkulator-gaji");
+  await expect(kalkulator).toContainText("Take-home pay");
+  await expect(kalkulator).toContainText("Base salary");
+  await expect(kalkulator).not.toContainText("Gaji bersih yang diterima");
+  await expect(page.getByRole("navigation", { name: "Breadcrumb" }).getByRole("link", { name: "Free tools" })).toHaveAttribute("href", "/en/alat");
+  await periksa(page, "alat-en-gaji");
+
+  await page.goto("/en/alat/thr");
+  await page.waitForLoadState("networkidle");
+  await page.getByLabel("Start date").fill("2026-01-15");
+  await page.getByLabel("Holiday date (Hari Raya)").fill("2026-07-20");
+  await page.getByLabel("Monthly base salary").fill("3.600.000");
+  await expect(page.getByTestId("hasil-thr")).toHaveText(formatRupiah(hitungThr({ mulai: "2026-01-15", hariRaya: "2026-07-20", pokok: 3_600_000 }).thr));
+  await expect(page.getByTestId("kalkulator-thr")).toContainText("Less than 12 months: 6/12 x monthly wage.");
+
+  await page.goto("/en/alat/invoice");
+  await expect(page.getByTestId("total-invoice")).toHaveText(formatRupiah(totalBaris([{ uraian: "x", jumlah: 20, harga: 25_000 }])));
+  await expect(page.getByTestId("pembuat-invoice")).toContainText("Bill to");
+
+  await page.goto("/en/alat/dokumen");
+  await expect(page.getByLabel("Document type")).toBeVisible();
+  // Isi surat tetap bahasa Indonesia (dipakai di tempat kerja Indonesia) dan ditandai lang id.
+  await expect(page.getByTestId("pratinjau-dokumen")).toHaveAttribute("lang", "id");
+
+  // Isi halaman dan kaki halaman en menautkan versi en (menu atas yang tertutup juga memuatnya, tetapi tersembunyi).
+  await page.goto("/en/bantuan");
+  await expect(page.locator('a[href="/en/alat"]').filter({ visible: true })).toHaveCount(2);
+  await expect(page.locator('a[href="/alat"]').filter({ visible: true })).toHaveCount(0);
+});
+
 test("kamus istilah: daftar, cari tanpa JavaScript, halaman istilah dengan tautan ke Nadi", async ({ page }) => {
   await page.goto("/kamus");
   expect(await page.getByTestId("kartu-istilah").count()).toBeGreaterThanOrEqual(40);

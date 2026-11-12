@@ -111,7 +111,7 @@ export function KakiPoster({ bahasa = "id" }: { bahasa?: Bahasa }) {
             <Link href="/masuk/staf">{kk.masukStaf}</Link>
             <Link href={`${awal}/panduan`}>{kk.panduan}</Link>
             <Link href={`${awal}/bantuan`}>{kk.pusatBantuan}</Link>
-            <Link href="/alat">{kk.alatGratis}</Link>
+            <Link href={`${awal}/alat`}>{kk.alatGratis}</Link>
             <Link href="/kamus">{kk.kamusIstilah}</Link>
             <Link href="/baru">{kk.yangBaru}</Link>
           </nav>

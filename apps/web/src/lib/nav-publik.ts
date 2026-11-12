@@ -9,8 +9,8 @@ export type KelompokMenu = { judul: string; butir: ButirMenu[]; semua?: { href: 
 export type PanelMenu = { id: string; label: string; kelompok: KelompokMenu[] };
 
 const b = (href: string, label: T2, ket: T2) => ({ href, label, ket });
-// Halaman yang punya versi /en: diberi awalan bahasa. Sisanya (kamus, alat, yang baru) hanya berbahasa Indonesia.
-const PUNYA_EN = ["/untuk", "/panduan", "/integrasi", "/keamanan", "/privasi", "/tentang", "/harga", "/bantuan"];
+// Halaman yang punya versi /en: diberi awalan bahasa. Sisanya (kamus, yang baru) hanya berbahasa Indonesia. Alat gratis punya versi /en sejak L-08.
+const PUNYA_EN = ["/untuk", "/panduan", "/integrasi", "/keamanan", "/privasi", "/tentang", "/harga", "/bantuan", "/alat"];
 
 const SOLUSI = {
   label: { id: "Solusi", en: "Solutions" },
