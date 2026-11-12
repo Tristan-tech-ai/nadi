@@ -3471,8 +3471,11 @@
    "accept": "aksi tunda N jam (pg_cron menjalankan aksi yang jatuh tempo), tes SQL jeda dan pembatalan saat alur dimatikan, e2e alur dengan jeda 0",
    "how": "supabase/migrations alur",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T16:46:09"
+   "status": "done",
+   "created": "2026-11-05T16:46:09",
+   "started": "2026-11-12T09:57:29",
+   "done": "2026-11-12T10:03:18",
+   "result": "supabase/tests/alur_jeda.test.sql 23/23 lokal dan produksi (transaksi dibatalkan; merah sekali 21/23), UI isian Jeda sebelum aksi + keterangan jeda + status menunggu jeda/batal di /app/alur (set_flow_delay setelah save_flow), e2e/alur-jeda.spec.ts lokal lulus (jeda 0 langsung ke Feed, jeda 2 jam menunggu, dimatikan menjadi batal; axe; 390/1440 terang gelap), tes SQL lokal 143/143; migrasi 20261106110000_alur_jeda sudah di produksi sejak 6 Nov"
   },
   {
    "id": "M-24B",
@@ -5374,9 +5377,11 @@
    "accept": "staf/akuntan dengan izin kustom kerja.kelola melihat formulir Tambah kerja dan papan pengelola di /app/kerja (nama rekan lewat app.nama_rekan, bukan RLS orang); staf tanpa izin tidak melihatnya; e2e lokal",
    "how": "baca izin dari anggota.custom_role(permissions) sesi; RPC daftar nama rekan definer",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-11-11T20:15:47",
-   "started": "2026-11-12T09:31:25"
+   "started": "2026-11-12T09:31:25",
+   "done": "2026-11-12T09:45:26",
+   "result": "907e995 + migrasi 20261112140000_kelola_kerja_saya di produksi (sidik md5 ca7dd04e sama dengan berkas), tes SQL 12/12 lokal dan produksi (transaksi dibatalkan; merah sekali 9/12), reset DB lokal 183 migrasi + 142/142 tes SQL, e2e/koordinator-kerja.spec.ts lokal lulus (axe, 390/1440 terang gelap) + kerja-tim/kerja-review/divisi lulus, get_advisors tanpa ERROR, CI 43143260206 hijau, Vercel READY, RPC anon 401"
   },
   {
    "id": "UAT-02A",
