@@ -5744,6 +5744,20 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-12T16:55:59"
+  },
+  {
+   "id": "UAT-01Q",
+   "fase": "UAT",
+   "kind": "test",
+   "priority": 5,
+   "size": "s",
+   "wajib": false,
+   "title": "Dokumen UAT Nadi memuat perubahan setelah UAT 12 Nov (821bec6) dan uji asap produksi terbaru",
+   "accept": "docs/quality/uat-nadi.md punya bagian Perubahan setelah UAT: 14 commit apps/web+supabase sejak 821bec6 masing-masing dengan berkas e2e/tes lokal yang membuktikannya dan status Lulus lokal; baris uji asap produksi CI 43191207176 (19 lulus) dan D-FN-TANYA (pelajari-tanya versi 2, uji luar 401/403/405); temuan /app/mod diberi status terkini; tidak ada status yang ditulis tanpa bukti berkas atau run",
+   "how": "git log 821bec6..HEAD -- apps/web supabase; urai.py laporan JSON bila ada",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T16:57:34"
   }
  ]
 }
