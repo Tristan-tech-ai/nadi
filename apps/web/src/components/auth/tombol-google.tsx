@@ -56,7 +56,7 @@ export function TombolGoogle({ clientId, mode, bahasa, next, teks: t }: { client
     <div className="mt-3" data-testid="tombol-google-resmi" data-keadaan={keadaan}>
       <Script src="https://accounts.google.com/gsi/client" strategy="afterInteractive" onReady={() => { void siapkan(); }} onError={() => setKeadaan("gagal")} />
       {galat && <p role="alert" className="mb-3 text-sm text-cap">{t.googleGagal}</p>}
-      <div ref={wadah} className="flex min-h-11 w-full justify-center [&_iframe:focus-visible]:outline-2! [&_iframe:focus-visible]:outline-offset-2! [&_iframe:focus-visible]:outline-tinta! [&_iframe:focus-visible]:outline-solid!" aria-busy={keadaan === "muat" || keadaan === "masuk"} />
+      <div ref={wadah} className="flex min-h-11 w-full justify-center [&_iframe:focus]:outline-2! [&_iframe:focus]:outline-offset-2! [&_iframe:focus]:outline-tinta! [&_iframe:focus]:outline-solid!" aria-busy={keadaan === "muat" || keadaan === "masuk"} />
       {keadaan === "muat" && <p className="text-center text-sm text-tinta-2">{t.googleMuat}</p>}
       {keadaan === "masuk" && <p role="status" className="mt-2 text-center text-sm text-tinta-2">{t.sebentar}</p>}
       {keadaan === "gagal" && <p role="alert" className="text-sm text-cap">{t.googleSkripGagal}</p>}

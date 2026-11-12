@@ -354,7 +354,7 @@ for (const [jalur, judul, idJudul] of [["/en/privasi", "Privacy policy", "Kebija
   });
 }
 
-for (const [jalur, judul, idJudul, h2] of [["/en/tentang", "About Nadi", "Tentang Nadi", 3], ["/en/panduan", "Nadi guide", "Panduan Nadi", 4]] as const) {
+for (const [jalur, judul, idJudul, h2] of [["/en/tentang", "About Nadi", "Tentang Nadi", 4], ["/en/panduan", "Nadi guide", "Panduan Nadi", 4]] as const) {
   test(`${jalur} berbahasa Inggris dan axe bersih`, async ({ page }, info) => {
     test.skip(info.project.name !== "desktop", "sekali (desktop)");
     await page.goto(jalur);

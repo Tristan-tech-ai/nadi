@@ -61,8 +61,9 @@ jobs:
           ARG=""
           for b in $DAFTAR; do ARG="$ARG e2e/${b%.spec.ts}.spec.ts"; done
           set +e
-          # Berkas terpilih: tanpa proyek induk berantai (pindah-*), supaya tidak ikut menjalankan semua tes desktop dan HP.
-          NODEPS=""; [ -n "$BERKAS" ] && NODEPS="--no-deps"
+          # Berkas terpilih: tanpa proyek induk berantai (pindah-*), supaya tidak ikut menjalankan semua tes desktop dan HP. Tes @bahasa-akun
+          # mengganti bahasa akun uji A, jadi tanpa rantai urutan ia tidak boleh jalan bersamaan dengan tes lain (run 43272852488).
+          NODEPS=""; [ -n "$BERKAS" ] && NODEPS="--no-deps --grep-invert @bahasa-akun"
           pnpm exec playwright test $ARG $NODEPS --workers=2 --reporter=line,json --output=hasil-uat 2>&1 | tee uat.log
           kode=${PIPESTATUS[0]}
           rm -f .env.e2e.local .env.local
