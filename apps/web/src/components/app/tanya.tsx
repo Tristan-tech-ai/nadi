@@ -57,6 +57,12 @@ export function FormTanya({ contoh, bahasa, teks: t }: { contoh: string[]; bahas
                 {h.niat.asal === "model" ? t.belajar : t.tanpaAi}
               </p>
             )}
+            {h.lainnya?.map((j, i) => (
+              <div key={i} className="mt-4 border-t border-garis pt-4" data-testid="tanya-jawaban-lain">
+                <Kalimat j={j} t={t} bahasa={bahasa} />
+                <p className="mt-2 text-sm"><Link href={j.sumber} className="text-laut underline underline-offset-4">{t.lihatSumber}</Link></p>
+              </div>
+            ))}
             <p className="mt-1 text-xs text-tinta-2">{t.dasar}</p>
           </div>
         )}

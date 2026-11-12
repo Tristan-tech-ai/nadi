@@ -54,3 +54,23 @@ export const KORPUS: [string, { niat: string; dari: string; sampai: string; cari
   ["Kenapa penjualan turun?", null],
   ["Cuaca besok bagaimana?", null],
 ];
+
+// M-22B korpus tambahan: rentang tanggal bebas dan pertanyaan gabungan (hari acuan sama). Setiap kalimat bisa berisi beberapa jawaban.
+type Harap = { niat: string; dari: string; sampai: string };
+export const KORPUS_TAMBAHAN: [string, Harap[]][] = [
+  ["penjualan tanggal 3 sampai 10 November", [{ niat: "pendapatan", dari: "2026-11-03", sampai: "2026-11-10" }]],
+  ["pengeluaran 1-5 nov", [{ niat: "beban", dari: "2026-11-01", sampai: "2026-11-05" }]],
+  ["omzet 28 oktober sampai 4 november", [{ niat: "pendapatan", dari: "2026-10-28", sampai: "2026-11-04" }]],
+  ["laba tgl 1 sampai 15 oktober 2026", [{ niat: "laba", dari: "2026-10-01", sampai: "2026-10-15" }]],
+  ["penjualan dan laba bulan ini", [{ niat: "pendapatan", dari: "2026-11-01", sampai: "2026-11-06" }, { niat: "laba", dari: "2026-11-01", sampai: "2026-11-06" }]],
+  ["berapa pengeluaran dan pemasukan minggu ini", [{ niat: "beban", dari: "2026-11-02", sampai: "2026-11-06" }, { niat: "pendapatan", dari: "2026-11-02", sampai: "2026-11-06" }]],
+  ["omzet & untung bulan lalu", [{ niat: "pendapatan", dari: "2026-10-01", sampai: "2026-10-31" }, { niat: "laba", dari: "2026-10-01", sampai: "2026-10-31" }]],
+  ["gaji dan lembur bulan lalu", [{ niat: "gaji", dari: "2026-10-01", sampai: "2026-10-31" }, { niat: "lembur", dari: "2026-10-01", sampai: "2026-10-31" }]],
+  ["piutang dan utang ke pemasok", [{ niat: "piutang", dari: "2026-11-06", sampai: "2026-11-06" }, { niat: "hutang", dari: "2026-11-06", sampai: "2026-11-06" }]],
+  ["kas dan piutang yang telat", [{ niat: "kas", dari: "2026-11-06", sampai: "2026-11-06" }, { niat: "piutang_lewat", dari: "2026-11-06", sampai: "2026-11-06" }]],
+  ["penjualan serta pengeluaran kemarin", [{ niat: "pendapatan", dari: "2026-11-05", sampai: "2026-11-05" }, { niat: "beban", dari: "2026-11-05", sampai: "2026-11-05" }]],
+  ["sales and expenses last month", [{ niat: "pendapatan", dari: "2026-10-01", sampai: "2026-10-31" }, { niat: "beban", dari: "2026-10-01", sampai: "2026-10-31" }]],
+  ["jualan 2-4 november dan laba", [{ niat: "pendapatan", dari: "2026-11-02", sampai: "2026-11-04" }, { niat: "laba", dari: "2026-11-02", sampai: "2026-11-04" }]],
+  ["hadir dan lembur hari ini", [{ niat: "hadir", dari: "2026-11-06", sampai: "2026-11-06" }, { niat: "lembur", dari: "2026-11-06", sampai: "2026-11-06" }]],
+  ["invoice dan piutang bulan ini", [{ niat: "invoice_terbit", dari: "2026-11-01", sampai: "2026-11-06" }, { niat: "piutang", dari: "2026-11-06", sampai: "2026-11-06" }]],
+];

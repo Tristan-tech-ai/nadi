@@ -61,7 +61,21 @@ export function rentang(t: string, hariIni: string): { dari: string; sampai: str
   }
   if (/\b(tahun ini|this year)\b/.test(t)) return { dari: `${th}-01-01`, sampai: hariIni };
   if (/\b(tahun lalu|last year)\b/.test(t)) return { dari: `${th - 1}-01-01`, sampai: `${th - 1}-12-31` };
-  const b = new RegExp(`\\b(${Object.keys(BULAN).join("|")})\\b(?: (\\d{4}))?`).exec(t);
+  // M-22B: rentang bebas "tanggal 3 sampai 10 november", "3-10 nov 2026", "28 oktober sampai 4 november".
+  const bln = Object.keys(BULAN).join("|");
+  const rr = new RegExp(`\\b(?:tanggal |tgl |dari )?(\\d{1,2})(?: (${bln}))? ?(?:sampai|hingga|s/d|sd|-|to|until) ?(?:tanggal |tgl )?(\\d{1,2}) (${bln})\\b(?: (\\d{4}))?`).exec(t);
+  if (rr) {
+    const m2 = BULAN[rr[4]];
+    const m1 = rr[2] ? BULAN[rr[2]] : m2;
+    const y2 = rr[5] ? Number(rr[5]) : m2 > bl ? th - 1 : th;
+    const y1 = m1 > m2 ? y2 - 1 : y2;
+    const d1 = Number(rr[1]);
+    const d2 = Number(rr[3]);
+    const dari = `${y1}-${pad(m1)}-${pad(d1)}`;
+    const sampai = `${y2}-${pad(m2)}-${pad(d2)}`;
+    if (d1 >= 1 && d2 >= 1 && dari <= akhirBulan(y1, m1) && sampai <= akhirBulan(y2, m2) && dari <= sampai) return { dari, sampai };
+  }
+  const b = new RegExp(`\\b(${bln})\\b(?: (\\d{4}))?`).exec(t);
   if (b) {
     const m = BULAN[b[1]];
     const y = b[2] ? Number(b[2]) : m > bl ? th - 1 : th;
@@ -117,4 +131,34 @@ export function bentukTanya(kalimat: string, hariIni: string, niat: Niat): Tanya
     return { niat, dari: `${y}-${pad(m)}-01`, sampai: akhirBulan(y, m) };
   }
   return { niat, dari: `${th}-${pad(bl)}-01`, sampai: hariIni };
+}
+
+const PENGHUBUNG = /\b(dan|serta|sama|and|plus)\b|&/;
+
+/**
+ * M-22B: pertanyaan gabungan ("penjualan dan laba bulan ini") menjadi beberapa pertanyaan dengan periode yang sama, urut sesuai
+ * kalimat, paling banyak 3. Tanpa penghubung, atau hanya satu ukuran, sama dengan uraiTanya. Ukuran umum yang tertutup ukuran lebih
+ * khusus dibuang (piutang bila ada lewat jatuh tempo, karyawan bila ada gaji/lembur/hadir).
+ */
+export function uraiTanyaBanyak(kalimat: string, hariIni: string, aturan: readonly AturanTanya[] = []): Tanya[] {
+  const t = normal(kalimat);
+  if (DITOLAK.test(t)) return [];
+  if (PENGHUBUNG.test(t)) {
+    const cocok = NIAT.map(([n, re]) => {
+      const m = re.exec(t);
+      return m ? { n, i: m.index } : null;
+    }).filter((c): c is { n: Niat; i: number } => c !== null);
+    const ada = new Set(cocok.map((c) => c.n));
+    const buang = new Set<Niat>();
+    if (ada.has("piutang_lewat")) buang.add("piutang");
+    if (ada.has("gaji") || ada.has("lembur") || ada.has("hadir")) buang.add("karyawan");
+    if (ada.has("kas")) buang.add("stok");
+    const pilih = cocok.filter((c) => !buang.has(c.n)).sort((x, y) => x.i - y.i).slice(0, 3);
+    if (pilih.length >= 2) {
+      const hasil = pilih.map((c) => bentukTanya(kalimat, hariIni, c.n)).filter((x): x is Tanya => x !== null);
+      if (hasil.length >= 2) return hasil;
+    }
+  }
+  const satu = uraiTanya(kalimat, hariIni, aturan);
+  return satu ? [satu] : [];
 }
