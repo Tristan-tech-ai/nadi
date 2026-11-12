@@ -6134,9 +6134,10 @@
    "accept": "RPC jadikan_admin/cabut_admin khusus pemilik dengan tes SQL (isolasi usaha, bukan pemilik ditolak, pemilik tidak bisa mencabut dirinya); undang admin lewat email akun Nadi seperti akuntan; tombol di Orang dengan konfirmasi; e2e cloud; panduan peran admin diperbarui",
    "how": "",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-11-12T23:05:00",
-   "result": "BELUM DONE: tunggu e2e cloud run 43267444570 (admin-usaha.spec). Sudah: migrasi 20261113002000_admin_usaha.sql produksi, tes SQL 17/17 produksi, bagian Admin usaha di /app/orang, artikel bantuan tambah-admin id/en, deploy dpl_9DScGAEp2GhgM1pRQr4NRcPma4DD READY, commit ab41927"
+   "result": "e2e/admin-usaha.spec.ts lulus di cloud run 43267444570 (desktop); SQL 17/17 produksi; deploy dpl_9DScGAEp2GhgM1pRQr4NRcPma4DD; commit ab41927",
+   "done": "2026-11-13T00:50:00"
   },
   {
    "fase": "deploy",
@@ -6149,8 +6150,10 @@
    "accept": "Tristan membuat akun lewat aplikasi (asisten dilarang membuat akun di produksi) memakai alias nadiusaha.my.id+...@gmail.com supaya email pribadi tidak terbuka; loop mengisi data sintetis lengkap ke usaha juri lewat RPC aplikasi sebagai pemilik (orang, topi, produk, stok, invoice, penjualan, kas, usulan di Feed, jadwal, izin, kerja tim, proyek, satu fitur tambahan dari katalog), menjadikan admin lewat ADMIN-01, lalu menulis isian lewat proposal/alat-pengumpulan/buat_isian_tahap2.py dari akun-juri.txt tanpa mencetak sandi; setiap akun diuji masuk lewat CI",
    "how": "",
    "blocked_by": "menunggu Tristan membuat akun juri (UNTUK-TRISTAN 12 Nov); admin kini bisa ditambah pemilik juri sendiri di Orang > Admin usaha (ADMIN-01)",
-   "status": "blocked",
-   "created": "2026-11-12T23:05:00"
+   "status": "cancelled",
+   "created": "2026-11-12T23:05:00",
+   "done": "2026-11-13T00:50:00",
+   "result": "DIBATALKAN: Tristan 13 Nov \"untuk akun juri lengkap tidak perlu\"; slot dihapus dari isian tahap 2"
   },
   {
    "fase": "R",
@@ -6194,9 +6197,55 @@
    "title": "Alamat kontak resmi Nadi di /privasi, /keamanan, /tentang menggantikan \"sedang disiapkan\"",
    "accept": "Alamat di domain Nadi yang benar-benar menerima email (penerusan Hostinger ke kotak masuk Tristan), diuji kirim dan terima, dipasang di tiga halaman dan kamus en; tidak ada lagi teks \"alamat resminya sedang disiapkan\"",
    "how": "",
-   "blocked_by": "Tristan memilih tujuan ifys4251 (13 Nov), tetapi penerusan Hostinger butuh paket email berbayar (mail_orders kosong); pilihan: tampilkan alamat Gmail langsung (butuh persetujuan publik) atau terima lewat Resend inbound",
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-13T00:20:00",
+   "done": "2026-11-13T00:50:00",
+   "result": "Tristan memilih nadiusaha.my.id@gmail.com (13 Nov); /privasi, /tentang, /en/privasi memuat tautan mailto (curl produksi 2 per halaman), /keamanan teks lalu tautan (commit setelah df38807); deploy dpl_8TYUM5PnQpwSthnEHf4MpZPB7Gxe"
+  },
+  {
+   "fase": "R",
+   "kind": "research",
+   "id": "R-UUPK3",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Pesan dan sumber pasal di fungsi database memakai UU 27/2026",
+   "accept": "Tidak ada fungsi public/app yang mengutip PP 35/2021 atau UU 13/2003; logika dan hak tidak berubah; tes SQL",
+   "how": "",
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-13T00:50:00",
+   "result": "migrasi 20261113003000_pesan_uu27.sql produksi (tujuh fungsi dibangun ulang dari pg_get_functiondef), supabase/tests/pesan_uu27.test.sql 5/5 (merah 1/5 dulu), commit da0b0df",
+   "done": "2026-11-13T00:50:00"
+  },
+  {
+   "fase": "R",
+   "kind": "research",
+   "id": "CADANGAN-01",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Cadangan database mingguan terenkripsi ke Storage Bucket privat Hugging Face",
+   "accept": "Workflow cadangan-mingguan.yml berjalan hijau sekali: dump roles/schema/data, enkripsi AES-256 PBKDF2, unggah ke bucket privat, unduh balik dengan sidik sama dan dekripsi berisi tiga berkas, retensi 8; teks keamanan \"sedang dibuat\" diganti setelah jalan pertama hijau; cadangan berkas Storage masuk rencana",
+   "how": "",
+   "blocked_by": "menunggu Tristan memasang secret NADI_DB_URL, HF_TOKEN, NADI_KUNCI_CADANGAN (UNTUK-TRISTAN 13 Nov); variabel HF_BUCKET sudah dipasang",
    "status": "blocked",
-   "created": "2026-11-13T00:20:00"
+   "created": "2026-11-13T00:50:00"
+  },
+  {
+   "fase": "R",
+   "kind": "research",
+   "id": "VID-GAJI",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Bab Gaji November video demo v4b (12 dtk) menampilkan peringatan JP lama dan teks PP 35/2021",
+   "accept": "Bila Tristan setuju: rekam ulang take s5-gaji dari produksi (login cursorcam tersimpan milik Tristan), potong, render ulang v4b, campur audio, look.py, kirim, ganti video landing",
+   "how": "",
+   "blocked_by": "menunggu keputusan Tristan: rekam ulang bab Gaji video demo v4b atau biarkan",
+   "status": "blocked",
+   "created": "2026-11-13T00:50:00"
   }
  ]
 }
