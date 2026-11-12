@@ -52,6 +52,8 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
   const [selesai, setSelesai] = useState<Kunjungan[]>([]);
   const [pesan, setPesan] = useState<{ jenis: "info" | "galat"; teks: string } | null>(null);
   const [terkirim, setTerkirim] = useState(false);
+  // Q-47: sudah ada satu kali hitung yang selesai; hasil (boleh 0 kunjungan) tetap ditampilkan.
+  const [dihitung, setDihitung] = useState(false);
   const [kamera, setKamera] = useState<"atas" | "miring">("atas");
   // V-12: kepekaan tinggi untuk kamera sungguhan berkontras rendah (diukur pada footage CCTV asli, src/lib/mata/jejak.ts).
   const [peka, setPeka] = useState<"normal" | "tinggi">("normal");
@@ -166,6 +168,7 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
     } catch {
       return setPesan({ jenis: "galat", teks: t.gagalVideo });
     }
+    setDihitung(false);
     setJalan(true);
     const miring = kamera === "miring" && Boolean(model);
     const fps = miring ? FPS_MIRING : FPS;
@@ -208,6 +211,7 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
     setTerlihat(0);
     setKemajuan(null);
     setJalan(false);
+    setDihitung(true);
     // Kunci per kali hitung: kirim ulang hasil yang sama (jaringan putus) tidak menggandakan angka.
     await kirim(hasil, asalMs, `berkas-${f.size}-${Math.round(asalMs)}`);
   }
@@ -260,6 +264,7 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
     setSelesai([]);
     setTerkirim(false);
     berhenti.current = false;
+    setDihitung(false);
     setJalan(true);
     const asalMs = Date.now();
     const sesi = `${asal}-${asalMs}`;
@@ -327,6 +332,7 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
     setSelesai(semua);
     tutup();
     setJalan(false);
+    setDihitung(true);
     if (await kirim(tertunda, asalMs, `${sesi}-${ke}`) && putus) setPesan((p) => ({ jenis: "info", teks: `${t.jembatanBerhenti} ${p?.teks ?? ""}`.trim() }));
   }
 
@@ -458,11 +464,11 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
             </details>
       <video ref={video} className="hidden" muted playsInline />
       <canvas ref={pratinjau} className="hidden" aria-hidden />
-      <figure className={`mt-4 ${jalan || selesai.length > 0 ? "" : "hidden"}`}>
+      <figure className={`mt-4 ${jalan || selesai.length > 0 || dihitung ? "" : "hidden"}`}>
         <canvas ref={layar} className="w-full max-w-2xl rounded-[var(--radius-kartu)] border border-garis" role="img" aria-label={t.layarAria} data-testid="kunjungan-layar" />
         <figcaption className="sr-only">{t.layarAria}</figcaption>
       </figure>
-      <dl className={`mt-2 flex gap-6 text-sm ${jalan || selesai.length > 0 ? "" : "hidden"}`} data-testid="kunjungan-pintu" data-masuk={pintu.masuk} data-keluar={pintu.keluar}>
+      <dl className={`mt-2 flex gap-6 text-sm ${jalan || selesai.length > 0 || dihitung ? "" : "hidden"}`} data-testid="kunjungan-pintu" data-masuk={pintu.masuk} data-keluar={pintu.keluar}>
         <div className="flex items-baseline gap-2"><dt className="text-tinta-2">{t.pintuMasuk}</dt><dd className="text-lg font-semibold tabular-nums">{pintu.masuk}</dd></div>
         <div className="flex items-baseline gap-2"><dt className="text-tinta-2">{t.pintuKeluar}</dt><dd className="text-lg font-semibold tabular-nums">{pintu.keluar}</dd></div>
       </dl>
@@ -478,7 +484,11 @@ export function HitungKunjungan({ zona, papanAwal, model, teks: t, bahasa }: { z
           <div><dt className="text-tinta-2">{t.layanRata}</dt><dd className="font-semibold">{rata(r.layan, r.layanN)}</dd></div>
         </dl>
       )}
-      {!jalan && kemajuan === null && selesai.length === 0 && terkirim ? <p className="mt-3 text-sm text-tinta-2">{t.kosong}</p> : null}
+      {!jalan && kemajuan === null && selesai.length === 0 && (terkirim || dihitung) ? (
+        <p className="mt-3 text-sm text-tinta-2" data-testid="kunjungan-kosong">
+          {dihitung ? isiTeks(t.belumLengkap, { masuk: pintu.masuk, keluar: pintu.keluar }) : t.kosong}
+        </p>
+      ) : null}
       {pesan && (
         <p role={pesan.jenis === "galat" ? "alert" : "status"} className={`mt-3 text-sm ${pesan.jenis === "galat" ? "text-cap" : ""}`} data-testid={terkirim ? "kunjungan-terkirim" : undefined}>
           {pesan.teks} {terkirim && pesan.jenis === "info" ? <a href="/app/peta-usaha" className="font-semibold underline underline-offset-4">{t.lihatPeta}</a> : null}

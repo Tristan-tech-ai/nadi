@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { EyeIcon, VideoCameraIcon } from "@phosphor-icons/react";
 import { Tombol } from "@/components/ui/tombol";
 import { isiTeks } from "@/lib/i18n/isi-teks";
 import { ALAMAT_JEMBATAN, bukaJembatan } from "@/lib/mata/jembatan";
+import { labelJenisZona } from "@/lib/mata/label";
 import type { Kamus } from "@/lib/i18n/kamus";
 import { catatMata, denahKamera, setujuiDenah, simpanZona, usulDenah } from "@/app/app/mata/actions";
 import { langkahStatus, medianAntrean, orangDiZona, statusAwal, type Deteksi, type JenisZona, type Status, type Titik, type Zona } from "@/lib/mata/resep";
@@ -28,6 +30,8 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
     { nilai: "meja", label: t.jMeja }, { nilai: "antrean", label: t.jAntrean }, { nilai: "kasir", label: t.jKasir },
     { nilai: "pintu", label: t.jPintu }, { nilai: "lorong", label: t.jLorong }, { nilai: "kerja", label: t.jKerja },
   ];
+  // Q-46: zona tersimpan dibagikan ke Hitung kunjungan lewat muat ulang komponen server (state layar ini tetap).
+  const router = useRouter();
   const video = useRef<HTMLVideoElement>(null);
   const layar = useRef<HTMLCanvasElement>(null);
   const pekerja = useRef<Worker | null>(null);
@@ -117,6 +121,7 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
     if ("galat" in h) return setPesan({ jenis: "galat", teks: h.galat });
     setZona(h.zona);
     setTersimpan(true);
+    router.refresh();
     setDikenal(true);
     setPesan({ jenis: "info", teks: t.denahDikenal });
   }
@@ -149,6 +154,7 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
     if ("galat" in h) return setPesan({ jenis: "galat", teks: h.galat });
     setZona(h.zona);
     setTersimpan(true);
+    router.refresh();
     setDenahDraf(null);
     setDikenal(true);
     setPesan({ jenis: "info", teks: isiTeks(t.tersimpan, { n: h.zona.length }) });
@@ -213,6 +219,7 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
     if ("galat" in h) return setPesan({ jenis: "galat", teks: h.galat });
     setZona(h.zona);
     setTersimpan(true);
+    router.refresh();
     setPesan({ jenis: "info", teks: isiTeks(t.tersimpan, { n: h.zona.length }) });
   }
 
@@ -375,7 +382,7 @@ export function LayarMata({ model, zonaAwal, teks: t, bahasa }: { model: ModelMa
                 <li key={z.id || `baru-${i}`} className="flex items-center justify-between gap-3 py-2" data-testid="zona-mata" data-nama={z.nama} data-status={z.jenis === "meja" ? k?.status.nilai ?? "" : String(k?.jumlah ?? "")}>
                   <span className="min-w-0">
                     <span className="font-semibold" data-pengguna>{z.nama}</span>
-                    <span className="block text-sm text-tinta-2">{z.jenis === "meja" ? t.meja : z.jenis === "antrean" ? t.antrean : t.rak}</span>
+                    <span className="block text-sm text-tinta-2">{labelJenisZona(z.jenis, t)}</span>
                   </span>
                   <span className="flex items-center gap-3">
                     <span className="text-sm">{teks}</span>
