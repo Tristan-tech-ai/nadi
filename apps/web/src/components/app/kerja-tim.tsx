@@ -17,7 +17,8 @@ function Hasil({ h }: { h: HasilKerja }) {
 
 export function AturTim({ kerja, judul, orang, awal, en = false }: { kerja: string; judul: string; orang: Opsi[]; awal: { id: string; porsi: number; pic: boolean }[]; en?: boolean }) {
   const [h, kirim, sibuk] = useActionState<HasilKerja, FormData>(aturTim, null);
-  const [baris, setBaris] = useState(awal.length ? awal.map((x) => ({ ...x })) : [{ id: "", porsi: 100, pic: true }]);
+  // Q-50: porsi disimpan sebagai teks selama diketik (isian kosong tetap kosong, tidak menjadi 0 lalu 060); angka hanya untuk jumlah.
+  const [baris, setBaris] = useState(awal.length ? awal.map((x) => ({ ...x, porsi: String(x.porsi) })) : [{ id: "", porsi: "100", pic: true }]);
   const awalan = useId();
   const jumlah = baris.reduce((a, x) => a + (Number(x.porsi) || 0), 0);
   const ubah = (i: number, isi: Partial<(typeof baris)[number]>) => setBaris((b) => b.map((x, j) => (j === i ? { ...x, ...isi } : x)));
@@ -35,7 +36,7 @@ export function AturTim({ kerja, judul, orang, awal, en = false }: { kerja: stri
             </select>
             <label className="flex items-center gap-1">
               <span className="sr-only">{en ? `Share of person ${i + 1}` : `Porsi orang ${i + 1}`}</span>
-              <input name={`porsi_${i}`} type="number" min={1} max={100} value={x.porsi} onChange={(e) => ubah(i, { porsi: Number(e.target.value) })} className={`${isian} angka w-20`} />
+              <input name={`porsi_${i}`} type="number" min={1} max={100} value={x.porsi} onChange={(e) => ubah(i, { porsi: e.target.value })} className={`${isian} angka w-20`} />
               <span aria-hidden>%</span>
             </label>
             <label className="flex items-center gap-1">
@@ -51,7 +52,7 @@ export function AturTim({ kerja, judul, orang, awal, en = false }: { kerja: stri
         ))}
       </fieldset>
       <div className="flex flex-wrap items-center gap-3">
-        {baris.length < 10 && <button type="button" onClick={() => setBaris((b) => [...b, { id: "", porsi: 0, pic: false }])} className="underline underline-offset-4">{en ? "Add person" : "Tambah orang"}</button>}
+        {baris.length < 10 && <button type="button" onClick={() => setBaris((b) => [...b, { id: "", porsi: String(Math.max(0, 100 - b.reduce((a, x) => a + (Number(x.porsi) || 0), 0))), pic: false }])} className="underline underline-offset-4">{en ? "Add person" : "Tambah orang"}</button>}
         <span className={`angka ${jumlah === 100 ? "text-tinta-2" : "text-cap"}`} data-testid="jumlah-porsi">{en ? "Total" : "Jumlah"} {jumlah}%</span>
         <Tombol type="submit" ragam="kedua" disabled={sibuk}>{sibuk ? "..." : en ? "Save team" : "Simpan tim"}</Tombol>
         <Hasil h={h} />
