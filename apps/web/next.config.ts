@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { alihDomainLama } from "./src/lib/seo/alih-domain";
 
 const nextConfig: NextConfig = {
   // Gerbang loop membangun ke folder terpisah (NEXT_DIST_DIR=.next-gate) agar tidak menimpa build lokal untuk e2e.
@@ -7,6 +8,10 @@ const nextConfig: NextConfig = {
   // Q-20: penanda uji cek wajah selalu terdefinisi saat build ("0" kecuali build lokal e2e menyetel 1), sehingga cabang uji di
   // cek-wajah.tsx dihapus minifier di produksi (docs bawaan Next 05-config/01-next-config-js/env.md). Vercel tidak pernah menyetelnya.
   env: { NEXT_PUBLIC_NADI_UJI_WAJAH: process.env.NEXT_PUBLIC_NADI_UJI_WAJAH === "1" ? "1" : "0" },
+  // D-ALIH: halaman publik di alamat lama dialihkan 308 ke domain utama; API, autentikasi, dan tautan pribadi tidak (src/lib/seo/alih-domain.ts).
+  async redirects() {
+    return alihDomainLama();
+  },
   // Header keamanan untuk service worker (docs bawaan Next 02-guides/progressive-web-apps.md).
   async headers() {
     return [
