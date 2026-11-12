@@ -3,7 +3,7 @@ import type { Bahasa } from "@/lib/i18n/bahasa";
 import { SUREL_KONTAK } from "@/lib/situs";
 
 /** Alamat kontak di dalam kalimat menjadi tautan email. */
-function Kalimat({ teks }: { teks: string }) {
+export function Kalimat({ teks }: { teks: string }) {
   const i = teks.indexOf(SUREL_KONTAK);
   if (i < 0) return <>{teks}</>;
   return <>{teks.slice(0, i)}<a href={`mailto:${SUREL_KONTAK}`} className="font-semibold underline underline-offset-4">{SUREL_KONTAK}</a>{teks.slice(i + SUREL_KONTAK.length)}</>;
