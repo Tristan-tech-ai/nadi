@@ -27,3 +27,14 @@ Bilah bawah HP kini `position: fixed` dengan pengganjal. Aturan target-size axe 
 | /app/invoice | 93 | 100 | 0 | |
 | /app/orang | 92 | 100 | 0,002 | Deretan tautan fitur kecil dibuang (gagal target-size; fiturnya ada di navigasi ruang) |
 | /app/kursus, /app/alur, dan 5 halaman Q-41 lainnya | 90-100 | 100 | | Diukur dengan bilah bawah fixed yang sama (scratchpad nav-fixed sebelum U-01) |
+
+## Beranda produksi setelah SEO-01 (12 Nov 2026, Q-54)
+
+Lighthouse 13.6.0, emulasi mobile bawaan, langsung ke produksi https://nadiusaha.my.id (deploy 65ce9c7: film landing v4b, og:image, JSON-LD). Laporan JSON: `docs/quality/lighthouse-beranda/id.json` dan `en.json`.
+
+| Halaman | Performa | Aksesibilitas | Best practices | SEO | LCP | CLS | TBT |
+|---|---|---|---|---|---|---|---|
+| / | 99 | 100 | 100 | 100 | 1,6 dtk | 0 | 20 ms |
+| /en | 100 | 100 | 100 | 100 | 1,1 dtk | 0 | 0 ms |
+
+Film landing tidak menurunkan performa, jadi tidak ada perubahan preload. Sisa saran Lighthouse (JavaScript tak terpakai, legacy JS, pengiriman gambar) bernilai insight, bukan kegagalan audit.
