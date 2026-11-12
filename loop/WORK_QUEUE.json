@@ -2451,8 +2451,8 @@
    "title": "Cek ulang teks resmi UU Pelindungan Ketenagakerjaan (setelah batas 30 hari 5 Nov 2026)",
    "accept": "cek peraturan.bpk.go.id, jdih.setneg.go.id, jdih.kemnaker.go.id; bila terbit: nomor, tanggal diundangkan dan berlaku, kutipan pasal waktu kerja, lembur, upah, PKWT, PHK, pesangon, tabel perbedaan terhadap aturan_bertanggal dan F1-05/F3-07/F4-09/Q-22, baris aturan bertanggal berlaku_dari = tanggal berlaku (terverifikasi hanya dari teks resmi) + tes SQL; bila belum: catat tanggal cek dan tunda 7 hari lagi",
    "how": "docs/research/uu-pelindungan-ketenagakerjaan.md; python -I loop/next_task.py tunda R-UUPK2 YYYY-MM-DD",
-   "blocked_by": "UU 27/2026 sudah terbit (berlaku 28 Okt 2026, mencabut UU 13/2003); naskah pasal hanya PDF unduhan 12,8 MB dari peraturan.bpk.go.id, menunggu izin unduh dari Tristan",
-   "status": "blocked",
+   "blocked_by": "",
+   "status": "ready",
    "created": "2026-11-04T11:11:14",
    "tidak_sebelum": "2026-11-08"
   },
