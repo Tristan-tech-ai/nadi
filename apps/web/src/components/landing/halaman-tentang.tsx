@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Bagian, HalamanInfo } from "@/components/landing/halaman-info";
 import { awalanJalur, type Bahasa } from "@/lib/i18n/bahasa";
 import { ambilKamus } from "@/lib/i18n/kamus";
+import { SUREL_KONTAK } from "@/lib/situs";
 
 const TAUTAN = "font-semibold text-tinta underline underline-offset-4";
 
@@ -24,6 +25,7 @@ export function HalamanTentang({ bahasa }: { bahasa: Bahasa }) {
           <Link href="/demo" className={TAUTAN} hrefLang="id">{k.siapaDemo}</Link> {k.siapaTengah}{" "}
           <Link href={`${awalanJalur(bahasa)}/panduan`} className={TAUTAN}>{k.siapaPanduan}</Link>{k.siapaAkhir}
         </p>
+        <p data-testid="kontak-nadi">{k.kontak} <a href={`mailto:${SUREL_KONTAK}`} className={TAUTAN}>{SUREL_KONTAK}</a></p>
       </Bagian>
     </HalamanInfo>
   );
