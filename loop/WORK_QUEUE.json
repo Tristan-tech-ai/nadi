@@ -5788,8 +5788,24 @@
    "accept": "UJI.md kedua repo PTM punya bagian Uji versi online 12 Nov 2026: tes Laravel ke TiDB ptm_test (admin 41/41, tim 31/31), asap 3 peran ke database online gagal 0, alur e2e 15/15 ke database online lewat app lokal, cek luar ptm-admin/ptm-team (/up, /masuk 200, form https, cookie secure, tanpa jejak debug), dan baris uji langsung di URL online berstatus menunggu sampai uji_ptm uat-live dijalankan Tristan; tanpa sandi; publik dipush",
    "how": "proposal/alat-pengumpulan/uji_ptm.py; bukti scratchpad bukti-ptm-live-db",
    "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-12T17:40:33",
+   "done": "2026-11-12T17:42:48",
+   "result": "docs/bukti/uji/UJI.md bagian Uji versi online + online-db-alur.txt (15 lulus) di ptm-publik e53b603 (dipush publik) dan project-team-management 1405507: migrasi+impor TiDB 61 pernyataan 40 tabel, tes ptm_test admin 41/41 tim 31/31, asap 3 peran 0 gagal, alur 15/15 ke database online lewat app lokal, cek luar (/up /masuk 200, https, cookie secure httponly, sesi di database online, 404 tanpa debug), uji langsung di URL online berstatus menunggu; tanpa sandi"
+  },
+  {
+   "id": "D-IGNORE-PTM",
+   "fase": "deploy",
+   "kind": "deploy",
+   "priority": 5,
+   "size": "s",
+   "wajib": false,
+   "title": "Proyek Vercel ptm-admin dan ptm-team hanya membangun ulang bila folder app-nya berubah",
+   "accept": "Ignored Build Step kedua proyek (root admin-app / team-app) memakai pola D-IGNORE terhadap folder app itu saja; push yang hanya mengubah docs/ atau README PTM membuat deploy CANCELED dengan log Ignored Build Step exit 0 di kedua proyek; push yang mengubah satu app hanya membangun app itu; produksi kedua app tetap 200 di /up",
+   "how": "vercel api PATCH /v9/projects/ptm-admin dan ptm-team",
+   "blocked_by": "",
    "status": "ready",
-   "created": "2026-11-12T17:40:33"
+   "created": "2026-11-12T17:42:57"
   }
  ]
 }

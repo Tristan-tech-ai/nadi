@@ -357,3 +357,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 12 Nov 2026 17.20 D-FN-TANYA done; R-UUPK2 menemukan UU 27/2026 terbit (berlaku 28 Okt 2026, mencabut UU 13/2003), diblokir menunggu izin unduh PDF; tambah Q-52 dan UAT-01Q.
 - 12 Nov 2026 17.45 Q-52 done: catatan UU 27/2026 di 8 layar hitungan ketenagakerjaan, catatan basi di Cadangan pesangon diperbaiki.
 - 12 Nov 2026 17.55 D-IGNORE: Ignored Build Step nadi dipasang, diuji lokal 3 kasus; push loop-saja sebagai bukti.
+- 12 Nov 2026 18.05 D-IGNORE done (deploy loop-saja dibatalkan Ignored Build Step); UAT-01S done (UJI.md PTM versi online).
