@@ -18,6 +18,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+from urllib.parse import urlsplit
 
 SIMPAN = 8
 POLA = re.compile(r"^db/nadi-db-(\d{8})\.tar\.gz\.enc$")
@@ -56,8 +57,35 @@ def jalankan(perintah: list[str], **kw) -> None:
     subprocess.run(perintah, check=True, **kw)
 
 
+def masalah_url(db_url: str) -> str | None:
+    """Kesalahan bentuk string sambungan Session pooler, tanpa menyebut isinya; None bila bentuknya benar."""
+    if "YOUR-PASSWORD" in db_url:
+        return "Sandi belum diisi: ganti [YOUR-PASSWORD] dengan sandi database (kurung sikunya ikut dihapus)."
+    try:
+        u = urlsplit(db_url)
+        port = u.port
+    except ValueError:
+        return "String sambungan tidak terbaca. Bila sandi memuat @ : / # ? atau %, reset sandi database dengan huruf dan angka saja."
+    if u.scheme not in ("postgresql", "postgres"):
+        return "String sambungan harus diawali postgresql://"
+    if not u.password:
+        return "Sandi belum diisi: ganti [YOUR-PASSWORD] dengan sandi database (kurung sikunya ikut dihapus)."
+    if not (u.username or "").startswith("postgres."):
+        return "Nama pengguna Session pooler berbentuk postgres.<id proyek>; salin ulang dari Connect, Session pooler."
+    if port not in (5432, 6543) or not (u.hostname or "").endswith("pooler.supabase.com"):
+        return "Pakai string Session pooler (host ...pooler.supabase.com, port 5432), bukan direct connection."
+    return None
+
+
 def dump(folder: str, db_url: str) -> None:
-    jalankan(["supabase", "db", "dump", "--db-url", db_url, "-f", os.path.join(folder, "roles.sql"), "--role-only"])
+    m = masalah_url(db_url)
+    if m:
+        sys.exit("NADI_DB_URL: " + m)
+    try:
+        jalankan(["supabase", "db", "dump", "--db-url", db_url, "-f", os.path.join(folder, "roles.sql"), "--role-only"])
+    except subprocess.CalledProcessError:
+        sys.exit("supabase db dump gagal. Bila log menulis password authentication failed: sandi di NADI_DB_URL salah. Reset sandi database "
+                 "(huruf dan angka saja) di Supabase, Database settings, lalu perbarui secret NADI_DB_URL.")
     jalankan(["supabase", "db", "dump", "--db-url", db_url, "-f", os.path.join(folder, "schema.sql")])
     jalankan(["supabase", "db", "dump", "--db-url", db_url, "-f", os.path.join(folder, "data.sql"), "--use-copy", "--data-only"])
     for b in BERKAS:
@@ -128,6 +156,9 @@ def selftest() -> int:
         if not ok:
             gagal.append(nama)
 
+    cek("url tanpa sandi ditolak", "Sandi belum diisi" in (masalah_url("postgresql://postgres.abc:[YOUR-PASSWORD]@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres") or ""))
+    cek("url direct connection ditolak", "Session pooler" in (masalah_url("postgresql://postgres:x@db.abc.supabase.co:5432/postgres") or ""))
+    cek("url pooler benar diterima", masalah_url("postgresql://postgres.abc:Sandi123@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres") is None)
     cek("nama berkas memakai tanggal", nama_cadangan(dt.date(2026, 11, 16)) == "db/nadi-db-20261116.tar.gz.enc")
     daftar = [nama_cadangan(dt.date(2026, 1, 5) + dt.timedelta(weeks=i)) for i in range(10)]
     daftar += [p + ".sha256" for p in daftar] + ["db/README.md", "lain/nadi-db-20200101.tar.gz.enc"]
