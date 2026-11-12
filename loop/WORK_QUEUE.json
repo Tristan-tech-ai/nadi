@@ -4731,8 +4731,8 @@
    "title": "Kode OTP di email masuk, daftar, dan atur ulang sandi",
    "accept": "Setelah SMTP sendiri aktif: templat supabase/templates terpasang di dashboard, batas email per jam dinaikkan, env NADI_KODE_EMAIL=1, isian kode tampil, e2e kirim kode ke email uji berhasil",
    "how": "UNTUK-TRISTAN SMTP 6 Nov",
-   "blocked_by": "Menunggu Tristan memasang SMTP sendiri di Supabase (UNTUK-TRISTAN 6 Nov)",
-   "status": "blocked",
+   "blocked_by": "",
+   "status": "ready",
    "created": "2026-11-06T10:52:31"
   },
   {
