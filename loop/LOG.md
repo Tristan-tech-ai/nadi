@@ -355,3 +355,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 12 Nov 2026 16.10 UAT-01P done: Laravel PTM online gratis (ptm-admin.vercel.app, ptm-team.vercel.app) dengan TiDB Cloud Starter + Vercel Container Runtime tanpa ubah kode/skema; tes TiDB 41/41 + 31/31, asap 3 peran 0 gagal, cek luar 200 kedua app; build pertama gagal karena ext-gd (phpspreadsheet), diperbaiki 3b366e7.
 - 12 Nov 2026 16.40 Permintaan Tristan: berkas pengumpulan PKL proposal/pengumpulan-pkl.md (PTM + Nadi, tautan, akun demo, UAT); uji asap produksi Nadi 19 lulus; PTM alur 15/15 ke database online; uji langsung di URL online PTM menunggu Tristan; M-24B ditunda di stash.
 - 12 Nov 2026 17.20 D-FN-TANYA done; R-UUPK2 menemukan UU 27/2026 terbit (berlaku 28 Okt 2026, mencabut UU 13/2003), diblokir menunggu izin unduh PDF; tambah Q-52 dan UAT-01Q.
+- 12 Nov 2026 17.45 Q-52 done: catatan UU 27/2026 di 8 layar hitungan ketenagakerjaan, catatan basi di Cadangan pesangon diperbaiki.
