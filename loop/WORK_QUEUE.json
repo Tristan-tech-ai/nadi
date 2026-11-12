@@ -5927,7 +5927,7 @@
    "title": "Email autentikasi dari no-reply@nadiusaha.my.id lewat Resend supaya tidak masuk Spam",
    "accept": "Tristan membuat akun Resend dan kunci API (hanya kirim); loop menambah domain nadiusaha.my.id di Resend lewat Chrome, memasang SPF/DKIM (dan DMARC p=none) lewat Hostinger, domain Verified; SMTP Supabase smtp.resend.com 465 user resend, pengirim no-reply@nadiusaha.my.id, sandi = kunci yang ditempel Tristan; uji daftar/atur ulang ke Gmail ifys4251 dan Gmail baru masuk Kotak Masuk (bukan Spam), dicek lewat Chrome; Authentication-Results dkim=pass spf=pass dmarc=pass",
    "how": "docs resend.com/docs/send-with-smtp, supabase.com/docs/guides/auth/auth-smtp",
-   "blocked_by": "menunggu Tristan: akun Resend + kunci API",
+   "blocked_by": "12 Nov 2026 20.03: domain nadiusaha.my.id Verified di Resend (akun ifys4251, Tokyo, pelacakan mati; DKIM resend._domainkey, CNAME rsend dan send, DMARC p=none lewat Hostinger). Sisa: SMTP Supabase ke Resend. Menunggu Tristan memilih (a) izinkan integrasi resmi Resend > Settings > Integrations > Connect to Supabase (OAuth, kunci dipasang Resend sendiri) atau (b) buat API key sendiri dan tempel di SMTP Supabase; lalu uji ke Gmail lewat Chrome",
    "status": "blocked",
    "created": "2026-11-12T19:45:00"
   }
