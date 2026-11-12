@@ -4731,7 +4731,7 @@
    "title": "Kode OTP di email masuk, daftar, dan atur ulang sandi",
    "accept": "Setelah SMTP sendiri aktif: templat supabase/templates terpasang di dashboard, batas email per jam dinaikkan, env NADI_KODE_EMAIL=1, isian kode tampil, e2e kirim kode ke email uji berhasil",
    "how": "UNTUK-TRISTAN SMTP 6 Nov",
-   "blocked_by": "12 Nov 2026 21.40: produksi sudah membawa NADI_KODE_EMAIL=1 (deploy 4f2f3cd READY, /masuk/kode menulis \"mengirim kode\"); Gmail pengirim nadiusaha.my.id@gmail.com mencatat email daftar (kode 8 angka di subjek) dan atur ulang di Terkirim, tetapi penerima belum melihatnya; menunggu Tristan memeriksa Spam penerima dan 3 email di Kotak Masuk pengirim (kemungkinan pantulan)",
+   "blocked_by": "12 Nov 2026 19.33: email kode SAMPAI dalam hitungan detik tetapi masuk Spam Gmail penerima (\"similar to messages that were identified as spam\"; 4/4 email atur ulang ke ifys4251 di Spam, diperiksa sendiri lewat Chrome). Kode produksi sudah benar (isian kode 8 angka). Menunggu Tristan membuat akun Resend + kunci API (EMAIL-DOMAIN); W-11 selesai bila email daftar ke Gmail baru masuk Kotak Masuk",
    "status": "blocked",
    "created": "2026-11-06T10:52:31"
   },
@@ -5898,6 +5898,36 @@
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-12T19:08:07"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "SEO-01",
+   "priority": 2,
+   "size": "m",
+   "wajib": false,
+   "title": "SEO halaman publik: sitemap, robots, og:image, JSON-LD, Search Console",
+   "accept": "sitemap.xml memuat semua halaman publik id/en dengan hreflang dari sumber data halaman, robots menutup /app /api /cetak /oauth /dev /auth, og:image 1200x630 dengan pesan inti Nadi, JSON-LD beranda/istilah/artikel tanpa rating karangan, judul beranda memuat kata pencarian dan <= 60 karakter, tes unit, properti Domain Search Console terverifikasi + sitemap dikirim + beranda diminta diindeks",
+   "how": "app/sitemap.ts, app/robots.ts, lib/seo, Search Console sc-domain:nadiusaha.my.id",
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-12T19:30:00",
+   "done": "2026-11-12T19:48:01",
+   "result": "65ce9c7 deploy dpl_3ZvGgN6xk3pMXguEuWcwEz4ufj7g READY; sitemap.xml 315 URL hreflang 512 vercel 0; robots.txt 6 Disallow; og:image 200 image/png; JSON-LD 3 tipe; peta-situs.test.ts 8/8 merah sekali; Search Console sc-domain:nadiusaha.my.id verified, sitemap submitted, beranda indexing requested"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "EMAIL-DOMAIN",
+   "priority": 1,
+   "size": "s",
+   "wajib": false,
+   "title": "Email autentikasi dari no-reply@nadiusaha.my.id lewat Resend supaya tidak masuk Spam",
+   "accept": "Tristan membuat akun Resend dan kunci API (hanya kirim); loop menambah domain nadiusaha.my.id di Resend lewat Chrome, memasang SPF/DKIM (dan DMARC p=none) lewat Hostinger, domain Verified; SMTP Supabase smtp.resend.com 465 user resend, pengirim no-reply@nadiusaha.my.id, sandi = kunci yang ditempel Tristan; uji daftar/atur ulang ke Gmail ifys4251 dan Gmail baru masuk Kotak Masuk (bukan Spam), dicek lewat Chrome; Authentication-Results dkim=pass spf=pass dmarc=pass",
+   "how": "docs resend.com/docs/send-with-smtp, supabase.com/docs/guides/auth/auth-smtp",
+   "blocked_by": "menunggu Tristan: akun Resend + kunci API",
+   "status": "blocked",
+   "created": "2026-11-12T19:45:00"
   }
  ]
 }
