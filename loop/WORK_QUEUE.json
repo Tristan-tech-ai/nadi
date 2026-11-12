@@ -5722,7 +5722,7 @@
    "title": "project-team-management online: dua proyek Vercel Container Runtime (Dockerfile per app) + database TiDB Cloud Starter (MySQL-compatible, gratis), tanpa mengubah kode/skema",
    "accept": "Dockerfile admin-app dan team-app (PHP 8.4, composer --no-dev, npm build, APP_DEBUG=false, DEBUGBAR_ENABLED=false) dan render.yaml (dua web service gratis, env rahasia sync:false diisi Tristan) di repo lokal + publik tanpa mengubah kode aplikasi, skema, atau stack; image dibangun dan dijalankan lokal terhadap MySQL lokal sampai login 3 peran dan tes lulus; README bagian Deploy Render (batas paket gratis, pilihan database: MySQL di Render berbayar atau TiDB Cloud Starter gratis kompatibel MySQL yang wajib diuji impor SQL + tes dulu); setelah Tristan membuat Blueprint dan database: URL dicek dari luar",
    "how": "Dockerfile per app (PHP 8.4, composer --no-dev, npm build, port 80/PORT), uji docker lokal; uji kompatibilitas TiDB (image lokal bila Tristan izinkan, atau cluster miliknya); proyek Vercel via MCP, rahasia DB diisi Tristan; docs vercel.com/docs/functions/runtimes/container",
-   "blocked_by": "TRISTAN: butuh akun TiDB Cloud Starter (autentikasi) dan pilihan uji kompatibilitas (a) image lokal pingcap/tidb:v8.5.1 yang sudah terunduh atau (b) cluster miliknya dengan kredensial di .env lokal; Dockerfile disiapkan saat dibuka",
+   "blocked_by": "TRISTAN: instance TiDB ptm-demo dibuat; butuh Tristan klik Connect > Generate Password dan menyimpan kredensial sendiri ke ptm-uji-publik/admin-app/.env.tidb (asisten tidak boleh membaca/mengetik sandi)",
    "status": "blocked",
    "created": "2026-11-12T15:00:00",
    "asal": "Tristan 12 Nov 14.58: pilih v4b, video Laravel v2 bagus, coba Render"
