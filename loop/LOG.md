@@ -361,3 +361,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 12 Nov 2026 19.00 Domain nadiusaha.my.id disiapkan (registrasi menunggu Tristan), Google Auth Platform dibuat, redirect Supabase ditambah.
 - 12 Nov 2026 21.40 Domain nadiusaha.my.id selesai (D-DOMAIN), deploy 4f2f3cd READY setelah Ignored Build Step diperbaiki, kode email aktif di produksi, berkas pengumpulan diperbarui.
 - 12 Nov 2026 19.50 SEO-01 hidup + Search Console terverifikasi; email terbukti masuk Spam (rencana Resend); deploy otomatis per push dimatikan.
+- 12 Nov 2026 20.05 Q-54 Lighthouse beranda produksi 99 dan 100 (perf), a11y/BP/SEO 100.

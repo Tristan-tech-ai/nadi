@@ -5822,8 +5822,10 @@
    "accept": "Lighthouse mobile (lab, perangkat bawaan) di https://nadi-swart.vercel.app/ dan /en: performa >= 90, aksesibilitas 100, LCP dan CLS dicatat; bila di bawah ambang, video film tidak diunduh sebelum diputar (preload none + poster) atau sebab lain diperbaiki dengan e2e/tes, lalu diukur ulang di produksi; angka dan laporan JSON disimpan di docs/quality",
    "how": "npx lighthouse dengan --preset bawaan mobile; bandingkan ukuran transfer awal",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-12T18:14:10"
+   "status": "done",
+   "created": "2026-11-12T18:14:10",
+   "done": "2026-11-12T19:53:00",
+   "result": "Lighthouse 13.6.0 mobile produksi https://nadiusaha.my.id/ perf 99 a11y 100 BP 100 SEO 100 LCP 1,6 dtk CLS 0; /en 100/100/100/100 LCP 1,1 dtk CLS 0; docs/quality/lighthouse.md + lighthouse-beranda/id.json en.json"
   },
   {
    "id": "Q-55",
