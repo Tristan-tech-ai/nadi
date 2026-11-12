@@ -2641,7 +2641,7 @@ export const kamusEn: Kamus = {
   },
   tanya: {
     tanpaAi: "Answered with a learned rule, without AI.",
-    belajar: "Nadi is learning a new format, just once. Questions like this are answered without AI next time.",
+    belajar: "Nadi is learning a new format. After it matches on two more similar questions, questions like this are answered without AI.",
     judul: "Ask your data", ket: "Ask about your business numbers in everyday words. Nadi answers from the same data as its reports and links the source. No AI, so no guessing.",
     hanyaPengelola: "Asking data is only for the owner, admins, and accountants.", label: "Your question", tanya: "Ask", contoh: "Examples:",
     contohDaftar: ["How much revenue this month?", "Profit last month", "Overdue invoices", "Unpaid invoices", "How many employees"],
@@ -2666,7 +2666,7 @@ export const kamusEn: Kamus = {
   },
   pindahPesan: {
     tanpaAi: "This file's columns were learned before; read without AI.",
-    belajar: "Nadi is learning a new format, just once. Files with the same columns are read without AI next time.",
+    belajar: "Nadi is learning a new format. After it matches on two more files with the same columns, files like this are read without AI.",
     pilihBerkas: "Choose a file first.", terlaluBesar: "The file is over 900 KB. Split it into several files.", jenisBerkas: "Use a CSV or XLSX file.",
     rusak: "The file cannot be read. Save it again as CSV or XLSX from the app.",
     tidakDikenali: "These columns are not recognised yet. Make sure the first row holds column titles, for example Account Name and Category Number, or Name and Position.",
@@ -2959,7 +2959,7 @@ export const kamusEn: Kamus = {
   },
   klaim: {
     terbacaAturan: "Read with a learned receipt rule, without AI. Check the numbers.",
-    belajarStruk: "Nadi is learning a new format, just once. Receipts from the same shop are read without AI next time.",
+    belajarStruk: "Nadi is learning a new format. After it matches on two more receipts from the same shop, that shop's receipts are read without AI.",
     uangHarianBaris: "daily allowance {hari} days",
     membacaFoto: "Reading the receipt photo...", terbacaFoto: "Read from the photo on this phone, without AI. Check the numbers before submitting.", terbacaAi: "Read by Nadi with AI, {n}% sure. Check the numbers before submitting.", fotoTakTerbaca: "The total in this photo could not be read. Take a closer photo, or type the total.", uangHarianJudul: "Daily allowance for business trips", uangHarianKet: "Rate per day by destination city. When a trip is approved, Nadi creates the daily allowance claim itself. Write * for other cities.", uangHarianAria: "Set daily allowance", uangHarianKota: "Destination city", uangHarianKotaContoh: "Surabaya, or *", uangHarianNominal: "Daily allowance (Rp per day, empty = turn off)", uangHarianSimpan: "Save rate", uangHarianLain: "Other cities", uangHarianPerHari: "per day",
     judul: "Expense claims", ket: "Pay back personal money spent for the business: fuel, parking, tolls, meals on duty, business trips. Approved by the direct manager then the owner, paid through payroll or cash.",

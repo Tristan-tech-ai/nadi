@@ -2642,7 +2642,7 @@ export const kamusId = {
   },
   tanya: {
     tanpaAi: "Dijawab dengan aturan yang sudah dipelajari, tanpa AI.",
-    belajar: "Nadi sedang mempelajari format baru, sekali saja. Pertanyaan seperti ini berikutnya dijawab tanpa AI.",
+    belajar: "Nadi sedang mempelajari format baru. Setelah pola ini cocok di dua pertanyaan serupa berikutnya, pertanyaan seperti ini dijawab tanpa AI.",
     judul: "Tanya data", ket: "Tanyakan angka usahamu dengan bahasa sehari-hari. Nadi menjawab dari data yang sama dengan laporannya dan menautkan sumbernya. Tanpa AI, jadi tidak ada tebakan.",
     hanyaPengelola: "Tanya data hanya untuk pemilik, admin, dan akuntan.", label: "Pertanyaanmu", tanya: "Tanya", contoh: "Contoh:",
     contohDaftar: ["Berapa penjualan bulan ini?", "Untung bulan lalu", "Tagihan yang lewat jatuh tempo", "Stok gula pasir", "Hutang ke pemasok"],
@@ -2667,7 +2667,7 @@ export const kamusId = {
   },
   pindahPesan: {
     tanpaAi: "Kolom berkas ini sudah dipelajari, dibaca tanpa AI.",
-    belajar: "Nadi sedang mempelajari format baru, sekali saja. Berkas dengan kolom yang sama berikutnya dibaca tanpa AI.",
+    belajar: "Nadi sedang mempelajari format baru. Setelah cocok di dua berkas berikutnya yang berkolom sama, berkas seperti ini dibaca tanpa AI.",
     pilihBerkas: "Pilih berkasnya dulu.", terlaluBesar: "Berkas lebih dari 900 KB. Pecah jadi beberapa berkas.", jenisBerkas: "Pakai berkas CSV atau XLSX.",
     rusak: "Berkas tidak bisa dibaca. Simpan ulang sebagai CSV atau XLSX dari aplikasinya.",
     tidakDikenali: "Kolom berkas ini belum dikenali. Pastikan baris pertama berisi judul kolom, misalnya Account Name dan Category Number, atau Nama dan Jabatan.",
@@ -2960,7 +2960,7 @@ export const kamusId = {
   },
   klaim: {
     terbacaAturan: "Terbaca dengan aturan struk yang sudah dipelajari, tanpa AI. Periksa angkanya.",
-    belajarStruk: "Nadi sedang mempelajari format baru, sekali saja. Struk dari toko yang sama berikutnya dibaca tanpa AI.",
+    belajarStruk: "Nadi sedang mempelajari format baru. Setelah cocok di dua struk berikutnya dari toko yang sama, struk dari toko itu dibaca tanpa AI.",
     uangHarianBaris: "uang harian {hari} hari",
     membacaFoto: "Membaca foto struk...", terbacaFoto: "Dibaca dari foto di HP ini, tanpa AI. Periksa angkanya sebelum mengajukan.", terbacaAi: "Dibaca Nadi dengan AI, yakin {n}%. Periksa angkanya sebelum mengajukan.", fotoTakTerbaca: "Total di foto ini belum terbaca. Foto ulang lebih dekat, atau ketik totalnya.", uangHarianJudul: "Uang harian perjalanan dinas", uangHarianKet: "Tarif per hari menurut kota tujuan. Saat perjalanan disetujui, Nadi membuat klaim uang harian sendiri. Tulis * untuk kota lain.", uangHarianAria: "Atur uang harian", uangHarianKota: "Kota tujuan", uangHarianKotaContoh: "Surabaya, atau *", uangHarianNominal: "Uang harian (Rp per hari, kosong = matikan)", uangHarianSimpan: "Simpan tarif", uangHarianLain: "Kota lain", uangHarianPerHari: "per hari",
     judul: "Klaim pengeluaran", ket: "Ganti uang pribadi yang terpakai untuk usaha: bensin, parkir, tol, makan saat tugas, perjalanan dinas. Disetujui atasan langsung lalu pemilik, dibayar lewat slip gaji atau kas.",

@@ -54,7 +54,7 @@ test("belajar format tanya data: model sekali, bayangan 2 kali, lalu token 0", a
       await expect(jawab).toContainText("Laba", { timeout: 60_000 });
       const a = jawab.getByTestId("tanya-asal");
       asal.push({ asal: (await a.getAttribute("data-asal"))!, token: Number(await a.getAttribute("data-token")) });
-      if (asal.at(-1)!.asal === "model") await expect(a).toContainText("Nadi sedang mempelajari format baru, sekali saja");
+      if (asal.at(-1)!.asal === "model") await expect(a).toContainText("Nadi sedang mempelajari format baru.");
       if (i === 0) {
         const axe = await new AxeBuilder({ page }).analyze();
         expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);

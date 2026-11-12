@@ -60,7 +60,7 @@ test("belajar format pindah data: model sekali, bayangan 2 kali, lalu tanpa AI",
       const status = f.getByRole("status");
       await expect(status).toContainText("Usulan dibuat untuk 14 produk", { timeout: 60_000 });
       const t = (await status.textContent()) ?? "";
-      asal.push(t.includes("sekali saja") ? "model" : t.includes("tanpa AI") ? "aturan" : "lain");
+      asal.push(t.includes("sedang mempelajari format baru") ? "model" : t.includes("tanpa AI") ? "aturan" : "lain");
       if (i === 0) {
         const axe = await new AxeBuilder({ page }).analyze();
         expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
