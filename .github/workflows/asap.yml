@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      E2E_BASE_URL: https://nadi-swart.vercel.app
+      E2E_BASE_URL: https://nadiusaha.my.id
       ASAP_GAGAL_SENGAJA: ${{ inputs.gagal_sengaja && '1' || '0' }}
     steps:
       - uses: actions/checkout@v7
