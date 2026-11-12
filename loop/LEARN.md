@@ -207,3 +207,13 @@ Hal yang dipelajari dari sumber primer, dengan URL dan tanggal akses. Tulis sebe
 - Supabase RLS + RLS performance (search_docs 11 Nov 2026): (select fn()) initPlan, indeks kolom kebijakan, security definer jangan di skema terekspos tanpa cek peran.
 - Supabase CLI 3.1.0 (npx supabase@latest --version, 11 Nov 2026) untuk Supabase lokal; create_project ditolak penjaga loop (alat yang bisa menagih).
 - 11 Nov 2026 CI: https://playwright.dev/docs/ci merekomendasikan `npx playwright install --with-deps` di GitHub Actions (tidak membahas install-deps terpisah); https://pypi.org/pypi/lxml/6.1.3/json lxml 6.1.3 dirilis 2 Sep 2026, requires_python >=3.8, ada wheel cp312 manylinux x86_64. Temuan: CI merah sejak 6 Nov karena lxml tidak terpasang di runner dan pemeriksa payroll menolak CSV berakhiran LF (checkout Linux), sedangkan Windows lokal membaca CRLF.
+
+## 12 Nov 2026: hosting project-team-management (UAT-01O/01P)
+- https://render.com/docs/free (dibaca 12 Nov 2026): paket gratis hanya web service, Postgres, Key Value, situs statis; private service dan disk tidak gratis; web gratis tidur setelah 15 menit tanpa trafik (bangun sekitar 1 menit), filesystem sementara, 750 jam per workspace per bulan.
+- https://render.com/docs/deploy-mysql (12 Nov 2026): MySQL di Render = private service + disk (/var/lib/mysql), jadi berbayar.
+- https://render.com/docs/blueprint-spec (12 Nov 2026): sync: false tidak boleh di envVarGroups; preDeployCommand hanya untuk web berbayar, private service, worker.
+- https://aiven.io/docs/platform/concepts/free-plan (12 Nov 2026): tier gratis Aiven tanpa MySQL (MySQL di tier Developer).
+- https://docs.pingcap.com/tidbcloud/select-cluster-tier/ (12 Nov 2026): TiDB Cloud Starter gratis dalam kuota (5 GiB baris, 50 juta RU per bulan per instance, maks 5 instance), kompatibel protokol MySQL, tanpa kartu untuk instance pertama.
+- https://github.com/vercel-community/php (12 Nov 2026): runtime vercel-php DIARSIPKAN 29 Okt 2026, bukan runtime resmi; vercel-php@0.8.0 = PHP 8.4; proyek baru disarankan memakai container runtime.
+- https://vercel.com/docs/functions/runtimes/container (diperbarui 7 Jul 2026, dibaca 12 Nov 2026): Container Runtime Beta di semua paket; Dockerfile/Containerfile di akar proyek; port 80 atau env PORT; skala turun setelah 5 menit tanpa trafik di produksi; batas dan harga Vercel Functions berlaku.
+- Petunjuk Teknis Laravel (dibaca ulang 12 Nov 2026): satu database MySQL bersama, skema modul diimpor sekali lewat phpMyAdmin, nama tabel/kolom mengikuti SQL sumber; jadi Postgres (Supabase) melanggar, TiDB (kompatibel MySQL) wajib diuji impor SQL dan seluruh tes dulu.
