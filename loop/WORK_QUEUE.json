@@ -3457,8 +3457,9 @@
    "accept": "urai 'tanggal 3 sampai 10 November' dan 'penjualan dan laba bulan ini' (dua jawaban); korpus 50 tetap >= 90%, korpus tambahan 15 kalimat >= 80%; e2e satu pertanyaan gabungan",
    "how": "src/lib/tanya/urai.ts",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-05T16:46:09"
+   "status": "running",
+   "created": "2026-11-05T16:46:09",
+   "started": "2026-11-12T10:19:11"
   },
   {
    "id": "M-20B",
@@ -5433,6 +5434,20 @@
    "started": "2026-11-11T21:31:03",
    "done": "2026-11-11T22:07:29",
    "result": "825ce60: periksaPayroll menerima LF/CRLF/BOM (tes baru merah dulu di Windows, lalu lulus), ci.yml memasang lxml==6.1.3; workflow CI run 43042915159 di push 2f960f6 completed success (merah sejak 6 Nov)"
+  },
+  {
+   "id": "D-FN-TANYA",
+   "fase": "Q",
+   "kind": "maint",
+   "priority": 40,
+   "size": "s",
+   "wajib": false,
+   "title": "Deploy ulang Edge Function pelajari-tanya dengan urai.ts terbaru (M-22B)",
+   "accept": "supabase/functions/pelajari-tanya (index.ts, pengawas.ts, urai.ts) dideploy ke produksi lewat deploy_edge_function; get_edge_function menunjukkan isi urai.ts sama dengan repo (sidik md5); tes salinan tetap lulus; panggilan dari aplikasi tetap jalan",
+   "how": "MCP deploy_edge_function dengan isi berkas apa adanya",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T10:35:00"
   }
  ]
 }

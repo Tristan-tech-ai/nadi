@@ -346,3 +346,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 12 Nov 2026 | iterasi 7 lanjut | tes navigasi halaman depan gagal 2/3 di produksi karena axe mengukur kartu yang masih beranimasi (kartu-masuk); tes kini menunggu animasi berhingga pada linimasa dokumen, 5/5 lulus di produksi; push kedua iterasi ini karena wake_guard menolak kode belum di-commit/di-push |
 | 12 Nov 2026 | iterasi 8 | X-13B koordinator kerja.kelola membuat dan mengatur kerja dari layar Kerja (RPC kelola_kerja_saya, tes SQL 12/12 merah sekali, e2e lokal); UAT-02 tetap menunggu Tristan masuk |
 | 12 Nov 2026 | iterasi 9 | M-20B alur berjeda: tes SQL 23/23 lokal dan produksi, isian jeda di layar Alur, e2e lokal jeda 0 dan 2 jam lalu dimatikan; UAT-02 tetap menunggu Tristan masuk |
+| 12 Nov 2026 | iterasi 10 | M-22B Tanya data rentang bebas + pertanyaan gabungan (tes unit, e2e lokal); tugas baru D-FN-TANYA deploy ulang pelajari-tanya |
