@@ -95,6 +95,26 @@ test("alat gratis: gaji bersih dan THR sama dengan hitungan aplikasi", async ({ 
   await periksa(page, "alat-pesangon");
 });
 
+test("Q-43: isian kalkulator yang diketik sebelum JavaScript siap tetap dipakai setelah hidrasi", async ({ page }) => {
+  // Tahan semua chunk JS sampai isian selesai diketik, jadi pengetikan pasti terjadi sebelum hidrasi.
+  let lepas = () => {};
+  const tahan = new Promise<void>((r) => { lepas = r; });
+  const jsNext = (u: URL) => u.pathname.startsWith("/_next/static/chunks/") && u.pathname.endsWith(".js");
+  await page.route(jsNext, async (route) => { await tahan; await route.continue(); });
+  await page.goto("/alat/thr", { waitUntil: "commit" });
+  await page.getByLabel("Mulai bekerja").fill("2026-01-15");
+  await page.getByLabel("Tanggal Hari Raya").fill("2026-07-20");
+  await page.getByLabel("Gaji pokok sebulan").fill("3600000");
+  lepas();
+  await page.waitForLoadState("networkidle");
+  await page.unroute(jsNext);
+  await expect(page.getByTestId("hasil-thr")).toHaveText(formatRupiah(hitungThr({ mulai: "2026-01-15", hariRaya: "2026-07-20", pokok: 3_600_000 }).thr));
+  // Isian lain diubah setelah hidrasi: nilai yang diketik sebelumnya tidak tertimpa nilai awal.
+  await page.getByLabel("Tunjangan tetap sebulan").fill("400000");
+  await expect(page.getByLabel("Gaji pokok sebulan")).toHaveValue("Rp3.600.000");
+  await expect(page.getByTestId("hasil-thr")).toHaveText(formatRupiah(hitungThr({ mulai: "2026-01-15", hariRaya: "2026-07-20", pokok: 3_600_000, tunjanganTetap: 400_000 }).thr));
+});
+
 test("alat gratis bahasa Inggris (L-08): teks en, angka sama dengan rumus aplikasi, tautan versi en", async ({ page }) => {
   test.skip(!E.NEXT_PUBLIC_SUPABASE_URL, "butuh .env.local");
   await page.goto("/en/alat");

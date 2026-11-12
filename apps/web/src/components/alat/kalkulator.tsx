@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { hitungPesangon, type AturanKompensasi, type AturanPesangon } from "@/lib/gaji/pesangon";
 import { susunSlip, type PetaAturan, type RisikoJkk } from "@/lib/gaji/susun";
 import { hitungThr } from "@/lib/gaji/thr";
@@ -15,6 +15,24 @@ const isian = "mt-1 h-12 w-full rounded-[var(--radius-isian)] border border-gari
 const angka = (s: string) => Math.max(0, Math.round(Number(s.replace(/\D/g, "")) || 0));
 const rp = (n: number) => formatRupiah(n);
 
+/**
+ * Q-43: isian yang diketik sebelum JavaScript siap tetap dipakai. React 19 tidak menimpa nilai DOM saat hidrasi
+ * (react-dom initInput: `isHydrating || ... element.value = value`), tetapi state masih nilai awal sehingga hasil memakai
+ * angka lama dan ketikan tertimpa pada render berikutnya. Sekali setelah hidrasi, nilai DOM yang berbeda dari tampilan
+ * state diambil ke state. Pada navigasi biasa nilai DOM sama dengan tampilan, jadi tidak ada yang berubah.
+ */
+function useIsianSebelumHidrasi(isian: [id: string, tampil: string, ubah: (v: string) => void][]) {
+  useEffect(() => {
+    for (const [id, tampil, ubah] of isian) {
+      const el = document.getElementById(id) as HTMLInputElement | HTMLSelectElement | null;
+      if (el && el.value !== tampil) ubah(el.value);
+    }
+    // Sengaja sekali saja: yang dibaca adalah ketikan sebelum hidrasi, bukan perubahan berikutnya.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+}
+const tampilRp = (nilai: string) => (nilai ? formatRupiah(angka(nilai)) : "");
+
 function Isian({ id, label, ket, children }: { id: string; label: string; ket?: string; children: ReactNode }) {
   return (
     <div>
@@ -28,7 +46,7 @@ function Isian({ id, label, ket, children }: { id: string; label: string; ket?: 
 function Rupiah({ id, label, nilai, ubah, ket }: { id: string; label: string; nilai: string; ubah: (v: string) => void; ket?: string }) {
   return (
     <Isian id={id} label={label} ket={ket}>
-      <input id={id} inputMode="numeric" value={nilai ? formatRupiah(angka(nilai)) : ""} placeholder="Rp0" onChange={(e) => ubah(e.target.value)} className={isian} />
+      <input id={id} inputMode="numeric" value={tampilRp(nilai)} placeholder="Rp0" onChange={(e) => ubah(e.target.value)} className={isian} />
     </Isian>
   );
 }
@@ -63,6 +81,11 @@ export function KalkulatorGaji({ aturan, bulanIni, slip = false, bahasa = "id" }
   const [ptkp, setPtkp] = useState("TK/0");
   const [risiko, setRisiko] = useState<RisikoJkk>("sangat_rendah");
   const [lembur, setLembur] = useState("0");
+  useIsianSebelumHidrasi([
+    ["pokok", tampilRp(pokok), setPokok], ["tunjangan", tampilRp(tunjangan), setTunjangan], ["ptkp", ptkp, setPtkp],
+    ["risiko", risiko, (v) => setRisiko(v as RisikoJkk)], ["lembur", lembur, setLembur],
+    ...(slip ? ([["nama-usaha", namaUsaha, setNamaUsaha], ["nama-orang", namaOrang, setNamaOrang]] as [string, string, (v: string) => void][]) : []),
+  ]);
   // Desember memakai perhitungan setahun yang butuh riwayat 11 bulan; alat ini menghitung bulan biasa.
   const bulan = bulanIni === 12 ? 11 : bulanIni;
   const hasil = useMemo(() => {
@@ -119,6 +142,7 @@ export function KalkulatorThr({ hariIni, bahasa = "id" }: { hariIni: string; bah
   const [hariRaya, setHariRaya] = useState(hariIni);
   const [pokok, setPokok] = useState("3500000");
   const [tunjangan, setTunjangan] = useState("");
+  useIsianSebelumHidrasi([["mulai", mulai, setMulai], ["hari-raya", hariRaya, setHariRaya], ["pokok-thr", tampilRp(pokok), setPokok], ["tunjangan-thr", tampilRp(tunjangan), setTunjangan]]);
   const sah = /^\d{4}-\d{2}-\d{2}$/.test(mulai) && /^\d{4}-\d{2}-\d{2}$/.test(hariRaya);
   const h = sah ? hitungThr({ mulai, hariRaya, pokok: angka(pokok), tunjanganTetap: angka(tunjangan) }) : null;
   return (
@@ -150,6 +174,7 @@ export function KalkulatorPesangon({ aturan, kompensasi, hariIni, bahasa = "id" 
   const [pokok, setPokok] = useState("4000000");
   const [tunjangan, setTunjangan] = useState("");
   const [kontrak, setKontrak] = useState(false);
+  useIsianSebelumHidrasi([["mulai-p", mulai, setMulai], ["berhenti", berhenti, setBerhenti], ["pokok-p", tampilRp(pokok), setPokok], ["tunjangan-p", tampilRp(tunjangan), setTunjangan]]);
   if (!aturan) return <p>{t.belumDibuka}</p>;
   const b = hitungPesangon({ id: "x", nama: "x", mulai, kontrak_selesai: kontrak ? berhenti : null, pokok: angka(pokok), tunjangan_tetap: angka(tunjangan) }, aturan, berhenti, kompensasi);
   return (
