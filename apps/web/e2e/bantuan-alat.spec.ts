@@ -244,6 +244,12 @@ test("pusat bantuan bahasa Inggris: cari dan artikel", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("lang", /en|id/);
 });
 
+/** Tunggu animasi berhingga (mis. kartu-masuk di gambar ponsel landing) selesai: axe mengukur warna yang masih setengah transparan
+ *  sebagai kontras rendah (2 dari 3 jalan produksi gagal 12 Nov 2026). Animasi tak berhingga (denyut) dan animasi berbasis gulir diabaikan. */
+async function tungguAnimasi(page: Page) {
+  await page.waitForFunction(() => document.getAnimations().filter((a) => a.timeline === document.timeline && a.effect?.getComputedTiming().iterations !== Infinity).every((a) => a.playState !== "running"), null, { timeout: 10_000 });
+}
+
 test("navigasi halaman depan: panel Solusi dan Sumber belajar di desktop, satu lembar menu di HP", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto("/");
@@ -252,6 +258,7 @@ test("navigasi halaman depan: panel Solusi dan Sumber belajar di desktop, satu l
   const solusi = page.getByTestId("menu-solusi");
   await expect(solusi).toBeVisible();
   await expect(solusi.getByRole("link", { name: /Warung dan toko/ })).toHaveAttribute("href", "/untuk/warung");
+  await tungguAnimasi(page);
   await page.screenshot({ path: test.info().outputPath("nav-solusi-1440.png") });
   const axe1 = await new AxeBuilder({ page }).analyze();
   expect(axe1.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
@@ -270,6 +277,7 @@ test("navigasi halaman depan: panel Solusi dan Sumber belajar di desktop, satu l
   const menu = page.locator("#menu-fitur");
   await expect(menu.getByRole("link", { name: /Kamus istilah/ })).toBeVisible();
   await expect(menu.getByRole("link", { name: /Pembuat invoice/ })).toBeAttached();
+  await tungguAnimasi(page);
   await page.screenshot({ path: test.info().outputPath("nav-hp-390.png"), fullPage: false });
   const axe2 = await new AxeBuilder({ page }).analyze();
   expect(axe2.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id)).toEqual([]);
