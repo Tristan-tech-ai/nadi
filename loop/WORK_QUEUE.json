@@ -2452,9 +2452,11 @@
    "accept": "cek peraturan.bpk.go.id, jdih.setneg.go.id, jdih.kemnaker.go.id; bila terbit: nomor, tanggal diundangkan dan berlaku, kutipan pasal waktu kerja, lembur, upah, PKWT, PHK, pesangon, tabel perbedaan terhadap aturan_bertanggal dan F1-05/F3-07/F4-09/Q-22, baris aturan bertanggal berlaku_dari = tanggal berlaku (terverifikasi hanya dari teks resmi) + tes SQL; bila belum: catat tanggal cek dan tunda 7 hari lagi",
    "how": "docs/research/uu-pelindungan-ketenagakerjaan.md; python -I loop/next_task.py tunda R-UUPK2 YYYY-MM-DD",
    "blocked_by": "",
-   "status": "ready",
+   "status": "done",
    "created": "2026-11-04T11:11:14",
-   "tidak_sebelum": "2026-11-08"
+   "tidak_sebelum": "2026-11-08",
+   "done": "2026-11-12T23:21:27",
+   "result": "commit 63ebc48 + deploy dpl_4HBGGc7yKFtpfCNNg4usJvQNhDdJ READY; migrasi 20261113000000_uu27_ketenagakerjaan.sql produksi, tes SQL uu27 23/23 (merah 0/6 dulu); pesangon.test 39/39, hak.test 8/8; e2e pesangon-uu27 lulus di https://nadiusaha.my.id dari luar; docs/research/uu-27-2026-cocok.md; CatatanUuBaru dihapus"
   },
   {
    "id": "D-20",
@@ -6148,6 +6150,50 @@
    "blocked_by": "menunggu Tristan membuat akun juri (UNTUK-TRISTAN 12 Nov) dan ADMIN-01",
    "status": "blocked",
    "created": "2026-11-12T23:05:00"
+  },
+  {
+   "fase": "R",
+   "kind": "research",
+   "id": "R-ATURAN26",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Aturan bertanggal 2026 yang belum terverifikasi (batas upah JP, UMP Bali, UMK Badung) dicocokkan ke teks resmi",
+   "accept": "Setiap baris aturan_bertanggal terverifikasi dengan sumber resmi (surat BPJS, Keputusan Gubernur); tidak ada baris terverifikasi=false; slip menghitung JP; tes SQL dan unit",
+   "how": "",
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-13T00:20:00",
+   "result": "migrasi 20261113001000_aturan_resmi_2026.sql di produksi, supabase/tests/aturan_resmi_2026.test.sql 7/7 produksi (merah 1/5 dulu, termasuk tidak ada aturan tak terverifikasi), susun.test.ts JP 110.863/221.726, commit 7505cbc",
+   "done": "2026-11-13T00:20:00"
+  },
+  {
+   "fase": "R",
+   "kind": "research",
+   "id": "R-PDP",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Kebijakan privasi dicocokkan pasal per pasal dengan UU 27/2022 (PDP)",
+   "accept": "Pasal hak subjek data, dasar pemrosesan, pemberitahuan kegagalan pelindungan 3 x 24 jam, transfer data ke luar negeri (server Singapura), prosesor data, retensi dicocokkan dari teks resmi; kalimat \"pasal-pasalnya belum dicocokkan\" hilang karena sudah benar-benar dicocokkan; perubahan fitur yang diwajibkan undang-undang dibuat dengan tes",
+   "how": "",
+   "blocked_by": "menunggu izin Tristan mengunduh PDF resmi UU 27/2022 Pelindungan Data Pribadi dari JDIH BPK",
+   "status": "blocked",
+   "created": "2026-11-13T00:20:00"
+  },
+  {
+   "fase": "R",
+   "kind": "research",
+   "id": "KONTAK-01",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Alamat kontak resmi Nadi di /privasi, /keamanan, /tentang menggantikan \"sedang disiapkan\"",
+   "accept": "Alamat di domain Nadi yang benar-benar menerima email (penerusan Hostinger ke kotak masuk Tristan), diuji kirim dan terima, dipasang di tiga halaman dan kamus en; tidak ada lagi teks \"alamat resminya sedang disiapkan\"",
+   "how": "",
+   "blocked_by": "menunggu izin Tristan memasang penerusan email kontak@nadiusaha.my.id (aturan penerusan email butuh persetujuan pemilik)",
+   "status": "blocked",
+   "created": "2026-11-13T00:20:00"
   }
  ]
 }
