@@ -40,7 +40,8 @@ test("paket skill: unduh dari halaman Usaha, zip Agent Skills sah tanpa data pri
   expect(skill).toContain(`${new URL(page.url()).origin}/api/mcp`);
   expect(skill).toContain("buat_usulan");
   expect(usaha).toContain("## Topi");
-  expect(skill + usaha).not.toMatch(/\b\d{12,}\b/);
+  // Nama topi buatan tes lain memuat Date.now() (13 digit, mis. "Barista Ilmu 1793754778763"); itu bukan data pribadi.
+  expect((skill + usaha).replace(/\b1[789]\d{11}\b/g, "")).not.toMatch(/\b\d{12,}\b/);
   if (process.env.E2E_SKILL_DIR) {
     for (const [jalur, data] of Object.entries(isi)) {
       const tujuan = join(process.env.E2E_SKILL_DIR, jalur);

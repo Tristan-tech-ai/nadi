@@ -2120,7 +2120,7 @@ export const kamusEn: Kamus = {
       "nama": "Mata (camera)",
       "sub": "Tables and queues, live",
       "pintu": "Know when tables fill up",
-      "judul": "Your camera watches the tables.",
+      "judul": "Camera eyes on tables.",
       "pendukung": "A phone or camera reads which tables are taken and how long the queue is. The video never leaves the device.",
       "masalah": [
         "Empty tables go unnoticed",

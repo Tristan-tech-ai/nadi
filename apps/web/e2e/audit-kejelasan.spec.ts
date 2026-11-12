@@ -1,4 +1,4 @@
-import { writeFileSync } from "node:fs";
+import { mkdirSync, writeFileSync } from "node:fs";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { expect, test, type Page } from "@playwright/test";
@@ -61,6 +61,7 @@ test("audit kejelasan tombol di semua halaman pemilik", async ({ page }, info) =
     umum: t.tombol.filter((x) => UMUM.test(x.label)).map((x) => `${x.label} (${x.bagian || "tanpa judul bagian"})`),
     tanpaNama: t.tombol.filter((x) => !x.label).length,
   }));
+  mkdirSync(join(__dirname, "..", "test-results"), { recursive: true });
   writeFileSync(join(__dirname, "..", "test-results", "audit-kejelasan.json"), JSON.stringify(ringkas, null, 1));
   expect(semua.length).toBeGreaterThan(50);
 });
@@ -87,6 +88,7 @@ test("audit kejelasan tombol di semua halaman staf", async ({ browser }, info) =
     await page.waitForURL((u) => u.pathname.startsWith("/app"));
     const semua: Temuan[] = [];
     for (const r of ruangUntuk("staf")) for (const h of r.halaman) semua.push(await kumpulkan(page, h.href));
+    mkdirSync(join(__dirname, "..", "test-results"), { recursive: true });
     writeFileSync(join(__dirname, "..", "test-results", "audit-kejelasan-staf.json"), JSON.stringify(semua.map((t) => ({
       ...t, umum: t.tombol.filter((x) => UMUM.test(x.label)).map((x) => `${x.label} (${x.bagian || "tanpa judul bagian"})`), tanpaNama: t.tombol.filter((x) => !x.label).length })), null, 1));
     expect(semua.length).toBeGreaterThan(8);
