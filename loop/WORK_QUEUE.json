@@ -6062,6 +6062,48 @@
    "blocked_by": "menunggu Tristan membuat proyek nadi-staging dan token akses (UNTUK-TRISTAN 12 Nov)",
    "status": "blocked",
    "created": "2026-11-12T22:20:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "TUR-01",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Tur singkat jalan di halaman mana pun dan bisa diulang kapan saja",
+   "accept": "Tur dibuka dari tombol ? di setiap halaman (termasuk /app/mulai dan /app/mulai/lanjut) berjalan DI HALAMAN ITU, tidak melompat ke Hari ini; langkah yang bagiannya tidak ada di layar dilewati, bukan kartu kosong di tengah; ada tur khusus Mulai (isi data awal) dan tur Hari ini; e2e cloud membuka tur dari /app/mulai/lanjut dan dari /app, 390/1440 terang gelap axe; sebab tur tidak jalan yang dilaporkan Tristan 12 Nov dicatat dengan bukti",
+   "how": "",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T22:55:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "BANTU-01",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Pusat belajar yang selalu bisa ditemukan: daftar Mulai di Nadi, tur, video, panduan peran dari sidebar dan menu",
+   "accept": "Sidebar bagian bawah Bantuan dan panduan membuka satu halaman /app/belajar berisi daftar langkah Mulai di Nadi dengan progres sungguhan (data usaha), tombol ulang tur per ruang, video singkat per fitur dari rekaman asli, panduan per peran, dan cari bantuan; daftar Mulai bisa ditampilkan lagi setelah ditutup; staf dan akuntan mendapat daftar sesuai perannya; pola dirujuk dari sumber (NN/g onboarding, contoh SaaS) dan dicatat di LEARN; e2e cloud",
+   "how": "",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T22:55:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "UAT-PAHAM",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "UAT pengguna baru: paham, terbiasa, dan nyaman memakai Nadi tanpa dibimbing",
+   "accept": "Skenario tugas untuk pengguna yang belum pernah memakai Nadi (siapkan usaha, lempar nota, setujui, buat invoice, tambah staf, pasang fitur tambahan, cari bantuan) diukur: tugas selesai tanpa bantuan, waktu per tugas, salah klik, dan skor kenyamanan SUS; minimal 5 penguji nyata yang diundang Tristan (protokol dan lembar isian disiapkan loop) ditambah uji otomatis bahwa setiap layar punya langkah pertama di keadaan kosong dan tombol bantuan; ambang SUS >= 70 dan keberhasilan tugas >= 80%; hasil masuk PDF UAT",
+   "how": "",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T22:55:00"
   }
  ]
 }
