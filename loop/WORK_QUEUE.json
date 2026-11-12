@@ -4731,7 +4731,7 @@
    "title": "Kode OTP di email masuk, daftar, dan atur ulang sandi",
    "accept": "Setelah SMTP sendiri aktif: templat supabase/templates terpasang di dashboard, batas email per jam dinaikkan, env NADI_KODE_EMAIL=1, isian kode tampil, e2e kirim kode ke email uji berhasil",
    "how": "UNTUK-TRISTAN SMTP 6 Nov",
-   "blocked_by": "12 Nov 2026 19.33: email kode SAMPAI dalam hitungan detik tetapi masuk Spam Gmail penerima (\"similar to messages that were identified as spam\"; 4/4 email atur ulang ke ifys4251 di Spam, diperiksa sendiri lewat Chrome). Kode produksi sudah benar (isian kode 8 angka). Menunggu Tristan membuat akun Resend + kunci API (EMAIL-DOMAIN); W-11 selesai bila email daftar ke Gmail baru masuk Kotak Masuk",
+   "blocked_by": "12 Nov 2026 20.13: email kode lewat Resend masuk Kotak Masuk dengan SPF/DKIM/DMARC PASS; isian kode 8 angka di produksi (label 8 angka menunggu deploy besar berikutnya). Menunggu Tristan menulis berhasil setelah daftar akun baru",
    "status": "blocked",
    "created": "2026-11-06T10:52:31"
   },
@@ -5895,7 +5895,7 @@
    "size": "m",
    "wajib": false,
    "title": "Masuk dengan Google memakai tombol resmi Google Identity Services + signInWithIdToken sehingga layar Google menyebut domain Nadi, bukan supabase.co",
-   "accept": "Baca docs Supabase signInWithIdToken (Google) dan docs Google Identity Services terbaru, catat di LEARN; tombol GIS di /masuk dan /daftar (id dan en) dengan nonce acak yang di-hash (SHA-256) dan diverifikasi Supabase; skrip accounts.google.com/gsi/client dimuat hanya saat halaman masuk/daftar dibuka; alur redirect lama tetap sebagai cadangan bila skrip gagal atau diblokir; layar pilih akun Google menampilkan nadiusaha.my.id (dibuktikan tangkapan layar oleh Tristan); tes unit nonce; e2e lokal tombol tampil 390/1440 terang gelap axe; Lighthouse /masuk tetap >= 90; tidak ada sandi/akun dibuat oleh loop",
+   "accept": "Baca docs Supabase signInWithIdToken (Google) dan docs Google Identity Services terbaru, catat di LEARN; tombol GIS di /masuk dan /daftar (id dan en) dengan nonce acak yang di-hash (SHA-256) dan diverifikasi Supabase; skrip accounts.google.com/gsi/client dimuat hanya saat halaman masuk/daftar dibuka; tanpa cadangan redirect ke supabase.co (verifikasi branding Google mewajibkan semua Authorized domains diverifikasi; supabase.co dan vercel.app tidak bisa), browser dalam aplikasi diberi petunjuk membuka di browser biasa karena Google memang menolak webview; layar pilih akun Google menampilkan nadiusaha.my.id (dibuktikan tangkapan layar oleh Tristan); tes unit nonce; e2e lokal tombol tampil 390/1440 terang gelap axe; Lighthouse /masuk tetap >= 90; tidak ada sandi/akun dibuat oleh loop; halaman /privasi menjelaskan data akun Google yang dipakai (nama, email, foto) hanya untuk masuk dan tidak dibagikan",
    "how": "Supabase auth signInWithIdToken provider google token nonce; client ID 644230089259-7s29623tfn52n0dc54i2frtffqtfopaf",
    "blocked_by": "",
    "status": "ready",
@@ -5927,9 +5927,51 @@
    "title": "Email autentikasi dari no-reply@nadiusaha.my.id lewat Resend supaya tidak masuk Spam",
    "accept": "Tristan membuat akun Resend dan kunci API (hanya kirim); loop menambah domain nadiusaha.my.id di Resend lewat Chrome, memasang SPF/DKIM (dan DMARC p=none) lewat Hostinger, domain Verified; SMTP Supabase smtp.resend.com 465 user resend, pengirim no-reply@nadiusaha.my.id, sandi = kunci yang ditempel Tristan; uji daftar/atur ulang ke Gmail ifys4251 dan Gmail baru masuk Kotak Masuk (bukan Spam), dicek lewat Chrome; Authentication-Results dkim=pass spf=pass dmarc=pass",
    "how": "docs resend.com/docs/send-with-smtp, supabase.com/docs/guides/auth/auth-smtp",
-   "blocked_by": "12 Nov 2026 20.03: domain nadiusaha.my.id Verified di Resend (akun ifys4251, Tokyo, pelacakan mati; DKIM resend._domainkey, CNAME rsend dan send, DMARC p=none lewat Hostinger). Sisa: SMTP Supabase ke Resend. Menunggu Tristan memilih (a) izinkan integrasi resmi Resend > Settings > Integrations > Connect to Supabase (OAuth, kunci dipasang Resend sendiri) atau (b) buat API key sendiri dan tempel di SMTP Supabase; lalu uji ke Gmail lewat Chrome",
+   "blocked_by": "12 Nov 2026 20.13: SMTP Supabase = Resend lewat integrasi resmi (Tristan mengizinkan, Authorize ditekan Tristan), host smtp.resend.com 465 user resend, pengirim Nadi <no-reply@nadiusaha.my.id>; uji atur ulang ke ifys4251 masuk KOTAK MASUK, Show original SPF PASS, DKIM PASS nadiusaha.my.id, DMARC PASS. Menunggu Tristan mencoba daftar sendiri dan menulis berhasil (perintah Tristan: belum selesai sebelum ia bilang berhasil)",
    "status": "blocked",
    "created": "2026-11-12T19:45:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "BRAND-GOOGLE",
+   "priority": 2,
+   "size": "s",
+   "wajib": false,
+   "title": "Verifikasi branding Google: layar masuk Google menampilkan Nadi dan logonya",
+   "accept": "Setelah AUTH-GIS dideploy: Authorized domains hanya nadiusaha.my.id (supabase.co dan nadi-swart.vercel.app dilepas, redirect URI Supabase dilepas dari client), beranda dan /privasi di domain terverifikasi Search Console dengan bagian data Google, logo 120x120 tersimpan (sudah, 12 Nov), Verify branding diajukan di Verification Center, status dipantau sampai disetujui; Tristan membuktikan layar Google menampilkan Nadi + logo",
+   "how": "console.cloud.google.com/auth/branding?project=nadi-514510, support.google.com/cloud/answer/13464321",
+   "blocked_by": "menunggu AUTH-GIS dideploy",
+   "status": "blocked",
+   "created": "2026-11-12T20:20:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "DOC-DOMAIN",
+   "priority": 3,
+   "size": "s",
+   "wajib": false,
+   "title": "Dokumen dan teks publik memakai nadiusaha.my.id",
+   "accept": "README, docs/promo (lomba, ringkasan, video-v2), docs/bisnis/investor, panduan sambung MCP dan bantuan menyebut https://nadiusaha.my.id; nadi-swart hanya disebut sebagai alamat lama yang tetap jalan; grep nadi-swart di teks publik hanya tersisa di catatan sejarah; video tidak dirender ulang tanpa diminta",
+   "how": "",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T20:25:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "D-ALIH",
+   "priority": 2,
+   "size": "s",
+   "wajib": false,
+   "title": "Alamat lama nadi-swart.vercel.app mengalihkan halaman publik ke domain utama",
+   "accept": "Proxy/middleware Next: permintaan GET ke host nadi-swart.vercel.app untuk halaman publik (beranda, fitur, harga, bantuan, kamus, alat, masuk, daftar) dialihkan 308 ke jalur sama di https://nadiusaha.my.id; /api/*, /auth/*, /.well-known/*, /app/*, tautan pribadi (struk, slip, tanda, lamar, i, v, sertifikat, servis) TIDAK dialihkan supaya token MCP, email lama, QR tercetak, dan sesi tetap jalan; tes unit pemilih jalur; e2e lokal dengan header Host; dibaca dulu docs Next proxy",
+   "how": "",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T20:25:00"
   }
  ]
 }
