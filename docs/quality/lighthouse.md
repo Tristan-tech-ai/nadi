@@ -38,3 +38,5 @@ Lighthouse 13.6.0, emulasi mobile bawaan, langsung ke produksi https://nadiusaha
 | /en | 100 | 100 | 100 | 100 | 1,1 dtk | 0 | 0 ms |
 
 Film landing tidak menurunkan performa, jadi tidak ada perubahan preload. Sisa saran Lighthouse (JavaScript tak terpakai, legacy JS, pengiriman gambar) bernilai insight, bukan kegagalan audit.
+
+Setelah tombol Google resmi (AUTH-GIS, 12 Nov 2026), produksi https://nadiusaha.my.id/masuk: performa 97, aksesibilitas 100, best practices 100, SEO 100, LCP 1,4 dtk, CLS 0,005, TBT 80 ms (`lighthouse-beranda/masuk.json`).

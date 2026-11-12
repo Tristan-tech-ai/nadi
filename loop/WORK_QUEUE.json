@@ -5897,8 +5897,8 @@
    "title": "Masuk dengan Google memakai tombol resmi Google Identity Services + signInWithIdToken sehingga layar Google menyebut domain Nadi, bukan supabase.co",
    "accept": "Baca docs Supabase signInWithIdToken (Google) dan docs Google Identity Services terbaru, catat di LEARN; tombol GIS di /masuk dan /daftar (id dan en) dengan nonce acak yang di-hash (SHA-256) dan diverifikasi Supabase; skrip accounts.google.com/gsi/client dimuat hanya saat halaman masuk/daftar dibuka; tanpa cadangan redirect ke supabase.co (verifikasi branding Google mewajibkan semua Authorized domains diverifikasi; supabase.co dan vercel.app tidak bisa), browser dalam aplikasi diberi petunjuk membuka di browser biasa karena Google memang menolak webview; layar pilih akun Google menampilkan nadiusaha.my.id (dibuktikan tangkapan layar oleh Tristan); tes unit nonce; e2e lokal tombol tampil 390/1440 terang gelap axe; Lighthouse /masuk tetap >= 90; tidak ada sandi/akun dibuat oleh loop; halaman /privasi menjelaskan data akun Google yang dipakai (nama, email, foto) hanya untuk masuk dan tidak dibagikan",
    "how": "Supabase auth signInWithIdToken provider google token nonce; client ID 644230089259-7s29623tfn52n0dc54i2frtffqtfopaf",
-   "blocked_by": "",
-   "status": "ready",
+   "blocked_by": "Kode selesai dan di produksi (bd1ae68, deploy dpl_3qPM6MDh2J1b5TRVuxSuHeWnD818): tombol resmi tampil di https://nadiusaha.my.id/masuk (Chrome menampilkan Login sebagai akun Google), nonce SHA-256 + FedCM, tanpa redirect supabase.co; google-gis.test.ts 10/10 merah sekali; e2e masuk-google lokal lulus dengan skrip Google tiruan (penukaran id_token, nonce mentah ke Supabase, tanpa /auth/v1/authorize); Lighthouse /masuk 97/100/100/100. Sisa kriteria: tangkapan layar Tristan bahwa layar pilih akun Google menyebut Nadi/nadiusaha.my.id dan masuk berhasil (loop tidak boleh masuk atau membuat akun di produksi)",
+   "status": "blocked",
    "created": "2026-11-12T19:08:07"
   },
   {
@@ -5941,9 +5941,11 @@
    "title": "Verifikasi branding Google: layar masuk Google menampilkan Nadi dan logonya",
    "accept": "Setelah AUTH-GIS dideploy: Authorized domains hanya nadiusaha.my.id (supabase.co dan nadi-swart.vercel.app dilepas, redirect URI Supabase dilepas dari client), beranda dan /privasi di domain terverifikasi Search Console dengan bagian data Google, logo 120x120 tersimpan (sudah, 12 Nov), Verify branding diajukan di Verification Center, status dipantau sampai disetujui; Tristan membuktikan layar Google menampilkan Nadi + logo",
    "how": "console.cloud.google.com/auth/branding?project=nadi-514510, support.google.com/cloud/answer/13464321",
-   "blocked_by": "menunggu AUTH-GIS dideploy",
-   "status": "blocked",
-   "created": "2026-11-12T20:20:00"
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-12T20:20:00",
+   "done": "2026-11-12T20:44:37",
+   "result": "Verification Center nadi-514510: \"Your branding has been verified and is being shown to users\" setelah Publish branding; Authorized domains hanya nadiusaha.my.id, klien OAuth origin hanya https://nadiusaha.my.id tanpa redirect supabase.co, logo 120x120"
   },
   {
    "fase": "deploy",
@@ -5956,8 +5958,10 @@
    "accept": "README, docs/promo (lomba, ringkasan, video-v2), docs/bisnis/investor, panduan sambung MCP dan bantuan menyebut https://nadiusaha.my.id; nadi-swart hanya disebut sebagai alamat lama yang tetap jalan; grep nadi-swart di teks publik hanya tersisa di catatan sejarah; video tidak dirender ulang tanpa diminta",
    "how": "",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-12T20:25:00"
+   "status": "done",
+   "created": "2026-11-12T20:25:00",
+   "done": "2026-11-12T20:44:37",
+   "result": "567e46c README, lomba, ringkasan, investor, panduan pintu-data, skill MCP id/en memakai nadiusaha.my.id; skill tes 24/24; catatan sejarah (video-v2, storyboard, ASSETS) dibiarkan"
   },
   {
    "fase": "deploy",
@@ -5970,8 +5974,10 @@
    "accept": "Proxy/middleware Next: permintaan GET ke host nadi-swart.vercel.app untuk halaman publik (beranda, fitur, harga, bantuan, kamus, alat, masuk, daftar) dialihkan 308 ke jalur sama di https://nadiusaha.my.id; /api/*, /auth/*, /.well-known/*, /app/*, tautan pribadi (struk, slip, tanda, lamar, i, v, sertifikat, servis) TIDAK dialihkan supaya token MCP, email lama, QR tercetak, dan sesi tetap jalan; tes unit pemilih jalur; e2e lokal dengan header Host; dibaca dulu docs Next proxy",
    "how": "",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-12T20:25:00"
+   "status": "done",
+   "created": "2026-11-12T20:25:00",
+   "done": "2026-11-12T20:44:37",
+   "result": "f15023f; produksi dpl_3qPM6MDh2J1b5TRVuxSuHeWnD818: nadi-swart / /harga /kamus/pesangon /masuk /sitemap.xml 308 ke nadiusaha.my.id; /api/mcp 405, /auth/konfirmasi 307 lokal, /masuk/sandi-baru 200, /.well-known 200 tidak dialihkan; alih-domain.test.ts 3/3 merah sekali"
   }
  ]
 }

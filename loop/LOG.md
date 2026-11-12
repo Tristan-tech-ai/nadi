@@ -364,3 +364,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 12 Nov 2026 20.05 Q-54 Lighthouse beranda produksi 99 dan 100 (perf), a11y/BP/SEO 100.
 - 12 Nov 2026 20.05 Domain nadiusaha.my.id terverifikasi di Resend (DKIM, SPF, DMARC lewat Hostinger); menunggu izin sambung SMTP Supabase.
 - 12 Nov 2026 20.20 SMTP Resend aktif, email uji masuk Kotak Masuk (SPF/DKIM/DMARC PASS); logo branding Google tersimpan, pengajuan menunggu AUTH-GIS.
+- 12 Nov 2026 20.50 Tombol Google resmi + branding Google terverifikasi dan tampil; alamat lama dialihkan; dokumen domain baru; kunci domain Hostinger.
