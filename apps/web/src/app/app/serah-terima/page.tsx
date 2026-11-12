@@ -20,6 +20,7 @@ import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
+import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 
 export const metadata: Metadata = { title: "Serah terima" };
 
@@ -182,6 +183,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/serah-terim
   const kepala = (
     <>
       <KepalaHalaman jalur="/app/serah-terima" judul={t.judul} ket={t.ket} />
+      <CatatanUuBaru dasar="PP 35/2021 (pengunduran diri, uang pisah, uang penggantian hak)" bahasa={bahasa} />
     </>
   );
   if (sesi.peran !== "pemilik" && sesi.peran !== "admin") {

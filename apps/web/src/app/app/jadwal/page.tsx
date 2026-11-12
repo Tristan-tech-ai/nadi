@@ -14,6 +14,7 @@ import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
+import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 
 export const metadata: Metadata = { title: "Jadwal" };
 
@@ -187,6 +188,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/jadwal">["s
   return (
     <div lang={bahasa}>
       <KepalaHalaman jalur="/app/jadwal" judul={k.t.judul} />
+      <CatatanUuBaru dasar="PP 35/2021 (waktu kerja dan lembur)" bahasa={bahasa} />
       {sesi.peran === "staf" ? <Staf hari={hari} k={k} /> : <Pengelola minggu={minggu} kelola={sesi.peran === "pemilik" || sesi.peran === "admin"} hari={hari} k={k} />}
     </div>
   );

@@ -3,6 +3,7 @@ import { KunciAturan, negaraUsaha } from "@/components/app/aturan-indonesia";
 import { Suspense } from "react";
 import { IlustrasiSlip } from "@/components/ilustrasi";
 import { CadanganPesangon } from "@/components/app/cadangan-pesangon";
+import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 import { FormBagikan, FormLembur, FormLepas, FormSetujui, FormSiapkan } from "@/components/app/aksi-gaji";
 import { Cap } from "@/components/ui/cap";
 import { Rupiah } from "@/components/ui/rupiah";
@@ -89,6 +90,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
   const kepala = (
     <>
       <KepalaHalaman jalur="/app/gaji" judul={t.judul} ket={t.ket} />
+      <CatatanUuBaru dasar="PP 35/2021 dan PP 36/2021 (lembur, upah, pesangon)" bahasa={bahasa} />
       {bahasa !== "id" ? (
         <p className="mt-3 rounded-[var(--radius-kartu)] border border-garis-kuat px-3 py-2 text-sm" data-testid="khusus-indonesia">
           <span className="font-semibold">{t.hanyaIndonesia}.</span> {t.hanyaIndonesiaKet}

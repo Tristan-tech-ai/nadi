@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { FormIuranPensiun, FormSaldoPesangon } from "@/components/app/aksi-gaji";
+import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 import { Rupiah } from "@/components/ui/rupiah";
 import { formatTanggalKalender } from "@/lib/format";
 import { hitungPesangon, ringkasCadangan, teksMasaKerja, type AturanKompensasi, type AturanPesangon, type BarisPesangon, type OrangPesangon } from "@/lib/gaji/pesangon";
@@ -131,9 +132,10 @@ export async function CadanganPesangon() {
           <p>Jumlah yang dibayar sungguhan tergantung alasan berhenti (PP 35/2021 Pasal 41 sampai 57): misalnya 0,5 kali bila efisiensi karena rugi, 1,75 kali bila pensiun. Uang penggantian hak, seperti sisa cuti, tidak masuk cadangan ini.</p>
           <p>Iuran dana pensiun yang dibayar usaha (bukan BPJS Jaminan Pensiun) boleh diperhitungkan sebagai bagian dari pesangon dan penghargaan masa kerja (PP 35/2021 Pasal 58 ayat (1)); bila manfaat pensiunnya lebih kecil, selisihnya tetap dibayar usaha (ayat (2)). Isi iuran yang sudah dibayar per orang di rincian.</p>
           <p>Karyawan kontrak (PKWT) mendapat uang kompensasi saat kontrak berakhir: masa kerja dibagi 12 dikali 1 bulan upah, setelah paling sedikit 1 bulan kerja (Pasal 15 ayat (3) dan Pasal 16 ayat (1)); bila berakhir lebih awal, dihitung sampai yang sudah dijalani (Pasal 17). Nadi menghitung dari tanggal mulai kerja sampai hari ini; bila kontrak sudah diperpanjang dan kompensasi periode lalu sudah dibayar, ubah tanggal mulai ke awal kontrak terakhir.</p>
-          <p>UU Pelindungan Ketenagakerjaan sudah disahkan DPR pada 6 Okt 2026 tetapi teksnya belum terbit. Sampai berlaku, Nadi memakai PP 35/2021 (berlaku sejak {formatTanggalKalender(d.aturan.berlaku_dari)}).</p>
+          <p>Aturan PP 35/2021 yang dipakai di sini tercatat berlaku sejak {formatTanggalKalender(d.aturan.berlaku_dari)}.</p>
         </div>
       </details>
+      <CatatanUuBaru dasar="PP 35/2021" />
     </Bagian>
   );
 }

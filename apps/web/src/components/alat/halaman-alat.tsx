@@ -7,6 +7,7 @@ import { KalkulatorGaji, KalkulatorPesangon, KalkulatorThr } from "@/components/
 import { HalamanInfo } from "@/components/landing/halaman-info";
 import { aturanPublik } from "@/lib/alat/aturan";
 import type { AturanKompensasi, AturanPesangon } from "@/lib/gaji/pesangon";
+import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { hariIni } from "@/lib/izin";
 
@@ -104,6 +105,7 @@ export function HalamanAlat({ slug, bahasa = "id" }: { slug: SlugAlat; bahasa?: 
       <nav aria-label={u.jejak} className="mb-6 text-[15px] text-tinta-2"><Link href={`${awalan(bahasa)}/alat`} className="underline underline-offset-4">{u.indeks}</Link> / {judul}</nav>
       <Suspense fallback={<div className="h-96 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}><Isi slug={slug} bahasa={bahasa} /></Suspense>
       <p className="mt-8 text-[15px]">{DASAR[bahasa][slug]}</p>
+      <CatatanUuBaru dasar={DASAR[bahasa][slug]} bahasa={bahasa} />
       <p className="mt-4 text-[15px]">{tambahan} <Link href="/demo" className="underline underline-offset-4">{u.coba}</Link>.</p>
     </HalamanInfo>
   );

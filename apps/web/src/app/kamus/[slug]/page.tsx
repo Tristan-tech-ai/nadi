@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 import { HalamanInfo } from "@/components/landing/halaman-info";
 import { istilah, ISTILAH } from "@/lib/kamus-istilah";
 
@@ -21,6 +22,7 @@ export default async function HalamanIstilah({ params }: PageProps<"/kamus/[slug
     <HalamanInfo judul={i.istilah} pengantar={i.arti} warna="kunyit">
       <nav aria-label="Jejak" className="text-[15px] text-tinta-2"><Link href="/kamus" className="underline underline-offset-4">Kamus istilah</Link> / {i.istilah}</nav>
       {i.dasar ? <p className="mt-6"><span className="font-semibold">Dasar aturan:</span> {i.dasar}</p> : null}
+      {i.dasar ? <CatatanUuBaru dasar={i.dasar} /> : null}
       <section className="mt-6" aria-labelledby="judul-dipakai">
         <h2 id="judul-dipakai" className="papan papan-sedang">Dipakai di Nadi</h2>
         <p className="mt-3 flex flex-wrap gap-x-6 gap-y-2">{i.tautan.map((a) => <Link key={a.href} href={a.href} className="font-semibold underline underline-offset-4" data-testid="tautan-istilah">{a.label}</Link>)}</p>
