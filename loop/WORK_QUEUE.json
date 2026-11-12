@@ -5730,6 +5730,20 @@
    "asal": "Tristan 12 Nov 14.58: pilih v4b, video Laravel v2 bagus, coba Render",
    "done": "2026-11-12T15:56:13",
    "result": "Online tanpa ubah kode/skema/stack: https://ptm-admin.vercel.app dan https://ptm-team.vercel.app (Vercel Container Runtime, tim tristan-tech-ais-projects, proyek prj_Eda814ENV4nnrDstfg7GpelFBB7V dan prj_VyCOkcmqOeEp4DCi8GaXAj5t72mG, region sin1, tersambung repo publik; deploy dpl_BJuhogBpxKppzvcm2m1Vvh1PAyjo dan dpl_EuqkcC8N8ZwSz6tSUC31NwAigoe4 READY di commit publik 583988d, push otomatis membangun ulang). Database TiDB Cloud Starter ptm-demo (AWS Singapura, gratis): migrate + impor SQL (61 pernyataan, 40 tabel) + db:seed; ptm_test di TiDB: admin php artisan test 41/41 (263 dtk), tim 31/31 (167 dtk); asap.mjs 3 peran semua menu gagal 0 (admin-app lokal ke TiDB). Dari luar: /up 200, /masuk 200 kedua app (form action https, cookie secure+httponly, sesi tercatat di TiDB 12 baris), 404 tanpa jejak debug, Debugbar tidak terpasang (composer --no-dev), log runtime tanpa galat, x-vercel-id sin1. Berkas: Dockerfile + .dockerignore + docker/Caddyfile + docker/mulai.sh per app (FrankenPHP php8.4, ekstensi pdo_mysql gd intl zip bcmath opcache, storage di /tmp, HTTPS lewat FORCE_HTTPS), docs/alat/impor-sql.php, README bagian Online; publik db85764 3b366e7 583988d, lokal project-team-management 57911b9. Env 21 per proyek, DB_HOST/USERNAME/PASSWORD + APP_KEY bertipe sensitive dikirim lewat stdin tanpa dicetak. SELISIH dari kriteria awal (ditulis untuk Render): render.yaml diganti proyek Vercel atas arahan Tristan; image tidak dijalankan di docker lokal karena unduhan image tidak diizinkan (dibangun dan dijalankan Vercel); login bermasuk di URL online tidak diuji loop (aturan: tidak mengetik sandi di host produksi), diserahkan ke Tristan di UNTUK-TRISTAN"
+  },
+  {
+   "id": "Q-52",
+   "fase": "Q",
+   "kind": "build",
+   "priority": 5,
+   "size": "s",
+   "wajib": false,
+   "title": "Aturan ketenagakerjaan yang dasarnya UU 13/2003 diberi tanda sedang diperbarui ke UU 27/2026",
+   "accept": "Setiap baris aturan_bertanggal atau teks layar yang menyebut UU 13/2003 sebagai dasar (lembur, PKWT, pesangon, waktu kerja) menampilkan catatan bahwa UU 13/2003 dicabut UU 27/2026 sejak 28 Okt 2026 dan angka sedang dicek ke pasal baru (sumber JDIH BPK Details/359755); tidak ada angka baru yang ditulis sebelum pasal dibaca; tes unit atau SQL memastikan catatan muncul untuk semua sumber UU 13/2003; e2e lokal halaman terkait 390/1440 axe",
+   "how": "grep sumber aturan_bertanggal dan teks kamus yang menyebut UU 13/2003",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T16:55:59"
   }
  ]
 }
