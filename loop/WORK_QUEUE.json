@@ -5854,8 +5854,10 @@
    "accept": "Tes unit membaca kamus id dan en: setiap kunci yang teksnya cocok DASAR_TERDAMPAK dipetakan ke layar pemakainya, dan setiap layar itu memasang CatatanUuBaru (pola kerja di Orang, kasbon, surat peringatan, perkiraan biaya jam kerja, dan yang ditemukan tes); tes merah dulu; e2e lokal satu layar bermasuk (axe 390/1440 terang gelap)",
    "how": "grep kunci kamus; uu-ketenagakerjaan.test.ts",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-12T18:15:23"
+   "status": "cancelled",
+   "created": "2026-11-12T18:15:23",
+   "result": "DIBATALKAN: digantikan R-UUPK2: aturan diperbarui ke UU 27/2026, catatan sementara dihapus dari semua layar",
+   "done": "2026-11-12T23:11:57"
   },
   {
    "id": "D-DOMAIN",
