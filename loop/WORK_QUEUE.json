@@ -5978,6 +5978,20 @@
    "created": "2026-11-12T20:25:00",
    "done": "2026-11-12T20:44:37",
    "result": "f15023f; produksi dpl_3qPM6MDh2J1b5TRVuxSuHeWnD818: nadi-swart / /harga /kamus/pesangon /masuk /sitemap.xml 308 ke nadiusaha.my.id; /api/mcp 405, /auth/konfirmasi 307 lokal, /masuk/sandi-baru 200, /.well-known 200 tidak dialihkan; alih-domain.test.ts 3/3 merah sekali"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "UAT-CLOUD",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "UAT Nadi diulang di cloud (https://nadiusaha.my.id) lewat CI dengan secret akun uji, bukan lokal",
+   "accept": "Workflow GitHub Actions uat-produksi.yml (workflow_dispatch) menjalankan e2e bermasuk + publik ke E2E_BASE_URL=https://nadiusaha.my.id memakai secret E2E_* yang dipasang Tristan (asisten tidak membaca/mengetik sandi); spec yang hanya bisa lokal (uji wajah, CIMD lokal, migrasi lokal) dilewati dengan alasan; hasil JSON dirangkum ke docs/quality/uat-nadi.md bagian Uji ulang di domain baru; kegagalan nyata diperbaiki lalu diulang; Supabase lokal tidak dipakai sebagai bukti UAT",
+   "how": "gh workflow run uat-produksi.yml; urai laporan JSON seperti UAT-01",
+   "blocked_by": "menunggu Tristan memasang secret akun uji (UNTUK-TRISTAN 12 Nov: gh secret set -f apps/web/.env.e2e.local)",
+   "status": "blocked",
+   "created": "2026-11-12T21:50:00"
   }
  ]
 }
