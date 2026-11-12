@@ -55,11 +55,13 @@ test("hak berhenti: hitungan saran, uang pisah, usulan Feed untuk pemilik, tanpa
   const hak = paket().getByTestId("hak-berhenti");
   await expect(hak.getByTestId("rincian-hak")).toContainText(/hari kerja dari (25|21)/);
   await expect(hak.getByTestId("pesangon")).toContainText("tanpa pesangon");
-  await expect(hak.getByTestId("pesangon")).toContainText("Pasal 50");
+  await expect(hak.getByTestId("pesangon")).toContainText("Pasal 242");
   if (kebijakan?.jatah_tahunan == null) await expect(hak).toContainText("Jatah cuti tahunan belum diatur");
   else await expect(hak.getByTestId("sisa-cuti")).toContainText(`jatah ${kebijakan.jatah_tahunan}`);
   const gajiSaran = await hak.getByLabel("Gaji terakhir (Rp)").inputValue();
   expect(Number(gajiSaran.replace(/\./g, ""))).toBeGreaterThan(0);
+  // UU 27/2026 Pasal 233 ayat (2): saran uang pisah paling sedikit 1 bulan upah untuk pengunduran diri.
+  expect(Number((await hak.getByLabel("Uang pisah (Rp, isian pemilik)").inputValue()).replace(/\D/g, ""))).toBeGreaterThan(0);
   await hak.getByLabel("Uang pisah (Rp, isian pemilik)").fill("5.000.000");
   await periksa(page, "hak-form", hak);
   await hak.getByTestId("ajukan-hak").click();

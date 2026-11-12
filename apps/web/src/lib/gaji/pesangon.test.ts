@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { bulanMenurut, hitungPesangon, masaKerjaBulan, ringkasCadangan, teksMasaKerja, type AturanPesangon, type OrangPesangon } from "./pesangon";
+import { bulanMenurut, hitungAlasan, hitungPesangon, masaKerjaBulan, pilihAturanPesangon, ringkasCadangan, teksMasaKerja, type AturanPesangon, type OrangPesangon } from "./pesangon";
 
 // Sama dengan aturan_bertanggal kunci pesangon.pp35 (migrasi 20261101021000_cadangan_pesangon.sql), dari PP 35/2021 Pasal 40
 // ayat (2) dan (3) (docs/research/pesangon-f4-09.md).
@@ -125,5 +125,48 @@ describe("iuran dana pensiun pengusaha mengurangi kekurangan orang itu (Pasal 58
   it("kekurangan = kewajiban - iuran tertutup - saldo", () => {
     const r = ringkasCadangan([sari, budi, kontrak], 10_000_000);
     expect(r).toMatchObject({ dasar: 28_000_000 + 6_000_000 + 3_000_000, tertutupPensiun: 16_000_000, kekurangan: 11_000_000, dihitung: 3 });
+  });
+});
+
+// R-UUPK2: sama dengan aturan_bertanggal pesangon.uu27 (migrasi 20261113000000_uu27_ketenagakerjaan.sql), UU 27/2026 Pasal 232-250.
+const UU27: AturanPesangon = {
+  ...PP35,
+  pengali: { rugi: 1, pensiun: 2 },
+  uang_pisah_min_bulan: 1,
+  mikro_kecil_kesepakatan: true,
+  alasan: [
+    { kode: "tutup_rugi", pasal: "Pasal 237", pesangon: 1, upmk: 1, pisah: false },
+    { kode: "tutup_permanen", pasal: "Pasal 238", pesangon: 1, upmk: 1.5, pisah: false },
+    { kode: "sakit_panjang", pasal: "Pasal 246", pesangon: 2, upmk: 2, pisah: false },
+    { kode: "pensiun", pasal: "Pasal 247", pesangon: 2, upmk: 1, pisah: false },
+    { kode: "mundur", pasal: "Pasal 242", pesangon: 0, upmk: 0, pisah: true },
+    { kode: "ditahan", pasal: "Pasal 245 ayat (4)", pesangon: 0, upmk: 1, pisah: false },
+  ],
+};
+
+describe("UU 27/2026: aturan terbaru dipilih dan dihitung per alasan berhenti", () => {
+  it("pilihAturanPesangon memakai pesangon.uu27 bila terverifikasi, pesangon.pp35 bila belum ada", () => {
+    expect(pilihAturanPesangon({ "pesangon.pp35": { nilai: PP35, terverifikasi: true }, "pesangon.uu27": { nilai: UU27, terverifikasi: true } })).toBe(UU27);
+    expect(pilihAturanPesangon({ "pesangon.pp35": { nilai: PP35, terverifikasi: true }, "pesangon.uu27": { nilai: UU27, terverifikasi: false } })).toBe(PP35);
+    expect(pilihAturanPesangon({})).toBeNull();
+  });
+  // Sari: masa kerja 4 tahun 2 bulan, upah 4 juta: pesangon 5 bulan (20 juta), UPMK 2 bulan (8 juta).
+  const sari = hitungPesangon(orang({}), UU27, HARI);
+  it("skenario rugi kini 1 kali (Pasal 237) dan pensiun 2 kali uang pesangon (Pasal 247)", () => {
+    expect(sari).toMatchObject({ dasar: 28_000_000, rugi: 28_000_000, pensiun: 48_000_000 });
+  });
+  it.each([
+    ["tutup_rugi", 20_000_000, 8_000_000, 0],
+    ["tutup_permanen", 20_000_000, 12_000_000, 0],
+    ["sakit_panjang", 40_000_000, 16_000_000, 0],
+    ["pensiun", 40_000_000, 8_000_000, 0],
+    ["mundur", 0, 0, 4_000_000],
+    ["ditahan", 0, 8_000_000, 0],
+  ])("%s: pesangon %i, UPMK %i, uang pisah minimal %i", (kode, p, u, pisah) => {
+    expect(hitungAlasan(sari, UU27, kode)).toMatchObject({ pesangon: p, upmk: u, pisah, total: p + u + pisah });
+  });
+  it("alasan yang tidak ada di aturan (mis. efisiensi) = null", () => {
+    expect(hitungAlasan(sari, UU27, "efisiensi")).toBeNull();
+    expect(hitungAlasan(sari, PP35, "pensiun")).toBeNull();
   });
 });

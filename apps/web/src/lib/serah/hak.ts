@@ -3,8 +3,12 @@
 //   bertanggal upah.pembagi_harian. Aturan penggantian cuti tidak menyebut pembagi, jadi angka ini saran yang bisa diubah pemilik.
 // - Gaji bulan terakhir = slip susunSlip dengan pokok dan tunjangan tetap dikali hari kerja (1 s.d. tanggal efektif) / pembagi,
 //   paling banyak sebulan penuh. Hari libur nasional belum dikurangi.
-// - Sisa cuti = jatah tahunan - cuti disetujui tahun itu, hanya bila jatah diatur (PP 35/2021 Pasal 40 ayat (4) huruf a).
-// - Mengundurkan diri tidak mendapat pesangon (PP 35/2021 Pasal 50); alasan lain belum dihitung di sini.
+// - Pembagi upah sehari PP 36/2021 Pasal 17 tetap berlaku menurut UU 27/2026 Pasal 310.
+// - Sisa cuti = jatah tahunan - cuti disetujui tahun itu, hanya bila jatah diatur (uang penggantian hak, UU 27/2026 Pasal 232 ayat (4) huruf a).
+// - Mengundurkan diri tidak mendapat pesangon, tetapi uang penggantian hak dan uang pisah (UU 27/2026 Pasal 242); bila peraturan
+//   perusahaan tidak mengatur besarnya, uang pisah paling sedikit 1 bulan upah (Pasal 233 ayat (2)), dari aturan pesangon.uu27.
+//   Alasan lain belum dihitung di sini (kalkulator pesangon menghitungnya per alasan).
+import { pilihAturanPesangon } from "@/lib/gaji/pesangon";
 import { susunSlip, type DataGaji, type Komponen, type PetaAturan } from "@/lib/gaji/susun";
 
 export type Pola = "6_hari" | "5_hari";
@@ -17,6 +21,8 @@ export type HasilHak = {
   gajiAkhir: { bruto: number; potongan: number; neto: number; komponen: Komponen[]; peringatan: string[] } | null;
   cuti: { jatah: number; terpakai: number; sisa: number; nilai: number | null } | null;
   pesangon: "tidak_berlaku" | "belum_dihitung";
+  /** Uang pisah paling sedikit untuk pengunduran diri (Pasal 233 ayat (2)); null bila bukan mengundurkan diri atau tanpa data. */
+  uangPisahMinimal: number | null;
 };
 
 /** Hari kerja dari tanggal 1 bulan itu sampai tanggal (termasuk): Minggu libur, Sabtu juga libur untuk pola 5 hari. */
@@ -50,5 +56,7 @@ export function hitungHak(m: MasukHak, aturan: PetaAturan): HasilHak {
     const sisa = Math.max(0, m.jatahCuti - m.cutiTerpakai);
     return { jatah: m.jatahCuti, terpakai: m.cutiTerpakai, sisa, nilai: upahHarian === null ? null : sisa * upahHarian };
   })();
-  return { upahSebulan, upahHarian, pembagi, hariKerja, faktor, gajiAkhir, cuti, pesangon: m.alasan === "mundur" ? "tidak_berlaku" : "belum_dihitung" };
+  const minPisah = pilihAturanPesangon(aturan)?.uang_pisah_min_bulan;
+  const uangPisahMinimal = m.alasan === "mundur" && upahSebulan !== null && minPisah ? Math.floor(upahSebulan * minPisah) : null;
+  return { upahSebulan, upahHarian, pembagi, hariKerja, faktor, gajiAkhir, cuti, pesangon: m.alasan === "mundur" ? "tidak_berlaku" : "belum_dihitung", uangPisahMinimal };
 }

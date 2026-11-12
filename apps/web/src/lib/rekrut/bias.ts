@@ -1,5 +1,5 @@
 // Penjaga bias lowongan (F2-02). Dasar: SE Menaker M/6/HK.04/V/2025 (28 Mei 2025) butir 2-4,
-// UU 13/2003 Pasal 5 dan Penjelasan Pasal 6, UU 8/2016 (disabilitas). Rincian di docs/research/rubrik.md.
+// UU 27/2026 Pasal 6 dan 7 beserta penjelasannya, UU 8/2016 (disabilitas). Rincian di docs/research/rubrik.md.
 // Pemeriksa ini memberi peringatan, bukan vonis: syarat usia boleh bila sifat pekerjaan nyata memengaruhinya (SE butir 3a).
 
 export type KodeBias = "usia" | "penampilan" | "status_kawin" | "jenis_kelamin" | "agama" | "suku_ras" | "politik" | "disabilitas";
@@ -42,25 +42,25 @@ const ATURAN: { kode: KodeBias; pola: RegExp[]; alasan: string; saran: string }[
   {
     kode: "jenis_kelamin",
     pola: [/\b(?:pria|wanita|laki[- ]?laki|perempuan|cowok|cewek)\b/g],
-    alasan: "Membedakan jenis kelamin dilarang (UU 13/2003 Pasal 5 dan Penjelasan Pasal 6).",
+    alasan: "Membedakan jenis kelamin dilarang (UU 27/2026 Pasal 6 dan 7 beserta penjelasannya).",
     saran: "Tulis pekerjaannya saja, misalnya pelayan, tanpa pria atau wanita.",
   },
   {
     kode: "agama",
     pola: [/\b(?:muslim|muslimah|nasrani|kristen|katolik|hindu|buddha|budha|konghucu|beragama|berjilbab|berhijab|seiman)\b/g],
-    alasan: "Membedakan agama dilarang (UU 13/2003 Pasal 5 dan Penjelasan Pasal 6).",
+    alasan: "Membedakan agama dilarang (UU 27/2026 Pasal 6 dan 7 beserta penjelasannya).",
     saran: "Hapus syarat ini. Aturan seragam kerja boleh ditulis terpisah tanpa menyebut agama.",
   },
   {
     kode: "suku_ras",
     pola: [/\bsuku\b/g, /\bras\b/g, /\bketurunan\b/g, /\bwarna\s+kulit\b/g, /\bkulit\s+(?:putih|cerah|terang|bersih)\b/g, /\bpribumi\b/g, /\b(?:tionghoa|chinese)\b/g],
-    alasan: `Membedakan suku, ras, atau warna kulit dilarang (UU 13/2003 Penjelasan Pasal 6; ${SE} butir 2).`,
+    alasan: `Membedakan suku, ras, atau warna kulit dilarang (UU 27/2026 Penjelasan Pasal 7 ayat (1); ${SE} butir 2).`,
     saran: "Hapus syarat ini. Bila butuh bahasa daerah, tulis kemampuan bahasanya.",
   },
   {
     kode: "politik",
     pola: [/\bpartai\b/g, /\b(?:aliran|afiliasi|pilihan)\s+politik\b/g],
-    alasan: "Membedakan aliran politik dilarang (UU 13/2003 Penjelasan Pasal 6).",
+    alasan: "Membedakan aliran politik dilarang (UU 27/2026 Penjelasan Pasal 6 dan Pasal 7 ayat (1)).",
     saran: "Hapus syarat ini.",
   },
   {

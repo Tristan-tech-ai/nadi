@@ -185,3 +185,4 @@ divisi
 indeks_fk_x
 indeks_aktif_x
 kelola_kerja_saya
+uu27_ketenagakerjaan

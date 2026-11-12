@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 import Link from "next/link";
 import { Suspense } from "react";
 import { ArrowsLeftRightIcon } from "@phosphor-icons/react/dist/ssr";
@@ -164,7 +163,6 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/kerja">["se
   const kepala = (
     <>
       <KepalaHalaman jalur="/app/kerja" judul={t.judul} ket={t.ket} />
-      <CatatanUuBaru dasar="PP 36/2021 (insentif kolam kerja)" bahasa={bahasa} />
     </>
   );
   const sp = await searchParams;

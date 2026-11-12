@@ -1,5 +1,5 @@
--- Tes F4-09 cadangan pesangon (docs/research/pesangon-f4-09.md): aturan pesangon.pp35 sama dengan tabel PP 35/2021 Pasal 40
--- ayat (2)-(3) di apps/web/src/lib/gaji/pesangon.test.ts; RPC cadangan_pesangon hanya untuk pemilik (lewat app.peran_aktif, bukan
+-- Tes F4-09 cadangan pesangon (docs/research/pesangon-f4-09.md): aturan pesangon.pp35 (PHK sampai 27 Okt 2026) sama dengan tabel PP 35/2021
+-- Pasal 40 ayat (2)-(3), RPC memakai pesangon.uu27 sejak 28 Okt 2026, di apps/web/src/lib/gaji/pesangon.test.ts; RPC cadangan_pesangon hanya untuk pemilik (lewat app.peran_aktif, bukan
 -- klaim), memberi bahan hitung karyawan aktif saja (bukan magang, bukan nonaktif) dengan tanggal hari ini di zona usaha; saldo
 -- cadangan hanya diatur pemilik; usaha lain terpisah. Lulus bila "gagal=[]".
 create temp table _t (nama text, ok boolean, info text);
@@ -58,7 +58,9 @@ begin
     perform set_config('request.jwt.claims', ka, true);
     r := public.cadangan_pesangon();
     perform pg_temp.cek('hari ini dari zona usaha (Asia/Jayapura)', (r ->> 'hari_ini')::date = v_hari, r ->> 'hari_ini');
-    perform pg_temp.cek('aturan ikut dikirim dengan sumber', r -> 'aturan' -> 'nilai' = a and r -> 'aturan' ->> 'sumber' ~ 'Pasal 40', (r -> 'aturan')::text);
+    perform pg_temp.cek('aturan terbaru UU 27/2026 ikut dikirim dengan sumber', r -> 'aturan' ->> 'kunci' = 'pesangon.uu27'
+      and r -> 'aturan' -> 'nilai' -> 'pesangon' = a -> 'pesangon' and r -> 'aturan' -> 'nilai' -> 'pengali' = '{"rugi":1,"pensiun":2}'::jsonb
+      and r -> 'aturan' ->> 'sumber' ~ 'UU 27/2026 Pasal 231, 232', (r -> 'aturan')::text);
     select string_agg(e ->> 'nama', ',' order by e ->> 'nama') into x from jsonb_array_elements(r -> 'orang') e;
     perform pg_temp.cek('hanya karyawan aktif (tanpa magang dan nonaktif)', x = 'Budi,Dewi,Sari', x);
     select e into a from jsonb_array_elements(r -> 'orang') e where e ->> 'nama' = 'Sari';

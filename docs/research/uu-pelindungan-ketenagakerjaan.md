@@ -61,3 +61,10 @@ Sumber resmi: JDIH BPK https://peraturan.bpk.go.id/Details/359755/uu-no-27-tahun
 - **Hubungan dengan aturan lain (dari metadata JDIH BPK):** mencabut UU No. 13 Tahun 2003 tentang Ketenagakerjaan; mencabut sebagian UU No. 6 Tahun 2023 (Penetapan Perppu Cipta Kerja menjadi UU).
 - **Dampak segera ke Nadi:** semua aturan bertanggal yang dasarnya UU 13/2003 atau bagian ketenagakerjaan UU 6/2023 (waktu kerja, lembur, PKWT, PHK, pesangon, THR bila dirujuk) perlu dicek ulang terhadap pasal UU 27/2026 untuk masa sejak 28 Okt 2026. Isi pasal BELUM dibaca: naskah hanya tersedia sebagai unduhan PDF (UU Nomor 27 Tahun 2026.pdf, 12.849.456 byte) dan unduhan berkas menunggu izin Tristan. Sampai pasal dibaca, aturan_bertanggal tidak diubah dan angka baru tidak ditulis dari berita.
 - **Berikutnya (R-UUPK2 lanjut):** setelah izin unduh, kutip pasal waktu kerja, lembur, upah, PKWT, PHK, pesangon, dan ketentuan peralihan (peraturan pelaksana yang tetap berlaku), lalu tabel perbedaan terhadap aturan_bertanggal dan F1-05/F3-07/F4-09/Q-22, baris aturan bertanggal berlaku_dari 2026-10-28 dengan tes SQL.
+
+## Diperbarui (13 Nov 2026)
+
+Naskah resmi dibaca pasal per pasal; tabel perbedaan dan perubahan Nadi ada di docs/research/uu-27-2026-cocok.md. Aturan
+bertanggal `pesangon.uu27` (pengali per alasan Pasal 236-249, uang pisah Pasal 233, usaha mikro dan kecil Pasal 250) berlaku
+28 Okt 2026; aturan lembur, kompensasi PKWT, dan upah sehari yang angkanya sama mendapat dasar hukum UU 27/2026 + Pasal 310.
+Catatan sementara di layar (Q-52, Q-56) dihapus karena aturannya sudah diperbarui.

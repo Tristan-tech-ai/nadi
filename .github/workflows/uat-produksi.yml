@@ -52,7 +52,7 @@ jobs:
           PLAYWRIGHT_JSON_OUTPUT_NAME: uat-produksi.json
           BERKAS: ${{ inputs.berkas }}
         run: |
-          DAFTAR="${BERKAS:-absen akses akuntan auth bantuan-alat barang buku cocok-mutasi crm divisi feed-hp feed-penuh gaji halaman-publik hari-di-warung hr invoice izin jadwal jual kas kasir katalog-resmi kerja-review kerja-tim kerja laporan-mod lempar-hp lempar masuk-email mata-v2 mata mcp mod-versi mod mode-coba mulai otomasi pajak pembangun-mod prompt-sambung proyek-operasional siapkan stok-lanjut surat-keluar surat tambah-fitur tanda-tangan tukar-shift uu-baru masuk-google asap-produksi}"
+          DAFTAR="${BERKAS:-absen akses akuntan auth bantuan-alat barang buku cocok-mutasi crm divisi feed-hp feed-penuh gaji halaman-publik hari-di-warung hr invoice izin jadwal jual kas kasir katalog-resmi kerja-review kerja-tim kerja laporan-mod lempar-hp lempar masuk-email mata-v2 mata mcp mod-versi mod mode-coba mulai otomasi pajak pembangun-mod prompt-sambung proyek-operasional siapkan stok-lanjut surat-keluar surat tambah-fitur tanda-tangan tukar-shift pesangon-uu27 masuk-google asap-produksi}"
           ARG=""
           for b in $DAFTAR; do ARG="$ARG e2e/${b%.spec.ts}.spec.ts"; done
           set +e

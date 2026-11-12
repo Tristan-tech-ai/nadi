@@ -52,8 +52,17 @@ describe("serah/hak", () => {
     expect(hitungHak({ ...dasar, pembagi: null }, {}).upahHarian).toBeNull();
   });
 
-  it("pesangon: mengundurkan diri tidak berhak (PP 35/2021 Pasal 50), alasan lain belum dihitung", () => {
+  it("pesangon: mengundurkan diri tidak berhak (UU 27/2026 Pasal 242), alasan lain belum dihitung", () => {
+    expect(hitungHak(dasar, {}).pesangon).toBe("tidak_berlaku");
     expect(hitungHak({ ...dasar, alasan: "kontrak_selesai" }, {}).pesangon).toBe("belum_dihitung");
     expect(hitungHak({ ...dasar, alasan: "lainnya" }, {}).pesangon).toBe("belum_dihitung");
+  });
+
+  it("uang pisah mengundurkan diri paling sedikit 1 bulan upah (UU 27/2026 Pasal 233 ayat (2), Pasal 242)", () => {
+    const aturan = { "pesangon.uu27": { nilai: { pesangon: [], upmk: [], pengali: { rugi: 1, pensiun: 2 }, uang_pisah_min_bulan: 1 }, terverifikasi: true } };
+    expect(hitungHak(dasar, aturan).uangPisahMinimal).toBe(4_500_000);
+    expect(hitungHak({ ...dasar, alasan: "kontrak_selesai" }, aturan).uangPisahMinimal).toBeNull();
+    expect(hitungHak({ ...dasar, gaji: null }, aturan).uangPisahMinimal).toBeNull();
+    expect(hitungHak(dasar, {}).uangPisahMinimal).toBeNull();
   });
 });

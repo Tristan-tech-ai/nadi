@@ -18,7 +18,7 @@ describe("teks alat dua bahasa", () => {
   });
 
   it("peringatan lembur di atas batas membawa tanggal dan jam", () => {
-    expect(teksPeringatan("Lembur 2026-11-03 (5 jam) melebihi batas PP 35/2021; tidak dihitung.", "en")).toBe("Overtime on 2026-11-03 (5 h) is over the PP 35/2021 limit; it is not counted.");
+    expect(teksPeringatan("Lembur 2026-11-03 (5 jam) melebihi batas UU 27/2026 Pasal 116; tidak dihitung.", "en")).toBe("Overtime on 2026-11-03 (5 h) is over the UU 27/2026 Article 116 limit; it is not counted.");
     expect(teksPeringatan("Pesan baru yang belum dikenal", "en")).toBe("Pesan baru yang belum dikenal");
   });
 

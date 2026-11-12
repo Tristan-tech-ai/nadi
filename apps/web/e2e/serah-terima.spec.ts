@@ -76,7 +76,7 @@ test("serah terima: paket, pengganti, pindah kerja, akses manual", async ({ page
 
   const paket = page.getByTestId("paket-serah").filter({ hasText: `Serah terima ${nama}` });
   await expect(paket).toContainText("Dicabut segera");
-  await expect(paket).toContainText("Pasal 36 huruf i");
+  await expect(paket).toContainText("Pasal 231 huruf i");
   await expect(paket.getByTestId("butir-kerja")).toContainText(`Usulan pengganti: ${rekan}`);
   await expect(paket.getByTestId("akses-otomatis")).toContainText("Akun Nadi (staf)");
   await expect(paket.getByTestId("akses-manual").getByRole("listitem")).toHaveCount(4);

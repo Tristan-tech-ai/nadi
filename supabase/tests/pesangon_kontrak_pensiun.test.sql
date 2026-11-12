@@ -11,10 +11,10 @@ declare
   ua uuid := gen_random_uuid(); ub uuid := gen_random_uuid(); ud uuid := gen_random_uuid(); pa uuid; pb uuid; o1 uuid; o2 uuid; ob uuid;
   ka text; kb text; kd text; r jsonb; a jsonb;
 begin
-  select nilai into a from public.aturan_bertanggal where kunci = 'kompensasi.pkwt' and terverifikasi;
+  select nilai into a from public.aturan_bertanggal where kunci = 'kompensasi.pkwt' and terverifikasi order by berlaku_dari desc limit 1;
   perform pg_temp.cek('aturan kompensasi.pkwt terverifikasi (pembagi 12, minimal 1 bulan, mikro kecil kesepakatan)',
     (a ->> 'pembagi_bulan')::int = 12 and (a ->> 'minimal_bulan')::int = 1 and (a ->> 'mikro_kecil_kesepakatan')::boolean, coalesce(a::text, 'tidak ada'));
-  perform pg_temp.cek('sumber menyebut Pasal 16 dan 17', (select sumber ~ 'Pasal 16' and sumber ~ 'Pasal 17' from public.aturan_bertanggal where kunci = 'kompensasi.pkwt'));
+  perform pg_temp.cek('sumber menyebut Pasal 16 dan 17', (select bool_and(sumber ~ 'Pasal 16' and sumber ~ 'Pasal 17') from public.aturan_bertanggal where kunci = 'kompensasi.pkwt'));
   perform pg_temp.cek('anon tidak bisa mengisi iuran', not has_function_privilege('anon', 'public.atur_iuran_pensiun(uuid,bigint)', 'execute')
     and not has_table_privilege('authenticated', 'public.iuran_pensiun', 'insert'));
 

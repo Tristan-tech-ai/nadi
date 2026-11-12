@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 import { randomUUID } from "node:crypto";
 import { Suspense } from "react";
 import { FormKasbon } from "@/components/app/kasbon";
@@ -31,7 +30,6 @@ async function Isi() {
   return (
     <div lang={bahasa}>
       <KepalaHalaman jalur="/app/gaji/kasbon" judul={t.judul} ket={t.ket} />
-      <CatatanUuBaru dasar="PP 36/2021 (potongan upah untuk kasbon)" bahasa={bahasa} />
       {daftar.length === 0 ? (
         <p data-langkah='#judul-beri-kasbon' className="mt-6 text-tinta-2" data-testid="kasbon-kosong">{t.kosong}</p>
       ) : (

@@ -277,7 +277,7 @@ test("aturan kerja: pemilik ganti pola lewat lembar dampak, lembur libur pola la
     const kartu = page.getByTestId("aturan-kerja");
     await expect(kartu.getByTestId("pola-6_hari")).toContainText("dipakai sekarang");
     await expect(kartu.getByTestId("pola-5_hari")).not.toContainText("dipakai sekarang");
-    await expect(kartu).toContainText("Mengikuti PP 35/2021 Pasal 21 dan 22 serta PP 36/2021 Pasal 17. Total tetap 40 jam seminggu.");
+    await expect(kartu).toContainText("Mengikuti UU 27/2026 Pasal 115 dan 118 serta PP 36/2021 Pasal 17. Total tetap 40 jam seminggu.");
     await axeKartu(page, kartu, "aturan-kerja-pemilik");
 
     await kartu.getByRole("radio", { name: /5 hari seminggu/ }).check();
@@ -369,7 +369,8 @@ test("aturan kerja: pemilik ganti pola lewat lembar dampak, lembur libur pola la
 
 // F4-09: cadangan pesangon di /app/gaji (pemilik). Karyawan mulai 50 bulan lalu (tanggal 1; zona usaha Indonesia di depan UTC,
 // jadi masa kerja 4 tahun lebih sedikit), pokok Rp3.500.000 + tunjangan tetap Rp500.000 -> 5 bulan pesangon + 2 bulan
-// penghargaan = Rp28.000.000; rentang rugi Rp18.000.000, pensiun Rp43.000.000. Satu karyawan tanpa tanggal mulai belum dihitung.
+// penghargaan = Rp28.000.000; rentang UU 27/2026: pensiun 2 kali pesangon + 1 kali UPMK = Rp48.000.000 (Pasal 247), baris rugi 0,5 kali
+// PP 35/2021 tidak ada lagi karena tutup karena rugi kini 1 kali (Pasal 237). Satu karyawan tanpa tanggal mulai belum dihitung.
 // Saldo Rp4.000.000 -> kekurangan Rp24.000.000 -> sisihkan Rp2.000.000 sebulan. Usaha "Uji Gaji E2E" (akun A dekat batas 20 usaha).
 test("cadangan pesangon: perkiraan skenario dasar, rentang, saran sisihan, bertanda belum final", async ({ page }) => {
   test.setTimeout(180_000);
@@ -411,8 +412,9 @@ test("cadangan pesangon: perkiraan skenario dasar, rentang, saran sisihan, berta
     await expect(kartu).toContainText("Perkiraan, belum final");
     await expect(kartu).toContainText("Rp28.000.000");
     await expect(kartu).toContainText("1 orang belum dihitung");
-    await expect(kartu.getByTestId("rentang-pesangon")).toContainText("Rp18.000.000");
-    await expect(kartu.getByTestId("rentang-pesangon")).toContainText("Rp43.000.000");
+    await expect(kartu.getByTestId("rentang-pesangon")).toContainText("Rp48.000.000");
+    await expect(kartu.getByTestId("rentang-pesangon")).not.toContainText("Rp18.000.000");
+    await expect(kartu).not.toContainText("PP 35/2021 Pasal 40");
     await kartu.getByLabel("Sudah disisihkan (Rp)").fill("4000000");
     await kartu.getByRole("button", { name: "Simpan saldo" }).click();
     await expect(kartu.getByText("Saldo tersimpan.")).toBeVisible();

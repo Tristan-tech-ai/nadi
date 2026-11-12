@@ -65,21 +65,6 @@ test("proyek: RAB, tagihan material masuk proyek, jam kerja, laporan", async ({ 
     await page.getByRole("button", { name: "Masuk" }).click();
     await page.waitForURL((u) => u.pathname === "/app/proyek");
     await page.waitForLoadState("networkidle");
-    // Q-56: perkiraan biaya jam kerja berdasar PP 35/2021 Pasal 31, jadi catatan UU 27/2026 tampil dan lolos axe di 390/1440 terang gelap.
-    const catatan = page.getByTestId("catatan-uu-baru");
-    await expect(catatan).toHaveCount(1);
-    await expect(catatan.getByRole("link")).toHaveAttribute("href", /peraturan\.bpk\.go\.id\/Details\/359755/);
-    for (const [lebar, tinggi] of [[390, 844], [1440, 900]]) {
-      for (const skema of ["light", "dark"] as const) {
-        await page.setViewportSize({ width: lebar, height: tinggi });
-        await page.emulateMedia({ colorScheme: skema });
-        await page.waitForTimeout(300);
-        const axe = await new AxeBuilder({ page }).include('[data-testid="catatan-uu-baru"]').analyze();
-        expect(axe.violations.filter((v) => v.impact === "serious" || v.impact === "critical").map((v) => v.id), `catatan proyek ${lebar} ${skema}`).toEqual([]);
-        await page.screenshot({ path: test.info().outputPath(`catatan-proyek-${lebar}-${skema}.png`) });
-      }
-    }
-    await page.emulateMedia({ colorScheme: "light" });
 
     const fb = page.getByRole("form", { name: "Proyek baru" });
     await fb.getByLabel("Nama proyek").fill(proyek);

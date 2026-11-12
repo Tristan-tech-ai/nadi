@@ -6,8 +6,7 @@ import { PembuatDokumen } from "@/components/alat/dokumen";
 import { KalkulatorGaji, KalkulatorPesangon, KalkulatorThr } from "@/components/alat/kalkulator";
 import { HalamanInfo } from "@/components/landing/halaman-info";
 import { aturanPublik } from "@/lib/alat/aturan";
-import type { AturanKompensasi, AturanPesangon } from "@/lib/gaji/pesangon";
-import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
+import { pilihAturanPesangon, type AturanKompensasi } from "@/lib/gaji/pesangon";
 import type { Bahasa } from "@/lib/i18n/bahasa";
 import { hariIni } from "@/lib/izin";
 
@@ -22,7 +21,7 @@ export const ALAT = [
     en: { judul: "Invoice maker", ringkas: "A numbered invoice with goods and services, automatic total, ready to print or save as PDF." } },
   { slug: "dokumen", judul: "Templat dokumen kerja", ringkas: "Surat keterangan kerja, surat tugas, SK mutasi, surat peringatan, formulir izin, dan berita acara serah terima, siap dicetak.", kunci: [],
     en: { judul: "Workplace document templates", ringkas: "Employment certificate, assignment letter, transfer decree, warning letter, leave form, and handover record, ready to print (letters in Indonesian)." } },
-  { slug: "pesangon", judul: "Kalkulator pesangon", ringkas: "Uang pesangon dan penghargaan masa kerja, atau kompensasi karyawan kontrak.", kunci: ["pesangon.pp35", "kompensasi.pkwt"],
+  { slug: "pesangon", judul: "Kalkulator pesangon", ringkas: "Uang pesangon dan penghargaan masa kerja, atau kompensasi karyawan kontrak.", kunci: ["pesangon.uu27", "kompensasi.pkwt"],
     en: { judul: "Severance calculator", ringkas: "Severance and long-service pay, or compensation for fixed-term employees." } },
 ] as const;
 export type SlugAlat = (typeof ALAT)[number]["slug"];
@@ -30,20 +29,20 @@ export type SlugAlat = (typeof ALAT)[number]["slug"];
 const ZONA = "Asia/Jakarta";
 const DASAR: Record<Bahasa, Record<SlugAlat, string>> = {
   id: {
-    gaji: "PPh 21 memakai tarif efektif (TER) PP 58/2023 dan PMK 168/2023; BPJS menurut tarif resmi masing-masing program; lembur PP 35/2021 Pasal 31. Hanya aturan yang sudah diperiksa ke teks resmi yang dipakai; yang belum disebut di bawah hasil.",
+    gaji: "PPh 21 memakai tarif efektif (TER) PP 58/2023 dan PMK 168/2023; BPJS menurut tarif resmi masing-masing program; lembur UU 27/2026 Pasal 116 dengan pengali PP 35/2021 Pasal 31 (tetap berlaku menurut Pasal 310). Hanya aturan yang sudah diperiksa ke teks resmi yang dipakai; yang belum disebut di bawah hasil.",
     thr: "Permenaker 6/2016: berhak setelah 1 bulan masa kerja; 12 bulan atau lebih = 1 bulan upah; kurang dari itu proporsional; dibayar paling lambat 7 hari sebelum Hari Raya. Upah = gaji pokok + tunjangan tetap.",
-    slip: "Komponen dan potongan sama dengan Kalkulator gaji bersih: PPh 21 TER (PP 58/2023, PMK 168/2023), BPJS, dan lembur PP 35/2021.",
+    slip: "Komponen dan potongan sama dengan Kalkulator gaji bersih: PPh 21 TER (PP 58/2023, PMK 168/2023), BPJS, dan lembur UU 27/2026 Pasal 116.",
     dokumen: "Surat keterangan kerja, surat tugas, dan SK mutasi memakai kalimat yang sama dengan Surat keluar di aplikasi Nadi. Surat peringatan mengikuti peraturan perusahaan atau perjanjian kerja usahamu; periksa isinya sebelum ditandatangani.",
     invoice: "Total = jumlah x harga setiap baris, dibulatkan ke rupiah, sama dengan invoice di aplikasi Nadi. Belum memuat PPN; bila usahamu PKP, buat faktur pajak lewat Coretax.",
-    pesangon: "PP 35/2021 Pasal 40 (pesangon dan penghargaan masa kerja) dan Pasal 15 sampai 17 (kompensasi PKWT), dengan upah pokok + tunjangan tetap. Angka sungguhan tergantung alasan berhenti.",
+    pesangon: "UU 27/2026 tentang Pelindungan Ketenagakerjaan (berlaku 28 Okt 2026): tabel Pasal 232, uang pisah Pasal 233, upah pokok + tunjangan tetap Pasal 234, pengali per alasan berhenti Pasal 236 sampai 249. Kompensasi kontrak: Pasal 88 dengan rincian PP 35/2021 Pasal 15 sampai 17 yang tetap berlaku (Pasal 310).",
   },
   en: {
-    gaji: "Income tax uses the effective rates (TER) of PP 58/2023 and PMK 168/2023; BPJS uses each programme's official rates; overtime follows PP 35/2021 Article 31. Only rules checked against the official text are used; any that are not yet checked are named below the result.",
+    gaji: "Income tax uses the effective rates (TER) of PP 58/2023 and PMK 168/2023; BPJS uses each programme's official rates; overtime follows UU 27/2026 Article 116 with the PP 35/2021 Article 31 multipliers (still in force under Article 310). Only rules checked against the official text are used; any that are not yet checked are named below the result.",
     thr: "Permenaker 6/2016: entitled after 1 month of service; 12 months or more = 1 month of wages; less than that is pro rata; paid no later than 7 days before the holiday. Wage = base salary + fixed allowance.",
-    slip: "Earnings and deductions are the same as the take-home pay calculator: income tax TER (PP 58/2023, PMK 168/2023), BPJS, and overtime under PP 35/2021.",
+    slip: "Earnings and deductions are the same as the take-home pay calculator: income tax TER (PP 58/2023, PMK 168/2023), BPJS, and overtime under UU 27/2026 Article 116.",
     dokumen: "The employment certificate, assignment letter, and transfer decree use the same sentences as Outgoing letters in the Nadi app. The letters are written in Indonesian because they are used in Indonesian workplaces. A warning letter follows your company regulations or employment agreement; check it before signing.",
     invoice: "Total = quantity x price for each line, rounded to the rupiah, the same as invoices in the Nadi app. VAT is not included; if your business is a VAT-registered (PKP) business, issue the tax invoice through Coretax.",
-    pesangon: "PP 35/2021 Article 40 (severance and long-service pay) and Articles 15 to 17 (fixed-term compensation), using base salary + fixed allowance. The real amount depends on the reason the job ends.",
+    pesangon: "UU 27/2026 on Employment Protection (in force from 28 Oct 2026): the Article 232 tables, separation pay in Article 233, base salary + fixed allowance in Article 234, multipliers per reason in Articles 236 to 249. Fixed-term compensation: Article 88 with the details of PP 35/2021 Articles 15 to 17, still in force (Article 310).",
   },
 };
 
@@ -83,7 +82,7 @@ async function Isi({ slug, bahasa }: { slug: SlugAlat; bahasa: Bahasa }) {
       {slug === "invoice" ? <PembuatInvoice hariIni={hari} bahasa={bahasa} /> : null}
       {slug === "dokumen" ? <PembuatDokumen hariIni={hari} bahasa={bahasa} /> : null}
       {slug === "thr" ? <KalkulatorThr hariIni={hari} bahasa={bahasa} /> : null}
-      {slug === "pesangon" ? <KalkulatorPesangon aturan={pakai<AturanPesangon>("pesangon.pp35")} kompensasi={pakai<AturanKompensasi>("kompensasi.pkwt")} hariIni={hari} bahasa={bahasa} /> : null}
+      {slug === "pesangon" ? <KalkulatorPesangon aturan={pilihAturanPesangon(aturan)} kompensasi={pakai<AturanKompensasi>("kompensasi.pkwt")} hariIni={hari} bahasa={bahasa} /> : null}
       {dipakai.length ? (
         <details className="mt-8 text-[15px]" data-testid="sumber-aturan">
           <summary className="cursor-pointer font-semibold">{u.aturan}</summary>
@@ -105,7 +104,6 @@ export function HalamanAlat({ slug, bahasa = "id" }: { slug: SlugAlat; bahasa?: 
       <nav aria-label={u.jejak} className="mb-6 text-[15px] text-tinta-2"><Link href={`${awalan(bahasa)}/alat`} className="underline underline-offset-4">{u.indeks}</Link> / {judul}</nav>
       <Suspense fallback={<div className="h-96 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}><Isi slug={slug} bahasa={bahasa} /></Suspense>
       <p className="mt-8 text-[15px]">{DASAR[bahasa][slug]}</p>
-      <CatatanUuBaru dasar={DASAR[bahasa][slug]} bahasa={bahasa} />
       <p className="mt-4 text-[15px]">{tambahan} <Link href="/demo" className="underline underline-offset-4">{u.coba}</Link>.</p>
     </HalamanInfo>
   );

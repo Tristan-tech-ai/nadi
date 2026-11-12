@@ -7,14 +7,14 @@ export type SumberAturan = { kunci: string; sumber: string | null; berlaku_dari:
 
 /**
  * L-05: aturan bertanggal yang sama dengan yang dipakai Gaji di aplikasi (tabel aturan_bertanggal, boleh dibaca publik),
- * diambil terbaru per kunci yang sudah berlaku hari ini. Aturan yang belum terverifikasi ikut terkirim dengan tandanya,
+ * diambil terbaru per kunci yang sudah berlaku hari ini dan belum berakhir (berlaku_sampai). Aturan yang belum terverifikasi ikut terkirim dengan tandanya,
  * dan susunSlip tidak memakainya (sama dengan aplikasi).
  */
 export async function aturanPublik(hari: string): Promise<{ aturan: PetaAturan; sumber: SumberAturan[] }> {
   "use cache";
   const { supabaseUrl, supabasePublishableKey } = readPublicEnv();
   try {
-    const r = await fetch(`${supabaseUrl}/rest/v1/aturan_bertanggal?select=kunci,nilai,terverifikasi,berlaku_dari,sumber&berlaku_dari=lte.${hari}&order=berlaku_dari.desc`, {
+    const r = await fetch(`${supabaseUrl}/rest/v1/aturan_bertanggal?select=kunci,nilai,terverifikasi,berlaku_dari,sumber&berlaku_dari=lte.${hari}&or=(berlaku_sampai.is.null,berlaku_sampai.gte.${hari})&order=berlaku_dari.desc`, {
       headers: { apikey: supabasePublishableKey, Authorization: `Bearer ${supabasePublishableKey}` },
     });
     if (!r.ok) throw new Error(String(r.status));

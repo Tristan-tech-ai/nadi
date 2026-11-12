@@ -20,7 +20,6 @@ import { createClient } from "@/lib/supabase/server";
 import { wajibPerusahaan } from "@/lib/sesi";
 import { zonaUsahaIni } from "@/lib/zona-usaha";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
-import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 
 export const metadata: Metadata = { title: "Serah terima" };
 
@@ -66,7 +65,7 @@ function BagianHak({ id, hak, t, bahasa }: { id: string; hak: Hak; t: Kamus["hak
         <FormHakBerhenti berhenti={id} teks={t} saran={{
           gaji: h.gajiAkhir?.neto ?? null,
           dasarGaji: h.gajiAkhir && h.pembagi ? `${h.hariKerja} hari kerja dari ${h.pembagi}, dibayar setelah potongan slip ${formatRupiah(h.gajiAkhir.potongan)}` : "",
-          cuti: h.cuti?.nilai ?? null, cutiHari: h.cuti?.sisa ?? null, upahHarian: h.upahHarian, uangPisah: b.uang_pisah,
+          cuti: h.cuti?.nilai ?? null, cutiHari: h.cuti?.sisa ?? null, upahHarian: h.upahHarian, uangPisah: b.uang_pisah ?? h.uangPisahMinimal,
         }} />
       )}
     </section>
@@ -183,7 +182,6 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/serah-terim
   const kepala = (
     <>
       <KepalaHalaman jalur="/app/serah-terima" judul={t.judul} ket={t.ket} />
-      <CatatanUuBaru dasar="PP 35/2021 (pengunduran diri, uang pisah, uang penggantian hak)" bahasa={bahasa} />
     </>
   );
   if (sesi.peran !== "pemilik" && sesi.peran !== "admin") {

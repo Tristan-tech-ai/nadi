@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 import { AturWaktu } from "@/components/app/atur-waktu";
 import { Suspense } from "react";
 import Link from "next/link";
@@ -92,7 +91,6 @@ function KepalaIsi({ t, bahasa }: { t: ReturnType<typeof ambilKamus>["usaha"]; b
   return (
     <div lang={bahasa}>
       <KepalaHalaman jalur="/app/perusahaan" judul={t.judul} ket={t.ket} />
-      <CatatanUuBaru dasar="PP 35/2021 (aturan dan pola kerja)" bahasa={bahasa} />
     </div>
   );
 }

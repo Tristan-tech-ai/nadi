@@ -1,7 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { FormIuranPensiun, FormSaldoPesangon } from "@/components/app/aksi-gaji";
-import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 import { Rupiah } from "@/components/ui/rupiah";
 import { formatTanggalKalender } from "@/lib/format";
 import { hitungPesangon, ringkasCadangan, teksMasaKerja, type AturanKompensasi, type AturanPesangon, type BarisPesangon, type OrangPesangon } from "@/lib/gaji/pesangon";
@@ -13,7 +12,7 @@ import { createClient } from "@/lib/supabase/server";
 type Data = {
   hari_ini: string;
   saldo: number;
-  aturan: { nilai: AturanPesangon; sumber: string; berlaku_dari: string } | null;
+  aturan: { kunci?: string; nilai: AturanPesangon; sumber: string; berlaku_dari: string } | null;
   kompensasi: { nilai: AturanKompensasi; sumber: string } | null;
   orang: OrangPesangon[];
 };
@@ -69,13 +68,15 @@ function BarisOrang({ b, o }: { b: BarisPesangon; o: OrangPesangon }) {
         <p className="text-tinta-2">
           {teksMasaKerja(b.masaBulan ?? 0)}. <Rupiah nilai={b.upah} /> x ({b.bulanPesangon} bulan pesangon + {b.bulanUpmk} bulan penghargaan)
         </p>
-        {b.tertutupPensiun > 0 && <p className="text-tinta-2" data-testid="tertutup-pensiun">Tertutup iuran dana pensiun <Rupiah nilai={b.tertutupPensiun} />.</p>}
+        {b.tertutupPensiun > 0 && <p className="text-tinta-2" data-testid="tertutup-pensiun">Tertutup iuran program pensiun <Rupiah nilai={b.tertutupPensiun} />.</p>}
         <FormIuranPensiun orang={b.id} nama={b.nama} nilai={Math.max(0, Number(o.iuran_pensiun ?? 0))} />
       </div>
       <Rupiah nilai={b.dasar} className="font-semibold" />
     </li>
   );
 }
+
+const kali = (n: number) => String(n).replace(".", ",");
 
 export async function CadanganPesangon() {
   const supabase = await createClient();
@@ -88,6 +89,7 @@ export async function CadanganPesangon() {
   const orangDari = new Map(d.orang.map((o) => [o.id, o]));
   const adaKontrak = baris.some((b) => b.status === "kompensasi");
   const r = ringkasCadangan(baris, Number(d.saldo));
+  const pengali = d.aturan.nilai.pengali;
   if (!r.dihitung) {
     return (
       <Bagian>
@@ -101,16 +103,16 @@ export async function CadanganPesangon() {
     <Bagian>
       <p className="mt-3"><Rupiah nilai={r.dasar} className="text-3xl font-extrabold" /></p>
       <p className="mt-1 text-sm text-tinta-2">
-        Kalau semua karyawan berhenti hari ini dengan alasan umum (1 kali), menurut PP 35/2021 Pasal 40.
+        Kalau semua karyawan berhenti hari ini dengan pengali 1 kali (misalnya usaha tutup karena rugi atau keadaan memaksa), menurut UU 27/2026 Pasal 232.
         {r.belumDihitung > 0 && <> {r.belumDihitung} orang belum dihitung.</>}
       </p>
       <dl className="mt-3 grid grid-cols-[1fr_auto] gap-x-4 border-y border-garis py-2 text-sm" data-testid="rentang-pesangon">
-        <dt className="text-tinta-2">Bila usaha rugi (0,5 kali)</dt><dd className="text-right"><Rupiah nilai={r.rugi} /></dd>
+        {pengali.rugi !== 1 && <><dt className="text-tinta-2">Bila usaha rugi ({kali(pengali.rugi)} kali)</dt><dd className="text-right"><Rupiah nilai={r.rugi} /></dd></>}
         <dt className="text-tinta-2">Dasar (1 kali)</dt><dd className="text-right"><Rupiah nilai={r.dasar} className="font-semibold" /></dd>
-        <dt className="text-tinta-2">Bila pensiun (1,75 kali)</dt><dd className="text-right"><Rupiah nilai={r.pensiun} /></dd>
-        {r.tertutupPensiun > 0 && <><dt className="text-tinta-2">Tertutup iuran dana pensiun (Pasal 58)</dt><dd className="text-right" data-testid="total-tertutup-pensiun"><Rupiah nilai={r.tertutupPensiun} /></dd></>}
+        <dt className="text-tinta-2">Bila pensiun atau meninggal ({kali(pengali.pensiun)} kali uang pesangon)</dt><dd className="text-right"><Rupiah nilai={r.pensiun} /></dd>
+        {r.tertutupPensiun > 0 && <><dt className="text-tinta-2">Tertutup iuran program pensiun (Pasal 248)</dt><dd className="text-right" data-testid="total-tertutup-pensiun"><Rupiah nilai={r.tertutupPensiun} /></dd></>}
       </dl>
-      {adaKontrak && <p className="mt-2 text-sm text-tinta-2" data-testid="catatan-kontrak">Karyawan kontrak dihitung uang kompensasi PKWT (PP 35/2021 Pasal 16). Untuk usaha mikro dan kecil, besarnya berdasarkan kesepakatan dengan pekerja (Pasal 16 ayat (6)); angka ini acuan.</p>}
+      {adaKontrak && <p className="mt-2 text-sm text-tinta-2" data-testid="catatan-kontrak">Karyawan kontrak dihitung uang kompensasi PKWT (UU 27/2026 Pasal 88, rinciannya PP 35/2021 Pasal 16). Untuk usaha mikro dan kecil, besarnya berdasarkan kesepakatan dengan pekerja (PP 35/2021 Pasal 16 ayat (6)); angka ini acuan.</p>}
       <p className="mt-3 text-sm" data-testid="saran-pesangon">
         {r.kekurangan > 0
           ? <>Sisihkan <Rupiah nilai={r.sisihanSebulan} className="font-semibold" /> sebulan selama 12 bulan untuk menutup skenario dasar.</>
@@ -126,16 +128,17 @@ export async function CadanganPesangon() {
       <details className="mt-2 text-sm">
         <summary className="cursor-pointer text-tinta-2">Dari mana angka ini?</summary>
         <div className="mt-2 space-y-2 text-tinta-2">
-          <p>Uang pesangon (Pasal 40 ayat (2)): 1 bulan upah untuk masa kerja kurang dari 1 tahun, bertambah 1 bulan tiap tahun, paling banyak 9 bulan sejak 8 tahun.</p>
-          <p>Uang penghargaan masa kerja (Pasal 40 ayat (3)): 2 bulan sejak 3 tahun, 3 bulan sejak 6 tahun, dan seterusnya sampai 10 bulan sejak 24 tahun.</p>
-          <p>Upah yang dipakai adalah gaji pokok ditambah tunjangan tetap (Pasal 157 UU 13/2003 yang diubah UU 6/2023), bukan lembur atau tunjangan tidak tetap.</p>
-          <p>Jumlah yang dibayar sungguhan tergantung alasan berhenti (PP 35/2021 Pasal 41 sampai 57): misalnya 0,5 kali bila efisiensi karena rugi, 1,75 kali bila pensiun. Uang penggantian hak, seperti sisa cuti, tidak masuk cadangan ini.</p>
-          <p>Iuran dana pensiun yang dibayar usaha (bukan BPJS Jaminan Pensiun) boleh diperhitungkan sebagai bagian dari pesangon dan penghargaan masa kerja (PP 35/2021 Pasal 58 ayat (1)); bila manfaat pensiunnya lebih kecil, selisihnya tetap dibayar usaha (ayat (2)). Isi iuran yang sudah dibayar per orang di rincian.</p>
-          <p>Karyawan kontrak (PKWT) mendapat uang kompensasi saat kontrak berakhir: masa kerja dibagi 12 dikali 1 bulan upah, setelah paling sedikit 1 bulan kerja (Pasal 15 ayat (3) dan Pasal 16 ayat (1)); bila berakhir lebih awal, dihitung sampai yang sudah dijalani (Pasal 17). Nadi menghitung dari tanggal mulai kerja sampai hari ini; bila kontrak sudah diperpanjang dan kompensasi periode lalu sudah dibayar, ubah tanggal mulai ke awal kontrak terakhir.</p>
-          <p>Aturan PP 35/2021 yang dipakai di sini tercatat berlaku sejak {formatTanggalKalender(d.aturan.berlaku_dari)}.</p>
+          <p>Uang pesangon (UU 27/2026 Pasal 232 ayat (2)): 1 bulan upah untuk masa kerja kurang dari 1 tahun, bertambah 1 bulan tiap tahun, paling banyak 9 bulan sejak 8 tahun.</p>
+          <p>Uang penghargaan masa kerja (Pasal 232 ayat (3)): 2 bulan sejak 3 tahun, 3 bulan sejak 6 tahun, dan seterusnya sampai 10 bulan sejak 24 tahun.</p>
+          <p>Upah yang dipakai adalah gaji pokok ditambah tunjangan tetap (Pasal 234), bukan lembur atau tunjangan tidak tetap.</p>
+          <p>Jumlah yang dibayar sungguhan tergantung alasan berhenti (Pasal 236 sampai 249): 1 kali bila usaha tutup karena rugi, keadaan memaksa, PKPU atau pailit, atau pelanggaran setelah SP3; uang penghargaan masa kerja 1,5 kali bila pemilik menutup usaha untuk seterusnya; 2 kali uang pesangon bila pensiun, meninggal, atau pekerja berhenti karena pemberi kerja melanggar; 2 kali uang pesangon dan 2 kali uang penghargaan masa kerja bila sakit berkepanjangan lebih dari 12 bulan. Pekerja yang mengundurkan diri tidak mendapat pesangon, tetapi mendapat uang pisah paling sedikit 1 bulan upah bila peraturan perusahaan tidak mengatur (Pasal 233 dan 242). Hitungan per alasan ada di <Link href="/alat/pesangon" className="text-laut underline underline-offset-2">kalkulator pesangon</Link>. Uang penggantian hak, seperti sisa cuti, tidak masuk cadangan ini.</p>
+          <p>Usaha mikro dan kecil membayar pesangon, uang penghargaan masa kerja, dan uang pisah menurut kesepakatan dengan pekerja (Pasal 250).</p>
+          <p>Iuran program pensiun yang dibayar penuh oleh usaha (bukan BPJS Jaminan Pensiun) boleh diperhitungkan sebagai bagian dari hak pensiun (Pasal 248 ayat (1)); bila manfaat pensiunnya lebih kecil, selisihnya tetap dibayar usaha (ayat (2)). Isi iuran yang sudah dibayar per orang di rincian.</p>
+          <p>Karyawan kontrak (PKWT) mendapat uang kompensasi saat kontrak berakhir (Pasal 88): masa kerja dibagi 12 dikali 1 bulan upah, setelah paling sedikit 1 bulan kerja (PP 35/2021 Pasal 15 ayat (3) dan Pasal 16 ayat (1), tetap berlaku menurut Pasal 310); bila berakhir lebih awal, dihitung sampai yang sudah dijalani (Pasal 17). Nadi menghitung dari tanggal mulai kerja sampai hari ini; bila kontrak sudah diperpanjang dan kompensasi periode lalu sudah dibayar, ubah tanggal mulai ke awal kontrak terakhir.</p>
+          <p>Pengusaha wajib menyediakan dana cadangan pesangon (Pasal 253); saldo di atas adalah catatan dana yang sudah kamu sisihkan.</p>
+          <p>Aturan yang dipakai: {d.aturan.sumber}, berlaku sejak {formatTanggalKalender(d.aturan.berlaku_dari)}.</p>
         </div>
       </details>
-      <CatatanUuBaru dasar="PP 35/2021" />
     </Bagian>
   );
 }

@@ -34,7 +34,7 @@ export function susunSlip(g: DataGaji, aturan: PetaAturan, bulan: number, riwaya
   tambah({ kode: "tunjangan_tetap", label: "Tunjangan tetap", jenis: "pendapatan", nilai: g.tunjangan_tetap ?? 0, sumber: "orang_rahasia" });
   const upah = g.pokok + (g.tunjangan_tetap ?? 0);
 
-  // Lembur (PP 35/2021 Pasal 31-32): dasar upah sebulan = pokok + tunjangan tetap (Nadi belum mencatat tunjangan tidak tetap,
+  // Lembur (UU 27/2026 Pasal 116; pengali PP 35/2021 Pasal 31-32 yang tetap berlaku menurut Pasal 310): dasar upah sebulan = pokok + tunjangan tetap (Nadi belum mencatat tunjangan tidak tetap,
   // jadi aturan 75% Pasal 32 ayat (4) tidak berlaku). Pendapatan, sehingga masuk bruto PPh 21.
   const hariLembur = lembur.filter((l) => l.jam > 0);
   if (hariLembur.length) {
@@ -49,7 +49,7 @@ export function susunSlip(g: DataGaji, aturan: PetaAturan, bulan: number, riwaya
           nilai += upahLembur(upah, l.jenis, l.jam, al).upah;
           jam += l.jam;
         } catch {
-          peringatan.push(`Lembur ${l.tanggal} (${l.jam} jam) melebihi batas PP 35/2021; tidak dihitung.`);
+          peringatan.push(`Lembur ${l.tanggal} (${l.jam} jam) melebihi batas UU 27/2026 Pasal 116; tidak dihitung.`);
         }
       }
       tambah({ kode: "lembur", label: `Lembur ${jam} jam`, jenis: "pendapatan", nilai, sumber: "aturan:lembur.pp35" });

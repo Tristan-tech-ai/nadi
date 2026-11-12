@@ -13,7 +13,7 @@ export const HARI: BarisHari[] = [
   { jam: "12.30", peran: "Nadi", kejadian: "Jam makan siang, meja penuh.", nadi: "Mata membaca kamera di perangkatmu: meja terisi, kosong, dan panjang antrean muncul di Peta Usaha secara langsung. Gambar tidak diunggah." },
   { jam: "14.00", peran: "Pemilik", kejadian: "Pesanan katering kantor sebelah.", nadi: "Invoice bernomor dengan QRIS milikmu, halaman bayar untuk pelanggan, dan pengingat H-3 yang kamu kirim sendiri lewat WhatsApp." },
   { jam: "15.20", peran: "Admin", kejadian: "Mutasi bank minggu ini diunduh.", nadi: "Cocok mutasi menandai tagihan yang sudah dibayar tanpa AI. Yang ragu ditampilkan sebagai pilihan, melunasi tetap lewat tombolmu." },
-  { jam: "16.00", peran: "Admin", kejadian: "Menyusun jadwal minggu depan.", nadi: "Usulan jadwal per topi (peran kerja) mengikuti batas jam kerja PP 35/2021. Staf bisa melepas shift ke rekan bertopi sama." },
+  { jam: "16.00", peran: "Admin", kejadian: "Menyusun jadwal minggu depan.", nadi: "Usulan jadwal per topi (peran kerja) mengikuti batas jam kerja UU 27/2026. Staf bisa melepas shift ke rekan bertopi sama." },
   { jam: "19.00", peran: "Pemilik", kejadian: "Butuh satu pelayan baru.", nadi: "Lowongan diperiksa dari kalimat yang diskriminatif, pelamar menjawab wawancara lewat rekaman suara, kamu mendengar klipnya." },
   { jam: "21.00", peran: "Nadi", kejadian: "Warung tutup.", nadi: "Analis Malam menyusun kabar untuk besok pagi dan Alur nyata menunjukkan tagihan mana yang lunas terlambat tanpa pengingat." },
   { jam: "Akhir bulan", peran: "Akuntan", kejadian: "Gaji dan tutup buku.", nadi: "Slip gaji dengan PPh 21 dan BPJS, Gerbang Gaji menahan rekening ganda atau karyawan tanpa absen, ekspor BPMP untuk Coretax, kunci bulan." },

@@ -1,15 +1,22 @@
-// Cadangan pesangon (F4-09, docs/research/pesangon-f4-09.md). Perkiraan skenario dasar 1 kali PP 35/2021 Pasal 40 ayat (2)
-// (uang pesangon) + ayat (3) (uang penghargaan masa kerja), dengan dasar upah pokok + tunjangan tetap (Pasal 157 UU 6/2023).
-// Rentang: pengali alasan PHK (Pasal 41-57) hanya mengenai uang pesangon, UPMK tetap 1 kali. Tabel dan pengali dibaca dari
-// aturan_bertanggal kunci pesangon.pp35. Belum final: jumlah sungguhan tergantung alasan berhenti dan aturan yang berlaku saat itu.
-// F4-09B: karyawan kontrak (PKWT, ada orang.data.kontrak_selesai) dihitung uang kompensasi PP 35/2021 Pasal 16 ayat (1):
-// masa kerja (bulan penuh) / 12 x 1 bulan upah, sampai hari ini (Pasal 17), minimal 1 bulan masa kerja (Pasal 15 ayat (3));
-// untuk usaha mikro dan kecil besarnya berdasarkan kesepakatan (Pasal 16 ayat (6)), jadi angka ini acuan. Iuran dana pensiun
-// pengusaha (Pasal 58) mengurangi kekurangan pesangon + UPMK orang itu, paling banyak sebesar kewajibannya, bukan kompensasi PKWT.
+// Cadangan pesangon (F4-09) dan kalkulator pesangon, diperbarui ke UU 27/2026 tentang Pelindungan Ketenagakerjaan (R-UUPK2,
+// docs/research/uu-27-2026-cocok.md). Tabel uang pesangon dan uang penghargaan masa kerja (UPMK) UU 27/2026 Pasal 232 ayat (2) dan (3),
+// dasar upah pokok + tunjangan tetap (Pasal 234). Pengali per alasan PHK (Pasal 236 sampai 249) dan uang pisah paling sedikit
+// 1 bulan upah (Pasal 233 ayat (2)) dibaca dari aturan_bertanggal pesangon.uu27 (berlaku 28 Okt 2026); PHK sebelum itu memakai
+// pesangon.pp35 (PP 35/2021 Pasal 40, 43, 56). Usaha mikro dan kecil membayar menurut kesepakatan (Pasal 250), jadi angkanya acuan.
+// Karyawan kontrak (PKWT, ada orang.data.kontrak_selesai) dihitung uang kompensasi (UU 27/2026 Pasal 88, rinciannya PP 35/2021
+// Pasal 15 sampai 17 yang tetap berlaku menurut Pasal 310): masa kerja (bulan penuh) / 12 x 1 bulan upah, minimal 1 bulan masa kerja.
+// Iuran program pensiun yang dibayar penuh usaha (Pasal 248) mengurangi kekurangan pesangon + UPMK orang itu, paling banyak sebesar
+// kewajibannya, bukan kompensasi PKWT.
+import type { PetaAturan } from "@/lib/gaji/susun";
 
 /** Tabel [batas masa kerja dalam tahun penuh, bulan upah], urut naik. */
 export type TabelBulan = [number, number][];
-export type AturanPesangon = { pesangon: TabelBulan; upmk: TabelBulan; pengali: { rugi: number; pensiun: number } };
+/** Pengali satu alasan PHK (UU 27/2026 Pasal 236-249): kali uang pesangon, kali UPMK, dan apakah berhak uang pisah. */
+export type AlasanPhk = { kode: string; pasal: string; pesangon: number; upmk: number; pisah: boolean };
+export type AturanPesangon = {
+  pesangon: TabelBulan; upmk: TabelBulan; pengali: { rugi: number; pensiun: number };
+  alasan?: AlasanPhk[]; uang_pisah_min_bulan?: number; mikro_kecil_kesepakatan?: boolean;
+};
 export type OrangPesangon = {
   id: string;
   nama: string;
@@ -17,7 +24,7 @@ export type OrangPesangon = {
   kontrak_selesai: string | null;
   pokok: number | null;
   tunjangan_tetap: number | null;
-  /** Iuran dana pensiun yang sudah dibayar usaha untuk orang ini (Pasal 58; bukan BPJS JP), isian pemilik. */
+  /** Iuran program pensiun yang sudah dibayar usaha untuk orang ini (UU 27/2026 Pasal 248; bukan BPJS JP), isian pemilik. */
   iuran_pensiun?: number | null;
 };
 /** Aturan kompensasi PKWT (aturan_bertanggal kompensasi.pkwt). */
@@ -34,7 +41,7 @@ export type BarisPesangon = {
   dasar: number;
   rugi: number;
   pensiun: number;
-  /** Bagian kewajiban yang sudah tertutup iuran dana pensiun pengusaha (Pasal 58). */
+  /** Bagian kewajiban yang sudah tertutup iuran program pensiun pengusaha (UU 27/2026 Pasal 248). */
   tertutupPensiun: number;
 };
 
@@ -87,6 +94,22 @@ export function hitungPesangon(o: OrangPesangon, aturan: AturanPesangon, hari: s
     pensiun: Math.floor(upah * p * aturan.pengali.pensiun) + upmk,
     tertutupPensiun: Math.min(Math.max(0, Math.floor(o.iuran_pensiun ?? 0)), upah * p + upmk),
   };
+}
+
+/** Aturan pesangon yang berlaku: pesangon.uu27 (UU 27/2026) bila terverifikasi, selain itu pesangon.pp35. */
+export function pilihAturanPesangon(peta: PetaAturan): AturanPesangon | null {
+  for (const k of ["pesangon.uu27", "pesangon.pp35"]) if (peta[k]?.terverifikasi) return peta[k]!.nilai as AturanPesangon;
+  return null;
+}
+
+/** Hak satu orang untuk satu alasan PHK; null bila alasan itu tidak ada di aturan (mis. efisiensi, yang tidak ada di UU 27/2026). */
+export function hitungAlasan(b: BarisPesangon, aturan: AturanPesangon, kode: string) {
+  const a = aturan.alasan?.find((x) => x.kode === kode);
+  if (!a || b.status !== "dihitung") return null;
+  const pesangon = Math.floor(b.upah * b.bulanPesangon * a.pesangon);
+  const upmk = Math.floor(b.upah * b.bulanUpmk * a.upmk);
+  const pisah = a.pisah ? Math.floor(b.upah * (aturan.uang_pisah_min_bulan ?? 0)) : 0;
+  return { alasan: a, pesangon, upmk, pisah, total: pesangon + upmk + pisah };
 }
 
 export function ringkasCadangan(baris: BarisPesangon[], saldo: number) {

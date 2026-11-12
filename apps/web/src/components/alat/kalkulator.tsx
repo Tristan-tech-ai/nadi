@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { hitungPesangon, type AturanKompensasi, type AturanPesangon } from "@/lib/gaji/pesangon";
+import { hitungAlasan, hitungPesangon, type AturanKompensasi, type AturanPesangon } from "@/lib/gaji/pesangon";
 import { susunSlip, type PetaAturan, type RisikoJkk } from "@/lib/gaji/susun";
 import { hitungThr } from "@/lib/gaji/thr";
 import { formatRupiah, formatTanggalKalender } from "@/lib/format";
@@ -174,9 +174,11 @@ export function KalkulatorPesangon({ aturan, kompensasi, hariIni, bahasa = "id" 
   const [pokok, setPokok] = useState("4000000");
   const [tunjangan, setTunjangan] = useState("");
   const [kontrak, setKontrak] = useState(false);
+  const [alasan, setAlasan] = useState("tutup_rugi");
   useIsianSebelumHidrasi([["mulai-p", mulai, setMulai], ["berhenti", berhenti, setBerhenti], ["pokok-p", tampilRp(pokok), setPokok], ["tunjangan-p", tampilRp(tunjangan), setTunjangan]]);
   if (!aturan) return <p>{t.belumDibuka}</p>;
   const b = hitungPesangon({ id: "x", nama: "x", mulai, kontrak_selesai: kontrak ? berhenti : null, pokok: angka(pokok), tunjangan_tetap: angka(tunjangan) }, aturan, berhenti, kompensasi);
+  const h = aturan.alasan ? hitungAlasan(b, aturan, alasan) : null;
   return (
     <div className="grid gap-8 md:grid-cols-2" data-testid="kalkulator-pesangon">
       <form className="grid content-start gap-4" onSubmit={(e) => e.preventDefault()} aria-label={t.isianPesangon}>
@@ -185,9 +187,24 @@ export function KalkulatorPesangon({ aturan, kompensasi, hariIni, bahasa = "id" 
         <Rupiah id="pokok-p" label={t.pokok} nilai={pokok} ubah={setPokok} />
         <Rupiah id="tunjangan-p" label={t.tunjangan} nilai={tunjangan} ubah={setTunjangan} />
         <label className="flex items-center gap-2 text-[15px]"><input type="checkbox" checked={kontrak} onChange={(e) => setKontrak(e.target.checked)} className="size-5" /> {t.kontrak}</label>
+        {aturan.alasan && !kontrak ? (
+          <Isian id="alasan-p" label={t.alasanBerhenti}>
+            <select id="alasan-p" value={alasan} onChange={(e) => setAlasan(e.target.value)} className={isian}>
+              {aturan.alasan.map((a) => <option key={a.kode} value={a.kode}>{t.alasanPhk[a.kode] ?? a.kode}</option>)}
+            </select>
+          </Isian>
+        ) : null}
       </form>
       <div className="grid content-start gap-4" aria-live="polite">
-        {b.status === "dihitung" ? <>
+        {b.status === "dihitung" && h ? <>
+          <p className="rounded-[var(--radius-kartu)] bg-kertas-2 p-4">
+            <span className="block text-sm text-tinta-2">{t.hasilAlasan}</span>
+            <span className="font-judul text-3xl font-extrabold tabular-nums" data-testid="hasil-pesangon">{rp(h.total)}</span>
+          </p>
+          <p>{t.rincianPesangon(masaKerjaTeks(b.masaBulan ?? 0, bahasa), b.bulanPesangon, b.bulanUpmk, rp(b.upah))}</p>
+          <p data-testid="rincian-alasan">{t.rincianAlasan(h.alasan.pasal, h.pesangon ? rp(h.pesangon) : null, h.upmk ? rp(h.upmk) : null, h.alasan.pisah ? rp(h.pisah) : null)}</p>
+          {aturan.mikro_kecil_kesepakatan ? <p className="text-sm text-tinta-2">{t.mikroKecil}</p> : null}
+        </> : b.status === "dihitung" ? <>
           <p className="rounded-[var(--radius-kartu)] bg-kertas-2 p-4">
             <span className="block text-sm text-tinta-2">{t.hasilPesangon}</span>
             <span className="font-judul text-3xl font-extrabold tabular-nums" data-testid="hasil-pesangon">{rp(b.dasar)}</span>
