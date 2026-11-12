@@ -349,3 +349,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 | 12 Nov 2026 | iterasi 10 | M-22B Tanya data rentang bebas + pertanyaan gabungan (tes unit, e2e lokal); tugas baru D-FN-TANYA deploy ulang pelajari-tanya |
 | 12 Nov 2026 | iterasi 11 | UAT-02 video v2 terkirim (282,6 dtk, 96% rekaman produksi); Q-45 label zona, Q-46 zona Pintu tanpa muat ulang, Q-47 hasil hitung kosong berkalimat, Q-48 pilihan inti kosong bertautan; Q-49 dibatalkan (klaim salah); UAT-02B dan UAT-02C menunggu Tristan |
 | 12 Nov 2026 | iterasi 11 | UAT-02C video v3 dua versi terkirim (cursorcam + HyperFrames + motionmaxxing, lagu HitsLab); Q-50 porsi tim diperbaiki lokal (e2e kerja-porsi merah lalu hijau) |
+- 12 Nov 2026 13.35 iterasi 12: done UAT-02D (video v4a terkirim, 290,9 dtk, look.py lulus) dan UAT-02B (obrolan MCP sungguhan + tempel manifest diterapkan); UAT-02E (v4b per peran) dibuat dan menunggu Tristan membuat akun staf dan login cursorcam; Q-51 dari temuan rekaman.
