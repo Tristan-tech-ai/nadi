@@ -14,6 +14,9 @@ import { LingkaranRekrut } from "@/components/app/lingkaran-rekrut";
 import { FormAkunStaf, FormTambahOrang } from "./form-orang";
 import { KepalaHalaman } from "@/components/app/kepala-halaman";
 import { FormDivisi } from "@/components/app/divisi";
+import { FormCabutAdmin, FormTambahAdmin } from "@/components/app/admin-usaha";
+import { TEKS_ADMIN } from "@/components/app/admin-teks";
+import type { Bahasa } from "@/lib/i18n/bahasa";
 
 export const metadata: Metadata = { title: "Orang" };
 const LEPAS_TAMPIL = 30;
@@ -92,10 +95,40 @@ async function Isi() {
       <Suspense fallback={<div className="mt-10 h-24 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <BagianDivisi orang={(orang ?? []).map((o) => ({ id: o.id as string, nama: o.nama as string }))} />
       </Suspense>
+      {sesi.peran === "pemilik" && (
+        <Suspense fallback={<div className="mt-10 h-24 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
+          <BagianAdmin bahasa={bahasa} />
+        </Suspense>
+      )}
       <KartuLowongan />
       <Suspense fallback={<div className="mt-10 h-32 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
         <LingkaranRekrut />
       </Suspense>
+    </section>
+  );
+}
+
+/** ADMIN-01: pemilik menjadikan akun Nadi lain admin dan mencabutnya (list_admins, add_admin, remove_admin khusus pemilik). */
+async function BagianAdmin({ bahasa }: { bahasa: Bahasa }) {
+  const t = TEKS_ADMIN[bahasa];
+  const supabase = await createClient();
+  const { data } = await supabase.rpc("list_admins");
+  const admin = (data ?? []) as { user_id: string; email: string; aktif: boolean }[];
+  return (
+    <section className="mt-10" aria-labelledby="judul-admin" data-testid="admin-usaha">
+      <h2 id="judul-admin" className="text-lg font-semibold">{t.judul}</h2>
+      <p className="mt-1 text-sm text-tinta-2">{t.ket}</p>
+      {admin.length === 0 ? <p className="mt-3 text-sm text-tinta-2">{t.kosong}</p> : (
+        <ul className="mt-3 divide-y divide-garis border-y border-garis text-sm" data-testid="daftar-admin">
+          {admin.map((a) => (
+            <li key={a.user_id} className="flex flex-wrap items-center justify-between gap-2 py-2" data-admin={a.email}>
+              <span className="font-mono" data-pengguna>{a.email}</span>
+              {a.aktif ? <FormCabutAdmin user={a.user_id} email={a.email} teks={t} /> : <span className="text-tinta-2">{t.dicabut}</span>}
+            </li>
+          ))}
+        </ul>
+      )}
+      <FormTambahAdmin teks={t} />
     </section>
   );
 }

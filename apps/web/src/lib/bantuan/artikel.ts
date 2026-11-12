@@ -45,6 +45,15 @@ export const TUGAS: ArtikelTugas[] = [
     ],
     catatan: "PIN salah 5 kali dalam 15 menit mengunci akun staf selama 15 menit. Pemilik bisa mengganti PIN dari halaman Orang.",
     tautan: [{ href: "/masuk/staf", label: "Masuk staf" }], cari: "staf karyawan pin kode usaha id staf" },
+  { slug: "tambah-admin", kategori: "mulai", judul: "Menambah admin usaha", ringkas: "Orang kepercayaan yang ikut mengurus usaha, hanya pemilik yang menambahkannya.",
+    langkah: [
+      "Minta calon admin mendaftar akun Nadi dengan emailnya sendiri.",
+      "Pemilik membuka Orang, bagian Admin usaha, lalu menulis email akun Nadi calon admin.",
+      "Centang bahwa kamu paham admin bisa melihat gaji dan menyetujui usulan, lalu pilih Jadikan admin.",
+      "Admin melihat usaha ini setelah masuk lagi. Untuk mencabut, pilih Cabut admin di barisnya lalu Ya, cabut.",
+    ],
+    catatan: "Admin tidak bisa menambah atau mencabut admin lain dan tidak melihat cadangan pesangon. Jawaban Nadi sama untuk email yang terdaftar atau belum, supaya tidak ada yang bisa menebak siapa yang punya akun.",
+    tautan: [{ href: "/app/orang", label: "Orang" }], cari: "admin tambah admin kepala toko manajer hak akses peran cabut" },
   { slug: "lempar-dan-setujui", kategori: "hari-ini", judul: "Lempar berkas lalu setujui usulannya", ringkas: "Berkas menjadi usulan; tidak ada yang tersimpan sebelum kamu setuju.",
     langkah: [
       "Buka Lempar berkas dan lempar foto nota, slip, mutasi bank, atau Excel.",
