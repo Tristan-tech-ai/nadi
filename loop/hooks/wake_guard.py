@@ -236,9 +236,16 @@ def repo_problems():
         return msgs
     dirty = [l for l in git("status", "--porcelain", "--", "apps", "packages", "supabase", "scripts").splitlines() if l.strip()]
     gate_bad = (not g.get("ok")) or g.get("head") != head or g.get("kode_belum_commit", 1) != 0 or dirty
+    ahead = git("rev-list", "--count", "@{u}..HEAD")
+    # Kerja berkelompok (Tristan 13 Nov 2026: commit dan push setiap kali membuang waktu dan slot): commit lokal yang belum
+    # di-push boleh menunggu sampai BATCH_MIN menit; gerbang dan push dilakukan sekali per kelompok. Deploy produksi tetap
+    # menolak HEAD yang belum di-push (loop/deploy_produksi.py).
+    if kelompok_aktif(ahead, git("log", "@{u}..HEAD", "--format=%ct"), time.time()):
+        if not fresh(STATE, STATE_MIN):
+            msgs.append("PENJAGA: loop/STATE.md tidak diperbarui dalam 30 menit. Tulis keadaan sekarang, tugas berikutnya, dan pemblokir sebelum menjadwalkan.")
+        return msgs
     if gate_bad and not fresh(GATE_RED, GATE_RED_MIN):
         msgs.append(f"GERBANG: HEAD {head[:8]} belum lulus `bash loop/gate.sh` (gate_last: head {str(g.get('head'))[:8]}, ok {g.get('ok')}, kode belum commit {len(dirty)}). Commit, jalankan gerbang, perbaiki sampai LULUS. Bila tidak bisa dalam tick ini: tulis alasannya ke loop/.gate_merah dan tambah tugas kind=fix prioritas 0.")
-    ahead = git("rev-list", "--count", "@{u}..HEAD")
     if ahead and ahead.isdigit() and int(ahead) > 0:
         msgs.append(f"PENJAGA: {ahead} commit belum di-push. git push dulu (commit yang tertinggal pernah membuat HEAD tidak bisa dijalankan).")
     if not fresh(STATE, STATE_MIN):
@@ -346,6 +353,17 @@ def start(inp):
     return 0, ""
 
 
+BATCH_MIN = 180
+
+
+def kelompok_aktif(ahead: str, waktu_commit: str, sekarang: float) -> bool:
+    """True bila ada commit lokal yang belum di-push dan yang tertua belum lebih dari BATCH_MIN menit."""
+    if not (ahead and ahead.isdigit() and int(ahead) > 0):
+        return False
+    t = [int(x) for x in waktu_commit.split() if x.isdigit()]
+    return bool(t) and sekarang - min(t) < BATCH_MIN * 60
+
+
 def selftest():
     ok = tot = 0
 
@@ -356,6 +374,9 @@ def selftest():
         print(("ok  " if got == want else "BAD ") + n, got, "expected", want)
     h = "KONTRAK TICK: jalankan python loop/next_task.py setiap tick tanpa kecuali. PERINTAH TETAP: hanya autentikasi oleh Tristan sampai selesai."
     case("prompt lengkap lolos", check_prompt(h + " keadaan: F0-01 berikutnya.", h), [])
+    case("kelompok: commit lokal 1 jam boleh menunggu", kelompok_aktif("2", "1000 4600", 4600), True)
+    case("kelompok: commit lokal lebih dari 3 jam wajib push", kelompok_aktif("1", "1000", 1000 + 181 * 60), False)
+    case("kelompok: tanpa commit lokal tidak berlaku", kelompok_aktif("0", "", 5000), False)
     case("prompt dipendekkan ditolak", len(check_prompt("lanjutkan loop sesuai loop/wake_header.txt", h)), 2)
     W, N, S, U = ("WAKE",), ("NEXT",), ("SUB",), ("USER",)
     case("tick tanpa next_task ditolak", any("next_task" in m for m in tick_problems([W, S], False)), True)
