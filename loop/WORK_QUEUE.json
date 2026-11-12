@@ -5758,8 +5758,10 @@
    "accept": "docs/quality/uat-nadi.md punya bagian Perubahan setelah UAT: 14 commit apps/web+supabase sejak 821bec6 masing-masing dengan berkas e2e/tes lokal yang membuktikannya dan status Lulus lokal; baris uji asap produksi CI 43191207176 (19 lulus) dan D-FN-TANYA (pelajari-tanya versi 2, uji luar 401/403/405); temuan /app/mod diberi status terkini; tidak ada status yang ditulis tanpa bukti berkas atau run",
    "how": "git log 821bec6..HEAD -- apps/web supabase; urai.py laporan JSON bila ada",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-12T16:57:34"
+   "status": "done",
+   "created": "2026-11-12T16:57:34",
+   "done": "2026-11-12T18:14:52",
+   "result": "docs/quality/uat-nadi.md bagian Perubahan setelah UAT: 15 commit apps/web+supabase sejak 821bec6 (git log), masing-masing dengan berkas tes/e2e lokal dan status produksi dari catatan done (tes SQL X-13B 12/12 dan M-20B 23/23 di produksi, bantuan-alat 9/9 produksi, Q-43 produksi, Edge Function pelajari-tanya v2 401/403, video 18.332.304 byte, catatan Q-52); temuan /app/mod dan ukuran Q-42 ditandai menunggu uji bermasuk; uji asap produksi CI 43191207176 19 lulus 0 gagal; satu klaim awal (ab40b00 lulus 3/3) dibuang karena tidak ada bukti"
   },
   {
    "id": "D-IGNORE",
@@ -5804,8 +5806,54 @@
    "accept": "Ignored Build Step kedua proyek (root admin-app / team-app) memakai pola D-IGNORE terhadap folder app itu saja; push yang hanya mengubah docs/ atau README PTM membuat deploy CANCELED dengan log Ignored Build Step exit 0 di kedua proyek; push yang mengubah satu app hanya membangun app itu; produksi kedua app tetap 200 di /up",
    "how": "vercel api PATCH /v9/projects/ptm-admin dan ptm-team",
    "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-12T17:42:57",
+   "done": "2026-11-12T18:13:58",
+   "result": "Ignored Build Step ptm-admin (root admin-app) dan ptm-team (root team-app): [ -n \"$VERCEL_GIT_PREVIOUS_SHA\" ] && git diff --quiet \"$VERCEL_GIT_PREVIOUS_SHA\" HEAD -- . (PATCH /v9/projects tersimpan). Push docs-saja ptm-publik 5ecc309 (README tautan uji online): dpl_9rJMVxQ4 dan dpl_CADzUDj4 CANCELED, log 'Ignored Build Step command returned exit code 0' di kedua proyek; /up kedua app 200 dari deploy e53b603. Uji lokal: admin-app sejak e53b603 kode 0, sejak db85764 (Dockerfile berubah) kode 1, team-app sejak db85764 kode 1. Build satu-app-saja dibuktikan lokal; dicek lagi pada push kode PTM berikutnya"
+  },
+  {
+   "id": "Q-54",
+   "fase": "Q",
+   "kind": "test",
+   "priority": 4,
+   "size": "s",
+   "wajib": false,
+   "title": "Halaman depan produksi tetap Lighthouse mobile performa >= 90 setelah film landing diganti v4b (18 MB)",
+   "accept": "Lighthouse mobile (lab, perangkat bawaan) di https://nadi-swart.vercel.app/ dan /en: performa >= 90, aksesibilitas 100, LCP dan CLS dicatat; bila di bawah ambang, video film tidak diunduh sebelum diputar (preload none + poster) atau sebab lain diperbaiki dengan e2e/tes, lalu diukur ulang di produksi; angka dan laporan JSON disimpan di docs/quality",
+   "how": "npx lighthouse dengan --preset bawaan mobile; bandingkan ukuran transfer awal",
+   "blocked_by": "",
    "status": "ready",
-   "created": "2026-11-12T17:42:57"
+   "created": "2026-11-12T18:14:10"
+  },
+  {
+   "id": "Q-55",
+   "fase": "Q",
+   "kind": "build",
+   "priority": 5,
+   "size": "s",
+   "wajib": false,
+   "title": "Artikel Pusat bantuan yang menyebut PP 35/2021, PP 36/2021, atau UU 13/2003 juga menampilkan catatan UU 27/2026",
+   "accept": "Halaman artikel bantuan (id dan en) memasang CatatanUuBaru dengan dasar dari isi artikel; tes unit memeriksa setiap artikel di src/lib/bantuan yang isinya cocok DASAR_TERDAMPAK menghasilkan catatan dan artikel lain tidak; e2e lokal satu artikel gaji/lembur id dan en (axe 390/1440 terang gelap); produksi dicek dari luar",
+   "how": "lib/aturan/uu-ketenagakerjaan.ts perluCatatan; halaman /bantuan/artikel/[slug]",
+   "blocked_by": "",
+   "status": "cancelled",
+   "created": "2026-11-12T18:15:02",
+   "result": "DIBATALKAN: premis salah: artikel di src/lib/bantuan tidak menyebut PP 35/2021, PP 36/2021, atau UU 13/2003 (grep 12 Nov); diganti Q-56",
+   "done": "2026-11-12T18:15:23"
+  },
+  {
+   "id": "Q-56",
+   "fase": "Q",
+   "kind": "build",
+   "priority": 5,
+   "size": "s",
+   "wajib": false,
+   "title": "Layar yang memakai teks kamus berdasar PP 35/2021, PP 36/2021, atau UU 13/2003 memasang catatan UU 27/2026",
+   "accept": "Tes unit membaca kamus id dan en: setiap kunci yang teksnya cocok DASAR_TERDAMPAK dipetakan ke layar pemakainya, dan setiap layar itu memasang CatatanUuBaru (pola kerja di Orang, kasbon, surat peringatan, perkiraan biaya jam kerja, dan yang ditemukan tes); tes merah dulu; e2e lokal satu layar bermasuk (axe 390/1440 terang gelap)",
+   "how": "grep kunci kamus; uu-ketenagakerjaan.test.ts",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T18:15:23"
   }
  ]
 }
