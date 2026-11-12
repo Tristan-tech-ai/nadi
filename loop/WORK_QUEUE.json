@@ -6031,7 +6031,7 @@
    "title": "Uji beban ratusan pengguna: 300 pengguna serentak dalam SATU usaha dan 300 pengguna tersebar di 50 usaha, di lingkungan cloud yang sama arsitekturnya dengan produksi",
    "accept": "Skrip k6 (sumber terbuka) di repo dijalankan dari GitHub Actions ke lingkungan uji ber-host staging (bukan produksi, karena perlu ratusan akun uji): skenario campuran (buka Feed, lempar berkas kecil tanpa AI, setujui usulan, absen staf, catat penjualan kasir, laporan) 10 menit; ambang: galat < 0,5%, p95 halaman < 1,5 dtk, p95 RPC < 500 ms, tidak ada respons berisi data usaha lain (pemeriksaan isolasi di setiap respons), tidak ada deadlock atau koneksi habis; laporan angka + grafik di docs/quality/beban.md",
    "how": "",
-   "blocked_by": "menunggu Tristan memilih lingkungan uji beban (UNTUK-TRISTAN 12 Nov: staging terpisah)",
+   "blocked_by": "menunggu STAGING (Tristan memilih staging 12 Nov 2026)",
    "status": "blocked",
    "created": "2026-11-12T22:10:00"
   },
@@ -6048,6 +6048,20 @@
    "blocked_by": "menyusul UAT-BEBAN",
    "status": "blocked",
    "created": "2026-11-12T22:10:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "STAGING",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Lingkungan cloud staging untuk uji beban: Supabase nadi-staging + staging.nadiusaha.my.id",
+   "accept": "Proyek Supabase nadi-staging (Singapura, gratis) berisi semua 183 migrasi urutan produksi lewat loop/staging.py (tercatat di app_dev.terapan) + konfigurasi seed; tes SQL isolasi tenant lulus di staging; Auth staging tanpa konfirmasi email (akun uji massal tidak mengirim email); DNS staging.nadiusaha.my.id lewat Hostinger ke Vercel; deployment Preview cabang staging dengan env Supabase staging (env khusus cabang, produksi tidak berubah); https://staging.nadiusaha.my.id/ 200 dan masuk dengan akun uji staging berhasil; robots staging Disallow semua",
+   "how": "loop/staging.py migrasi REF; Management API config/auth; vercel api env gitBranch staging",
+   "blocked_by": "menunggu Tristan membuat proyek nadi-staging dan token akses (UNTUK-TRISTAN 12 Nov)",
+   "status": "blocked",
+   "created": "2026-11-12T22:20:00"
   }
  ]
 }
