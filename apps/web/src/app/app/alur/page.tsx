@@ -15,8 +15,8 @@ export const metadata: Metadata = { title: "Alur" };
 
 type Formulir = { id: string; nama: string; bidang: Bidang[] };
 type Alur = { id: string; nama: string; aktif: boolean; pemicu: string; form_id: string | null; syarat: { bidang: string; op: string; nilai: string }[];
-  aksi: { jenis: "kartu" | "kerja" | "webhook"; judul?: string; url?: string }[]; batas_jam: number };
-type Jalan = { id: string; status: "jalan" | "dibatasi" | "gagal"; catatan: string | null; at: string; webhook: { url: string; kode: number | null; galat: string | null }[] | null };
+  aksi: { jenis: "kartu" | "kerja" | "webhook"; judul?: string; url?: string }[]; batas_jam: number; jeda_menit: number };
+type Jalan = { id: string; status: "jalan" | "dibatasi" | "gagal" | "tertunda" | "batal"; catatan: string | null; at: string; webhook: { url: string; kode: number | null; galat: string | null }[] | null };
 
 async function Isi() {
   const sesi = await wajibPerusahaan();
@@ -26,7 +26,7 @@ async function Isi() {
   const pengelola = sesi.peran === "pemilik" || sesi.peran === "admin";
   const [fm, al] = await Promise.all([
     supabase.from("custom_form").select("id, nama, bidang").eq("aktif", true).order("dibuat_at", { ascending: false }).limit(50),
-    pengelola ? supabase.from("flow").select("id, nama, aktif, pemicu, form_id, syarat, aksi, batas_jam").order("dibuat_at", { ascending: false }).limit(50) : Promise.resolve({ data: [] }),
+    pengelola ? supabase.from("flow").select("id, nama, aktif, pemicu, form_id, syarat, aksi, batas_jam, jeda_menit").order("dibuat_at", { ascending: false }).limit(50) : Promise.resolve({ data: [] }),
   ]);
   const formulir = (fm.data ?? []) as Formulir[];
   const alur = (al.data ?? []) as Alur[];
@@ -59,6 +59,7 @@ async function Isi() {
                   </div>
                   <p className="mt-1"><span className="text-tinta-2">{t.ketika}</span> {pemicu}
                     {a.syarat.length > 0 && <> <span className="text-tinta-2">{t.jika}</span> <span data-pengguna>{a.syarat.map((s) => `${s.bidang} ${t.opNama[s.op as keyof typeof t.opNama] ?? s.op} ${s.nilai}`).join(", ")}</span></>}</p>
+                  {a.jeda_menit > 0 && <p className="mt-1" data-testid="alur-jeda"><span className="text-tinta-2">{t.jedaSebelum}</span> {isiTeks(t.jedaJam, { jam: (a.jeda_menit / 60).toLocaleString(bahasa === "en" ? "en-GB" : "id-ID") })}</p>}
                   <ul className="mt-1 grid gap-0.5">{a.aksi.map((x, i) => (
                     <li key={i}><span className="text-tinta-2">{t.aksiNama[x.jenis]}:</span> <span data-pengguna className="break-all">{x.judul ?? x.url}</span></li>))}</ul>
                   <p className="mt-2 text-xs text-tinta-2" data-testid="alur-jalan">{isiTeks(t.ringkasJalan, { jalan: n.jalan, dibatasi: n.dibatasi, gagal: n.gagal, batas: a.batas_jam })}</p>

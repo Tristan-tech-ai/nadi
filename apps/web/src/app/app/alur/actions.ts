@@ -45,8 +45,14 @@ export async function simpanAlur(_: HasilAlur, form: FormData): Promise<HasilAlu
   const { data, error } = await supabase.rpc("save_flow", { p: { nama: String(form.get("nama") ?? ""), pemicu: jenis, formulir, syarat, aksi,
     batas_jam: String(form.get("batas_jam") ?? "") } });
   if (error) return galat(p, error);
+  const r = data as { id: string; rahasia: string | null };
+  // M-20B: jeda sebelum aksi (0 sampai 168 jam) disimpan lewat set_flow_delay; aksi dijalankan pg_cron saat jatuh tempo.
+  const jeda = Number(String(form.get("jeda_jam") ?? "0").replace(",", "."));
+  if (jeda > 0) {
+    const { error: eJ } = await supabase.rpc("set_flow_delay", { p_flow: r.id, p_jam: jeda });
+    if (eJ) return galat(p, eJ);
+  }
   segar();
-  const r = data as { rahasia: string | null };
   return { pesan: p.alurDibuat, rahasia: r.rahasia ?? undefined };
 }
 

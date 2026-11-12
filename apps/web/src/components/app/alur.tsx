@@ -35,7 +35,7 @@ export function FormFormulir({ teks: t }: { teks: Teks }) {
 export function FormAlur({ formulir, teks: t }: { formulir: { id: string; nama: string; bidang: Bidang[] }[]; teks: Teks }) {
   const [h, aksi, sibuk] = useActionState<HasilAlur, FormData>(simpanAlur, null);
   const [pemicu, setPemicu] = useState(formulir[0] ? `formulir:${formulir[0].id}` : "invoice.lunas");
-  const id = { n: useId(), p: useId(), k: useId(), j: useId(), w: useId(), b: useId(), d: useId() };
+  const id = { n: useId(), p: useId(), k: useId(), j: useId(), w: useId(), b: useId(), d: useId(), t: useId() };
   const baris = [useId(), useId()];
   const dipilih = formulir.find((f) => `formulir:${f.id}` === pemicu);
   const saran = dipilih ? dipilih.bidang.map((b) => b.kunci) : ["nilai"];
@@ -70,6 +70,7 @@ export function FormAlur({ formulir, teks: t }: { formulir: { id: string; nama: 
         <p className="text-xs text-tinta-2 sm:col-span-3">{t.aksiKet}</p>
       </fieldset>
       <Kolom label={t.batas} id={id.b}><input id={id.b} name="batas_jam" type="number" min={1} max={500} defaultValue={30} className={`${isian} angka`} /></Kolom>
+      <Kolom label={t.jeda} id={id.t}><input id={id.t} name="jeda_jam" type="number" min={0} max={168} step={0.5} defaultValue={0} aria-describedby={`${id.t}-k`} className={`${isian} angka`} /><span id={`${id.t}-k`} className="mt-1 block text-xs text-tinta-2">{t.jedaKet}</span></Kolom>
       <div className="flex flex-wrap items-center gap-3 sm:col-span-2"><Tombol type="submit" disabled={sibuk}>{t.buatAlur}</Tombol><Hasil h={h} /></div>
       {h && "rahasia" in h && h.rahasia && (
         <div className="rounded-[var(--radius-kartu)] bg-kertas-2 p-3 sm:col-span-2" data-testid="rahasia-alur">
