@@ -5868,6 +5868,20 @@
    "blocked_by": "menunggu Tristan menyelesaikan pendaftaran domain di hPanel (data pemilik + KTP)",
    "status": "blocked",
    "created": "2026-11-12T18:28:10"
+  },
+  {
+   "id": "L-15",
+   "fase": "L",
+   "kind": "build",
+   "priority": 2,
+   "size": "m",
+   "wajib": false,
+   "title": "Halaman publik menampilkan fleksibilitas Nadi: menu Fitur tambahan di sebelah Fitur, halaman sendiri, landing dan pusat bantuan diperbarui",
+   "accept": "Navbar publik (id dan en) tetap memuat Fitur (modul inti) dan menambah item Fitur tambahan ke halaman /fitur-tambahan (dan /en): 21 paket resmi per jenis usaha dari katalog sungguhan, buat sendiri tanpa kode, buat dengan AI-mu lewat MCP, cara amannya (pengawas bukan AI, pemilik menerapkan, terisolasi per usaha), contoh per jenis usaha dengan tangkapan layar asli; landing punya satu bagian fleksibilitas yang menautkan ke halaman itu; pusat bantuan dikelompokkan ulang (inti, fitur tambahan, peran) dan setiap artikel tetap terjangkau; teks lolos VOICE/ANTI-SLOP; e2e 390/1440 terang gelap axe tanpa pelanggaran serius; Lighthouse mobile >= 90; domain tampil nadiusaha.my.id",
+   "how": "katalog src/lib/mod/katalog, artikel bantuan, komponen landing; nama menu Fitur tambahan sama dengan istilah di aplikasi",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T19:01:17"
   }
  ]
 }
