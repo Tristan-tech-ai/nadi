@@ -5244,8 +5244,11 @@
    "accept": "semua layar Admin (desktop-first) dan Tim (mobile-first) mengikuti bagian 06 dokumen (sistem visual, aturan CSS/Bootstrap, UX anti-ribet) dan dipoles dengan skill desain pilihan LV-00; bottom nav hanya di HP dan hilang di desktop tanpa ruang kosong; tangkapan 390 dan 1366 px tiap layar utama ditinjau; axe tanpa pelanggaran serius",
    "how": "prototype bagian 07 dokumen sebagai acuan; Playwright untuk tangkapan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T18:49:25"
+   "status": "done",
+   "created": "2026-11-11T18:49:25",
+   "started": "2026-11-12T06:26:33",
+   "done": "2026-11-12T06:26:33",
+   "result": "project-team-management commit 4abc3ce; docs/bukti/ui/AUDIT.md: 28 layar admin x 390/1366 (56 cek) + 12 layar tim (24 cek) axe serious/critical 0, gulir samping 0, bottom nav tim hanya 390; perbaikan kontras hijau #17713f/kuning #8a5700/btn-outline-secondary, aria paginasi DataTables, tabel bergulir fokus, FullCalendar a11y; tangkapan PNG di docs/bukti/ui; tes admin 40 tim 31"
   },
   {
    "id": "LV-07",
@@ -5258,8 +5261,11 @@
    "accept": "tes otomatis (PHPUnit/Pest + Playwright) menjalankan 8 skenario bagian 11.3 dan semua butir 11.2 untuk super_admin, manager, member di kedua app; member yang memaksa URL Admin mendapat 403/redirect aman; hasil uji tersimpan sebagai bukti",
    "how": "skenario 11.3 satu per satu",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T18:49:25"
+   "status": "done",
+   "created": "2026-11-11T18:49:25",
+   "started": "2026-11-12T06:40:33",
+   "done": "2026-11-12T06:40:33",
+   "result": "project-team-management b4237de; docs/bukti/uji/UJI.md: instalasi bersih dari README, PHPUnit admin 40/40 + tim 31/31 (JUnit xml), uji peramban 17/17 termasuk 8 skenario 11.3 (periode berulang, Tim 390/1366, Member 403, DataTables 520 baris server-side), asap 3 role admin 53 halaman + tim 29 halaman 0 gagal; 17 butir 11.2 semua Lulus dengan bukti"
   },
   {
    "id": "LV-08",
@@ -5272,8 +5278,11 @@
    "accept": "dokumen UAT (PDF) berisi 17 butir checklist 11.2 dengan status, langkah uji, peran, dan bukti tangkapan layar atau keluaran tes dari aplikasi yang benar-benar berjalan; skenario 11.3 dengan hasilnya; daftar temuan dan perbaikannya",
    "how": "isi dari hasil LV-07",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T18:49:25"
+   "status": "done",
+   "created": "2026-11-11T18:49:25",
+   "started": "2026-11-12T06:41:37",
+   "done": "2026-11-12T06:41:37",
+   "result": "project-team-management bfbada4; docs/UAT.pdf + C:/Users/Tristan/Downloads/project-pkl/proposal/ptm-uat.pdf: 17 butir 11.2 status Lulus + bukti, langkah uji per peran (Super Admin, Manager, Member), 8 skenario 11.3 dengan hasil, 8 tangkapan e2e, 13 temuan + perbaikan; dari instalasi bersih"
   },
   {
    "id": "LV-09",
@@ -5286,8 +5295,10 @@
    "accept": "video MP4 rekaman layar aplikasi Admin dan Tim yang benar-benar berjalan (bukan animasi atau rekonstruksi UI) memperlihatkan 8 skenario 11.3, dengan teks penjelas per langkah; durasi dan isi dicek ulang dengan menonton potongan bingkai",
    "how": "Playwright recordVideo atau perekam layar pada browser sungguhan; sunting dengan ffmpeg Tristan 12 Nov 2026: \"untuk proyek laravel juga nanti buatkan video nya\". Rekam dengan cursorcam (langkah JSON dari docs/alat/e2e-alur.mjs) + caption/audio cara devrel-video seperti UAT-02A, dari build produksi lokal (APP_DEBUG=false agar Debugbar tidak terekam).",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T18:49:25"
+   "status": "done",
+   "created": "2026-11-11T18:49:25",
+   "done": "2026-11-12T07:27:56",
+   "result": "proposal/ptm-demo.mp4 268 dtk 1920x1080 30fps -15.9 LUFS, 10 segmen rekaman cursorcam dari instalasi bersih (8 skenario 11.3), caption id dibakar, project-team-management e4bd85a (docs/video README+susun.py), perbaikan geser deadline fba950d+4b2b61a (admin 41/41, tim 31/31)"
   },
   {
    "id": "LV-10",
@@ -5300,8 +5311,10 @@
    "accept": "README instalasi singkat yang diuji ulang dari nol (folder bersih) sampai login; struktur repo sesuai 2.1; semua butir HASIL AKHIR dokumen ada (source dua app, migration/schema, seeder, bukti uji semua role, video, catatan instalasi); laporan ke Tristan",
    "how": "pasang ulang di folder baru untuk membuktikan",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-11T18:49:25"
+   "status": "done",
+   "created": "2026-11-11T18:49:25",
+   "done": "2026-11-12T07:30:18",
+   "result": "project-team-management 8beb73e: README diuji dari nol (ptm-bersih, 2 temuan diperbaiki) + langkah UatSkenarioSeeder + tabel serah terima; struktur {admin-app, team-app, docs} sesuai 2.1; HASIL AKHIR lengkap (source, migrasi+SQL, 3 seeder, bukti uji 3 role: phpunit admin 41/41 tim 31/31, e2e 17/17, asap 53+29 halaman, docs/UAT.pdf 14 hlm, docs/video/ptm-demo.mp4 268 dtk); ptm-uat.pdf + video dikirim lewat SendUserFile; repo tanpa jejak asisten (git grep 0)"
   },
   {
    "id": "UAT-01",
