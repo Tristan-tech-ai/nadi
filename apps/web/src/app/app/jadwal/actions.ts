@@ -10,7 +10,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export type HasilJadwal = { pesan: string } | { galat: string; isian?: Record<string, string> } | null;
 
-/** Pesan jadwal dalam bahasa pengguna. Pesan database (batas PP 35/2021) ditulis dalam bahasa Indonesia: di bahasa lain dibungkus. */
+/** Pesan jadwal dalam bahasa pengguna. Pesan database (batas UU 27/2026 Pasal 116) ditulis dalam bahasa Indonesia: di bahasa lain dibungkus. */
 async function teksJadwal() {
   const bahasa = await bahasaAplikasi();
   const t: Kamus["jadwalPesan"] = ambilKamus(bahasa).jadwalPesan;
@@ -18,7 +18,7 @@ async function teksJadwal() {
   return { t, bahasa, db };
 }
 
-/** Tambah satu shift (F3-06). Batas PP 35/2021 ditegakkan simpan_shift di database. */
+/** Tambah satu shift (F3-06). Batas UU 27/2026 Pasal 116 ditegakkan simpan_shift di database. */
 export async function tambahShift(_: HasilJadwal, form: FormData): Promise<HasilJadwal> {
   const isian = {
     orang: String(form.get("orang") ?? ""), tanggal: String(form.get("tanggal") ?? ""), mulai: String(form.get("mulai") ?? ""),

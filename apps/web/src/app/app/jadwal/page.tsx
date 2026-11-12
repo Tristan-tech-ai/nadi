@@ -17,7 +17,7 @@ import { KepalaHalaman } from "@/components/app/kepala-halaman";
 
 export const metadata: Metadata = { title: "Jadwal" };
 
-// F3-06 (docs/design/jadwal-shift.md): jadwal shift per minggu. Batas PP 35/2021 dijaga simpan_shift; lembur butuh persetujuan.
+// F3-06 (docs/design/jadwal-shift.md): jadwal shift per minggu. Batas UU 27/2026 Pasal 115-116 dijaga simpan_shift; lembur butuh persetujuan.
 
 type Shift = { id?: string; tanggal: string; mulai: string; selesai: string; istirahat: number; lembur?: string | null; bisa_ditawarkan?: boolean; tawaran?: "terbuka" | "diambil" | null };
 type Tawaran = { untuk: { id: string; tanggal: string; mulai: string; selesai: string; dari: string; topi: string | null }[]; milik: { id: string; shift_id: string; status: "terbuka" | "diambil"; tanggal: string; mulai: string; selesai: string; diambil: string | null }[] };

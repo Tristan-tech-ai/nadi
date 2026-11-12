@@ -194,7 +194,7 @@ export async function aturSaldoPesangon(_: HasilGaji, form: FormData): Promise<H
   return { pesan: t.saldoTersimpan };
 }
 
-/** F4-09B: iuran dana pensiun yang sudah dibayar usaha untuk satu orang (PP 35/2021 Pasal 58; bukan BPJS JP), pemilik saja.
+/** F4-09B: iuran dana pensiun yang sudah dibayar usaha untuk satu orang (UU 27/2026 Pasal 248; bukan BPJS JP), pemilik saja.
  * Kartu cadangan pesangon berbahasa Indonesia (dibungkus lang=id di mode lain), jadi pesannya juga. */
 export async function aturIuranPensiun(_: HasilGaji, form: FormData): Promise<HasilGaji> {
   const orang = String(form.get("orang") ?? "");
@@ -210,7 +210,7 @@ export async function aturIuranPensiun(_: HasilGaji, form: FormData): Promise<Ha
   return { pesan: "Iuran tersimpan." };
 }
 
-/** Catat jam lembur satu orang satu hari (RPC catat_lembur memeriksa batas PP 35/2021 dan kunci bulan yang sudah disetujui). */
+/** Catat jam lembur satu orang satu hari (RPC catat_lembur memeriksa batas UU 27/2026 Pasal 116 dan kunci bulan yang sudah disetujui). */
 export async function catatLembur(_: HasilGaji, form: FormData): Promise<HasilGaji> {
   const orang = String(form.get("orang") ?? "");
   const tanggal = String(form.get("tanggal") ?? "");

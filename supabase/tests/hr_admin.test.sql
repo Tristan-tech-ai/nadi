@@ -53,7 +53,7 @@ begin
   r := public.beri_sp(o3, hari, 'Mengulang lagi tidak masuk', null, 3, false, md5('sp-3')::uuid);
   perform pg_temp.cek('SP ketiga dengan masa 3 bulan dari PK', (r ->> 'tingkat')::int = 3 and (r ->> 'berlaku_sampai')::date = (hari + interval '3 months')::date - 1);
   begin perform public.beri_sp(o3, hari, 'Pelanggaran keempat', null, null, false, md5('sp-4')::uuid); perform pg_temp.cek('SP3 berlaku: SP baru ditolak, dasar PHK', false);
-  exception when sqlstate '22023' then get stacked diagnostics g = message_text; perform pg_temp.cek('SP3 berlaku: SP baru ditolak, dasar PHK', g like '%Pasal 36 huruf k%', g); end;
+  exception when sqlstate '22023' then get stacked diagnostics g = message_text; perform pg_temp.cek('SP3 berlaku: SP baru ditolak, dasar PHK', g like '%UU 27/2026 Pasal 231 huruf k%', g); end;
   r := public.beri_sp(o1, hari, 'Pelanggaran berat menurut PKB Pasal 30', 'PKB Pasal 30', null, true, md5('sp-akhir')::uuid);
   perform pg_temp.cek('SP pertama dan terakhir', (r ->> 'tingkat')::int = 1 and (r ->> 'terakhir')::boolean);
   begin perform public.beri_sp(o1, hari, 'Pelanggaran lagi', null, null, false, md5('sp-akhir2')::uuid); perform pg_temp.cek('setelah SP terakhir: ditolak', false);

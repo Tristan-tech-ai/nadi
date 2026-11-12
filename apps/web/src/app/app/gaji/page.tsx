@@ -181,7 +181,7 @@ async function Isi({ searchParams }: { searchParams: PageProps<"/app/gaji">["sea
       {pengelola && <BagianKomisi bahasa={bahasa} bulan={bulan} namaBulan={namaBulan(bulan, t)} akhir={akhir} />}
       {sesi.peran === "pemilik" && (
         <Suspense fallback={<div className="mt-10 h-40 animate-pulse rounded-[var(--radius-kartu)] bg-kertas-2" aria-hidden />}>
-          {/* Cadangan pesangon berisi penjelasan pasal PP 35/2021; di bahasa lain tampil dalam bahasa Indonesia dengan catatan. */}
+          {/* Cadangan pesangon berisi penjelasan pasal UU 27/2026; di bahasa lain tampil dalam bahasa Indonesia dengan catatan. */}
           {bahasa !== "id" ? <p className="mt-10 text-sm text-tinta-2" data-testid="catatan-pesangon">{t.pesangonCatatan}</p> : null}
           <div lang={isiLang}>
             <CadanganPesangon />
