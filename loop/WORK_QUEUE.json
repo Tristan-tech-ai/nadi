@@ -4517,8 +4517,9 @@
    "accept": "Waktu dari klik Tambah orang sampai baris tampil diukur sebelum dan sesudah di produksi; sesudah <= 3 dtk untuk usaha 50 orang; e2e auth staf kembali ke batas waktu bawaan 10 dtk",
    "how": "Ukur bagian lambat (insert orang + pemicu, revalidatePath halaman berat, render daftar); perbaiki yang terbesar",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-06T09:52:55"
+   "status": "running",
+   "created": "2026-11-06T09:52:55",
+   "started": "2026-11-12T09:02:26"
   },
   {
    "id": "L-03",
@@ -4611,9 +4612,11 @@
    "accept": "/en/bantuan, /en/bantuan/artikel/*, /en/alat dan kalkulatornya memakai teks en (label ruang, guna, artikel tugas en); kaki halaman en menautkan versi en; e2e",
    "how": "Teks2 untuk artikel tugas, HalamanInfo bahasa en",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-11-06T10:45:50",
-   "started": "2026-11-12T08:28:29"
+   "started": "2026-11-12T08:28:29",
+   "done": "2026-11-12T08:35:46",
+   "result": "c40145a: /en/alat + 6 halaman en (gaji, thr, slip, invoice, dokumen, pesangon) dengan rumus aplikasi yang sama, kamus src/lib/alat/teks.ts (teks.test.ts 5/5), tautan en di menu Sumber belajar, kaki halaman, bantuan en; produksi d9834ee: /en/alat 200, e2e bantuan-alat.spec.ts 9/9 terhadap https://nadi-swart.vercel.app tanpa masuk (termasuk 'alat gratis bahasa Inggris', axe 390/1440 terang gelap), CI 43135109414 hijau"
   },
   {
    "id": "L-09",
@@ -4706,8 +4709,9 @@
    "accept": "Isian yang diisi sebelum JavaScript selesai tetap dipakai setelah hidrasi (temuan e2e produksi THR); e2e mengisi segera setelah goto tanpa menunggu networkidle",
    "how": "Baca nilai DOM awal saat hidrasi atau isian tak terkendali",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-06T10:52:31"
+   "status": "running",
+   "created": "2026-11-06T10:52:31",
+   "started": "2026-11-12T09:02:26"
   },
   {
    "id": "W-11",
@@ -4734,8 +4738,11 @@
    "accept": "/en/alat dan kalkulatornya dengan label en; angka sama dengan versi id (e2e)",
    "how": "Teks kalkulator lewat kamus",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-06T11:15:14"
+   "status": "done",
+   "created": "2026-11-06T11:15:14",
+   "started": "2026-11-12T08:53:54",
+   "done": "2026-11-12T08:53:54",
+   "result": "duplikat L-08 (c40145a): /en/alat + 6 kalkulator/alat berlabel en, e2e bantuan-alat 'alat gratis bahasa Inggris' membandingkan gaji bersih dan THR dengan rumus aplikasi yang sama dengan versi id, lulus di produksi 9/9 tanpa masuk (12 Nov)"
   },
   {
    "id": "L-14",
@@ -5334,9 +5341,11 @@
    "accept": "dokumen UAT Nadi (PDF) berisi checklist penerimaan per area (masuk, Lempar, Feed, uang, orang, gaji, jual, barang, Mata, dokumen, otomasi, MCP, mod/Tambah fitur, mode coba, bantuan) untuk pemilik, admin, akuntan, staf, dengan langkah, kriteria, status, dan bukti tangkapan layar/keluaran e2e dari aplikasi yang berjalan; skenario DONE-01 termasuk; temuan dan perbaikan dicatat",
    "how": "susun dari e2e yang ada + jalankan ulang di lokal/produksi",
    "blocked_by": "",
-   "status": "running",
+   "status": "done",
    "created": "2026-11-11T18:49:25",
-   "started": "2026-11-12T07:40:17"
+   "started": "2026-11-12T07:40:17",
+   "done": "2026-11-12T08:35:46",
+   "result": "b3085bc docs/quality/uat-nadi.md + C:/Users/Tristan/Downloads/project-pkl/proposal/nadi-uat.pdf (21 hlm): 60 kriteria per area untuk pemilik/admin/akuntan/staf/pengunjung/pelanggan dengan langkah, kriteria, status dari laporan JSON e2e (59 lulus, 1 diperbaiki menunggu uji ulang produksi), DONE-01 lulus di produksi, 9 temuan + perbaikan (/app/mod kosong, rantai pindah-mulai, data uji dipulihkan tanpa hapus, tes basi mcp/mulai), galeri 15 tangkapan; e2e: produksi 4 batch + lokal 10 spec mod/kerja + build lokal mcp/absen 6/6"
   },
   {
    "id": "UAT-02",
