@@ -3,7 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CatatanUuBaru } from "@/components/app/catatan-uu-baru";
 import { HalamanInfo } from "@/components/landing/halaman-info";
+import { JsonLd } from "@/components/seo/json-ld";
 import { istilah, ISTILAH } from "@/lib/kamus-istilah";
+import { dataIstilah } from "@/lib/seo/json-ld";
+import { asalSitus } from "@/lib/situs";
 
 export function generateStaticParams() {
   return ISTILAH.map((i) => ({ slug: i.slug }));
@@ -20,6 +23,7 @@ export default async function HalamanIstilah({ params }: PageProps<"/kamus/[slug
   const lain = ISTILAH.filter((x) => x.slug !== i.slug && x.tautan.some((a) => i.tautan.some((b) => a.href === b.href))).slice(0, 6);
   return (
     <HalamanInfo judul={i.istilah} pengantar={i.arti} warna="kunyit">
+      <JsonLd data={dataIstilah(asalSitus(), i)} />
       <nav aria-label="Jejak" className="text-[15px] text-tinta-2"><Link href="/kamus" className="underline underline-offset-4">Kamus istilah</Link> / {i.istilah}</nav>
       {i.dasar ? <p className="mt-6"><span className="font-semibold">Dasar aturan:</span> {i.dasar}</p> : null}
       {i.dasar ? <CatatanUuBaru dasar={i.dasar} /> : null}
