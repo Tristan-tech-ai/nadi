@@ -6099,11 +6099,53 @@
    "size": "m",
    "wajib": false,
    "title": "UAT pengguna baru: paham, terbiasa, dan nyaman memakai Nadi tanpa dibimbing",
-   "accept": "Skenario tugas untuk pengguna yang belum pernah memakai Nadi (siapkan usaha, lempar nota, setujui, buat invoice, tambah staf, pasang fitur tambahan, cari bantuan) diukur: tugas selesai tanpa bantuan, waktu per tugas, salah klik, dan skor kenyamanan SUS; minimal 5 penguji nyata yang diundang Tristan (protokol dan lembar isian disiapkan loop) ditambah uji otomatis bahwa setiap layar punya langkah pertama di keadaan kosong dan tombol bantuan; ambang SUS >= 70 dan keberhasilan tugas >= 80%; hasil masuk PDF UAT",
+   "accept": "Skenario tugas untuk pengguna yang belum pernah memakai Nadi (siapkan usaha, lempar nota, setujui, buat invoice, tambah staf, pasang fitur tambahan, cari bantuan) diukur: tugas selesai tanpa bantuan, waktu per tugas, salah klik, dan skor kenyamanan SUS; minimal 5 penguji nyata yang diundang Tristan (protokol dan lembar isian disiapkan loop) ditambah uji otomatis bahwa setiap layar punya langkah pertama di keadaan kosong dan tombol bantuan; ambang SUS >= 70 dan keberhasilan tugas >= 80%; hasil masuk PDF UAT; TAHAP SUBMISSION (deadline 13 Nov 2026): diganti uji otomatis dulu (setiap layar punya langkah pertama di keadaan kosong, tombol bantuan, tur yang jalan, dan teks lolos VOICE), uji 5 penguji nyata menyusul setelah submission",
    "how": "",
    "blocked_by": "",
    "status": "ready",
    "created": "2026-11-12T22:55:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "UAT-KLIK",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Robot UAT mengklik semua tombol dan tautan di setiap layar untuk setiap peran, di cloud",
+   "accept": "Spec Playwright e2e/uat-klik.spec.ts: masuk sebagai pemilik, admin, akuntan, staf (akun uji dari secret), membuka setiap rute app dari peta ruang (src/lib/ruang.ts) dan setiap halaman publik dari sitemap, mengklik setiap tombol, tautan, tab, menu, dan isian yang terlihat, lalu kembali; aksi yang mengirim pesan ke luar (kirim email, WhatsApp, undang) dan yang menghapus dilewati dengan daftar tertulis; gagal bila ada galat konsol, respons 5xx, halaman galat, tombol tanpa efek, atau pelanggaran axe serius; laporan JSON per rute x peran x tombol masuk matriks UAT dan PDF; dijalankan di CI uat-produksi",
+   "how": "",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T23:05:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "ADMIN-01",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Pemilik bisa menjadikan anggota sebagai admin dari layar Orang (belum ada jalurnya di aplikasi)",
+   "accept": "RPC jadikan_admin/cabut_admin khusus pemilik dengan tes SQL (isolasi usaha, bukan pemilik ditolak, pemilik tidak bisa mencabut dirinya); undang admin lewat email akun Nadi seperti akuntan; tombol di Orang dengan konfirmasi; e2e cloud; panduan peran admin diperbarui",
+   "how": "",
+   "blocked_by": "",
+   "status": "ready",
+   "created": "2026-11-12T23:05:00"
+  },
+  {
+   "fase": "deploy",
+   "kind": "deploy",
+   "id": "AKUN-JURI",
+   "priority": 1,
+   "size": "m",
+   "wajib": false,
+   "title": "Akun demo juri lengkap (pemilik, admin, akuntan, dua staf) di satu usaha berisi data sintetis lengkap",
+   "accept": "Tristan membuat akun lewat aplikasi (asisten dilarang membuat akun di produksi) memakai alias nadiusaha.my.id+...@gmail.com supaya email pribadi tidak terbuka; loop mengisi data sintetis lengkap ke usaha juri lewat RPC aplikasi sebagai pemilik (orang, topi, produk, stok, invoice, penjualan, kas, usulan di Feed, jadwal, izin, kerja tim, proyek, satu fitur tambahan dari katalog), menjadikan admin lewat ADMIN-01, lalu menulis isian lewat proposal/alat-pengumpulan/buat_isian_tahap2.py dari akun-juri.txt tanpa mencetak sandi; setiap akun diuji masuk lewat CI",
+   "how": "",
+   "blocked_by": "menunggu Tristan membuat akun juri (UNTUK-TRISTAN 12 Nov) dan ADMIN-01",
+   "status": "blocked",
+   "created": "2026-11-12T23:05:00"
   }
  ]
 }

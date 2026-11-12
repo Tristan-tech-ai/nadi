@@ -370,3 +370,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 12 Nov 2026 22.10 Definisi UAT 100% dicatat; tugas matriks, beban, efisiensi ditambah; UAT cloud CI berjalan.
 - 12 Nov 2026 22.20 Staging dipilih; skrip migrasi staging siap; menunggu proyek + token dari Tristan.
 - 12 Nov 2026 22.40 Isian tahap 2 disusun, tag v2.0-final dipush.
+- 12 Nov 2026 23.05 Tugas UAT-KLIK, ADMIN-01, AKUN-JURI ditambah; isian tahap 2 jadi templat dengan slot akun juri.
