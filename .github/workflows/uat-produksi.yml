@@ -69,6 +69,15 @@ jobs:
           kode=${PIPESTATUS[0]}
           rm -f .env.e2e.local .env.local
           exit $kode
+      - name: Simpan laporan JSON (kecil, untuk dokumen UAT)
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: uat-produksi-json
+          path: |
+            apps/web/uat-produksi.json
+            apps/web/uat.log
+          retention-days: 30
       - name: Simpan laporan
         if: always()
         uses: actions/upload-artifact@v7
