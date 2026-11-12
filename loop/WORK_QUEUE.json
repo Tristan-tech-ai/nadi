@@ -5451,8 +5451,10 @@
    "accept": "supabase/functions/pelajari-tanya (index.ts, pengawas.ts, urai.ts) dideploy ke produksi lewat deploy_edge_function; get_edge_function menunjukkan isi urai.ts sama dengan repo (sidik md5); tes salinan tetap lulus; panggilan dari aplikasi tetap jalan",
    "how": "MCP deploy_edge_function dengan isi berkas apa adanya",
    "blocked_by": "",
-   "status": "ready",
-   "created": "2026-11-12T10:35:00"
+   "status": "done",
+   "created": "2026-11-12T10:35:00",
+   "done": "2026-11-12T16:49:23",
+   "result": "Edge Function pelajari-tanya produksi versi 2 (sebelumnya versi 1 dari T-01A), dideploy lewat MCP deploy_edge_function dengan isi berkas repo apa adanya (index.ts md5 18a00573, pengawas.ts md5 347a902c, urai.ts md5 ac580d54; hanya urai.ts berubah sejak 7dc1c6c), verify_jwt tetap false karena fungsi memeriksa JWT sendiri. get_edge_function versi 2 memuat blok M-22B (rentang tanggal bebas, uraiTanyaBanyak); sidik md5 tidak bisa dihitung langsung dari keluaran MCP, jadi isi dibandingkan per blok. Uji dari luar: tanpa token 401 Masuk dulu, token palsu 403, GET 405 (fungsi berhasil start dengan urai.ts baru). Tes salinan dan tanya di aplikasi 12/12 lulus (src/lib/tanya)."
   },
   {
    "id": "Q-45",
