@@ -22,7 +22,7 @@ begin
   -- Aturan.
   perform pg_temp.cek('TER A/B/C termuat terverifikasi', (select terverifikasi and jsonb_array_length(nilai -> 'A') = 44 and jsonb_array_length(nilai -> 'B') = 40
     and jsonb_array_length(nilai -> 'C') = 41 from public.aturan_bertanggal where kunci = 'pph21.ter'));
-  perform pg_temp.cek('batas upah JP 2026 tidak dianggap pasti', (select not terverifikasi and nilai -> 'batas_upah' = 'null'::jsonb from public.aturan_bertanggal where kunci = 'bpjs.jp'));
+  perform pg_temp.cek('batas upah JP 2026 terverifikasi dari surat BPJS B/1226/022026', (select bool_and(terverifikasi and (nilai ->> 'batas_upah')::bigint > 0) from public.aturan_bertanggal where kunci = 'bpjs.jp'));
   perform pg_temp.cek('PTKP, Pasal 17, lembur termuat', (select count(distinct kunci) = 3 from public.aturan_bertanggal where kunci in ('pph21.ptkp', 'pph21.pasal17', 'lembur.pp35') and terverifikasi));
 
   insert into auth.users (id, email) values (ua, 'a@uji.local'), (ub, 'b@uji.local');

@@ -33,6 +33,17 @@ describe("susun slip", () => {
     expect(nilai(komponen, "jp")).toBeUndefined();
     expect(peringatan).toEqual(["Batas upah Jaminan Pensiun tahun ini belum terverifikasi; iuran JP belum dihitung. Isi manual bila usahamu wajib ikut JP."]);
   });
+  it("JP terverifikasi (surat BPJS B/1226/022026): iuran dari upah paling tinggi Rp11.086.300, tidak masuk bruto PPh 21", () => {
+    const A = { ...ATURAN, "bpjs.jp": ok({ pemberi_kerja: 0.02, pekerja: 0.01, batas_upah: 11_086_300 }) };
+    const atas = susunSlip({ pokok: 12_000_000, ptkp: "TK/0" }, A, 10);
+    expect(nilai(atas.komponen, "jp")).toBe(110_863);
+    expect(nilai(atas.komponen, "jp_pk")).toBe(221_726);
+    expect(atas.peringatan).toEqual([]);
+    const bawah = susunSlip({ pokok: 8_000_000, ptkp: "TK/0" }, A, 10);
+    expect(nilai(bawah.komponen, "jp")).toBe(80_000);
+    expect(nilai(bawah.komponen, "jp_pk")).toBe(160_000);
+    expect(nilai(bawah.komponen, "pph21")).toBe(125_448);
+  });
   it("aturan belum terverifikasi tidak dipakai: komponen tidak dihitung, ada peringatan", () => {
     const { komponen, peringatan } = susunSlip({ pokok: 5_000_000, ptkp: "K/1" }, { ...ATURAN, "bpjs.kesehatan": { nilai: { pemberi_kerja: 0.04, pekerja: 0.01, batas_upah: 12000000 }, terverifikasi: false } }, 10);
     expect(nilai(komponen, "bpjs_kes")).toBeUndefined();

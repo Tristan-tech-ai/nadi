@@ -4,8 +4,8 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Page } from "@playwright/test";
 import { createClient } from "@supabase/supabase-js";
 
-// F1-05: isi gaji Rp8.000.000 TK/0 di halaman Orang, siapkan gaji, PPh 21 Rp125.448 (TER A 1,5% x bruto 8.363.200) dan peringatan
-// JP tampil, setujui, bagikan, slip terbuka tanpa akun. Memakai usaha khusus "Uji Gaji E2E" milik akun A dan bulan yang belum pernah
+// F1-05: isi gaji Rp8.000.000 TK/0 di halaman Orang, siapkan gaji, PPh 21 Rp125.448 (TER A 1,5% x bruto 8.363.200), iuran
+// JP terhitung tanpa peringatan, setujui, bagikan, slip terbuka tanpa akun. Memakai usaha khusus "Uji Gaji E2E" milik akun A dan bulan yang belum pernah
 // dipakai (periode yang disetujui terkunci), lalu usaha aktif dikembalikan.
 function bacaEnv(nama: string): Record<string, string> {
   try {
@@ -87,9 +87,10 @@ test("gaji: isi gaji, siapkan, PPh 21 sesuai TER, setujui, bagikan, slip terbuka
     await expect(page.getByText("Draf gaji siap untuk 1 orang.")).toBeVisible();
     await page.reload();
     const slip = page.getByTestId("daftar-slip").getByRole("listitem").filter({ hasText: nama });
-    // Neto = 8.000.000 - BPJS Kes 80.000 - JHT 160.000 - PPh 21 125.448 = 7.634.552.
-    await expect(slip).toContainText("Rp7.634.552");
-    await expect(slip).toContainText("Jaminan Pensiun tahun ini belum terverifikasi");
+    // Neto = 8.000.000 - BPJS Kes 80.000 - JHT 160.000 - JP 80.000 (1%, batas Rp11.086.300 surat BPJS B/1226/022026) - PPh 21 125.448
+    // = 7.554.552. Iuran JP usaha tidak masuk bruto PPh 21.
+    await expect(slip).toContainText("Rp7.554.552");
+    await expect(slip).not.toContainText("Jaminan Pensiun tahun ini belum terverifikasi");
     await slip.getByText("Rincian").click();
     await expect(slip.getByText("Potongan PPh 21")).toBeVisible();
     await expect(slip).toContainText("-Rp125.448");
@@ -106,7 +107,7 @@ test("gaji: isi gaji, siapkan, PPh 21 sesuai TER, setujui, bagikan, slip terbuka
 
     const tamu = await (await browser.newContext()).newPage();
     await tamu.goto(new URL(tautan).pathname + new URL(tautan).hash);
-    await expect(tamu.getByTestId("slip-neto")).toContainText("Rp7.634.552");
+    await expect(tamu.getByTestId("slip-neto")).toContainText("Rp7.554.552");
     await expect(tamu.getByTestId("slip")).toContainText(nama);
     await periksaUi(tamu, "slip-publik");
     await tamu.goto("/slip#nms_" + "0".repeat(64));
