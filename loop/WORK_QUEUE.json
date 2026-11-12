@@ -6229,9 +6229,11 @@
    "title": "Cadangan database mingguan terenkripsi ke Storage Bucket privat Hugging Face",
    "accept": "Workflow cadangan-mingguan.yml berjalan hijau sekali: dump roles/schema/data, enkripsi AES-256 PBKDF2, unggah ke bucket privat, unduh balik dengan sidik sama dan dekripsi berisi tiga berkas, retensi 8; teks keamanan \"sedang dibuat\" diganti setelah jalan pertama hijau; cadangan berkas Storage masuk rencana",
    "how": "",
-   "blocked_by": "menunggu Tristan memasang secret NADI_DB_URL, HF_TOKEN, NADI_KUNCI_CADANGAN (UNTUK-TRISTAN 13 Nov); variabel HF_BUCKET sudah dipasang",
-   "status": "blocked",
-   "created": "2026-11-13T00:50:00"
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-13T00:50:00",
+   "done": "2026-11-13T01:45:00",
+   "result": "run 43280715637 hijau: roles 379 B, schema 1,7 MB, data 16,0 MB, terenkripsi 2.658.736 byte ke bucket privat Tristannss/nadi-cadangan (db/nadi-db-20261113.tar.gz.enc), uji pulih lulus; /keamanan diperbarui, deploy dpl_DdKFVoy665sVjf2B71c2r9vr4q5A"
   },
   {
    "fase": "R",
@@ -6244,8 +6246,10 @@
    "accept": "Bila Tristan setuju: rekam ulang take s5-gaji dari produksi (login cursorcam tersimpan milik Tristan), potong, render ulang v4b, campur audio, look.py, kirim, ganti video landing",
    "how": "",
    "blocked_by": "menunggu keputusan Tristan: rekam ulang bab Gaji video demo v4b atau biarkan",
-   "status": "blocked",
-   "created": "2026-11-13T00:50:00"
+   "status": "cancelled",
+   "created": "2026-11-13T00:50:00",
+   "done": "2026-11-13T01:45:00",
+   "result": "DIBATALKAN: Tristan 13 Nov \"video nya ga usah lah di perbarui, minor\""
   }
  ]
 }
