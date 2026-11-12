@@ -58,6 +58,9 @@ function Isian({ b, awal, opsi, id }: { b: Bidang; awal?: string | string[] | bo
           {pilihan.map((p) => <option key={p.v} value={p.v}>{p.l}</option>)}
         </select>
       );
+      // Q-48: daftar inti kosong (mis. belum ada pelanggan) diberi jalan keluar, bukan isian wajib yang buntu.
+      const kosong = pilihan.length === 0 ? KOSONG_INTI[b.tipe as keyof typeof KOSONG_INTI] : undefined;
+      if (kosong) kontrol = <>{kontrol}<p className="text-xs text-tinta-2" data-testid="mod-pilihan-kosong">{kosong.teks} <a href={kosong.href} className="font-semibold text-laut underline underline-offset-4">{kosong.tautan}</a></p></>;
       break;
     }
     default: {
@@ -75,6 +78,13 @@ function Isian({ b, awal, opsi, id }: { b: Bidang; awal?: string | string[] | bo
     </div>
   );
 }
+
+const KOSONG_INTI = {
+  orang: { teks: "Belum ada orang di usaha ini.", href: "/app/orang", tautan: "Tambah orang" },
+  pelanggan: { teks: "Belum ada pelanggan tercatat. Nama di invoice belum otomatis menjadi pelanggan.", href: "/app/pelanggan", tautan: "Tambah pelanggan" },
+  produk: { teks: "Belum ada produk.", href: "/app/barang", tautan: "Tambah produk" },
+  proyek: { teks: "Belum ada proyek.", href: "/app/proyek", tautan: "Buat proyek" },
+} as const;
 
 /** Formulir buat atau ubah satu catatan. `bidang` sudah dari manifest; server membaca ulang manifest saat menyimpan. */
 export function FormCatatan({ dasar, bidang, awal = {}, opsi, id, label, tautan }: {
