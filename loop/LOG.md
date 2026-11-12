@@ -359,3 +359,4 @@ Satu baris per tick: waktu | tugas | hasil | bukti. Terbaru di bawah.
 - 12 Nov 2026 17.55 D-IGNORE: Ignored Build Step nadi dipasang, diuji lokal 3 kasus; push loop-saja sebagai bukti.
 - 12 Nov 2026 18.05 D-IGNORE done (deploy loop-saja dibatalkan Ignored Build Step); UAT-01S done (UJI.md PTM versi online).
 - 12 Nov 2026 19.00 Domain nadiusaha.my.id disiapkan (registrasi menunggu Tristan), Google Auth Platform dibuat, redirect Supabase ditambah.
+- 12 Nov 2026 21.40 Domain nadiusaha.my.id selesai (D-DOMAIN), deploy 4f2f3cd READY setelah Ignored Build Step diperbaiki, kode email aktif di produksi, berkas pengumpulan diperbarui.

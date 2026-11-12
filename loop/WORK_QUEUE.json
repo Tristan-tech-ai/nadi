@@ -4731,7 +4731,7 @@
    "title": "Kode OTP di email masuk, daftar, dan atur ulang sandi",
    "accept": "Setelah SMTP sendiri aktif: templat supabase/templates terpasang di dashboard, batas email per jam dinaikkan, env NADI_KODE_EMAIL=1, isian kode tampil, e2e kirim kode ke email uji berhasil",
    "how": "UNTUK-TRISTAN SMTP 6 Nov",
-   "blocked_by": "SMTP + templat + batas 100/jam selesai dan email lupa sandi terkirim tanpa galat 12 Nov 20.15; menunggu Tristan memastikan email berkode tiba di Gmail, lalu deploy kode berikutnya membawa NADI_KODE_EMAIL=1",
+   "blocked_by": "12 Nov 2026 21.40: produksi sudah membawa NADI_KODE_EMAIL=1 (deploy 4f2f3cd READY, /masuk/kode menulis \"mengirim kode\"); Gmail pengirim nadiusaha.my.id@gmail.com mencatat email daftar (kode 8 angka di subjek) dan atur ulang di Terkirim, tetapi penerima belum melihatnya; menunggu Tristan memeriksa Spam penerima dan 3 email di Kotak Masuk pengirim (kemungkinan pantulan)",
    "status": "blocked",
    "created": "2026-11-06T10:52:31"
   },
@@ -5865,9 +5865,11 @@
    "title": "Nadi di domain nadiusaha.my.id: DNS, Vercel, Supabase, Google, tautan",
    "accept": "Setelah domain terdaftar: DNS Hostinger A @ ke IP Vercel yang direkomendasikan API + CNAME www, domain dan www (redirect 308) di proyek Vercel nadi, misconfigured=false dan sertifikat aktif, https://nadiusaha.my.id/ 200 dan /masuk 200, Site URL Supabase domain baru, branding Google dan berkas pengumpulan memakai domain baru, nadi-swart.vercel.app tetap jalan",
    "how": "Hostinger connector DNS, vercel api /v10/projects/nadi/domains, Chrome Supabase/Google",
-   "blocked_by": "menunggu Tristan menyelesaikan pendaftaran domain di hPanel (data pemilik + KTP)",
-   "status": "blocked",
-   "created": "2026-11-12T18:28:10"
+   "blocked_by": "",
+   "status": "done",
+   "created": "2026-11-12T18:28:10",
+   "done": "2026-11-12T19:22:03",
+   "result": "DNS Hostinger A @ 216.198.79.1+64.29.17.1 + CNAME www; Vercel misconfigured=false dua domain, www 308 ke apex, /masuk 200 ssl_verify 0; Site URL Supabase + branding Google domain baru; kode 4f2f3cd (asalSitus, tes 3/3 merah sekali) deploy dpl_C9UVmkTZpWRKxMpUr3RtmFKRJNKs READY, canonical https://nadiusaha.my.id; berkas pengumpulan diganti (8 tautan); nadi-swart tetap 200"
   },
   {
    "id": "L-15",
