@@ -1,0 +1,72 @@
+name: UAT produksi
+# UAT-CLOUD: skenario UAT (docs/quality/uat-nadi.md) dijalankan ke produksi https://nadiusaha.my.id, termasuk alur bermasuk,
+# memakai akun uji dari secret repo (dipasang pemilik repo, tidak pernah dicetak). Salinan lokal tidak dipakai sebagai bukti UAT.
+on:
+  workflow_dispatch:
+    inputs:
+      berkas:
+        description: "Daftar berkas spec dipisah spasi (kosong = semua skenario UAT)"
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+jobs:
+  uat:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      E2E_BASE_URL: https://nadiusaha.my.id
+      ASAP_GAGAL_SENGAJA: "0"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Pasang Chromium
+        working-directory: apps/web
+        run: |
+          timeout 240 pnpm exec playwright install-deps chromium || echo "install-deps tidak selesai (apt runner), lanjut tanpa"
+          pnpm exec playwright install chromium
+      - name: Siapkan akun uji dari secret (tidak dicetak)
+        working-directory: apps/web
+        env:
+          E2E_EMAIL_A: ${{ secrets.E2E_EMAIL_A }}
+          E2E_EMAIL_B: ${{ secrets.E2E_EMAIL_B }}
+          E2E_SANDI: ${{ secrets.E2E_SANDI }}
+          SUPA_URL: ${{ vars.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPA_KUNCI: ${{ vars.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          umask 077
+          printf 'E2E_EMAIL_A=%s\nE2E_EMAIL_B=%s\nE2E_SANDI=%s\n' "$E2E_EMAIL_A" "$E2E_EMAIL_B" "$E2E_SANDI" > .env.e2e.local
+          printf 'NEXT_PUBLIC_SUPABASE_URL=%s\nNEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=%s\n' "$SUPA_URL" "$SUPA_KUNCI" > .env.local
+          test -n "$E2E_SANDI" || { echo "secret E2E_SANDI kosong"; exit 1; }
+      - name: Jalankan skenario UAT ke produksi
+        id: uji
+        working-directory: apps/web
+        env:
+          PLAYWRIGHT_JSON_OUTPUT_NAME: uat-produksi.json
+          BERKAS: ${{ inputs.berkas }}
+        run: |
+          DAFTAR="${BERKAS:-absen akses akuntan auth bantuan-alat barang buku cocok-mutasi crm divisi feed-hp feed-penuh gaji halaman-publik hari-di-warung hr invoice izin jadwal jual kas kasir katalog-resmi kerja-review kerja-tim kerja laporan-mod lempar-hp lempar masuk-email mata-v2 mata mcp mod-versi mod mode-coba mulai otomasi pajak pembangun-mod prompt-sambung proyek-operasional siapkan stok-lanjut surat-keluar surat tambah-fitur tanda-tangan tukar-shift uu-baru masuk-google asap-produksi}"
+          ARG=""
+          for b in $DAFTAR; do ARG="$ARG e2e/${b%.spec.ts}.spec.ts"; done
+          set +e
+          pnpm exec playwright test $ARG --workers=2 --reporter=line,json --output=hasil-uat 2>&1 | tee uat.log
+          kode=${PIPESTATUS[0]}
+          rm -f .env.e2e.local .env.local
+          exit $kode
+      - name: Simpan laporan
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: uat-produksi
+          path: |
+            apps/web/uat-produksi.json
+            apps/web/uat.log
+            apps/web/hasil-uat
+          retention-days: 14
